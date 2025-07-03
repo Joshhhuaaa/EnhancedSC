@@ -47,6 +47,9 @@
     <ClCompile Include="src\fixes\shadow_resolution.cpp">
       <Filter>WIP</Filter>
     </ClCompile>
+    <ClCompile Include="mouse_xbuttons_support.cpp">
+      <Filter>Fixes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\features\intro_skip.hpp">
@@ -102,6 +105,9 @@
     </ClInclude>
     <ClInclude Include="external\safetyhook\Zydis.h">
       <Filter>Utility\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="mouse_xbuttons_support.hpp">
+      <Filter>Fixes\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

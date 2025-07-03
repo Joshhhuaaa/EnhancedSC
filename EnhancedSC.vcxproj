@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\fixes\mouse_xbuttons_support.cpp" />
     <ClCompile Include="src\resources\logging.cpp" />
     <ClCompile Include="src\features\custom_saves.cpp" />
     <ClCompile Include="src\fixes\idle_timers.cpp" />
@@ -37,6 +38,7 @@
     <ClCompile Include="src\resources\helper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\fixes\mouse_xbuttons_support.hpp" />
     <ClInclude Include="src\resources\logging.hpp" />
     <ClInclude Include="src\features\custom_saves.hpp" />
     <ClInclude Include="src\fixes\idle_timers.hpp" />
