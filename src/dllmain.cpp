@@ -41,8 +41,6 @@ std::string sGameVersion;
 
 // Ini
 inipp::Ini<char> ini;
-std::filesystem::path sConfigFile = "Enhanced.ini";
-std::pair DesktopDimensions = { 0,0 };
 
 #pragma region deadcode
 /*      Deadcode, not used anymore, just kept for reference / future ideas.
@@ -328,18 +326,24 @@ int iCurrentResY;
 
 void Init_ReadConfig()
 {
-    // Initialise config
-    std::ifstream iniFile((sExePath / sConfigFile).string());
-    if (!iniFile)
-    {
+    auto iniPath = sExePath / "Enhanced.ini";
+    std::ifstream iniFile(iniPath);
+    if (!iniFile.is_open()) {
+        spdlog::error("Error opening ini file {}.", iniPath.string());
+
         return FreeLibraryAndExitThread(baseModule, 1);
     }
-    spdlog::info("Config file: {}", (sExePath / sConfigFile).string());
+
+    spdlog::info("Parsing config file: {}", iniPath.string());
+
     ini.parse(iniFile);
+    if (!ini.errors.empty()) {
+        spdlog::error("Error parsing ini file, encountered {} errors at these lines:", ini.errors.size());
 
-    // Grab desktop resolution
-    DesktopDimensions = Util::GetPhysicalDesktopDimensions();
-
+        for (auto err : ini.errors) {
+            spdlog::error(err);
+        }
+    }
 
     // Read ini file
     g_DistanceCulling.isEnabled = Util::stringToBool(ini.sections["Echelon.EchelonGameInfo"]["bLODDistance"]);
@@ -350,7 +354,6 @@ void Init_ReadConfig()
 
     g_PauseOnFocusLoss.shouldPause = Util::stringToBool(ini.sections["Echelon.EchelonGameInfo"]["bPauseOnFocusLoss"]);
     spdlog::info("Config Parse: Pause on Focus Loss: {}", g_PauseOnFocusLoss.shouldPause);
-
 }
 
 // Case-insensitive string comparison helper
