@@ -15,7 +15,7 @@
 ///Fixes
 #include "distance_culling.hpp"
 #include "idle_timers.hpp"
-
+#include "mouse_xbuttons_support.hpp"
 
 //Warnings
 #include "asi_loader_checks.hpp"
@@ -366,9 +366,7 @@ static bool iequals(const std::string& a, const std::string& b) {
 void Initbinw32() //g_GameDLLs.binkw32
 {
 }
-void InitD3DDrv() //g_GameDLLs.D3DDrv
-{
-}
+
 void InitDareAudio() //g_GameDLLs.DareAudio
 {
 }
@@ -404,6 +402,11 @@ void InitUWindow() //g_GameDLLs.UWindow
 }
 void InitWinDrv() //g_GameDLLs.WinDrv
 {}
+
+void InitD3DDrv() //g_GameDLLs.D3DDrv
+{
+    INITIALIZE(g_MouseXButtonsSupport.Initialize());
+}
 
 void InitializeSubsystems()
 {
