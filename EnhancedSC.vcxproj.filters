@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="external\safetyhook\safetyhook.cpp">
-      <Filter>Utility</Filter>
-    </ClCompile>
     <ClCompile Include="src\resources\gamevars.cpp">
       <Filter>APIs</Filter>
     </ClCompile>
@@ -18,9 +15,6 @@
     </ClCompile>
     <ClCompile Include="src\features\msaa.cpp">
       <Filter>WIP</Filter>
-    </ClCompile>
-    <ClCompile Include="external\safetyhook\Zydis.c">
-      <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="src\fixes\pause_on_focus_loss.cpp">
       <Filter>WIP</Filter>
@@ -47,8 +41,35 @@
     <ClCompile Include="src\fixes\shadow_resolution.cpp">
       <Filter>WIP</Filter>
     </ClCompile>
-    <ClCompile Include="mouse_xbuttons_support.cpp">
-      <Filter>Fixes</Filter>
+    <ClCompile Include="src\fixes\mouse_xbuttons_support.cpp">
+      <Filter>Features</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\version_checker.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="external\safetyhook\src\vmt_hook.cpp">
+      <Filter>Utility\SafetyHook</Filter>
+    </ClCompile>
+    <ClCompile Include="external\safetyhook\src\allocator.cpp">
+      <Filter>Utility\SafetyHook</Filter>
+    </ClCompile>
+    <ClCompile Include="external\safetyhook\src\easy.cpp">
+      <Filter>Utility\SafetyHook</Filter>
+    </ClCompile>
+    <ClCompile Include="external\safetyhook\src\inline_hook.cpp">
+      <Filter>Utility\SafetyHook</Filter>
+    </ClCompile>
+    <ClCompile Include="external\safetyhook\src\mid_hook.cpp">
+      <Filter>Utility\SafetyHook</Filter>
+    </ClCompile>
+    <ClCompile Include="external\safetyhook\src\os.linux.cpp">
+      <Filter>Utility\SafetyHook</Filter>
+    </ClCompile>
+    <ClCompile Include="external\safetyhook\src\os.windows.cpp">
+      <Filter>Utility\SafetyHook</Filter>
+    </ClCompile>
+    <ClCompile Include="external\safetyhook\src\utility.cpp">
+      <Filter>Utility\SafetyHook</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,8 +127,23 @@
     <ClInclude Include="external\safetyhook\Zydis.h">
       <Filter>Utility\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="mouse_xbuttons_support.hpp">
-      <Filter>Fixes\Headers</Filter>
+    <ClInclude Include="src\fixes\mouse_xbuttons_support.hpp">
+      <Filter>Features\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\RegStateHelpers.hpp">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\version_checker.hpp">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\submodule_initiailization.hpp">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\version.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="external\safetyhook\include\safetyhook.hpp">
+      <Filter>Utility\SafetyHook</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -144,5 +180,16 @@
     <Filter Include="Utility\Headers">
       <UniqueIdentifier>{d96b7279-7630-4397-ae8c-98cc2aeb8338}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{67ee53c2-5999-4498-bda3-7693404ed72a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\SafetyHook">
+      <UniqueIdentifier>{8000396c-c441-4b05-a901-73bd1aea1256}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\resources\EnhancedSC.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

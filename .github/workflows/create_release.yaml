@@ -1,11 +1,7 @@
-name: create-release
+name: Create Release
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Release version number'
-        required: true
 
 jobs:
   build:
@@ -16,7 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        submodules: true
+        submodules: recursive
 
     - name: Setup Folders
       run: |
@@ -24,6 +20,21 @@ jobs:
         mkdir .\_staging\system
         mkdir .\_staging\system\logs
         mkdir .\_staging\system\scripts
+
+    - name: Extract version from version.h
+      id: extract_version
+      shell: bash
+      run: |
+        VERSION_FILE="src/resources/version.h"
+        echo "Reading version from $VERSION_FILE"
+
+        version_line=$(grep '#define VERSION_STRING' "$VERSION_FILE")
+        echo "Found line: $version_line"
+
+        version=$(echo "$version_line" | sed -E 's/#define VERSION_STRING +"([^"]+)"/\1/')
+        echo "Parsed version: $version"
+
+        echo "version=$version" >> $GITHUB_OUTPUT
 
     - name: Setup and Compile .asi File
       uses: microsoft/setup-msbuild@v1.1
@@ -88,7 +99,7 @@ jobs:
 
     - name: Create Windows zip
       run: |
-        7z a -tzip "${{ github.event.repository.name }}_${{ github.event.inputs.version }}.zip" .\_staging\*
+        7z a -tzip "${{ github.event.repository.name }}_${{ steps.extract_version.outputs.version }}.zip" .\_staging\*
 
     - name: Overwrite Configs for Linux
       run: |
@@ -101,17 +112,17 @@ jobs:
 
     - name: Create Linux zip
       run: |
-        7z a -tzip "${{ github.event.repository.name }}_${{ github.event.inputs.version }}_linux.zip" .\_staging\*
+        7z a -tzip "${{ github.event.repository.name }}_${{ steps.extract_version.outputs.version }}_linux.zip" .\_staging\*
 
     - name: Upload Release
       uses: ncipollo/release-action@v1
       with:
         artifacts: |
-          ${{ github.event.repository.name }}_${{ github.event.inputs.version }}.zip
-          ${{ github.event.repository.name }}_${{ github.event.inputs.version }}_linux.zip
+          ${{ github.event.repository.name }}_${{ steps.extract_version.outputs.version }}.zip
+          ${{ github.event.repository.name }}_${{ steps.extract_version.outputs.version }}_linux.zip
         token: ${{ secrets.GITHUB_TOKEN }}
-        tag: ${{ github.event.inputs.version }}
-        name: "${{ github.event.inputs.version }}"
+        tag: ${{ steps.extract_version.outputs.version }}
+        name: "${{ steps.extract_version.outputs.version }}"
         draft: true
         generateReleaseNotes: true
         artifactErrorsFailBuild: true

@@ -1,11 +1,10 @@
 #include "helper.hpp"
-#include <spdlog/spdlog.h>
+#include "logging.hpp"
 
 #pragma comment(lib,"Version.lib")
 
 extern HMODULE baseModule;
 extern std::filesystem::path sExePath;
-extern std::filesystem::path sFixPath;
 extern std::string sExeName;
 
 
@@ -28,7 +27,7 @@ namespace Memory
         return len ? (HMODULE)info.AllocationBase : NULL;
     }
 
-    std::string GetModuleVersion(void* module)
+    std::string GetModuleVersion(HMODULE module)
     {
         auto dosHeader = (PIMAGE_DOS_HEADER)module;
         auto ntHeaders = (PIMAGE_NT_HEADERS)((std::uint8_t*)module + dosHeader->e_lfanew);
@@ -90,34 +89,17 @@ namespace Memory
         return nullptr;
     }
 
-    std::uint8_t* PatternScan(void* module, const char* signature, const char* prefix, const char* successMessage, const char* errorMessage)
+    std::uint8_t* PatternScan(void* module, const char* signature, const char* prefix)
     {
         std::uint8_t* foundPattern = PatternScanSilent(module, signature);
         if (foundPattern)
         {
-#ifdef SC_DEBUG
-            if (successMessage)
-            {
-                spdlog::info("{} Address: {:s}+{:x}", successMessage, sExeName.c_str(), (uintptr_t)foundPattern - (uintptr_t)baseModule);
-
-            }
-            else
-            {
-                spdlog::info("{}: Pattern scan found. Address: {:s}+{:x}", prefix, sExeName.c_str(), (uintptr_t)foundPattern - (uintptr_t)baseModule);
-            }
-#endif
+            spdlog::info("{}: Pattern scan found. Address: {:s}+{:x}", prefix, sExeName.c_str(), (uintptr_t)foundPattern - (uintptr_t)baseModule);
         }
         else
         {
-            if (errorMessage)
-            {
-                spdlog::error("{}", errorMessage);
 
-            }
-            else
-            {
-                spdlog::error("{}: Pattern scan failed.", prefix);
-            }
+            spdlog::error("{}: Pattern scan failed.", prefix);
         }
         return foundPattern;
     }
@@ -167,6 +149,76 @@ namespace Memory
         }
         return FALSE;
     }
+    // Read the current IAT entry (without changing it)
+    void* ReadIAT(HMODULE callerModule, const char* targetModule, const char* targetFunction)
+    {
+        uint8_t* base = reinterpret_cast<uint8_t*>(callerModule);
+        auto dos_header = reinterpret_cast<IMAGE_DOS_HEADER*>(base);
+        auto nt_headers = reinterpret_cast<IMAGE_NT_HEADERS*>(base + dos_header->e_lfanew);
+        auto imports = reinterpret_cast<IMAGE_IMPORT_DESCRIPTOR*>(
+            base + nt_headers->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress);
+
+        for (int i = 0; imports[i].Characteristics; ++i)
+        {
+            const char* dllName = reinterpret_cast<const char*>(base + imports[i].Name);
+            if (_stricmp(dllName, targetModule) != 0)
+                continue;
+
+            auto origFirstThunk = reinterpret_cast<IMAGE_THUNK_DATA*>(base + imports[i].OriginalFirstThunk);
+            auto firstThunk = reinterpret_cast<IMAGE_THUNK_DATA*>(base + imports[i].FirstThunk);
+
+            for (; origFirstThunk->u1.AddressOfData; ++origFirstThunk, ++firstThunk)
+            {
+                auto importByName = reinterpret_cast<IMAGE_IMPORT_BY_NAME*>(base + origFirstThunk->u1.AddressOfData);
+                if (strcmp(reinterpret_cast<const char*>(importByName->Name), targetFunction) != 0)
+                    continue;
+
+                return reinterpret_cast<void*>(firstThunk->u1.Function);
+            }
+        }
+
+        return nullptr;
+    }
+
+    // Write a new pointer into the IAT entry (unconditionally)
+    BOOL WriteIAT(HMODULE callerModule, const char* targetModule, const char* targetFunction, void* detourFunction)
+    {
+        uint8_t* base = reinterpret_cast<uint8_t*>(callerModule);
+        auto dos_header = reinterpret_cast<IMAGE_DOS_HEADER*>(base);
+        auto nt_headers = reinterpret_cast<IMAGE_NT_HEADERS*>(base + dos_header->e_lfanew);
+        auto imports = reinterpret_cast<IMAGE_IMPORT_DESCRIPTOR*>(
+            base + nt_headers->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT].VirtualAddress);
+
+        for (int i = 0; imports[i].Characteristics; ++i)
+        {
+            const char* dllName = reinterpret_cast<const char*>(base + imports[i].Name);
+            if (_stricmp(dllName, targetModule) != 0)
+                continue;
+
+            auto origFirstThunk = reinterpret_cast<IMAGE_THUNK_DATA*>(base + imports[i].OriginalFirstThunk);
+            auto firstThunk = reinterpret_cast<IMAGE_THUNK_DATA*>(base + imports[i].FirstThunk);
+
+            for (; origFirstThunk->u1.AddressOfData; ++origFirstThunk, ++firstThunk)
+            {
+                auto importByName = reinterpret_cast<IMAGE_IMPORT_BY_NAME*>(base + origFirstThunk->u1.AddressOfData);
+                if (strcmp(reinterpret_cast<const char*>(importByName->Name), targetFunction) != 0)
+                    continue;
+
+                DWORD oldProtect;
+                if (!VirtualProtect(&firstThunk->u1.Function, sizeof(void*), PAGE_EXECUTE_READWRITE, &oldProtect))
+                    return FALSE;
+
+                firstThunk->u1.Function = reinterpret_cast<ULONG_PTR>(detourFunction);
+
+                VirtualProtect(&firstThunk->u1.Function, sizeof(void*), oldProtect, &oldProtect);
+
+                return TRUE;
+            }
+        }
+
+        return FALSE;
+    }
+
 }
 
 namespace Util
@@ -241,6 +293,7 @@ namespace Util
     {
         std::array<std::string, 4> paths = { "", "plugins", "scripts", "update" };
         std::filesystem::path foundPath;
+        bool bFoundOnce = false;
         for (const auto& path : paths)
         {
             auto filePath = sExePath / path / (fileName + ".asi");
@@ -256,19 +309,17 @@ namespace Util
                     ss >> std::get_time(&checkDate, "%Y-%m-%d");
                     if (ss.fail() || std::mktime(&fileCreationTime) >= std::mktime(&checkDate))
                     {
-                        continue; // Skip this file if it doesn't meet the creation date requirement
+                        continue;
                     }
                 }
-                if (!foundPath.empty()) // multiple versions found
+                if (bFoundOnce)
                 {
-                    AllocConsole();
-                    FILE* dummy;
-                    freopen_s(&dummy, "CONOUT$", "w", stdout);
                     std::string errorMessage = "DUPLICATE FILE ERROR: Duplicate " + fileName + ".asi installations found! Please make sure to delete any old versions!\n";
-                    errorMessage.append("DUPLICATE FILE ERROR - Installation 1: ").append((sExePath / foundPath / (fileName + ".asi\n")).string());
-                    errorMessage.append("DUPLICATE FILE ERROR - Installation 2: ").append((sExePath / path / (fileName + ".asi\n")).string());
-                    std::cout << errorMessage;
+                    errorMessage.append("DUPLICATE FILE ERROR - Installation 1: ").append((sExePath / foundPath / (fileName + ".asi")).string().append("\n"));
+                    errorMessage.append("DUPLICATE FILE ERROR - Installation 2: ").append(filePath.string());
                     spdlog::error("{}", errorMessage);
+                    Logging::ShowConsole();
+                    std::cout << errorMessage << std::endl;
                     FreeLibraryAndExitThread(baseModule, 1);
                 }
                 foundPath = path;
@@ -280,6 +331,7 @@ namespace Util
                 {
                     return TRUE;
                 }
+                bFoundOnce = true;
             }
         }
         return FALSE;
@@ -293,18 +345,49 @@ namespace Util
             {
                 return std::tolower(c);
             });
-
         if (lowerStr == "true" || lowerStr == "1")
         {
             return true;
         }
-        else if (lowerStr == "false" || lowerStr == "0")
+        if (lowerStr == "false" || lowerStr == "0")
         {
             return false;
         }
         // Handle cases where the string is not a recognized boolean representation
         // For example, throw an exception, return a default value, or log an error.
         // For simplicity, this example returns false for unrecognized strings.
+        return false;
+    }
+
+
+    std::string GetUppercaseNameAtIndex(const std::initializer_list<std::string>& list, int index)
+    {
+        if (index >= 0 && index < static_cast<int>(list.size()))
+        {
+            auto it = list.begin();
+            std::advance(it, index);
+            std::string name = *it;
+            std::transform(name.begin(), name.end(), name.begin(), ::toupper);
+            return name;
+        }
+        return "UNKNOWN";
+    }
+
+    bool IsSteamOS()
+    {
+        if (g_Logging.bCheckedSteamDeck)
+        {
+            return g_Logging.bIsSteamDeck;
+        }
+
+        g_Logging.bCheckedSteamDeck = true;
+
+        // Check for Proton/Steam Deck environment variables
+        if (std::getenv("STEAM_COMPAT_CLIENT_INSTALL_PATH") || std::getenv("STEAM_COMPAT_DATA_PATH") || std::getenv("XDG_SESSION_TYPE"))
+        {
+            g_Logging.bIsSteamDeck = true;
+            return true;
+        }
         return false;
     }
 

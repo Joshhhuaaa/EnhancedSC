@@ -11,7 +11,7 @@ void IntroSkip::Initialize() const
         return;
     }
 
-    if (uint8_t* IntroSkipScan2 = Memory::PatternScan(g_GameDLLs.Engine, "39 3D ?? ?? ?? ?? 75 ?? 39 3D", "Skip Intro Videos", NULL, NULL))
+    if (uint8_t* IntroSkipScan2 = Memory::PatternScan(g_GameDLLs.Engine, "39 3D ?? ?? ?? ?? 75 ?? 39 3D", "Skip Intro Videos"))
     {
         static SafetyHookMid Initialization3 {};
         Initialization3 = safetyhook::create_mid(IntroSkipScan2,
@@ -23,7 +23,7 @@ void IntroSkip::Initialize() const
 
     }
 
-    if (uint8_t* IntroSkipScan = Memory::PatternScan(g_GameDLLs.Engine, "E8 ?? ?? ?? ?? 6A ?? 6A ?? 68 ?? ?? ?? ?? 56", "Skip Intro Videos (Idle Replay)", NULL, NULL))
+    if (uint8_t* IntroSkipScan = Memory::PatternScan(g_GameDLLs.Engine, "E8 ?? ?? ?? ?? 6A ?? 6A ?? 68 ?? ?? ?? ?? 56", "Skip Intro Videos (Idle Replay)"))
     {
         Memory::PatchBytes((uintptr_t)IntroSkipScan, "\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90", 20);
     }

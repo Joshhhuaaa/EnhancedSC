@@ -1,15 +1,21 @@
 [submodule "external/inipp"]
 	path = external/inipp
-	url = ../../mcmtroffaes/inipp
+	url = https://github.com/mcmtroffaes/inipp
 [submodule "external/spdlog"]
 	path = external/spdlog
-	url = ../../gabime/spdlog
+	url = https://github.com/gabime/spdlog
 [submodule "external/dxsdk"]
 	path = external/dxsdk
-	url = ../../apitrace/dxsdk
+	url = https://github.com/apitrace/dxsdk
 [submodule "external/minhook"]
 	path = external/minhook
-	url = ../../TsudaKageyu/minhook
+	url = https://github.com/TsudaKageyu/minhook
 [submodule "external/hooking"]
 	path = external/hooking
-	url = ../../ThirteenAG/Hooking.Patterns
+	url = https://github.com/ThirteenAG/Hooking.Patterns
+[submodule "external/safetyhook"]
+	path = external/safetyhook
+	url = https://github.com/cursey/safetyhook
+[submodule "external/zydis"]
+	path = external/zydis
+	url = https://github.com/zyantific/zydis

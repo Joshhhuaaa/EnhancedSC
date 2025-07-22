@@ -1,7 +1,9 @@
 #pragma once
 
 #include "stdafx.h"
-#include "safetyhook.hpp"
+#include "RegStateHelpers.hpp"
+
+inline std::filesystem::path sFixPath;
 
 namespace Memory
 {
@@ -18,17 +20,20 @@ namespace Memory
 
     static HMODULE GetThisDllHandle();
 
-    std::string GetModuleVersion(void* module);
+    std::string GetModuleVersion(HMODULE module);
 
     std::uint8_t* PatternScanSilent(void* module, const char* signature);
 
-    std::uint8_t* PatternScan(void* module, const char* signature, const char* prefix, const char* successMessage, const char* errorMessage);
+    std::uint8_t* PatternScan(void* module, const char* signature, const char* prefix);
 
     uintptr_t GetAbsolute(uintptr_t address) noexcept;
 
     uintptr_t GetRelativeOffset(uint8_t* addr) noexcept;
 
     BOOL HookIAT(HMODULE callerModule, char const* targetModule, const void* targetFunction, void* detourFunction);
+
+    void* ReadIAT(HMODULE callerModule, const char* targetModule, const char* targetFunction);
+    BOOL WriteIAT(HMODULE callerModule, const char* targetModule, const char* targetFunction, void* detourFunction);
 }
 
 namespace Util
@@ -45,46 +50,22 @@ namespace Util
     bool CheckForASIFiles(std::string fileName, bool checkForDuplicates, bool setFixPath, const char* checkCreationDate);
 
     bool stringToBool(const std::string& str);
+
+    std::string GetUppercaseNameAtIndex(const std::initializer_list<std::string>& list, int index);
+
+    bool IsSteamOS();
 }
 
 
 ///Input: SafetyHookMid, const char* Prefix, const char* successMessage (or NULL), const char* errorMessage (or NULL)
-#ifdef SC_DEBUG
-#define LOG_HOOK(hook, prefix, successMessage, errorMessage)\
+#define LOG_HOOK(hook, prefix)\
 {\
     if (hook)\
     {\
-        if (successMessage)\
-        {\
-            spdlog::info("{}", successMessage);\
-        }\
-        else\
-        {\
-            spdlog::info("{}: Hook installed.", prefix);\
-        }\
-    }\
-    else if (errorMessage)\
-    {\
-        spdlog::error("{}", errorMessage);\
+        spdlog::info("{}: Hook installed.", prefix);\
     }\
     else\
     {\
         spdlog::error("{}: Hook failed.", prefix);\
     }\
-}
-#else
-#define LOG_HOOK(hook, prefix, successMessage, errorMessage)\
-{\
-    if (hook)\
-    {\
-    }\
-    else if (errorMessage)\
-    {\
-        spdlog::error("{}", errorMessage);\
-    }\
-    else\
-    {\
-        spdlog::error("{}: Hook failed.", prefix);\
-    }\
-}
-#endif
+}\

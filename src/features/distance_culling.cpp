@@ -11,7 +11,7 @@ void DistanceCulling::Initialize() const
         spdlog::info("Distance Culling: Feature is disabled in config.");
         return;
     }
-    if (uint8_t* SkeletalLODResult = Memory::PatternScan(g_GameDLLs.Engine, "A8 ?? 0F 84 ?? ?? ?? ?? A8 ?? 0F 85 ?? ?? ?? ?? 83 F9", "Skeletal LOD", NULL, NULL))
+    if (uint8_t* SkeletalLODResult = Memory::PatternScan(g_GameDLLs.Engine, "A8 ?? 0F 84 ?? ?? ?? ?? A8 ?? 0F 85 ?? ?? ?? ?? 83 F9", "Skeletal LOD"))
     {
         
         static SafetyHookMid SkeletalLODMidHook {};
@@ -20,7 +20,7 @@ void DistanceCulling::Initialize() const
             {
                 ctx.ecx = 0xA;
             });
-        LOG_HOOK(SkeletalLODMidHook, "Skeletal LOD", NULL, NULL)
+        LOG_HOOK(SkeletalLODMidHook, "Skeletal LOD")
     }
 
 }
