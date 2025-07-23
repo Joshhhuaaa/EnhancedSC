@@ -2,7 +2,6 @@
 #include "helper.hpp"
 #include <inipp/inipp.h>
 
-std::string const VERSION_STRING = "0.0.1a";
 extern std::string sExeName;
 
 

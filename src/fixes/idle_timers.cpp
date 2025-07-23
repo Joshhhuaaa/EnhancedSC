@@ -8,7 +8,7 @@
 void IdleTimers::Initialize()
 {
 
-    if (uint8_t* IdleTimerResult = Memory::PatternScan(g_GameDLLs.Engine, "DF E0 25 ?? ?? ?? ?? 75 ?? A1", "Idle Timer", NULL, NULL))
+    if (uint8_t* IdleTimerResult = Memory::PatternScan(g_GameDLLs.Engine, "DF E0 25 ?? ?? ?? ?? 75 ?? A1", "Idle Timer"))
     {
         static SafetyHookMid IdleTimerHook;
         IdleTimerHook = safetyhook::create_mid(IdleTimerResult, [](SafetyHookContext& ctx)
@@ -19,6 +19,6 @@ void IdleTimers::Initialize()
                 ctx.eax = 0x4100;
                 spdlog::info("Idle Timer: Idle timer override applied.");
             });
-        LOG_HOOK(IdleTimerHook, "Idle Timer", NULL, NULL, NULL);
+        LOG_HOOK(IdleTimerHook, "Idle Timer");
     }
 }

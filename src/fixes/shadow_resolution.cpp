@@ -11,7 +11,7 @@ void ShadowResolution::Initialize() const
         spdlog::info("Shadow Resolution feature is config disabled.");
         return;
     }
-    if (uint8_t* SkeletalLODResult = Memory::PatternScan(g_GameDLLs.Engine, "A1 ?? ?? ?? ?? 8B 08 8A 41", "Skeletal LOD", NULL, NULL))
+    if (uint8_t* SkeletalLODResult = Memory::PatternScan(g_GameDLLs.Engine, "A1 ?? ?? ?? ?? 8B 08 8A 41", "Skeletal LOD"))
     {
 
         static SafetyHookMid SkeletalLODMidHook {};
@@ -20,7 +20,7 @@ void ShadowResolution::Initialize() const
             {
                 ctx.ecx = 0xA;
             });
-        LOG_HOOK(SkeletalLODMidHook, "Skeletal LOD", NULL, NULL)
+        LOG_HOOK(SkeletalLODMidHook, "Skeletal LOD")
     }
 
 }

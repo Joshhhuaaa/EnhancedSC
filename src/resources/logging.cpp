@@ -1,10 +1,11 @@
+#include "common.hpp"
 #include "logging.hpp"
 
-#include "common.hpp"
 #include <spdlog/sinks/base_sink.h>
-#include <spdlog/spdlog.h>
 
-std::filesystem::path sFixPath;
+#include "version.h"
+
+extern std::filesystem::path sFixPath;
 
 
 
@@ -60,6 +61,18 @@ private:
     }
 };
 
+void Logging::ShowConsole()
+{
+    if (g_Logging.bConsoleShown)
+    {
+        return;
+    }
+    g_Logging.bConsoleShown = true;
+    AllocConsole();
+    FILE* dummy;
+    freopen_s(&dummy, "CONOUT$", "w", stdout);
+}
+
 
 void Logging::Initialize()
 {
@@ -74,14 +87,14 @@ void Logging::Initialize()
     {
         try
         {
-            std::filesystem::path sLogFile = sFixName + ".log";
-
             bool logDirExists = std::filesystem::is_directory(sExePath / "logs");
             if (!logDirExists)
             {
                 std::filesystem::create_directory(sExePath / "logs"); //create a "logs" subdirectory in the game folder to keep the main directory tidy.
             }
+            g_Logging.bLoaded = true;
             // Create 10MB truncated logger
+            std::filesystem::path sLogFile = sFixName + ".log";
             std::shared_ptr<spdlog::logger> logger = std::make_shared<spdlog::logger>(sLogFile.string(), std::make_shared<size_limited_sink<std::mutex>>((sExePath / "logs" / sLogFile).string(), 10 * 1024 * 1024));
             spdlog::set_default_logger(logger);
 
@@ -92,6 +105,8 @@ void Logging::Initialize()
             {
                 spdlog::info("New log subdirectory created.");
             }
+            spdlog::info("Checking for duplicate intallations of {}.", sFixName);
+            Util::CheckForASIFiles(sFixName, true, true, nullptr); //Sets sFixPath. Exit thread & warn the user if multiple copies of EnhancedSC are trying to initialize.
             spdlog::info("{} v{} loaded.", sFixName, VERSION_STRING);
             spdlog::info("ASI plugin location: {}", (sExePath / sFixPath / (sFixName + ".asi")).string());
             spdlog::info("----------");
@@ -106,26 +121,16 @@ void Logging::Initialize()
         }
         catch (const spdlog::spdlog_ex& ex)
         {
-            AllocConsole();
-            FILE* dummy;
-            freopen_s(&dummy, "CONOUT$", "w", stdout);
+            ShowConsole();
             std::cout << "Log initialisation failed: " << ex.what() << std::endl;
             return FreeLibraryAndExitThread(baseModule, 1);
         }
     }
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - g_Logging.initStartTime).count(); \
-        spdlog::info("---------- Logging loaded in: {} ms ----------", duration);
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - g_Logging.initStartTime).count();
+    spdlog::info("---------- Logging loaded in: {} ms ----------", duration);
 }
 
-bool IsSteamOS()
-{
-    // Check for Proton/Steam Deck environment variables
-    return std::getenv("STEAM_COMPAT_CLIENT_INSTALL_PATH") ||
-        std::getenv("STEAM_COMPAT_DATA_PATH") ||
-        std::getenv("XDG_SESSION_TYPE"); // XDG_SESSION_TYPE is often set on Linux
-}
-
-std::string GetSteamOSVersion()
+std::string Logging::GetSteamOSVersion()
 {
     std::ifstream os_release("/etc/os-release");
     std::string line;
@@ -143,18 +148,12 @@ std::string GetSteamOSVersion()
             return line.substr(13); // fallback
         }
     }
-    return "";
+    return "SteamOS (Unknown Version)";
 }
 
 ///Prints CPU, GPU, and RAM info to the log to expedite common troubleshooting.
 void Logging::LogSysInfo()
 {
-#ifndef _WIN32
-    spdlog::info("System Details - Steam Deck/Linux");
-    return;
-#endif
-
-
     std::array<int, 4> integerBuffer = {};
     constexpr size_t sizeofIntegerBuffer = sizeof(int) * integerBuffer.size();
     std::array<char, 64> charBuffer = {};
@@ -174,35 +173,43 @@ void Logging::LogSysInfo()
 
     spdlog::info("System Details - CPU: {}", cpu);
 
-    std::string deviceString;
-    for (int i = 0; ; i++)
+    if (Util::IsSteamOS())
     {
-        DISPLAY_DEVICE dd = { sizeof(dd), 0 };
-        BOOL f = EnumDisplayDevices(NULL, i, &dd, EDD_GET_DEVICE_INTERFACE_NAME);
-        if (!f)
-        {
-            break; //that's all, folks.
-        }
-        char deviceStringBuffer[128];
-        WideCharToMultiByte(CP_UTF8, 0, dd.DeviceString, -1, deviceStringBuffer, sizeof(deviceStringBuffer), NULL, NULL);
-        if (deviceString == deviceStringBuffer) //each monitor reports what gpu is driving it, lets just double check in case we're looking at a laptop with mixed usage.
-        {
-            continue;
-        }
-        deviceString = deviceStringBuffer;
-        spdlog::info("System Details - GPU: {}", deviceString);
+        spdlog::info("System Details - Detected Steam Deck (SteamOS / Proton).");
     }
+    else
+    {
+        std::string deviceString;
+        for (int i = 0; ; i++)
+        {
+            DISPLAY_DEVICE dd = { sizeof(dd), 0 };
+            BOOL f = EnumDisplayDevices(NULL, i, &dd, EDD_GET_DEVICE_INTERFACE_NAME);
+            if (!f)
+            {
+                break; //that's all, folks.
+            }
+            char deviceStringBuffer[128];
+            WideCharToMultiByte(CP_UTF8, 0, dd.DeviceString, -1, deviceStringBuffer, sizeof(deviceStringBuffer), NULL, NULL);
+            if (deviceString == deviceStringBuffer) //each monitor reports what gpu is driving it, lets just double check in case we're looking at a laptop with mixed usage.
+            {
+                continue;
+            }
+            deviceString = deviceStringBuffer;
+            spdlog::info("System Details - GPU: {}", deviceString);
+        }
+    }
+
 
     MEMORYSTATUSEX status;
     status.dwLength = sizeof(status);
     GlobalMemoryStatusEx(&status);
-    double totalMemory = status.ullTotalPhys / 1024 / 1024;    ///Total physical RAM in MB.
-    spdlog::info("System Details - RAM: {} GB ({} MB)", ceil((totalMemory / 1024) * 100) / 100, totalMemory);
+    double totalMemory = static_cast<double>(status.ullTotalPhys) / 1024.0 / 1024.0;
+    spdlog::info("System Details - RAM: {} GB ({:.0f} MB)", ceil((totalMemory / 1024) * 100) / 100, totalMemory);
 
 
     std::string os;
 
-    if (IsSteamOS())
+    if (Util::IsSteamOS())
     {
         os = GetSteamOSVersion();
     }
@@ -229,28 +236,43 @@ void Logging::LogSysInfo()
             }
         }
 
+        // Read UBR (Update Build Revision) value from registry
+        DWORD ubr = 0;
+        if (key != nullptr)
+        {
+            DWORD ubrSize = sizeof(ubr);
+            RegQueryValueExA(key, "UBR", nullptr, nullptr, reinterpret_cast<LPBYTE>(&ubr), &ubrSize);
+        }
+
         RegCloseKey(key);
 
         HMODULE ntdll = GetModuleHandleA("ntdll.dll");
-        while (ntdll)
+        if (ntdll)
         {
             typedef LONG(WINAPI* RtlGetVersion_t)(PRTL_OSVERSIONINFOW);
             RtlGetVersion_t RtlGetVersion =
                 reinterpret_cast<RtlGetVersion_t>(GetProcAddress(ntdll, "RtlGetVersion"));
-            if (!RtlGetVersion) break;
+            if (RtlGetVersion)
+            {
+                RTL_OSVERSIONINFOW info = {};
+                info.dwOSVersionInfoSize = sizeof(RTL_OSVERSIONINFOW);
 
-            RTL_OSVERSIONINFOW info = {};
-            info.dwOSVersionInfoSize = sizeof(RTL_OSVERSIONINFOW);
+                if (RtlGetVersion(&info) == 0)
+                {
+                    // Append build number and UBR (e.g. " (26100.4652)")
+                    os += " (" + std::to_string(info.dwBuildNumber) + "." + std::to_string(ubr) + ")";
 
-            if (RtlGetVersion(&info) != 0) break;
-            os += " (build " + std::to_string(info.dwBuildNumber) + ")";
-
-            if (info.dwBuildNumber < 22000) break;
-            std::size_t pos = os.find("Windows 10");
-
-            if (pos == std::string::npos) break;
-            os.replace(pos, 10, "Windows 11");
-            break;
+                    // Replace "Windows 10" with "Windows 11" if build number is 22000 or greater
+                    if (info.dwBuildNumber >= 22000)
+                    {
+                        std::size_t pos = os.find("Windows 10");
+                        if (pos != std::string::npos)
+                        {
+                            os.replace(pos, 10, "Windows 11");
+                        }
+                    }
+                }
+            }
         }
     }
     if (!os.empty()) spdlog::info("System Details - OS:  {}", os);

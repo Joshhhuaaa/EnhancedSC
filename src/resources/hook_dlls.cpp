@@ -1,6 +1,7 @@
 #include "hook_dlls.hpp"
 #include "callbacks.h"
 #include "logging.hpp"
+#include "submodule_initiailization.hpp"
 
 extern void Initbinw32();
 extern void InitD3DDrv();

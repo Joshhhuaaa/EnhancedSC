@@ -19,6 +19,9 @@
 
 //Warnings
 #include "asi_loader_checks.hpp"
+#include "submodule_initiailization.hpp"
+#include "version.h"
+#include "version_checker.hpp"
 
 ///WIP
 //#include "msaa.hpp"
@@ -31,14 +34,14 @@ HWND MainHwnd = nullptr;
 HMODULE baseModule = GetModuleHandle(NULL);
 
 // Version
-std::string sFixName = "EnhancedSC";
+std::string sFixName = FIX_NAME;
 int iConfigVersion = 1; //increment this when making config changes, along with the number at the bottom of the config file
                         //that way we can sanity check to ensure people don't have broken/disabled features due to old config files.
 
 std::filesystem::path sExePath;
 std::string sExeName;
 std::string sGameVersion;
-
+bool bCheckForUpdates;
 // Ini
 inipp::Ini<char> ini;
 
@@ -354,6 +357,10 @@ void Init_ReadConfig()
 
     g_PauseOnFocusLoss.shouldPause = Util::stringToBool(ini.sections["Echelon.EchelonGameInfo"]["bPauseOnFocusLoss"]);
     spdlog::info("Config Parse: Pause on Focus Loss: {}", g_PauseOnFocusLoss.shouldPause);
+
+    bCheckForUpdates = Util::stringToBool(ini.sections["Echelon.EchelonGameInfo"]["bCheckForUpdates"]);
+    spdlog::info("Config Parse: Check for Updates: {}", bCheckForUpdates);
+
 }
 
 // Case-insensitive string comparison helper
@@ -429,7 +436,8 @@ void InitializeSubsystems()
         INITIALIZE(g_DistanceCulling.Initialize());
         INITIALIZE(g_IntroSkip.Initialize());
 
-
+        LatestVersionChecker checker;
+        INITIALIZE(checker.checkForUpdates());
     }
     else
     {
