@@ -4,20 +4,15 @@
 - Added Mission Statistics that can be viewed while playing a mission and upon completing a mission.
 - Added a new difficulty called Elite, which removes starting ammo unless required, reduces initial health, disables saves, and includes other level-specific changes.
 - Added a Permadeath Mode, where failing a mission deletes your profile.
-- Doors can now be opened while crouched or carrying a body, using animations backported from Pandora Tomorrow.
 - Added Open Door Stealth as a separate door interaction, similar to Chaos Theory.
-- Added the option to use a new door interaction system with built-in Lock Pick, Disposable Pick, and Optic Cable in the interaction box.
 - Improved the Optic Cable's enter and exit sounds, restoring the missing exit sound on PC version.
-- The selected rate of fire is now saved before entering sniper mode and correctly restored after exiting.
-- Sam now adjusts his stance to match the NPC's during conversations, similar to Pandora Tomorrow.
 - Increased the lifespan for bullet shell casings from 3 seconds to 30 seconds.
 - Added an option to whistle similar to later Splinter Cell games.
-- Added an option to use zoom levels (2x/4x) for the SC-20K, similar to Pandora Tomorrow.
 - Added an option to restore the burst fire mode for the SC-20K, featured in builds prior to E3 2002.
 - Added an option to randomize lockpick combinations.
 - Added an option to use any vision mode in Optic Cables similar to later Splinter Cell games.
 - Added an option to enable Thermal Vision across all levels, regardless of their original settings.
-- Added an option to make explosive and gas damage correctly scale with difficulty level.
+- Added an option to make Frag Grenades lethal to enemies on Hard difficulty.
 - Added an option to control the explosion delay for Wall Mines:
   - 1.75 seconds (Default)
   - 0.50 seconds (Elite)
@@ -27,12 +22,10 @@
 - Added an option to use Xbox difficulty, where Sam starts with 300 HP on Normal and 198 HP on Hard, compared to the PC default of 200 HP on Normal and 132 HP on Hard.
 - Added an option to hide letterboxing in cinematics.
 - Added an option to unlock all levels, including their individual parts.
-- Added the option to show the keypad code as the current goal when using a keypad.
 - Added an option to show/hide individual HUD elements:
   - Communications Box
   - Timer
   - Inventory
-  - Shadow Meter
   - Current Goal
   - Mission Information
   - Crosshair
@@ -40,8 +33,6 @@
 - Added an option to override Sam's suit across all levels.
 - Xbox renderer textures have been restored to bring lighting closer to the Xbox version.
 - Restored the Xbox light effect for alarm lights when they are triggered.
-- Fixed a bug where the mouse wheel changed variable speeds while a weapon was drawn or when using a Sticky Camera or Diversion Camera.
-- Sniper sway is no longer disabled when player input is blocked.
 
 ### Input
 - Added an option to set the initial movement speed.
@@ -50,9 +41,6 @@
 - Added an option to toggle Back to Wall peek when weapon is equipped.
 - Added an option to toggle the inventory, so holding the key is no longer required, similar to Pandora Tomorrow.
 - Added an option to assign a keybind to toggle the HUD on or off.
-- Added support for Mouse 4 and Mouse 5 (side buttons).
-- Added support for using the NumPad on keypads.
-- Sniper mode now uses a dedicated keybind, similar to later Splinter Cell games, instead of being triggered by the Accelerate key.
 - Improved controller support to more closely match the Xbox version.
   - Vibration is not supported due to the game using DirectInput.
   - Some visual errors may appear on the Xbox inventory and pause screens when using the ThirteenAG Widescreen Fix.
@@ -61,14 +49,9 @@
 
 ### Miscellaneous
 - Added an "Enhanced" tab in the Settings menu for configuring Enhanced settings.
-- Added an option to increase the level of detail (LOD) distance significantly, improving the quality of meshes at greater distances.
-- Added an option to increase the Shadow Distance by up to 8x.
-- Added an option to skip intros.
-- Added an option to pause the game when it loses focus.
 - All mission parts now require a keypress to continue after loading, not just the initial part.
 - Save games now use a new file extension for Enhanced to prevent incompatible saves from the original game from being displayed.
-- Fixed a bug in the PC version where inactivity videos couldn't be skipped.
-- Restored the Wall Mine gadget video on the OPSAT, which was accidentally left out of the PC release.
+- Fixed an issue in the PC version where inactivity videos couldn't be skipped.
 - The "Mission Complete" screen now requires a keypress to continue, giving players the chance to view their Mission Statistics without a timer.
 - Increased the inactivity timer from 100 seconds to 300 seconds before inactivity videos start playing.
 - Added a debug command `FixCam` that locks the camera in place, similar to the `fixecam` command in Chaos Theory.
@@ -84,13 +67,11 @@
 ### Maps
 - Training
   - Based on the Xbox version for both parts, featuring lighting improvements.
-  - Fixed a bug by no longer removing the pistol from the player's inventory immediately after shooting the camera, as this could lead to issues when using Back to Wall peeking. The pistol is now removed at the start of the next section instead.
-  - Training popups will now dynamically display either the Keyboard or Controller instructions, depending on the last input used.
 ---
 - Police Station
   - Based on the Xbox version for all parts, featuring lighting improvements.
   - Restored the extraction van from Xbox version.
-  - Fixed a bug in Police Station's texture package by making a plant texture two-sided, allowing it to render correctly from both sides.
+  - Fixed an issue in the Police Station by making a plant texture two-sided, allowing it to render correctly from both sides.
 ---
 - Defense Ministry
   - Applied alternate character meshes to increase NPC variety.
@@ -110,20 +91,18 @@
 ---
 - Kalinatek
   - Included the Xbox version, featuring lighting improvements.
-  - Lambert's briefings no longer trigger at the start of the level, allowing the player to speak with Wilkes without interruption.
   - Restored two previously unused character meshes to increase NPC variety.
   - On Elite mode, the bomb timer has been reduced from 150 seconds to 100 seconds.
-  - Fixed a bug in Kalinatek's texture package by making a plant texture two-sided, allowing it to render correctly from both sides.
+  - Fixed an issue in Kalinatek's texture package by making a plant texture two-sided, allowing it to render correctly from both sides.
 ---
 - Chinese Embassy
   - Based on the Xbox version for the first part, featuring lighting and mesh improvements.
-  - Lambert's briefings no longer trigger at the start of the level, allowing the player to speak with Coen without interruption.
 ---
 - Abattoir
   - Based on the Xbox version for the first part, featuring mesh improvements.
   - Applied alternate character meshes to increase NPC variety.
   - The kill objective will no longer complete from knocking out the primary target.
-  - Fixed a bug where the player could keep retriggering the same objective and dialogue.
+  - Prevent a bug where the player could keep retriggering the same objective and dialogue.
   - After completing the final objective, the player can still move around in case enemies are still around.
   - Changed the default mesh for Sam to Partial Sleeves.
 ---
@@ -143,7 +122,6 @@
   - Restored a camera in the control room from the Xbox version.
   - The level now transitions directly into Vselka Submarine, treating them as a single mission.
   - Alarm stages will no longer be ignored for the initial part.
-  - Added a new alarm light for the Cafeteria ceiling camera as none was assigned.
   - On Elite mode, the extraction timer has been reduced from 150 seconds to 100 seconds.
   - Restored the Russian stress and fight soundtracks.
   - Added alternate mix of common fight theme.
@@ -156,12 +134,10 @@
   - Various lighting fixes in the second part.
   - Added turret controllers for the turrets.
   - Fixed disposable picks that were assigned the wrong StaticMesh.
-  - Fixed an issue where the keyboard typing sound would endlessly loop after triggering the meltdown.
-  - Temporarily disabled speech events to fix issues with scripts failing due to missing audio.
+  - **Note: You may need to Quick Save and Quick Load after triggering the meltdown to ensure the event works correctly.**
 ---
 - Severonickel
   - The first part is currently unplayable, missing StaticMeshes and NPCs, but available for exploration.
   - The second part now starts the player with the same equipment as the first part.
   - Fixed a StaticMesh that was clipping through a ceiling.
   - Added textures for several StaticMeshes that had none assigned.
-  - Temporarily disabled speech events to fix issues with scripts failing due to missing audio.
