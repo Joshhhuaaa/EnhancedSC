@@ -26,13 +26,20 @@ function bool NotifyPickup( Controller Instigator )
 	Ammo -= TransferedBullets;
 	
 	//Log("Is"@Ammo@GetAmmoWeapon(Epc).Ammo);
-	Epc.SendTransmissionMessage(Localize("InventoryItem", ItemName, "Localization\\HUD") $ Localize("Transmission", "PickUp", "Localization\\HUD"), TR_INVENTORY);
+
+	// Joshua - Improvement: Only show pickup message if ammo was transfered
+	if(TransferedBullets>0)
+		Epc.SendTransmissionMessage(Localize("InventoryItem", ItemName, "Localization\\HUD") $ Localize("Transmission", "PickUp", "Localization\\HUD"), TR_INVENTORY);
 	
 
 	if( Ammo <= 0 )
 		Destroy();
 	else
+	{
+		// Joshua - Improvement: Only show pickup message if ammo was transfered
+		EPC.SendTransmissionMessage(Localize("Transmission", "NoPickUp", "Localization\\HUD") $ Localize("InventoryItem", ItemName, "Localization\\HUD"), TR_INVENTORY);
 		Throw(Instigator, Vect(0,0,0));
+	}
 
 	return true; // no go in hand
 }

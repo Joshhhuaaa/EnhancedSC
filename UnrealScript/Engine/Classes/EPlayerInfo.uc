@@ -3,7 +3,7 @@
 //=============================================================================
 class EPlayerInfo extends Actor 
 	  //config(SplinterCellUser)
-      config(Enhanced) // Joshua - Class, configurable in Enhanced config
+    config(Enhanced) // Joshua - Class, configurable in Enhanced config
 	  native;
 
 /*-----------------------------------------------------------------------------
@@ -37,6 +37,12 @@ var config int    SfxVol;
 var config int    AmbVol;
 var config int    iLastSaveType;
 var config bool   bValidProfile;
+
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
 
 // Joshua - New variable for mission unlocks
 enum ELevelUnlock

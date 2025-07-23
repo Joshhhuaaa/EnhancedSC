@@ -17,18 +17,26 @@ var INT             m_IResetToDefaultXPos;
 var EPCTextButton   m_Controls;
 var EPCTextButton   m_Graphics;
 var EPCTextButton   m_Sounds;
-var EPCTextButton   m_Enhanced; // Joshua - Enhanced settings
 var INT             m_iSectionButtonsYPos, m_iFirstSectionButtonsXPos, m_iSectionButtonsXOffset, m_iSectionButtonsWidth;
 
 
 var EPCVideoConfigArea      m_GraphicArea;
 var EPCSoundConfigArea      m_SoundsArea;
 var EPCControlsConfigArea   m_ControlsArea;
-var EPCEnhancedConfigArea   m_EnhancedArea; // Joshua - Enhanced settings
+
 
 var INT                  m_IAreaXPos, m_IAreaYPos, m_IAreaWidth, m_IAreaHeight;
 
 var EPCMessageBox        m_MessageBox;
+
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
+
+var EPCTextButton   m_Enhanced; // Joshua - Enhanced settings
+var EPCEnhancedConfigArea   m_EnhancedArea; // Joshua - Enhanced settings
 
 function Created()
 {
@@ -52,7 +60,7 @@ function Created()
     m_Graphics.SetButtonText(Caps(Localize("HUD","GRAPHICS","Localization\\HUD")) ,TXT_CENTER);
     m_Sounds.SetButtonText(Caps(Localize("HUD","SOUNDS","Localization\\HUD")) ,TXT_CENTER);
     // Joshua - Enhanced settings
-    m_Enhanced.SetButtonText(Caps(Localize("Options","Enhanced","Localization\\Enhanced")) ,TXT_CENTER);
+    m_Enhanced.SetButtonText(Caps(Localize("HUD","Enhanced","Localization\\Enhanced")) ,TXT_CENTER);
     
     m_Controls.Font         = F_Normal;
     m_Graphics.Font         = F_Normal;

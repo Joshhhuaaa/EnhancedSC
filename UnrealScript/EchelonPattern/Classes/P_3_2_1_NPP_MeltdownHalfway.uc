@@ -62,7 +62,7 @@ Half:
     Goal_Default(2,GOAL_Patrol,8,,,,'Sam_0',,FALSE,,MOVE_WalkAlert,,MOVE_WalkAlert);
     End();
 HoppityHop:
-    Speech(Localize("P_3_2_1_NPP_MeltdownHalfway", "Speech_0001L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_28_01', 1, 0, TR_NPCS, 0, false);
+    //Joshua - Temporarily removed until audio is restored:Speech(Localize("P_3_2_1_NPP_MeltdownHalfway", "Speech_0001L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_28_01', 1, 0, TR_NPCS, 0, false);
     Sleep(0.1);
     Close();
     End();

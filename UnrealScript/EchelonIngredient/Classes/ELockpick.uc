@@ -64,6 +64,8 @@ state s_Selected
 		// Send controller into pick lock state
 		Controller.GotoState('s_PickLock');
 	}
+AutoUse:
+	Use();
 }
 
 defaultproperties

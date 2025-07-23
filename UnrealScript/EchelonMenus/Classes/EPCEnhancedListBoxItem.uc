@@ -8,6 +8,7 @@ var bool            m_bIsDescription;
 var bool            m_bIsNotSelectable;
 var UWindowWindow   m_Control; 
 var bool            bIsLine;          
+var bool            bIsTitleLine; // Special line item with smaller height for titles
 var Color           m_TextColor;
 
 defaultproperties

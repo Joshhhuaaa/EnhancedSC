@@ -81,7 +81,13 @@ state s_RayTracing
 
 			//log("hitting"@P@DotP);
 			if( DotP > 0.75 )
-				P.TakeDamage(SprayDamage, None, P.Location, Vect(0,0,0), Vect(0,0,0), DamageType);
+			{
+				// Joshua - Scaling damage as NPCs have 150 HP on Hard diffculty
+				if(EchelonGameInfo(Level.Game).pPlayer.playerInfo.Difficulty > 0 && EchelonGameInfo(Level.Game).bScaleGadgetDamage)
+					P.TakeDamage(SprayDamage * 1.5f, None, P.Location, Vect(0,0,0), Vect(0,0,0), DamageType);
+				else
+					P.TakeDamage(SprayDamage, None, P.Location, Vect(0,0,0), Vect(0,0,0), DamageType);
+			}
 		}
 	}
 }

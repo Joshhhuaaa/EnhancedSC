@@ -58,6 +58,48 @@ function PostBeginPlay()
 	local EMemoryStick Ms;
     local int i;
 	local EEventTrigger EventTrigger;
+	local Actor A;
+
+	// Joshua - Apply TurnOffDistance scaling based on user settings
+    switch(EchelonGameInfo(Level.Game).TurnOffDistanceScale)
+    {
+        case TurnOffDistance_1x:
+            // Default behavior, keep original values
+            break;
+            
+        case TurnOffDistance_2x:
+            // Multiply all actor TurnOffDistance values by 2
+            ForEach DynamicActors(class'Actor', A)
+            {
+                if (A.TurnOffDistance > 0)
+                {
+                    A.TurnOffDistance = A.TurnOffDistance * 2;
+                }
+            }
+            break;
+            
+        case TurnOffDistance_4x:
+            // Multiply all actor TurnOffDistance values by 4
+            ForEach DynamicActors(class'Actor', A)
+            {
+                if (A.TurnOffDistance > 0)
+                {
+                    A.TurnOffDistance = A.TurnOffDistance * 4;
+                }
+            }
+            break;
+            
+        case TurnOffDistance_8x:
+            // Multiply all actor TurnOffDistance values by 8
+            ForEach DynamicActors(class'Actor', A)
+            {
+                if (A.TurnOffDistance > 0)
+                {
+                    A.TurnOffDistance = A.TurnOffDistance * 8;
+                }
+            }
+            break;
+    }
 
 	// Joshua - Assigning new default meshes to these levels
 	switch(GetCurrentMapName())

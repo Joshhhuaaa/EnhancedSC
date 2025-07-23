@@ -323,7 +323,7 @@ function PostBeginPlay()
 			SetSamMesh(0);
 			break;
     }
- 
+
     Super.PostBeginPlay();
 }
 

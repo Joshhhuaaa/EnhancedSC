@@ -22,7 +22,7 @@ function Created()
     m_Graphics.SetButtonText(Caps(Localize("HUD","GRAPHICS","Localization\\HUD")) ,TXT_CENTER);
     m_Sounds.SetButtonText(Caps(Localize("HUD","SOUNDS","Localization\\HUD")) ,TXT_CENTER);
     // Joshua - Enhanced settings
-    m_Enhanced.SetButtonText(Caps(Localize("Options","Enhanced","Localization\\Enhanced")) ,TXT_CENTER);
+    m_Enhanced.SetButtonText(Caps(Localize("HUD","Enhanced","Localization\\Enhanced")) ,TXT_CENTER);
     
     m_Controls.Font         = EPCMainMenuRootWindow(Root).TitleFont;    
     m_Graphics.Font         = EPCMainMenuRootWindow(Root).TitleFont;   

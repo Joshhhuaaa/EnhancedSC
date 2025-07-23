@@ -61,9 +61,11 @@ var const float				RecoilFadeOut;
 
 // ACCURACY
 var bool					UseAccuracy;
+// Joshua - Removed const (start)
 var const float				AccuracyMovementModifier;	// Desired accuracy when moving
 var const float				AccuracyReturnModifier;		// Speed at which it comes back to desired
 var const float				AccuracyBase;				// Base accuracy, will never be lower
+// Joshua - Removed const (end)
 var const float				AccuracyDesired;			// Where we want the accuracy to be
 var	const float				Accuracy;					// Current/Actual weapon accuracy at a certain time
 var const float				RealAccuracy;

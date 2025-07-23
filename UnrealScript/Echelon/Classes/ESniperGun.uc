@@ -10,6 +10,14 @@ var			bool			bSniperMode;
 var			ESniperNoise	Sn;
 var			float			LastSniperModeTime;
 
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
+
+var			ERateOfFireMode	eROFMode_old; // Joshua - QoL improvement: Switch back to previous RoF when leaving sniper mode
+
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
@@ -130,7 +138,7 @@ function Vector GetFireDirection( Vector ShotDirection )
 		return Super.GetFireDirection(ShotDirection);
 }
 
-
+/* Joshua - Replacing with ZoomIn and ZoomOut functions like SCPT
 function Zoom( optional bool bInit )
 {
 	// nothing to do if only one zoom
@@ -147,6 +155,80 @@ function Zoom( optional bool bInit )
 		// Changing directly zoom might mess up cinematic camera.
 		EPlayerController(Controller).SetCameraFOV(Controller, GetZoom());
 	}
+}
+ */
+
+function ZoomIn( optional bool bInit )
+{
+    local float factor;
+    local EPlayerController EPC;
+	local int oldFOVIndex;
+    
+    EPC = EPlayerController(Controller);
+	oldFOVIndex = FOVIndex;
+    
+    if(bInit)
+    {
+        if(EPC != None && !EPC.bF2000ZoomLevels)
+            FOVIndex = FOVs.Length - 1;
+        else
+            FOVIndex = 0;
+    }
+    else
+    {
+        if(EPC != None && !EPC.bF2000ZoomLevels)
+            FOVIndex = FOVs.Length - 1;
+        else if(FOVIndex < FOVs.Length - 1)
+            FOVIndex++;
+    }
+
+    if(Controller != None && Controller.bIsPlayer)
+    {
+        EPC.SetCameraFOV(Controller, GetZoom());
+        
+        factor = EPC.DesiredFOV / GetZoom();
+        // Only play sound if the zoom level actually changed
+        if (EPC.bF2000ZoomLevels && FOVIndex != oldFOVIndex)
+            Controller.Pawn.PlaySound(Sound'Interface.Play_FisherEquipStickyCam', SLOT_SFX);
+    }
+}
+
+function ZoomOut()
+{
+    local float factor;
+    local EPlayerController EPC;
+	local int oldFOVIndex;
+    
+    EPC = EPlayerController(Controller);
+	oldFOVIndex = FOVIndex;
+    
+    // If bF2000ZoomLevels is false, don't allow zooming out
+    if(EPC != None && !EPC.bF2000ZoomLevels)
+        return;
+        
+    if(FOVIndex <= 0)
+        return;
+
+    FOVIndex--;
+
+    if(Controller != None && Controller.bIsPlayer)
+    {
+        EPC.SetCameraFOV(Controller, GetZoom());
+
+        factor = EPC.DesiredFOV / GetZoom();
+        // Only play sound if the zoom level actually changed
+        if (EPC.bF2000ZoomLevels && FOVIndex != oldFOVIndex)
+            Controller.Pawn.PlaySound(Sound'Interface.Play_FisherEquipStickyCam', SLOT_SFX);
+    }
+}
+
+// Joshua - Validate zoom level if zoom levels were disabled while in-game
+function ValidateZoomLevel()
+{
+    if(!EPlayerController(Controller).bF2000ZoomLevels && FOVIndex != FOVs.Length - 1)
+    {
+        FOVIndex = FOVs.Length - 1;
+    }
 }
 
 function float GetZoom()
@@ -166,14 +248,25 @@ function SetSniperMode( bool bIsSniping )
 
 		GotoState('s_Selected');
 
+		
+		eROFMode_old = eROFMode; // Joshua - Switch back to previous RoF when leaving sniper mode
 		eROFMode = ROF_Single;
-		Zoom(true);
+
+		//Zoom(true);
+		ZoomIn(true); // Joshua - Replacing with ZoomIn and ZoomOut functions like SCPT
 
 		if( Controller.bIsPlayer )
 			EPlayerController(Controller).iRenderMask = 1;
 	}
 	else if( Controller.bIsPlayer )
+	{
+		// Joshua - Switch back to previous RoF when leaving sniper mode
+		if(	eROFMode_old != eROFMode )
+		{
+			eROFMode = eROFMode_old;
+		}
 		EPlayerController(Controller).iRenderMask = 0;
+	}
 }
 
 

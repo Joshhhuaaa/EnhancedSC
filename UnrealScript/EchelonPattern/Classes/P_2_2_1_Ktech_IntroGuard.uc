@@ -51,6 +51,7 @@ state Pattern
 Begin:
 IntroGuard:
     Log("First 2 guards coming");
+    SendPatternEvent('LambertComms','MapStartLambertComNew'); // Joshua - Lambert dialogue will begin when leaving Wilkes
     SetExclusivity(FALSE);
     Goal_Set(1,GOAL_MoveTo,9,,,,'IntroGuardNode01',,TRUE,,MOVE_WalkNormal,,MOVE_WalkRelaxed);
     Sleep(2);
@@ -67,7 +68,6 @@ IntroGuard:
     Goal_Set(2,GOAL_MoveTo,1,,'IntroGuardFocusNode05',,'IntroGuardNode02',,FALSE,,MOVE_WalkNormal,,MOVE_WalkNormal);
     Goal_Default(2,GOAL_Guard,0,,'IntroGuardFocusNode05',,'IntroGuardNode02',,FALSE,,MOVE_WalkRelaxed,,MOVE_WalkRelaxed);
     SendPatternEvent('IntroCinematic','WilkesTeleport');
-    End();
 
 }
 

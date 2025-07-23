@@ -52,7 +52,8 @@ Begin:
 MissionGoals:
     Log("Lambert explains Fisher's coming mission. ");
     Sleep(0.50);
-    AddNote("", "P_4_1_1_CEmb_Lambert1", "Note_0027L", "Localization\\P_4_1_1ChineseEmbassy");
+    // Joshua - Removing dialogue on mission start, instead waiting until player leaves Frances
+    /*AddNote("", "P_4_1_1_CEmb_Lambert1", "Note_0027L", "Localization\\P_4_1_1ChineseEmbassy");
     AddGoal('4_1_1', "", 1, "", "P_4_1_1_CEmb_Lambert1", "Goal_0028L", "Localization\\P_4_1_1ChineseEmbassy", "P_4_1_1_CEmb_Lambert1", "Goal_0029L", "Localization\\P_4_1_1ChineseEmbassy");
     AddGoal('4_1_2', "", 3, "", "P_4_1_1_CEmb_Lambert1", "Goal_0030L", "Localization\\P_4_1_1ChineseEmbassy", "P_4_1_1_CEmb_Lambert1", "Goal_0031L", "Localization\\P_4_1_1ChineseEmbassy");
     AddGoal('4_1_11', "", 4, "", "P_4_1_1_CEmb_Lambert1", "Goal_0032L", "Localization\\P_4_1_1ChineseEmbassy", "P_4_1_1_CEmb_Lambert1", "Goal_0033L", "Localization\\P_4_1_1ChineseEmbassy");
@@ -62,7 +63,8 @@ MissionGoals:
     Speech(Localize("P_4_1_1_CEmb_Lambert1", "Speech_0011L", "Localization\\P_4_1_1ChineseEmbassy"), Sound'S4_1_1Voice.Play_41_15_01', 1, 0, TR_HEADQUARTER, 0, false);
     Speech(Localize("P_4_1_1_CEmb_Lambert1", "Speech_0017L", "Localization\\P_4_1_1ChineseEmbassy"), Sound'S4_1_1Voice.Play_41_15_02', 0, 0, TR_CONVERSATION, 0, false);
     Speech(Localize("P_4_1_1_CEmb_Lambert1", "Speech_0018L", "Localization\\P_4_1_1ChineseEmbassy"), Sound'S4_1_1Voice.Play_41_15_03', 1, 0, TR_HEADQUARTER, 0, false);
-    Close();
+    Close();*/
+    // Joshua - This patrol will start earlier without the speech, since it's a latent function
     SendPatternEvent('Group345','ECSWaitingA');
     End();
 

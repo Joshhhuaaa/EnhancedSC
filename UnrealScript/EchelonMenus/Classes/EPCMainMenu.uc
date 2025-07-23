@@ -16,13 +16,20 @@ var EPCTextButton   m_PlayIntro;
 var EPCTextButton   m_Credits;
 var EPCTextButton   m_ExitGame;
 var EPCTextButton   m_GoOnline;
-var UWindowLabelControl m_VersionLabel; // Joshua - Enhanced version label
 
 var INT             m_IMainButtonsXPos, m_IMainButtonsHeight, m_IMainButtonsWidth, m_IMainButtonsFirstYPos, m_IMainButtonsYOffset;
 var INT             m_IGoOnlineYPos, m_IGoOnlineWidth, m_IGoOnlineXPos;
-var INT             m_IVersionLabelXPos, m_IVersionLabelYPos; // Joshua - Enhanced version label
 
 var EPCMessageBox        m_MessageBox;
+
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
+
+var UWindowLabelControl m_VersionLabel; // Joshua - Enhanced version label
+var INT             m_IVersionLabelXPos, m_IVersionLabelYPos; // Joshua - Enhanced version label
 
 function Created()
 {
@@ -46,7 +53,7 @@ function Created()
     // Joshua - Replaced website with Enhanced
     //m_GoOnline.SetButtonText(Localize("HUD","WEBSITE","Localization\\HUD") ,TXT_CENTER);
     m_GoOnline.SetButtonText(Localize("Common","Website","Localization\\Enhanced") ,TXT_CENTER);
-    m_VersionLabel.SetLabelText("Enhanced v1.2a", TXT_CENTER); // Joshua - Enhanced version label
+    m_VersionLabel.SetLabelText("Enhanced v1.3", TXT_CENTER); // Joshua - Enhanced version label
     
     m_StarGame.Font = F_Large;
     m_Settings.Font = F_Large;
@@ -56,9 +63,9 @@ function Created()
     m_GoOnline.Font = F_Large;
     m_VersionLabel.Font = F_Normal; // Joshua - Enhanced version label
 
-    m_VersionLabel.TextColor.R = 77;
-    m_VersionLabel.TextColor.G = 77;
-    m_VersionLabel.TextColor.B = 77;
+    m_VersionLabel.TextColor.R = 51;
+    m_VersionLabel.TextColor.G = 51;
+    m_VersionLabel.TextColor.B = 51;
     m_VersionLabel.TextColor.A = 255;
 }
 
@@ -122,6 +129,6 @@ defaultproperties
     m_IGoOnlineYPos=295
     m_IGoOnlineWidth=300
     m_IGoOnlineXPos=180
-    m_IVersionLabelXPos=440
-    m_IVersionLabelYPos=395
+    m_IVersionLabelXPos=435 //435 //429
+    m_IVersionLabelYPos=395 //393 breaks widescreen fix?
 }

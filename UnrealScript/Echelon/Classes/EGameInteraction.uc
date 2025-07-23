@@ -31,6 +31,80 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 		return true;
 	}
 
+	// Joshua - Adding NumPad support for keypads
+	if( Action == IST_Press )
+	{
+		if( Epc.GetStateName() == 's_KeyPadInteract' )
+		{
+			// NumPad binds take priority if there's a conflic
+			if( Key == IK_NumPad0 )
+			{
+				Epc.KeyEvent("Keypad_NumPad0", Action, Delta);
+				return true;
+			}
+			else if( Key == IK_NumPad1 )
+			{
+				Epc.KeyEvent("Keypad_NumPad1", Action, Delta);
+				return true;
+			}
+			else if( Key == IK_NumPad2 )
+			{
+				Epc.KeyEvent("Keypad_NumPad2", Action, Delta);
+				return true;
+			}
+			else if( Key == IK_NumPad3 )
+			{
+				Epc.KeyEvent("Keypad_NumPad3", Action, Delta);
+				return true;
+			}
+			else if( Key == IK_NumPad4 )
+			{
+				Epc.KeyEvent("Keypad_NumPad4", Action, Delta);
+				return true;
+			}
+			else if( Key == IK_NumPad5 )
+			{
+				Epc.KeyEvent("Keypad_NumPad5", Action, Delta);
+				return true;
+			}
+			else if( Key == IK_NumPad6 )
+			{
+				Epc.KeyEvent("Keypad_NumPad6", Action, Delta);
+				return true;
+			}
+			else if( Key == IK_NumPad7 )
+			{
+				Epc.KeyEvent("Keypad_NumPad7", Action, Delta);
+				return true;
+			}
+			else if( Key == IK_NumPad8 )
+			{
+				Epc.KeyEvent("Keypad_NumPad8", Action, Delta);
+				return true;
+			}
+			else if( Key == IK_NumPad9 )
+			{
+				Epc.KeyEvent("Keypad_NumPad9", Action, Delta);
+				return true;
+			}
+			else if( Key == IK_NumPadPeriod )
+			{
+				Epc.KeyEvent("Keypad_NumPadPeriod", Action, Delta);
+				return true;
+			}
+			else if( Key == IK_GreyStar )
+			{
+				Epc.KeyEvent("Keypad_GreyStar", Action, Delta);
+				return true;
+			}
+			else if( Key == IK_Backspace )
+			{
+				Epc.KeyEvent("Keypad_Backspace", Action, Delta);
+				return true;
+			}
+		}
+	}
+
 	if( Action == IST_Press || Action == IST_Hold )
 	{
 		//clauzon 9/17/2002 replaced a switch checking the key pressed by the mapped action test.
@@ -86,7 +160,7 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 			if (Epc.GetStateName() == 's_FirstPersonTargeting' || Epc.GetStateName() == 's_PlayerSniping' || Epc.GetStateName() == 's_PlayerBTWTargeting')
 			{
 				Epc.SetKey("Joy1 ReloadGun", ""); // Joshua - Xbox used Joy5 originally but added whistling
-				Epc.SetKey("Joy4 ToggleSnipe", "");
+				Epc.SetKey("Joy4 Snipe", "");
 				Epc.SetKey("Joy11 SwitchROF", "");
 			}
 
@@ -126,7 +200,7 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 			{
 				Epc.SetKey("Joy1 ReloadGun", "");
 				Epc.SetKey("Joy11 SwitchROF", ""); // Joshua - Pandora used both thumbsticks to snipe because it had no ROF
-				Epc.SetKey("Joy12 ToggleSnipe", "");
+				Epc.SetKey("Joy12 Snipe", "");
 			}
 
 
@@ -166,7 +240,7 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 			{
 				Epc.SetKey("Joy1 ReloadGun", ""); // Joshua - PlayStation used Joy5 originally but added whistling
 				Epc.SetKey("Joy11 SwitchROF", "");
-				Epc.SetKey("Joy12 ToggleSnipe", "");
+				Epc.SetKey("Joy12 Snipe", "");
 			}
 
 
@@ -235,6 +309,7 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 		Epc.eGame.bUseController = true;
 
 
+	BindSnipe();
 	BindWhistle();
 	BindToggleHUD();
 	BindPlayerStats();
@@ -324,6 +399,37 @@ state s_GameInteractionMenu
 		}
 		return true;
 	} 
+}
+
+// Joshua - Function to bind Sniper to Middle Mouse
+// Only binds if Middle Mouse is free and Sniper isn't already bound to another key
+function BindSnipe()
+{
+    local byte SnipeKeyByte;
+    local byte MiddleMouseKeyByte;
+    local string BoundAction;
+    local bool bSnipeBound;
+    
+    MiddleMouseKeyByte = 4; // Value for 'MiddleMouse'
+    
+    // Check if already bound to a key
+    MiddleMouseKeyByte = Epc.GetKey("Snipe", false);
+    
+    // Don't consider controller keys (196-215) as bindings
+    if(MiddleMouseKeyByte != 0 && !(MiddleMouseKeyByte >= 196 && MiddleMouseKeyByte <= 215))
+    {
+        bSnipeBound = true;
+    }
+    
+    if(!bSnipeBound)
+    {
+        BoundAction = Epc.GetActionKey(MiddleMouseKeyByte);
+        
+        if(BoundAction == "" || BoundAction == "None")
+        {
+            Epc.SetKey("MiddleMouse Snipe", "");
+        }
+    }
 }
 
 // Joshua - Function to bind Whistle to V key

@@ -51,7 +51,11 @@ state s_Flying
 		ratio = float(Smoke.Emitters[0].LivingParticles) / Smoke.Emitters[0].MaxParticles;
 		ForEach VisibleCollidingActors(class'EPawn', P, ratio*400.f)
 		{
-			P.TakeDamage(2, Controller.Pawn, P.Location, Vect(0,0,0), Vect(0,0,0), class'ESleepingGas');
+			// Joshua - Scaling damage as NPCs have 150 HP on Hard diffculty
+			if(EchelonGameInfo(Level.Game).pPlayer.playerInfo.Difficulty > 0 && EchelonGameInfo(Level.Game).bScaleGadgetDamage)
+				P.TakeDamage(2*1.5f, Controller.Pawn, P.Location, Vect(0,0,0), Vect(0,0,0), class'ESleepingGas');
+			else
+				P.TakeDamage(2, Controller.Pawn, P.Location, Vect(0,0,0), Vect(0,0,0), class'ESleepingGas');
 		}
 	}
 }

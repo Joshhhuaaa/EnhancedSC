@@ -218,6 +218,14 @@ var int iGameOverMsg;
 var int iCheatMask;
 var bool bQuickLoad;
 
+const MAX_REGULAR_MAP = 13;
+
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
+
 var bool bCheckpoint; // Joshua - New variable for Checkpoints
 var string CheckpointLevel; // Joshua - New variable to keep track which level the Checkpoint was on
 
@@ -252,20 +260,32 @@ var(Enhanced) config bool bWhistle; // Joshua - Option to enable whistling
 var float m_WhistleTime; // Joshua - New variable to keep track of last whistle
 var bool bDisableWhistle; // Joshua - Used to disable whistle while in Diversion Camera
 
+var(Enhanced) config bool bF2000ZoomLevels; // Joshua - Enables 2x/4x/6x zoom for F2000 sniper (default game had 6x only)
+var int LastSniperFOVIndex; // Joshua - Remember the last FOV index so we can restore it after reloading
+
+var bool bPressSnip;
+var bool bDPadUpPressed, bDPadDownPressed;
+var bool bUsingAirCamera; // Joshua - True when the player is using a camera, prevents movement speed changes with mouse wheel
+
 var(Enhanced) bool bToggleBTWTargeting; // Joshua - Used to toggle BTW targeting instead of holding direction
+
+var EInventoryItem OpticCableItem; // Joshua - Optic Cable interaction
+
+var(Enhanced) config bool bShowKeypadGoal; // Joshua - Show keypad as goal
+var bool bShowKeyNum;
 
 var EPlayerStats playerStats; // Joshua - Player statistics tracking
 var bool bConfirmStats;
+var bool bDebugStats;
 
 // Joshua - Global HUD variables
 var(Enhanced) config bool bShowHUD;
 var(Enhanced) config bool bShowInventory;
+var(Enhanced) config bool bShowStealthMeter;
 var(Enhanced) config bool bShowCurrentGoal;
 var(Enhanced) config bool bShowMissionInformation;
 var(Enhanced) config bool bShowCrosshair;
 var(Enhanced) config bool bShowScope;
-
-const MAX_REGULAR_MAP = 13;
 
 native(1290) final function SetCameraFOV( actor Owner, float NewFOV );
 native(1291) final function SetCameraMode( actor Owner, int NewRendMap );
@@ -400,7 +420,8 @@ function UpdateCameraRotation(actor ViewActor)
 	local ESniperGun	snipeGun;
 
 	snipeGun = ESniperGun(ePawn.HandItem);
-	if( snipeGun != None && snipeGun.bSniperMode && !bStopInput )
+	// Joshua - Continue sniper noise even when the player's input is being blocked
+	if( snipeGun != None && snipeGun.bSniperMode /*&& !bStopInput*/ )
 		ViewRotation = snipeGun.SniperNoisedRotation;
 	else
 		ViewRotation = Rotation;
@@ -604,6 +625,9 @@ function PostBeginPlay()
 	m_camera = Spawn(class'EPlayerCam', self);
 	m_camera.m_EPC = self;
 
+	// Joshua - Set thermal texture after play begins
+	ThermalTexture = Level.pThermalTexture_A;
+
 	// Set current value to desired value from ini
 	SetCameraFOV(self, DesiredFov);
 }
@@ -702,10 +726,10 @@ event AddNote(string NoteString, string Section, string Key, string Package, boo
 	Note.Package = Package;
 
 	// Always insert notes at begining of the list
-	if ( NoteBook.FirstNode != None && !insertAtEnd)
-		NoteBook.InsertBefore( Note, ENote(NoteBook.FirstNode.Data) );
+	if (NoteBook.FirstNode != None && !insertAtEnd)
+		NoteBook.InsertBefore(Note, ENote(NoteBook.FirstNode.Data));
 	else
-	NoteBook.InsertAtEnd(Note);
+		NoteBook.InsertAtEnd(Note);
 }
 
 //---------------------------------------[Yanick Mimee - 26 Juin 2002]-----
@@ -936,6 +960,36 @@ event SetGoalStatus(Name ID, bool status)
 			bNewGoal = false;
 		}
 	}
+}
+
+// Joshua - Keypad hint
+function RefreshGoals()
+{
+	local ENote     Goal;
+    local EListNode Node;
+	local bool      bGotNewGoal;
+
+	bGotNewGoal = false;
+
+	// Find the high priority goal
+	Node = GoalList.FirstNode;
+	while(Node != None)
+	{
+		Goal = ENote(Node.Data);
+		if( !Goal.bCompleted )
+		{
+			bGotNewGoal = true;
+			CurrentGoal = Goal.NoteShrink;
+			CurrentGoal = Localize(Goal.SectionShrink, Goal.KeyShrink, Goal.PackageShrink);
+			CurrentGoalSection = Goal.SectionShrink;
+			CurrentGoalKey     = Goal.KeyShrink;
+			CurrentGoalPackage = Goal.PackageShrink;
+			break;
+		}
+		Node = Node.NextNode;
+	}
+	// If we didn't find one, they're all completed so display nothing
+	if ( !bGotNewGoal ) CurrentGoal = "";
 }
 
 //----------------------------------------[David Kalina - 7 Mar 2001]-----
@@ -1169,10 +1223,17 @@ exec function IncSpeed()
 	bIncSpeedPressed = true;
 	bMustZoomIn		 = true;
 
-	m_curWalkSpeed += 1 ;
-	if(m_curWalkSpeed > eGame.m_maxSpeedInterval)
+	// Joshua - Todo: Instead add this to the ZoomIn alias in SplinterCell.ini
+	SnipeZoomIn();
+
+	// Joshua - QoL improvement: if we aren't in weapon stance 0, or if we're zooming, don't process the movement speed change
+	if( ePawn.WeaponStance == 0 && !bUsingAirCamera )
 	{
-		m_curWalkSpeed = eGame.m_maxSpeedInterval;
+		m_curWalkSpeed += 1;
+		if(m_curWalkSpeed > eGame.m_maxSpeedInterval)
+		{
+			m_curWalkSpeed = eGame.m_maxSpeedInterval;
+		}
 	}
 }
 
@@ -1189,10 +1250,17 @@ exec function DecSpeed()
 	bDecSpeedPressed = true;
 	bMustZoomOut	 = true;
 
-	m_curWalkSpeed -= 1;
-	if(m_curWalkSpeed <= 0 )
+	// Joshua - Todo: Instead add this to the ZoomIn alias in SplinterCell.ini
+	SnipeZoomOut();
+
+	// Joshua - QoL improvement: if we aren't in weapon stance 0, or if we're zooming, don't process the movement speed change
+	if( ePawn.WeaponStance == 0 && !bUsingAirCamera )
 	{
-		m_curWalkSpeed = 1;
+		m_curWalkSpeed -= 1;
+		if(m_curWalkSpeed <= 0 )
+		{
+			m_curWalkSpeed = 1;
+		}
 	}
 }
 
@@ -1200,9 +1268,9 @@ exec function DecSpeed()
 // Description
 //		 Toggles the SC-20K's scope using a single button (Y), replicating the Xbox control scheme.
 //------------------------------------------------------------------------
-exec function ToggleSnipe()
+exec function Snipe()
 {
-	local ESniperGun	snipeGun;
+/*	local ESniperGun	snipeGun;
 	snipeGun = ESniperGun(ePawn.HandItem);
 
 	if( snipeGun != None && snipeGun.bSniperMode && !bStopInput )
@@ -1215,6 +1283,38 @@ exec function ToggleSnipe()
 		bMustZoomIn = true;
 		bMustZoomOut = false;
 	}
+*/
+	if( Level.Pauser != None || bStopInput )
+		return;
+
+	if (ActiveGun != None && ActiveGun == MainGun && !bInGunTransition)
+		bPressSnip = true;
+}
+
+//---------------------------------------[Joshua - 15 Jul 2025]-----
+// Description
+//		 While in sniper mode, zoom in to the next FoV index on the list if available.
+//------------------------------------------------------------------------
+exec function SnipeZoomIn()
+{
+	if( Level.Pauser != None || bStopInput )
+		return;
+
+	if( bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping' )
+		ESniperGun(ActiveGun).ZoomIn();
+}
+
+//---------------------------------------[Joshua - 15 Jul 2025]-----
+// Description
+//		 While in sniper mode, zoom out to the previous FoV index on the list if available.
+//------------------------------------------------------------------------
+exec function SnipeZoomOut()
+{
+	if( Level.Pauser != None || bStopInput )
+		return;
+
+	if( bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping' )
+		ESniperGun(ActiveGun).ZoomOut();
 }
 
 //---------------------------------------[Joshua - 17 Apr 2025]-----
@@ -1225,6 +1325,7 @@ exec function ResetCamera()
 {
 	if( Level.Pauser != None || bStopInput )
 		return;
+
 	bResetCamera = 1;
 }
 
@@ -1392,20 +1493,32 @@ exec function KillPawns()
 
 exec function Stealth()
 {
+	if (eGame.bEliteMode || eGame.bPermadeathMode)
+		return;
+
 	bDebugStealth = !bDebugStealth;
 }
 exec function ShowInput()
 {
+	if (eGame.bEliteMode || eGame.bPermadeathMode)
+		return;
+
     bDebugInput = !bDebugInput;
 }
 exec function ToggleCamShot()
 {
+	if (eGame.bEliteMode || eGame.bPermadeathMode)
+		return;
+
 	bVideoMode = !bVideoMode;
 }
 
 exec function IM()
 {
 	local int i;
+
+	if (eGame.bEliteMode || eGame.bPermadeathMode)
+		return;
 
 	Log("* IM ["$IManager.Interactions.Length$"]");
 	for( i=0; i<IManager.Interactions.Length; i++ )
@@ -1414,6 +1527,9 @@ exec function IM()
 
 exec function Mission( optional float i )
 {
+	if (eGame.bEliteMode || eGame.bPermadeathMode)
+		return;
+
 	EndMission(i==0, 4);
 }
 
@@ -1464,6 +1580,247 @@ exec function FixCam()
 exec function SaveEnhancedOptions()
 {
 	SaveConfig("Enhanced");
+}
+
+// Joshua - Temporary PlayerStats debug
+exec function Stat(string Stat)
+{
+	switch(Stat)
+	{
+	case "A": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("PlayerIdentified"); break;
+	case "B": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BodyFound"); break;
+	case "C": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("AlarmTriggered"); break;
+
+	case "D": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKnockedOut"); break;
+	case "E": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKnockedOutRequired"); break;
+	case "F": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyInjured"); break;
+	case "G": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKilled"); break;
+	case "H": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKilledRequired"); break;
+
+	case "I": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKnockedOut"); break;
+	case "J": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKnockedOutRequired"); break;
+	case "K": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianInjured"); break;
+	case "L": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKilled"); break;
+	case "M": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKilledRequired"); break;
+
+	case "N": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BulletFired"); break;
+	case "O": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("LightDestroyed"); break;
+	case "P": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("ObjectDestroyed"); break;
+	case "Q": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("LockPicked"); break;
+	case "R": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("LockDestroyed"); break;
+	case "S": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("MedkitUsed"); break;
+	case "T": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("NPCsInterrogated"); break;
+
+	case "U": EchelonGameInfo(Level.Game).pPlayer.playerStats.bCheatsActive = !EchelonGameInfo(Level.Game).pPlayer.playerStats.bCheatsActive; break;
+
+	default: break;
+	}
+}
+
+exec function RandStat()
+{
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.PlayerIdentified = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("PlayerIdentified", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.BodyFound = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BodyFound", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AlarmTriggered = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("AlarmTriggered", 1 + rand(9999));
+
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.EnemyKnockedOut = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKnockedOut", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.EnemyKnockedOutRequired = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKnockedOutRequired", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.EnemyInjured = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyInjured", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.EnemyKilled = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKilled", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.EnemyKilledRequired = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKilledRequired", 1 + rand(9999));
+
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.CivilianKnockedOut = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKnockedOut", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.CivilianKnockedOutRequired = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKnockedOutRequired", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.CivilianInjured = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianInjured", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.CivilianKilled = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKilled", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.CivilianKilledRequired = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKilledRequired", 1 + rand(9999));
+
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.BulletFired = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BulletFired", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.LightDestroyed = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("LightDestroyed", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.ObjectDestroyed = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("ObjectDestroyed", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.LockPicked = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("LockPicked", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.LockDestroyed = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("LockDestroyed", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.MedkitUsed = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("MedkitUsed", 1 + rand(9999));
+    
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.NPCsInterrogated = 0;
+    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("NPCsInterrogated", 1 + rand(9999));
+
+	EchelonGameInfo(Level.Game).pPlayer.playerStats.bCheatsActive = !EchelonGameInfo(Level.Game).pPlayer.playerStats.bCheatsActive;
+}
+
+exec function ShowStat()
+{
+	bDebugStats = !bDebugStats;
+}
+
+function ShowDebugStats(Canvas Canvas, out float YL, out float YPos)
+{
+    local string T;
+    local float XL;
+    
+    Canvas.SetDrawColor(255,255,255);
+    Canvas.SetPos(4,YPos);
+    Canvas.Style = ERenderStyle.STY_Normal;
+    
+    Canvas.StrLen("TEST", XL, YL);
+    
+    T = "[EPlayerStats]";
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+
+	T = "MissionName: "$playerStats.MissionName;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+
+	T = "MissionTime: "$playerStats.MissionTime;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+
+	T = "bCheatsActive: "$playerStats.bCheatsActive;
+    Canvas.DrawText(T);
+    YPos += YL * 1.5;
+    Canvas.SetPos(4,YPos);
+    
+    Canvas.SetDrawColor(255,100,100);
+    T = "PlayerIdentified: "$playerStats.PlayerIdentified;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "BodyFound: "$playerStats.BodyFound;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "AlarmTriggered: "$playerStats.AlarmTriggered;
+    Canvas.DrawText(T);
+    YPos += YL * 1.5;
+    Canvas.SetPos(4,YPos);
+    
+    Canvas.SetDrawColor(255,255,100);
+    T = "EnemyKnockedOut: "$playerStats.EnemyKnockedOut;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "EnemyKnockedOutRequired: "$playerStats.EnemyKnockedOutRequired;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "EnemyInjured: "$playerStats.EnemyInjured;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "EnemyKilled: "$playerStats.EnemyKilled;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "EnemyKilledRequired: "$playerStats.EnemyKilledRequired;
+    Canvas.DrawText(T);
+    YPos += YL * 1.5;
+    Canvas.SetPos(4,YPos);
+    
+    Canvas.SetDrawColor(100,255,100);
+    T = "CivilianKnockedOut: "$playerStats.CivilianKnockedOut;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "CivilianKnockedOutRequired: "$playerStats.CivilianKnockedOutRequired;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "CivilianInjured: "$playerStats.CivilianInjured;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "CivilianKilled: "$playerStats.CivilianKilled;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "CivilianKilledRequired: "$playerStats.CivilianKilledRequired;
+    Canvas.DrawText(T);
+    YPos += YL * 1.5;
+    Canvas.SetPos(4,YPos);
+    
+    Canvas.SetDrawColor(100,255,255);
+    T = "BulletFired: "$playerStats.BulletFired;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "LightDestroyed: "$playerStats.LightDestroyed;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "ObjectDestroyed: "$playerStats.ObjectDestroyed;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "LockPicked: "$playerStats.LockPicked;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "LockDestroyed: "$playerStats.LockDestroyed;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "MedkitUsed: "$playerStats.MedkitUsed;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "NPCsInterrogated: "$playerStats.NPCsInterrogated;
+    Canvas.DrawText(T);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
 }
 
 //	                                                        
@@ -1535,7 +1892,8 @@ event PlayerCalcView(out actor ViewActor, out vector CameraLocation, out rotator
 		m_lastLocationTick = Level.TimeSeconds;
 	}
 
-	if( snipeGun != None && snipeGun.bSniperMode && !bStopInput )
+	// Joshua - Continue sniper noise even when the player's input is being blocked
+	if( snipeGun != None && snipeGun.bSniperMode /*&& !bStopInput*/ )
 		CameraRotation = snipeGun.SniperNoisedRotation;
 }
 
@@ -1768,10 +2126,10 @@ function EndMission( bool bMissionComplete, int iFailureType )
 	if( iGameOverMsg != -1 && iGameOverMsg != iFailureType )
 		return;
 
-	// Joshua - Hack for Presidential Palace to display mission statistics before ending cutscene
+	// Joshua - Hack for Presidential Palace to display player statistics before ending cutscene
 	if (GetCurrentMapName() == "5_1_2_PresidentialPalace" && bMissionComplete && iFailureType == 0)
 	{
-		playerStats.OnMissionComplete(); // Joshua - For mission statistics, pauses the mission time
+		playerStats.OnMissionComplete(); // Joshua - For player statistics, pauses the mission time
 		myHUD.GoToState('s_FinalMapStats');
 
         if (bConfirmStats == false)
@@ -1787,7 +2145,7 @@ function EndMission( bool bMissionComplete, int iFailureType )
 	// Change hud state
 	if( bMissionComplete )
 	{
-		playerStats.OnMissionComplete(); // Joshua - For mission statistics, pauses the mission time
+		playerStats.OnMissionComplete(); // Joshua - For player statistics, pauses the mission time
 		myHUD.GotoState('s_Mission', 'Complete');
 	}
 	else
@@ -1902,6 +2260,45 @@ event MayFall()
 //-----------------------------------------------------------------------
 function SendTransmissionMessage(string TextData, EchelonEnums.eTransmissionType eType)
 {
+	// Joshua - Hack to make it so duplicated messages don't appear in the communication box
+	local EListNode Node;
+	local ETransmissionObj T;
+	local ESList TransmissionList;
+		
+	switch(eType)
+	{
+		case TR_HINT:
+		case TR_CONSOLE:
+			TransmissionList = EMainHUD(myHUD).CommunicationBox.ConsoleList;
+			break;
+		case TR_NPCS:
+			TransmissionList = EMainHUD(myHUD).CommunicationBox.NPCList;
+			break;
+		case TR_INVENTORY:
+		case TR_COMMWARNING:
+			TransmissionList = EMainHUD(myHUD).CommunicationBox.InventoryList;
+			break;
+		default:
+			// For other types, don't check for duplicates in the list
+			EMainHUD(myHUD).CommunicationBox.AddTransmission( self, eType, TextData, None);
+			return;
+	}
+	
+	// Check if the same message already exists in the transmission list
+	if (TransmissionList != None && TransmissionList.FirstNode != None)
+	{
+		for(Node = TransmissionList.FirstNode; Node != None; Node = Node.NextNode)
+		{
+			T = ETransmissionObj(Node.Data);
+			if(T != None && T.Data == TextData)
+			{
+				// Same message already exists, don't add it
+				return;
+			}
+		}
+	}
+	
+	// Joshua - Original behavior: Message doesn't exist, add it
 	EMainHUD(myHUD).CommunicationBox.AddTransmission( self, eType, TextData, None);
 }
 
@@ -2245,6 +2642,9 @@ exec function Whistle()
 
 	if(!EPawn.IsPawnTalking() && bWhistle && Level.TimeSeconds - m_WhistleTime > 1.0)
 	{
+		// Joshua - Doesn't look the best with SC1 SkeletalMesh
+		//ePawn.BlendAnimOverCurrent('Whistle', 1, 'B Head');
+
 		ePawn.PlaySound(Sound'FisherEquipement.Play_Random_StickyCamNoise', SLOT_Interface);
 
 		ePawn.MakeNoise(750, NOISE_Object_Falling);
@@ -2711,6 +3111,7 @@ state s_GrabTargeting
     {
         local vector X,Y,Z, NewAccel;
 		local float pushingForce;
+		local float inputMagnitude; // Joshua - Normalize movement
 
 		pushingForce = GetPushingForce();
 
@@ -2768,19 +3169,10 @@ state s_GrabTargeting
 		}
 
 		// Joshua - Normalize movement
-		if (bNormalizeMovement)
+		inputMagnitude = sqrt(aForward * aForward + aStrafe * aStrafe);
+		if (inputMagnitude > 1.0 && bNormalizeMovement)
 		{
-			if (IsPushing())
-			{
-				if (ePawn.bIsCrouched)
-					ePawn.GroundSpeed = m_speedWalkFPCr;
-				else
-					ePawn.GroundSpeed = m_speedWalkFP;
-			}
-			else
-			{
-				ePawn.GroundSpeed = 0.0;
-			}
+			ePawn.GroundSpeed = ePawn.GroundSpeed / inputMagnitude;
 		}
 	}	
 
@@ -2829,7 +3221,8 @@ state s_Carry
 				NpcSetup(ePawn.ToWorldDir(vect(-200,0,200)),'CaryCrAlQk0', true);
 		}
 
-		m_AttackTarget = None;
+ 		// Joshua - PT carry interact
+		//m_AttackTarget = None;
 		ElapsedTime = 0.0f;
 		if (bIsPlaying)
 		{
@@ -2856,7 +3249,18 @@ state s_Carry
 
 	function bool CanAddInteract( EInteractObject IntObj )
 	{
-		return false;
+		//return false;
+		// Joshua - PT carry interact
+		if( !bInTransition && ( IntObj.class.name == 'EDoorInteraction' ) )
+			return true;
+		else
+			return false;
+	}
+
+	// Joshua - PT carry interact
+	function bool CanInteract()
+	{
+		return ePawn.Physics != PHYS_Falling;
 	}
 
 	function ProcessScope()
@@ -2867,6 +3271,10 @@ state s_Carry
 
 	function ProcessInteract()
 	{
+		//Joshua - PT carry interact
+		if(IManager.Interactions.length != 0)
+			return;
+
 		if( !bInTransition && ePawn.Physics != PHYS_Falling)
 			GoToState(, 'Drop');
 	}
@@ -3005,6 +3413,7 @@ Falling:
 	else
 		NpcSetup(ePawn.ToWorldDir(vect(-200,0,200)),'CaryCrAlQk0', true);
 	bInTransition = false;
+	//JumpLabelPrivate = 'FromCarry'; // Joshua - Prevent grabbing ledge when falling from a carry, PT feature
 	GoTostate('s_PlayerJumping');
 
 QuickDrop:
@@ -3026,6 +3435,7 @@ QuickDrop:
 		FinishAnim();
 	bInTransition = false;
 	bNoLedgePush = false;
+	m_AttackTarget = None; // Joshua - PT carry interact
 	// if ActiveGun, go in targeting mode automatically
 	if( ActiveGun != None )
 		OnGroundScope();
@@ -3063,6 +3473,7 @@ Drop:
 	bInTransition = false;
 	bNoLedgePush = false;
 
+	m_AttackTarget = None; // Joshua - PT carry interact
 	GotoState('s_playerwalking');
 
 Crouch:
@@ -3120,6 +3531,35 @@ Begin:
 	}
 	else
 		m_camera.SetMode(ECM_CarryCr);
+
+	bInTransition = false;
+	bNoLedgePush = false;
+	Stop;
+
+OpenDoorBack:
+	ePawn.SetPhysics(PHYS_Walking);
+	KillPawnSpeed();
+	m_SMInTrans = false;
+
+	// if grabbed npc is on fire, player will fire up
+	NotifyBump(m_AttackTarget);
+
+	//m_AttackTarget.LoopAnimOnly('CaryStAlNt0', 0.0001, 0.0);
+	m_AttackTarget.SetBase(None);	// Leave this line there. It is important
+	ePawn.AttachToBone(m_AttackTarget, 'CarryBody');
+
+	m_AttackTarget.SetRelativeRotation(rot(1796, -8345, 15840));
+	m_AttackTarget.SetRelativeLocation(vect(17.152830, -0.340918, 0.698137));
+	if(!ePawn.bIsCrouched)
+	{
+		m_camera.SetMode(ECM_Carry);
+		ePawn.LoopAnimOnly('CaryStAlNt0', , 0.3);
+	}
+	else
+	{
+		m_camera.SetMode(ECM_CarryCr);
+		ePawn.LoopAnimOnly('CaryCrAlNt0', , 0.5);
+	}
 
 	bInTransition = false;
 	bNoLedgePush = false;
@@ -3370,7 +3810,7 @@ state s_PlayerWalking
         
 		GetAxes(ePawn.Rotation,X,Y,Z);
 
-		// Joshua - Noramlize movement
+		// Joshua - Normalize movement
 		if (inputMagnitude > 1.0 && bNormalizeMovement)
 		{
 			aForward /= inputMagnitude;
@@ -3733,7 +4173,7 @@ function PlayOnGround(float waitTween)
 	// Reset time when moving, turning or when you're frozen
 	if( speed > 0 || aTurn != 0 || bStopInput )
 	{
-		ePawn.IdleTime=0;
+		ePawn.IdleTime = 0;
 	}
 	// If is 0, reset to current time to begin idle timer
 	else if( ePawn.IdleTime == 0 )
@@ -4235,28 +4675,22 @@ state s_FirstPersonTargeting extends s_Targeting
 
     function PlayerMove( float DeltaTime )
     {
+		local float inputMagnitude; // Joshua - Normalize movement
+
 		Super.PlayerMove(DeltaTime);
 
-		if( bMustZoomIn && ActiveGun == MainGun && !bInGunTransition && !bLockedCamera )
+		if( bPressSnip && ActiveGun == MainGun && !bInGunTransition && !bLockedCamera )
 		{
+			bPressSnip = false;
 			bInTransition = true; // prevent the SheathWeapon
 			GotoState('s_PlayerSniping');
 		}
 
 		// Joshua - Normalize movement
-		if (bNormalizeMovement)
+		inputMagnitude = sqrt(aForward * aForward + aStrafe * aStrafe);
+		if (inputMagnitude > 1.0 && bNormalizeMovement)
 		{
-			if (IsPushing())
-			{
-				if (ePawn.bIsCrouched)
-					ePawn.GroundSpeed = m_speedWalkFPCr;
-				else
-					ePawn.GroundSpeed = m_speedWalkFP;
-			}
-			else
-			{
-				ePawn.GroundSpeed = 0.0;
-			}
+			ePawn.GroundSpeed = ePawn.GroundSpeed / inputMagnitude;
 		}
 	}
 
@@ -4295,6 +4729,7 @@ state s_PlayerSniping extends s_Targeting
 		SetCameraFOV(self, DesiredFov);			// restore Fov that may have changed in sniping mode
 		ESniperGun(ActiveGun).SetSniperMode(false);
 		bHideSam	= false;
+		LastSniperFOVIndex = 0; // Joshua - Set FOV index to default when leaving
 	}
 
 	function float GetSniperPosVar()
@@ -4323,6 +4758,10 @@ state s_PlayerSniping extends s_Targeting
 	// Reload in Sniper mode stuff
 	function NotifyReloading()
 	{
+		// Joshua - Save the current FOV index before reloading
+		if(ESniperGun(ActiveGun) != None)
+			LastSniperFOVIndex = ESniperGun(ActiveGun).FOVIndex;
+
 		ZoomLevel			= 0.0f;
 		SetCameraFOV(self, DesiredFov);			// restore Fov that may have changed in sniping mode
 		ESniperGun(ActiveGun).SetSniperMode(false);
@@ -4348,6 +4787,8 @@ state s_PlayerSniping extends s_Targeting
 
     function PlayerMove( float DeltaTime )
     {
+		local float inputMagnitude; // Joshua - Normalize movement
+
 		// No update on ZoomLevel when reloading
 		if( bHideSam )
 		{
@@ -4357,8 +4798,9 @@ state s_PlayerSniping extends s_Targeting
 			ZoomLevel*=0.7f;
 		}
 
-		if( bMustZoomOut && !bInGunTransition )
+		if( bPressSnip && !bInGunTransition )
 		{
+			bPressSnip = false;
 			bInTransition = true; // prevent the DrawWeapon
 			GotoState('s_FirstPersonTargeting');
 		}
@@ -4368,19 +4810,31 @@ state s_PlayerSniping extends s_Targeting
 			KillPawnSpeed();
 
 		// Joshua - Normalize movement
-		if (bNormalizeMovement)
+		inputMagnitude = sqrt(aForward * aForward + aStrafe * aStrafe);
+		if (inputMagnitude > 1.0 && bNormalizeMovement)
 		{
-			if (IsPushing())
-			{
-				/*if (ePawn.bIsCrouched)*/
-					ePawn.GroundSpeed = m_speedWalkSniping;
-				/*else
-					ePawn.GroundSpeed = m_speedWalkSnipingCr;*/ // Joshua - m_speedWalkSnipingCr doesn't exist, but could consider adding
-			}
-			else
-			{
-				ePawn.GroundSpeed = 0.0;
-			}
+			ePawn.GroundSpeed = ePawn.GroundSpeed / inputMagnitude;
+		}
+
+		// Joshua - Controller support for zoom levels
+		if( bDPadUp != 0 && !bDPadUpPressed )
+		{
+			bDPadUpPressed = true;
+			SnipeZoomIn();
+		}
+		else if( bDPadUp == 0 )
+		{
+			bDPadUpPressed = false;
+		}
+
+		if( bDPadDown != 0 && !bDPadDownPressed )
+		{
+			bDPadDownPressed = true;
+			SnipeZoomOut();
+		}
+		else if( bDPadDown == 0 )
+		{
+			bDPadDownPressed = false;
 		}
 	}
 
@@ -4396,6 +4850,14 @@ Begin:
 	bHideSam = true;
 	EMainHUD(myHud).Slave(ActiveGun);
 	ESniperGun(ActiveGun).SetSniperMode(true);
+
+    // Joshua - Restore the previous zoom level if we have one
+    if(LastSniperFOVIndex > 0)
+    {
+        while(ESniperGun(ActiveGun).FOVIndex < LastSniperFOVIndex)
+            ESniperGun(ActiveGun).ZoomIn();
+    }
+
 	bInTransition = false;
 }
 
@@ -4458,21 +4920,15 @@ state s_CameraJammerTargeting extends s_Targeting
 	// Joshua - Normalize movement
 	function PlayerMove(float DeltaTime)
 	{
+		local float inputMagnitude; // Joshua - Normalize movement
+
 		Super.PlayerMove(DeltaTime);
 
-		if (bNormalizeMovement)
+		// Joshua - Normalize movement
+		inputMagnitude = sqrt(aForward * aForward + aStrafe * aStrafe);
+		if (inputMagnitude > 1.0 && bNormalizeMovement)
 		{
-			if (IsPushing())
-			{
-				if (ePawn.bIsCrouched)
-					ePawn.GroundSpeed = m_speedWalkFPCr;
-				else
-					ePawn.GroundSpeed = m_speedWalkFP;
-			}
-			else
-			{
-				ePawn.GroundSpeed = 0.0;
-			}
+			ePawn.GroundSpeed = ePawn.GroundSpeed / inputMagnitude;
 		}
 	}
 
@@ -4535,21 +4991,15 @@ state s_LaserMicTargeting extends s_Targeting
 	// Joshua - Normalize movement
 	function PlayerMove(float DeltaTime)
 	{
+		local float inputMagnitude; // Joshua - Normalize movement
+
 		Super.PlayerMove(DeltaTime);
 
-		if (bNormalizeMovement)
+		// Joshua - Normalize movement
+		inputMagnitude = sqrt(aForward * aForward + aStrafe * aStrafe);
+		if (inputMagnitude > 1.0 && bNormalizeMovement)
 		{
-			if (IsPushing())
-			{
-				if (ePawn.bIsCrouched)
-					ePawn.GroundSpeed = m_speedWalkFPCr;
-				else
-					ePawn.GroundSpeed = m_speedWalkFP;
-			}
-			else
-			{
-				ePawn.GroundSpeed = 0.0;
-			}
+			ePawn.GroundSpeed = ePawn.GroundSpeed / inputMagnitude;
 		}
 	}
 
@@ -5173,6 +5623,44 @@ state s_Conversation extends s_InteractWithObject
 		if( Interaction != None )
 			ePawn.RotateTowardsRotator(Rotator(Interaction.Owner.Location - ePawn.Location));
 	}
+
+// Joshua - Force player to match NPC stance when having a conversation
+Begin:
+    bInTransition = true;
+    
+    if ((ENpcZoneInteraction(Interaction).Npc.bIsCrouched || ENpcZoneInteraction(Interaction).Npc.bDyingDude || Interaction.Owner.IsA('EBaxter')) != ePawn.bIsCrouched)
+    {
+        ePawn.bWantsToCrouch = ENpcZoneInteraction(Interaction).Npc.bIsCrouched || ENpcZoneInteraction(Interaction).Npc.bDyingDude || Interaction.Owner.IsA('EBaxter');
+        
+        if (ENpcZoneInteraction(Interaction).Npc.bIsCrouched || ENpcZoneInteraction(Interaction).Npc.bDyingDude || Interaction.Owner.IsA('EBaxter'))
+        {
+            ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, , 0.2);
+			FinishAnim();
+        }
+        else
+        {
+            ePawn.UnCrouch(false);
+            ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn,,,true); // Reverse play
+			FinishAnim();
+        }
+    }
+    
+    if (ENpcZoneInteraction(Interaction).Npc.bIsCrouched || ENpcZoneInteraction(Interaction).Npc.bDyingDude || Interaction.Owner.IsA('EBaxter'))
+    {
+        ePawn.LoopAnimOnly(ePawn.AWaitCrouch, , 0.2);
+        m_camera.SetMode(ECM_WalkingCr);
+    }
+    else
+    {
+        ePawn.LoopAnimOnly(ePawn.AWait, , 0.2);
+        m_camera.SetMode(ECM_Walking);
+    }
+    
+    bInTransition = false;
+    Stop;
+
+End:
+	GotoState('s_PlayerWalking');
 }
 
 // ----------------------------------------------------------------------
@@ -5431,14 +5919,22 @@ state s_OpticCable extends s_InteractWithObject
 		Exit();
 		Super.EndState();
 	}
+
 	function Exit()
 	{
 		EMainHUD(myHud).NormalView();
 		bLockedCamera	= false;
+
 		// If exiting because of death, remove control
-		if( ePawn.HandItem.GetStateName() != 's_Selected' )
+		// Joshua - Optic Cable interaction
+		if( ePawn.HandItem.IsA('EOpticCable') && ePawn.HandItem.GetStateName() != 's_Selected' )
 		{
 			ePawn.HandItem.GotoState('s_Selected');
+			SetRotation(backupRotation);
+		}
+		else if( eGame.bNewDoorInteraction && OpticCableItem != None && OpticCableItem.GetStateName() != 's_Selected')
+		{
+			OpticCableItem.GotoState('s_Selected');
 			SetRotation(backupRotation);
 		}
 	}
@@ -5446,24 +5942,80 @@ state s_OpticCable extends s_InteractWithObject
 	function ProcessFire()
 	{
 		if( !bInTransition )
-			Global.ProcessFire();
+		{
+			// Joshua - Optic Cable interaction
+			if (ePawn.HandItem.IsA('EOpticCable'))
+				Global.ProcessFire();
+			else if (eGame.bNewDoorInteraction && OpticCableItem != None)
+				OpticCableItem.Use();
+		}
 	}
 
 begin:
 	bInTransition = true;
-	if( !ePawn.bIsCrouched )
+	
+	if (!eGame.bNewDoorInteraction)
 	{
-		ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, , 0.1);
-		FinishAnim();
-	}
-	ePawn.LoopAnimOnly(ePawn.AWaitCrouch, , 0.1);
+		// Original method
+		if( !ePawn.bIsCrouched )
+		{
+			ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, , 0.1);
+			FinishAnim();
+		}
+		ePawn.LoopAnimOnly(ePawn.AWaitCrouch, , 0.1);
 
-	ePawn.BlendAnimOverCurrent('LockStAlNt0',1,ePawn.UpperBodyBoneName,1,0.2);
-	Sleep(ePawn.GetAnimtime('LockStAlNt0') * 0.5);
-	backupRotation	= Rotation;
-	bLockedCamera	= true;
-	bInTransition	= false;
-	ePawn.HandItem.GotoState('s_Sneaking');
+		ePawn.BlendAnimOverCurrent('LockStAlNt0',1,ePawn.UpperBodyBoneName,1,0.2);
+		Sleep(ePawn.GetAnimtime('LockStAlNt0') * 0.5);
+		backupRotation	= Rotation;
+		bLockedCamera	= true;
+		bInTransition	= false;
+		
+		ePawn.HandItem.GotoState('s_Sneaking');
+	}
+	else if (eGame.bNewDoorInteraction)
+	{
+		// Joshua - New door interaction system, supports both original and new interaction methods
+		backupRotation = Rotation;
+		
+		// Check if using new interaction box method
+		if (OpticCableItem != None && OpticCableItem.GetStateName() == 's_InteractSelected')
+		{
+			// New interaction box method
+			Interaction.SetInteractLocation( EPawn );
+			ePawn.SetPhysics(PHYS_Linear);
+			ePawn.PlayMoveTo(Rotation);
+			ePawn.m_locationEnd = ePawn.location;
+			MoveToDestination(300, false);
+			if( !ePawn.bIsCrouched )
+			{
+				ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, , 0.1);
+				FinishAnim();
+			}
+			ePawn.LoopAnimOnly(ePawn.AWaitCrouch, , 0.1);
+			ePawn.BlendAnimOverCurrent('LockStAlNt0',1,ePawn.UpperBodyBoneName,1,0.2);
+			Sleep(ePawn.GetAnimtime('LockStAlNt0') * 0.5);
+			bLockedCamera	= true;
+			bInTransition	= false;
+			OpticCableItem.GotoState('s_Sneaking');
+		}
+		else
+		{
+			// Original method
+			if( !ePawn.bIsCrouched )
+			{
+				ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, , 0.1);
+				FinishAnim();
+			}
+			ePawn.LoopAnimOnly(ePawn.AWaitCrouch, , 0.1);
+
+			ePawn.BlendAnimOverCurrent('LockStAlNt0',1,ePawn.UpperBodyBoneName,1,0.2);
+			Sleep(ePawn.GetAnimtime('LockStAlNt0') * 0.5);
+			bLockedCamera	= true;
+			bInTransition	= false;
+			
+			ePawn.HandItem.GotoState('s_Sneaking');
+		}
+	}
 	Stop;
 
 End:
@@ -5789,47 +6341,165 @@ DoDoor:
 	ePawn.PlayMoveTo(Rotation);
 	MoveToDestination(300, true);
 
-	if( ePawn.bIsCrouched )
-	{
-		ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, 2,,true);
-		FinishAnim();
-	}
+	// Joshua - Adding Pandora animations for door interactions
+	//if( ePawn.bIsCrouched )
+	//{
+	//	ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, 2,,true);
+	//	FinishAnim();
+	//}
 	Goto(JumpLabelPrivate);
 
 JmpLockedLt:
-	ePawn.PlayAnimOnly('DoorStAlBgl');
-	FinishAnim();
-	ePawn.PlayAnimOnly('DoorStAlBgl',,, true);
-	Goto('EndState');
+//	ePawn.PlayAnimOnly('DoorStAlBgl');
+//	FinishAnim();
+//	ePawn.PlayAnimOnly('DoorStAlBgl',,, true);
+//
+//	Goto('EndState');
+
+	// Joshua - Adding Pandora animations for door interactions
+	if( !ePawn.bIsCrouched )
+	{
+		ePawn.PlayAnimOnly('DoorStAlBgl');
+		FinishAnim();
+		ePawn.PlayAnimOnly('DoorStAlBgl',,, true);
+		Goto('EndState');
+	}
+	else
+	{
+		ePawn.PlayAnimOnly('PT_DoorCrAlBgl');
+		FinishAnim();
+		ePawn.PlayAnimOnly('PT_DoorCrAlBgl',,, true);
+		Goto('EndState');
+	}
 
 JmpLockedRt:
-	ePawn.PlayAnimOnly('DoorStAlBgr');
-	FinishAnim();
-	NotifyAction();
-	ePawn.PlayAnimOnly('DoorStAlBgr',,, true);
+//	ePawn.PlayAnimOnly('DoorStAlBgr');
+//	FinishAnim();
+//	NotifyAction();
+//	ePawn.PlayAnimOnly('DoorStAlBgr',,, true);
+//
+//	Goto('EndState');
+
+	// Joshua - Adding Pandora animations for door interactions
+	if( !ePawn.bIsCrouched )
+	{
+		ePawn.PlayAnimOnly('DoorStAlBgr');
+		FinishAnim();
+		NotifyAction();
+		ePawn.PlayAnimOnly('DoorStAlBgr',,, true);
+	}
+	else
+	{
+		ePawn.PlayAnimOnly('PT_DoorCrAlBgr');
+		FinishAnim();
+		NotifyAction();
+		ePawn.PlayAnimOnly('PT_DoorCrAlBgr',,, true);
+	}
 
 	Goto('EndState');
 
 JmpUnLockedLt:
-	ePawn.PlayAnimOnly('DoorStAlBgl');
-	FinishAnim();
-	NotifyAction();
-	ePawn.PlayAnimOnly('DoorStAlEdl');
-	Goto('EndState');
+//	ePawn.PlayAnimOnly('DoorStAlBgl');
+//	FinishAnim();
+//	NotifyAction();
+//	ePawn.PlayAnimOnly('DoorStAlEdl');
+//
+//	Goto('EndState');
+
+	// Joshua - Adding Pandora animations for door interactions
+	if(m_AttackTarget != None && m_AttackTarget.GetStateName()=='s_Carried')
+	{
+		if( !ePawn.bIsCrouched )
+		{
+			ePawn.PlayAnimOnly('PT_CaryDoorStBgL');
+			FinishAnim();
+			NotifyAction();
+			ePawn.PlayAnimOnly('PT_CaryDoorStEdL');
+			Goto('EndState');
+		}
+		else
+		{
+			ePawn.PlayAnimOnly('PT_CaryDoorCrAlBgL');
+			FinishAnim();
+			NotifyAction();
+			ePawn.PlayAnimOnly('PT_CaryDoorCrAlEdL');
+			Goto('EndState');
+		}
+	}
+	else
+	{
+		if( !ePawn.bIsCrouched )
+		{
+			ePawn.PlayAnimOnly('DoorStAlBgl');
+			FinishAnim();
+			NotifyAction();
+			ePawn.PlayAnimOnly('DoorStAlEdl');
+			Goto('EndState');
+		}
+		else
+		{
+			ePawn.PlayAnimOnly('PT_DoorCrAlBgl');
+			FinishAnim();
+			NotifyAction();
+			ePawn.PlayAnimOnly('PT_DoorCrAlEdl');
+			Goto('EndState');
+		}
+	}
 
 JmpUnLockedRt:
-	ePawn.PlayAnimOnly('DoorStAlBgr');
-	FinishAnim();
-	NotifyAction();
-	ePawn.PlayAnimOnly('DoorStAlEdr');
+//	ePawn.PlayAnimOnly('DoorStAlBgr');
+//	FinishAnim();
+//	NotifyAction();
+//	ePawn.PlayAnimOnly('DoorStAlEdr');
+//
+//	Goto('EndState');
 
-	Goto('EndState');
+	// Joshua - Adding Pandora animations for door interactions
+	if(m_AttackTarget != None && m_AttackTarget.GetStateName()=='s_Carried')
+	{
+		if( !ePawn.bIsCrouched )
+		{
+			ePawn.PlayAnimOnly('PT_CaryDoorStBgR');
+			FinishAnim();
+			NotifyAction();
+			ePawn.PlayAnimOnly('PT_CaryDoorStEdR');
+			Goto('EndState');
+		}
+		else
+		{
+			ePawn.PlayAnimOnly('PT_CaryDoorCrAlBgR');
+			FinishAnim();
+			NotifyAction();
+			ePawn.PlayAnimOnly('PT_CaryDoorCrAlEdR');
+			Goto('EndState');
+		}
+	}
+	else
+	{
+		if( !ePawn.bIsCrouched )
+		{
+			ePawn.PlayAnimOnly('DoorStAlBgr');
+			FinishAnim();
+			NotifyAction();
+			ePawn.PlayAnimOnly('DoorStAlEdr');
+			Goto('EndState');
+		}
+		else
+		{
+			ePawn.PlayAnimOnly('PT_DoorCrAlBgr');
+			FinishAnim();
+			NotifyAction();
+			ePawn.PlayAnimOnly('PT_DoorCrAlEdr');
+			Goto('EndState');
+		}
+	}
 
 EndState:
 	JumpLabelPrivate = '';
 	FinishAnim();
-	if( ePawn.bIsCrouched )
-		ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn);
+	// Joshua - Adding Pandora animations for door interactions
+	//if( ePawn.bIsCrouched )
+	//	ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn);
 	// No FinishAnim to be able to start moving
 
 	ePawn.SetPhysics(PHYS_Walking);
@@ -5840,8 +6510,14 @@ GetOut:
 	if( JumpLabel == 'BackToFirstPerson' )
 	{
 		JumpLabel = '';
-		bInTransition = true;
+		//bInTransition = true;
+		bInTransition = false; // Joshua - PT carry interaction
 		GotoState('s_FirstPersonTargeting');
+	}
+	// Joshua - PT carry interaction
+	else if(m_AttackTarget != None && m_AttackTarget.GetStateName()=='s_Carried')
+	{
+		GotoState('s_Carry','OpenDoorBack');
 	}
 	else
 		GotoState('s_PlayerWalking');
@@ -6947,8 +7623,9 @@ state s_RappellingTargeting
 		// Check under feet
 		CheckFeet();
 
-		if( bPressedJump && ActiveGun == MainGun && !bInGunTransition )
+		if( bPressSnip && ActiveGun == MainGun && !bInGunTransition )
 		{
+			bPressSnip = false;
 			bInTransition = true;
 			GotoState(,'BeginSniping');
 		}
@@ -7104,10 +7781,11 @@ state s_RappellingSniping extends s_PlayerSniping
 
 		CheckFeet();
 
-		if( bPressedJump &&			// Go into sniper mode
+		if( bPressSnip &&			// Go into sniper mode
 			!bInGunTransition &&	// No drawing or sheating gun
 			JumpLabelPrivate == '' )// Scope wasn't just pushed
 		{
+			bPressSnip = false;
 			bInTransition = true;
 			GotoState(,'BackToFirstPerson');
 		}
@@ -9877,6 +10555,9 @@ state s_Dead
 		ePawn.AnimBlendToAlpha(EPawn.ACTIONCHANNEL,0,0.10);
 
 		SetTimer(4, false);
+
+		// Joshua - Bug fix: turn off the fake mouse when dead (useful if player died while using keypad, turret controller, etc.)
+		FakeMouseToggle(false);
 	}
 
 	function Timer()
@@ -9920,15 +10601,16 @@ defaultproperties
 	InputMode=IM_Auto // Joshua - Input mode
 	ControllerScheme=CS_Default // Joshua - Default, Pandora, PlayStation
 	bNormalizeMovement=true // Joshua - Option to normalize movement
-	bToggleInventory=false // Joshua - Option to use toggle inventory instead of hold
-	bInteractionPause=false // Joshua - If the interaction box or inventory is active, pause the game
-	bBurstFire=true // Joshua - Restoring burst fire from early Splinter Cell builds
+	bToggleBTWTargeting=true // Joshua - Used to toggle BTW targeting instead of holding direction
 	bWhistle=true // Joshua - Option to enable whlisting in keybinds
 	m_WhistleTime=-10.00 // Joshua - New variable to keep track of last whistle
-	bToggleBTWTargeting=true // Joshua - Used to toggle BTW targeting instead of holding direction
+	bF2000ZoomLevels=true // Joshua - Enables 2x/4x/6x zoom for F2000 sniper (default game had 6x only)
+	bBurstFire=true // Joshua - Restoring burst fire from early Splinter Cell builds
 	bShowHUD=true
 	bShowInventory=true
+	bShowStealthMeter=true
 	bShowCurrentGoal=true
+	bShowKeypadGoal=true
 	bShowMissionInformation=true
 	bShowCrosshair=true
 	bShowScope=true

@@ -317,7 +317,7 @@ state s_MissionComplete
     function Tick(float DeltaTime) { Tick_s_MissionComplete(DeltaTime);}
 
 // Joshua - s_MissionComplete is handled in C++, so its behavior can't be changed in UnrealScript.
-// The game transitions to the next level after 13 seconds, so we reset the timer to allow the player to view their Mission Statistics until a key press.
+// The game transitions to the next level after 13 seconds, so we reset the timer to allow the player to view their Player Statistics until a key press.
 Begin:
     while(true)
     {

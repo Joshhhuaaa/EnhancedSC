@@ -350,8 +350,9 @@ state s_NpcTalkInteraction
 			str = Localize("Interaction", "NpcZone2", "Localization\\HUD");
 		else
 			str = Localize("Interaction", "NpcZone3", "Localization\\HUD");
-			
-		return str $ Localize("Interaction", "NpcZone4", "Localization\\HUD"); // Joshua - Removed space after Interrogate / Talk To
+
+		// Joshua - Removing "..." after Interrogate... and Talk To...
+		return str; //$ Localize("Interaction", "NpcZone4", "Localization\\HUD"); // Joshua - Removed space after Interrogate / Talk To
 	}
 }
 

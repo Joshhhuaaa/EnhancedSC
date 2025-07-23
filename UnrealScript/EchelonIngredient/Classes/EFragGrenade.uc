@@ -10,10 +10,6 @@ class EFragGrenade extends EInventoryItem;
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
-	
-	// Joshua - Scales frag damage so that enemies die with one frag grenade on Hard difficulty
-	if (EchelonGameInfo(Level.Game).bScaleFragDamage)
-			ExplosionDamage = 150.0;
 
 	// manage quantity
 	if( Quantity == 1 )
@@ -68,15 +64,6 @@ function Select( EInventory Inv )
 	Super.Select(Inv);
 	PlaySound(Sound'Interface.Play_FisherEquipFragGrenade', SLOT_Interface);
 
-}
-
-// Joshua - Update frag damage if bScaleFragDamage changes during gameplay
-function UpdateFragDamage()
-{
-    if(EchelonGameInfo(Level.Game).bScaleFragDamage)
-        ExplosionDamage = 150.0;
-    else
-        ExplosionDamage = default.ExplosionDamage;
 }
 
 defaultproperties

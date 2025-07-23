@@ -20,8 +20,23 @@ function InitInteract( Controller Instigator )
 
 function Interact( Controller Instigator )
 {
-	// Destroy one disposable pick
-	Pick.ProcessUseItem();
+	local EInventory Inv;
+
+	// Joshua - Prevent switching to the Disposable Pick after using one with new door interaction system
+	if (EchelonGameInfo(Level.Game).bNewDoorInteraction)
+	{
+		if( Pick.Controller != None )
+		{
+			Inv = EPawn(Pick.Controller.Pawn).FullInventory;
+			Inv.RemoveItem(Pick, 1);
+		}
+	}
+	else
+	{
+		// Destroy one disposable pick
+		Pick.ProcessUseItem();
+	}
+
 	// When placing on door
 	Pick.PlaceOnDoor();
 }

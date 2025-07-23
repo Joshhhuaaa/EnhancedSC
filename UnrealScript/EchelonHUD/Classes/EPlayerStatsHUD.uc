@@ -2,7 +2,7 @@
 
  Class:         EPlayerStatsHUD
 
- Description:   Mission Statistics HUD
+ Description:   Player Statistics HUD
 
  Reference:     -
 

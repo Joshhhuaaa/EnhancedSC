@@ -442,7 +442,9 @@ function DrawQuickInv(ECanvas Canvas)
 {
     local int				iPrimAmmoClipNb;
     local String			strPrimAmmoNb;
+    local String            strZoomLevel; // Joshua - Display zoom level in SC-20K scope
 	local ESecondaryAmmo	SecAmmo;
+    local float             xLen, yLen; // Joshua - Display zoom level in SC-20K scope
 
     Canvas.SetDrawColor(128,128,128); 
     Canvas.Style=ERenderStyle.STY_Alpha;
@@ -480,11 +482,40 @@ function DrawQuickInv(ECanvas Canvas)
     //Canvas.DrawText(strPrimAmmoNb);
     Canvas.DrawTextRightAligned(strPrimAmmoNb);
 
+    // Joshua - Display zoom level in SC-20K scope
+    if( F2000 != None && Epc.bF2000ZoomLevels)
+    {
+        switch(F2000.FOVIndex)
+        {
+        case 0: // 2x Zoom
+            strZoomLevel = "2X";
+            break;
+        case 1: // 4x Zoom
+            strZoomLevel = "4X";
+            break;
+        case 2: // 6x Zoom
+            strZoomLevel = "6X";
+            break;
+        }
+
+        Canvas.Font = font'EHUDFont';
+        Canvas.SetDrawColor(128,128,128);
+        Canvas.DrawColor = Green;
+        Canvas.Style=ERenderStyle.STY_Alpha;
+        
+        Canvas.TextSize(strZoomLevel, xLen, yLen);
+    
+        Canvas.SetPos(QUICK_INV_LEFT + 60 + (23 - xLen)/2, QUICK_INV_TOP + 10 + (25 - yLen)/2);
+        Canvas.DrawText(strZoomLevel);
+
+        Canvas.Style= ERenderStyle.STY_Normal;
+    }
+
+	/*
     // Secondary Ammo, if any 
 	if( F2000 == None )
 		return;
 
-	/*
 	SecAmmo = ESecondaryAmmo(F2000.SecondaryAmmo);
     if( SecAmmo != None )
     {

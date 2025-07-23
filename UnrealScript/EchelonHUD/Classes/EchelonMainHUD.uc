@@ -62,10 +62,9 @@ const SPACING_ERROR_BOX = 50;
 -----------------------------------------------------------------------------*/
 // Menu //
 var EQInvHUD			QuickInvAndCurrentItems;
-var EQInvHUDXbox		QuickInvAndCurrentItemsXbox; // Joshua - Xbox quick inventory
 var EMainMenuHUD        MainMenuHUD;
 var EGameMenuHUD		GameMenuHUD;
-var EPlayerStatsHUD     PlayerStatsHUD; // Joshua - Mission statistics display
+
 
 var int					TimerCounter;
 var int					OldTimeCounter;
@@ -83,6 +82,15 @@ var bool bStockInMemory;
 
 //var bool bSubMap;
 //var bool bDisplaySplash;
+
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
+
+var EQInvHUDXbox		QuickInvAndCurrentItemsXbox; // Joshua - Xbox quick inventory
+var EPlayerStatsHUD     PlayerStatsHUD; // Joshua - Player statistics display
 
 // Joshua - New HUD toggles
 var(Enhanced) config bool bShowLifeBar;
@@ -163,7 +171,7 @@ function PostBeginPlay()
     QuickInvAndCurrentItems 	= spawn(class'EQInvHUD',self);
 	QuickInvAndCurrentItemsXbox = spawn(class'EQInvHUDXbox',self); // Joshua - Xbox quick inventory
     GameMenuHUD             	= spawn(class'EGameMenuHUD',self);
-    PlayerStatsHUD         		= spawn(class'EPlayerStatsHUD',self); // Joshua - Mission statistics screen
+    PlayerStatsHUD         		= spawn(class'EPlayerStatsHUD',self); // Joshua - Player statistics screen
     
     // Joshua - Start of controller related
     MainMenuHUD            		= spawn(class'EMainMenuHUD', self);
@@ -325,6 +333,8 @@ function DrawSaveLoadBox(ECanvas Canvas)
 -----------------------------------------------------------------------------*/
 function DrawDebugInfo(ECanvas Canvas)
 {    
+	local float YL, YPos; // Joshua - Temporary PlayerStats debug
+	
 	if	(Epc.bDebugInput)
 	{
 		//Canvas.Font = font'SmallFont';
@@ -339,6 +349,16 @@ function DrawDebugInfo(ECanvas Canvas)
 		{
 			Epc.Epawn.show_lighting_debug_info(Canvas);	
 		}
+	}
+
+	// Joshua - Temporary PlayerStats debug
+	if (Epc.bDebugStats)
+	{
+		Canvas.Font = font'SmallFont';
+		Canvas.SetPos(0,0);
+		YPos = 0.0;
+
+		Epc.ShowDebugStats(Canvas, YL, YPos);
 	}
 }
 
@@ -1588,7 +1608,7 @@ state PlayerStats
 /*=============================================================================
  State:         s_FinalMapStats
 
- Description:   Shows mission statistics on final map before ending cutscene
+ Description:   Shows player statistics on final map before ending cutscene
 =============================================================================*/
 state s_FinalMapStats
 {

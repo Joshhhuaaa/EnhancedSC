@@ -54,7 +54,7 @@ state Pattern
 Begin:
 Spot:
     Log("Spotlight has seen Sam.");
-    Speech(Localize("P_3_2_1_NPP_CatwalkGuards", "Speech_0001L", "Localization\\P_3_2_1_PowerPlant"), None, 1, 0, TR_NPCS, 0, false);
+    //Joshua - Temporarily removed until audio is restored:Speech(Localize("P_3_2_1_NPP_CatwalkGuards", "Speech_0001L", "Localization\\P_3_2_1_PowerPlant"), None, 1, 0, TR_NPCS, 0, false);
     Goal_Set(1,GOAL_MoveTo,9,,,,'Balcony1',,FALSE,,MOVE_JogAlert,,MOVE_JogAlert);
     Goal_Set(2,GOAL_MoveTo,9,,,,'Balcony2',,FALSE,,MOVE_JogAlert,,MOVE_JogAlert);
     Goal_Set(1,GOAL_Attack,8,,'PLAYER','PLAYER',,,FALSE,,,,);

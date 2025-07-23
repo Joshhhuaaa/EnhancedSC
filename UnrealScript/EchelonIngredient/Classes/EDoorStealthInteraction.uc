@@ -17,7 +17,13 @@ function string GetDescription()
 }
 
 function bool IsAvailable()
-{    
+{
+    // Hide the stealth interaction for locked doors if using the new door interaction system
+    if (EchelonGameInfo(Level.Game).bNewDoorInteraction && MyDoor.Locked)
+    {
+        return false;
+    }
+
     // Find the main door interaction and checking if it's available
     if (MyDoor.MyKnob != None && MyDoor.MyKnob.Interaction != None && 
         EDoorInteraction(MyDoor.MyKnob.Interaction) != None)
@@ -26,6 +32,37 @@ function bool IsAvailable()
     }
     
     return Super.IsAvailable();
+}
+
+function InitInteract(Controller Instigator)
+{
+	// Reset value
+	bStealthOpenDoor = false;
+	bInterrupted = false;
+	bStoppedPushing = false;
+
+    Instigator.Interaction = self;
+    ActiveController = Instigator;
+    LeftSideInteraction = MyDoor.GetPawnSide(EPawn(Instigator.Pawn)) == ESide_Front;
+
+    if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
+        EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
+
+    if (MyDoor.Locked || !MyDoor.Usable)
+    {
+        // Play locked/jammed animation, do not try to stealth open
+        if (LeftSideInteraction)
+            Instigator.GotoState('s_OpenDoor', 'LockedLt');
+        else
+            Instigator.GotoState('s_OpenDoor', 'LockedRt');
+    }
+    else
+    {
+        // Only do stealth open if door is unlocked and usable
+        MyDoor.bInUse = true;
+        EPlayerController(Instigator).m_BTWSide = !LeftSideInteraction;
+        Instigator.GotoState('s_OpenDoorStealth', 'BeginStealth');
+    }
 }
 
 function Interact( Controller Instigator )
@@ -64,31 +101,6 @@ function Interact( Controller Instigator )
 		MyDoor.PlaySound(MyDoor.LockedSound, SLOT_SFX);
 }
 
-function InitInteract(Controller Instigator)
-{
-    Instigator.Interaction = self;
-    ActiveController = Instigator;
-    LeftSideInteraction = MyDoor.GetPawnSide(EPawn(Instigator.Pawn)) == ESide_Front;
-
-    if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
-        EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
-
-    if (MyDoor.Locked || !MyDoor.Usable)
-    {
-        // Play locked/jammed animation, do not try to stealth open
-        if (LeftSideInteraction)
-            Instigator.GotoState('s_OpenDoor', 'LockedLt');
-        else
-            Instigator.GotoState('s_OpenDoor', 'LockedRt');
-    }
-    else
-    {
-        // Only do stealth open if door is unlocked and usable
-        MyDoor.bInUse = true;
-        EPlayerController(Instigator).m_BTWSide = !LeftSideInteraction;
-        Instigator.GotoState('s_OpenDoorStealth', 'BeginStealth');
-    }
-}
 
 function PostInteract( Controller Instigator )
 {

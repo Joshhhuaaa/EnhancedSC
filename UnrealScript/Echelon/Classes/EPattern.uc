@@ -3367,7 +3367,7 @@ function LevelChange(string URL)
 	if(Characters[0].pawn.health > 0)
 	{
 		ConsoleCommand("TRAVEL MAPNAME="$URL@"ITEMS=TRUE");
-		EPlayerController(Characters[0]).playerStats.OnLevelChange(); // Joshua - For mission statistics, saves the mission time from the previous part
+		EPlayerController(Characters[0]).playerStats.OnLevelChange(); // Joshua - For player statistics, saves the mission time from the previous part
 	}
 }
 

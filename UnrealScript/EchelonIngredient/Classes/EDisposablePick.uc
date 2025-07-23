@@ -70,6 +70,8 @@ state s_Selected
 		Interaction = spawn(class'EBreakLockInteraction', self);
 		Interaction.InitInteract(Controller);
 	}
+AutoUse:
+	Use();
 }
 
 defaultproperties

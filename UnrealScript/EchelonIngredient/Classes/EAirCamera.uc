@@ -28,6 +28,8 @@ function TakeView()
 	if( !Epc.bVideoMode )
 		Epc.bLockedCamera = true;
 	Epc.SetViewTarget(self);
+
+	Epc.bUsingAirCamera = true; // Joshua - True when the player is using a camera, prevents movement speed changes with mouse wheel
 	
 	BackupThermalTexture= Epc.ThermalTexture;
     BackupbBigPixels	= Epc.bBigPixels;		
@@ -57,6 +59,7 @@ function GiveView( bool bFromPlayer )
 	Epc.SetRotation(Epc.backupRotation);
 	Epc.SetBase(None);
 	Epc.SetViewTarget(Epc.Pawn);
+	Epc.bUsingAirCamera = false; // Joshua - True when the player is using a camera, prevents movement speed changes with mouse wheel
 	Disable('Tick');
 
 	if( !bFromPlayer )

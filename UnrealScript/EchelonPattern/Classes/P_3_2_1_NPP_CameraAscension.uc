@@ -53,7 +53,7 @@ Begin:
 Spot:
     Log("Sam has been spotted by the ascension cameras.");
     SendUnrealEvent('JammerDoor');
-    Speech(Localize("P_3_2_1_NPP_CameraAscension", "Speech_0001L", "Localization\\P_3_2_1_PowerPlant"), None, 1, 0, TR_NPCS, 0, false);
+    //Joshua - Temporarily removed until audio is restored:Speech(Localize("P_3_2_1_NPP_CameraAscension", "Speech_0001L", "Localization\\P_3_2_1_PowerPlant"), None, 1, 0, TR_NPCS, 0, false);
     Sleep(6);
     Close();
     End();

@@ -64,10 +64,10 @@ vent:
     Goal_Set(3,GOAL_Stop,9,,,,,,FALSE,0.5,,,);
     Goal_Set(3,GOAL_MoveTo,8,,,,'DeathNode3',,FALSE,,MOVE_JogAlert,,MOVE_JogAlert);
     Goal_Set(3,GOAL_Wait,7,,,,,,FALSE,,,,);
-    Speech(Localize("P_3_2_3_NPP_DepotGuards", "Speech_0001L", "Localization\\P_3_2_3_PowerPlant"), None, 1, 0, TR_CONVERSATION, 0);
+    //Joshua - Temporarily removed until audio is restored:Speech(Localize("P_3_2_3_NPP_DepotGuards", "Speech_0001L", "Localization\\P_3_2_3_PowerPlant"), None, 1, 0, TR_CONVERSATION, 0);
     Sleep(2);
     WaitForGoal(3,GOAL_MoveTo,);
-    Speech(Localize("P_3_2_3_NPP_DepotGuards", "Speech_0002L", "Localization\\P_3_2_3_PowerPlant"), None, 2, 0, TR_CONVERSATION, 0);
+    //Joshua - Temporarily removed until audio is restored:Speech(Localize("P_3_2_3_NPP_DepotGuards", "Speech_0002L", "Localization\\P_3_2_3_PowerPlant"), None, 2, 0, TR_CONVERSATION, 0);
     Sleep(0.25);
     Goal_Set(1,GOAL_Attack,9,,'ShootMe','ShootMe',,,TRUE,,,,);
     Sleep(1);

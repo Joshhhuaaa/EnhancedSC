@@ -422,6 +422,7 @@ final function Explode()
 	local float		damageScale, dist;
 	local vector	dir;
 	local Pawn		OriginalInstigator; // Joshua - Workaround for objects destroyed
+	local float		dam; // Joshua - Scaling damage as NPCs have 150 HP on Hard diffculty
 
 	// Sound
 	PlaySound(ExplosionSound, SLOT_SFX);
@@ -467,9 +468,14 @@ final function Explode()
 
 			dir = dir/dist; 
 
+ 			// Joshua - Scaling damage as NPCs have 150 HP on Hard diffculty
+			dam = damageScale * ExplosionDamage;
+			if(EchelonGameInfo(Level.Game).pPlayer.playerInfo.Difficulty > 0 && EchelonGameInfo(Level.Game).bScaleGadgetDamage)
+				dam *= 1.5f;
+
 			Victims.TakeDamage
 			(
-				damageScale * ExplosionDamage,
+				dam, // Joshua - Scaling damage as NPCs have 150 HP on Hard diffculty
 				Instigator,
 				Location, // GERONIMO TEST
 				dir,

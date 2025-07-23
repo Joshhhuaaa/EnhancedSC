@@ -314,8 +314,10 @@ state s_Use
 	{
 		local int OldSelectedButton;
 		local EPlayerController Epc;
-		Epc = EPlayerController(EKeyPadInteraction(Interaction).InteractionController);
+		local EKeyPadInteraction KeyPadInteraction;
 
+		Epc = EPlayerController(EKeyPadInteraction(Interaction).InteractionController);
+		
 		OldSelectedButton = SelectedButton;
 
 		if( Epc == None )
@@ -369,6 +371,16 @@ state s_Use
 			if( OldSelectedButton != SelectedButton )
 				GlowSelected();
 		}
+			// Joshua - Keypad hint
+			Super.Tick(DeltaTime);
+
+			KeyPadInteraction = EKeyPadInteraction(Interaction);
+
+			if(KeyPadInteraction != None && KeyPadInteraction.CheckKeyCode(KeyPadInteraction.InteractionController, AccessCode))
+			{
+				EPlayerController(KeyPadInteraction.InteractionController).CurrentGoal = Localize("HUD", "Keypad_Goal", "Localization\\Enhanced")@AccessCode;
+				EPlayerController(KeyPadInteraction.InteractionController).bShowKeyNum = true;
+			}
 	}
 
 	function bool CoordinateWithin( EPlayerController Epc, float x, float y, int w, int h )
@@ -431,14 +443,23 @@ state s_AccessGranted extends s_Access
 	function EndState()
 	{
 		local bool bShouldDestroy;
+		local EPlayerController EPC; // Joshua - Keypad hint
+
 		bShouldDestroy = EKeyPadInteraction(Interaction).InteractionController.bIsPlayer;
 		
-		Super.EndState();
-		dGranted.bHidden = true;
-
 		// destroy keypad interaction once successfully used by player only
 		if( bShouldDestroy )
 			Interaction.SetCollision(false);
+
+		EPC = EPlayerController(EKeyPadInteraction(Interaction).InteractionController);
+		if(EPC != None)
+		{
+			EPC.RefreshGoals();
+			EPC.bShowKeyNum = false;
+		}
+
+		Super.EndState();
+		dGranted.bHidden = true;
 	}
 
 	function Timer()

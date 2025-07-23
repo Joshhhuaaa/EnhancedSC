@@ -191,15 +191,20 @@ function FillListBox()
             }        
             L = EPCListBoxItem(m_ListBox.Items.Append(class'EPCListBoxItem'));
             L.Caption = PlayerInfo.UnlockedMap[i];
-            
+
             // Original Maps
             if (i<10)
             {
                 if (PlayerInfo.LevelUnlock == LU_Enabled && !EPC.eGame.bEliteMode && !EPC.eGame.bPermadeathMode) // Joshua - Unlocks all levels, bypassing profile progression
-                
                     L.m_bLocked = false;
                 else
                     L.m_bLocked = (i > PlayerInfo.MapCompleted);
+            }
+            
+            // Joshua - Police Station is automatically unlocked on Elite difficulty or Permadeath mode
+            if (i == 1 && (EPC.eGame.bEliteMode || EPC.eGame.bPermadeathMode))
+            {
+               L.m_bLocked = false;
             }
             // Joshua - Downloadable maps require Presidential Palace to be unlocked in Enhanced
             else if (i >= 10 && i <= 12) // Kola Cell, Vselka

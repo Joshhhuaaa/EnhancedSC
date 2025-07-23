@@ -25,19 +25,6 @@ var()  string DemoMap;        // Map loaded for Demo
 var()  string TrainingMap;    // Map loaded for Training
 var    bool bStartGame;       // true only the first time you go in main menu
 
-var bool bUseController; // Joshua - Adjusts HUD, inventory, lockpicking, keypad, turrets for controller
-var(Enhanced) config bool bEnableCheckpoints; // Joshua - Restores the checkpoints from the Xbox version
-
-var(Enhanced) config bool bThermalOverride; // Joshua - Enables thermal vision to be available for all levels, regardless of their original settings
-var(Enhanced) config bool bOpticCableVisions; // Joshua - Allows the Optic Cable use all vision modes like Pandora Tomorrow
-var(Enhanced) config bool bScaleFragDamage; // Joshua - Scales frag damage so that enemies die with one frag grenade on Hard difficulty
-var(Enhanced) config bool bRandomizeLockpick; // Joshua - Randomizes all the lockpick combinations on doors
-
-var(Enhanced) config bool bXboxDifficulty; // Joshua - Xbox difficulty, Sam has more health on Xbox
-var(Enhanced) config bool bEliteMode; // Joshua - Elite mode, no starting ammo, lower health, no saving, 3 alarms
-var(Enhanced) config bool bPermadeathMode; // Joshua - Permadeath mode, profile deletion upon mission failure
-
-
 //=============================================================================
 // Variables used as constants
 
@@ -150,6 +137,26 @@ var(SurfaceNoise) SurfaceNoiseInfo NormalSurface;
 var(SurfaceNoise) SurfaceNoiseInfo LoudSurface;
 var(SurfaceNoise) SurfaceNoiseInfo VeryLoudSurface;
 
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
+
+var bool bUseController; // Joshua - Adjusts HUD, inventory, lockpicking, keypad, turrets for controller
+var(Enhanced) config bool bEnableCheckpoints; // Joshua - Restores the checkpoints from the Xbox version
+
+var(Enhanced) config bool bThermalOverride; // Joshua - Enables thermal vision to be available for all levels, regardless of their original settings
+var(Enhanced) config bool bOpticCableVisions; // Joshua - Allows the Optic Cable use all vision modes like Pandora Tomorrow
+var(Enhanced) config bool bScaleGadgetDamage; // Joshua - Scales gadget damage on Hard difficulty (Pandora Tomorrow applied this fix: NPCs have 1.5x health on Hard, so 1.5x damage)
+var(Enhanced) config bool bNewDoorInteraction; // Joshua - Uses new door interaction system that adds Lock Pick, Disposable Pick, and Optic Cable like Chaos Theory
+var(Enhanced) config bool bRandomizeLockpick; // Joshua - Randomizes all the lockpick combinations on doors
+
+
+var(Enhanced) config bool bXboxDifficulty; // Joshua - Xbox difficulty, Sam has more health on Xbox
+var(Enhanced) config bool bEliteMode; // Joshua - Elite mode, no starting ammo, lower health, no saving, 3 alarms
+var(Enhanced) config bool bPermadeathMode; // Joshua - Permadeath mode, profile deletion upon mission failure
+
 // Joshua - Option to reduce delay to prevent running past the wallmine before it explodes
 enum EWallMineDelay
 {
@@ -181,6 +188,23 @@ var config ESamMeshType ESam_ChineseEmbassy2;
 var config ESamMeshType ESam_PresidentialPalace;
 var config ESamMeshType ESam_KolaCell;
 var config ESamMeshType ESam_Vselka;
+
+// Joshua - Echelon lights use TurnOffDistance to determine when to turn off
+// This setting allows users to scale that distance up to 8x, allowing Echelon lights to stay on farther away
+enum ETurnOffDistanceScale
+{
+    TurnOffDistance_1x,
+    TurnOffDistance_2x,
+    TurnOffDistance_4x,
+    TurnOffDistance_8x
+};
+var(Enhanced) config ETurnOffDistanceScale TurnOffDistanceScale;
+
+// Native Variables
+var(Enhanced) config bool bSkipIntroVideos;
+var(Enhanced) config bool bLODDistance;
+var(Enhanced) config bool bPauseOnFocusLoss;
+var(Enhanced) config bool bCheckForUpdates;
 
 //=============================================================================
 
@@ -244,6 +268,9 @@ event PlayerController Login(string Portal,
 		Log("WARNING!!!!!!   EchelonGameInfo.pPlayer is NOT an EPlayerController.  This is bad.");
 
     pPlayer.m_curWalkSpeed = m_defautSpeed;
+    
+    if (bPermadeathMode)
+        pPlayer.CheatManager = None;
 
     // Joshua - Elite mode
     if (bEliteMode)
@@ -386,10 +413,9 @@ defaultproperties
     GameName="Echelon"
     PlayerControllerClassName="Echelon.EPlayerController"
     bOpticCableVisions=true
-    bThermalOverride=false
     bEnableCheckpoints=true
-    bXboxDifficulty=false
-    bScaleFragDamage=true
+    bScaleGadgetDamage=true
+    bNewDoorInteraction=true
     bRandomizeLockpick=true
     WallMineDelay=WMD_Default
     ESam_Training=SMT_Default
@@ -406,4 +432,8 @@ defaultproperties
     ESam_PresidentialPalace=SMT_Default
     ESam_KolaCell=SMT_Default
     ESam_Vselka=SMT_Default
+    TurnOffDistanceScale=TurnOffDistance_1x
+    bLODDistance=true
+    bPauseOnFocusLoss=true
+    bCheckForUpdates=true
 }

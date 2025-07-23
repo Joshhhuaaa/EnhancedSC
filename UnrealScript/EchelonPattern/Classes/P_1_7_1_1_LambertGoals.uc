@@ -32,6 +32,8 @@ function InitPattern()
     local EGameplayObject EGO;
     local ECamera XboxCamera;
     local Rotator RealNeutralRot;
+    local EAlarm Alarm;
+    local EAlarmLight AlarmLight;
     
     // Joshua - Adding the camera that is missing in the PC version
     if (!bInit)
@@ -75,6 +77,19 @@ function InitPattern()
         if (XboxCamera.PatrolAngle != 0)
         {
             XboxCamera.RealPatrolAngle = 65535 / (360 / float(XboxCamera.PatrolAngle));
+        }
+
+        // Adding a new Alarm light as the Cafeteria camera has none assigned
+        AlarmLight = Spawn(class'EAlarmLight', , , vect(9694, -3696.6, -634.5), rot(0, 0, 0));
+        AlarmLight.SetDrawScale(0.70f);
+        
+        ForEach AllActors(class'EAlarm', Alarm)
+        {
+            if (Alarm.name == 'EAlarm0')
+            {
+                Alarm.AlarmObjects[0] = AlarmLight;
+                AlarmLight.Alarm = Alarm;
+            }
         }
 
         ForEach DynamicActors(class'EGameplayObject', EGO)

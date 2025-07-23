@@ -23,7 +23,7 @@ var Pawn Pawn;
 // Ticked pawn timers
 var		float		SightCounter;		// Used to keep track of when to check player visibility
 
-var		const float		FovAngle;			// X field of view angle in degrees, usually 90.
+var		const float	FovAngle;			// X field of view angle in degrees, usually 90.
 var		bool        bIsPlayer;			// Pawn is a player or a player-bot.
 
 //AI flags

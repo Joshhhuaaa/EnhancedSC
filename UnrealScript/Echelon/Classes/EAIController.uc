@@ -211,13 +211,19 @@ var Array<SNavPointTimeout>      NavPointsTimedOut;
 
 var Array<EAIController>         aoCloseControllers;       
 
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
+
 var(Enhanced) bool	bWasKnockedOut; // Joshua - Tracks if this NPC was ever knocked out
 var(Enhanced) bool	bWasInjured; // Joshua - Tracks if this NPC has been injured
 var(Enhanced) bool 	bWasFound; // Joshua - Tracks if this NPC has been found as a body
 var(Enhanced) bool	bAllowKill;  // Joshua - Allows NPC to be killed without affecting the Stealth Rating
 var(Enhanced) bool	bAllowKnockout;  // Joshua - Allows NPC to be knocked out without affecting the Stealth Rating
 var(Enhanced) bool	bBlockDetection;  // Joshua - Allows NPC to detect the player without affecting the Stealth Rating
-var(Enhanced) bool 	bNotInStats; // Joshua - NPC should not be included in the Mission Statistics
+var(Enhanced) bool 	bNotInStats; // Joshua - NPC should not be included in the Player Statistics
 var(Enhanced) bool 	bBlockJumpDetection; // Joshua - Workaround so drop attacking NPC doesn't trigger a detection
 
 
@@ -1665,7 +1671,7 @@ function Vector AdjustTarget( Vector ShotDirection )
 	}
 
 	//consider the level of difficulty-FBLAIS
-	if( EchelonGameInfo(Level.Game).pPlayer.playerInfo.difficulty > 0)
+	if(EchelonGameInfo(Level.Game).pPlayer.playerInfo.difficulty > 0)
 	{
 		AccuracyResult *= 0.50f;
 	}

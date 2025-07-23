@@ -14,7 +14,7 @@ function Touch(actor Other)
 	if(Other.bIsPlayerPawn && Trace(HitNormal, HitLocation, Other.Location, Location, true, vect(0,0,0)) == Other)
 	{
 		ConsoleCommand("TRAVEL MAPNAME="$URL@"ITEMS="$bTravel);
-		EPlayerController(EPawn(Other).Controller).playerStats.OnLevelChange(); // Joshua - For mission statistics, saves the mission time from the previous part
+		EPlayerController(EPawn(Other).Controller).playerStats.OnLevelChange(); // Joshua - For player statistics, saves the mission time from the previous part
 	}
 }  
 

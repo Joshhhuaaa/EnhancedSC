@@ -104,7 +104,9 @@ function ValidateROFMode()
 
 defaultproperties
 {
-    FOVs(0)=14.000000
+    FOVs(0)=45.000000
+    FOVs(1)=23.000000
+    FOVs(2)=14.000000
     Ammo=60
     MaxAmmo=60
     ClipAmmo=30

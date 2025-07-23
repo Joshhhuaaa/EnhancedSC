@@ -68,86 +68,141 @@ state Pattern
 Begin:
 PlayerLook:
     Log("");
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0033L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_LOOK_UP_MASK | KEY_LOOK_DOWN_MASK | KEY_LOOK_LEFT_MASK | KEY_LOOK_RIGHT_MASK, FALSE);
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0035L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_RESETCAMERA_MASK, FALSE);
+    if (!EchelonGameInfo(Level.Game).bUseController)
+    {
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0033L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_LOOK_UP_MASK | KEY_LOOK_DOWN_MASK | KEY_LOOK_LEFT_MASK | KEY_LOOK_RIGHT_MASK, FALSE);
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0035L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_RESETCAMERA_MASK, FALSE);
+    }
+    else
+    {
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0033L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK | KEY_LOOK_UP_MASK | KEY_LOOK_DOWN_MASK | KEY_LOOK_LEFT_MASK | KEY_LOOK_RIGHT_MASK, FALSE);
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0035L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK | KEY_RESETCAMERA_MASK, FALSE);
+    }
     End();
 PlayerMove:
     Log("");
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0036L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_MOVE_UP_MASK | KEY_MOVE_DOWN_MASK | KEY_MOVE_LEFT_MASK | KEY_MOVE_RIGHT_MASK, FALSE);
+    if (!EchelonGameInfo(Level.Game).bUseController)
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0036L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_MOVE_UP_MASK | KEY_MOVE_DOWN_MASK | KEY_MOVE_LEFT_MASK | KEY_MOVE_RIGHT_MASK, FALSE);
+    else
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0036L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK | KEY_MOVE_UP_MASK | KEY_MOVE_DOWN_MASK | KEY_MOVE_LEFT_MASK | KEY_MOVE_RIGHT_MASK, FALSE);
     End();
 JumpAndLedge:
     Log("");
     CheckFlags(JumpAndLedgePlayed,TRUE,'DoNothing');
     SetFlags(JumpAndLedgePlayed,FALSE);
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0001L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_MOVE_LEFT_MASK | KEY_MOVE_RIGHT_MASK | KEY_JUMP_MASK, FALSE);
+    if (!EchelonGameInfo(Level.Game).bUseController)
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0001L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_MOVE_LEFT_MASK | KEY_MOVE_RIGHT_MASK | KEY_JUMP_MASK, FALSE);
+    else
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0001L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK | KEY_MOVE_LEFT_MASK | KEY_MOVE_RIGHT_MASK | KEY_JUMP_MASK, FALSE);
     End();
 speed:
     Log("");
     CheckFlags(speedplayed,TRUE,'DoNothing');
     SetFlags(speedplayed,TRUE);
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0041L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
+    if (!EchelonGameInfo(Level.Game).bUseController) // Joshua - Controller should not get this tip, its related to scroll wheel speeds
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0041L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
     End();
 Ladder:
     Log("");
     CheckFlags(LadderPlayed,TRUE,'DoNothing');
     SetFlags(LadderPlayed,TRUE);
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0005L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
+    if (!EchelonGameInfo(Level.Game).bUseController)
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0005L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
+    else
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0005L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK, TRUE);
     End();
 ZipLine:
     Log("");
     CheckFlags(ZipLinePlayed,TRUE,'DoNothing');
     SetFlags(ZipLinePlayed,TRUE);
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0009L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_JUMP_MASK, FALSE);
+    if (!EchelonGameInfo(Level.Game).bUseController)
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0009L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_JUMP_MASK, FALSE);
+    else
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0009L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK | KEY_JUMP_MASK, FALSE);
     End();
 Pipe:
     Log("");
     CheckFlags(PipePlayed,TRUE,'DoNothing');
     SetFlags(PipePlayed,TRUE);
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0012L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
+    if (!EchelonGameInfo(Level.Game).bUseController)
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0012L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
+    else
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0012L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK, TRUE);
     End();
 SplitJump:
     Log("");
     CheckFlags(SplitJumpPlayed,TRUE,'DoNothing');
     SetFlags(SplitJumpPlayed,TRUE);
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0039L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0040L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
+    if (!EchelonGameInfo(Level.Game).bUseController)
+    {
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0039L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0040L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
+    }
+    else
+    {
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0039L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK, TRUE);
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0040L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK, TRUE);
+    }
     End();
 PipeHang:
     Log("");
     CheckFlags(PipeHangPlayed,TRUE,'DoNothing');
     SetFlags(PipeHangPlayed,TRUE);
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0014L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_JUMP_MASK, FALSE);
+    if (!EchelonGameInfo(Level.Game).bUseController)
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0014L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_JUMP_MASK, FALSE);
+    else
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0014L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK | KEY_JUMP_MASK, FALSE);
     End();
 Crouch:
     Log("");
     CheckFlags(CrouchPlayed,TRUE,'DoNothing');
     SetFlags(CrouchPlayed,TRUE);
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0025L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_DUCK_MASK, FALSE);
+    if (!EchelonGameInfo(Level.Game).bUseController)
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0025L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_DUCK_MASK, FALSE);
+    else
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0025L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK | KEY_DUCK_MASK, FALSE);
     End();
 PipeHangCrouch:
     Log("");
     CheckFlags(PipeHangCrouchPlayed,TRUE,'DoNothing');
     SetFlags(PipeHangCrouchPlayed,TRUE);
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0017L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_DUCK_MASK, FALSE);
+    if (!EchelonGameInfo(Level.Game).bUseController)
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0017L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_DUCK_MASK, FALSE);
+    else
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0017L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK | KEY_DUCK_MASK, FALSE);
     End();
 BackToWall:
     Log("");
     CheckFlags(BackToWallPlayed,TRUE,'DoNothing');
     SetFlags(BackToWallPlayed,TRUE);
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0032L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
+    if (!EchelonGameInfo(Level.Game).bUseController)
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0032L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
+    else
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0032L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK, TRUE);
     End();
 WallJump:
     Log("");
     CheckFlags(WallJumpPlayed,TRUE,'DoNothing');
     SetFlags(WallJumpPlayed,TRUE);
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0023L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0024L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_JUMP_MASK, FALSE);
+    if (!EchelonGameInfo(Level.Game).bUseController)
+    {
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0023L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0024L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_JUMP_MASK, FALSE);
+    }
+    else
+    {
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0023L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK, TRUE);
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0024L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK | KEY_JUMP_MASK, FALSE);   
+    }
     End();
 FenceClimbing:
     Log("");
     CheckFlags(FenceClimbingPlayed,TRUE,'DoNothing');
     SetFlags(FenceClimbingPlayed,TRUE);
-    AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0028L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
+    if (!EchelonGameInfo(Level.Game).bUseController)
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0028L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
+    else
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0028L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK, TRUE);
     End();
 SwitchJumpAndLedge:
     Log("");

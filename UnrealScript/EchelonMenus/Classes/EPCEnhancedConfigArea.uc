@@ -10,11 +10,13 @@ var EPCCheckBox             m_bInteractionPause,
                             m_bXboxDifficulty,
                             m_bLetterBoxCinematics,
                             m_bWhistle,
+                            m_bF2000ZoomLevels,
                             m_bBurstFire,
+                            m_bNewDoorInteraction,
                             m_bRandomizeLockpick,
                             m_bOpticCableVisions,
                             m_bThermalOverride,
-                            m_bScaleFragDamage;
+                            m_bScaleGadgetDamage;
 
 var EPCCheckBox             m_bShowHUD,
                             m_bShowLifeBar,
@@ -22,10 +24,16 @@ var EPCCheckBox             m_bShowHUD,
                             m_bShowCommunicationBox,
                             m_bShowTimer,
                             m_bShowInventory,
+                            m_bShowStealthMeter,
                             m_bShowCurrentGoal,
+                            m_bShowKeypadGoal,
                             m_bShowMissionInformation,
                             m_bShowCrosshair,
                             m_bShowScope;
+
+// Native
+var EPCCheckBox             m_bCheckForUpdates,
+                            m_bSkipIntroVideos;
 
 var EPCComboControl         m_LevelUnlock;
                             
@@ -63,9 +71,11 @@ function Created()
 function InitEnhancedSettings()
 {
     AddLineItem();
-    AddTitleItem(Caps(Localize("Options", "Title_General", "Localization\\Enhanced")));
+    AddTitleItem(Caps(Localize("Enhanced", "Title_General", "Localization\\Enhanced")));
     AddLineItem();
 
+    AddCheckBoxItem("CheckForUpdates", m_bCheckForUpdates);
+    AddCheckBoxItem("SkipIntroVideos", m_bSkipIntroVideos);
     AddCheckBoxItem("InteractionPause", m_bInteractionPause);
     AddCheckBoxItem("EnableCheckpoints", m_bEnableCheckpoints);
     AddCheckBoxItem("XboxDifficulty", m_bXboxDifficulty);
@@ -77,15 +87,17 @@ function InitEnhancedSettings()
     AddLineItem();
 
     AddLineItem();
-    AddTitleItem(Caps(Localize("Options", "Title_Equipment", "Localization\\Enhanced")));
+    AddTitleItem(Caps(Localize("Enhanced", "Title_Equipment", "Localization\\Enhanced")));
     AddLineItem();
 
     AddCheckBoxItem("Whistle", m_bWhistle);
+    AddCheckBoxItem("F2000ZoomLevels", m_bF2000ZoomLevels);
     AddCheckBoxItem("BurstFire", m_bBurstFire);
+    AddCheckBoxItem("NewDoorInteraction", m_bNewDoorInteraction);
     AddCheckBoxItem("RandomizeLockpick", m_bRandomizeLockpick);
     AddCheckBoxItem("OpticCableVisions", m_bOpticCableVisions);
     AddCheckBoxItem("ThermalOverride", m_bThermalOverride);
-    AddCheckBoxItem("ScaleFragDamage", m_bScaleFragDamage);
+    AddCheckBoxItem("ScaleGadgetDamage", m_bScaleGadgetDamage);
     AddLineItem();
 
     AddComboBoxItem("MineDelay", m_MineDelay);
@@ -93,7 +105,7 @@ function InitEnhancedSettings()
     AddLineItem();
 
     AddLineItem();
-    AddTitleItem(Caps(Localize("Options", "Title_HUD", "Localization\\Enhanced")));
+    AddTitleItem(Caps(Localize("Enhanced", "Title_HUD", "Localization\\Enhanced")));
     AddLineItem();
 
     AddCheckBoxItem("ShowHUD", m_bShowHUD);
@@ -102,14 +114,16 @@ function InitEnhancedSettings()
     AddCheckBoxItem("ShowCommunicationBox", m_bShowCommunicationBox);
     AddCheckBoxItem("ShowTimer", m_bShowTimer);
     AddCheckBoxItem("ShowInventory", m_bShowInventory);
+    AddCheckBoxItem("ShowStealthMeter", m_bShowStealthMeter);
     AddCheckBoxItem("ShowCurrentGoal", m_bShowCurrentGoal);
+    AddCheckBoxItem("ShowKeypadGoal", m_bShowKeypadGoal);
     AddCheckBoxItem("ShowMissionInformation", m_bShowMissionInformation);
     AddCheckBoxItem("ShowCrosshair", m_bShowCrosshair);
     AddCheckBoxItem("ShowScope", m_bShowScope);
     AddLineItem();
 
     AddLineItem();
-    AddTitleItem(Caps(Localize("Options", "Title_Suit", "Localization\\Enhanced")));
+    AddTitleItem(Caps(Localize("Enhanced", "Title_Suit", "Localization\\Enhanced")));
     AddLineItem();
 
     AddComboBoxItem("TrainingSamMesh", m_TrainingSamMesh); 
@@ -178,7 +192,7 @@ function AddCheckBoxItem(string LocalizationKey, out EPCCheckBox CheckBox)
     CheckBox.ImageY = 5;
 
     NewItem = EPCEnhancedListBoxItem(m_ListBox.Items.Append(class'EPCEnhancedListBoxItem'));
-    NewItem.Caption = Localize("Options", LocalizationKey, "Localization\\Enhanced");
+    NewItem.Caption = Localize("Enhanced", LocalizationKey, "Localization\\Enhanced");
     NewItem.m_Control = CheckBox;
     NewItem.m_bIsNotSelectable = true;
 
@@ -194,7 +208,7 @@ function AddComboBoxItem(string LocalizationKey, out EPCComboControl ComboBox)
     ComboBox.SetEditable(False);
 
     NewItem = EPCEnhancedListBoxItem(m_ListBox.Items.Append(class'EPCEnhancedListBoxItem'));
-    NewItem.Caption = Localize("Options", LocalizationKey, "Localization\\Enhanced");
+    NewItem.Caption = Localize("Enhanced", LocalizationKey, "Localization\\Enhanced");
     NewItem.m_Control = ComboBox;
     NewItem.m_bIsNotSelectable = true;
 
@@ -222,26 +236,26 @@ function AddLineItem()
 
 function AddLevelUnlockCombo(EPCComboControl ComboBox)
 {
-    ComboBox.AddItem(Localize("Options","LevelUnlock_Disabled","Localization\\Enhanced"));
-    ComboBox.AddItem(Localize("Options","LevelUnlock_Enabled","Localization\\Enhanced"));
-    ComboBox.AddItem(Localize("Options","LevelUnlock_AllParts","Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced","LevelUnlock_Disabled","Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced","LevelUnlock_Enabled","Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced","LevelUnlock_AllParts","Localization\\Enhanced"));
     ComboBox.SetSelectedIndex(0);
 }
 
 function AddMineDelayCombo(EPCComboControl ComboBox)
 {
-    ComboBox.AddItem(Localize("Options","MineDelay_Default","Localization\\Enhanced"));
-    ComboBox.AddItem(Localize("Options","MineDelay_Enhanced","Localization\\Enhanced"));
-    ComboBox.AddItem(Localize("Options","MineDelay_Instant","Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced","MineDelay_Default","Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced","MineDelay_Enhanced","Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced","MineDelay_Instant","Localization\\Enhanced"));
     ComboBox.SetSelectedIndex(0);
 }
 
 function AddSamMeshCombo(EPCComboControl ComboBox)
 {
-    ComboBox.AddItem(Localize("Options", "SamMesh_Default", "Localization\\Enhanced"));
-    ComboBox.AddItem(Localize("Options", "SamMesh_Standard", "Localization\\Enhanced"));
-    ComboBox.AddItem(Localize("Options", "SamMesh_Balaclava", "Localization\\Enhanced")); 
-    ComboBox.AddItem(Localize("Options", "SamMesh_PartialSleeves", "Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced", "SamMesh_Default", "Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced", "SamMesh_Standard", "Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced", "SamMesh_Balaclava", "Localization\\Enhanced")); 
+    ComboBox.AddItem(Localize("Enhanced", "SamMesh_PartialSleeves", "Localization\\Enhanced"));
     ComboBox.SetSelectedIndex(0);
 }
 
@@ -250,24 +264,30 @@ function Notify(UWindowDialogControl C, byte E)
     if(E == DE_Click)
     {
         switch(C)
-        {               
+        {
+            case m_bCheckForUpdates:
+            case m_bSkipIntroVideos:        
             case m_bInteractionPause:
             case m_bEnableCheckpoints:
             case m_bXboxDifficulty:
             case m_bLetterBoxCinematics:
             case m_bWhistle:
+            case m_bF2000ZoomLevels:
             case m_bBurstFire:
+            case m_bNewDoorInteraction:
             case m_bRandomizeLockpick:
             case m_bOpticCableVisions:
             case m_bThermalOverride:            
-            case m_bScaleFragDamage:
+            case m_bScaleGadgetDamage:
             case m_bShowHUD:
             case m_bShowLifeBar:
             case m_bShowInteractionBox:
             case m_bShowCommunicationBox:
             case m_bShowTimer:
             case m_bShowInventory:
+            case m_bShowStealthMeter:
             case m_bShowCurrentGoal:
+            case m_bShowKeypadGoal:
             case m_bShowMissionInformation:
             case m_bShowCrosshair:
             case m_bShowScope:
@@ -307,19 +327,43 @@ function SaveOptions()
     local EchelonMainHUD HUD;
 
     local EF2000 F2000;
+    local bool bPreviousF2000ZoomLevels;
     local bool bPreviousBurstFire;
+    local bool bPreviousNewDoorInteraction;
 
     local EGoggle Goggle;
     
     EPC = EPlayerController(GetPlayerOwner());
     HUD = EchelonMainHUD(EPC.myHUD);
+    bPreviousF2000ZoomLevels = EPC.bF2000ZoomLevels;
     bPreviousBurstFire = EPC.bBurstFire;
+    bPreviousNewDoorInteraction = EPC.eGame.bNewDoorInteraction;
     
+    EPC.eGame.bCheckForUpdates = m_bCheckForUpdates.m_bSelected;
+    EPC.eGame.bSkipIntroVideos = m_bSkipIntroVideos.m_bSelected;
     EPC.bInteractionPause = m_bInteractionPause.m_bSelected;
     EPC.eGame.bEnableCheckpoints = m_bEnableCheckpoints.m_bSelected;
     EPC.eGame.bXboxDifficulty = m_bXboxDifficulty.m_bSelected;
     HUD.bLetterBoxCinematics = m_bLetterBoxCinematics.m_bSelected;
     EPC.bWhistle = m_bWhistle.m_bSelected;
+    EPC.bF2000ZoomLevels = m_bF2000ZoomLevels.m_bSelected;
+    if (bPreviousF2000ZoomLevels && !EPC.bF2000ZoomLevels)
+    {
+        if(EPC.MainGun != None)
+        {
+            F2000 = EF2000(EPC.MainGun);
+            if(F2000 != None)
+            {
+                F2000.ValidateZoomLevel();
+
+                if(EPC.ActiveGun == EPC.MainGun && F2000.bSniperMode)
+                {
+                    EPC.SetCameraFOV(EPC, F2000.GetZoom());
+                }
+            }
+        }
+    }
+
     EPC.bBurstFire = m_bBurstFire.m_bSelected;
     if(bPreviousBurstFire && !EPC.bBurstFire)
     {
@@ -332,6 +376,13 @@ function SaveOptions()
             }
         }
     }
+
+    EPC.eGame.bNewDoorInteraction = m_bNewDoorInteraction.m_bSelected;
+    if (bPreviousNewDoorInteraction != EPC.eGame.bNewDoorInteraction)
+    {
+        RefreshCurrentDoorInteraction(EPC);
+    }
+    
     EPC.eGame.bRandomizeLockpick = m_bRandomizeLockpick.m_bSelected;
     EPC.eGame.bOpticCableVisions = m_bOpticCableVisions.m_bSelected;
     EPC.eGame.bThermalOverride = m_bThermalOverride.m_bSelected;
@@ -342,7 +393,7 @@ function SaveOptions()
         else
             EPC.Goggle.bNoThermalAvailable = false;
     }
-    EPC.eGame.bScaleFragDamage = m_bScaleFragDamage.m_bSelected;
+    EPC.eGame.bScaleGadgetDamage = m_bScaleGadgetDamage.m_bSelected;
 
     switch (m_LevelUnlock.GetSelectedIndex())
     {
@@ -366,7 +417,9 @@ function SaveOptions()
     HUD.bShowCommunicationBox = m_bShowCommunicationBox.m_bSelected;
     HUD.bShowTimer = m_bShowTimer.m_bSelected;
     EPC.bShowInventory = m_bShowInventory.m_bSelected;
+    EPC.bShowStealthMeter = m_bShowStealthMeter.m_bSelected;
     EPC.bShowCurrentGoal = m_bShowCurrentGoal.m_bSelected;
+    EPC.bShowKeyPadGoal = m_bShowKeypadGoal.m_bSelected;
     EPC.bShowMissionInformation = m_bShowMissionInformation.m_bSelected;
     EPC.bShowCrosshair = m_bShowCrosshair.m_bSelected;
     EPC.bShowScope = m_bShowScope.m_bSelected;
@@ -496,15 +549,33 @@ function SaveOptions()
         case 3: EPC.eGame.ESam_Severonickel = SMT_PartialSleeves; break;
         default: EPC.eGame.ESam_Severonickel = SMT_Default; break;
     }
-
     EPC.SaveEnhancedOptions();
     EPC.eGame.SaveEnhancedOptions();
     HUD.SaveEnhancedOptions();
     EPC.playerInfo.SaveEnhancedOptions();
 }
 
+// Joshua - Function to refresh the current door interaction the player is touching
+function RefreshCurrentDoorInteraction(EPlayerController EPC)
+{
+    local EDoorInteraction DoorInteraction;
+    local EInteractObject InteractObj;
+    
+    // Check if player currently has a door interaction in their interaction manager
+    if (EPC.IManager.IsPresent(class'EDoorInteraction', InteractObj))
+    {
+        DoorInteraction = EDoorInteraction(InteractObj);
+        if (DoorInteraction != None)
+        {
+            DoorInteraction.RefreshInteractions();
+        }
+    }
+}
+
 function ResetToDefault()
 {
+    m_bCheckForUpdates.m_bSelected = true;
+    m_bSkipIntroVideos.m_bSelected = false;
     m_bInteractionPause.m_bSelected = false;
     m_bEnableCheckpoints.m_bSelected = true;
     m_bXboxDifficulty.m_bSelected = false;
@@ -512,11 +583,13 @@ function ResetToDefault()
     m_LevelUnlock.SetSelectedIndex(0);
 
     m_bWhistle.m_bSelected = true;
+    m_bF2000ZoomLevels.m_bSelected = true;
     m_bBurstFire.m_bSelected = true;
+    m_bNewDoorInteraction.m_bSelected = true;
     m_bRandomizeLockpick.m_bSelected = true;
     m_bOpticCableVisions.m_bSelected = true;
     m_bThermalOverride.m_bSelected = false;
-    m_bScaleFragDamage.m_bSelected = true;
+    m_bScaleGadgetDamage.m_bSelected = true;
     m_MineDelay.SetSelectedIndex(0);
 
     m_bShowHUD.m_bSelected = true;
@@ -525,7 +598,9 @@ function ResetToDefault()
     m_bShowCommunicationBox.m_bSelected = true;
     m_bShowTimer.m_bSelected = true;
     m_bShowInventory.m_bSelected = true;
+    m_bShowStealthMeter.m_bSelected = true;
     m_bShowCurrentGoal.m_bSelected = true;
+    m_bShowKeypadGoal.m_bSelected = true;
     m_bShowMissionInformation.m_bSelected = true;
     m_bShowCrosshair.m_bSelected = true;
     m_bShowScope.m_bSelected = true;
@@ -554,6 +629,12 @@ function Refresh()
     EPC = EPlayerController(GetPlayerOwner());
     HUD = EchelonMainHUD(EPC.myHUD);
 
+    if (m_bCheckForUpdates != None)
+    m_bCheckForUpdates.m_bSelected = EPC.eGame.bCheckForUpdates;
+
+    if (m_bSkipIntroVideos != None)
+    m_bSkipIntroVideos.m_bSelected = EPC.eGame.bSkipIntroVideos;
+
     if (m_bInteractionPause != None)
         m_bInteractionPause.m_bSelected = EPC.bInteractionPause;
 
@@ -572,8 +653,14 @@ function Refresh()
     if (m_bWhistle != None)
         m_bWhistle.m_bSelected = EPC.bWhistle;
 
+    if (m_bF2000ZoomLevels != None)
+        m_bF2000ZoomLevels.m_bSelected = EPC.bF2000ZoomLevels;
+
     if (m_bBurstFire != None)
         m_bBurstFire.m_bSelected = EPC.bBurstFire;
+
+    if (m_bNewDoorInteraction != None)
+        m_bNewDoorInteraction.m_bSelected = EPC.eGame.bNewDoorInteraction;
 
     if (m_bRandomizeLockpick != None)
         m_bRandomizeLockpick.m_bSelected = EPC.eGame.bRandomizeLockpick;
@@ -584,8 +671,8 @@ function Refresh()
     if (m_bThermalOverride != None)
         m_bThermalOverride.m_bSelected = EPC.eGame.bThermalOverride;
        
-    if (m_bScaleFragDamage != None)
-        m_bScaleFragDamage.m_bSelected = EPC.eGame.bScaleFragDamage;
+    if (m_bScaleGadgetDamage != None)
+        m_bScaleGadgetDamage.m_bSelected = EPC.eGame.bScaleGadgetDamage;
 
     if (m_MineDelay != None)
         m_MineDelay.SetSelectedIndex(Clamp(EPC.eGame.WallMineDelay, 0, m_MineDelay.List.Items.Count() - 1));
@@ -608,11 +695,14 @@ function Refresh()
     if (m_bShowInventory != None)
         m_bShowInventory.m_bSelected = EPC.bShowInventory;
 
-    if (m_bShowInventory != None)
-        m_bShowInventory.m_bSelected = EPC.bShowInventory;
+    if (m_bShowStealthMeter != None)
+        m_bShowStealthMeter.m_bSelected = EPC.bShowStealthMeter;
 
     if (m_bShowCurrentGoal != None)
         m_bShowCurrentGoal.m_bSelected = EPC.bShowCurrentGoal;
+
+    if (m_bShowKeypadGoal != None)
+        m_bShowKeypadGoal.m_bSelected = EPC.bShowKeyPadGoal;
 
     if (m_bShowMissionInformation != None)
         m_bShowMissionInformation.m_bSelected = EPC.bShowMissionInformation;

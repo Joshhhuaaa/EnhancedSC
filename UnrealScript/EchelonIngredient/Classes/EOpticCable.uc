@@ -2,14 +2,17 @@ class EOpticCable extends EInventoryItem;
 
 #exec OBJ LOAD FILE=..\Sounds\Interface.uax
 
+// Joshua - Constants for rendering modes
+const REN_DynLight		= 5;
+const REN_ThermalVision = 10;
+const REN_NightVision	= 11;
+
 var()   float		    Damping;
 var	    rotator		    camera_rotation;
 var     int			    start_yaw;
 var		vector			start_location;
 var     ESwingingDoor   Door;
 var		int				RenderingMode; 		  // Joshua - New variable needed for vision modes in Optic Cables
-var 	texture			BackupThermalTexture; // Joshua - Backup for the controller's settings
-var 	bool 			BackupbBigPixels; 	  // Joshua - Backup for the controller's settings
 
 const valid_range = 13000;
 
@@ -110,6 +113,13 @@ function GetOpticStart()
 	start_yaw		= CenterToZero(camera_rotation.yaw);
 }
 
+// Joshua - Add optical cable interaction
+function AddedToInventory()
+{
+	EPlayerController(Controller).OpticCableItem = self;
+	Super.AddedToInventory();
+}
+
 function Select( EInventory Inv )
 {
 	Super.Select(Inv);
@@ -123,24 +133,28 @@ function HudView( bool bIn )
 	//Log("HUD VIEW!!!"@bIn@Controller);
 	if( bIn )
 	{
-		// Joshua - Thermal vision properties stored 
-		BackupThermalTexture = Epc.ThermalTexture;
-        BackupbBigPixels = Epc.bBigPixels;
-
 		// Camera location
 		Epc.SetLocation(start_location);
 		// Camera rotation
 		Epc.SetRotation(camera_rotation);
 
-		// Joshua - Synchronize the vision mode with the player's current mode
-        //RenderingMode = Epc.RendMap;
-		// Joshua - Start optic cable in dynamic light, goggles was getting desynced too easily
-		RenderingMode		= REN_DynLight;
+		// Joshua - Determine the starting render mode
+		if (Epc.Goggle.CurrentMode == REN_NightVision || Epc.Goggle.CurrentMode == REN_ThermalVision)
+		{
+			// If goggles are active, use their mode
+			RenderingMode = Epc.Goggle.CurrentMode;
+		}
+		else
+		{
+			// Otherwise start with dynamic light
+			RenderingMode = REN_DynLight;
+		}
 		Epc.SetCameraMode(self, RenderingMode);
 
-		// Joshua - Allows the Optic Cable use all vision modes like Pandora Tomorrow
+		// Joshua - If optic cable visions not allowed, force night vision
 		if (!Epc.eGame.bOpticCableVisions)
 			Epc.SetCameraMode(self, REN_NightVision);
+			
 		Epc.iRenderMask = 2;
 
 		Enable('Tick');
@@ -152,10 +166,33 @@ function HudView( bool bIn )
 		// Joshua - Xbox was playing this sound upon leaving, so I added it to PC
 		PlaySound(Sound'Interface.Play_FisherEquipEspionCam', SLOT_Interface);
 
-		// Joshua - Restore the player's original thermal vision settings
-        Epc.ThermalTexture = BackupThermalTexture;
-        Epc.bBigPixels = BackupbBigPixels;
-		
+		// Joshua - Update Goggle state based on current optic cable render mode
+		if (RenderingMode == REN_NightVision || RenderingMode == REN_ThermalVision)
+		{
+			// Force the goggle state to match our current vision mode
+			Epc.Goggle.CurrentMode = RenderingMode;
+			
+			// Make sure goggles are down if we're using vision modes
+			if (Epc.Goggle.IsInState('GoggleUp'))
+			{
+				Epc.Goggle.GotoState('GoggleDown');
+			}
+			
+			Epc.SetCameraMode(Epc, RenderingMode);
+		}
+		else
+		{
+			// If we're returning to normal view, reset to dynamic light
+			Epc.Goggle.CurrentMode = REN_DynLight;
+			Epc.SetCameraMode(Epc, REN_DynLight);
+			
+			// Make sure goggles are up if we're not using vision modes
+			if (Epc.Goggle.IsInState('GoggleDown'))
+			{
+				Epc.Goggle.GotoState('GoggleUp');
+			}
+		}
+
 		Epc.PopCamera(self);
 		Epc.iRenderMask = 0;
 	}
@@ -196,6 +233,26 @@ state s_Selected
 		// send message to Owner (Controller) that item can be place
 		Controller.GotoState('s_OpticCable');
 	}
+}
+
+// Joshua - Optic Cable interaction
+state s_InteractSelected
+{
+	function Use()
+	{
+		if(Door.bOpening || Door.bClosing || !Door.bClosed || Door.NoOpticCable)
+		{
+			//log("Door moving");
+			return;
+		}
+
+		GetOpticStart();
+
+		// Send message to Owner (Controller) that item can be place
+		Controller.GotoState('s_OpticCable');
+	}
+AutoUse:
+	Use();
 }
 
 state s_Sneaking
@@ -242,62 +299,68 @@ state s_Sneaking
 		local EPlayerController Epc;
 		Epc = EPlayerController(Controller);
 
-// Joshua - Adding support for switching visions in optic cable
-if (Epc.eGame.bOpticCableVisions)
-{
-    // Night vision
-    if (Epc.bDPadLeft != 0)
-    {
-        if (RenderingMode != REN_NightVision)
-        {
-            // Play the correct sound effect when switching between modes
-            if (RenderingMode == REN_ThermalVision)
-                PlaySound(Sound'Interface.Play_FisherSwitchGoggle', SLOT_Interface);
-            else
-                PlaySound(Sound'FisherEquipement.Play_GoggleRun', SLOT_SFX);
-
-            RenderingMode = REN_NightVision;
-        }
-        else
-        {
-            RenderingMode = REN_DynLight;
-        }
-
-        Epc.SetCameraMode(self, RenderingMode);
-        Epc.bDPadLeft = 0;
-    }
-	// Thermal vision
-	else if (Epc.bDPadRight != 0)
+	// Joshua - Adding support for switching visions in optic cable
+	if (Epc.eGame.bOpticCableVisions)
 	{
-		if (!Epc.Goggle.bNoThermalAvailable)
+		// Night vision
+		if (Epc.bDPadLeft != 0)
 		{
-			if (RenderingMode != REN_ThermalVision)
+			if (RenderingMode != REN_NightVision)
 			{
 				// Play the correct sound effect when switching between modes
-				if (RenderingMode == REN_NightVision)
+				if (RenderingMode == REN_ThermalVision)
 					PlaySound(Sound'Interface.Play_FisherSwitchGoggle', SLOT_Interface);
 				else
 					PlaySound(Sound'FisherEquipement.Play_GoggleRun', SLOT_SFX);
 
-				RenderingMode = REN_ThermalVision;
+				RenderingMode = REN_NightVision;
+				
+				// Update goggle's current mode to keep them in sync
+				Epc.Goggle.CurrentMode = RenderingMode;
 			}
 			else
 			{
 				RenderingMode = REN_DynLight;
+				Epc.Goggle.CurrentMode = RenderingMode;
 			}
 
 			Epc.SetCameraMode(self, RenderingMode);
-			Epc.ThermalTexture = Level.pThermalTexture_B;
-			Epc.bBigPixels = true;
+			Epc.bDPadLeft = 0;
 		}
-		else if (RenderingMode == REN_NightVision)
+		// Thermal vision
+		else if (Epc.bDPadRight != 0)
 		{
-			RenderingMode = REN_DynLight;
-			Epc.SetCameraMode(self, RenderingMode);
+			if (!Epc.Goggle.bNoThermalAvailable)
+			{
+				if (RenderingMode != REN_ThermalVision)
+				{
+					// Play the correct sound effect when switching between modes
+					if (RenderingMode == REN_NightVision)
+						PlaySound(Sound'Interface.Play_FisherSwitchGoggle', SLOT_Interface);
+					else
+						PlaySound(Sound'FisherEquipement.Play_GoggleRun', SLOT_SFX);
+
+					RenderingMode = REN_ThermalVision;
+					Epc.Goggle.CurrentMode = RenderingMode;
+
+					Epc.SetCameraMode(self, RenderingMode);
+				}
+				else
+				{
+					RenderingMode = REN_DynLight;
+					Epc.Goggle.CurrentMode = RenderingMode;
+					Epc.SetCameraMode(self, RenderingMode);
+				}
+			}
+			else if (RenderingMode == REN_NightVision)
+			{
+				RenderingMode = REN_DynLight;
+				Epc.Goggle.CurrentMode = RenderingMode;
+				Epc.SetCameraMode(self, RenderingMode);
+			}
+			Epc.bDPadRight = 0;
 		}
-		Epc.bDPadRight = 0;
 	}
-}
 
 		// give rotationnary cable movement
 		delta_damping	= Epc.aTurn * Damping;

@@ -9,6 +9,8 @@
 
 class EPCVideoConfigArea extends UWindowDialogClientWindow;
 
+var EPCOptionsListBoxEnhanced m_ListBox;
+
 var EPCHScrollBar       m_GammaScroll, m_BrightnessScroll;
 
 var EPCComboControl     m_ComboResolution;
@@ -17,126 +19,255 @@ var EPCComboControl     m_ComboShadow;
 var EPCComboControl     m_ComboTerrain;
 var EPCComboControl     m_ComboEffectsQuality;
 
-var UWindowLabelControl     m_LResolution;
-var UWindowLabelControl     m_LShadowResolution;
-var UWindowLabelControl     m_LShadow;
+var EPCComboControl     m_ComboTurnOffDistanceScale;
+var EPCComboControl     m_ComboLODDistance;
+var EPCComboControl     m_ComboPauseOnFocusLoss;
 
-var UWindowLabelControl     m_LGamma;
-var UWindowLabelControl     m_LBrightness;
-var UWindowLabelControl     m_LEffectsQuality;
-
-var INT                     m_ILabelXPos, m_ILabelWidth, m_ILabelHeight, m_IControlXPos, m_IComboWidth;
-var INT                     m_IFirstYPos, m_IYOffset, m_IButtonsWidth;
-var INT                     m_IScrollyOffset, m_IScrollWidth;
-
-var Color                   m_TextColor;
+var INT                     m_ILabelXPos, m_ILabelWidth, m_ILineItemHeight, m_ITitleLineItemHeight, m_IScrollWidth;
 
 var bool                    m_bModified;    //A setting has changed
 var bool					m_bFirstRefresh;
 
 function Created()
 {
+    SetAcceptsFocus();
+	
+    m_ListBox = EPCOptionsListBoxEnhanced(CreateWindow(class'EPCOptionsListBoxEnhanced', 0, 0, WinWidth, WinHeight));            
+    m_ListBox.SetAcceptsFocus();
+    m_ListBox.bAlwaysBehind = true;
+    m_ListBox.m_ILabelXPos = m_ILabelXPos;
+    m_ListBox.m_ILabelWidth = m_ILabelWidth;
+    m_ListBox.m_ILineItemHeight = m_ILineItemHeight;
+    m_ListBox.m_ITitleLineItemHeight = m_ITitleLineItemHeight;
+    InitVideoOptions();
+    m_ListBox.TitleFont=F_Normal;
+}
+
+function InitVideoOptions()
+{
 	local EPCGameOptions GO;  
 	
     GO = class'Actor'.static.GetGameOptions();
 
-    m_LResolution = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos, m_IFirstYPos, m_ILabelWidth, m_ILabelHeight, self));
-    m_LResolution.SetLabelText(Localize("HUD","RESOLUTION","Localization\\HUD"),TXT_LEFT);
-    m_LResolution.Font       = F_Normal;
-    m_LResolution.TextColor  = m_TextColor;
+    AddTitleLineItem();
 
-    m_ComboResolution   = EPCComboControl(CreateControl(class'EPCComboControl',m_ILabelXPos + m_ILabelWidth, m_LResolution.WinTop, m_IComboWidth ,m_ILabelHeight));	
-	m_ComboResolution.SetFont(F_Normal);
-	m_ComboResolution.SetEditable(False);
-    m_ComboResolution.AddItem("640x480");
-	if (GO.VidMem != 0)
-	{
-		m_ComboResolution.AddItem("800x600");
-		m_ComboResolution.AddItem("1024x768");
-		m_ComboResolution.AddItem("1280x1024");
-	}
-	if (GO.VidMem == 2)
-	{
-		m_ComboResolution.AddItem("1600x1200");
-	}
-	m_ComboResolution.SetValue(GetPlayerOwner().ConsoleCommand("GetCurrentRes"));
-	
+    // Resolution combo box
+    AddComboBoxItem("RESOLUTION", m_ComboResolution);
+    InitResolutionCombo(m_ComboResolution, GO);
+    AddLineItem();
 
-    m_LShadowResolution = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos, m_LResolution.WinTop + m_IYOffset, m_ILabelWidth, m_ILabelHeight, self));
-    m_LShadowResolution.SetLabelText(Localize("HUD","SHADOWRES","Localization\\HUD"),TXT_LEFT);
-    m_LShadowResolution.Font       = F_Normal;
-    m_LShadowResolution.TextColor  = m_TextColor;
+    // Shadow resolution combo box
+    AddComboBoxItem("SHADOWRES", m_ComboShadowResolution);
+    InitShadowResolutionCombo(m_ComboShadowResolution, GO);
+    AddLineItem();
 
-    m_ComboShadowResolution   = EPCComboControl(CreateControl(class'EPCComboControl',m_ILabelXPos + m_ILabelWidth,m_LShadowResolution.WinTop,m_IComboWidth,m_ILabelHeight));	
-	m_ComboShadowResolution.SetFont(F_Normal);
-	m_ComboShadowResolution.SetEditable(False);
-    m_ComboShadowResolution.AddItem(Localize("HUD","LOW","Localization\\HUD"));
-	m_ComboShadowResolution.AddItem(Localize("HUD","MEDIUM","Localization\\HUD"));
+    // Shadow distance Scale combo box
+    AddEnhancedComboBoxItem("TurnOffDistanceScale", m_ComboTurnOffDistanceScale);
+    InitTurnOffDistanceScaleCombo(m_ComboTurnOffDistanceScale);
+    AddLineItem();
 
-	if (GO.VidMem == 2)
-	{
-		m_ComboShadowResolution.AddItem(Localize("HUD","HIGH","Localization\\HUD"));
-	}
-	m_ComboShadowResolution.SetSelectedIndex(0);    
+    // Shadow quality combo box
+    AddComboBoxItem("SHADOWS", m_ComboShadow);
+    InitShadowCombo(m_ComboShadow);
+    AddLineItem();
 
-    m_LShadow     = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos, m_LShadowResolution.WinTop + m_IYOffset, m_ILabelWidth, m_ILabelHeight, self));
-    m_LShadow.SetLabelText(Localize("HUD","SHADOWS","Localization\\HUD"),TXT_LEFT);
-    m_LShadow.Font       = F_Normal;
-    m_LShadow.TextColor  = m_TextColor;
+    // Effects quality combo box
+    AddComboBoxItem("EFFECTSQUALITY", m_ComboEffectsQuality);
+    InitEffectsQualityCombo(m_ComboEffectsQuality, GO);
+    AddLineItem();
 
-    m_ComboShadow = EPCComboControl(CreateControl(class'EPCComboControl',m_ILabelXPos + m_ILabelWidth, m_LShadow.WinTop,m_IComboWidth,m_ILabelHeight));	
-	m_ComboShadow.SetFont(F_Normal);
-	m_ComboShadow.SetEditable(False);
-    m_ComboShadow.AddItem(Localize("HUD","LOW","Localization\\HUD"));
-	m_ComboShadow.AddItem(Localize("HUD","MEDIUM","Localization\\HUD"));
-    m_ComboShadow.AddItem(Localize("HUD","HIGH","Localization\\HUD"));     
-	m_ComboShadow.SetSelectedIndex(0);        
+    // LOD Distance combo box
+    AddEnhancedComboBoxItem("LODDistance", m_ComboLODDistance);
+    InitLODDistanceCombo(m_ComboLODDistance);
+    AddLineItem();
 
-    m_LEffectsQuality     = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos, m_LShadow.WinTop + m_IYOffset, m_ILabelWidth, m_ILabelHeight, self));
-    m_LEffectsQuality.SetLabelText(Localize("HUD","EFFECTSQUALITY","Localization\\HUD"),TXT_LEFT);
-    m_LEffectsQuality.Font       = F_Normal;
-    m_LEffectsQuality.TextColor  = m_TextColor;
+    // Pause on Focus Loss combo box
+    AddEnhancedComboBoxItem("PauseOnFocusLoss", m_ComboPauseOnFocusLoss);
+    InitPauseOnFocusLossCombo(m_ComboPauseOnFocusLoss);
+    AddLineItem();
 
-    m_ComboEffectsQuality = EPCComboControl(CreateControl(class'EPCComboControl',m_ILabelXPos + m_ILabelWidth, m_LEffectsQuality.WinTop,m_IComboWidth,m_ILabelHeight));	
-	m_ComboEffectsQuality.SetFont(F_Normal);
-	m_ComboEffectsQuality.SetEditable(False);
-    m_ComboEffectsQuality.AddItem(Localize("HUD","LOW","Localization\\HUD"));
-	m_ComboEffectsQuality.AddItem(Localize("HUD","MEDIUM","Localization\\HUD"));
-	if (GO.VidMem != 0)
-	{
-		m_ComboEffectsQuality.AddItem(Localize("HUD","HIGH","Localization\\HUD")); 
-	}
-	if (GO.VidMem == 2)
-	{    
-		m_ComboEffectsQuality.AddItem(Localize("HUD","VERYHIGH","Localization\\HUD"));  
-	}   
-	m_ComboEffectsQuality.SetSelectedIndex(0);  
+    // Gamma scroll bar
+    AddScrollBarItem("GAMMA", m_GammaScroll);
+    InitGammaScrollBar(m_GammaScroll);
+    AddLineItem();
 
-	m_LGamma      = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos, m_LEffectsQuality.WinTop + m_IYOffset, m_ILabelWidth, m_ILabelHeight, self));
-    m_LGamma.SetLabelText(Localize("HUD","GAMMA","Localization\\HUD"),TXT_LEFT);
-    m_LGamma.Font       = F_Normal;
-    m_LGamma.TextColor  = m_TextColor;
+    // Brightness scroll bar
+    AddScrollBarItem("BRIGHTNESS", m_BrightnessScroll);
+    InitBrightnessScrollBar(m_BrightnessScroll);
+    AddLineItem();
+}
 
-	m_GammaScroll = EPCHScrollBar(CreateControl( class'EPCHScrollBar', m_ILabelXPos + m_ILabelWidth, m_LEffectsQuality.WinTop + m_IScrollyOffset, m_IScrollWidth, LookAndFeel.Size_HScrollbarHeight, self));
-    m_GammaScroll.SetScrollHeight(12);
-    m_GammaScroll.SetRange(0, 100, 1);   
-	
-	m_LBrightness = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos, m_LGamma.WinTop + m_IYOffset, m_ILabelWidth, m_ILabelHeight, self));
-    m_LBrightness.SetLabelText(Localize("HUD","BRIGHTNESS","Localization\\HUD"),TXT_LEFT);
-    m_LBrightness.Font       = F_Normal;
-    m_LBrightness.TextColor  = m_TextColor;
+function AddTitleItem(string Title)
+{
+    local EPCEnhancedListBoxItem NewItem;
+    
+    NewItem = EPCEnhancedListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
+    NewItem.Caption = Title;
+    NewItem.m_bIsTitle = true;
+    NewItem.m_bIsNotSelectable = true;
+}
 
-	m_BrightnessScroll = EPCHScrollBar(CreateControl( class'EPCHScrollBar', m_ILabelXPos + m_ILabelWidth, m_LGamma.WinTop + m_IScrollyOffset, m_IScrollWidth, LookAndFeel.Size_HScrollbarHeight, self));
-    m_BrightnessScroll.SetScrollHeight(12);
-    m_BrightnessScroll.SetRange(0, 100, 1);        
-  
+function AddLineItem()
+{
+    local EPCEnhancedListBoxItem NewItem;
+    
+    NewItem = EPCEnhancedListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
+    NewItem.bIsLine = true;
+    NewItem.m_bIsNotSelectable = true;
+}
+
+function AddTitleLineItem()
+{
+    local EPCEnhancedListBoxItem NewItem;
+    
+    NewItem = EPCEnhancedListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
+    NewItem.bIsTitleLine = true;
+    NewItem.m_bIsNotSelectable = true;
+}
+
+function AddComboBoxItem(string LocalizationKey, out EPCComboControl ComboBox)
+{
+    local EPCEnhancedListBoxItem NewItem;
+    
+    ComboBox = EPCComboControl(CreateControl(class'EPCComboControl', 0, 0, 150, 18));
+    ComboBox.SetFont(F_Normal);
+    ComboBox.SetEditable(False);
+
+    NewItem = EPCEnhancedListBoxItem(m_ListBox.Items.Append(class'EPCEnhancedListBoxItem'));
+    // Joshua - Enhanced settings use different Localization file
+
+    NewItem.Caption = Localize("HUD", LocalizationKey, "Localization\\HUD");
+
+    NewItem.m_Control = ComboBox;
+    NewItem.m_bIsNotSelectable = true;
+
+    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = ComboBox;
+}
+
+function AddEnhancedComboBoxItem(string LocalizationKey, out EPCComboControl ComboBox)
+{
+    local EPCEnhancedListBoxItem NewItem;
+    
+    ComboBox = EPCComboControl(CreateControl(class'EPCComboControl', 0, 0, 150, 18));
+    ComboBox.SetFont(F_Normal);
+    ComboBox.SetEditable(False);
+
+    NewItem = EPCEnhancedListBoxItem(m_ListBox.Items.Append(class'EPCEnhancedListBoxItem'));
+    // Joshua - Enhanced settings use different Localization file
+
+    NewItem.Caption = Localize("Graphics", LocalizationKey, "Localization\\Enhanced");
+
+    NewItem.m_Control = ComboBox;
+    NewItem.m_bIsNotSelectable = true;
+
+    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = ComboBox;
+}
+
+function AddScrollBarItem(string LocalizationKey, out EPCHScrollBar ScrollBar)
+{
+    local EPCEnhancedListBoxItem NewItem;
+    
+    ScrollBar = EPCHScrollBar(CreateControl(class'EPCHScrollBar', 0, 0, m_IScrollWidth, LookAndFeel.Size_HScrollbarHeight));
+    ScrollBar.SetScrollHeight(12);
+
+    NewItem = EPCEnhancedListBoxItem(m_ListBox.Items.Append(class'EPCEnhancedListBoxItem'));
+    NewItem.Caption = Localize("HUD", LocalizationKey, "Localization\\HUD");
+    NewItem.m_Control = ScrollBar;
+    NewItem.m_bIsNotSelectable = true;
+
+    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = ScrollBar;
+}
+
+function InitResolutionCombo(EPCComboControl ComboBox, EPCGameOptions GO)
+{
+    ComboBox.AddItem("640x480");
+    if (GO.VidMem != 0)
+    {
+        ComboBox.AddItem("800x600");
+        ComboBox.AddItem("1024x768");
+        ComboBox.AddItem("1280x1024");
+    }
+    if (GO.VidMem == 2)
+    {
+        ComboBox.AddItem("1600x1200");
+    }
+    ComboBox.SetValue(GetPlayerOwner().ConsoleCommand("GetCurrentRes"));
+}
+
+function InitShadowResolutionCombo(EPCComboControl ComboBox, EPCGameOptions GO)
+{
+    ComboBox.AddItem(Localize("HUD","LOW","Localization\\HUD"));
+    ComboBox.AddItem(Localize("HUD","MEDIUM","Localization\\HUD"));
+    if (GO.VidMem == 2)
+    {
+        ComboBox.AddItem(Localize("HUD","HIGH","Localization\\HUD"));
+    }
+    ComboBox.SetSelectedIndex(0);
+}
+
+function InitShadowCombo(EPCComboControl ComboBox)
+{
+    ComboBox.AddItem(Localize("HUD","LOW","Localization\\HUD"));
+    ComboBox.AddItem(Localize("HUD","MEDIUM","Localization\\HUD"));
+    ComboBox.AddItem(Localize("HUD","HIGH","Localization\\HUD"));     
+    ComboBox.SetSelectedIndex(0);
+}
+
+function InitEffectsQualityCombo(EPCComboControl ComboBox, EPCGameOptions GO)
+{
+    ComboBox.AddItem(Localize("HUD","LOW","Localization\\HUD"));
+    ComboBox.AddItem(Localize("HUD","MEDIUM","Localization\\HUD"));
+    if (GO.VidMem != 0)
+    {
+        ComboBox.AddItem(Localize("HUD","HIGH","Localization\\HUD")); 
+    }
+    if (GO.VidMem == 2)
+    {    
+        ComboBox.AddItem(Localize("HUD","VERYHIGH","Localization\\HUD"));  
+    }   
+    ComboBox.SetSelectedIndex(0);
+}
+
+function InitGammaScrollBar(EPCHScrollBar ScrollBar)
+{
+    ScrollBar.SetRange(0, 100, 1);
+}
+
+function InitBrightnessScrollBar(EPCHScrollBar ScrollBar)
+{
+    ScrollBar.SetRange(0, 100, 1);
+}
+
+function InitTurnOffDistanceScaleCombo(EPCComboControl ComboBox)
+{
+    ComboBox.AddItem(Localize("Graphics","TurnOffDistanceScale_1x","Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Graphics","TurnOffDistanceScale_2x","Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Graphics","TurnOffDistanceScale_4x","Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Graphics","TurnOffDistanceScale_8x","Localization\\Enhanced"));
+    ComboBox.SetSelectedIndex(0);
+}
+
+function InitLODDistanceCombo(EPCComboControl ComboBox)
+{
+    ComboBox.AddItem(Localize("Graphics","LODDistance_Default","Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Graphics","LODDistance_Enhanced","Localization\\Enhanced"));
+    ComboBox.SetSelectedIndex(0);
+}
+
+function InitPauseOnFocusLossCombo(EPCComboControl ComboBox)
+{
+    ComboBox.AddItem(Localize("Graphics","PauseOnFocusLoss_Disable","Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Graphics","PauseOnFocusLoss_Enable","Localization\\Enhanced"));
+    ComboBox.SetSelectedIndex(0);
 }
 
 function Refresh()
 {
     local EPCGameOptions GO;  
+    local EPlayerController EPC;
 	
     GO = class'Actor'.static.GetGameOptions();
+    EPC = EPlayerController(GetPlayerOwner());
 
 	m_GammaScroll.Pos = Clamp(GO.Gamma,0,99);	
 	m_BrightnessScroll.Pos = Clamp(GO.Brightness,0,99);    
@@ -145,6 +276,15 @@ function Refresh()
     m_ComboShadowResolution.SetSelectedIndex(Clamp(GO.ShadowResolution,0,m_ComboShadowResolution.List.Items.Count()));    
     m_ComboShadow.SetSelectedIndex(Clamp(GO.ShadowLevel,0,m_ComboShadow.List.Items.Count() -1));        
     m_ComboEffectsQuality.SetSelectedIndex(Clamp(GO.EffectsQuality,0,m_ComboEffectsQuality.List.Items.Count() -1));            
+    
+    if (m_ComboTurnOffDistanceScale != None && EPC != None)
+        m_ComboTurnOffDistanceScale.SetSelectedIndex(Clamp(EPC.eGame.TurnOffDistanceScale, 0, m_ComboTurnOffDistanceScale.List.Items.Count() - 1));
+
+    if (m_ComboLODDistance != None && EPC != None)
+        m_ComboLODDistance.SetSelectedIndex(Clamp(int(EPC.eGame.bLODDistance), 0, m_ComboLODDistance.List.Items.Count() - 1));
+
+    if (m_ComboPauseOnFocusLoss != None && EPC != None)
+        m_ComboPauseOnFocusLoss.SetSelectedIndex(Clamp(int(EPC.eGame.bPauseOnFocusLoss), 0, m_ComboPauseOnFocusLoss.List.Items.Count() - 1));
 
 	m_bModified     = false;
 	m_bFirstRefresh = false;
@@ -153,9 +293,12 @@ function Refresh()
 function ResetToDefault()
 {
     local EPCGameOptions GO; 
+    local EPlayerController EPC;
     local string oldRes;
 
 	GO = class'Actor'.static.GetGameOptions();
+    EPC = EPlayerController(GetPlayerOwner());
+    
 	GO.oldResolution = GO.Resolution;
 	GO.oldEffectsQuality = GO.EffectsQuality;
 	GO.oldShadowResolution = GO.ShadowResolution;
@@ -163,14 +306,22 @@ function ResetToDefault()
 	GO.ResetGraphicsToDefault();
 	GO.UpdateEngineSettings();   
 
+    // Enhanced settings
+    EPC.eGame.TurnOffDistanceScale = EPC.eGame.default.TurnOffDistanceScale;
+    EPC.eGame.bLODDistance = EPC.eGame.default.bLODDistance;
+    EPC.eGame.bPauseOnFocusLoss = EPC.eGame.default.bPauseOnFocusLoss;
+    EPC.eGame.SaveEnhancedOptions();
+
 	Refresh(); 
 }
 
 function SaveOptions()
 {
     local EPCGameOptions GO;    
+    local EPlayerController EPC; // Joshua - Used for Enhanced settings
 	
     GO = class'Actor'.static.GetGameOptions();
+    EPC = EPlayerController(GetPlayerOwner());
 
     GO.Resolution = m_ComboResolution.GetValue();
     GO.ShadowResolution = m_ComboShadowResolution.GetSelectedIndex();    
@@ -180,6 +331,31 @@ function SaveOptions()
 	GO.Brightness = m_BrightnessScroll.Pos;
 	GO.Gamma   = m_GammaScroll.Pos;
 	
+    // Enhanced settings
+    switch (m_ComboTurnOffDistanceScale.GetSelectedIndex())
+    {
+        case 0: EPC.eGame.TurnOffDistanceScale = TurnOffDistance_1x; break;
+        case 1: EPC.eGame.TurnOffDistanceScale = TurnOffDistance_2x; break;
+        case 2: EPC.eGame.TurnOffDistanceScale = TurnOffDistance_4x; break;
+        case 3: EPC.eGame.TurnOffDistanceScale = TurnOffDistance_8x; break;
+        default: EPC.eGame.TurnOffDistanceScale = TurnOffDistance_1x; break;
+    }
+
+    switch (m_ComboLODDistance.GetSelectedIndex())
+    {
+        case 0: EPC.eGame.bLODDistance = false; break;
+        case 1: EPC.eGame.bLODDistance = true; break;
+        default: EPC.eGame.bLODDistance = false; break;
+    }
+
+    switch (m_ComboPauseOnFocusLoss.GetSelectedIndex())
+    {
+        case 0: EPC.eGame.bPauseOnFocusLoss = false; break;
+        case 1: EPC.eGame.bPauseOnFocusLoss = true; break;
+        default: EPC.eGame.bPauseOnFocusLoss = false; break;
+    }
+
+    EPC.eGame.SaveEnhancedOptions();
 }
 
 function Notify(UWindowDialogControl C, byte E)
@@ -194,23 +370,40 @@ function Notify(UWindowDialogControl C, byte E)
 		case m_GammaScroll:
 		case m_BrightnessScroll:
 		case m_ComboEffectsQuality:
+        case m_ComboTurnOffDistanceScale:
+        case m_ComboLODDistance:
+        case m_ComboPauseOnFocusLoss:
             m_bModified = true;
             break;
         }
     }
 }
 
+function MouseWheelDown(FLOAT X, FLOAT Y)
+{
+    CloseActiveComboBoxes();
+    if(m_ListBox != None)
+        m_ListBox.MouseWheelDown(X, Y);
+}
+
+function MouseWheelUp(FLOAT X, FLOAT Y)
+{
+    CloseActiveComboBoxes();
+    if(m_ListBox != None)
+        m_ListBox.MouseWheelUp(X, Y);
+}
+
+function CloseActiveComboBoxes()
+{
+    if(m_ListBox != None)
+        m_ListBox.CloseActiveComboBoxes();
+}
+
 defaultproperties
 {
     m_ILabelXPos=15
     m_ILabelWidth=250
-    m_ILabelHeight=18
-    m_IControlXPos=285
-    m_IComboWidth=150
-    m_IFirstYPos=5
-    m_IYOffset=25
-    m_IButtonsWidth=20
-    m_IScrollyOffset=25
-    m_IScrollWidth=200
-    m_TextColor=(R=71,G=71,B=71,A=255)
+    m_IScrollWidth=190
+    m_ITitleLineItemHeight=2
+    m_ILineItemHeight=8
 }

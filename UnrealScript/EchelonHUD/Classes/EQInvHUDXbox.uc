@@ -150,19 +150,39 @@ function PostRender(Canvas C)
 	if (Epc.bShowInventory && Epc.bShowHUD)
 	{
         DrawHandItem(Canvas, SCREEN_END_Y - eGame.HUD_OFFSET_Y - ITEMBOX_HEIGHT_L - ITEMBOX_HEIGHT_B - SPACE_BETWEEN_BOX - SPACE_EXTRA_GOAL, false);
-        DrawStealthMeter(Canvas);
         DrawRateOfFire(Canvas);
     }
 
-
+	if (Epc.bShowStealthMeter && Epc.bShowHUD)
+		DrawStealthMeter(Canvas);
 
 	// Display current goal		
-	if ( Epc.CurrentGoal != "" && (Epc.CurrentGoalSection != "") && (Epc.CurrentGoalKey != "") && (Epc.CurrentGoalPackage != "") ) 
+	/*if ( Epc.CurrentGoal != "" && (Epc.CurrentGoalSection != "") && (Epc.CurrentGoalKey != "") && (Epc.CurrentGoalPackage != "") ) 
 	{
 		sCurrentGoal = Localize(Epc.CurrentGoalSection, Epc.CurrentGoalKey, Epc.CurrentGoalPackage);
 
 		if ( sCurrentGoal != "(null)" && Epc.bShowCurrentGoal && Epc.bShowHUD ) 
 			DisplayCurrentGoal(Canvas);
+	}*/
+
+	// Display current goal
+	if (Epc.bShowCurrentGoal && Epc.bShowHUD)
+	{
+		 // Joshua - Show keypad as goal
+		if (Epc.bShowKeyNum && Epc.bShowKeyPadGoal)
+		{
+			sCurrentGoal = Epc.CurrentGoal;
+			DisplayCurrentGoal(Canvas);
+		}
+		else if (Epc.CurrentGoal != "" &&
+				Epc.CurrentGoalSection != "" &&
+				Epc.CurrentGoalKey != "" &&
+				Epc.CurrentGoalPackage != "")
+		{
+			sCurrentGoal = Localize(Epc.CurrentGoalSection, Epc.CurrentGoalKey, Epc.CurrentGoalPackage);
+			if (sCurrentGoal != "(null)")
+				DisplayCurrentGoal(Canvas);
+		}
 	}
 
 	// Display icon 
@@ -278,6 +298,28 @@ state s_QDisplayXbox
                 PCInventory.SetPreviousConfig();
             }
 
+            GotoState('');
+            Owner.GotoState(EchelonMainHud(Owner).RestoreState());
+        }
+    }
+    // Joshua - Allows the player to press Interaction to select an inventory item in ToggleInventory mode
+    else if (Key == "Interaction" && Epc.bToggleInventory && Action == IST_Press)
+    {
+        // Joshua - If we have a currently selected category and item, select it
+        if (CurrentCategory != -1 && CurrentItem != -1)
+        {
+            Item = PCInventory.GetItemInCategory(GetCategory(CurrentCategory), CurrentItem + 1);
+            
+            if (!PCInventory.IsSelected(Item))
+            {
+                PCInventory.SetSelectedItem(Item);
+            }
+            else if (!Item.IsA('EMainGun') && !Item.IsA('EOneHandedWeapon'))
+            {
+                PCInventory.UnEquipItem(Item);
+            }
+
+            // Exit inventory mode
             GotoState('');
             Owner.GotoState(EchelonMainHud(Owner).RestoreState());
         }

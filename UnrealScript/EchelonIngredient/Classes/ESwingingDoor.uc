@@ -188,6 +188,12 @@ function MakeGroupReturn( Actor Other )
 	if( EDoorInteraction(MyKnob.Interaction).ActiveController != None &&
 		EDoorInteraction(MyKnob.Interaction).ActiveController.bIsPlayer )
 		EDoorInteraction(MyKnob.Interaction).ActiveController.EndEvent();
+
+	if( EDoorInteraction(MyKnob.Interaction).StealthInteraction != None &&
+		EDoorInteraction(MyKnob.Interaction).StealthInteraction.ActiveController != None &&
+		EDoorInteraction(MyKnob.Interaction).StealthInteraction.ActiveController.bIsPlayer )
+		EDoorInteraction(MyKnob.Interaction).StealthInteraction.ActiveController.EndEvent();
+
 	Super.MakeGroupReturn(Other);
 }
 

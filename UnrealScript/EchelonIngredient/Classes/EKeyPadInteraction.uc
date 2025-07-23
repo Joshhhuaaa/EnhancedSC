@@ -90,10 +90,11 @@ function SetInteractLocation( Pawn InteractPawn )
 
 function KeyEvent( String Key, EInputAction Action, float Delta, optional bool bAuto )
 {
-	// Joshua - Adding controller support for keypads.
-	local EPlayerController EPC; 
+	
+	local EPlayerController EPC; // Joshua - Adding controller support for keypads
+	local int OldSelectedButton; // Joshua - Adding NumPad support for keypads
 	EPC = EPlayerController(EKeyPadInteraction(Interaction).InteractionController);
-
+	
 	// Process Npc interaction
 	if( bAuto )
 	{
@@ -109,6 +110,61 @@ function KeyEvent( String Key, EInputAction Action, float Delta, optional bool b
 
 	if(Action == IST_Press)
 	{
+		// Joshua - Start of NumPad support
+		OldSelectedButton = MyKeyPad.SelectedButton;
+        switch( Key )
+		{
+		case "Keypad_NumPad0":
+		    MyKeyPad.SelectedButton = 10;
+			MyKeyPad.KeyPushed();
+			break;
+        case "Keypad_NumPad1":
+		    MyKeyPad.SelectedButton = 0;
+			MyKeyPad.KeyPushed();
+			break;
+        case "Keypad_NumPad2":
+		    MyKeyPad.SelectedButton = 1;
+			MyKeyPad.KeyPushed();
+			break;
+        case "Keypad_NumPad3":
+		    MyKeyPad.SelectedButton = 2;
+			MyKeyPad.KeyPushed();
+			break;
+        case "Keypad_NumPad4":
+		    MyKeyPad.SelectedButton = 3;
+			MyKeyPad.KeyPushed();
+			break;
+        case "Keypad_NumPad5":
+		    MyKeyPad.SelectedButton = 4;
+			MyKeyPad.KeyPushed();
+			break;
+        case "Keypad_NumPad6":
+		    MyKeyPad.SelectedButton = 5;
+			MyKeyPad.KeyPushed();
+			break;
+        case "Keypad_NumPad7":
+		    MyKeyPad.SelectedButton = 6;
+			MyKeyPad.KeyPushed();
+			break;
+        case "Keypad_NumPad8":
+		    MyKeyPad.SelectedButton = 7;
+			MyKeyPad.KeyPushed();
+			break;
+        case "Keypad_NumPad9":
+		    MyKeyPad.SelectedButton = 8;
+			MyKeyPad.KeyPushed();
+			break;
+        case "Keypad_NumPadPeriod":
+		    MyKeyPad.SelectedButton = 11;
+			MyKeyPad.KeyPushed();
+			break;
+        case "Keypad_GreyStar":
+        case "Keypad_Backspace":
+		    MyKeyPad.SelectedButton = 9;
+			MyKeyPad.KeyPushed();
+			break;
+		}
+		// Joshua - End of NumPad support
 		switch( Key )
 		{
 		case "AnalogUp" :
@@ -147,8 +203,10 @@ function KeyEvent( String Key, EInputAction Action, float Delta, optional bool b
 				MyKeyPad.KeyPushed();
 			break;
 		}
-
-		MyKeyPad.GlowSelected();
+		
+		// Joshua - Adding NumPad support for keypads
+		if( OldSelectedButton != MyKeyPad.SelectedButton )
+		   MyKeyPad.GlowSelected();
 	}
 }
 
@@ -167,6 +225,68 @@ function int GetValidkey()
 	}
 
 	return -1;
+}
+
+// Joshua - Keypad hint
+function bool CheckKeyCode(Controller Instigator, string Key)
+{
+	local EPlayerController Epc;
+	local EListNode Node ;
+	local ENote Note;
+
+	Epc = EPlayerController(Instigator);
+
+	if(Epc == None)
+		return false;
+
+	Node = Epc.NoteBook.FirstNode;
+	While(Node != None)
+	{
+		Note = ENote(Node.Data);
+		if( (Note !=None) && (InStr(Note.Note, Key)>-1) )
+		{
+			return true;
+		}
+		Node = Node.NextNode;
+	}
+
+	return false;
+}
+
+function Touch(actor Other)
+{
+	local Pawn P;
+	local EPlayerController EPC;
+
+	Super.Touch(Other);
+
+	P = Pawn(Other);
+	if( P == None || !P.bIsPlayerPawn || P.Controller == None )
+		return;
+
+	EPC = EPlayerController(P.Controller);
+
+	if( EPC != None && EPC.CanAddInteract(self) && IsAvailable() && CheckKeyCode(EPC, MyKeyPad.AccessCode))
+	{
+		EPC.CurrentGoal = Localize("HUD", "Keypad_Goal", "Localization\\Enhanced")@MyKeyPad.AccessCode;
+		EPC.bShowKeyNum = true;
+	}
+}
+
+function UnTouch(actor Other)
+{
+	local Pawn P;
+	local EPlayerController EPC;
+
+	EPC = EPlayerController(InteractionPlayerController);
+
+	Super.UnTouch(Other);
+
+	if(EPC != None && InteractionController == None)
+	{
+		EPC.RefreshGoals();
+		EPC.bShowKeyNum = false;
+	}
 }
 
 defaultproperties

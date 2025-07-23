@@ -16,7 +16,7 @@ var EPCHScrollBar        m_MouseSensitivityScroll;
 var EPCHScrollBar        m_InitialSpeedScroll; // Joshua - Enhanced setting
 var EPCCheckBox          m_InvertMouseButton;
 var EPCCheckBox          m_FireEquipGun;
-var EPCCheckBox          m_bNormalizedMovement; // Joshua - Enhanced setting
+var EPCCheckBox          m_bNormalizeMovement; // Joshua - Enhanced setting
 var EPCCheckBox          m_bCrouchDrop; // Joshua - Enhanced setting
 var EPCCheckBox          m_bToggleBTWTargeting; // Joshua - Enhanced setting
 var EPCCheckBox          m_bToggleInventory; // Joshua - Enhanced setting
@@ -75,6 +75,7 @@ function InitOptionControls()
 
 	AddKeyItem( Localize("Keys","K_Fire","Localization\\HUD"), "Fire");
 	AddKeyItem( Localize("Keys","K_AltFire","Localization\\HUD"), "AltFire");
+    AddKeyItem( Localize("Keys","K_Snipe","Localization\\Enhanced"), "Snipe");
     AddKeyItem( Localize("Keys","K_Scope","Localization\\HUD"), "Scope");
     AddKeyItem( Localize("Keys","K_Jump","Localization\\HUD"), "Jump");
     AddKeyItem( Localize("Keys","K_Interaction","Localization\\HUD"), "Interaction");
@@ -117,7 +118,7 @@ function InitOptionControls()
 
     // Enhanced
     AddLineItem();
-	AddTitleItem( Caps(Localize("Options","Enhanced","Localization\\Enhanced")));
+	AddTitleItem( Caps(Localize("HUD","Enhanced","Localization\\Enhanced")));
     AddLineItem();
 
     AddInputModeControls();
@@ -142,7 +143,7 @@ function SaveOptions()
 	GO.FireEquipGun = m_FireEquipGun.m_bSelected;
 
     EPC.eGame.m_defautSpeed = m_InitialSpeedScroll.Pos;
-    EPC.bNormalizeMovement = m_bNormalizedMovement.m_bSelected;
+    EPC.bNormalizeMovement = m_bNormalizeMovement.m_bSelected;
     EPC.bCrouchDrop = m_bCrouchDrop.m_bSelected;
     EPC.bToggleBTWTargeting = m_bToggleBTWTargeting.m_bSelected;
     EPC.bToggleInventory = m_bToggleInventory.m_bSelected;
@@ -202,8 +203,8 @@ function Refresh()
     if (m_InitialSpeedScroll != None)
         m_InitialSpeedScroll.Pos = EPC.eGame.m_defautSpeed;
 
-    if (m_bNormalizedMovement != None)
-        m_bNormalizedMovement.m_bSelected = EPC.bNormalizeMovement;
+    if (m_bNormalizeMovement != None)
+        m_bNormalizeMovement.m_bSelected = EPC.bNormalizeMovement;
 
     if (m_bCrouchDrop != None)
         m_bCrouchDrop.m_bSelected = EPC.bCrouchDrop;
@@ -254,7 +255,7 @@ function ResetToDefault()
 
     EPC = EPlayerController(GetPlayerOwner());
     m_InitialSpeedScroll.Pos = 5;
-    m_bNormalizedMovement.m_bSelected = true;
+    m_bNormalizeMovement.m_bSelected = true;
     m_bCrouchDrop.m_bSelected = true;
     m_bToggleBTWTargeting.m_bSelected = true;
     m_bToggleInventory.m_bSelected = false;
@@ -313,12 +314,12 @@ function AddNormalizedMovementControls()
     NewItem.Caption			        = Localize("Controls","NormalizedMovement","Localization\\Enhanced");
     NewItem.m_bIsNotSelectable  = true;
 
-    m_bNormalizedMovement = EPCCheckBox(CreateControl( class'EPCCheckBox', 0, 0, 20, 18, self));    
-    m_bNormalizedMovement.ImageX      = 5;
-    m_bNormalizedMovement.ImageY      = 5;
-    NewItem.m_Control = m_bNormalizedMovement;
+    m_bNormalizeMovement = EPCCheckBox(CreateControl( class'EPCCheckBox', 0, 0, 20, 18, self));    
+    m_bNormalizeMovement.ImageX      = 5;
+    m_bNormalizeMovement.ImageY      = 5;
+    NewItem.m_Control = m_bNormalizeMovement;
     NewItem.bIsCheckBoxLine = true;
-    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_bNormalizedMovement;
+    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_bNormalizeMovement;
 }
 
 //===============================================================================
@@ -346,7 +347,7 @@ function AddCrouchDropControls()
 //===============================================================================
 function AddToggleBTWTargetingControls()
 {
-    // Joshua - Enhanced toggle inventory
+    // Joshua - Enhanced toggle back to wall targetting
     local EPCOptionsKeyListBoxItem NewItem;
 
     NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
@@ -504,7 +505,7 @@ function RefreshKeyList(bool bKeysOnly) // MClarke - Patch 1 Beta 2 - Added bool
         m_InvertMouseButton.m_bSelected = GO.InvertMouse;    
 	    m_FireEquipGun.m_bSelected = GO.FireEquipGun;
         m_InitialSpeedScroll.Pos = Clamp(EPC.eGame.m_defautSpeed, 1,6);
-        m_bNormalizedMovement.m_bSelected = EPC.bNormalizeMovement;
+        m_bNormalizeMovement.m_bSelected = EPC.bNormalizeMovement;
         m_bCrouchDrop.m_bSelected = EPC.bCrouchDrop;
         m_bToggleBTWTargeting.m_bSelected = EPC.bToggleBTWTargeting;
         m_bToggleInventory.m_bSelected = EPC.bToggleInventory;
@@ -589,19 +590,24 @@ function KeyPressed( int Key)
 //==============================================================================
 function KeyDown(int Key, float X, float Y)
 {
-	local string szTemp, szKeyName;
+	//local string szTemp, szKeyName;
 
 	if(m_MessageBox != None)
     {
 		// set the key and refresh the list
-		szKeyName = GetPlayerOwner().GetEnumName(Key);
+		//szKeyName = GetPlayerOwner().GetEnumName(Key);
 		
 		//validates the windows key:
-		szTemp = Caps(Left(szKeyName, 7));
+		//szTemp = Caps(Left(szKeyName, 7));
 		
-		// No joystick/gampad support for the PC version
+		// No joystick/gamepad support for the PC version
 		if( Key >= 196 && Key <= 215 ) return;
-		if(szTemp == "UNKNOWN") return;
+
+        // Joshua - Prevent binding Windows left (92) and Windows right (93)
+        If( Key == 92 || Key == 93 ) return;
+
+        // Joshua - Allow binding unknown keys (used for Mouse 4 / Mouse 5)
+		//if(szTemp == "UNKNOWN") return;
 		
 		if(Key != GetPlayerOwner().Player.Console.EInputKey.IK_Escape)
 		{
@@ -726,7 +732,7 @@ function Notify(UWindowDialogControl C, byte E)
     {
         m_bModified = true;
     }
-    else if(E==DE_Click && C == m_bNormalizedMovement)
+    else if(E==DE_Click && C == m_bNormalizeMovement)
     {
         m_bModified = true;
     }

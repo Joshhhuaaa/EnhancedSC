@@ -1,9 +1,13 @@
 class EPlayerStats extends Actor
-    config (Enhanced);
+    config(Enhanced);
 
 var config string MissionName;
 var config float MissionTime;
 var config float MissionTimePart;
+
+var config int PlayerIdentified;
+var config int BodyFound;
+var config int AlarmTriggered;
 
 var config int EnemyKnockedOut;
 var config int EnemyKnockedOutRequired;
@@ -17,17 +21,14 @@ var config int CivilianInjured;
 var config int CivilianKilled;
 var config int CivilianKilledRequired;
 
-var config int PlayerIdentified;
-var config int AlarmTriggered;
-var config int BodyFound;
-
 var config int BulletFired;
-var config int MedkitUsed;
-var config int LockPicked;
-
-var config int LockDestroyed;
 var config int LightDestroyed;
 var config int ObjectDestroyed;
+
+var config int LockPicked;
+var config int LockDestroyed;
+var config int MedkitUsed;
+
 var config int NPCsInterrogated;
 
 var float StealthRating;
@@ -39,29 +40,30 @@ function ResetSessionStats()
     MissionTime = 0;
     MissionTimePart = 0;
 
+    PlayerIdentified = 0;
+    BodyFound = 0;
+    AlarmTriggered = 0;
+
     EnemyKnockedOut = 0;
     EnemyKnockedOutRequired = 0;
     EnemyInjured = 0;
     EnemyKilled = 0;
     EnemyKilledRequired = 0;
-    
+
     CivilianKnockedOut = 0;
     CivilianKnockedOutRequired = 0;
     CivilianInjured = 0;
     CivilianKilled = 0;
     CivilianKilledRequired = 0;
-    
-    PlayerIdentified = 0;
-    AlarmTriggered = 0;
-    BodyFound = 0;
 
     BulletFired = 0;
-    MedkitUsed = 0;
-    LockPicked = 0;
-
-    LockDestroyed = 0;
     LightDestroyed = 0;
     ObjectDestroyed = 0;
+    
+    LockPicked = 0;
+    LockDestroyed = 0;
+    MedkitUsed = 0;
+ 
     NPCsInterrogated = 0;
 
     StealthRating = 100.0;
@@ -147,6 +149,15 @@ function AddStat(string StatName, optional int Amount)
         
     switch(StatName)
     {
+        case "PlayerIdentified":
+            PlayerIdentified += Amount;
+            break;
+        case "BodyFound":
+            BodyFound += Amount;
+            break;
+        case "AlarmTriggered":
+            AlarmTriggered += Amount;
+            break;
         case "EnemyKnockedOut":
             EnemyKnockedOut += Amount;
             break;
@@ -177,20 +188,14 @@ function AddStat(string StatName, optional int Amount)
         case "CivilianKilledRequired":
             CivilianKilledRequired += Amount;
             break;
-        case "PlayerIdentified":
-            PlayerIdentified += Amount;
-            break;
-        case "AlarmTriggered":
-            AlarmTriggered += Amount;
-            break;
-        case "BodyFound":
-            BodyFound += Amount;
-            break;
         case "BulletFired":
             BulletFired += Amount;
             break;
-        case "MedkitUsed":
-            MedkitUsed += Amount;
+        case "LightDestroyed":
+            LightDestroyed += Amount;
+            break;
+        case "ObjectDestroyed":
+            ObjectDestroyed += Amount;
             break;
         case "LockPicked":
             LockPicked += Amount;
@@ -198,11 +203,8 @@ function AddStat(string StatName, optional int Amount)
         case "LockDestroyed":
             LockDestroyed += Amount;
             break;
-        case "LightDestroyed":
-            LightDestroyed += Amount;
-            break;
-        case "ObjectDestroyed":
-            ObjectDestroyed += Amount;
+        case "MedkitUsed":
+            MedkitUsed += Amount;
             break;
         case "NPCsInterrogated":
             NPCsInterrogated += Amount;
@@ -215,22 +217,18 @@ function CalculateStealthRating()
 {
     local float rating;
     rating = 100.0;
+
+    rating -= float(PlayerIdentified) * 15.0;
+    rating -= float(BodyFound) * 15.0;
+    rating -= float(AlarmTriggered) * 20.0;
     
-    rating -= float(LockDestroyed) * 2.0;
-
     rating -= float(EnemyKnockedOut) * 5.0;
-
     rating -= float(CivilianKnockedOut) * 5.0;
 
     rating -= float(EnemyKilled) * 15.0;
-
     rating -= float(CivilianKilled) * 30.0;
 
-    rating -= float(AlarmTriggered) * 20.0;
-
-    rating -= float(BodyFound) * 15.0;
-
-    rating -= float(PlayerIdentified) * 15.0;
+    rating -= float(LockDestroyed) * 2.0;
 
     /* Joshua - Allow Stealth Rating to go below 0 like Double Agent
     if (rating < 0)
@@ -290,5 +288,4 @@ function OnLevelChange()
 defaultproperties
 {
     bHidden=true
-    bTravel=true
 }
