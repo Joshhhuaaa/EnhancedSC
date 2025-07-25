@@ -286,6 +286,7 @@ var(Enhanced) config bool bShowCurrentGoal;
 var(Enhanced) config bool bShowMissionInformation;
 var(Enhanced) config bool bShowCrosshair;
 var(Enhanced) config bool bShowScope;
+var(Enhanced) config bool bShowAlarms;
 
 native(1290) final function SetCameraFOV( actor Owner, float NewFOV );
 native(1291) final function SetCameraMode( actor Owner, int NewRendMap );
@@ -10614,5 +10615,6 @@ defaultproperties
 	bShowMissionInformation=true
 	bShowCrosshair=true
 	bShowScope=true
+	bShowAlarms=true
 	CheatClass=Class'ECheatManager'
 }

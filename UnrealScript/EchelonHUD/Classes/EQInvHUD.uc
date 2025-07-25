@@ -10,6 +10,8 @@
 ******************************************************************************/
 class EQInvHUD extends Actor;
 
+#exec OBJ LOAD FILE=..\Textures\HUD_Enhanced.utx PACKAGE=HUD_Enhanced
+
 var int			CurrentCategory,
 				CurrentItem,
 				Gap;
@@ -39,11 +41,21 @@ var FLOAT       fBlinkTime;
 var bool        bStopBlinkRecon;
 var bool        bStopBlinkGoal;
 var bool        bStopBlinkNote;
+var bool		bStopBlinkAlarm;
 var FLOAT       fNbrReconBlink;
 var FLOAT       fNbrGoalBlink;
 var FLOAT       fNbrNoteBlink;
+var FLOAT		fNbrAlarmBlink;
 
 var string      sCurrentGoal;
+
+// Joshua - Alarm
+var bool		bAlarmBlink;
+var bool		bHasCurrentGoal;
+var int			iAlarmFlashCount;
+var int 		iMaxAlarmFlashNbr;
+var FLOAT		fAlarmFlashTime;
+var FLOAT 		fAlarmFlashMaxTimePer;
 
 /*-----------------------------------------------------------------------------
                       T Y P E   D E F I N I T I O N S 
@@ -148,12 +160,42 @@ function Tick(float Delta)
 		else
 			bBlink=true;
 	}
+
+	// Joshua - Alarm blinking
+	if (eLevel.bAlarmStageChanged)
+	{
+		if (iAlarmFlashCount == 0 && fAlarmFlashTime == 0)
+		{
+			// Start with the alarm visible
+			bAlarmBlink = true;
+		}
+
+		fAlarmFlashTime += Delta;
+		if(fAlarmFlashTime > fAlarmFlashMaxTimePer)
+		{
+			fAlarmFlashTime = 0;
+
+			bAlarmBlink = !bAlarmBlink;
+			
+			iAlarmFlashCount++;
+			if (iAlarmFlashCount > iMaxAlarmFlashNbr)
+			{
+				eLevel.bAlarmStageChanged = false;
+				iAlarmFlashCount = 0;
+			}
+		}
+	}
+	else
+	{
+		bAlarmBlink = false;
+    	iAlarmFlashCount = 0;
+    	fAlarmFlashTime = 0;
+	}
 }
 
 function PostRender(Canvas C)
 {
 	local ECanvas Canvas;
-
 	Canvas = ECanvas(C);
 
 	if (Epc.bShowInventory && Epc.bShowHUD)
@@ -177,11 +219,14 @@ function PostRender(Canvas C)
 	// Display current goal
 	if (Epc.bShowCurrentGoal && Epc.bShowHUD)
 	{
-		 // Joshua - Show keypad as goal
+		bHasCurrentGoal = false;
+
+		// Joshua - Show keypad as goal
 		if (Epc.bShowKeyNum && Epc.bShowKeyPadGoal)
 		{
 			sCurrentGoal = Epc.CurrentGoal;
 			DisplayCurrentGoal(Canvas);
+			bHasCurrentGoal = true;
 		}
 		else if (Epc.CurrentGoal != "" &&
 				Epc.CurrentGoalSection != "" &&
@@ -190,7 +235,10 @@ function PostRender(Canvas C)
 		{
 			sCurrentGoal = Localize(Epc.CurrentGoalSection, Epc.CurrentGoalKey, Epc.CurrentGoalPackage);
 			if (sCurrentGoal != "(null)")
+			{
 				DisplayCurrentGoal(Canvas);
+				bHasCurrentGoal = true;
+			}
 		}
 	}
 
@@ -199,6 +247,86 @@ function PostRender(Canvas C)
 	{		
 		DisplayIconsGoalNoteRecon(Canvas);
 	}
+
+	// Joshua - Display alarms
+	if(Epc.bShowHUD && Epc.bShowAlarms && !eLevel.bIgnoreAlarmStage)
+		DrawAlarmBox(Canvas);
+}
+
+// Joshua - Alarm stages like the Shanghai version
+function DrawAlarmBox(ECanvas Canvas)
+{
+    local int xPos, yPos;
+    local float xLen, yLen;
+    local string szText, sMaxAlarm;
+    local int AlarmAlpha;
+
+    xPos = SCREEN_END_X - eGame.HUD_OFFSET_X - ITEMBOX_WIDTH_L - CURRENT_GOAL_WIDTH - 5;
+    yPos = SCREEN_END_Y - eGame.HUD_OFFSET_Y + 1 - ITEMBOX_HEIGHT_L - SPACE_EXTRA_GOAL;
+    
+    yPos += 2; // 6 pixels from top of goal box
+
+	if (eLevel.bOneAlarmLevel)
+		sMaxAlarm = "1";
+    else if(Epc.eGame.bEliteMode)
+        sMaxAlarm = "3";
+    else
+        sMaxAlarm = "4";
+
+    szText = string(eLevel.AlarmStage) $ "/" $ sMaxAlarm;
+
+    //if( eLevel.bIgnoreAlarmStage )
+    //    szText = "-/--";
+
+    if (!Epc.bShowCurrentGoal || !bHasCurrentGoal)
+    {
+		// Show Current Goal is disabled - always show alarm
+        AlarmAlpha = 255;
+    }
+	else
+	{
+		// Show Current Goal is sliding up - fade alarm out
+		AlarmAlpha = (iCurrentPos * 255) / 100;
+    	AlarmAlpha = Clamp(AlarmAlpha, 0, 255);
+	}
+
+	// Set alpha for all drawing operations
+    Canvas.Style = ERenderStyle.STY_Alpha;
+
+    // Draw background texture
+    Canvas.DrawColor = TextColor;
+    Canvas.DrawColor.A = AlarmAlpha;
+    Canvas.SetPos(xPos - 6, yPos);
+    Canvas.DrawTile(Texture'HUD_Enhanced.HUD.AlarmBackground', 64, 32, 0, 0, 64, 32);
+
+	// Draw alarm icon
+	Canvas.DrawColor = TextColor;
+	if (eLevel.bAlarmStageChanged)
+	{
+		if (bAlarmBlink)
+		{
+			Canvas.DrawColor.A = AlarmAlpha;
+			Canvas.SetPos(xPos + 4, yPos + 8);
+			Canvas.DrawTile(Texture'HUD_Enhanced.HUD.Alarm', 16, 16, 0, 0, 16, 16);
+		}
+	}
+	else
+	{
+		// No alarm change – always show the icon
+		Canvas.DrawColor.A = AlarmAlpha;
+		Canvas.SetPos(xPos + 4, yPos + 8);
+		Canvas.DrawTile(Texture'HUD_Enhanced.HUD.Alarm', 16, 16, 0, 0, 16, 16);
+	}
+    
+    // Draw the text
+    Canvas.DrawColor = TextColor;
+    Canvas.DrawColor.A = AlarmAlpha;
+    Canvas.Font = Canvas.ETextFont;
+    Canvas.TextSize(szText, xLen, yLen);
+    Canvas.SetPos(xPos + 26, yPos + 8);
+    Canvas.DrawTextAligned(szText, TXT_LEFT);
+
+    Canvas.Style = ERenderStyle.STY_Normal;
 }
 
 //-------------------------------------------------------------------------------
@@ -418,9 +546,11 @@ function PostBeginPlay()
 	bStopBlinkRecon = false;
 	bStopBlinkGoal = false;
 	bStopBlinkNote = false;
+	bStopBlinkAlarm = false;
 	fNbrReconBlink = 0;
 	fNbrGoalBlink = 0;
 	fNbrNoteBlink = 0;
+	fNbrAlarmBlink = 0;
 }
 
 // CRAP CRAP CRAP CRAP CRAP
@@ -1423,4 +1553,6 @@ defaultproperties
     HUDColor=(R=128,G=128,B=128,A=255)
     bHidden=true
     bAlwaysTick=true
+	iMaxAlarmFlashNbr=24
+	fAlarmFlashMaxTimePer=0.250000
 }

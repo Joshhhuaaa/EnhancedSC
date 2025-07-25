@@ -29,7 +29,8 @@ var EPCCheckBox             m_bShowHUD,
                             m_bShowKeypadGoal,
                             m_bShowMissionInformation,
                             m_bShowCrosshair,
-                            m_bShowScope;
+                            m_bShowScope,
+                            m_bShowAlarms;
 
 // Native
 var EPCCheckBox             m_bCheckForUpdates,
@@ -120,6 +121,7 @@ function InitEnhancedSettings()
     AddCheckBoxItem("ShowMissionInformation", m_bShowMissionInformation);
     AddCheckBoxItem("ShowCrosshair", m_bShowCrosshair);
     AddCheckBoxItem("ShowScope", m_bShowScope);
+    AddCheckBoxItem("ShowAlarms", m_bShowAlarms);
     AddLineItem();
 
     AddLineItem();
@@ -286,11 +288,25 @@ function Notify(UWindowDialogControl C, byte E)
             case m_bShowTimer:
             case m_bShowInventory:
             case m_bShowStealthMeter:
-            case m_bShowCurrentGoal:
+            case m_bShowCurrentGoal: // If current goal is disabled, disable keypad goal
+                if (C == m_bShowCurrentGoal)
+                {
+                    if (!m_bShowCurrentGoal.m_bSelected)
+                    {
+                        m_bShowKeypadGoal.bDisabled = true;
+                    }
+                    else
+                    {
+                        m_bShowKeypadGoal.bDisabled = false;
+                    }
+                }
+                m_bModified = true;
+                break;
             case m_bShowKeypadGoal:
             case m_bShowMissionInformation:
             case m_bShowCrosshair:
             case m_bShowScope:
+            case m_bShowAlarms:
                 m_bModified = true;
                 break;
         }
@@ -423,6 +439,7 @@ function SaveOptions()
     EPC.bShowMissionInformation = m_bShowMissionInformation.m_bSelected;
     EPC.bShowCrosshair = m_bShowCrosshair.m_bSelected;
     EPC.bShowScope = m_bShowScope.m_bSelected;
+    EPC.bShowAlarms = m_bShowAlarms.m_bSelected;
     
     switch (m_TrainingSamMesh.GetSelectedIndex())
     {
@@ -601,9 +618,11 @@ function ResetToDefault()
     m_bShowStealthMeter.m_bSelected = true;
     m_bShowCurrentGoal.m_bSelected = true;
     m_bShowKeypadGoal.m_bSelected = true;
+    m_bShowKeypadGoal.bDisabled = false; // Allow if current goal had disabled it
     m_bShowMissionInformation.m_bSelected = true;
     m_bShowCrosshair.m_bSelected = true;
     m_bShowScope.m_bSelected = true;
+    m_bShowAlarms.m_bSelected = true;
 
     m_TrainingSamMesh.SetSelectedIndex(0);
     m_TbilisiSamMesh.SetSelectedIndex(0);
@@ -699,7 +718,15 @@ function Refresh()
         m_bShowStealthMeter.m_bSelected = EPC.bShowStealthMeter;
 
     if (m_bShowCurrentGoal != None)
+    {
         m_bShowCurrentGoal.m_bSelected = EPC.bShowCurrentGoal;
+        
+        if (m_bShowKeypadGoal != None)
+        {
+            // Gray out keypad goal if current goal is disabled
+            m_bShowKeypadGoal.bDisabled = !EPC.bShowCurrentGoal;
+        }
+    }
 
     if (m_bShowKeypadGoal != None)
         m_bShowKeypadGoal.m_bSelected = EPC.bShowKeyPadGoal;
@@ -712,6 +739,9 @@ function Refresh()
 
     if (m_bShowScope != None)
         m_bShowScope.m_bSelected = EPC.bShowScope;
+
+    if (m_bShowAlarms != None)
+        m_bShowAlarms.m_bSelected = EPC.bShowAlarms;
 
     if (m_TrainingSamMesh != None)
         m_TrainingSamMesh.SetSelectedIndex(Clamp(EPC.eGame.ESam_Training, 0, m_TrainingSamMesh.List.Items.Count() - 1));
