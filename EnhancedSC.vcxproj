@@ -19,6 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="external\safetyhook\src\allocator.cpp" />
+    <ClCompile Include="external\safetyhook\src\easy.cpp" />
+    <ClCompile Include="external\safetyhook\src\inline_hook.cpp" />
+    <ClCompile Include="external\safetyhook\src\mid_hook.cpp" />
+    <ClCompile Include="external\safetyhook\src\os.linux.cpp" />
+    <ClCompile Include="external\safetyhook\src\os.windows.cpp" />
+    <ClCompile Include="external\safetyhook\src\utility.cpp" />
+    <ClCompile Include="external\safetyhook\src\vmt_hook.cpp" />
     <ClCompile Include="src\fixes\mouse_xbuttons_support.cpp" />
     <ClCompile Include="src\resources\logging.cpp" />
     <ClCompile Include="src\features\custom_saves.cpp" />
@@ -26,9 +34,8 @@
     <ClCompile Include="src\resources\hook_dlls.cpp" />
     <ClCompile Include="src\fixes\shadow_resolution.cpp" />
     <ClCompile Include="src\features\distance_culling.cpp" />
+    <ClCompile Include="src\resources\version_checker.cpp" />
     <ClCompile Include="src\warnings\asi_loader_checks.cpp" />
-    <ClCompile Include="external\safetyhook\safetyhook.cpp" />
-    <ClCompile Include="external\safetyhook\Zydis.c" />
     <ClCompile Include="src\dllmain.cpp" />
     <ClCompile Include="src\features\intro_skip.cpp" />
     <ClCompile Include="src\features\msaa.cpp" />
@@ -38,6 +45,7 @@
     <ClCompile Include="src\resources\helper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="external\safetyhook\include\safetyhook.hpp" />
     <ClInclude Include="src\fixes\mouse_xbuttons_support.hpp" />
     <ClInclude Include="src\resources\logging.hpp" />
     <ClInclude Include="src\features\custom_saves.hpp" />
@@ -49,6 +57,10 @@
     <ClInclude Include="src\features\distance_culling.hpp" />
     <ClInclude Include="external\safetyhook\safetyhook.hpp" />
     <ClInclude Include="external\safetyhook\Zydis.h" />
+    <ClInclude Include="src\resources\RegStateHelpers.hpp" />
+    <ClInclude Include="src\resources\submodule_initiailization.hpp" />
+    <ClInclude Include="src\resources\version_checker.hpp" />
+    <ClInclude Include="src\resources\version.h" />
     <ClInclude Include="src\warnings\asi_loader_checks.hpp" />
     <ClInclude Include="src\resources\gamevars.hpp" />
     <ClInclude Include="src\resources\common.hpp" />
@@ -57,6 +69,9 @@
     <ClInclude Include="src\fixes\pause_on_focus_loss.hpp" />
     <ClInclude Include="src\resources\helper.hpp" />
     <ClInclude Include="src\resources\stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\resources\EnhancedSC.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -115,7 +130,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetExt>.asi</TargetExt>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
-    <ExternalIncludePath>external\hooking;external\minhook\include;external\inipp;external\spdlog\include;external\dxsdk\Include;external\safetyhook;$(VC_IncludePath);$(WindowsSDK_IncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>external\hooking;external\minhook\include;external\inipp;external\spdlog\include;external\dxsdk\Include;external\safetyhook;$(VC_IncludePath);$(WindowsSDK_IncludePath);external\zydis\include;external\zydis\dependencies\zycore\include;external\safetyhook\include</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetExt>.asi</TargetExt>
@@ -132,14 +147,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <TargetExt>.asi</TargetExt>
-    <ExternalIncludePath>external\hooking;external\minhook\include;external\inipp;external\spdlog\include;external\dxsdk\Include;external\safetyhook;$(VC_IncludePath);$(WindowsSDK_IncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>external\hooking;external\minhook\include;external\inipp;external\spdlog\include;external\dxsdk\Include;external\safetyhook;$(VC_IncludePath);$(WindowsSDK_IncludePath);external\zydis\include;external\zydis\dependencies\zycore\include;external\safetyhook\include</ExternalIncludePath>
     <OutDir>F:\Games\Splinter Cell\system\scripts\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;MGSHDFix_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;SC_DEBUG</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;MGSHDFix_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;ZYDIS_STATIC_BUILD;ZYCORE_STATIC_BUILD;SC_DEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -156,6 +171,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <ProgramDatabaseFile>$(OutDir)\pdb\$(TargetName).pdb</ProgramDatabaseFile>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);$(SolutionDir)external\zydis\msvc\bin\ReleaseX86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);Zydis.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -164,7 +181,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;MGSHDFix_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;MGSHDFix_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;ZYDIS_STATIC_BUILD;ZYCORE_STATIC_BUILD</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -181,6 +198,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <ProgramDatabaseFile>$(OutDir)\pdb\$(TargetName).pdb</ProgramDatabaseFile>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);$(SolutionDir)external\zydis\msvc\bin\ReleaseX86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);Zydis.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
