@@ -64,7 +64,7 @@ Interrogate:
     SetFlags(Once,TRUE);
     Talk(Sound'S3_2_1Voice.Play_32_29_01', 0, , TRUE, 0);
     Sleep(0.1);
-    //Joshua - Temporarily removed until audio is restored:Speech(Localize("P_3_2_1_NPP_PistonInterro", "Speech_0008L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_29_02', 1, 0, TR_CONVERSATION, 0, false);
+    Speech(Localize("P_3_2_1_NPP_PistonInterro", "Speech_0008L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_29_02', 1, 0, TR_CONVERSATION, 0, false);
     Sleep(0.1);
     Talk(Sound'S3_2_1Voice.Play_32_29_03', 0, , TRUE, 0);
     Sleep(0.1);
