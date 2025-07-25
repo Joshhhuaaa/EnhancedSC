@@ -3366,8 +3366,13 @@ function LevelChange(string URL)
 	//don't travel if SAM is dead
 	if(Characters[0].pawn.health > 0)
 	{
-		ConsoleCommand("TRAVEL MAPNAME="$URL@"ITEMS=TRUE");
-		EPlayerController(Characters[0]).playerStats.OnLevelChange(); // Joshua - For player statistics, saves the mission time from the previous part
+		// Joshua - Bug fix: Don't travel if the player has reached alarm limit
+		if(EchelonLevelInfo(Level).bIgnoreAlarmStage || EchelonLevelInfo(Level).AlarmStage != 4 ||
+		  (EchelonGameInfo(Level.Game).bEliteMode && EchelonLevelInfo(Level).AlarmStage != 3))
+		{
+			ConsoleCommand("TRAVEL MAPNAME="$URL@"ITEMS=TRUE");
+			EPlayerController(Characters[0]).playerStats.OnLevelChange(); // Joshua - For player statistics, saves the mission time from the previous part
+		}
 	}
 }
 
