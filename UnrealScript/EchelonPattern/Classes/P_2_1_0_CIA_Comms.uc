@@ -74,8 +74,6 @@ state Pattern
 Begin:
 Start:
     Log("");
-    if(IsEliteMode()) // Joshua - Enhanced change: Removing the one alarm limit, player has accessed CIA central server
-        SetAlarmStage(3);
     Sleep(2.5);
     SendUnrealEvent('VentFan5');
     SendUnrealEvent('CleanMover');

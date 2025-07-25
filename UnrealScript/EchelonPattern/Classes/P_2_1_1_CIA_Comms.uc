@@ -60,8 +60,6 @@ state Pattern
 Begin:
 Start:
     Log("");
-    if(isEliteMode())  // Joshua - Enhanced change: One alarm and the mission is over until accessing the CIA central server
-        SetAlarmStage(3);
     Sleep(1);
 FGun:
     Log("Lambert tell sam his gun in place");
@@ -82,10 +80,11 @@ comm2120:
     Log("CPUaccessed");
     SetFlags(V2_1_1CIA(Level.VarObject).ServerDone,TRUE);
     GoalCompleted('GoalServer');
-    if(IsEliteMode()) // Joshua - Enhanced change: Removing the one alarm limit, player has accessed CIA central server
+    // Joshua - Enhanced change: Removing the one alarm limit, player has accessed CIA central server
+    if(IsEliteMode()) 
     {
         GoalCompleted('GoalAlarm');
-        SetAlarmStage(0);
+        EchelonLevelInfo(Level).bOneAlarmLevel = false;
     }
     AddGoal('GoalPC', "", 4, "", "P_2_1_1_CIA_Comms", "Goal_0066L", "Localization\\P_2_1_1CIA", "P_2_1_1_CIA_Comms", "Goal_0067L", "Localization\\P_2_1_1CIA");
     AddNote("", "P_2_1_1_CIA_Comms", "Note_0068L", "Localization\\P_2_1_1CIA");

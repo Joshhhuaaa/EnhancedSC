@@ -52,7 +52,8 @@ Begin:
 Milestone:
     Log("MilestonePostElevLambert");
     SetFlags(V1_2_1DefenseMinistry(Level.VarObject).LaserMicDone,TRUE);
-    SetAlarmStage(0);
+    //SetAlarmStage(0); // Joshua - Using new bOneAlarmLevel flag instead
+    EchelonLevelInfo(Level).bOneAlarmLevel = false;
     Sleep(1);
     CheckFlags(V1_2_1DefenseMinistry(Level.VarObject).TooFastLaserMic,FALSE,'NotAlreadyInNorth');
 AlreadyInNorth:

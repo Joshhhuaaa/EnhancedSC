@@ -61,7 +61,7 @@ state Pattern
 Begin:
 Milestone:
     Log("MilestoneIntroCall");
-    SetAlarmStage(3);
+    //SetAlarmStage(3); // Joshua - Using new bOneAlarmLevel flag instead
     Sleep(0.50);
     AddRecon(class 'EReconMapMinistry');
     AddRecon(class 'EReconPicGrinko');

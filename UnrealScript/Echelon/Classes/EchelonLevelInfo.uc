@@ -48,6 +48,15 @@ var ETGAME TGAME; // Super Texture - Put here to be accessible everywhere
 var ETMENU TMENU; // Super Texture - Put here to be accessible everywhere
 var ETICON TICON; // Super Texture - Put here to be accessible everywhere
 
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
+
+var(AI)	bool bOneAlarmLevel; // Joshua - New flag for one alarm levels like Defense Ministry, replaces SetAlarmStage(3) hack
+var bool bAlarmStageChanged;
+
 //---------------------------------------[Frederic Blais - 20 Nov 2001]-----
 // 
 // PostBeginPlay
@@ -145,11 +154,25 @@ function PostBeginPlay()
 		}
 	}
 
-	// Joshua - Enabling alarm stages for Vselka
+	// Joshua - Cleaner method for one alarm levels like Defense Ministry
+	if (GetCurrentMapName() == "1_2_1DefenseMinistry")
+		bOneAlarmLevel = true;
+
+	// Joshua - Oil Rig never had alarms, enabling this to hide their HUD counter
+	if (GetCurrentMapName() == "1_3_2CaspianOilRefinery" || GetCurrentMapName() == "1_3_3CaspianOilRefinery")
+        bIgnoreAlarmStage = true;
+
+	// Joshua - Enhanced change: CIA HQ is a one alarm level until accessing the central server (Elite difficulty)
+	if (GetCurrentMapName() == "2_1_0CIA" || GetCurrentMapName() == "2_1_1CIA")
+	{
+		if (EchelonGameInfo(Level.Game).bEliteMode)
+			bOneAlarmLevel = true;
+	}
+
+	// Joshua - Enhanced change: Enabling alarm stages for Vselka
 	if (GetCurrentMapName() == "1_7_1_1VselkaInfiltration")
         bIgnoreAlarmStage = false;
 
-    
     TGAME = spawn(class'ETGAME', self);
     TMENU = spawn(class'ETMENU', self);
     TICON = spawn(class'ETICON', self);
@@ -510,8 +533,23 @@ function IncreaseAlarmStage()
 		    AlarmPattern.InitPattern();
     }
 
-	// Joshua - Elite Mode, 3 alarms and the mission's over
-    if (EchelonGameInfo(Level.Game).bEliteMode)
+	bAlarmStageChanged = true;
+
+	// Joshua - Cleaner method for one alarm levels like Defense Ministry
+	if (bOneAlarmLevel)
+	{
+		AlarmStage++;
+		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("AlarmTriggered");
+
+		log("*** Last Alarm stage reached: GameOver ***");
+
+		if( AlarmPattern !=  None)
+		{
+			log("AlarmPattern !=  None");
+			AlarmPattern.GotoPatternLabel('AlarmStageD');
+		}
+	}
+    else if (EchelonGameInfo(Level.Game).bEliteMode) // Joshua - Elite Mode, 3 alarms and the mission's over
 	{
 		if(AlarmStage < 2)
 		{
