@@ -6,6 +6,13 @@ var	EMicro				Micro;
 var Actor				CurrentTarget;
 var	ELaserMicMover		LaserMicTarget;
 
+// Joshua - Zoom functionality
+var float MinFov;
+var float MaxFov;
+var float ZoomSpeed;
+var float Damping;
+var float current_fov;
+
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
@@ -60,7 +67,17 @@ state s_Microiing
 
 		// Micro
 		Micro.SetCollision(true);
-		Epc.SetCameraFOV(self, 30);
+		// Joshua - Zoom functionality
+		if (Epc.bLaserMicZoomLevels)
+		{
+			Epc.SetCameraFOV(self, (MaxFov + MinFov)/2);
+			current_fov = (MaxFov + MinFov)/2;
+		}
+		else
+		{
+			Epc.SetCameraFOV(self, 30.0);
+			current_fov = 30.0;
+		}
 		Epc.iRenderMask = 3;
 	}
 
@@ -80,6 +97,68 @@ state s_Microiing
 		EPlayerController(Controller).ReturnFromInteraction();
 		return true;
 	}
+
+	// Joshua - Zoom functionality
+	function Zoom(float DeltaTime)
+	{
+		local bool Zoomed;
+
+		// Zoom in
+		if (Epc.bIncSpeedPressed == true)
+		{
+			Epc.bIncSpeedPressed = false;
+			current_fov -= DeltaTime * ZoomSpeed;
+			if (current_fov >= MinFov)
+			{
+				Zoomed = true;
+			}
+		}
+		// Zoom out
+		else if (Epc.bDecSpeedPressed == true)
+		{
+			Epc.bDecSpeedPressed = false;
+			current_fov += DeltaTime * ZoomSpeed;	    
+			if (current_fov <= MaxFov)
+			{
+				Zoomed = true;
+			}
+		}
+
+		// Zoom in
+		if (Epc.bDPadUp != 0)
+		{
+			current_fov -= DeltaTime * ZoomSpeed;
+			if (current_fov >= MinFov)
+			{
+				Zoomed = true;
+			}
+		}
+		// Zoom out
+		else if (Epc.bDPadDown != 0)
+		{
+			current_fov += DeltaTime * ZoomSpeed;	    
+			if (current_fov <= MaxFov)
+			{
+				Zoomed = true;
+			}
+		}
+
+		if (Zoomed)
+		{
+			if (!IsPlaying(Sound'FisherEquipement.Play_StickyCamZoom'))
+				PlaySound(Sound'FisherEquipement.Play_StickyCamZoom', SLOT_SFX);
+		}
+
+		// Clamp fov and calculate zoom factor
+		current_fov = FClamp(current_fov, MinFov, MaxFov);
+		//		MaxDamping = Damping;
+		//		MaxDamping /= (MaxFov)/current_fov;
+
+		// Modify vision fov
+		Epc.SetCameraFOV(self, current_fov);
+
+	//	Super.Tick(DeltaTime);
+	}		
 
 	function Tick( float DeltaTime )
 	{
@@ -121,11 +200,19 @@ state s_Microiing
 		// Reset pointers if the mic mover pattern is not yet started
 		if( LaserMicTarget != None && LaserMicTarget.LinkedSession == None )
 			ResetTarget();
+		
+		// Joshua - Zoom functionality
+		if (Epc.bLaserMicZoomLevels)
+			Zoom(DeltaTime);
 	}
 }
 
 defaultproperties
 {
+    MinFov=14.000000
+    MaxFov=70.000000
+    ZoomSpeed=30.000000
+    Damping=200.000000
     Category=CAT_GADGETS
     ObjectHudClass=Class'ELaserMicView'
     StaticMesh=none

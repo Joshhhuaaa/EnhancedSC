@@ -263,7 +263,11 @@ var bool bDisableWhistle; // Joshua - Used to disable whistle while in Diversion
 var(Enhanced) config bool bF2000ZoomLevels; // Joshua - Enables 2x/4x/6x zoom for F2000 sniper (default game had 6x only)
 var int LastSniperFOVIndex; // Joshua - Remember the last FOV index so we can restore it after reloading
 
+var(Enhanced) config bool bLaserMicZoomLevels; // Joshua - Enables zoom functionality for the Laser Mic
+
 var bool bPressSnip;
+var bool m_ChoosePreviousGadget;
+var bool m_ChooseNextGadget;
 var bool bDPadUpPressed, bDPadDownPressed;
 var bool bUsingAirCamera; // Joshua - True when the player is using a camera, prevents movement speed changes with mouse wheel
 
@@ -1224,7 +1228,8 @@ exec function IncSpeed()
 	bIncSpeedPressed = true;
 	bMustZoomIn		 = true;
 
-	// Joshua - Todo: Instead add this to the ZoomIn alias in SplinterCell.ini
+	// Joshua - Add this as an Engine.Input alias in SplinterCellUser.ini instead?
+	// Aliases[]=(Command="IncSpeed|SnipeZoomIn",Alias="ZoomIn")
 	SnipeZoomIn();
 
 	// Joshua - QoL improvement: if we aren't in weapon stance 0, or if we're zooming, don't process the movement speed change
@@ -1251,14 +1256,15 @@ exec function DecSpeed()
 	bDecSpeedPressed = true;
 	bMustZoomOut	 = true;
 
-	// Joshua - Todo: Instead add this to the ZoomIn alias in SplinterCell.ini
+	// Joshua - Add this as an Engine.Input alias in SplinterCellUser.ini instead?
+	// Aliases[]=(Command="DecSpeed|SnipeZoomOut",Alias="ZoomOut")
 	SnipeZoomOut();
 
 	// Joshua - QoL improvement: if we aren't in weapon stance 0, or if we're zooming, don't process the movement speed change
-	if( ePawn.WeaponStance == 0 && !bUsingAirCamera )
+	if ( ePawn.WeaponStance == 0 && !bUsingAirCamera )
 	{
 		m_curWalkSpeed -= 1;
-		if(m_curWalkSpeed <= 0 )
+		if (m_curWalkSpeed <= 0 )
 		{
 			m_curWalkSpeed = 1;
 		}
@@ -1274,7 +1280,7 @@ exec function Snipe()
 /*	local ESniperGun	snipeGun;
 	snipeGun = ESniperGun(ePawn.HandItem);
 
-	if( snipeGun != None && snipeGun.bSniperMode && !bStopInput )
+	if ( snipeGun != None && snipeGun.bSniperMode && !bStopInput )
 	{
 		bMustZoomIn = false;
 		bMustZoomOut = true;
@@ -1285,7 +1291,7 @@ exec function Snipe()
 		bMustZoomOut = false;
 	}
 */
-	if( Level.Pauser != None || bStopInput )
+	if ( Level.Pauser != None || bStopInput )
 		return;
 
 	if (ActiveGun != None && ActiveGun == MainGun && !bInGunTransition)
@@ -1298,10 +1304,10 @@ exec function Snipe()
 //------------------------------------------------------------------------
 exec function SnipeZoomIn()
 {
-	if( Level.Pauser != None || bStopInput )
+	if ( Level.Pauser != None || bStopInput )
 		return;
 
-	if( bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping' )
+	if ( bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping' )
 		ESniperGun(ActiveGun).ZoomIn();
 }
 
@@ -1311,10 +1317,10 @@ exec function SnipeZoomIn()
 //------------------------------------------------------------------------
 exec function SnipeZoomOut()
 {
-	if( Level.Pauser != None || bStopInput )
+	if ( Level.Pauser != None || bStopInput )
 		return;
 
-	if( bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping' )
+	if ( bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping' )
 		ESniperGun(ActiveGun).ZoomOut();
 }
 
@@ -1324,7 +1330,7 @@ exec function SnipeZoomOut()
 //------------------------------------------------------------------------
 exec function ResetCamera()
 {
-	if( Level.Pauser != None || bStopInput )
+	if ( Level.Pauser != None || bStopInput )
 		return;
 
 	bResetCamera = 1;
@@ -2655,6 +2661,43 @@ exec function Whistle()
 	}
 }
 
+
+exec function PreviousGadget()
+{
+	if( Level.Pauser != None || bStopInput)
+		return;
+
+	// Joshua - If the player is in sniping mode, don't change gadget
+	if( ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping' )
+		return;
+
+	if(!CanAccessQuick())
+		return;
+
+	if(GetStateName() == 's_FirstPersonTargeting' && ePawn.HandItem.IsA('EFn7'))
+		return;
+
+	m_ChoosePreviousGadget = true;
+}
+
+exec function NextGadget()
+{
+	if( Level.Pauser != None || bStopInput)
+		return;
+
+	// Joshua - If the player is in sniping mode, don't change gadget
+	if( ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping' )
+		return;
+
+	if(!CanAccessQuick())
+		return;
+
+	if(GetStateName() == 's_FirstPersonTargeting' && ePawn.HandItem.IsA('EFn7'))
+		return;
+
+	m_ChooseNextGadget = true;
+}
+
 //-----
 // END
 //-----
@@ -3311,6 +3354,13 @@ state s_Carry
 		SetPawnAccel(X, eGame.m_onGroundAccel);
 		SetPawnRotation(40000);
 
+		// Joshua - Pressing jump will QuickDrop the body like Chaos Theory
+		if( bPressedJump )
+		{
+			bInTransition = true;
+			GotoState(, 'QuickDropJump');
+		}
+
 		if( bDuck > 0 )
 		{
 			ePawn.bWantsToCrouch = !ePawn.bWantsToCrouch;
@@ -3442,6 +3492,27 @@ QuickDrop:
 		OnGroundScope();
 	else
 		GotoState('s_PlayerWalking');
+	Stop;
+
+QuickDropJump:
+	// Joshua - Pressing jump will QuickDrop the body like Chaos Theory
+	bNoLedgePush = true;
+	if(!ePawn.bIsCrouched)
+	{
+		NpcSetup(ePawn.ToWorldDir(vect(-200,0,200)),'CaryStAlQk0', true);
+		ePawn.PlayAnimOnly('CaryStAlQk0');
+	}
+	else
+	{
+		NpcSetup(ePawn.ToWorldDir(vect(-200,0,200)),'CaryCrAlQk0', true);
+		ePawn.PlayAnimOnly('CaryCrAlQk0');
+	}
+	m_AttackTarget.bWasCarried = true;
+	FinishAnim();
+	bInTransition = false;
+	bNoLedgePush = false;
+	m_AttackTarget = None; // Joshua - PT carry interact
+	GotoState('s_PlayerWalking');
 	Stop;
 
 Drop:
@@ -5847,6 +5918,17 @@ state s_KeyPadInteract extends s_InteractWithObject
 	{
 		return false;
 	}
+
+	// Joshua - Crouching will exit the keypad
+	function PlayerMove(float DeltaTime)
+	{
+		if (bDuck > 0)
+		{
+			bDuck = 0;
+			if (Interaction != None)
+				Interaction.PostInteract(self);
+		}
+	}
 }
 
 // ----------------------------------------------------------------------
@@ -5914,6 +5996,20 @@ DoInteract:
 state s_OpticCable extends s_InteractWithObject
 {
 	Ignores ProcessHeadset;
+
+	function PlayerMove( float DeltaTime )
+	{
+		// Joshua - Crouching will exit the optic cable
+		if (bDuck > 0)
+		{
+			bDuck = 0;
+			if (!bInTransition)
+			{
+				OpticCableItem.GotoState('s_Selected');
+				GotoState('s_OpticCable', 'End');
+			}
+		}
+	}
 
 	function EndState()
 	{
@@ -6046,6 +6142,14 @@ state s_PickLock extends s_InteractWithObject
 	{
 		// Give Axis to interaction, move camera
 		Interaction.ProcessAxis(self, aForward, aStrafe, aTurn, aLookUp);
+
+		// Joshua - Crouching will exit the lockpick
+		if (bDuck > 0)
+		{
+			bDuck = 0;
+			if (Interaction != None)
+				Interaction.PostInteract(self);
+		}
 	}
 
 	function ProcessFire()
@@ -10606,6 +10710,7 @@ defaultproperties
 	bWhistle=true // Joshua - Option to enable whlisting in keybinds
 	m_WhistleTime=-10.00 // Joshua - New variable to keep track of last whistle
 	bF2000ZoomLevels=true // Joshua - Enables 2x/4x/6x zoom for F2000 sniper (default game had 6x only)
+	bLaserMicZoomLevels=true // Joshua - Enables zoom functionality for the Laser Mic
 	bBurstFire=true // Joshua - Restoring burst fire from early Splinter Cell builds
 	bShowHUD=true
 	bShowInventory=true

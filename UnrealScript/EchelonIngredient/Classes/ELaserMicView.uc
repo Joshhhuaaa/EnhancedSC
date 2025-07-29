@@ -157,6 +157,13 @@ function DrawBottomBar( ECanvas Canvas )
 	local float xLen, yLen;
 	local float textY;
 
+    // Joshua - Zoom functionality
+    local float     fZoomRatio;
+    local string    strZoom;
+    local float     RADCurr;
+    local float     RADDef;
+    local EPlayerController Epc;
+
     DrawRectangle(SCREEN_X + SIDEBAR_WIDTH - 1, SCREEN_END_Y - BOTTOM_SCREEN_Y - BOTTOMBAR_HEIGHT, SCREEN_END_X - SCREEN_X - SIDEBAR_WIDTH + 1, SCREEN_END_Y - BOTTOM_SCREEN_Y,
                   1, EHC_BLACK, Canvas);
     DrawRectangle(SCREEN_X + SIDEBAR_WIDTH, SCREEN_END_Y - BOTTOM_SCREEN_Y - BOTTOMBAR_HEIGHT + 1, SCREEN_END_X - SCREEN_X - SIDEBAR_WIDTH, SCREEN_END_Y - BOTTOM_SCREEN_Y - 1,
@@ -168,11 +175,30 @@ function DrawBottomBar( ECanvas Canvas )
     Canvas.DrawColor = Black;	
 
 	// ZOOM
-	text = Canvas.LocalizeStr("ZOOM_4X");
-    Canvas.TextSize(text, xLen, yLen);
-	textY = SCREEN_END_Y - BOTTOM_SCREEN_Y - 0.5f*(BOTTOMBAR_HEIGHT+yLen);
-    Canvas.SetPos(SCREEN_X + SIDEBAR_WIDTH + 8, textY);
-    Canvas.DrawText(text);
+    // Joshua - Zoom functionality
+    epc = EPlayerController(Mic.Controller);
+    if (Epc.bLaserMicZoomLevels)
+    {
+        RADCurr = (Mic.current_fov/180.0) * 3.1416;
+        RADDef = (90.0/180.0) * 3.1416;
+        fZoomRatio = tan(RADDef/2.0)/tan(RADCurr/2.0);
+        if (fZoomRatio < 1.0)
+            fZoomRatio = 1.0;
+        strZoom = Localize("HUD", "LaserMicZoom", "Localization\\Enhanced") @ int(fZoomRatio)$"X";
+
+        Canvas.TextSize(strZoom, xLen, yLen);
+        textY = SCREEN_END_Y - BOTTOM_SCREEN_Y - 0.5f*(BOTTOMBAR_HEIGHT+yLen);
+        Canvas.SetPos(SCREEN_X + SIDEBAR_WIDTH + 8, textY);
+        Canvas.DrawText(strZoom);
+    }
+    else
+    {
+        text = Canvas.LocalizeStr("ZOOM_4X");
+        Canvas.TextSize(text, xLen, yLen);
+        textY = SCREEN_END_Y - BOTTOM_SCREEN_Y - 0.5f*(BOTTOMBAR_HEIGHT+yLen);
+        Canvas.SetPos(SCREEN_X + SIDEBAR_WIDTH + 8, textY);
+        Canvas.DrawText(text);
+    }
 
 	text = "" $ VSize(EPlayerController(Mic.controller).m_targetLocation-Mic.Location)/100 $ " M";
 	Canvas.TextSize(text, xLen, yLen);
@@ -343,6 +369,3 @@ function DrawBlackMask(ECanvas Canvas)
     // RIGHT //
     DrawLine(SCREEN_END_X - SCREEN_X, TOP_SCREEN_Y, SCREEN_END_X, SCREEN_END_Y - BOTTOM_SCREEN_Y, EHC_BLACK, Canvas);
 }
-
-
-
