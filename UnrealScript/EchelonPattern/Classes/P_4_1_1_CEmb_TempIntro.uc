@@ -65,7 +65,7 @@ Teleport:
     Speech(Localize("P_4_1_1_CEmb_Lambert1", "Speech_0005L", "Localization\\P_4_1_1ChineseEmbassy"), Sound'S4_1_1Voice.Play_41_16_02', 0, 0, TR_CONVERSATION, 0, false);
     Speech(Localize("P_4_1_1_CEmb_Lambert1", "Speech_0007L", "Localization\\P_4_1_1ChineseEmbassy"), Sound'S4_1_1Voice.Play_41_16_03', 1, 2, TR_HEADQUARTER, 0, false);
     Close();
-    // Joshua - Adding delay for Lambert to update OPSAT like PS2 version
+    // Joshua - Adding delay for Lambert to update OPSAT like the Shanghai version
     Sleep(3.0);
     AddNote("", "P_4_1_1_CEmb_Lambert1", "Note_0027L", "Localization\\P_4_1_1ChineseEmbassy");
     AddGoal('4_1_1', "", 1, "", "P_4_1_1_CEmb_Lambert1", "Goal_0028L", "Localization\\P_4_1_1ChineseEmbassy", "P_4_1_1_CEmb_Lambert1", "Goal_0029L", "Localization\\P_4_1_1ChineseEmbassy");

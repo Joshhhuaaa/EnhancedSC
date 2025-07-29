@@ -88,6 +88,9 @@ LambertTruckWarning:
     Speech(Localize("P_4_1_2_CEmb_WTF", "Speech_0041L", "Localization\\P_4_1_2ChineseEmbassy"), Sound'S4_1_2Voice.Play_41_21_03', 1, 0, TR_HEADQUARTER, 0, false);
     Close();
     AddGoal('4_1_15', "", 10, "", "P_4_1_2_CEmb_WTF", "Goal_0042L", "Localization\\P_4_1_2ChineseEmbassy", "P_4_1_2_CEmb_WTF", "Goal_0043L", "Localization\\P_4_1_2ChineseEmbassy");
+    // Joshua - Lambert says one alarm and the mission's over (improved for Alarm HUD)
+    SetAlarmStage(0);
+    EchelonLevelInfo(Level).bOneAlarmLevel = true;
     End();
 FeirongFirstLamCall:
     Log("FeirongFirstLamCall");
