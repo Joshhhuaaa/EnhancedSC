@@ -149,6 +149,7 @@ var(Enhanced) config bool bEnableCheckpoints; // Joshua - Restores the checkpoin
 var(Enhanced) config bool bThermalOverride; // Joshua - Enables thermal vision to be available for all levels, regardless of their original settings
 var(Enhanced) config bool bOpticCableVisions; // Joshua - Allows the Optic Cable use all vision modes like Pandora Tomorrow
 var(Enhanced) config bool bScaleGadgetDamage; // Joshua - Scales gadget damage on Hard difficulty (Pandora Tomorrow applied this fix: NPCs have 1.5x health on Hard, so 1.5x damage)
+var(Enhanced) config bool bPS2FN7Accuracy; // Joshua - Uses the FN7's accuracy values from the PS2 version
 var(Enhanced) config bool bNewDoorInteraction; // Joshua - Uses new door interaction system that adds Lock Pick, Disposable Pick, and Optic Cable like Chaos Theory
 var(Enhanced) config bool bRandomizeLockpick; // Joshua - Randomizes all the lockpick combinations on doors
 
@@ -291,13 +292,26 @@ event PlayerController Login(string Portal,
             pPlayer.HandGun.ClipAmmo = 0;
         }
     }
-    // Joshua - Xbox difficulty
-    else if (bXboxDifficulty)
+    else // Not Elite Mode
     {
-        // Xbox = 300 HP, PC = 200 HP [Normal]
-        // Xbox = 198 HP, PC = 132 HP [Hard]
-        pPlayer.ePawn.InitialHealth = 300;
-        pPlayer.ePawn.Health = pPlayer.ePawn.InitialHealth;
+        // Joshua - Xbox difficulty
+        if (bXboxDifficulty)
+        {
+            // Xbox = 300 HP, PC = 200 HP [Normal]
+            // Xbox = 198 HP, PC = 132 HP [Hard]
+            pPlayer.ePawn.InitialHealth = 300;
+            pPlayer.ePawn.Health = pPlayer.ePawn.InitialHealth;
+        }
+
+        // Joshua - PS2 FN7 Accuracy
+        if (bPS2FN7Accuracy)
+        {
+            if (pPlayer.HandGun != None)
+            {
+                pPlayer.HandGun.AccuracyMovementModifier = 3.330000;
+                pPlayer.HandGun.AccuracyBase = 0.330000;
+            }
+        }
     }
 
 	return NewPlayer;

@@ -11,7 +11,9 @@ var EPCCheckBox             m_bInteractionPause,
                             m_bLetterBoxCinematics,
                             m_bWhistle,
                             m_bF2000ZoomLevels,
+                            m_bLaserMicZoomLevels,
                             m_bBurstFire,
+                            m_bPS2FN7Accuracy,
                             m_bNewDoorInteraction,
                             m_bRandomizeLockpick,
                             m_bOpticCableVisions,
@@ -93,7 +95,9 @@ function InitEnhancedSettings()
 
     AddCheckBoxItem("Whistle", m_bWhistle);
     AddCheckBoxItem("F2000ZoomLevels", m_bF2000ZoomLevels);
+    AddCheckBoxItem("LaserMicZoomLevels", m_bLaserMicZoomLevels);
     AddCheckBoxItem("BurstFire", m_bBurstFire);
+    AddCheckBoxItem("PS2FN7Accuracy", m_bPS2FN7Accuracy);
     AddCheckBoxItem("NewDoorInteraction", m_bNewDoorInteraction);
     AddCheckBoxItem("RandomizeLockpick", m_bRandomizeLockpick);
     AddCheckBoxItem("OpticCableVisions", m_bOpticCableVisions);
@@ -275,7 +279,9 @@ function Notify(UWindowDialogControl C, byte E)
             case m_bLetterBoxCinematics:
             case m_bWhistle:
             case m_bF2000ZoomLevels:
+            case m_bLaserMicZoomLevels:
             case m_bBurstFire:
+            case m_bPS2FN7Accuracy:
             case m_bNewDoorInteraction:
             case m_bRandomizeLockpick:
             case m_bOpticCableVisions:
@@ -344,6 +350,7 @@ function SaveOptions()
 
     local EF2000 F2000;
     local bool bPreviousF2000ZoomLevels;
+    local bool bPreviousLaserMicZoomLevels;
     local bool bPreviousBurstFire;
     local bool bPreviousNewDoorInteraction;
 
@@ -352,6 +359,7 @@ function SaveOptions()
     EPC = EPlayerController(GetPlayerOwner());
     HUD = EchelonMainHUD(EPC.myHUD);
     bPreviousF2000ZoomLevels = EPC.bF2000ZoomLevels;
+    bPreviousLaserMicZoomLevels = EPC.bLaserMicZoomLevels;
     bPreviousBurstFire = EPC.bBurstFire;
     bPreviousNewDoorInteraction = EPC.eGame.bNewDoorInteraction;
     
@@ -380,8 +388,15 @@ function SaveOptions()
         }
     }
 
+    EPC.bLaserMicZoomLevels = m_bLaserMicZoomLevels.m_bSelected;
+    if (bPreviousLaserMicZoomLevels && !Epc.bLaserMicZoomLevels)
+    {
+        EPC.SetCameraFOV(ELaserMic(EPC.ePawn.HandItem), 30.0);
+        ELaserMic(EPC.ePawn.HandItem).current_fov = 30.0;
+    }
+
     EPC.bBurstFire = m_bBurstFire.m_bSelected;
-    if(bPreviousBurstFire && !EPC.bBurstFire)
+    if (bPreviousBurstFire && !EPC.bBurstFire)
     {
         if(EPC.MainGun != None)
         {
@@ -393,6 +408,21 @@ function SaveOptions()
         }
     }
 
+    EPC.eGame.bPS2FN7Accuracy = m_bPS2FN7Accuracy.m_bSelected;
+    if (EPC.HandGun != None)
+    {
+        if (EPC.eGame.bPS2FN7Accuracy && !EPC.eGame.bEliteMode)
+        {
+            EPC.HandGun.AccuracyMovementModifier = 3.330000;
+            EPC.HandGun.AccuracyBase = 0.330000;
+        }
+        else
+        {
+            EPC.HandGun.AccuracyMovementModifier = EPC.HandGun.default.AccuracyMovementModifier;
+            EPC.HandGun.AccuracyBase = EPC.HandGun.default.AccuracyBase; 
+        }
+    }
+    
     EPC.eGame.bNewDoorInteraction = m_bNewDoorInteraction.m_bSelected;
     if (bPreviousNewDoorInteraction != EPC.eGame.bNewDoorInteraction)
     {
@@ -601,7 +631,9 @@ function ResetToDefault()
 
     m_bWhistle.m_bSelected = true;
     m_bF2000ZoomLevels.m_bSelected = true;
+    m_bLaserMicZoomLevels.m_bSelected = true;
     m_bBurstFire.m_bSelected = true;
+    m_bPS2FN7Accuracy.m_bSelected = true;
     m_bNewDoorInteraction.m_bSelected = true;
     m_bRandomizeLockpick.m_bSelected = true;
     m_bOpticCableVisions.m_bSelected = true;
@@ -675,8 +707,14 @@ function Refresh()
     if (m_bF2000ZoomLevels != None)
         m_bF2000ZoomLevels.m_bSelected = EPC.bF2000ZoomLevels;
 
+    if (m_bLaserMicZoomLevels != None)
+        m_bLaserMicZoomLevels.m_bSelected = EPC.bLaserMicZoomLevels;
+
     if (m_bBurstFire != None)
         m_bBurstFire.m_bSelected = EPC.bBurstFire;
+
+    if (m_bPS2FN7Accuracy != None)
+        m_bPS2FN7Accuracy.m_bSelected = EPC.eGame.bPS2FN7Accuracy;
 
     if (m_bNewDoorInteraction != None)
         m_bNewDoorInteraction.m_bSelected = EPC.eGame.bNewDoorInteraction;

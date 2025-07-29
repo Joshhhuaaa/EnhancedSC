@@ -61,9 +61,10 @@ var const float				RecoilFadeOut;
 
 // ACCURACY
 var bool					UseAccuracy;
-var const float				AccuracyMovementModifier;	// Desired accuracy when moving
-var const float				AccuracyReturnModifier;		// Speed at which it comes back to desired
-var const float				AccuracyBase;				// Base accuracy, will never be lower
+// Joshua - <const float> to <float>, we need to change this value for bPS2FN7Accuracy option
+var float					AccuracyMovementModifier;	// Desired accuracy when moving
+var float					AccuracyReturnModifier;		// Speed at which it comes back to desired
+var float					AccuracyBase;				// Base accuracy, will never be lower
 var const float				AccuracyDesired;			// Where we want the accuracy to be
 var	const float				Accuracy;					// Current/Actual weapon accuracy at a certain time
 var const float				RealAccuracy;
