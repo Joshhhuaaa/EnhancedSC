@@ -16,7 +16,6 @@ var int			CurrentCategory,
 				CurrentItem,
 				Gap;
 
-
 var EPlayerController Epc;
 var	EInventory	PCInventory;
 
@@ -41,11 +40,9 @@ var FLOAT       fBlinkTime;
 var bool        bStopBlinkRecon;
 var bool        bStopBlinkGoal;
 var bool        bStopBlinkNote;
-var bool		bStopBlinkAlarm;
 var FLOAT       fNbrReconBlink;
 var FLOAT       fNbrGoalBlink;
 var FLOAT       fNbrNoteBlink;
-var FLOAT		fNbrAlarmBlink;
 
 var string      sCurrentGoal;
 
@@ -152,10 +149,10 @@ function Tick(float Delta)
 	//Manage the blinking state		
 	fBlinkTime += Delta;
 
-	if(fBlinkTime >= FBLINKINGTIME)
+	if (fBlinkTime >= FBLINKINGTIME)
 	{
 		fBlinkTime = fBlinkTime-FBLINKINGTIME;
-		if(bBlink)
+		if (bBlink)
 			bBlink=false;
 		else
 			bBlink=true;
@@ -171,7 +168,7 @@ function Tick(float Delta)
 		}
 
 		fAlarmFlashTime += Delta;
-		if(fAlarmFlashTime > fAlarmFlashMaxTimePer)
+		if (fAlarmFlashTime > fAlarmFlashMaxTimePer)
 		{
 			fAlarmFlashTime = 0;
 
@@ -191,6 +188,9 @@ function Tick(float Delta)
     	iAlarmFlashCount = 0;
     	fAlarmFlashTime = 0;
 	}
+
+	CheckPreviousWeapon();
+	CheckNextWeapon();
 }
 
 function PostRender(Canvas C)
@@ -249,7 +249,7 @@ function PostRender(Canvas C)
 	}
 
 	// Joshua - Display alarms
-	if(Epc.bShowHUD && Epc.bShowAlarms && !eLevel.bIgnoreAlarmStage)
+	if (Epc.bShowHUD && Epc.bShowAlarms && !eLevel.bIgnoreAlarmStage)
 		DrawAlarmBox(Canvas);
 }
 
@@ -268,14 +268,14 @@ function DrawAlarmBox(ECanvas Canvas)
 
 	if (eLevel.bOneAlarmLevel)
 		sMaxAlarm = "1";
-    else if(Epc.eGame.bEliteMode)
+    else if (Epc.eGame.bEliteMode)
         sMaxAlarm = "3";
     else
         sMaxAlarm = "4";
 
     szText = string(eLevel.AlarmStage) $ "/" $ sMaxAlarm;
 
-    //if( eLevel.bIgnoreAlarmStage )
+    //if ( eLevel.bIgnoreAlarmStage )
     //    szText = "-/--";
 
     if (!Epc.bShowCurrentGoal || !bHasCurrentGoal)
@@ -355,7 +355,7 @@ state s_QDisplay
 	function EndState()
 	{
 		// Quick tap to get back to previous item
-		if( !bPreviousConfig )
+		if ( !bPreviousConfig )
 			Epc.EPawn.playsound(Sound'Interface.Play_ClosePackSac', SLOT_Interface);
 
 		Epc.FakeMouseToggle(false);
@@ -388,55 +388,55 @@ state s_QDisplay
 		//
 		// Crappy category selection
 		//
-		if( Epc.m_FakeMouseX > CAT2_X && Epc.m_FakeMouseX < CAT2_X + ITEMBOX_WIDTH_L )
+		if ( Epc.m_FakeMouseX > CAT2_X && Epc.m_FakeMouseX < CAT2_X + ITEMBOX_WIDTH_L )
 			CurrentCategory = 2;
-		else if( Epc.m_FakeMouseX > CAT1_X && Epc.m_FakeMouseX < CAT1_X + ITEMBOX_WIDTH_L )
+		else if ( Epc.m_FakeMouseX > CAT1_X && Epc.m_FakeMouseX < CAT1_X + ITEMBOX_WIDTH_L )
 			CurrentCategory = 1;
-		else if( Epc.m_FakeMouseX > CAT0_X && Epc.m_FakeMouseX < CAT0_X + ITEMBOX_WIDTH_L )
+		else if ( Epc.m_FakeMouseX > CAT0_X && Epc.m_FakeMouseX < CAT0_X + ITEMBOX_WIDTH_L )
 			CurrentCategory = 0;
 
 		// Make sure chosen category is available
-		if( !IsCategoryAvailable(GetCategory(CurrentCategory)) )
+		if ( !IsCategoryAvailable(GetCategory(CurrentCategory)) )
 			CurrentCategory = -1;
 
 		//
 		// Could-be-worst item selection
 		//
-		if( CurrentCategory != -1 && Epc.m_FakeMouseY < ALLCAT_Y )
+		if ( CurrentCategory != -1 && Epc.m_FakeMouseY < ALLCAT_Y )
 		{
 			CurrentItem = int(abs((Epc.m_FakeMouseY - ALLCAT_Y)/(ITEMBOX_HEIGHT_CAT + SEPARATOR_HEIGTHT)));
-			if( CurrentItem >= PCInventory.GetNbItemInCategory(GetCategory(CurrentCategory)) )
+			if ( CurrentItem >= PCInventory.GetNbItemInCategory(GetCategory(CurrentCategory)) )
 				CurrentItem = -1;
 		}
 		
 		//
 		// If there was no item selection, cancel selection
 		//
-		if( CurrentCategory == -1 || CurrentItem == -1 )
+		if ( CurrentCategory == -1 || CurrentItem == -1 )
 		{
 			CurrentCategory = -1;
 			CurrentItem = -1;
 		}
 
 		// If selection has changed, play sound
-		if( HoldCategory != -1 && HoldCategory != CurrentCategory || HoldItem != CurrentItem )
+		if ( HoldCategory != -1 && HoldCategory != CurrentCategory || HoldItem != CurrentItem )
 			Epc.Pawn.playsound(Sound'Interface.Play_NavigatePackSac', SLOT_Interface);
 
 		//
 		// Manage Mouse click
 		//
-		if( Epc.m_FakeMouseClicked )
+		if ( Epc.m_FakeMouseClicked )
 		{
 			// On valid exit, check for any selected item
-			if( CurrentCategory != -1 && CurrentItem != -1 )
+			if ( CurrentCategory != -1 && CurrentItem != -1 )
 			{
 				Item = PCInventory.GetItemInCategory(GetCategory(CurrentCategory), CurrentItem + 1);
-				if( !PCInventory.IsSelected(Item) )
+				if ( !PCInventory.IsSelected(Item) )
     				PCInventory.SetSelectedItem(Item);
-	    		else if( !Item.IsA('EMainGun') && !Item.IsA('EOneHandedWeapon') )
+	    		else if ( !Item.IsA('EMainGun') && !Item.IsA('EOneHandedWeapon') )
 		    		PCInventory.UnEquipItem(Item);
 			}
-/*			else if( bPreviousConfig )
+/*			else if ( bPreviousConfig )
 			{
 				PCInventory.SetPreviousConfig();
 			}*/
@@ -489,7 +489,7 @@ function bool KeyEvent(string Key, EInputAction Action, float Delta)
 	{
         local ECanvas			Canvas;
 		// draw normal view until timer expired
-/*		if( bPreviousConfig )
+/*		if ( bPreviousConfig )
 		{
 			Global.PostRender(C);
 			return;
@@ -527,11 +527,11 @@ function bool KeyEvent(string Key, EInputAction Action, float Delta)
 function PostBeginPlay()
 {
 	Epc = EPlayerController(Owner.Owner);
-	if( Epc == None ) 
+	if ( Epc == None ) 
 		Log("ERROR: Getting PlayerController in quick inv");
 
 	PCInventory = Epc.ePawn.FullInventory;
-	if( PCInventory == None )
+	if ( PCInventory == None )
 		Log("Problem to get player inventory in Quick inv. HUD");
 
     eGame  = EchelonGameInfo(Level.Game);
@@ -546,11 +546,9 @@ function PostBeginPlay()
 	bStopBlinkRecon = false;
 	bStopBlinkGoal = false;
 	bStopBlinkNote = false;
-	bStopBlinkAlarm = false;
 	fNbrReconBlink = 0;
 	fNbrGoalBlink = 0;
 	fNbrNoteBlink = 0;
-	fNbrAlarmBlink = 0;
 }
 
 // CRAP CRAP CRAP CRAP CRAP
@@ -578,10 +576,10 @@ function eInvCategory GetCategory(int c)
 ------------------------------------------------------------------------------*/
 function bool IsCategoryAvailable( eInvCategory cat )
 {
-    if(PCInventory.GetNbItemInCategory(cat) == 0)
+    if (PCInventory.GetNbItemInCategory(cat) == 0)
         return false;
 
-    if( cat != CAT_MAINGUN && (Epc.GetStateName() == 's_FirstPersonTargeting' ||
+    if ( cat != CAT_MAINGUN && (Epc.GetStateName() == 's_FirstPersonTargeting' ||
 							   Epc.GetStateName() == 's_RappellingTargeting' ||
 							   Epc.GetStateName() == 's_SplitTargeting') )
         return false;
@@ -638,7 +636,7 @@ function DrawStealthMeter(ECanvas Canvas)
     stealStatusWidth  = (STEALTH_METER_WIDTH - 2 - (NB_STEALTH_STATUS-1)) / NB_STEALTH_STATUS;
     stealStatusHeight = (STEALTH_METER_HEIGHT - 3)/2;
     
-    for(i = 0; i < NB_STEALTH_STATUS - 1; i++)
+    for (i = 0; i < NB_STEALTH_STATUS - 1; i++)
     {
         Canvas.DrawLine(xPos + (i+1) * (stealStatusWidth+1), yPos + 1, 1, stealStatusHeight, Canvas.black, BLACK_BORDER_ALPHA, eLevel.TGAME);
         Canvas.DrawLine(xPos + (i+1) * (stealStatusWidth+1), yPos + STEALTH_METER_HEIGHT - stealStatusHeight - 1, 1, stealStatusHeight, Canvas.black, BLACK_BORDER_ALPHA, eLevel.TGAME);
@@ -651,30 +649,30 @@ function DrawStealthMeter(ECanvas Canvas)
     visibility = Epc.ePawn.Visibilityfactor;
 
     // METER //
-    if(visibility >= FULLY_VISIBLE_VALUE)
+    if (visibility >= FULLY_VISIBLE_VALUE)
         visibility = FULLY_VISIBLE_VALUE;
 
-    if(visibility < eGame.VisBarelyThreshold)
+    if (visibility < eGame.VisBarelyThreshold)
     {
         vPos = (visibility / eGame.VisBarelyThreshold) * stealStatusWidth;
         DrawStealthMeterSelectBox(Canvas, xPos + 1 + vPos, yPos - 2);
     }
-    else if(visibility < eGame.VisPartiallyThreshold)
+    else if (visibility < eGame.VisPartiallyThreshold)
     {
         vPos = ((visibility - eGame.VisBarelyThreshold) / (eGame.VisPartiallyThreshold - eGame.VisBarelyThreshold)) * (stealStatusWidth + 1);
         DrawStealthMeterSelectBox(Canvas, xPos + stealStatusWidth + 1 + vPos, yPos - 2);
     }
-    else if(visibility < eGame.VisMostlyThreshold)
+    else if (visibility < eGame.VisMostlyThreshold)
     {
         vPos = ((visibility - eGame.VisPartiallyThreshold) / (eGame.VisMostlyThreshold - eGame.VisPartiallyThreshold)) * (stealStatusWidth + 1);
         DrawStealthMeterSelectBox(Canvas, xPos + (stealStatusWidth + 1) * 2 + vPos, yPos - 2);
     }
-    else if(visibility < eGame.VisFullyThreshold)
+    else if (visibility < eGame.VisFullyThreshold)
     {
         vPos = ((visibility - eGame.VisMostlyThreshold) / (eGame.VisFullyThreshold - eGame.VisMostlyThreshold)) * (stealStatusWidth + 1);
         DrawStealthMeterSelectBox(Canvas, xPos + (stealStatusWidth + 1) * 3 + vPos, yPos - 2);
     }
-    else //if(visibility < FULLY_VISIBLE_VALUE)
+    else //if (visibility < FULLY_VISIBLE_VALUE)
     {
         vPos = ((visibility - eGame.VisFullyThreshold) / (FULLY_VISIBLE_VALUE - eGame.VisFullyThreshold)) * (stealStatusWidth + 1 - 6);
         DrawStealthMeterSelectBox(Canvas, xPos + (stealStatusWidth + 1) * 4 + vPos, yPos - 2);
@@ -755,12 +753,12 @@ function DrawRateOfFire(ECanvas Canvas)
 
     Canvas.DrawColor = HUDColor;
 
-    if(selWeapon != None)
+    if (selWeapon != None)
     {
         // Single //
-        if(!selWeapon.IsROFModeAvailable(ROF_Single))
+        if (!selWeapon.IsROFModeAvailable(ROF_Single))
             Canvas.DrawColor.A = 25;
-        else if(selWeapon.eROFMode == ROF_Single)
+        else if (selWeapon.eROFMode == ROF_Single)
             Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
         else
             Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
@@ -771,16 +769,16 @@ function DrawRateOfFire(ECanvas Canvas)
 		Canvas.Style = ERenderStyle.STY_Normal;
 
         // Burst // Joshua - Restoring burst fire from early Splinter Cell builds
-		if(Epc.bBurstFire)
+		if (Epc.bBurstFire)
 		{
-			if(!selWeapon.IsROFModeAvailable(ROF_Burst))
+			if (!selWeapon.IsROFModeAvailable(ROF_Burst))
 				Canvas.DrawColor.A = 25;
-			else if(selWeapon.eROFMode == ROF_Burst)
+			else if (selWeapon.eROFMode == ROF_Burst)
 				Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
 			else
 				Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
 
-			for(j = 0; j < 3; j++)
+			for (j = 0; j < 3; j++)
 			{
 				Canvas.SetPos(xPos + 30 + j * 5, yPos + 8);
 				Canvas.Style = ERenderStyle.STY_Alpha;
@@ -790,14 +788,14 @@ function DrawRateOfFire(ECanvas Canvas)
 		}
 	
         // Auto //
-        if(!selWeapon.IsROFModeAvailable(ROF_Auto))
+        if (!selWeapon.IsROFModeAvailable(ROF_Auto))
             Canvas.DrawColor.A = 25;
-        else if(selWeapon.eROFMode == ROF_Auto)
+        else if (selWeapon.eROFMode == ROF_Auto)
             Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
         else
             Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
 
-       for(j = 0; j < 5; j++)
+       for (j = 0; j < 5; j++)
        {
             Canvas.SetPos(xPos + 54 + j*5, yPos + 8);
 			Canvas.Style = ERenderStyle.STY_Alpha;
@@ -815,7 +813,7 @@ function GetWeaponInfo( EWeapon Weapon, out int nbAmmo, out int nbClip )
 
     nbClip = (Weapon.Ammo - Weapon.ClipAmmo)/Weapon.ClipMaxAmmo;
 	f = float(Weapon.Ammo - Weapon.ClipAmmo)/Weapon.ClipMaxAmmo;
-	if( f - nbClip > 0 )
+	if ( f - nbClip > 0 )
 		nbClip++;
 }
 
@@ -841,7 +839,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
 
     // SET BOX SIZE //
 	MainGun = EMainGun(Item);
-	if(MainGun != None && MainGun.SecondaryAmmo != None)
+	if (MainGun != None && MainGun.SecondaryAmmo != None)
     {
         xPos  = SCREEN_END_X - eGame.HUD_OFFSET_X - ITEMBOX_WIDTH_B;
         width = ITEMBOX_WIDTH_B;
@@ -858,7 +856,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
 	DrawBoxBorders(Canvas, xPos, yPos, width, ITEMBOX_HEIGHT_B);
 
     Item = PCInventory.GetSelectedItem();
-    if(Item != None)
+    if (Item != None)
     {
         Canvas.SetDrawColor(64,64,64);
         Canvas.Style = ERenderStyle.STY_Modulated;
@@ -872,7 +870,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
 
     // WEAPON DISPLAY //
     Weapon = EWeapon(Item);
-	if( Weapon != None )
+	if ( Weapon != None )
 	{
         Canvas.DrawColor = Canvas.TextBlack;
         Canvas.SetPos(xPos + offset + 36, yPos + 29);
@@ -882,7 +880,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
         
 		GetWeaponInfo(Weapon, nbAmmo, nbClip);
 
-        for(i = 0; i < 10; i++)
+        for (i = 0; i < 10; i++)
 		{
             Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
 
@@ -891,7 +889,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
             eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sl_stroke, 3, 1, 0, 0, 1, 1);
 			Canvas.Style = ERenderStyle.STY_Normal;
 
-            if(i < nbAmmo)
+            if (i < nbAmmo)
                 Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
             else
                 Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
@@ -901,7 +899,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
             eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bullet, 3, 5, 0, 0, 3, 5);
 			Canvas.Style = ERenderStyle.STY_Normal;
 
-            if(i < nbClip)
+            if (i < nbClip)
             {
                 Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
 
@@ -915,14 +913,14 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
         Canvas.DrawColor = HUDColor;
 
         // SECONDARY AMMO //
-        if(MainGun != None && MainGun.SecondaryAmmo != None)
+        if (MainGun != None && MainGun.SecondaryAmmo != None)
         {
             SecAmmo = ESecondaryAmmo(MainGun.SecondaryAmmo);
 
             Canvas.SetPos(xPos + SEC_AMMO_WIDTH + 1, yPos + 6);
             eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v2, 4, ITEMBOX_HEIGHT_B - 10, 0, 0, 4, 1);
 
-            if(SecAmmo.MaxQuantity > 1)
+            if (SecAmmo.MaxQuantity > 1)
             {
                 szText = string(SecAmmo.Quantity);
                 Canvas.TextSize(szText, xLen, yLen);
@@ -939,13 +937,13 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
             Canvas.Style = ERenderStyle.STY_Normal;
         }
     }
-    else if( Item != None && Item.MaxQuantity > 1 )
+    else if ( Item != None && Item.MaxQuantity > 1 )
     {		
 		WriteText(Canvas, xPos+70, yPos+9, "x", Canvas.TextBlack);
 
-        if(Item.Quantity < 10)
+        if (Item.Quantity < 10)
         {
-            if(Item.Quantity == 1)
+            if (Item.Quantity == 1)
                 WriteText(Canvas, xPos+69, yPos+24, Item.Quantity, Canvas.TextBlack);
             else
                 WriteText(Canvas, xPos+70, yPos+24, Item.Quantity, Canvas.TextBlack);
@@ -973,7 +971,7 @@ function DrawInfoBar(Ecanvas Canvas)
 	DrawBoxBorders(Canvas, xPos, yPos, width, ITEMBOX_HEIGHT_L);
 
     // No current cursor over item
-	if( CurrentCategory == -1 || CurrentItem == -1 )
+	if ( CurrentCategory == -1 || CurrentItem == -1 )
 	{
 		Canvas.Font = Canvas.ETextFont;
 		Canvas.DrawColor = Canvas.TextBlack;		
@@ -994,7 +992,7 @@ function DrawInfoBar(Ecanvas Canvas)
     Canvas.DrawColor = Canvas.TextBlack;
 
 	Item = PCInventory.GetItemInCategory(GetCategory(CurrentCategory), CurrentItem+1);
-    if(Item != None)
+    if (Item != None)
     {
         Canvas.SetPos(xPos + width - 15, yPos + 5);
         WriteText(Canvas, xPos + 15, yPos + 5, Localize("InventoryItem", Item.ItemName, "Localization\\HUD"), Canvas.TextBlack);
@@ -1037,17 +1035,17 @@ function DrawNavigationText(Ecanvas Canvas)
     WriteText(Canvas, xPos + width - ITEMBOX_WIDTH_L/2 - xLen/2, yPos + 4, szText, TextColor);
 
     hold = CurrentCategory;
-    for(j = 0; j < nbCat; j++)
+    for (j = 0; j < nbCat; j++)
     {
         CurrentCategory = j;
         szText = PCInventory.GetCategoryName(GetCategory(CurrentCategory));
 
-        if(j == hold)
+        if (j == hold)
         {
             drawColor = TextSelectedColor;
             szText = "-"$szText$"-";
         }
-        else if(IsCategoryAvailable(GetCategory(j)))
+        else if (IsCategoryAvailable(GetCategory(j)))
             drawColor = TextColor;
         else
             drawColor = TextDisabledColor;
@@ -1099,14 +1097,14 @@ function DrawBoxBorders(ECanvas Canvas, int xPos, int yPos, int width, int heigh
     Canvas.SetPos(xPos + width - 5, yPos + 7);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v, 5, height - 11, 5, 0, -5, 1);
 
-	if( bNoDrawBackGround )
+	if ( bNoDrawBackGround )
 		return;
 
     // OPACITY BACKGROUND //
     Canvas.DrawLine(xPos + 5, yPos + 6, width - 10, height - 10, Canvas.white, -1, eLevel.TGAME);
     Canvas.DrawRectangle(xPos + 5, yPos + 6, width - 10, height - 10, 1, Canvas.black, INSIDE_BORDER_ALPHA, eLevel.TGAME);
 
-	if( bOpacityOnly )
+	if ( bOpacityOnly )
 		return;
 	
     // TRANSPARENCY BACKGROUND //
@@ -1128,15 +1126,15 @@ function DrawCategory(ECanvas Canvas)
 {
     local int xPos, yPos, xLightPos, yLightPos, i, nbItems, height, CatIndex;
 
-	for( CatIndex=0; CatIndex<PCInventory.GetNumberOfCategories()/*-1*/; CatIndex++ )
+	for ( CatIndex=0; CatIndex<PCInventory.GetNumberOfCategories()/*-1*/; CatIndex++ )
 	{
 		// Filter not-available categories
-		if( !IsCategoryAvailable(GetCategory(CatIndex)) )
+		if ( !IsCategoryAvailable(GetCategory(CatIndex)) )
 			continue;
 
 		// Filter empty categories
 		nbItems = PCInventory.GetNbItemInCategory(GetCategory(CatIndex));
-		if( nbItems == 0 )
+		if ( nbItems == 0 )
 			continue;
 
 		xPos = SCREEN_END_X - eGame.HUD_OFFSET_X - FIRSTCAT_OFFSET - (CatIndex + 1) * ITEMBOX_WIDTH_L - CatIndex * SPACE_BETWEEN_CAT;
@@ -1152,14 +1150,14 @@ function DrawCategory(ECanvas Canvas)
 		Canvas.DrawColor = HUDColor;
 
 		// ITEMS //
-		for(i = 1; i <= nbItems; i++)
+		for (i = 1; i <= nbItems; i++)
 		{      
 			Canvas.Style = ERenderStyle.STY_Alpha;
 			Canvas.DrawLine(xPos + 7, yPos - ITEMBOX_HEIGHT_CAT * i - SEPARATOR_HEIGTHT * i - 5, ITEMBOX_WIDTH_L - 14, 1, Canvas.black, INSIDE_BORDER_ALPHA, eLevel.TGAME);
 			Canvas.DrawLine(xPos + 6, yPos - ITEMBOX_HEIGHT_CAT * i - SEPARATOR_HEIGTHT * i - 6, 1, 3, Canvas.black, INSIDE_BORDER_ALPHA, eLevel.TGAME);
 			Canvas.DrawLine(xPos + ITEMBOX_WIDTH_L - 7, yPos - ITEMBOX_HEIGHT_CAT * i - SEPARATOR_HEIGTHT * i - 6, 1, 3, Canvas.black, INSIDE_BORDER_ALPHA, eLevel.TGAME);
 
-			if( CurrentCategory == CatIndex && i-1 == CurrentItem)
+			if ( CurrentCategory == CatIndex && i-1 == CurrentItem)
 			{
 				xLightPos = xPos + 5;
 				yLightPos = yPos - ITEMBOX_HEIGHT_CAT * i - SEPARATOR_HEIGTHT * i - 4;			
@@ -1173,7 +1171,7 @@ function DrawCategory(ECanvas Canvas)
 		}
 
 		// LIGHT //
-		if( CurrentCategory == CatIndex && CurrentItem > -1 )
+		if ( CurrentCategory == CatIndex && CurrentItem > -1 )
 		{
 			Canvas.SetDrawColor(128,128,128,128);
 			Canvas.SetPos(xLightPos, yLightPos);
@@ -1201,7 +1199,7 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
     Canvas.Font = Canvas.ETextFont;
 
     MainGun = EMainGun(PCInventory.GetSelectedItem());
-    if( Item == PCInventory.GetSelectedItem() || (MainGun != None && MainGun.SecondaryAmmo != None && Item == MainGun.SecondaryAmmo) )
+    if ( Item == PCInventory.GetSelectedItem() || (MainGun != None && MainGun.SecondaryAmmo != None && Item == MainGun.SecondaryAmmo) )
        bEquipedItem = true;
     else
        bEquipedItem = false;
@@ -1219,7 +1217,7 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
 
       // WEAPON DISPLAY //
     Weapon = EWeapon(Item);
-	if( Weapon != None )
+	if ( Weapon != None )
 	{        
         Canvas.DrawColor = Canvas.TextBlack;
 
@@ -1230,10 +1228,10 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
         
 		GetWeaponInfo(Weapon, nbAmmo, nbClip);
 
-        for(i = 0; i < 10; i++)
+        for (i = 0; i < 10; i++)
 		{
             Canvas.DrawColor = HUDColor;
-            if(bEquipedItem)
+            if (bEquipedItem)
                 Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
             else
                 Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
@@ -1243,16 +1241,16 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
             eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sl_stroke, 3, 1, 0, 0, 1, 1);
 			Canvas.Style = ERenderStyle.STY_Normal;
 
-            if(i < nbAmmo)
+            if (i < nbAmmo)
             {
-                if(bEquipedItem)
+                if (bEquipedItem)
                     Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
                 else
                     Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
             }                
             else
             {
-                if(bEquipedItem)
+                if (bEquipedItem)
                     Canvas.DrawColor.A = INSIDE_BORDER_ALPHA / 2;
                 else
                     Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
@@ -1263,9 +1261,9 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
             eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bullet, 3, 5, 0, 0, 3, 5);
 			Canvas.Style = ERenderStyle.STY_Normal;
 
-            if(i < nbClip)
+            if (i < nbClip)
             {
-                if(bEquipedItem)
+                if (bEquipedItem)
                     Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
                 else
                     Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
@@ -1277,15 +1275,15 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
             }
 		}
     }
-	else if( Item != None && Item.MaxQuantity > 1 )
+	else if ( Item != None && Item.MaxQuantity > 1 )
     {        
         txtColor = Canvas.TextBlack;
 
 		WriteText(Canvas, xPos+65, yPos+5, "x", txtColor);
 
-        if(Item.Quantity < 10)
+        if (Item.Quantity < 10)
         {
-            if(Item.Quantity == 1)
+            if (Item.Quantity == 1)
                 WriteText(Canvas, xPos+64, yPos+20, Item.Quantity, txtColor);
             else
                 WriteText(Canvas, xPos+65, yPos+20, Item.Quantity, txtColor);
@@ -1294,7 +1292,7 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
             WriteText(Canvas, xPos+60, yPos+20, Item.Quantity, txtColor);
     }
 
-    if(!bSelected)
+    if (!bSelected)
 	{
 		Canvas.Style = ERenderStyle.STY_Alpha;
         Canvas.DrawLine(xPos, yPos - 1, ITEMBOX_WIDTH_L - 10, ITEMBOX_HEIGHT_CAT + 2, Canvas.black, INSIDE_BORDER_ALPHA, eLevel.TGAME);
@@ -1395,7 +1393,7 @@ function DisplayCurrentGoal(ECanvas Canvas)
 	Canvas.DrawTextAligned(sCurrentGoal,TXT_RIGHT);	
 	
 	// Joshua - Keypad hint
-	if(Epc.bShowKeyNum)
+	if (Epc.bShowKeyNum)
 		Canvas.DrawTextAligned(Epc.CurrentGoal,TXT_RIGHT);
 		
 	Canvas.Style = ERenderStyle.STY_Normal;
@@ -1412,7 +1410,7 @@ function DrawAnimText(ECanvas Canvas, int xPos, int yPos, FLOAT xLen, FLOAT yLen
     local int length, i, iEmptySpot,y;	
 
     // Update text
-    if(fTime > ALARM_TEXT_ROT_TIME)
+    if (fTime > ALARM_TEXT_ROT_TIME)
     {        
         // Update current Alarm or Goal text
         szAlarmText = Epc.CurrentGoal;
@@ -1433,7 +1431,7 @@ function DrawAnimText(ECanvas Canvas, int xPos, int yPos, FLOAT xLen, FLOAT yLen
 		length = Len(szAlarmText);
 
         iAlarmIndex++;
-        if(iAlarmIndex >= length)
+        if (iAlarmIndex >= length)
             iAlarmIndex = 0;
 
         szAlarmText = Mid(szAlarmText, iAlarmIndex, length + iEmptySpot);
@@ -1544,6 +1542,326 @@ function DisplayIconsGoalNoteRecon(ECanvas Canvas)
 
 	Canvas.Style = ERenderStyle.STY_Normal;
 }
+
+// Joshua - Start of quick switch gadgets
+function bool HaveTheMainGun()
+{
+	local int i;
+	local EInventoryItem CheckItem;
+
+	i = -1;
+
+	do
+	{
+		i++;
+		CheckItem = PCInventory.GetItemInCategory(GetCategory(0), i + 1);
+		if (CheckItem != None && CheckItem.IsA('EMainGun'))
+		{
+			return true;
+		}
+	}
+	until(i > PCInventory.GetNbItemInCategory(GetCategory(0)));
+	return false;
+}
+
+function CheckNextWeapon()
+{
+	local int CurItem, CurCategory, MainGunPos, loopCounter;
+	local EInventoryItem Item, MyItem, MySecItem, CheckItem;
+
+	if (!Epc.m_ChooseNextGadget)
+		return;
+
+	Epc.m_ChooseNextGadget = false;
+
+	if (GetStateName() == 's_QDisplay')
+		return;
+
+	// Get the current category and current item
+	// Get the main weapon
+	MyItem=PCInventory.GetSelectedItem();
+
+	// Check the secondary weapon
+	MySecItem=PCInventory.GetSelectedItem(1);
+
+	// Check the current category
+	if (MyItem == None)
+	{
+		if (HaveTheMainGun())
+			CurCategory = -1;
+		else
+			CurCategory=0;
+
+		do
+		{
+			CurCategory++;
+			if (CurCategory > PCInventory.GetNumberOfCategories())
+				return;
+		}
+		until(PCInventory.GetNbItemInCategory(GetCategory(CurCategory))>0);
+
+	}
+	else
+		CurCategory = MyItem.Category - 1; // I have a item so get the category directly
+
+	// End of check the current category
+
+	// Check the current item
+	CurItem = -1;
+	if (MyItem != None && MyItem.IsA('EMainGun'))
+	{
+		if (MySecItem != None)
+		{
+			// Check to find the position of secondary ammo
+			do
+			{
+				CurItem++;
+			}
+			until(MySecItem == PCInventory.GetItemInCategory(GetCategory(0), CurItem + 1)); // Joshua - Secondary ammo for the SC-20K is CAT_MAINGUN in SC1
+		}
+		else
+		{
+			// Check to find the position of main gun
+			do
+			{
+				CurItem++;
+			}
+			until(PCInventory.GetItemInCategory(GetCategory(CurCategory), CurItem + 1).IsA('EMainGun'));
+
+		}
+	}
+	else if (MyItem != None)
+	{
+		//Check to find the position of item
+		do
+		{
+			CurItem++;
+		}
+		until(MyItem == PCInventory.GetItemInCategory(GetCategory(CurCategory), CurItem + 1));
+	}
+	else
+	{
+		// I do not have current Item but I have the category
+		if (HaveTheMainGun())
+			CurCategory = 0;
+		else
+			CurCategory = 1;
+		CurItem = 0;
+	}
+	// End of check the current item
+
+	// We got the category and item position of current item
+
+	// Find the correct previous weapon
+	loopCounter = 0;
+	if (Epc.ePawn.WeaponStance > 0)
+	{
+		// Gun is drawn
+		if (MyItem.IsA('EMainGun')) // Only happen on main gun
+		{
+			do // Go through all the items and find the correct position
+			{
+				loopCounter++;
+				CurItem++;
+				if (CurItem == PCInventory.GetNbItemInCategory(GetCategory(CurCategory)))
+					CurItem = 0;
+				CheckItem = PCInventory.GetItemInCategory(GetCategory(CurCategory), CurItem + 1);
+			}
+			until(loopCounter > PCInventory.GetNbItemInCategory(GetCategory(CurCategory)) || (CheckItem.IsA('EMainGun') == false && CheckItem.Quantity!=0));
+		}
+	}
+	else
+	{
+		// Gun is undrawn
+		do
+		{
+			if (MyItem == None || MyItem.IsA('EMainGun') || CurItem==PCInventory.GetNbItemInCategory(GetCategory(CurCategory)) -1) // Go to the end
+			{
+				// Find not empty category
+				do
+				{
+					// Reset the category
+					if (CurCategory == PCInventory.GetNumberOfCategories() - 1)
+					{
+						if (HaveTheMainGun())
+							CurCategory = 0;
+						else
+							CurCategory = 1;
+					}
+					else
+						CurCategory++;
+				}
+				until(PCInventory.GetNbItemInCategory(GetCategory(CurCategory)) != 0);
+				CurItem = 0;
+			}
+			else if (MyItem != None)
+				CurItem++;
+		}
+		until ((!PCInventory.GetItemInCategory(GetCategory(CurCategory), CurItem + 1).IsA('EMedKit')) &&
+			(!PCInventory.GetItemInCategory(GetCategory(CurCategory), CurItem + 1).IsA('EAbstractGoggle')) &&
+			(!PCInventory.GetItemInCategory(GetCategory(CurCategory), CurItem + 1).IsA('ESecondaryAmmo')))
+	}
+
+	// Item is finally found
+	// Get the item and set it as selected
+	Item = PCInventory.GetItemInCategory(GetCategory(CurCategory), CurItem + 1);
+
+	if (CurCategory == 0 && MySecItem != None && Epc.ePawn.WeaponStance == 0)
+		Item = MySecItem;
+
+	if (Item !=None && MyItem != Item)
+		PCInventory.SetSelectedItem(Item);
+}
+
+function CheckPreviousWeapon()
+{
+	local int CurItem, CurCategory, loopCounter;
+	local EInventoryItem Item, MyItem, MySecItem, CheckItem;
+
+	if (!Epc.m_ChoosePreviousGadget)
+		return;
+
+	Epc.m_ChoosePreviousGadget = false;
+
+	if (GetStateName() == 's_QDisplay')
+		return;
+
+	// Get the current category and current item
+	// Get the main weapon
+	MyItem = PCInventory.GetSelectedItem();
+
+	// Check the secondary weapon
+	MySecItem = PCInventory.GetSelectedItem(1);
+
+	// Check the current category
+	if (MyItem == None)
+	{
+		if (HaveTheMainGun())
+			CurCategory = -1;
+		else
+			CurCategory = 0;
+
+		do
+		{
+			CurCategory--;
+			if (CurCategory < 0)
+				return;
+		}
+		until(PCInventory.GetNbItemInCategory(GetCategory(CurCategory)) > 0);
+	}
+	else
+		CurCategory = MyItem.Category - 1; // I have a item so get the category directly
+
+	// End of check the current category
+
+	// Check the current item
+	CurItem = -1;
+	if (MyItem != None && MyItem.IsA('EMainGun'))
+	{
+		if (MySecItem != None)
+		{
+			// Check to find the position of secondary ammo
+			do
+			{
+				CurItem++;
+			}
+			until(MySecItem == PCInventory.GetItemInCategory(GetCategory(0), CurItem + 1)); // Joshua - Secondary ammo for the SC-20K is CAT_MAINGUN in SC1
+		}
+		else
+		{
+			// Check to find the position of main gun
+			do
+			{
+				CurItem++;
+			}
+			until(PCInventory.GetItemInCategory(GetCategory(CurCategory), CurItem + 1).IsA('EMainGun'));
+		}
+	}
+	else if (MyItem != None)
+	{
+		//Check to find the position of item
+		do
+		{
+			CurItem++;
+		}
+		until(MyItem == PCInventory.GetItemInCategory(GetCategory(CurCategory), CurItem + 1));
+	}
+	else
+	{
+		// I do not have current Item but I have the category
+		if (HaveTheMainGun())
+			CurCategory = 0;
+		else
+			CurCategory = 1;
+		CurItem = 0;
+	}
+	// End of check the current item
+
+	// We got the category and item position of current item
+
+	// Find the correct previous weapon
+	loopCounter = 0;
+	if (Epc.ePawn.WeaponStance > 0)
+	{
+		// Gun is drawn
+		if (MyItem.IsA('EMainGun')) // Only happen on main gun
+		{
+			do // Go through all the items and find the correct position
+			{
+				loopCounter++;
+				CurItem--;
+				if (CurItem < 0)
+					CurItem = PCInventory.GetNbItemInCategory(GetCategory(CurCategory)) - 1;
+
+				CheckItem = PCInventory.GetItemInCategory(GetCategory(CurCategory), CurItem + 1);
+			}
+			until(loopCounter > PCInventory.GetNbItemInCategory(GetCategory(CurCategory)) || (CheckItem.IsA('EMainGun') == false && CheckItem.Quantity !=0 ));
+		}
+	}
+	else
+	{
+		// Gun is undrawn
+		do
+		{
+			if (MyItem == None || MyItem.IsA('EMainGun') || CurItem == 0) // Go to the end
+			{
+				// Find not empty category
+				do
+				{
+					// Reset the category
+					if (CurCategory <= 0)
+					{
+						if (HaveTheMainGun())
+							CurCategory = PCInventory.GetNumberOfCategories() - 1;
+						else
+							CurCategory = PCInventory.GetNumberOfCategories() - 2;
+					}
+					else
+						CurCategory--;
+				}
+				until(PCInventory.GetNbItemInCategory(GetCategory(CurCategory)) != 0);
+
+				CurItem = PCInventory.GetNbItemInCategory(GetCategory(CurCategory)) - 1;
+			}
+			else if (MyItem != None)
+				CurItem--;
+		}
+		until ((!PCInventory.GetItemInCategory(GetCategory(CurCategory), CurItem + 1).IsA('EMedKit')) &&
+			(!PCInventory.GetItemInCategory(GetCategory(CurCategory), CurItem + 1).IsA('EAbstractGoggle')) &&
+			(!PCInventory.GetItemInCategory(GetCategory(CurCategory), CurItem + 1).IsA('ESecondaryAmmo')))
+	}
+
+	// Item is finally found
+	// Get the item and set it as selected
+	Item = PCInventory.GetItemInCategory(GetCategory(CurCategory), CurItem + 1);
+
+	if (CurCategory == 0 && MySecItem != None && Epc.ePawn.WeaponStance == 0)
+		Item = MySecItem;
+
+	if (Item != None && MyItem != Item)
+		PCInventory.SetSelectedItem(Item);
+}
+// Joshua - End of quick switch gadgets
 
 defaultproperties
 {

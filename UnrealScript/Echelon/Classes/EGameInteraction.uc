@@ -312,6 +312,8 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 	BindSnipe();
 	BindWhistle();
 	BindToggleHUD();
+	//BindPreviousGadget();
+	//BindNextGadget();
 	BindPlayerStats();
 	
 	return false; // continue input processing
@@ -490,6 +492,68 @@ function BindToggleHUD()
         if(BoundAction == "" || BoundAction == "None")
         {
             Epc.SetKey("F1 ToggleHUD", "");
+        }
+    }
+}
+
+// Joshua - Function to bind PreviousGadget to Mouse 4 (UnknownC1) key
+// Only binds if Mouse 4 is free and PreviousGadget isn't already bound to another key
+function BindPreviousGadget()
+{
+    local byte ToggleHUDKeyByte;
+    local byte Mouse4KeyByte;
+    local string BoundAction;
+    local bool bPreviousGadgetBound;
+    
+    Mouse4KeyByte = 193; // Value for 'UnknownC1' (Mouse 4)
+    
+    // Check if already bound to a key
+    Mouse4KeyByte = Epc.GetKey("PreviousGadget", false);
+    
+    // Don't consider controller keys (196-215) as bindings
+    if(Mouse4KeyByte != 0 && !(Mouse4KeyByte >= 196 && Mouse4KeyByte <= 215))
+    {
+        bPreviousGadgetBound = true;
+    }
+    
+    if(!bPreviousGadgetBound)
+    {
+        BoundAction = Epc.GetActionKey(Mouse4KeyByte);
+        
+        if(BoundAction == "" || BoundAction == "None")
+        {
+            Epc.SetKey("UnknownC1 PreviousGadget", "");
+        }
+    }
+}
+
+// Joshua - Function to bind NextGadget to Mouse 5 (UnknownC2) key
+// Only binds if Mouse 5 is free and NextGadget isn't already bound to another key
+function BindNextGadget()
+{
+    local byte ToggleHUDKeyByte;
+    local byte Mouse5KeyByte;
+    local string BoundAction;
+    local bool bNextGadgetBound;
+    
+    Mouse5KeyByte = 194; // Value for 'UnknownC2' (Mouse 5)
+    
+    // Check if already bound to a key
+    Mouse5KeyByte = Epc.GetKey("NextGadget", false);
+    
+    // Don't consider controller keys (196-215) as bindings
+    if(Mouse5KeyByte != 0 && !(Mouse5KeyByte >= 196 && Mouse5KeyByte <= 215))
+    {
+        bNextGadgetBound = true;
+    }
+    
+    if(!bNextGadgetBound)
+    {
+        BoundAction = Epc.GetActionKey(Mouse5KeyByte);
+        
+        if(BoundAction == "" || BoundAction == "None")
+        {
+            Epc.SetKey("UnknownC2 NextGadget", "");
         }
     }
 }

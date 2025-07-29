@@ -10,6 +10,8 @@
 ******************************************************************************/
 class EQInvHUDXbox extends Actor;
 
+#exec OBJ LOAD FILE=..\Textures\HUD_Enhanced.utx PACKAGE=HUD_Enhanced
+
 var int			CurrentCategory,
 				CurrentItem,
 				Gap;
@@ -139,10 +141,10 @@ function Tick(float Delta)
 	//Manage the blinking state		
 	fBlinkTime += Delta;
 
-	if(fBlinkTime >= FBLINKINGTIME)
+	if (fBlinkTime >= FBLINKINGTIME)
 	{
 		fBlinkTime = fBlinkTime-FBLINKINGTIME;
-		if(bBlink)
+		if (bBlink)
 			bBlink=false;
 		else
 			bBlink=true;
@@ -158,7 +160,7 @@ function Tick(float Delta)
 		}
 
 		fAlarmFlashTime += Delta;
-		if(fAlarmFlashTime > fAlarmFlashMaxTimePer)
+		if (fAlarmFlashTime > fAlarmFlashMaxTimePer)
 		{
 			fAlarmFlashTime = 0;
 
@@ -236,7 +238,7 @@ function PostRender(Canvas C)
 	}
 
 	// Joshua - Display alarms
-	if(Epc.bShowHUD && Epc.bShowAlarms && !eLevel.bIgnoreAlarmStage)
+	if (Epc.bShowHUD && Epc.bShowAlarms && !eLevel.bIgnoreAlarmStage)
 		DrawAlarmBox(Canvas);
 }
 
@@ -255,14 +257,14 @@ function DrawAlarmBox(ECanvas Canvas)
 
 	if (eLevel.bOneAlarmLevel)
 		sMaxAlarm = "1";
-    else if(Epc.eGame.bEliteMode)
+    else if (Epc.eGame.bEliteMode)
         sMaxAlarm = "3";
     else
         sMaxAlarm = "4";
 
     szText = string(eLevel.AlarmStage) $ "/" $ sMaxAlarm;
 
-    //if( eLevel.bIgnoreAlarmStage )
+    //if ( eLevel.bIgnoreAlarmStage )
     //    szText = "-/--";
 
     if (!Epc.bShowCurrentGoal || !bHasCurrentGoal)
@@ -325,10 +327,10 @@ state s_QDisplayXbox
 		local EInventoryItem	Item;
 		local int nbItem, HoldCategory, HoldItem;
 
-		if( Action == IST_Press )
+		if ( Action == IST_Press )
 		{
 			// ignore Timer, reset it now.
-			if( bPreviousConfig )
+			if ( bPreviousConfig )
 				Timer();
 
 			HoldCategory = CurrentCategory;
@@ -340,24 +342,24 @@ state s_QDisplayXbox
 			case "AnalogUp" :
 			case "MoveForward" :
 				// if over category name and not last item .. move to above item
-				if( CurrentCategory != -1 )
+				if ( CurrentCategory != -1 )
 					CurrentItem = Min(CurrentItem+1, PCInventory.GetNbItemInCategory(GetCategory(CurrentCategory))-1);
 				break;
 
 			case "DPadDown" :
 			case "AnalogDown" :
 			case "MoveBackward" :
-				if( CurrentCategory != -1 )
+				if ( CurrentCategory != -1 )
 					CurrentItem = Max(CurrentItem-1, -1);
 				break;
 				
 			case "DPadRight" :
             case "AnalogRight" :
 			case "StrafeRight" :
-                if( CurrentCategory > -1 )
+                if ( CurrentCategory > -1 )
                     CurrentCategory--;
 
-                while( !IsCategoryAvailable(GetCategory(CurrentCategory)) && CurrentCategory > -1 )
+                while ( !IsCategoryAvailable(GetCategory(CurrentCategory)) && CurrentCategory > -1 )
 	    			CurrentCategory--;
 
 				CurrentItem = Min(HoldItem, PCInventory.GetNbItemInCategory(GetCategory(CurrentCategory))-1);
@@ -367,12 +369,12 @@ state s_QDisplayXbox
 			case "DPadLeft" :
             case "AnalogLeft":
 			case "StrafeLeft" :
-				while( true )
+				while ( true )
 				{
 					CurrentCategory++;
-					if( CurrentCategory <= PCInventory.GetNumberOfCategories()-1 && IsCategoryAvailable(GetCategory(CurrentCategory)) )
+					if ( CurrentCategory <= PCInventory.GetNumberOfCategories()-1 && IsCategoryAvailable(GetCategory(CurrentCategory)) )
 						break;
-					else if( CurrentCategory == PCInventory.GetNumberOfCategories() )
+					else if ( CurrentCategory == PCInventory.GetNumberOfCategories() )
 					{
 						CurrentCategory = HoldCategory;
 						break;
@@ -393,7 +395,7 @@ state s_QDisplayXbox
 			}
 			
 			// If selection has changed, play sound
-			if( HoldCategory != CurrentCategory || HoldItem != CurrentItem )
+			if ( HoldCategory != CurrentCategory || HoldItem != CurrentItem )
 				Epc.Pawn.playsound(Sound'Interface.Play_NavigatePackSac', SLOT_Interface);
 		}
     
@@ -457,7 +459,7 @@ state s_QDisplayXbox
         local ECanvas			Canvas;
 
 		// draw normal view until timer expired
-		if( bPreviousConfig )
+		if ( bPreviousConfig )
 		{
 			Global.PostRender(C);
 			return;
@@ -476,7 +478,7 @@ state s_QDisplayXbox
 		//Log("QUICK"@Epc.CanAccessQuick()@!Epc.bStopInput);
 
 		// Get out!
-		if( !Epc.CanAccessQuick() || Epc.bStopInput )
+		if ( !Epc.CanAccessQuick() || Epc.bStopInput )
 		{
 			GotoState('');
 			Owner.GotoState(EchelonMainHud(Owner).RestoreState());
@@ -506,7 +508,7 @@ state s_QDisplayXbox
 	function EndState()
 	{
 		// Quick tap to get back to previous item
-		if( !bPreviousConfig )
+		if ( !bPreviousConfig )
 			Epc.EPawn.playsound(Sound'Interface.Play_ClosePackSac', SLOT_Interface);
 
         Epc.FakeMouseToggle(false);
@@ -535,11 +537,11 @@ state s_QDisplayXbox
 function PostBeginPlay()
 {
 	Epc = EPlayerController(Owner.Owner);
-	if( Epc == None )
+	if ( Epc == None )
 		Log("ERROR: Getting PlayerController in quick inv");
 
 	PCInventory = Epc.ePawn.FullInventory;
-	if( PCInventory == None )
+	if ( PCInventory == None )
 		Log("Problem to get player inventory in Quick inv. HUD");
 
     eGame  = EchelonGameInfo(Level.Game);
@@ -584,10 +586,10 @@ function eInvCategory GetCategory(int c)
 ------------------------------------------------------------------------------*/
 function bool IsCategoryAvailable( eInvCategory cat )
 {
-    if(PCInventory.GetNbItemInCategory(cat) == 0)
+    if (PCInventory.GetNbItemInCategory(cat) == 0)
         return false;
 
-    if( cat != CAT_MAINGUN && (Epc.GetStateName() == 's_FirstPersonTargeting' ||
+    if ( cat != CAT_MAINGUN && (Epc.GetStateName() == 's_FirstPersonTargeting' ||
 							   Epc.GetStateName() == 's_RappellingTargeting' ||
 							   Epc.GetStateName() == 's_SplitTargeting') )
         return false;
@@ -644,7 +646,7 @@ function DrawStealthMeter(ECanvas Canvas)
     stealStatusWidth  = (STEALTH_METER_WIDTH - 2 - (NB_STEALTH_STATUS-1)) / NB_STEALTH_STATUS;
     stealStatusHeight = (STEALTH_METER_HEIGHT - 3)/2;
     
-    for(i = 0; i < NB_STEALTH_STATUS - 1; i++)
+    for (i = 0; i < NB_STEALTH_STATUS - 1; i++)
     {
         Canvas.DrawLine(xPos + (i+1) * (stealStatusWidth+1), yPos + 1, 1, stealStatusHeight, Canvas.black, BLACK_BORDER_ALPHA, eLevel.TGAME);
         Canvas.DrawLine(xPos + (i+1) * (stealStatusWidth+1), yPos + STEALTH_METER_HEIGHT - stealStatusHeight - 1, 1, stealStatusHeight, Canvas.black, BLACK_BORDER_ALPHA, eLevel.TGAME);
@@ -657,30 +659,30 @@ function DrawStealthMeter(ECanvas Canvas)
     visibility = Epc.ePawn.Visibilityfactor;
 
     // METER //
-    if(visibility >= FULLY_VISIBLE_VALUE)
+    if (visibility >= FULLY_VISIBLE_VALUE)
         visibility = FULLY_VISIBLE_VALUE;
 
-    if(visibility < eGame.VisBarelyThreshold)
+    if (visibility < eGame.VisBarelyThreshold)
     {
         vPos = (visibility / eGame.VisBarelyThreshold) * stealStatusWidth;
         DrawStealthMeterSelectBox(Canvas, xPos + 1 + vPos, yPos - 2);
     }
-    else if(visibility < eGame.VisPartiallyThreshold)
+    else if (visibility < eGame.VisPartiallyThreshold)
     {
         vPos = ((visibility - eGame.VisBarelyThreshold) / (eGame.VisPartiallyThreshold - eGame.VisBarelyThreshold)) * (stealStatusWidth + 1);
         DrawStealthMeterSelectBox(Canvas, xPos + stealStatusWidth + 1 + vPos, yPos - 2);
     }
-    else if(visibility < eGame.VisMostlyThreshold)
+    else if (visibility < eGame.VisMostlyThreshold)
     {
         vPos = ((visibility - eGame.VisPartiallyThreshold) / (eGame.VisMostlyThreshold - eGame.VisPartiallyThreshold)) * (stealStatusWidth + 1);
         DrawStealthMeterSelectBox(Canvas, xPos + (stealStatusWidth + 1) * 2 + vPos, yPos - 2);
     }
-    else if(visibility < eGame.VisFullyThreshold)
+    else if (visibility < eGame.VisFullyThreshold)
     {
         vPos = ((visibility - eGame.VisMostlyThreshold) / (eGame.VisFullyThreshold - eGame.VisMostlyThreshold)) * (stealStatusWidth + 1);
         DrawStealthMeterSelectBox(Canvas, xPos + (stealStatusWidth + 1) * 3 + vPos, yPos - 2);
     }
-    else //if(visibility < FULLY_VISIBLE_VALUE)
+    else //if (visibility < FULLY_VISIBLE_VALUE)
     {
         vPos = ((visibility - eGame.VisFullyThreshold) / (FULLY_VISIBLE_VALUE - eGame.VisFullyThreshold)) * (stealStatusWidth + 1 - 6);
         DrawStealthMeterSelectBox(Canvas, xPos + (stealStatusWidth + 1) * 4 + vPos, yPos - 2);
@@ -761,12 +763,12 @@ function DrawRateOfFire(ECanvas Canvas)
 
     Canvas.DrawColor = HUDColor;
 
-    if(selWeapon != None)
+    if (selWeapon != None)
     {
         // Single //
-        if(!selWeapon.IsROFModeAvailable(ROF_Single))
+        if (!selWeapon.IsROFModeAvailable(ROF_Single))
             Canvas.DrawColor.A = 25;
-        else if(selWeapon.eROFMode == ROF_Single)
+        else if (selWeapon.eROFMode == ROF_Single)
             Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
         else
             Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
@@ -777,16 +779,16 @@ function DrawRateOfFire(ECanvas Canvas)
 		Canvas.Style = ERenderStyle.STY_Normal;
 
         // Burst // Joshua - Restoring burst fire from early Splinter Cell builds
-		if(Epc.bBurstFire)
+		if (Epc.bBurstFire)
         {
-			if(!selWeapon.IsROFModeAvailable(ROF_Burst))
+			if (!selWeapon.IsROFModeAvailable(ROF_Burst))
 				Canvas.DrawColor.A = 25;
-			else if(selWeapon.eROFMode == ROF_Burst)
+			else if (selWeapon.eROFMode == ROF_Burst)
 				Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
 			else
 				Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
 
-			for(j = 0; j < 3; j++)
+			for (j = 0; j < 3; j++)
 			{
 				Canvas.SetPos(xPos + 30 + j * 5, yPos + 8);
 				Canvas.Style = ERenderStyle.STY_Alpha;
@@ -796,14 +798,14 @@ function DrawRateOfFire(ECanvas Canvas)
 		}
 
         // Auto //
-        if(!selWeapon.IsROFModeAvailable(ROF_Auto))
+        if (!selWeapon.IsROFModeAvailable(ROF_Auto))
             Canvas.DrawColor.A = 25;
-        else if(selWeapon.eROFMode == ROF_Auto)
+        else if (selWeapon.eROFMode == ROF_Auto)
             Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
         else
             Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
 
-       for(j = 0; j < 5; j++)
+       for (j = 0; j < 5; j++)
        {
             Canvas.SetPos(xPos + 54 + j*5, yPos + 8);
 			Canvas.Style = ERenderStyle.STY_Alpha;
@@ -821,7 +823,7 @@ function GetWeaponInfo( EWeapon Weapon, out int nbAmmo, out int nbClip )
 
     nbClip = (Weapon.Ammo - Weapon.ClipAmmo)/Weapon.ClipMaxAmmo;
 	f = float(Weapon.Ammo - Weapon.ClipAmmo)/Weapon.ClipMaxAmmo;
-	if( f - nbClip > 0 )
+	if ( f - nbClip > 0 )
 		nbClip++;
 }
 
@@ -847,7 +849,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
 
     // SET BOX SIZE //
 	MainGun = EMainGun(Item);
-	if(MainGun != None && MainGun.SecondaryAmmo != None)
+	if (MainGun != None && MainGun.SecondaryAmmo != None)
     {
         xPos  = SCREEN_END_X - eGame.HUD_OFFSET_X - ITEMBOX_WIDTH_B;
         width = ITEMBOX_WIDTH_B;
@@ -864,7 +866,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
 	DrawBoxBorders(Canvas, xPos, yPos, width, ITEMBOX_HEIGHT_B);
 
     Item = PCInventory.GetSelectedItem();
-    if(Item != None)
+    if (Item != None)
     {
         Canvas.SetDrawColor(64,64,64);
         Canvas.Style = ERenderStyle.STY_Modulated;
@@ -878,7 +880,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
 
     // WEAPON DISPLAY //
     Weapon = EWeapon(Item);
-	if( Weapon != None )
+	if ( Weapon != None )
 	{
         Canvas.DrawColor = Canvas.TextBlack;
         Canvas.SetPos(xPos + offset + 36, yPos + 29);
@@ -888,7 +890,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
         
 		GetWeaponInfo(Weapon, nbAmmo, nbClip);
 
-        for(i = 0; i < 10; i++)
+        for (i = 0; i < 10; i++)
 		{
             Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
 
@@ -897,7 +899,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
             eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sl_stroke, 3, 1, 0, 0, 1, 1);
 			Canvas.Style = ERenderStyle.STY_Normal;
 
-            if(i < nbAmmo)
+            if (i < nbAmmo)
                 Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
             else
                 Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
@@ -907,7 +909,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
             eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bullet, 3, 5, 0, 0, 3, 5);
 			Canvas.Style = ERenderStyle.STY_Normal;
 
-            if(i < nbClip)
+            if (i < nbClip)
             {
                 Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
 
@@ -921,14 +923,14 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
         Canvas.DrawColor = HUDColor;
 
         // SECONDARY AMMO //
-        if(MainGun != None && MainGun.SecondaryAmmo != None)
+        if (MainGun != None && MainGun.SecondaryAmmo != None)
         {
             SecAmmo = ESecondaryAmmo(MainGun.SecondaryAmmo);
 
             Canvas.SetPos(xPos + SEC_AMMO_WIDTH + 1, yPos + 6);
             eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v2, 4, ITEMBOX_HEIGHT_B - 10, 0, 0, 4, 1);
 
-            if(SecAmmo.MaxQuantity > 1)
+            if (SecAmmo.MaxQuantity > 1)
             {
                 szText = string(SecAmmo.Quantity);
                 Canvas.TextSize(szText, xLen, yLen);
@@ -945,13 +947,13 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
             Canvas.Style = ERenderStyle.STY_Normal;
         }
     }
-    else if( Item != None && Item.MaxQuantity > 1 )
+    else if ( Item != None && Item.MaxQuantity > 1 )
     {		
 		WriteText(Canvas, xPos+70, yPos+9, "x", Canvas.TextBlack);
 
-        if(Item.Quantity < 10)
+        if (Item.Quantity < 10)
         {
-            if(Item.Quantity == 1)
+            if (Item.Quantity == 1)
                 WriteText(Canvas, xPos+69, yPos+24, Item.Quantity, Canvas.TextBlack);
             else
                 WriteText(Canvas, xPos+70, yPos+24, Item.Quantity, Canvas.TextBlack);
@@ -961,14 +963,14 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
     }
 
     // NOT SELECTED FILTER //
-    if(bDisplayState)
+    if (bDisplayState)
     {
-        if(!(CurrentCategory == -1))
+        if (!(CurrentCategory == -1))
         {
 			Canvas.Style = ERenderStyle.STY_Alpha;
             Canvas.DrawLine(xPos + offset + 5, yPos + 6, ITEMBOX_WIDTH_L - 10, ITEMBOX_HEIGHT_B - 10, Canvas.black, INSIDE_BORDER_ALPHA, eLevel.TGAME);
 
-            if(MainGun != None && MainGun.SecondaryAmmo != None)
+            if (MainGun != None && MainGun.SecondaryAmmo != None)
                 Canvas.DrawLine(xPos + 5, yPos + 6, SEC_AMMO_WIDTH - 4, ITEMBOX_HEIGHT_B - 10, Canvas.black, INSIDE_BORDER_ALPHA, eLevel.TGAME);
 			Canvas.Style = ERenderStyle.STY_Normal;
          }
@@ -976,7 +978,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
 
     Canvas.DrawColor = HUDColor;
     Canvas.DrawColor.A = 128;
-    if(bDisplayState && CurrentCategory == -1)
+    if (bDisplayState && CurrentCategory == -1)
     {
 		Canvas.Style = ERenderStyle.STY_Alpha;
         Canvas.SetPos(xPos + width - ITEMBOX_WIDTH_L + 5, yPos + 6);
@@ -1003,7 +1005,7 @@ function DrawInfoBar(Ecanvas Canvas)
 	DrawBoxBorders(Canvas, xPos, yPos, width, ITEMBOX_HEIGHT_L);
 
     // No current cursor over item
-	if( CurrentCategory == -1 || CurrentItem == -1 )
+	if ( CurrentCategory == -1 || CurrentItem == -1 )
 	{
 		Canvas.Font = Canvas.ETextFont;
 		Canvas.DrawColor = Canvas.TextBlack;		
@@ -1024,7 +1026,7 @@ function DrawInfoBar(Ecanvas Canvas)
     Canvas.DrawColor = Canvas.TextBlack;
 
 	Item = PCInventory.GetItemInCategory(GetCategory(CurrentCategory), CurrentItem+1);
-    if(Item != None)
+    if (Item != None)
     {
         Canvas.SetPos(xPos + width - 15, yPos + 5);
         WriteText(Canvas, xPos + 15, yPos + 5, Localize("InventoryItem", Item.ItemName, "Localization\\HUD"), Canvas.TextBlack);
@@ -1063,7 +1065,7 @@ function DrawNavigationText(Ecanvas Canvas)
 	
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sl_stroke, width - 9, TEXTBOX_HEIGHT - 7, 0, 0, 1, 1);
 
-    if( CurrentCategory == -1 )
+    if ( CurrentCategory == -1 )
         drawColor = TextSelectedColor;
     else
         drawColor = TextColor;
@@ -1073,17 +1075,17 @@ function DrawNavigationText(Ecanvas Canvas)
     WriteText(Canvas, xPos + width - ITEMBOX_WIDTH_L/2 - xLen/2, yPos + 4, szText, drawColor);
 
     hold = CurrentCategory;
-    for(j = 0; j < nbCat; j++)
+    for (j = 0; j < nbCat; j++)
     {
         CurrentCategory = j;
         szText = PCInventory.GetCategoryName(GetCategory(CurrentCategory));
 
-        if(j == hold)
+        if (j == hold)
         {
             drawColor = TextSelectedColor;
             szText = "-"$szText$"-";
         }
-        else if(IsCategoryAvailable(GetCategory(j)))
+        else if (IsCategoryAvailable(GetCategory(j)))
             drawColor = TextColor;
         else
             drawColor = TextDisabledColor;
@@ -1135,14 +1137,14 @@ function DrawBoxBorders(ECanvas Canvas, int xPos, int yPos, int width, int heigh
     Canvas.SetPos(xPos + width - 5, yPos + 7);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v, 5, height - 11, 5, 0, -5, 1);
 
-	if( bNoDrawBackGround )
+	if ( bNoDrawBackGround )
 		return;
 
     // OPACITY BACKGROUND //
     Canvas.DrawLine(xPos + 5, yPos + 6, width - 10, height - 10, Canvas.white, -1, eLevel.TGAME);
     Canvas.DrawRectangle(xPos + 5, yPos + 6, width - 10, height - 10, 1, Canvas.black, INSIDE_BORDER_ALPHA, eLevel.TGAME);
 
-	if( bOpacityOnly )
+	if ( bOpacityOnly )
 		return;
 	
     // TRANSPARENCY BACKGROUND //
@@ -1164,11 +1166,11 @@ function DrawCategory(ECanvas Canvas)
 {
     local int xPos, yPos, xLightPos, yLightPos, i, nbItems, height;
 
-    if(CurrentCategory == -1)
+    if (CurrentCategory == -1)
 		return;
 
     nbItems = PCInventory.GetNbItemInCategory(GetCategory(CurrentCategory));
-    if(nbItems == 0)
+    if (nbItems == 0)
 		return;
 
     xPos = SCREEN_END_X - eGame.HUD_OFFSET_X - FIRSTCAT_OFFSET - (CurrentCategory + 1) * ITEMBOX_WIDTH_L - CurrentCategory * SPACE_BETWEEN_CAT;
@@ -1184,14 +1186,14 @@ function DrawCategory(ECanvas Canvas)
     Canvas.DrawColor = HUDColor;
 
     // ITEMS //
-    for(i = 1; i <= nbItems; i++)
+    for (i = 1; i <= nbItems; i++)
     {      
 		Canvas.Style = ERenderStyle.STY_Alpha;
         Canvas.DrawLine(xPos + 7, yPos - ITEMBOX_HEIGHT_CAT * i - SEPARATOR_HEIGTHT * i - 5, ITEMBOX_WIDTH_L - 14, 1, Canvas.black, INSIDE_BORDER_ALPHA, eLevel.TGAME);
         Canvas.DrawLine(xPos + 6, yPos - ITEMBOX_HEIGHT_CAT * i - SEPARATOR_HEIGTHT * i - 6, 1, 3, Canvas.black, INSIDE_BORDER_ALPHA, eLevel.TGAME);
         Canvas.DrawLine(xPos + ITEMBOX_WIDTH_L - 7, yPos - ITEMBOX_HEIGHT_CAT * i - SEPARATOR_HEIGTHT * i - 6, 1, 3, Canvas.black, INSIDE_BORDER_ALPHA, eLevel.TGAME);
 
-        if(i-1 == CurrentItem)
+        if (i-1 == CurrentItem)
         {
             xLightPos = xPos + 5;
             yLightPos = yPos - ITEMBOX_HEIGHT_CAT * i - SEPARATOR_HEIGTHT * i - 4;			
@@ -1205,7 +1207,7 @@ function DrawCategory(ECanvas Canvas)
     }
 
     // LIGHT //
-	if( CurrentItem > -1 )
+	if ( CurrentItem > -1 )
 	{
 		Canvas.SetDrawColor(128,128,128,128);
 		Canvas.SetPos(xLightPos, yLightPos);
@@ -1232,7 +1234,7 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
     Canvas.Font = Canvas.ETextFont;
 
     MainGun = EMainGun(PCInventory.GetSelectedItem());
-    if( Item == PCInventory.GetSelectedItem() || (MainGun != None && MainGun.SecondaryAmmo != None && Item == MainGun.SecondaryAmmo) )
+    if ( Item == PCInventory.GetSelectedItem() || (MainGun != None && MainGun.SecondaryAmmo != None && Item == MainGun.SecondaryAmmo) )
        bEquipedItem = true;
     else
        bEquipedItem = false;
@@ -1250,7 +1252,7 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
 
       // WEAPON DISPLAY //
     Weapon = EWeapon(Item);
-	if( Weapon != None )
+	if ( Weapon != None )
 	{        
         Canvas.DrawColor = Canvas.TextBlack;
 
@@ -1261,10 +1263,10 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
         
 		GetWeaponInfo(Weapon, nbAmmo, nbClip);
 
-        for(i = 0; i < 10; i++)
+        for (i = 0; i < 10; i++)
 		{
             Canvas.DrawColor = HUDColor;
-            if(bEquipedItem)
+            if (bEquipedItem)
                 Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
             else
                 Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
@@ -1274,16 +1276,16 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
             eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sl_stroke, 3, 1, 0, 0, 1, 1);
 			Canvas.Style = ERenderStyle.STY_Normal;
 
-            if(i < nbAmmo)
+            if (i < nbAmmo)
             {
-                if(bEquipedItem)
+                if (bEquipedItem)
                     Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
                 else
                     Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
             }                
             else
             {
-                if(bEquipedItem)
+                if (bEquipedItem)
                     Canvas.DrawColor.A = INSIDE_BORDER_ALPHA / 2;
                 else
                     Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
@@ -1294,9 +1296,9 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
             eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bullet, 3, 5, 0, 0, 3, 5);
 			Canvas.Style = ERenderStyle.STY_Normal;
 
-            if(i < nbClip)
+            if (i < nbClip)
             {
-                if(bEquipedItem)
+                if (bEquipedItem)
                     Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
                 else
                     Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
@@ -1308,15 +1310,15 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
             }
 		}
     }
-	else if( Item != None && Item.MaxQuantity > 1 )
+	else if ( Item != None && Item.MaxQuantity > 1 )
     {        
         txtColor = Canvas.TextBlack;
 
 		WriteText(Canvas, xPos+65, yPos+5, "x", txtColor);
 
-        if(Item.Quantity < 10)
+        if (Item.Quantity < 10)
         {
-            if(Item.Quantity == 1)
+            if (Item.Quantity == 1)
                 WriteText(Canvas, xPos+64, yPos+20, Item.Quantity, txtColor);
             else
                 WriteText(Canvas, xPos+65, yPos+20, Item.Quantity, txtColor);
@@ -1325,7 +1327,7 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
             WriteText(Canvas, xPos+60, yPos+20, Item.Quantity, txtColor);
     }
 
-    if(!bSelected)
+    if (!bSelected)
 	{
 		Canvas.Style = ERenderStyle.STY_Alpha;
         Canvas.DrawLine(xPos, yPos - 1, ITEMBOX_WIDTH_L - 10, ITEMBOX_HEIGHT_CAT + 2, Canvas.black, INSIDE_BORDER_ALPHA, eLevel.TGAME);
@@ -1433,7 +1435,7 @@ function DrawAnimText(ECanvas Canvas, int xPos, int yPos, FLOAT xLen, FLOAT yLen
     local int length, i, iEmptySpot,y;	
 
     // Update text
-    if(fTime > ALARM_TEXT_ROT_TIME)
+    if (fTime > ALARM_TEXT_ROT_TIME)
     {        
         // Update current Alarm or Goal text
         szAlarmText = Epc.CurrentGoal;
@@ -1454,7 +1456,7 @@ function DrawAnimText(ECanvas Canvas, int xPos, int yPos, FLOAT xLen, FLOAT yLen
 		length = Len(szAlarmText);
 
         iAlarmIndex++;
-        if(iAlarmIndex >= length)
+        if (iAlarmIndex >= length)
             iAlarmIndex = 0;
 
         szAlarmText = Mid(szAlarmText, iAlarmIndex, length + iEmptySpot);

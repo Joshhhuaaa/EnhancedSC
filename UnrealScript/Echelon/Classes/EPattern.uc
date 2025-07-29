@@ -4513,7 +4513,7 @@ function SetProfileDeletion()
 
     EPC = EPlayerController(Characters[0]);
 
-	if(EPC.eGame.bPermadeathMode)
+	if (EPC.eGame.bPermadeathMode)
 		EPC.bProfileDeletionPending = true;
 }
 
@@ -4546,7 +4546,7 @@ function PlayerIdentified()
     local EAIController  MasterController, DogController;
     local EPawn MasterPawn;
     
-    if(EGroupAI(Owner).bPlayerIdentifiedCounted || 
+    if (EGroupAI(Owner).bPlayerIdentifiedCounted || 
        EAIController(Characters[1]).bBlockDetection || 
        EAIController(Characters[1]).bBlockJumpDetection ||
 	   EAIController(Characters[1]).bNotInStats)
@@ -4555,18 +4555,18 @@ function PlayerIdentified()
     }
 
     // Check if this is a dog with a master
-    if(Characters[1] != None && EDog(Characters[1].Pawn) != None)
+    if (Characters[1] != None && EDog(Characters[1].Pawn) != None)
     {
         DogController = EAIController(Characters[1]);
 
-        if(DogController.Master != None)
+        if (DogController.Master != None)
         {
             MasterPawn = DogController.Master;
             MasterController = EAIController(MasterPawn.Controller);
 
-            if(MasterController != None && MasterController.Group != None)
+            if (MasterController != None && MasterController.Group != None)
             {
-                if(MasterController.Group.bPlayerIdentifiedCounted)
+                if (MasterController.Group.bPlayerIdentifiedCounted)
                     return;
 
                 MasterController.Group.bPlayerIdentifiedCounted = true;

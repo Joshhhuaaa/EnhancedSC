@@ -85,8 +85,8 @@ var(Damage) Array<SpawnInfo>	SpawnableObjects;	// Table of spawnable objects dep
 // Explosion stuff
 var(Damage) class<Emitter>		ExplosionClass;		// Emitter to be spawn upon explosion
 var(Damage) class<damageType>	ExplosionDamageClass;
-// Joshua - ExplosionDamage, configurable in Enhanced config
-var(Damage) config float		 ExplosionDamage;	// Damage for the explosion
+
+var(Damage) float		 		ExplosionDamage;	// Damage for the explosion
 var(Damage) float				ExplosionMinRadius;	// Min Radius within which the damage will be maximal
 var(Damage) float				ExplosionMaxRadius;	// Max range at which the explosion will do damage
 var(Damage) float				ExplosionNoiseRadius;//Noise radius
