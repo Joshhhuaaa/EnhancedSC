@@ -97,3 +97,5 @@ Enhanced SC includes an improved character texture package that replaces the ori
 
 > [!NOTE]
 > The PlayStation 3 HD textures originally caused issues with shadows not rendering properly through alpha textures. I’ve recently rebuilt them to fix this problem. However, some of Ubisoft's replacement textures deviate from the original design instead of just increasing resolution.
+
+<img width="3840" height="3240" alt="PS3_Comparison" src="https://github.com/user-attachments/assets/a1ccf32b-1d0a-40cd-b1a7-effc16f9910a"/>
