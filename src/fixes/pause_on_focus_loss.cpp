@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "pause_on_focus_loss.hpp"
 
 #include <spdlog/spdlog.h>

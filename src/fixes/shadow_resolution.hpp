@@ -1,6 +1,6 @@
 #pragma once
 
-class ShadowResolution
+class ShadowResolution final
 {
 public:
     bool isEnabled;

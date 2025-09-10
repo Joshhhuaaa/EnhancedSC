@@ -1,7 +1,9 @@
 #pragma once
 
-class CustomSaves
+class RestoreEAX final
 {
 public:
     static void Initialize();
 };
+
+

@@ -1,6 +1,7 @@
+#include "stdafx.h"
 #include "common.hpp"
 #include "gamevars.hpp"
-#include "spdlog/spdlog.h"
+#include "logging.hpp"
 
 void GameVars::Initialize()
 {

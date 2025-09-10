@@ -1,5 +1,6 @@
+#include "stdafx.h"
 #include "common.hpp"
-#include "spdlog/spdlog.h"
+#include "logging.hpp"
 #include "intro_skip.hpp"
 
 #include "hook_dlls.hpp"

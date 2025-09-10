@@ -1,7 +1,8 @@
 #pragma once
 
-class CustomSaves
+class DPadKeybinds final
 {
 public:
     static void Initialize();
 };
+

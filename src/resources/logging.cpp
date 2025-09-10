@@ -1,12 +1,10 @@
+#include "stdafx.h"
 #include "common.hpp"
 #include "logging.hpp"
 
 #include <spdlog/sinks/base_sink.h>
 
 #include "version.h"
-
-extern std::filesystem::path sFixPath;
-
 
 
 // Spdlog sink (truncate on startup, single file)
@@ -92,7 +90,6 @@ void Logging::Initialize()
             {
                 std::filesystem::create_directory(sExePath / "logs"); //create a "logs" subdirectory in the game folder to keep the main directory tidy.
             }
-            g_Logging.bLoaded = true;
             // Create 10MB truncated logger
             std::filesystem::path sLogFile = sFixName + ".log";
             std::shared_ptr<spdlog::logger> logger = std::make_shared<spdlog::logger>(sLogFile.string(), std::make_shared<size_limited_sink<std::mutex>>((sExePath / "logs" / sLogFile).string(), 10 * 1024 * 1024));
@@ -107,7 +104,7 @@ void Logging::Initialize()
             }
             spdlog::info("Checking for duplicate intallations of {}.", sFixName);
             Util::CheckForASIFiles(sFixName, true, true, nullptr); //Sets sFixPath. Exit thread & warn the user if multiple copies of EnhancedSC are trying to initialize.
-            spdlog::info("{} v{} loaded.", sFixName, VERSION_STRING);
+            spdlog::info("{} v{} loaded.", sFixName, sFixVersion);
             spdlog::info("ASI plugin location: {}", (sExePath / sFixPath / (sFixName + ".asi")).string());
             spdlog::info("----------");
             spdlog::info("Log file: {}", (sExePath / "logs" / sLogFile).string());
@@ -116,7 +113,8 @@ void Logging::Initialize()
             // Log module details
             spdlog::info("Module Name: {0:s}", sExeName.c_str());
             spdlog::info("Module Path: {0:s}", sExePath.string());
-            spdlog::info("Module Address: 0x{0:x}", (uintptr_t)baseModule);
+            spdlog::info("Module Address: 0x{0:X}", (uintptr_t)baseModule);
+            spdlog::info("Module First Segment: 0x{0:X}", (uintptr_t)baseModule+0x1000);
             spdlog::info("Module Version: {}", Memory::GetModuleVersion(baseModule));
         }
         catch (const spdlog::spdlog_ex& ex)
@@ -180,6 +178,7 @@ void Logging::LogSysInfo()
     else
     {
         std::string deviceString;
+        int gpuIndex = 1;
         for (int i = 0; ; i++)
         {
             DISPLAY_DEVICE dd = { sizeof(dd), 0 };
@@ -195,7 +194,8 @@ void Logging::LogSysInfo()
                 continue;
             }
             deviceString = deviceStringBuffer;
-            spdlog::info("System Details - GPU: {}", deviceString);
+            spdlog::info("System Details - GPU #{}: {}", gpuIndex, deviceString);
+            gpuIndex++;
         }
     }
 

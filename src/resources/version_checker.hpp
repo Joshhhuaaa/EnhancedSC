@@ -30,10 +30,14 @@ private:
     std::wstring buildUserAgent() const;
     RepoInfo parseRepoUrl(const std::string& url) const;
 
-    static int compareSemVer(const std::string& a, const std::string& b);
     static std::string currentTimeISO8601();
     static std::chrono::system_clock::time_point parseISO8601(const std::string& timeStr);
     static constexpr int iCacheTTLHours = 24; // Cache TTL in hours
 
 #endif
 };
+
+inline bool bShouldCheckForUpdates;
+inline bool bConsoleUpdateNotifications;
+
+void CheckForUpdates();

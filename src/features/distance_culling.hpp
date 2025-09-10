@@ -1,6 +1,6 @@
 #pragma once
 
-class DistanceCulling
+class DistanceCulling final
 {
 public:
     void Initialize() const;

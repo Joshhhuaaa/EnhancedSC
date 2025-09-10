@@ -71,6 +71,21 @@
     <ClCompile Include="external\safetyhook\src\utility.cpp">
       <Filter>Utility\SafetyHook</Filter>
     </ClCompile>
+    <ClCompile Include="src\fixes\restore_eax.cpp">
+      <Filter>Fixes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\config.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\features\dpad_keybinds.cpp">
+      <Filter>Features</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fixes\fix_default_gpu.cpp">
+      <Filter>Fixes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resources\stdafx.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\features\intro_skip.hpp">
@@ -118,13 +133,7 @@
     <ClInclude Include="src\resources\logging.hpp">
       <Filter>Utility\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="external\safetyhook\safetyhook.hpp">
-      <Filter>Utility\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="src\resources\stdafx.h">
-      <Filter>Utility\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="external\safetyhook\Zydis.h">
       <Filter>Utility\Headers</Filter>
     </ClInclude>
     <ClInclude Include="src\fixes\mouse_xbuttons_support.hpp">
@@ -144,6 +153,18 @@
     </ClInclude>
     <ClInclude Include="external\safetyhook\include\safetyhook.hpp">
       <Filter>Utility\SafetyHook</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fixes\restore_eax.hpp">
+      <Filter>Fixes\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\config.hpp">
+      <Filter>Utility\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resources\config_keys.hpp">
+      <Filter>Utility\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\features\dpad_keybinds.hpp">
+      <Filter>Features\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
