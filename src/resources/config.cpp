@@ -10,6 +10,7 @@
 
 #include "intro_skip.hpp"
 #include "distance_culling.hpp"
+#include "idle_timers.hpp"
 
 // -----------------------------------------------------------------------------
 // ConfigHelper: A type-safe, case-insensitive, error-checked INI config reader.
@@ -155,6 +156,8 @@ void Config::Read()
         }
     }
 
+    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bDisableMenuIdleTimer", g_IdleTimers.bDisableIdleTimer);
+    LOG_CONFIG(ConfigKeys::DisableMenuIdleTimers_Section, ConfigKeys::DisableMenuIdleTimers_Setting, g_IdleTimers.bDisableIdleTimer);
 
     ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bLODDistance", g_DistanceCulling.isEnabled);
     LOG_CONFIG(ConfigKeys::DistanceCulling_Section, ConfigKeys::DistanceCulling_Setting, g_DistanceCulling.isEnabled);

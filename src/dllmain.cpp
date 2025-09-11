@@ -45,6 +45,8 @@ void InitEchelon() //g_GameDLLs.Echelon
 }
 void InitEchelonHUD() //g_GameDLLs.EchelonHUD
 {
+    IdleTimers::Initialize();
+
 }
 void InitEchelonIngredient() //g_GameDLLs.EchelonIngredient
 {
@@ -72,7 +74,7 @@ void InitWinDrv() //g_GameDLLs.WinDrv
 
 void InitD3DDrv() //g_GameDLLs.D3DDrv
 {
-    INITIALIZE(MouseXButtonsSupport::Initialize());
+    MouseXButtonsSupport::Initialize();
 }
 
 void InitializeSubsystems()
@@ -89,7 +91,6 @@ void InitializeSubsystems()
         INITIALIZE(g_GameVars.Initialize());
         INITIALIZE(Config::Read()); 
         INITIALIZE(CustomSaves::Initialize());
-        INITIALIZE(IdleTimers::Initialize());
         INITIALIZE(g_DistanceCulling.Initialize());
         INITIALIZE(g_IntroSkip.Initialize());
         INITIALIZE(RestoreEAX::Initialize());

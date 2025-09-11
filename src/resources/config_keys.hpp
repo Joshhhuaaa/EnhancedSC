@@ -15,6 +15,10 @@ namespace ConfigKeys
     constexpr const char* SkipIntroLogos_Section = "Various";
     constexpr const char* SkipIntroLogos_Setting = "Skip Intro Videos";
 
+    // Tweaks
+    constexpr const char* DisableMenuIdleTimers_Section = "Various";
+    constexpr const char* DisableMenuIdleTimers_Setting = "Disable Menu Idle Timers";
+
     // Internal
     constexpr const char* CheckForUpdates_Section = "Update Notifications";
     constexpr const char* CheckForUpdates_Setting = "Check For EnhancedSC Updates";
