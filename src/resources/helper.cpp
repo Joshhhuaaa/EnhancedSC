@@ -1,12 +1,9 @@
-#include "helper.hpp"
+#include "stdafx.h"
+#include "common.hpp"
+
 #include "logging.hpp"
 
 #pragma comment(lib,"Version.lib")
-
-extern HMODULE baseModule;
-extern std::filesystem::path sExePath;
-extern std::string sExeName;
-
 
 namespace Memory
 {
@@ -223,22 +220,97 @@ namespace Memory
 
 namespace Util
 {
-
-    int findStringInVector(std::string& str, const std::initializer_list<std::string>& search)
+#if !defined(RELEASE_BUILD)
+    void DumpContext(const safetyhook::Context& ctx)
     {
-        std::transform(str.begin(), str.end(), str.begin(),
-            [](unsigned char c)
+        spdlog::info("\n"
+            // General-purpose 32-bit registers
+            "EAX = 0x{:X}\t| EBX = 0x{:X}\t| ECX = 0x{:X}\t| EDX = 0x{:X}\n"
+            "ESI = 0x{:X}\t| EDI = 0x{:X}\t| EBP = 0x{:X}\t| ESP = 0x{:X}\n"
+            "EIP = 0x{:X}\n"
+            // XMM floats
+            "XMM0 = {:g}\t| XMM1 = {:g}\t| XMM2 = {:g}\t| XMM3 = {:g}\n"
+            "XMM4 = {:g}\t| XMM5 = {:g}\t| XMM6 = {:g}\t| XMM7 = {:g}\n",
+            ctx.eax, ctx.ebx, ctx.ecx, ctx.edx,
+            ctx.esi, ctx.edi, ctx.ebp, ctx.esp,
+            ctx.eip,
+            ctx.xmm0.f32[0], ctx.xmm1.f32[0], ctx.xmm2.f32[0], ctx.xmm3.f32[0],
+            ctx.xmm4.f32[0], ctx.xmm5.f32[0], ctx.xmm6.f32[0], ctx.xmm7.f32[0]
+        );
+    }
+
+    void DumpBytes(uint64_t address)
+    {
+        BYTE* fn = reinterpret_cast<BYTE*>(address);
+        spdlog::info("First 6 bytes at address:");
+        for (int i = 0; i < 6; ++i)
+        {
+            spdlog::info("  0x{:02X}", fn[i]);
+        }
+    }
+#endif
+
+
+    bool IsProcessRunning(const std::filesystem::path& fullPath)
+    {
+        HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+        if (snapshot == INVALID_HANDLE_VALUE)
+        {
+            return false;
+        }
+
+        PROCESSENTRY32W entry {};
+        entry.dwSize = sizeof(entry);
+
+        bool found = false;
+
+        if (Process32FirstW(snapshot, &entry))
+        {
+            do
             {
-                return std::tolower(c);
-            });
-        auto it = std::find(search.begin(), search.end(), str);
-        if (it != search.end())
-            return (int)std::distance(search.begin(), it);
+                HANDLE hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, entry.th32ProcessID);
+                if (hProcess)
+                {
+                    wchar_t buf[MAX_PATH];
+                    DWORD size = MAX_PATH;
+                    if (QueryFullProcessImageNameW(hProcess, 0, buf, &size))
+                    {
+                        if (_wcsicmp(buf, fullPath.c_str()) == 0)
+                        {
+                            found = true;
+                        }
+                    }
+                    CloseHandle(hProcess);
+                    if (found) break;
+                }
+            } while (Process32NextW(snapshot, &entry));
+        }
+
+        CloseHandle(snapshot);
+        return found;
+    }
+
+
+    int findStringInVector(const std::string& str, const std::initializer_list<std::string>& search)
+    {
+        std::string lowerStr = str;
+        std::transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), ::tolower);
+
+        for (auto it = search.begin(); it != search.end(); ++it)
+        {
+            std::string lower = *it;
+            std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
+
+            if (lowerStr == lower)
+                return static_cast<int>(std::distance(search.begin(), it));
+        }
         return 0;
     }
 
+
+
     // Convert an UTF8 string to a wide Unicode String
-    std::wstring utf8_decode(const std::string& str)
+    std::wstring UTF8toWide(const std::string& str)
     {
         if (str.empty()) return std::wstring();
         int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
@@ -246,6 +318,28 @@ namespace Util
         MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
         return wstrTo;
     }
+
+    std::string WideToUTF8(const std::wstring& wstr)
+    {
+        if (wstr.empty()) return {};
+
+        int sizeNeeded = WideCharToMultiByte(
+            CP_UTF8, 0,
+            wstr.data(), (int)wstr.size(),
+            nullptr, 0, nullptr, nullptr
+        );
+
+        std::string result(sizeNeeded, 0);
+        WideCharToMultiByte(
+            CP_UTF8, 0,
+            wstr.data(), (int)wstr.size(),
+            result.data(), sizeNeeded,
+            nullptr, nullptr
+        );
+
+        return result;
+    }
+
 
     std::pair<int, int> GetPhysicalDesktopDimensions()
     {
@@ -337,28 +431,16 @@ namespace Util
         return FALSE;
     }
 
-    bool stringToBool(const std::string& str)
+    std::string GetNameAtIndex(const std::initializer_list<std::string>& list, int index)
     {
-        std::string lowerStr = str;
-        std::transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(),
-            [](unsigned char c)
-            {
-                return std::tolower(c);
-            });
-        if (lowerStr == "true" || lowerStr == "1")
+        if (index >= 0 && index < static_cast<int>(list.size()))
         {
-            return true;
+            auto it = list.begin();
+            std::advance(it, index);
+            return *it;
         }
-        if (lowerStr == "false" || lowerStr == "0")
-        {
-            return false;
-        }
-        // Handle cases where the string is not a recognized boolean representation
-        // For example, throw an exception, return a default value, or log an error.
-        // For simplicity, this example returns false for unrecognized strings.
-        return false;
+        return "Unknown";
     }
-
 
     std::string GetUppercaseNameAtIndex(const std::initializer_list<std::string>& list, int index)
     {
@@ -390,5 +472,164 @@ namespace Util
         }
         return false;
     }
+
+    std::string StripQuotes(const std::string& value)
+    {
+        if (value.size() >= 2 && value.front() == '"' && value.back() == '"')
+        {
+            std::string s = value.substr(1, value.size() - 2);
+            // Handle escaped quotes
+            size_t pos = 0;
+            while ((pos = s.find("\\\"", pos)) != std::string::npos)
+            {
+                s.replace(pos, 2, "\"");
+                pos += 1;
+            }
+            return s;
+        }
+        return value;
+    }
+
+
+    std::string GetParentProcessName()
+    {
+        DWORD currentPid = GetCurrentProcessId();
+        DWORD parentPid = 0;
+
+        HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+        if (snapshot == INVALID_HANDLE_VALUE)
+        {
+            return {};
+        }
+
+        PROCESSENTRY32 pe;
+        pe.dwSize = sizeof(PROCESSENTRY32);
+
+        if (Process32First(snapshot, &pe))
+        {
+            do
+            {
+                if (pe.th32ProcessID == currentPid)
+                {
+                    parentPid = pe.th32ParentProcessID;
+                    break;
+                }
+            } while (Process32Next(snapshot, &pe));
+        }
+        CloseHandle(snapshot);
+
+        if (parentPid == 0)
+        {
+            return {};
+        }
+
+        HANDLE hParent = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, parentPid);
+        if (!hParent)
+        {
+            return {};
+        }
+
+        char exePath[MAX_PATH] = {};
+        DWORD size = sizeof(exePath);
+        if (!QueryFullProcessImageNameA(hParent, 0, exePath, &size))
+        {
+            CloseHandle(hParent);
+            return {};
+        }
+        CloseHandle(hParent);
+
+        std::string name = exePath;
+        size_t pos = name.find_last_of("\\/");
+        if (pos != std::string::npos)
+        {
+            name = name.substr(pos + 1);
+        }
+
+        // lowercase normalize
+        std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+        return name;
+    }
+
+    bool IsProcessParent(const std::string& exeName)
+    {
+        std::string parent = GetParentProcessName();
+        if (parent.empty())
+        {
+            return false;
+        }
+
+        std::string target = exeName;
+        std::transform(target.begin(), target.end(), target.begin(), ::tolower);
+        return parent == target;
+    }
+
+    // Case-insensitive string comparison helper
+    bool iequals(const std::string& a, const std::string& b)
+    {
+        return a.size() == b.size() &&
+            std::equal(a.begin(), a.end(), b.begin(), [](char a, char b)
+                {
+                    return std::tolower(static_cast<unsigned char>(a)) == std::tolower(static_cast<unsigned char>(b));
+                });
+    }
+
+    int compareSemVer(const std::string& a, const std::string& b)
+    {
+        auto parse = [](const std::string& s)
+            {
+                std::vector<int> parts;
+                std::istringstream ss(s);
+                std::string token;
+
+                while (std::getline(ss, token, '.'))
+                {
+                    if (token.empty())
+                    {
+                        parts.push_back(0);
+                        continue;
+                    }
+
+                    size_t i = 0;
+                    while (i < token.size() && std::isdigit(static_cast<unsigned char>(token[i])))
+                        ++i;
+
+                    int value = (i > 0) ? std::stoi(token.substr(0, i)) : 0;
+                    parts.push_back(value);
+
+                    if (i < token.size())
+                    {
+                        // take first suffix letter -> 'a' = 1, 'b' = 2, etc.
+                        char c = static_cast<char>(std::tolower(token[i]));
+                        if (c >= 'a' && c <= 'z')
+                        {
+                            parts.push_back((c - 'a') + 1);
+                        }
+                        else
+                        {
+                            parts.push_back(1); // fallback for weird suffix
+                        }
+                    }
+                }
+
+                return parts;
+            };
+
+        std::vector<int> va = parse(a);
+        std::vector<int> vb = parse(b);
+
+        size_t n = std::max(va.size(), vb.size());
+        va.resize(n, 0);
+        vb.resize(n, 0);
+
+        for (size_t i = 0; i < n; ++i)
+        {
+            if (va[i] < vb[i]) return -1;
+            if (va[i] > vb[i]) return 1;
+        }
+        return 0;
+    }
+
+
+
 
 }

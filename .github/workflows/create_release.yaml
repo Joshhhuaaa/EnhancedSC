@@ -1,5 +1,8 @@
 name: Create Release
 
+env:
+  CI: true
+
 on:
   workflow_dispatch:
 
@@ -28,10 +31,11 @@ jobs:
         VERSION_FILE="src/resources/version.h"
         echo "Reading version from $VERSION_FILE"
 
-        version_line=$(grep '#define VERSION_STRING' "$VERSION_FILE")
-        echo "Found line: $version_line"
+        VERSION_MAJOR=$(grep '#define VERSION_MAJOR' "$VERSION_FILE" | awk '{print $3}')
+        VERSION_MINOR=$(grep '#define VERSION_MINOR' "$VERSION_FILE" | awk '{print $3}')
+        VERSION_PATCH=$(grep '#define VERSION_PATCH' "$VERSION_FILE" | awk '{print $3}')
 
-        version=$(echo "$version_line" | sed -E 's/#define VERSION_STRING +"([^"]+)"/\1/')
+        version="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
         echo "Parsed version: $version"
 
         echo "version=$version" >> $GITHUB_OUTPUT
@@ -39,9 +43,25 @@ jobs:
     - name: Setup and Compile .asi File
       uses: microsoft/setup-msbuild@v1.1
 
+    # Zydis cache setup
+    - name: Get Zydis submodule hash
+      id: zydishash
+      run: |
+        cd external/zydis
+        $hash = git rev-parse HEAD
+        "hash=$hash" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+    - name: Cache Zydis
+      uses: actions/cache@v4
+      with:
+        path: |
+          external/zydis/msvc/bin/ReleaseX64
+          external/zydis/msvc/bin/ReleaseX86
+        key: zydis-${{ runner.os }}-${{ steps.zydishash.outputs.hash }}
+
     - name: Compile .asi File
       run: |
-        msbuild ${{ github.event.repository.name }}.sln -t:rebuild -verbosity:diag -property:Configuration=Release -property:Platform=x86
+        msbuild ${{ github.event.repository.name }}.sln /m -t:rebuild -verbosity:minimal -property:Configuration=Release -property:Platform=x86
         mv Release\${{ github.event.repository.name }}.asi .\_staging\system\scripts\${{ github.event.repository.name }}.asi
 
     - name: Download ASI Loader

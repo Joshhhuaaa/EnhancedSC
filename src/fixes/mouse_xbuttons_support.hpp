@@ -3,8 +3,6 @@
 class MouseXButtonsSupport
 {
 public:
-    void Initialize() const;
+    static void Initialize();
 };
-
-inline MouseXButtonsSupport g_MouseXButtonsSupport;
 

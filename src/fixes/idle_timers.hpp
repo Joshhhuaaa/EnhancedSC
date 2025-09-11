@@ -1,8 +1,7 @@
 #pragma once
 
-class IdleTimers
+class IdleTimers final
 {
 public:
-    void Initialize();
+    static void Initialize();
 };
-inline IdleTimers g_IdleTimers;

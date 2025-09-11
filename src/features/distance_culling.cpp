@@ -1,7 +1,8 @@
+#include "stdafx.h"
 #include "distance_culling.hpp"
-#include <spdlog/spdlog.h>
 #include "common.hpp"
 #include "hook_dlls.hpp"
+#include "logging.hpp"
 
 
 void DistanceCulling::Initialize() const

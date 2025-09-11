@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "hook_dlls.hpp"
 #include "callbacks.h"
 #include "logging.hpp"

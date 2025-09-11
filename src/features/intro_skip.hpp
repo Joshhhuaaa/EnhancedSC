@@ -1,6 +1,6 @@
 #pragma once
 
-class IntroSkip
+class IntroSkip final
 {
 public:
     bool isEnabled;
