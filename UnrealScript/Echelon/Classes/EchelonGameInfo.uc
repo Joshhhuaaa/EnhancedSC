@@ -446,7 +446,7 @@ defaultproperties
     ESam_PresidentialPalace=SMT_Default
     ESam_KolaCell=SMT_Default
     ESam_Vselka=SMT_Default
-    TurnOffDistanceScale=TurnOffDistance_1x
+    TurnOffDistanceScale=TurnOffDistance_4x
     bLODDistance=true
     bPauseOnFocusLoss=true
     bCheckForUpdates=true

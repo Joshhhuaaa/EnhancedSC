@@ -154,6 +154,10 @@ function PostBeginPlay()
 		}
 	}
 
+	// Joshua - Training never had alarms, enabling this to hide their HUD counter
+	if (GetCurrentMapName() == "0_0_2_Training" || GetCurrentMapName() == "0_0_3_Training")
+        bIgnoreAlarmStage = true;
+
 	// Joshua - Cleaner method for one alarm levels like Defense Ministry
 	if (GetCurrentMapName() == "1_2_1DefenseMinistry")
 		bOneAlarmLevel = true;

@@ -21,7 +21,7 @@ var EPCComboControl     m_ComboEffectsQuality;
 
 var EPCComboControl     m_ComboTurnOffDistanceScale;
 var EPCComboControl     m_ComboLODDistance;
-var EPCComboControl     m_ComboPauseOnFocusLoss;
+//var EPCComboControl     m_ComboPauseOnFocusLoss;
 
 var INT                     m_ILabelXPos, m_ILabelWidth, m_ILineItemHeight, m_ITitleLineItemHeight, m_IScrollWidth;
 
@@ -51,47 +51,38 @@ function InitVideoOptions()
 
     AddTitleLineItem();
 
-    // Resolution combo box
     AddComboBoxItem("RESOLUTION", m_ComboResolution);
     InitResolutionCombo(m_ComboResolution, GO);
     AddLineItem();
 
-    // Shadow resolution combo box
     AddComboBoxItem("SHADOWRES", m_ComboShadowResolution);
     InitShadowResolutionCombo(m_ComboShadowResolution, GO);
     AddLineItem();
 
-    // Shadow distance Scale combo box
     AddEnhancedComboBoxItem("TurnOffDistanceScale", m_ComboTurnOffDistanceScale);
     InitTurnOffDistanceScaleCombo(m_ComboTurnOffDistanceScale);
     AddLineItem();
 
-    // Shadow quality combo box
     AddComboBoxItem("SHADOWS", m_ComboShadow);
     InitShadowCombo(m_ComboShadow);
     AddLineItem();
 
-    // Effects quality combo box
     AddComboBoxItem("EFFECTSQUALITY", m_ComboEffectsQuality);
     InitEffectsQualityCombo(m_ComboEffectsQuality, GO);
     AddLineItem();
 
-    // LOD Distance combo box
     AddEnhancedComboBoxItem("LODDistance", m_ComboLODDistance);
     InitLODDistanceCombo(m_ComboLODDistance);
     AddLineItem();
 
-    // Pause on Focus Loss combo box
-    AddEnhancedComboBoxItem("PauseOnFocusLoss", m_ComboPauseOnFocusLoss);
-    InitPauseOnFocusLossCombo(m_ComboPauseOnFocusLoss);
-    AddLineItem();
+    //AddEnhancedComboBoxItem("PauseOnFocusLoss", m_ComboPauseOnFocusLoss);
+    //InitPauseOnFocusLossCombo(m_ComboPauseOnFocusLoss);
+    //AddLineItem();
 
-    // Gamma scroll bar
     AddScrollBarItem("GAMMA", m_GammaScroll);
     InitGammaScrollBar(m_GammaScroll);
     AddLineItem();
 
-    // Brightness scroll bar
     AddScrollBarItem("BRIGHTNESS", m_BrightnessScroll);
     InitBrightnessScrollBar(m_BrightnessScroll);
     AddLineItem();
@@ -254,12 +245,12 @@ function InitLODDistanceCombo(EPCComboControl ComboBox)
     ComboBox.SetSelectedIndex(0);
 }
 
-function InitPauseOnFocusLossCombo(EPCComboControl ComboBox)
-{
-    ComboBox.AddItem(Localize("Graphics","PauseOnFocusLoss_Disable","Localization\\Enhanced"));
-    ComboBox.AddItem(Localize("Graphics","PauseOnFocusLoss_Enable","Localization\\Enhanced"));
-    ComboBox.SetSelectedIndex(0);
-}
+//function InitPauseOnFocusLossCombo(EPCComboControl ComboBox)
+//{
+//    ComboBox.AddItem(Localize("Graphics","PauseOnFocusLoss_Disable","Localization\\Enhanced"));
+//    ComboBox.AddItem(Localize("Graphics","PauseOnFocusLoss_Enable","Localization\\Enhanced"));
+//    ComboBox.SetSelectedIndex(0);
+//}
 
 function Refresh()
 {
@@ -283,8 +274,8 @@ function Refresh()
     if (m_ComboLODDistance != None && EPC != None)
         m_ComboLODDistance.SetSelectedIndex(Clamp(int(EPC.eGame.bLODDistance), 0, m_ComboLODDistance.List.Items.Count() - 1));
 
-    if (m_ComboPauseOnFocusLoss != None && EPC != None)
-        m_ComboPauseOnFocusLoss.SetSelectedIndex(Clamp(int(EPC.eGame.bPauseOnFocusLoss), 0, m_ComboPauseOnFocusLoss.List.Items.Count() - 1));
+    //if (m_ComboPauseOnFocusLoss != None && EPC != None)
+    //    m_ComboPauseOnFocusLoss.SetSelectedIndex(Clamp(int(EPC.eGame.bPauseOnFocusLoss), 0, m_ComboPauseOnFocusLoss.List.Items.Count() - 1));
 
 	m_bModified     = false;
 	m_bFirstRefresh = false;
@@ -307,9 +298,9 @@ function ResetToDefault()
 	GO.UpdateEngineSettings();   
 
     // Enhanced settings
-    EPC.eGame.TurnOffDistanceScale = EPC.eGame.default.TurnOffDistanceScale;
+    EPC.eGame.TurnOffDistanceScale = TurnOffDistance_4x;
     EPC.eGame.bLODDistance = EPC.eGame.default.bLODDistance;
-    EPC.eGame.bPauseOnFocusLoss = EPC.eGame.default.bPauseOnFocusLoss;
+    //EPC.eGame.bPauseOnFocusLoss = EPC.eGame.default.bPauseOnFocusLoss;
     EPC.eGame.SaveEnhancedOptions();
 
 	Refresh(); 
@@ -348,12 +339,12 @@ function SaveOptions()
         default: EPC.eGame.bLODDistance = false; break;
     }
 
-    switch (m_ComboPauseOnFocusLoss.GetSelectedIndex())
-    {
-        case 0: EPC.eGame.bPauseOnFocusLoss = false; break;
-        case 1: EPC.eGame.bPauseOnFocusLoss = true; break;
-        default: EPC.eGame.bPauseOnFocusLoss = false; break;
-    }
+    //switch (m_ComboPauseOnFocusLoss.GetSelectedIndex())
+    //{
+    //    case 0: EPC.eGame.bPauseOnFocusLoss = false; break;
+    //    case 1: EPC.eGame.bPauseOnFocusLoss = true; break;
+    //    default: EPC.eGame.bPauseOnFocusLoss = false; break;
+    //}
 
     EPC.eGame.SaveEnhancedOptions();
 }
@@ -372,7 +363,7 @@ function Notify(UWindowDialogControl C, byte E)
 		case m_ComboEffectsQuality:
         case m_ComboTurnOffDistanceScale:
         case m_ComboLODDistance:
-        case m_ComboPauseOnFocusLoss:
+        //case m_ComboPauseOnFocusLoss:
             m_bModified = true;
             break;
         }
