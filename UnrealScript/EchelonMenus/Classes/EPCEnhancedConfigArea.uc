@@ -36,7 +36,8 @@ var EPCCheckBox             m_bShowHUD,
 
 // Native
 var EPCCheckBox             m_bCheckForUpdates,
-                            m_bSkipIntroVideos;
+                            m_bSkipIntroVideos,
+                            m_bDisableMenuIdleTimer;
 
 var EPCComboControl         m_LevelUnlock;
                             
@@ -79,6 +80,7 @@ function InitEnhancedSettings()
 
     AddCheckBoxItem("CheckForUpdates", m_bCheckForUpdates);
     AddCheckBoxItem("SkipIntroVideos", m_bSkipIntroVideos);
+    AddCheckBoxItem("DisableMenuIdleTimer", m_bDisableMenuIdleTimer);
     AddCheckBoxItem("InteractionPause", m_bInteractionPause);
     AddCheckBoxItem("EnableCheckpoints", m_bEnableCheckpoints);
     AddCheckBoxItem("XboxDifficulty", m_bXboxDifficulty);
@@ -272,7 +274,8 @@ function Notify(UWindowDialogControl C, byte E)
         switch(C)
         {
             case m_bCheckForUpdates:
-            case m_bSkipIntroVideos:        
+            case m_bSkipIntroVideos:
+            case m_bDisableMenuIdleTimer:
             case m_bInteractionPause:
             case m_bEnableCheckpoints:
             case m_bXboxDifficulty:
@@ -365,6 +368,7 @@ function SaveOptions()
     
     EPC.eGame.bCheckForUpdates = m_bCheckForUpdates.m_bSelected;
     EPC.eGame.bSkipIntroVideos = m_bSkipIntroVideos.m_bSelected;
+    EPC.eGame.bDisableMenuIdleTimer = m_bDisableMenuIdleTimer.m_bSelected;
     EPC.bInteractionPause = m_bInteractionPause.m_bSelected;
     EPC.eGame.bEnableCheckpoints = m_bEnableCheckpoints.m_bSelected;
     EPC.eGame.bXboxDifficulty = m_bXboxDifficulty.m_bSelected;
@@ -623,6 +627,7 @@ function ResetToDefault()
 {
     m_bCheckForUpdates.m_bSelected = true;
     m_bSkipIntroVideos.m_bSelected = false;
+    m_bDisableMenuIdleTimer.m_bSelected = false;
     m_bInteractionPause.m_bSelected = false;
     m_bEnableCheckpoints.m_bSelected = true;
     m_bXboxDifficulty.m_bSelected = false;
@@ -681,10 +686,13 @@ function Refresh()
     HUD = EchelonMainHUD(EPC.myHUD);
 
     if (m_bCheckForUpdates != None)
-    m_bCheckForUpdates.m_bSelected = EPC.eGame.bCheckForUpdates;
+        m_bCheckForUpdates.m_bSelected = EPC.eGame.bCheckForUpdates;
 
     if (m_bSkipIntroVideos != None)
-    m_bSkipIntroVideos.m_bSelected = EPC.eGame.bSkipIntroVideos;
+        m_bSkipIntroVideos.m_bSelected = EPC.eGame.bSkipIntroVideos;
+
+    if (m_bDisableMenuIdleTimer != None)
+        m_bDisableMenuIdleTimer.m_bSelected = EPC.eGame.bDisableMenuIdleTimer;
 
     if (m_bInteractionPause != None)
         m_bInteractionPause.m_bSelected = EPC.bInteractionPause;

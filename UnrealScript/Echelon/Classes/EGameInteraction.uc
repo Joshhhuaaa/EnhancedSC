@@ -14,7 +14,7 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 	if( Epc.Level.Pauser != None )
 		return false;
 
-        // Joshua - Track Alt key state for Alt+F4
+	// Joshua - Track Alt key state for Alt+F4
 	if( Key == IK_Alt )
 	{
 		if( Action == IST_Press || Action == IST_Hold )
@@ -407,183 +407,184 @@ state s_GameInteractionMenu
 // Only binds if Middle Mouse is free and Sniper isn't already bound to another key
 function BindSnipe()
 {
-    local byte SnipeKeyByte;
-    local byte MiddleMouseKeyByte;
-    local string BoundAction;
-    local bool bSnipeBound;
-    
-    MiddleMouseKeyByte = 4; // Value for 'MiddleMouse'
-    
-    // Check if already bound to a key
-    MiddleMouseKeyByte = Epc.GetKey("Snipe", false);
-    
-    // Don't consider controller keys (196-215) as bindings
-    if(MiddleMouseKeyByte != 0 && !(MiddleMouseKeyByte >= 196 && MiddleMouseKeyByte <= 215))
-    {
-        bSnipeBound = true;
-    }
-    
-    if(!bSnipeBound)
-    {
-        BoundAction = Epc.GetActionKey(MiddleMouseKeyByte);
-        
-        if(BoundAction == "" || BoundAction == "None")
-        {
-            Epc.SetKey("MiddleMouse Snipe", "");
-        }
-    }
+	local byte SnipeKeyByte;
+	local byte MiddleMouseKeyByte;
+	local string BoundAction;
+	local bool bSnipeBound;
+
+	MiddleMouseKeyByte = 4; // Value for 'MiddleMouse'
+
+	// Check if already bound to a key
+	MiddleMouseKeyByte = Epc.GetKey("Snipe", false);
+
+	// Don't consider controller keys (196-215) as bindings
+	if(MiddleMouseKeyByte != 0 && !(MiddleMouseKeyByte >= 196 && MiddleMouseKeyByte <= 215))
+	{
+		bSnipeBound = true;
+	}
+
+	if(!bSnipeBound)
+	{
+		BoundAction = Epc.GetActionKey(MiddleMouseKeyByte);
+
+		if(BoundAction == "" || BoundAction == "None")
+		{
+			Epc.SetKey("MiddleMouse Snipe", "");
+		}
+	}
 }
 
 // Joshua - Function to bind Whistle to V key
 // Only binds if V is free and Whistle isn't already bound to another key
 function BindWhistle()
 {
-    local byte WhistleKeyByte;
-    local byte VKeyByte;
-    local string BoundAction;
-    local bool bWhistleBound;
-    
-    VKeyByte = 86; // Value for 'V'
-    
-    // Check if already bound to a key
-    WhistleKeyByte = Epc.GetKey("Whistle", false);
-    
-    // Don't consider controller keys (196-215) as bindings
-    if(WhistleKeyByte != 0 && !(WhistleKeyByte >= 196 && WhistleKeyByte <= 215))
-    {
-        bWhistleBound = true;
-    }
-    
-    if(!bWhistleBound)
-    {
-        BoundAction = Epc.GetActionKey(VKeyByte);
-        
-        if(BoundAction == "" || BoundAction == "None")
-        {
-            Epc.SetKey("V Whistle", "");
-        }
-    }
+	local byte WhistleKeyByte;
+	local byte VKeyByte;
+	local string BoundAction;
+	local bool bWhistleBound;
+
+	VKeyByte = 86; // Value for 'V'
+
+	// Check if already bound to a key
+	WhistleKeyByte = Epc.GetKey("Whistle", false);
+
+	// Don't consider controller keys (196-215) as bindings
+	if(WhistleKeyByte != 0 && !(WhistleKeyByte >= 196 && WhistleKeyByte <= 215))
+	{
+		bWhistleBound = true;
+	}
+
+	if(!bWhistleBound)
+	{
+		BoundAction = Epc.GetActionKey(VKeyByte);
+
+		if(BoundAction == "" || BoundAction == "None")
+		{
+			Epc.SetKey("V Whistle", "");
+		}
+	}
 }
 
 // Joshua - Function to bind ToggleHUD to F1 key
 // Only binds if F1 is free and ToggleHUD isn't already bound to another key
 function BindToggleHUD()
 {
-    local byte ToggleHUDKeyByte;
-    local byte F1KeyByte;
-    local string BoundAction;
-    local bool bToggleHUDBound;
-    
-    F1KeyByte = 112; // Value for 'F1'
-    
-    // Check if already bound to a key
-    ToggleHUDKeyByte = Epc.GetKey("ToggleHUD", false);
-    
-    // Don't consider controller keys (196-215) as bindings
-    if(ToggleHUDKeyByte != 0 && !(ToggleHUDKeyByte >= 196 && ToggleHUDKeyByte <= 215))
-    {
-        bToggleHUDBound = true;
-    }
-    
-    if(!bToggleHUDBound)
-    {
-        BoundAction = Epc.GetActionKey(F1KeyByte);
-        
-        if(BoundAction == "" || BoundAction == "None")
-        {
-            Epc.SetKey("F1 ToggleHUD", "");
-        }
-    }
+	local byte ToggleHUDKeyByte;
+	local byte F1KeyByte;
+	local string BoundAction;
+	local bool bToggleHUDBound;
+
+	F1KeyByte = 112; // Value for 'F1'
+
+	// Check if already bound to a key
+	ToggleHUDKeyByte = Epc.GetKey("ToggleHUD", false);
+
+	// Don't consider controller keys (196-215) as bindings
+	if(ToggleHUDKeyByte != 0 && !(ToggleHUDKeyByte >= 196 && ToggleHUDKeyByte <= 215))
+	{
+		bToggleHUDBound = true;
+	}
+
+	if(!bToggleHUDBound)
+	{
+	BoundAction = Epc.GetActionKey(F1KeyByte);
+
+		if(BoundAction == "" || BoundAction == "None")
+		{
+			Epc.SetKey("F1 ToggleHUD", "");
+		}
+	}
 }
 
 // Joshua - Function to bind PreviousGadget to Mouse 4 (UnknownC1) key
 // Only binds if Mouse 4 is free and PreviousGadget isn't already bound to another key
 function BindPreviousGadget()
 {
-    local byte ToggleHUDKeyByte;
-    local byte Mouse4KeyByte;
-    local string BoundAction;
-    local bool bPreviousGadgetBound;
-    
-    Mouse4KeyByte = 193; // Value for 'UnknownC1' (Mouse 4)
-    
-    // Check if already bound to a key
-    Mouse4KeyByte = Epc.GetKey("PreviousGadget", false);
-    
-    // Don't consider controller keys (196-215) as bindings
-    if(Mouse4KeyByte != 0 && !(Mouse4KeyByte >= 196 && Mouse4KeyByte <= 215))
-    {
-        bPreviousGadgetBound = true;
-    }
-    
-    if(!bPreviousGadgetBound)
-    {
-        BoundAction = Epc.GetActionKey(Mouse4KeyByte);
-        
-        if(BoundAction == "" || BoundAction == "None")
-        {
-            Epc.SetKey("UnknownC1 PreviousGadget", "");
-        }
-    }
+	local byte ToggleHUDKeyByte;
+	local byte Mouse4KeyByte;
+	local string BoundAction;
+	local bool bPreviousGadgetBound;
+
+	Mouse4KeyByte = 193; // Value for 'UnknownC1' (Mouse 4)
+
+	// Check if already bound to a key
+	Mouse4KeyByte = Epc.GetKey("PreviousGadget", false);
+
+	// Don't consider controller keys (196-215) as bindings
+	if(Mouse4KeyByte != 0 && !(Mouse4KeyByte >= 196 && Mouse4KeyByte <= 215))
+	{
+		bPreviousGadgetBound = true;
+	}
+
+	if(!bPreviousGadgetBound)
+	{
+		BoundAction = Epc.GetActionKey(Mouse4KeyByte);
+
+		if(BoundAction == "" || BoundAction == "None")
+		{
+			Epc.SetKey("UnknownC1 PreviousGadget", "");
+		}
+	}
 }
 
 // Joshua - Function to bind NextGadget to Mouse 5 (UnknownC2) key
 // Only binds if Mouse 5 is free and NextGadget isn't already bound to another key
 function BindNextGadget()
 {
-    local byte ToggleHUDKeyByte;
-    local byte Mouse5KeyByte;
-    local string BoundAction;
-    local bool bNextGadgetBound;
-    
-    Mouse5KeyByte = 194; // Value for 'UnknownC2' (Mouse 5)
-    
-    // Check if already bound to a key
-    Mouse5KeyByte = Epc.GetKey("NextGadget", false);
-    
-    // Don't consider controller keys (196-215) as bindings
-    if(Mouse5KeyByte != 0 && !(Mouse5KeyByte >= 196 && Mouse5KeyByte <= 215))
-    {
-        bNextGadgetBound = true;
-    }
-    
-    if(!bNextGadgetBound)
-    {
-        BoundAction = Epc.GetActionKey(Mouse5KeyByte);
-        
-        if(BoundAction == "" || BoundAction == "None")
-        {
-            Epc.SetKey("UnknownC2 NextGadget", "");
-        }
-    }
+	local byte ToggleHUDKeyByte;
+	local byte Mouse5KeyByte;
+	local string BoundAction;
+	local bool bNextGadgetBound;
+
+	Mouse5KeyByte = 194; // Value for 'UnknownC2' (Mouse 5)
+
+	// Check if already bound to a key
+	Mouse5KeyByte = Epc.GetKey("NextGadget", false);
+
+	// Don't consider controller keys (196-215) as bindings
+	if(Mouse5KeyByte != 0 && !(Mouse5KeyByte >= 196 && Mouse5KeyByte <= 215))
+	{
+		bNextGadgetBound = true;
+	}
+
+	if(!bNextGadgetBound)
+	{
+		BoundAction = Epc.GetActionKey(Mouse5KeyByte);
+
+		if(BoundAction == "" || BoundAction == "None")
+		{
+			Epc.SetKey("UnknownC2 NextGadget", "");
+		}
+	}
 }
 
 // Joshua - Function to bind PlayerStats to Tab key
 // Bind ToggleStats to Tab key if it's not already bound elsewhere
 function BindPlayerStats()
 {
-    local byte PlayerStatsKeyByte;
-    local byte TabKeyByte;
-    local string BoundAction;
-    local bool bToggleStatsBound;
-    
-    TabKeyByte = 9; // Value for 'Tab'
-    
-    // Check if already bound to a key
-    PlayerStatsKeyByte = Epc.GetKey("PlayerStats", false);
-    
-    // Don't consider controller keys (196-215) as bindings
-    if(PlayerStatsKeyByte != 0 && !(PlayerStatsKeyByte >= 196 && PlayerStatsKeyByte <= 215))
-    {
-        bToggleStatsBound = true;
-    }
-    
-    if(!bToggleStatsBound)
-    {        BoundAction = Epc.GetActionKey(TabKeyByte);
-        
-        if(BoundAction == "" || BoundAction == "None")
-        {
-            Epc.SetKey("Tab PlayerStats", "");
-        }
-    }
+	local byte PlayerStatsKeyByte;
+	local byte TabKeyByte;
+	local string BoundAction;
+	local bool bToggleStatsBound;
+
+	TabKeyByte = 9; // Value for 'Tab'
+
+	// Check if already bound to a key
+	PlayerStatsKeyByte = Epc.GetKey("PlayerStats", false);
+
+	// Don't consider controller keys (196-215) as bindings
+	if(PlayerStatsKeyByte != 0 && !(PlayerStatsKeyByte >= 196 && PlayerStatsKeyByte <= 215))
+	{
+		bToggleStatsBound = true;
+	}
+
+	if(!bToggleStatsBound)
+	{
+		BoundAction = Epc.GetActionKey(TabKeyByte);
+
+		if(BoundAction == "" || BoundAction == "None")
+		{
+			Epc.SetKey("Tab PlayerStats", "");
+		}
+	}
 }

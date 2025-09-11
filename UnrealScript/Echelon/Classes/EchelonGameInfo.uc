@@ -203,6 +203,7 @@ var(Enhanced) config ETurnOffDistanceScale TurnOffDistanceScale;
 
 // Native Variables
 var(Enhanced) config bool bSkipIntroVideos;
+var(Enhanced) config bool bDisableMenuIdleTimer;
 var(Enhanced) config bool bLODDistance;
 var(Enhanced) config bool bPauseOnFocusLoss;
 var(Enhanced) config bool bCheckForUpdates;

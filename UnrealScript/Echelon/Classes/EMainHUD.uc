@@ -84,6 +84,9 @@ function FullInventory()
 			return;
 		}
 
+		// Joshua - Necessary to reset keybind if pausing in weapon mode
+		EPlayerController(Owner).SetKey("Joy1 Interaction", "");
+
 		EPlayerController(Owner).bStopRenderWorld = true;
 		PauseSound();
 		SaveState();
