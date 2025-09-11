@@ -29,9 +29,6 @@
     <ClCompile Include="src\resources\hook_dlls.cpp">
       <Filter>APIs</Filter>
     </ClCompile>
-    <ClCompile Include="src\fixes\idle_timers.cpp">
-      <Filter>WIP</Filter>
-    </ClCompile>
     <ClCompile Include="src\features\custom_saves.cpp">
       <Filter>Features</Filter>
     </ClCompile>
@@ -85,6 +82,9 @@
     </ClCompile>
     <ClCompile Include="src\resources\stdafx.cpp">
       <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fixes\idle_timers.cpp">
+      <Filter>Fixes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

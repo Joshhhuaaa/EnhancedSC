@@ -88,6 +88,7 @@ namespace
 
 void MouseXButtonsSupport::Initialize()
 {
+    spdlog::info("Initializing Mouse XButtons Support...");
     uintptr_t baseAddress = reinterpret_cast<uintptr_t>(g_GameDLLs.WinDrv);
     
     sh_ViewportWndProc = safetyhook::create_inline(
@@ -99,4 +100,5 @@ void MouseXButtonsSupport::Initialize()
         baseAddress + UWindowsViewport_CauseInputEvent_OFFSET,
         &OnUWindowsViewport_CauseInputEvent
     );
+    spdlog::info("Mouse XButtons Support initialized.");
 }

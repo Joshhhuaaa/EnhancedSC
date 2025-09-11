@@ -8,18 +8,20 @@
 
 void IdleTimers::Initialize()
 {
-
-    if (uint8_t* IdleTimerResult = Memory::PatternScan(g_GameDLLs.Engine, "DF E0 25 ?? ?? ?? ?? 75 ?? A1", "Idle Timer"))
+    if (!g_IdleTimers.bDisableIdleTimer)
     {
-        static SafetyHookMid IdleTimerHook;
-        IdleTimerHook = safetyhook::create_mid(IdleTimerResult, [](SafetyHookContext& ctx)
-            {
-                // After fnstsw ax, eax contains the FPU status word in ax.
-                // The next instruction is: and eax, 4100h
-                // To force the jump, set eax to any nonzero value with 0x4100 bits set.
-                ctx.eax = 0x4100;
-                spdlog::info("Idle Timer: Idle timer override applied.");
-            });
-        LOG_HOOK(IdleTimerHook, "Idle Timer");
+        return;
+    }
+    spdlog::info("IdleTimers: Initializing...");
+
+    if (uint8_t* IdleTimerResult = Memory::PatternScan(g_GameDLLs.EchelonHUD, "D8 1D ?? ?? ?? ?? DF E0 25 ?? ?? ?? ?? 75 ?? A1", "Demo Timer"))
+    {
+        uintptr_t baseAddress = reinterpret_cast<uintptr_t>(g_GameDLLs.EchelonHUD);
+        float* target = reinterpret_cast<float*>(baseAddress + 0x3D8A4);
+        DWORD oldProtect;
+        VirtualProtect(target, sizeof(float), PAGE_EXECUTE_READWRITE, &oldProtect);
+        *target = std::numeric_limits<float>::max();
+        VirtualProtect(target, sizeof(float), oldProtect, &oldProtect);
+        spdlog::info("IdleTimers: Patched demo idle timer.");
     }
 }
