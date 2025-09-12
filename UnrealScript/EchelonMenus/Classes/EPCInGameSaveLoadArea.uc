@@ -115,7 +115,7 @@ function FillListBox()
     m_FileListBox.Clear();
     //Filling Save Games
     FileManager = EPCMainMenuRootWindow(Root).m_FileManager;
-    Path = "..\\Save\\"$PlayerInfo.PlayerName$"\\*.en1"; // Joshua - Enhanced save games are not compatible, changing extension to avoid confusion
+    Path = "..\\Save\\"$PlayerInfo.PlayerName$"\\*.en2"; // Joshua - Enhanced save games are not compatible, changing extension to avoid confusion
     FileManager.DetailedFindFiles(Path);
 
     for(i=0; i< FileManager.m_pDetailedFileList.Length ; i++)
@@ -283,7 +283,7 @@ function Load()
         if(m_FileListBox.SelectedItem != None)
         {
 			// Added extension (.sav ) (YM)
-            Error = GetPlayerOwner().ConsoleCommand("LoadGame Filename="$EPCListBoxItem(m_FileListBox.SelectedItem).Caption$".en1"); // Joshua - Enhanced save games are not compatible, changing extension to avoid confusion
+            Error = GetPlayerOwner().ConsoleCommand("LoadGame Filename="$EPCListBoxItem(m_FileListBox.SelectedItem).Caption$".en2"); // Joshua - Enhanced save games are not compatible, changing extension to avoid confusion
 			noLoadMap = true;
         }
         else

@@ -296,9 +296,9 @@ Begin:
         {
             Sleep(6.0);
             if (EPC.myHUD.IsPlayerGameOver() && Epc.CheckpointLevel == GetCurrentMapName())
-                ConsoleCommand("LOADGAME FILENAME=" $ Localize("Common", "CheckpointName", "Localization\\Enhanced") $ ".en1");
+                ConsoleCommand("LOADGAME FILENAME=" $ Localize("Common", "CheckpointName", "Localization\\Enhanced") $ ".en2");
             else
-                ConsoleCommand("LOADGAME FILENAME=" $ Localize("HUD", "AUTOSAVENAME", "Localization\\HUD") $ ".en1");
+                ConsoleCommand("LOADGAME FILENAME=" $ Localize("HUD", "AUTOSAVENAME", "Localization\\HUD") $ ".en2");
         }
     }
 }
