@@ -4,7 +4,7 @@
 - Added Mission Statistics that can be viewed while playing a mission and upon completing a mission.
 - Added a new difficulty called Elite, which removes starting ammo unless required, reduces initial health, disables saves, and includes other level-specific changes.
 - Added a Permadeath Mode, where failing a mission deletes your profile.
-- Doors can now be opened while crouched or carrying a body, using animations backported from Pandora Tomorrow.
+- [@Hamzaxx360](https://github.com/Hamzaxx370): Doors can now be opened while crouched or carrying a body, using animations backported from Pandora Tomorrow.
 - Added Open Door Stealth as a separate door interaction, similar to Chaos Theory.
 - Added the option to use a new door interaction system with built-in Lock Pick, Disposable Pick, and Optic Cable in the interaction box.
 - Improved the Optic Cable's enter and exit sounds, restoring the missing exit sound on PC version.
@@ -56,7 +56,7 @@
 - Added an option to toggle Back to Wall peek when weapon is equipped.
 - Added an option to toggle the inventory, so holding the key is no longer required, similar to Pandora Tomorrow.
 - Added an option to assign a keybind to toggle the HUD on or off.
-- Added support for Mouse 4 and Mouse 5 (side buttons).
+- [@Shryder](https://github.com/shryder): Added support for Mouse 4 and Mouse 5 (side buttons).
 - Added support for using the NumPad on keypads.
 - Sniper mode now uses a dedicated keybind, similar to later Splinter Cell games, instead of being triggered by the Accelerate key.
 - Added dedicated keybinds to cycle through the inventory (Previous Weapon and Next Weapon), similar to Pandora Tomorrow.
@@ -69,24 +69,23 @@
 
 ### Miscellaneous
 - Added an "Enhanced" tab in the Settings menu for configuring Enhanced settings.
-- Added an option to increase the level of detail (LOD) distance significantly, improving the quality of meshes at greater distances.
+- [@Afevis](https://github.com/ShizCalev): Added an option to increase the level of detail (LOD) distance significantly, improving the quality of meshes at greater distances.
 - Added an option to increase the Shadow Distance by up to 8x.
-- Added an option to automatically check for updates.
-- Added an option to skip intros.
-- Added an option to disable inactivity videos.
-- Restored EAX support, which was disabled in the official v1.3 patch used by the GOG and Ubisoft Connect versions of the game.
-- Restored numerous textures that were previously downscaled to their full resolution.
+- [@Afevis](https://github.com/ShizCalev): Added an option to automatically check for updates.
+- [@Afevis](https://github.com/ShizCalev): Added an option to skip intros.
+- [@Afevis](https://github.com/ShizCalev): Added an option to disable inactivity videos.
+- [@Afevis](https://github.com/ShizCalev): Restored EAX support, which was disabled in the official v1.3 patch used by the GOG and Ubisoft Connect versions of the game.
+- [@TGP482](https://www.youtube.com/@TGP482): Restored numerous textures that were previously downscaled to their full resolution.
 - All mission parts now require a keypress to continue after loading, not just the initial part.
 - Save games now use a new file extension for Enhanced to prevent incompatible saves from the original game from being displayed.
 - Fixed a bug in the PC version where inactivity videos couldn't be skipped.
 - Restored the Wall Mine gadget video on the OPSAT, which was accidentally left out of the PC release.
 - The "Mission Complete" screen now requires a keypress to continue, giving players the chance to view their Mission Statistics without a timer.
-- Increased the inactivity timer from 100 seconds to 300 seconds before inactivity videos start playing.
 - Added a debug command `FixCam` that locks the camera in place, similar to the `fixecam` command in Chaos Theory.
 - Localization fixes, including typo corrections and consistency improvements.
 - Includes experimental versions of Nuclear Power Plant and Severonickel that can be played. Both cancelled levels currently lack level-specific audio due to incompatible Xbox sound files.
-- Includes newly recreated loading screens by [cazzhmir](https://www.youtube.com/@cazzhmir) to improve the accuracy of the story.
-- Includes updated cutscene that improve the storytelling for Kalinatek, along with two new cutscenes for Nuclear Power Plant and Severonickel.
+- [@cazzhmir](https://www.youtube.com/@cazzhmir): Includes newly recreated loading screens to improve the accuracy of the story.
+- [@cazzhmir](https://www.youtube.com/@cazzhmir): Includes updated cutscene that improve the storytelling for Kalinatek, along with two new cutscenes for Nuclear Power Plant and Severonickel.
 - [dgVoodoo2](https://github.com/dege-diosg/dgVoodoo2) is included to restore Shadow Buffer rendering and set a 60 FPS cap. The 60 FPS cap is necessary to prevent [issues](https://youtu.be/X3tuerrwhnw) with AI pathing and SoftBody physics that can occur at higher frame rates. 
 - [ThirteenAG Widescreen Fix](https://github.com/ThirteenAG/WidescreenFixesPack) is included for widescreen support.
 - [Xidi](https://github.com/samuelgr/Xidi) is included to improve compatibility for XInput-based controllers.
@@ -177,3 +176,4 @@
   - Fixed a StaticMesh that was clipping through a ceiling.
   - Added textures for several StaticMeshes that had none assigned.
   - Temporarily disabled speech events to fix issues with scripts failing due to missing audio.
+
