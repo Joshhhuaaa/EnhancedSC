@@ -638,7 +638,7 @@ function ResetToDefault()
     m_bF2000ZoomLevels.m_bSelected = true;
     m_bLaserMicZoomLevels.m_bSelected = true;
     m_bBurstFire.m_bSelected = true;
-    m_bPS2FN7Accuracy.m_bSelected = true;
+    m_bPS2FN7Accuracy.m_bSelected = false;
     m_bNewDoorInteraction.m_bSelected = true;
     m_bRandomizeLockpick.m_bSelected = true;
     m_bOpticCableVisions.m_bSelected = true;
