@@ -21,6 +21,8 @@ namespace Memory
 
     std::string GetModuleVersion(HMODULE module);
 
+    std::string GetModuleName(HMODULE hMod, bool filenameOnly);
+
     std::uint8_t* PatternScanSilent(void* module, const char* signature);
 
     std::uint8_t* PatternScan(void* module, const char* signature, const char* prefix);
