@@ -38,6 +38,25 @@ namespace Memory
         return std::to_string(year) + "-" + std::to_string(month) + "-" + std::to_string(day);
     }
 
+
+
+    std::string GetModuleName(const HMODULE hMod, const bool filenameOnly = true)
+    {
+        char path[MAX_PATH];
+        DWORD len = GetModuleFileNameA(hMod, path, MAX_PATH);
+        if (len == 0)
+        {
+            return {};
+        }
+
+        if (filenameOnly)
+        {
+            return std::filesystem::path(path).filename().string();
+        }
+
+        return std::string(path, len);
+    }
+
     // CSGOSimple's pattern scan
     // https://github.com/OneshotGH/CSGOSimple-master/blob/master/CSGOSimple/helpers/utils.cpp
     std::uint8_t* PatternScanSilent(void* module, const char* signature)
@@ -96,7 +115,9 @@ namespace Memory
         else
         {
 
+            spdlog::error("---------- PATTERN SCAN FAILURE ----------");
             spdlog::error("{}: Pattern scan failed.", prefix);
+            spdlog::error("---------- PATTERN SCAN FAILURE ----------");
         }
         return foundPattern;
     }
