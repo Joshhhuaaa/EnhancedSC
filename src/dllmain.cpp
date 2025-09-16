@@ -22,6 +22,7 @@
 
 //Warnings
 #include "asi_loader_checks.hpp"
+#include "steam_deck_features.hpp"
 #include "submodule_initiailization.hpp"
 #include "version_checker.hpp"
 
@@ -83,6 +84,7 @@ void InitializeSubsystems()
     INITIALIZE(Init_ASILoaderSanityChecks());
     if (Util::iequals(sExeName, "Splintercell.exe"))
     {
+        INITIALIZE(SteamDeckFeatures::Toggle());
         INITIALIZE(g_GameDLLs.Initialize());
         /* At this point Core, Engine, GeometricEvent, and Window dll's are hooked.
         Things reliant on binkw32, D3DDrv, DareAudio, eax, Echelon, EchelonHUD, EchelonIngredient, EchelonMenus, Editor, SNDdbgV, SNDDSound3DDLL_VBR, SNDext_VBR, UWindow, and WinDrv

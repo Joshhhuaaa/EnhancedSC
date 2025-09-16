@@ -86,6 +86,9 @@
     <ClCompile Include="src\fixes\idle_timers.cpp">
       <Filter>Fixes</Filter>
     </ClCompile>
+    <ClCompile Include="src\features\steam_deck_features.cpp">
+      <Filter>Features</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\features\intro_skip.hpp">
@@ -164,6 +167,9 @@
       <Filter>Utility\Headers</Filter>
     </ClInclude>
     <ClInclude Include="src\features\dpad_keybinds.hpp">
+      <Filter>Features\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\features\steam_deck_features.hpp">
       <Filter>Features\Headers</Filter>
     </ClInclude>
   </ItemGroup>
