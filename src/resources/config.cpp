@@ -173,6 +173,9 @@ void Config::Read()
 
     bConsoleUpdateNotifications = bShouldCheckForUpdates;
 
+    bool bSteamDeckMode = false;
+    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bSteamDeckMode", bSteamDeckMode); // Not actually used, just to verify config key exists.
+
 
     ConfigLogger::Flush();
 }
