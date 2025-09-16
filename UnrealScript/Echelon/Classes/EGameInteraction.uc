@@ -414,10 +414,10 @@ function BindSnipe()
 	MiddleMouseKeyByte = 4; // Value for 'MiddleMouse'
 
 	// Check if already bound to a key
-	MiddleMouseKeyByte = Epc.GetKey("Snipe", false);
+	SnipeKeyByte = Epc.GetKey("Snipe", false);
 
 	// Don't consider controller keys (196-215) as bindings
-	if(MiddleMouseKeyByte != 0 && !(MiddleMouseKeyByte >= 196 && MiddleMouseKeyByte <= 215))
+	if(SnipeKeyByte != 0 && !(SnipeKeyByte >= 196 && SnipeKeyByte <= 215))
 	{
 		bSnipeBound = true;
 	}
@@ -486,7 +486,7 @@ function BindToggleHUD()
 
 	if(!bToggleHUDBound)
 	{
-	BoundAction = Epc.GetActionKey(F1KeyByte);
+		BoundAction = Epc.GetActionKey(F1KeyByte);
 
 		if(BoundAction == "" || BoundAction == "None")
 		{
@@ -495,64 +495,64 @@ function BindToggleHUD()
 	}
 }
 
-// Joshua - Function to bind PreviousGadget to Mouse 4 (UnknownC1) key
-// Only binds if Mouse 4 is free and PreviousGadget isn't already bound to another key
+// Joshua - Function to bind PreviousGadget to 4 key
+// Only binds if 4 is free and PreviousGadget isn't already bound to another key
 function BindPreviousGadget()
 {
-	local byte ToggleHUDKeyByte;
-	local byte Mouse4KeyByte;
+	local byte PreviousGadgetKeyByte;
+	local byte Num4KeyByte;
 	local string BoundAction;
 	local bool bPreviousGadgetBound;
 
-	Mouse4KeyByte = 193; // Value for 'UnknownC1' (Mouse 4)
+	Num4KeyByte = 52; // Value for '4'
 
 	// Check if already bound to a key
-	Mouse4KeyByte = Epc.GetKey("PreviousGadget", false);
+	PreviousGadgetKeyByte = Epc.GetKey("PreviousGadget", false);
 
 	// Don't consider controller keys (196-215) as bindings
-	if(Mouse4KeyByte != 0 && !(Mouse4KeyByte >= 196 && Mouse4KeyByte <= 215))
+	if(PreviousGadgetKeyByte != 0 && !(PreviousGadgetKeyByte >= 196 && PreviousGadgetKeyByte <= 215))
 	{
 		bPreviousGadgetBound = true;
 	}
 
 	if(!bPreviousGadgetBound)
 	{
-		BoundAction = Epc.GetActionKey(Mouse4KeyByte);
+		BoundAction = Epc.GetActionKey(Num4KeyByte);
 
 		if(BoundAction == "" || BoundAction == "None")
 		{
-			Epc.SetKey("UnknownC1 PreviousGadget", "");
+			Epc.SetKey("4 PreviousGadget", "");
 		}
 	}
 }
 
-// Joshua - Function to bind NextGadget to Mouse 5 (UnknownC2) key
-// Only binds if Mouse 5 is free and NextGadget isn't already bound to another key
+// Joshua - Function to bind NextGadget to 5 key
+// Only binds if 5 is free and NextGadget isn't already bound to another key
 function BindNextGadget()
 {
-	local byte ToggleHUDKeyByte;
-	local byte Mouse5KeyByte;
+	local byte NextGadgetKeyByte;
+	local byte Num5KeyByte;
 	local string BoundAction;
 	local bool bNextGadgetBound;
 
-	Mouse5KeyByte = 194; // Value for 'UnknownC2' (Mouse 5)
+	Num5KeyByte = 53; // Value for '5'
 
 	// Check if already bound to a key
-	Mouse5KeyByte = Epc.GetKey("NextGadget", false);
+	NextGadgetKeyByte = Epc.GetKey("NextGadget", false);
 
 	// Don't consider controller keys (196-215) as bindings
-	if(Mouse5KeyByte != 0 && !(Mouse5KeyByte >= 196 && Mouse5KeyByte <= 215))
+	if(NextGadgetKeyByte != 0 && !(NextGadgetKeyByte >= 196 && NextGadgetKeyByte <= 215))
 	{
 		bNextGadgetBound = true;
 	}
 
 	if(!bNextGadgetBound)
 	{
-		BoundAction = Epc.GetActionKey(Mouse5KeyByte);
+		BoundAction = Epc.GetActionKey(Num5KeyByte);
 
 		if(BoundAction == "" || BoundAction == "None")
 		{
-			Epc.SetKey("UnknownC2 NextGadget", "");
+			Epc.SetKey("5 NextGadget", "");
 		}
 	}
 }
