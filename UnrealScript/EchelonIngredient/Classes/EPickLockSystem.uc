@@ -236,8 +236,11 @@ state s_Picked
 		PlaySound(PLI.LockPick.OpenLock, SLOT_Interface);
 		PlayAnim('Open');
 
-		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("LockPicked");
+ 		// Joshua - Hack to prevent interrupting the animation
+		EPlayerController(PickLocker).bStopInput = true;
 
+		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("LockPicked");
+		
 		// Unlock door as soon as picked
 		PLI.Interact(PickLocker);
 	}
@@ -245,6 +248,9 @@ state s_Picked
 	function AnimEnd( optional int Channel )
 	{
 		PLI.PostInteract(PickLocker);
+		
+		// Joshua - Hack to prevent interrupting the animation
+		EPlayerController(PickLocker).bStopInput = false;
 	}
 }
 

@@ -11,9 +11,12 @@ class Enhanced extends Actor;
 
 // Joshua - Uncomment to generate a new HUD_Enhanced.utx with modified or new textures
 // Textures must be extracted into Textures\HUD_Enhanced
+
 /*
-#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Alarm.dds" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Alarm" MIPS=1
-#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\AlarmBackground.dds" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="AlarmBackground" MIPS=1
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Alarm.dds" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Alarm" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\AlarmBackground.dds" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="AlarmBackground" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Discord.dds" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Discord" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Discord_dis.dds" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Discord_dis" MIPS=0
 
 #exec SAVEPACKAGE FILE=..\Textures\HUD_Enhanced.utx PACKAGE=HUD_Enhanced
 */

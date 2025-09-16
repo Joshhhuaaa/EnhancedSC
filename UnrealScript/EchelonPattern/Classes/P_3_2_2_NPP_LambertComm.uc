@@ -47,64 +47,80 @@ function InitPattern()
             Characters[1] = P.controller;
         if(P.name == 'ECIABureaucratF0')
             Characters[2] = P.controller;
-    }
-
-    
-    ForEach DynamicActors(class'EGamePlayObject', EGO)
-    {
-        if (EGO.CollisionPrimitive == StaticMesh(DynamicLoadObject("EGO_OBJ.GenObjGO.General_GlasseB00", class'StaticMesh')))
+        if(P.Name == 'EMercenaryTechnician0')
         {
-            EGO.DamagedMeshes[0].Percent = 0.0;
-            //EGO.DamagedMeshes[0].StaticMesh
-            //EGO.DamagedMeshes[0].CollPrimMesh = None;
+            Characters[3] = P.controller;
+            EAIController(Characters[3]).bAllowKnockout = true;
         }
-
-        // Joshua - Destroying the concussion grenade (canceled gadget) to prevent a crash
-        if(EGO.name == 'EConcussionGrenade0')
-            EGO.Destroy();
-
-        // Joshua - Disposable pick was assigned the incorrect mesh
-        if(EGO.name == 'EDisposablePick0')
+        if(P.Name == 'EMercenaryTechnician1')
         {
-            EGO.SetStaticMesh(StaticMesh'EMeshIngredient.Item.DisposablePick');
-            EGO.SetLocation(EGO.Location + vect(0,0,-13.5));
-        }
-
-        // Joshua - Door nametag placement fix
-        if(EGO.name == 'EGameplayObject18' && !bInit)
-        {
-            // This is not working properly yet location remains static instead attached to door
-            // EGO.SetLocation(vect(13971.016602, -6400.000000, 984.000000));
-            // Going to hide the object for now.
-            EGO.bHidden = true;
-            // Location=(X=13971.016602,Y=-6315.776367,Z=984.000000)
+            Characters[4] = P.controller;
+            EAIController(Characters[4]).bAllowKnockout = true;
         }
     }
 
-    ForEach AllActors(class'Actor', A)
-    {
-        if(A.name == 'ELight48' || A.name == 'ELight56')
-            A.bAffectOwnZoneOnly=true;
-
-        if(A.name == 'ELight55')
-            A.LightEffect=LE_ESpotShadow;
-
-        if(A.name == 'ELight117')
-            A.LightEffect=LE_ESpotShadowDistAtten;
-    }
-
-    ForEach AllActors(class'Mover', M)
-    {
-        if (M.name == 'ESlidingDoor3')
-            M.KeyPos[1]=(vect(0,112,0)); // Joshua - Originally, 144, lowered to 128.
-
-        if (M.name == 'ESlidingDoor10')
-            M.KeyPos[1]=(vect(0,0,0)); //0,-144,0 // Joshua - Going to keep this mover static since it clips through wall
-    }
-
-    // Joshua - Adding turret controllers for the turrets
     if (!bInit)
     {
+        // Joshua - Glass collision fix so player can go through broken windows
+        ForEach DynamicActors(class'EGamePlayObject', EGO)
+        {
+            if (EGO.CollisionPrimitive == StaticMesh(DynamicLoadObject("EGO_OBJ.GenObjGO.General_GlasseB00", class'StaticMesh')))
+            {
+                EGO.DamagedMeshes[0].Percent = 0.0;
+                //EGO.DamagedMeshes[0].StaticMesh
+                //EGO.DamagedMeshes[0].CollPrimMesh = None;
+            }
+
+            // Joshua - Destroying the concussion grenade (canceled gadget) to prevent a crash
+            if(EGO.name == 'EConcussionGrenade0')
+                EGO.Destroy();
+
+            // Joshua - Replacing the Chemcial Flares for Flares for the turret section (possibly revert later)
+            if (EGO.name == 'EChemFlare0' || EGO.name == 'EChemFlare1' || EGO.name == 'EChemFlare2')
+                EGO.Destroy();
+
+            // Joshua - Disposable pick was assigned the incorrect mesh
+            if(EGO.name == 'EDisposablePick0')
+            {
+                EGO.SetStaticMesh(StaticMesh'EMeshIngredient.Item.DisposablePick');
+                EGO.SetLocation(EGO.Location + vect(0,0,-13.5));
+            }
+
+            // Joshua - Door nametag placement fix
+            if(EGO.name == 'EGameplayObject18' && !bInit)
+            {
+                // This is not working properly yet location remains static instead attached to door
+                // EGO.SetLocation(vect(13971.016602, -6400.000000, 984.000000));
+                // Going to hide the object for now.
+                EGO.bHidden = true;
+                // Location=(X=13971.016602,Y=-6315.776367,Z=984.000000)
+            }
+        }
+
+        // Joshua - Fixing some broken lighting
+        ForEach AllActors(class'Actor', A)
+        {
+            if(A.name == 'ELight48' || A.name == 'ELight56')
+                A.bAffectOwnZoneOnly=true;
+
+            if(A.name == 'ELight55')
+                A.LightEffect=LE_ESpotShadow;
+
+            if(A.name == 'ELight117')
+                A.LightEffect=LE_ESpotShadowDistAtten;
+        }
+
+        // Joshua - Fixing doors that slide in the wrong direction
+        ForEach AllActors(class'Mover', M)
+        {
+            if (M.name == 'ESlidingDoor3')
+                M.KeyPos[1]=(vect(0,112,0)); // Joshua - Originally, 144, lowered to 128.
+
+            if (M.name == 'ESlidingDoor10')
+                M.KeyPos[1]=(vect(0,0,0)); //0,-144,0 // Joshua - Going to keep this mover static since it clips through wall
+        }
+
+        // Joshua - Adding turret controllers for the turrets
         TurretController = Spawn(class'ETurretController', , , vect(12000, -6680, 430), rot(0, 16384, 0));
         ForEach AllActors(class'Actor', A)
         {
@@ -140,6 +156,11 @@ function InitPattern()
             if(A.name == 'ETurret5')
                 TurretController.LinkedTurret = ETurret(A);
         }
+
+        // Joshua - Replacing the Chemcial Flares for Flares for the turret section (possibly revert later)
+        Spawn(class'EFlare', , , vect(12122.338867, -4888.167480, 400.750000), rot(16384, -8600, 0));
+        Spawn(class'EFlare', , , vect(12109.731445, -4879.166992, 400.750000), rot(16384, -16, 0));
+        Spawn(class'EFlare', , , vect(12110.436523, -4891.073730, 400.750000), rot(16384, -19344, 0));
     }
 
     if( !bInit )

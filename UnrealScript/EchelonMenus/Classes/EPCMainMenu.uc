@@ -10,6 +10,8 @@
 class EPCMainMenu extends EPCMenuPage
         native;
 
+#exec OBJ LOAD FILE=..\Textures\HUD_Enhanced.utx
+
 var EPCTextButton   m_StarGame;
 var EPCTextButton   m_Settings;
 var EPCTextButton   m_PlayIntro;
@@ -28,11 +30,19 @@ var EPCMessageBox        m_MessageBox;
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
 
-var UWindowLabelControl m_VersionLabel; // Joshua - Enhanced version label
+var UWindowLabelControl m_VersionLabel; // Enhanced version label
 var INT             m_IVersionLabelXPos, m_IVersionLabelYPos; // Joshua - Enhanced version label
+
+// Discord logo
+var UWindowLabelControl m_DiscordLabel;
+var INT                 m_IDiscordLabelXPos, m_IDiscordLabelYPos;
+var EPCImageButton      m_oDiscordLogo;
+var INT                 m_IDiscordLogoXPos, m_IDiscordLogoYPos;
 
 function Created()
 {
+    local Region DiscordRegion;
+    
     Super.Created();
 
     m_StarGame  = EPCTextButton(CreateControl( class'EPCTextButton', m_IMainButtonsXPos, m_IMainButtonsFirstYPos, m_IMainButtonsWidth, m_IMainButtonsHeight, self));
@@ -43,6 +53,7 @@ function Created()
 
     m_GoOnline  = EPCTextButton(CreateControl( class'EPCTextButton', m_IGoOnlineXPos, m_IGoOnlineYPos, m_IGoOnlineWidth, m_IMainButtonsHeight, self));
     m_VersionLabel = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_IVersionLabelXPos, m_IVersionLabelYPos, 200, 18, self)); // Joshua - Enhanced version label
+    m_DiscordLabel = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_IDiscordLabelXPos, m_IDiscordLabelYPos, 200, 18, self)); // Joshua - Discord label
 
     //Buttons will have Root.Font[0] as default font wich is what we want
     m_StarGame.SetButtonText(Localize("HUD","START","Localization\\HUD") ,TXT_CENTER);
@@ -53,7 +64,8 @@ function Created()
     // Joshua - Replaced website with Enhanced
     //m_GoOnline.SetButtonText(Localize("HUD","WEBSITE","Localization\\HUD") ,TXT_CENTER);
     m_GoOnline.SetButtonText(Localize("Common","Website","Localization\\Enhanced") ,TXT_CENTER);
-    m_VersionLabel.SetLabelText("Enhanced v1.3", TXT_CENTER); // Joshua - Enhanced version label
+    m_VersionLabel.SetLabelText("Enhanced v1.3a", TXT_CENTER); // Joshua - Enhanced version label
+    m_DiscordLabel.SetLabelText("Discord", TXT_LEFT); // Joshua - Discord label
     
     m_StarGame.Font = F_Large;
     m_Settings.Font = F_Large;
@@ -62,21 +74,33 @@ function Created()
     m_ExitGame.Font = F_Large;
     m_GoOnline.Font = F_Large;
     m_VersionLabel.Font = F_Normal; // Joshua - Enhanced version label
+    m_DiscordLabel.Font = F_Normal; // Joshua - Discord label
 
     m_VersionLabel.TextColor.R = 51;
     m_VersionLabel.TextColor.G = 51;
     m_VersionLabel.TextColor.B = 51;
     m_VersionLabel.TextColor.A = 255;
+
+    m_DiscordLabel.TextColor.R = 51;
+    m_DiscordLabel.TextColor.G = 51;
+    m_DiscordLabel.TextColor.B = 51;
+    m_DiscordLabel.TextColor.A = 255;
+
+    // Joshua - Setup Discord logo
+    m_oDiscordLogo = EPCImageButton(CreateControl(class'EPCImageButton', m_IDiscordLogoXPos, m_IDiscordLogoYPos, 16, 16, self));
+    m_oDiscordLogo.NormalTexture = Texture'HUD_Enhanced.HUD.Discord_dis';
+    m_oDiscordLogo.HoverTexture = Texture'HUD_Enhanced.HUD.Discord';
+    m_oDiscordLogo.PressedTexture = Texture'HUD_Enhanced.HUD.Discord';
+    m_oDiscordLogo.bNoKeyboard = true;
 }
 
 function Paint(Canvas C, float MouseX, float MouseY)
-{
-    Render( C , MouseX, MouseY);	
+{    
+    Render(C, MouseX, MouseY);
 }
 
 function Notify(UWindowDialogControl C, byte E)
 {
-
 	if(E == DE_Click)
 	{
         switch(C)
@@ -99,7 +123,9 @@ function Notify(UWindowDialogControl C, byte E)
         case m_ExitGame:            
             m_MessageBox = EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("OPTIONS","QUITSPLINTER","Localization\\HUD"), Localize("OPTIONS","QUITSPLINTERMESSAGE","Localization\\HUD"), MB_YesNo, MR_No, MR_No);
             break;
-
+        case m_oDiscordLogo:
+            GetLevel().ConsoleCommand("startminimized "@"https://discord.gg/k6mZJcfjSh");
+            break;
         }
     }
 }
@@ -129,6 +155,10 @@ defaultproperties
     m_IGoOnlineYPos=295
     m_IGoOnlineWidth=300
     m_IGoOnlineXPos=180
-    m_IVersionLabelXPos=435 //435 //429
+    m_IVersionLabelXPos=429 //435 //429
     m_IVersionLabelYPos=395 //393 breaks widescreen fix?
+    m_IDiscordLabelXPos=85
+    m_IDiscordLabelYPos=395 //393 breaks widescreen fix?
+    m_IDiscordLogoXPos=65
+    m_IDiscordLogoYPos=398
 }

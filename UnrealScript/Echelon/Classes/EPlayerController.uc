@@ -5924,9 +5924,19 @@ state s_KeyPadInteract extends s_InteractWithObject
 	{
 		if (bDuck > 0)
 		{
-			bDuck = 0;
-			if (Interaction != None)
-				Interaction.PostInteract(self);
+			// Do not allow exiting during Access Denied or Access Granted
+			if (Interaction != None && Interaction.Owner != None && 
+				Interaction.Owner.GetStateName() != 's_AccessDenied' && 
+				Interaction.Owner.GetStateName() != 's_AccessGranted')
+			{
+				bDuck = 0;
+				if (Interaction != None)
+					Interaction.PostInteract(self);
+			}
+			else
+			{
+				bDuck = 0; 
+			}
 		}
 	}
 }
