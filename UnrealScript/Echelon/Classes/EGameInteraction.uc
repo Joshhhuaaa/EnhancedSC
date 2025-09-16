@@ -308,12 +308,11 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 	else if (Epc.InputMode == IM_Controller)
 		Epc.eGame.bUseController = true;
 
-
 	BindSnipe();
 	BindWhistle();
 	BindToggleHUD();
-	//BindPreviousGadget();
-	//BindNextGadget();
+	BindPreviousGadget();
+	BindNextGadget();
 	BindPlayerStats();
 	
 	return false; // continue input processing

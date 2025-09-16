@@ -101,8 +101,8 @@ function InitOptionControls()
     AddLineItem();
 
 	AddKeyItem( Localize("Keys","K_QuickInventory","Localization\\HUD"), "QuickInventory");
-    AddKeyItem( Localize("Keys","K_PreviousWeapon","Localization\\Enhanced"), "PreviousWeapon");
-    AddKeyItem( Localize("Keys","K_NextWeapon","Localization\\Enhanced"), "NextWeapon");
+    AddKeyItem( Localize("Keys","K_PreviousGadget","Localization\\Enhanced"), "PreviousGadget");
+    AddKeyItem( Localize("Keys","K_NextGadget","Localization\\Enhanced"), "NextGadget");
     //AddKeyItem( Localize("Keys","K_FullInventory","Localization\\HUD"), "FullInventory");
 
     AddLineItem();
