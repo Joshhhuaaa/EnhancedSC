@@ -90,6 +90,7 @@ DeadAll:
     SetExclusivity(TRUE);
     SetFlags(V4_2_2_Abattoir(Level.VarObject).DeadC1,TRUE);
     SendPatternEvent('EGroupAI24','SquadCount');
+    SendPatternEvent('EGroupAI27','GrinkoSpeach2'); // Joshua - Colonel Bagrat fix
     Sleep(1);
     End();
 GetToDefaut:

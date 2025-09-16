@@ -96,7 +96,7 @@ SC1:
 SC2:
     Log("");
     SetFlags(GrinkoAttackPass2,TRUE);
-    SendPatternEvent('EGroupAI27','GrinkoSpeach2');
+    //SendPatternEvent('EGroupAI27','GrinkoSpeach2'); // Joshua - Colonel Bagrat fix
     End();
 OrderLeft:
     Log("A1 - C1");
