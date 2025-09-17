@@ -3315,7 +3315,7 @@ state s_Carry
 
 	function ProcessInteract()
 	{
-		//Joshua - PT carry interact
+		// Joshua - PT carry interact
 		if(IManager.Interactions.length != 0)
 			return;
 

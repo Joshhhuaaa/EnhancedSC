@@ -40,6 +40,13 @@ function InitPattern()
             Characters[4] = P.controller;
         if(P.name == 'spetsnaz2')
             Characters[5] = P.controller;
+        // Joshua - Hack to prevent PlayerIdentified from explosion during cinematic
+        if(P.name == 'spetsnaz4')
+            Characters[6] = P.controller;
+        if(P.name == 'spetsnaz6')
+            Characters[7] = P.controller;
+        if(P.name == 'spetsnaz7')
+            Characters[8] = P.controller;
     }
 
     if( !bInit )
@@ -71,6 +78,10 @@ SetUp:
     LockDoor('DoorLockedTilEnd', FALSE, TRUE);
     SetFlags(OKforFinale,TRUE);
     Log("insert cinematic stuff here with Osprey flying over, SAMs exploding, Osprey landing, Wilkes and spetznas fighting.");
+    // Joshua - Hack to prevent PlayerIdentified from explosion during cinematic
+    EAIController(Characters[6]).bNotInStats = true;
+    EAIController(Characters[7]).bNotInStats = true;
+    EAIController(Characters[8]).bNotInStats = true;
     CinCamera(0, 'Finale10Cam', 'Finale10Foc',);
     Sleep(1);
     SendUnrealEvent('Osprey');
@@ -85,6 +96,10 @@ SetUp:
     Sleep(0.75);
     SendUnrealEvent('SAM1Boom');
     CinCamera(1, , ,);
+    // Joshua - Hack to prevent PlayerIdentified from explosion during cinematic
+    EAIController(Characters[6]).bNotInStats = false;
+    EAIController(Characters[7]).bNotInStats = false;
+    EAIController(Characters[8]).bNotInStats = false;
     End();
 LaunchTest:
     Log("Checking if its okay to launch the finale");
