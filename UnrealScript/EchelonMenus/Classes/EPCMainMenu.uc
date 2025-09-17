@@ -33,16 +33,16 @@ var EPCMessageBox        m_MessageBox;
 var UWindowLabelControl m_VersionLabel; // Enhanced version label
 var INT             m_IVersionLabelXPos, m_IVersionLabelYPos; // Joshua - Enhanced version label
 
-// Discord logo
+// Joshua - Discord logo
 var UWindowLabelControl m_DiscordLabel;
 var INT                 m_IDiscordLabelXPos, m_IDiscordLabelYPos;
 var EPCImageButton      m_oDiscordLogo;
 var INT                 m_IDiscordLogoXPos, m_IDiscordLogoYPos;
 
+var EPCImageButton m_oQRTexture; // Joshua - QR code texture for GitHub/Discord on Steam Deck
+
 function Created()
 {
-    local Region DiscordRegion;
-    
     Super.Created();
 
     m_StarGame  = EPCTextButton(CreateControl( class'EPCTextButton', m_IMainButtonsXPos, m_IMainButtonsFirstYPos, m_IMainButtonsWidth, m_IMainButtonsHeight, self));
@@ -86,7 +86,7 @@ function Created()
     m_DiscordLabel.TextColor.B = 51;
     m_DiscordLabel.TextColor.A = 255;
 
-    // Joshua - Setup Discord logo
+    // Joshua - Discord logo
     m_oDiscordLogo = EPCImageButton(CreateControl(class'EPCImageButton', m_IDiscordLogoXPos, m_IDiscordLogoYPos, 16, 16, self));
     m_oDiscordLogo.NormalTexture = Texture'HUD_Enhanced.HUD.Discord_dis';
     m_oDiscordLogo.HoverTexture = Texture'HUD_Enhanced.HUD.Discord';
@@ -117,17 +117,35 @@ function Notify(UWindowDialogControl C, byte E)
         case m_Credits:            
             Root.ChangeCurrentWidget(WidgetID_Credits);
             break;
-        case m_GoOnline:            
-            // Joshua - Block opening links on Steam Deck as it will crash the game
-            if (!EPlayerController(GetPlayerOwner()).eGame.bSteamDeckMode)
+        case m_GoOnline:
+            // Joshua - Show QR code instead of opening the link on Steam Deck
+            if (EPlayerController(GetPlayerOwner()).eGame.bSteamDeckMode)
+            {
+                m_MessageBox = EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common","Website","Localization\\Enhanced"), "", MB_OK, MR_OK, MR_OK);
+                m_oQRTexture = EPCImageButton(m_MessageBox.CreateControl(class'EPCImageButton', 140, 26, 96, 96));
+                m_oQRTexture.NormalTexture = Texture'HUD_Enhanced.HUD.QR_GitHub';
+                m_oQRTexture.HoverTexture = Texture'HUD_Enhanced.HUD.QR_GitHub';
+                m_oQRTexture.PressedTexture = Texture'HUD_Enhanced.HUD.QR_GitHub';
+                m_oQRTexture.bNoKeyboard = true;
+            }
+            else
                 GetLevel().ConsoleCommand("startminimized "@"https://github.com/Joshhhuaaa/EnhancedSC");
             break;
         case m_ExitGame:            
             m_MessageBox = EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("OPTIONS","QUITSPLINTER","Localization\\HUD"), Localize("OPTIONS","QUITSPLINTERMESSAGE","Localization\\HUD"), MB_YesNo, MR_No, MR_No);
             break;
         case m_oDiscordLogo:
-            // Joshua - Block opening links on Steam Deck as it will crash the game
-            if (!EPlayerController(GetPlayerOwner()).eGame.bSteamDeckMode)
+            // Joshua - Show QR code instead of opening the link on Steam Deck
+            if (EPlayerController(GetPlayerOwner()).eGame.bSteamDeckMode)
+            {
+                m_MessageBox = EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common","DiscordServer","Localization\\Enhanced"), "", MB_OK, MR_OK, MR_OK);
+                m_oQRTexture = EPCImageButton(m_MessageBox.CreateControl(class'EPCImageButton', 140, 26, 96, 96));
+                m_oQRTexture.NormalTexture = Texture'HUD_Enhanced.HUD.QR_Discord';
+                m_oQRTexture.HoverTexture = Texture'HUD_Enhanced.HUD.QR_Discord';
+                m_oQRTexture.PressedTexture = Texture'HUD_Enhanced.HUD.QR_Discord';
+                m_oQRTexture.bNoKeyboard = true;
+            }
+            else
                 GetLevel().ConsoleCommand("startminimized "@"https://discord.gg/k6mZJcfjSh");
             break;
         }
@@ -139,14 +157,20 @@ function MessageBoxDone(UWindowWindow W, MessageBoxResult Result)
     if(m_MessageBox == W)
     {
         m_MessageBox = None;
+        
+        // Joshua - Clear QR texture when message box closes
+        if(m_oQRTexture != None)
+        {
+            m_oQRTexture.HideWindow();
+            m_oQRTexture = None;
+        }
 
         if(Result == MR_Yes)
         {
             Root.DoQuitGame();
         }
-            
+    
     }    
-
 }
 
 defaultproperties

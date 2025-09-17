@@ -11,12 +11,13 @@ class Enhanced extends Actor;
 
 // Joshua - Uncomment to generate a new HUD_Enhanced.utx with modified or new textures
 // Textures must be extracted into Textures\HUD_Enhanced
-
 /*
-#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Alarm.dds" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Alarm" MIPS=0
-#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\AlarmBackground.dds" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="AlarmBackground" MIPS=0
-#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Discord.dds" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Discord" MIPS=0
-#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Discord_dis.dds" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Discord_dis" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Alarm.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Alarm" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\AlarmBackground.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="AlarmBackground" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Discord.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Discord" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Discord_dis.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Discord_dis" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\QR_Discord.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="QR_Discord" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\QR_GitHub.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="QR_GitHub" MIPS=0
 
 #exec SAVEPACKAGE FILE=..\Textures\HUD_Enhanced.utx PACKAGE=HUD_Enhanced
 */
