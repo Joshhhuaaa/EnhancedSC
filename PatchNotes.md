@@ -94,7 +94,6 @@
 ### Maps
 - Training
   - Based on the Xbox version for both parts, featuring lighting improvements.
-  - Fixed a bug by no longer removing the pistol from the player's inventory immediately after shooting the camera, as this could lead to issues when using Back to Wall peeking. The pistol is now removed at the start of the next section instead.
   - Training popups will now dynamically display either the Keyboard or Controller instructions, depending on the last input used.
 ---
 - Police Station
@@ -176,4 +175,5 @@
   - Fixed a StaticMesh that was clipping through a ceiling.
   - Added textures for several StaticMeshes that had none assigned.
   - Temporarily disabled speech events to fix issues with scripts failing due to missing audio.
+
 
