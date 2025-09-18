@@ -308,14 +308,20 @@ function bool IsInQuickInv()
 	return (myHUD != None && myHUD.GetStateName() == 'QuickInventory');
 }
 
+// Joshua - Track if Xbox game menu is being used to prevent saving/loading in it
+function bool IsInXboxGameMenu()
+{
+	return (myHUD != None && myHUD.GetStateName() == 's_GameMenu');
+}
+
 event bool CanSaveGame()
 {
-	return (Pawn != None && Pawn.Health > 0 && !bStopInput && !Level.bIsStartMenu && !IsInQuickInv() && (!eGame.bEliteMode || bAutoSaveLoad || bSavingTraining)); // Joshua - No quick saving in Elite mode
+	return (Pawn != None && Pawn.Health > 0 && !bStopInput && !Level.bIsStartMenu && !IsInQuickInv() && !IsInXboxGameMenu() && (!eGame.bEliteMode || bAutoSaveLoad || bSavingTraining)); // Joshua - No quick saving in Elite mode
 }
 
 event bool CanLoadGame()
 {
-	return !IsInQuickInv() && (!eGame.bEliteMode || bLoadingTraining); // Joshua - No quick loading in Elite mode
+	return !IsInQuickInv() && !IsInXboxGameMenu() && (!eGame.bEliteMode || bLoadingTraining); // Joshua - No quick loading in Elite mode
 }
 
 event bool CanGoBackToGame()
@@ -1232,8 +1238,8 @@ exec function IncSpeed()
 	// Aliases[]=(Command="IncSpeed|SnipeZoomIn",Alias="ZoomIn")
 	SnipeZoomIn();
 
-	// Joshua - QoL improvement: if we aren't in weapon stance 0, or if we're zooming, don't process the movement speed change
-	if( ePawn.WeaponStance == 0 && !bUsingAirCamera )
+	// Joshua - QoL improvement: variable speeds in weapon mode but we must prevent it while zooming or using air camera
+	if (GetStateName() != 's_PlayerSniping' && GetStateName() != 's_LaserMicTargeting' && !bUsingAirCamera)
 	{
 		m_curWalkSpeed += 1;
 		if(m_curWalkSpeed > eGame.m_maxSpeedInterval)
@@ -1260,8 +1266,8 @@ exec function DecSpeed()
 	// Aliases[]=(Command="DecSpeed|SnipeZoomOut",Alias="ZoomOut")
 	SnipeZoomOut();
 
-	// Joshua - QoL improvement: if we aren't in weapon stance 0, or if we're zooming, don't process the movement speed change
-	if ( ePawn.WeaponStance == 0 && !bUsingAirCamera )
+	// Joshua - QoL improvement: variable speeds in weapon mode but we must prevent it while zooming or using air camera
+	if (GetStateName() != 's_PlayerSniping' && GetStateName() != 's_LaserMicTargeting' && !bUsingAirCamera)
 	{
 		m_curWalkSpeed -= 1;
 		if (m_curWalkSpeed <= 0 )
@@ -2650,7 +2656,7 @@ exec function Whistle()
 	if(!EPawn.IsPawnTalking() && bWhistle && Level.TimeSeconds - m_WhistleTime > 1.0)
 	{
 		// Joshua - Doesn't look the best with SC1 SkeletalMesh
-		//ePawn.BlendAnimOverCurrent('Whistle', 1, 'B Head');
+		//ePawn.BlendAnimOverCurrent('PT_Whistle', 1, 'B Head');
 
 		ePawn.PlaySound(Sound'FisherEquipement.Play_Random_StickyCamNoise', SLOT_Interface);
 
@@ -3155,9 +3161,12 @@ state s_GrabTargeting
     {
         local vector X,Y,Z, NewAccel;
 		local float pushingForce;
+		local float accelModif, finalSpeed; // Joshua - Variable speeds for keyboard in targeting mode
 		local float inputMagnitude; // Joshua - Normalize movement
 
-		pushingForce = GetPushingForce();
+		inputMagnitude = sqrt(aForward * aForward + aStrafe * aStrafe);
+		// Joshua - Replacing GetPushingForce() C++ function to be able to calculate magnitude
+		//pushingForce = GetPushingForce();
 
 		// if Npc is on fire
 		if( m_AttackTarget != None && m_AttackTarget.Base == ePawn && m_AttackTarget.BodyFlames.Length > 0 )
@@ -3186,6 +3195,25 @@ state s_GrabTargeting
 
 		GetAxes(Rotation,X,Y,Z);
 
+		// Joshua - Normalize movement
+		if (inputMagnitude > 1.0 && bNormalizeMovement)
+		{
+			aForward /= inputMagnitude;
+			aStrafe  /= inputMagnitude;
+		}
+
+		// Joshua - Replacing GetPushingForce() C++ function to be able to calculate magnitude
+		pushingForce = sqrt(aForward * aForward + aStrafe * aStrafe);
+
+        // Joshua - Variable speeds for keyboard in targeting mode
+        if(m_curWalkSpeed != 0)
+        {
+            accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
+            
+            aForward *= accelModif;
+            aStrafe  *= accelModif;
+        }
+
 		// Update acceleration.
 		NewAccel            = aForward * X + aStrafe * Y;
 		NewAccel.Z          = 0;
@@ -3196,7 +3224,10 @@ state s_GrabTargeting
 
 		if(pushingForce > 0.3)
 		{
-			ePawn.GroundSpeed = pushingForce * m_speedGrabFP;
+			// Joshua - Variable speeds for keyboard in targeting mode
+			finalSpeed = pushingForce;
+			finalSpeed *= (float(m_curWalkSpeed) / eGame.m_maxSpeedInterval);
+			ePawn.GroundSpeed = finalSpeed * m_speedGrabFP;
 			ePawn.WalkingRatio = VSize(ePawn.Velocity / m_speedGrabFP);
 			m_AttackTarget.WalkingRatio = ePawn.WalkingRatio;
 			ePawn.PlayMove(ePawn.ABlendGrab, Rotation, ePawn.Velocity, 0.0, true, true);
@@ -3210,13 +3241,6 @@ state s_GrabTargeting
 			m_AttackTarget.WalkingRatio = 0.0;
 			ePawn.LoopAnimOnly('grabstspnt1', , 0.2);
 			m_AttackTarget.LoopAnimOnly(m_AttackTarget.AGrabWait, , 0.2);
-		}
-
-		// Joshua - Normalize movement
-		inputMagnitude = sqrt(aForward * aForward + aStrafe * aStrafe);
-		if (inputMagnitude > 1.0 && bNormalizeMovement)
-		{
-			ePawn.GroundSpeed = ePawn.GroundSpeed / inputMagnitude;
 		}
 	}	
 
@@ -4613,9 +4637,33 @@ state s_Targeting
     {
         local vector X,Y,Z, NewAccel;
 		local float pushingForce;
+		local float accelModif, finalSpeed; // Joshua - Variable speeds for keyboard in targeting mode
+		local float inputMagnitude; // Joshua - Normalize movement
 
-		pushingForce = GetPushingForce();
+		inputMagnitude = sqrt(aForward * aForward + aStrafe * aStrafe);
+		// Joshua - Replacing GetPushingForce() C++ function to be able to calculate magnitude
+		//pushingForce = GetPushingForce();
+
         GetAxes(Rotation,X,Y,Z);
+
+		// Joshua - Normalize movement
+		if (inputMagnitude > 1.0 && bNormalizeMovement)
+		{
+			aForward /= inputMagnitude;
+			aStrafe  /= inputMagnitude;
+		}
+
+		// Joshua - Replacing GetPushingForce() C++ function to be able to calculate magnitude
+		pushingForce = sqrt(aForward * aForward + aStrafe * aStrafe);
+
+        // Joshua - Variable speeds for keyboard in targeting mode
+        if(m_curWalkSpeed != 0)
+        {
+            accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
+            
+            aForward *= accelModif;
+            aStrafe  *= accelModif;
+        }
 
 		if( bLockedCamera )
 			KillPawnSpeed();
@@ -4634,7 +4682,12 @@ state s_Targeting
 			ePawn.AimAt(AAVERT, Vector(Rotation), Vector(ePawn.Rotation), 0, 0, -90, 90);
 		}
 
-		PlayOnGroundSniping((pushingForce > 0.3), pushingForce * GetGroundSpeed(), true);
+		// Joshua - Variable speeds for keyboard in targeting mode
+		finalSpeed = pushingForce;
+		finalSpeed *= (float(m_curWalkSpeed) / eGame.m_maxSpeedInterval);
+		PlayOnGroundSniping((pushingForce > 0.3), finalSpeed * GetGroundSpeed(), true);
+
+		//PlayOnGroundSniping((pushingForce > 0.3), pushingForce * GetGroundSpeed(), true);
 	}
 
 	function bool CanAccessQuick()
@@ -4745,26 +4798,17 @@ state s_FirstPersonTargeting extends s_Targeting
 		m_camera.SetMode(ECM_FirstPerson);
 	}
 
-    function PlayerMove( float DeltaTime )
-    {
-		local float inputMagnitude; // Joshua - Normalize movement
+	function PlayerMove( float DeltaTime )
+    {	
+        Super.PlayerMove(DeltaTime);
 
-		Super.PlayerMove(DeltaTime);
-
-		if( bPressSnip && ActiveGun == MainGun && !bInGunTransition && !bLockedCamera )
-		{
-			bPressSnip = false;
-			bInTransition = true; // prevent the SheathWeapon
-			GotoState('s_PlayerSniping');
-		}
-
-		// Joshua - Normalize movement
-		inputMagnitude = sqrt(aForward * aForward + aStrafe * aStrafe);
-		if (inputMagnitude > 1.0 && bNormalizeMovement)
-		{
-			ePawn.GroundSpeed = ePawn.GroundSpeed / inputMagnitude;
-		}
-	}
+        if( bPressSnip && ActiveGun == MainGun && !bInGunTransition && !bLockedCamera )
+        {
+            bPressSnip = false;
+            bInTransition = true; // prevent the SheathWeapon
+            GotoState('s_PlayerSniping');
+        }
+    }
 
 Begin:
 	// will not happen from Sniper mode
@@ -4859,8 +4903,6 @@ state s_PlayerSniping extends s_Targeting
 
     function PlayerMove( float DeltaTime )
     {
-		local float inputMagnitude; // Joshua - Normalize movement
-
 		// No update on ZoomLevel when reloading
 		if( bHideSam )
 		{
@@ -4880,13 +4922,6 @@ state s_PlayerSniping extends s_Targeting
    			Super.PlayerMove(DeltaTime);
 		else
 			KillPawnSpeed();
-
-		// Joshua - Normalize movement
-		inputMagnitude = sqrt(aForward * aForward + aStrafe * aStrafe);
-		if (inputMagnitude > 1.0 && bNormalizeMovement)
-		{
-			ePawn.GroundSpeed = ePawn.GroundSpeed / inputMagnitude;
-		}
 
 		// Joshua - Controller support for zoom levels
 		if( bDPadUp != 0 && !bDPadUpPressed )
@@ -4911,8 +4946,12 @@ state s_PlayerSniping extends s_Targeting
 	}
 
 	function float GetGroundSpeed()
-	{	
-		return m_speedWalkSniping;		
+	{
+		// Joshua - QoL improvement: Ubisoft forgot to apply a crouch speed multiplier while sniping
+		if( ePawn.bIsCrouched )
+			return m_speedWalkSniping / (m_speedWalkFP / m_speedWalkFPCr);
+		else
+			return m_speedWalkSniping;
 	}
 
 Reload:
@@ -4989,21 +5028,6 @@ state s_CameraJammerTargeting extends s_Targeting
 		return true;
 	}
 
-	// Joshua - Normalize movement
-	function PlayerMove(float DeltaTime)
-	{
-		local float inputMagnitude; // Joshua - Normalize movement
-
-		Super.PlayerMove(DeltaTime);
-
-		// Joshua - Normalize movement
-		inputMagnitude = sqrt(aForward * aForward + aStrafe * aStrafe);
-		if (inputMagnitude > 1.0 && bNormalizeMovement)
-		{
-			ePawn.GroundSpeed = ePawn.GroundSpeed / inputMagnitude;
-		}
-	}
-
 Begin:
 	// Get camera out in hands
 	ePawn.BlendAnimOverCurrent(GetWeaponAnimation(), 1, ePawn.UpperBodyBoneName);
@@ -5058,21 +5082,6 @@ state s_LaserMicTargeting extends s_Targeting
 	event ReduceCameraSpeed(out float turnMul)
 	{
 		turnMul = 0.3f; //(FovAngle from Laser mic / DesiredFOV) * 0.5;
-	}
-
-	// Joshua - Normalize movement
-	function PlayerMove(float DeltaTime)
-	{
-		local float inputMagnitude; // Joshua - Normalize movement
-
-		Super.PlayerMove(DeltaTime);
-
-		// Joshua - Normalize movement
-		inputMagnitude = sqrt(aForward * aForward + aStrafe * aStrafe);
-		if (inputMagnitude > 1.0 && bNormalizeMovement)
-		{
-			ePawn.GroundSpeed = ePawn.GroundSpeed / inputMagnitude;
-		}
 	}
 
 Begin:
@@ -5543,8 +5552,12 @@ state s_Throw
 	{
         local vector X,Y,Z, NewAccel;
 		local float pushingForce;
+		local float accelModif, finalSpeed; // Joshua - Variable speeds for keyboard in targeting mode
+		local float inputMagnitude; // Joshua - Normalize movement
 
-		pushingForce = GetPushingForce();
+		inputMagnitude = sqrt(aForward * aForward + aStrafe * aStrafe);
+		// Joshua - Replacing GetPushingForce() C++ function to be able to calculate magnitude
+		//pushingForce = GetPushingForce();
 
 		ePawn.AimAt(AAVERT, Vector(Rotation), Vector(ePawn.Rotation), 0, 0, -60, 80);
 
@@ -5557,6 +5570,25 @@ state s_Throw
 			return;
 
         GetAxes(Rotation,X,Y,Z);
+
+		// Joshua - Normalize movement
+		if (inputMagnitude > 1.0 && bNormalizeMovement)
+		{
+			aForward /= inputMagnitude;
+			aStrafe  /= inputMagnitude;
+		}
+
+		// Joshua - Replacing GetPushingForce() C++ function to be able to calculate magnitude
+		pushingForce = sqrt(aForward * aForward + aStrafe * aStrafe);
+
+        // Joshua - Variable speeds for keyboard in targeting mode
+        if(m_curWalkSpeed != 0)
+        {
+            accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
+            
+            aForward *= accelModif;
+            aStrafe  *= accelModif;
+        }
 
 		NewAccel            = aForward*X + aStrafe*Y;
 		NewAccel.Z          = 0;
@@ -5572,7 +5604,12 @@ state s_Throw
 		else
 			bThrowTargeting = false;
 
-		PlayOnGroundSniping((pushingForce > 0.3), pushingForce * GetGroundSpeed(), false);
+		// Joshua - Variable speeds for keyboard in targeting mode
+		finalSpeed = pushingForce;
+		finalSpeed *= (float(m_curWalkSpeed) / eGame.m_maxSpeedInterval);
+		PlayOnGroundSniping((pushingForce > 0.3), finalSpeed * GetGroundSpeed(), false);
+
+		//PlayOnGroundSniping((pushingForce > 0.3), pushingForce * GetGroundSpeed(), false);
 
 		ePawn.AnimBlendParams(ePawn.ACTIONCHANNEL, 1, 0.0, 0.0, ePawn.UpperBodyBoneName);
 
@@ -7316,6 +7353,24 @@ state s_PlayerBTWTargeting extends s_PlayerBTWBase
 			ePawn.BlendAnimOverCurrent('BackStSpFrR', 1, ePawn.UpperBodyBoneName);
 		else
 			ePawn.BlendAnimOverCurrent('BackStSpFrL', 1, ePawn.UpperBodyBoneName);
+	}
+
+	// Joshua - Mission failed to bring back in 3rd person
+	function ProcessEndMission()
+	{
+		bFire = 0; // Force this so that ProcessScope may be valid
+		ProcessScope();
+	}
+
+	// Joshua - Make sure we don't lose weapon while using it
+	function NotifyLostInventoryItem( EInventoryItem Item )
+	{
+		// Force release fire
+		bFire = 0;
+		if( Item != None && Item == ePawn.HandItem )
+			ProcessScope();
+		// Reset things
+		Global.NotifyLostInventoryItem(Item);
 	}
 
 ToggleCrouch:

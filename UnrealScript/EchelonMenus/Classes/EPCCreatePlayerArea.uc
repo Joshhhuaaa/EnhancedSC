@@ -19,10 +19,10 @@ var UWindowLabelControl     m_LDifficulty;      //Title
 var UWindowLabelControl     m_LDifficultyNormal;
 var UWindowLabelControl     m_LDifficultyHard;
 var UWindowLabelControl     m_LDifficultyElite; // Joshua - Added Elite difficulty
-var UWindowLabelControl     m_LPermadeathMode; //Joshua - Added Permadeath
+var UWindowLabelControl     m_LPermadeathMode; // Joshua - Added Permadeath
 
-var EPCMessageBox           m_PermadeathWarningBox; //Joshua - Added Permadeath
-var bool                    bPermadeathPending; //Joshua - Added Permadeath
+var EPCMessageBox           m_PermadeathWarningBox; // Joshua - Added Permadeath
+var bool                    bPermadeathPending; // Joshua - Added Permadeath
 
 var EPCEditControl          m_EPlayerName;      //Value
 
@@ -90,7 +90,7 @@ function Created()
     m_LDifficultyHard.TextColor     = m_TextColor;
     m_LDifficultyElite.TextColor     = m_TextColor;
 
-    //Joshua - Permadeath
+    // Joshua - Permadeath
     m_LPermadeathMode = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', 
         m_IXLabelPos,
         m_LDifficultyElite.WinTop + m_IDifficultyYOffset,
@@ -110,7 +110,7 @@ function Created()
     m_LPermadeathMode.TextColor = m_TextColor;
 }
 
-//Joshua - Permadeath warning
+// Joshua - Permadeath warning
 function MessageBoxDone(UWindowWindow W, MessageBoxResult Result)
 {
     if(W == m_PermadeathWarningBox)
@@ -212,13 +212,13 @@ defaultproperties
     m_IXLabelPos=20
     m_ILabelHeight=18
     m_ILabelWidth=190
-    m_IPlayerNameYPos=10        //Joshua - Modified from 30 to fit Elite/Permadeath
+    m_IPlayerNameYPos=10        // Joshua - Modified from 30 to fit Elite/Permadeath
     m_IPlayerNameOffset=25
     m_IPlayerNameWidth=200
     m_IDifficultyXOffset=30
-    m_IDifficultyYPos=45        //Joshua - Modified from 70 to fit Elite/Permadeath
-    m_IDifficultyYOffset=20     //Joshua - Modified from 25 to fit Elite/Permadeath
-    m_IDifficultyRadioYPos=45   //Joshua - Modified from 70 to fit Elite/Permadeath
+    m_IDifficultyYPos=45        // Joshua - Modified from 70 to fit Elite/Permadeath
+    m_IDifficultyYOffset=20     // Joshua - Modified from 25 to fit Elite/Permadeath
+    m_IDifficultyRadioYPos=45   // Joshua - Modified from 70 to fit Elite/Permadeath
     m_IRadioWidth=20
     m_EditBorderColor=(R=51,G=51,B=51,A=255)
     m_TextColor=(R=51,G=51,B=51,A=255)

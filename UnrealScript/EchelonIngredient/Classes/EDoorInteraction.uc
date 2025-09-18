@@ -79,7 +79,7 @@ function bool IsAvailable()
         if (EchelonGameInfo(Level.Game).bNewDoorInteraction && MyDoor.Locked)
             InteractionPlayerController.IManager.RemoveInteractionObj(Self);
     }
-	//Joshua - When carrying a body, remove Break Lock, Optic Cable, and Open Door Stealth
+	// Joshua - When carrying a body, remove Break Lock, Optic Cable, and Open Door Stealth
     else if (EchelonGameInfo(Level.Game).pPlayer.m_AttackTarget != None && EchelonGameInfo(Level.Game).pPlayer.m_AttackTarget.GetStateName()=='s_Carried')
     {
         InteractionPlayerController.IManager.RemoveInteractionObj(BreakLockInteraction);
