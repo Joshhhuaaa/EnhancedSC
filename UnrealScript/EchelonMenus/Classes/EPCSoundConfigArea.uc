@@ -16,6 +16,11 @@ var UWindowLabelControl     m_LAmbiantSound;
 var UWindowLabelControl     m_LVoicesSound;
 var UWindowLabelControl     m_LMusicSound;
 var UWindowLabelControl     m_LSFXSound;
+// Joshua - Label for each of the scroll bars
+var UWindowLabelControl     m_LAmbiantSoundValue;
+var UWindowLabelControl     m_LVoicesSoundValue;
+var UWindowLabelControl     m_LMusicSoundValue;
+var UWindowLabelControl     m_LSFXSoundValue;
 var INT                     m_ILabelXPos, m_ILabelWidth, m_ILabelHeight;
 
 var UWindowLabelControl     m_LAudioVirt;
@@ -102,6 +107,27 @@ function Created()
     m_LSFXSound.Font        = F_Normal;
     m_LSFXSound.TextColor   = m_TextColor;
 
+    // Joshua - Label for each of the scroll bars
+    m_LAmbiantSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_AmbiantSoundScroll.WinTop, 40, m_ILabelHeight, self));
+    m_LAmbiantSoundValue.Font = F_Normal;
+    m_LAmbiantSoundValue.TextColor = m_TextColor;
+    m_LAmbiantSoundValue.SetLabelText("0", TXT_LEFT);
+
+    m_LVoicesSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_VoicesSoundScroll.WinTop, 40, m_ILabelHeight, self));
+    m_LVoicesSoundValue.Font = F_Normal;
+    m_LVoicesSoundValue.TextColor = m_TextColor;
+    m_LVoicesSoundValue.SetLabelText("0", TXT_LEFT);
+
+    m_LMusicSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_LMusicSoundScroll.WinTop, 40, m_ILabelHeight, self));
+    m_LMusicSoundValue.Font = F_Normal;
+    m_LMusicSoundValue.TextColor = m_TextColor;
+    m_LMusicSoundValue.SetLabelText("0", TXT_LEFT);
+
+    m_LSFXSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_SFXSoundScroll.WinTop, 40, m_ILabelHeight, self));
+    m_LSFXSoundValue.Font = F_Normal;
+    m_LSFXSoundValue.TextColor = m_TextColor;
+    m_LSFXSoundValue.SetLabelText("0", TXT_LEFT);
+
     // ***********************************************************************************************
     // * Drop Down
     // ***********************************************************************************************
@@ -186,6 +212,12 @@ function Refresh()
     m_LMusicSoundScroll.Pos  = Clamp(GO.MusicVolume,0,99);
     m_SFXSoundScroll.Pos  = Clamp(GO.SFXVolume,0,99);
 
+    // Joshua - Label for each of the scroll bars
+    m_LAmbiantSoundValue.SetLabelText(string(int(m_AmbiantSoundScroll.Pos)), TXT_LEFT);
+    m_LVoicesSoundValue.SetLabelText(string(int(m_VoicesSoundScroll.Pos)), TXT_LEFT);
+    m_LMusicSoundValue.SetLabelText(string(int(m_LMusicSoundScroll.Pos)), TXT_LEFT);
+    m_LSFXSoundValue.SetLabelText(string(int(m_SFXSoundScroll.Pos)), TXT_LEFT);
+
     m_AudioVirtCombo.SetSelectedIndex(Clamp(GO.AudioVirt,0,m_AudioVirtCombo.List.Items.Count() -1));    
     m_EaxButton.m_bSelected = GO.EAX;
     m_3DAccButton.m_bSelected = GO.Sound3DAcc;
@@ -265,6 +297,11 @@ function Notify(UWindowDialogControl C, byte E)
 				GO.RTSFXVolume = m_SFXSoundScroll.Pos;
 				GO.UpdateEngineSettings(true);
 			}
+            // Joshua - Label for each of the scroll bars
+            m_LAmbiantSoundValue.SetLabelText(string(int(m_AmbiantSoundScroll.Pos)), TXT_LEFT);
+            m_LVoicesSoundValue.SetLabelText(string(int(m_VoicesSoundScroll.Pos)), TXT_LEFT);
+            m_LMusicSoundValue.SetLabelText(string(int(m_LMusicSoundScroll.Pos)), TXT_LEFT);
+            m_LSFXSoundValue.SetLabelText(string(int(m_SFXSoundScroll.Pos)), TXT_LEFT);
             break;
         }
     }
@@ -312,7 +349,7 @@ defaultproperties
 {
     m_IFirstScrollyPos=5
     m_IScrollyOffset=25
-    m_IScrollWidth=200
+    m_IScrollWidth=180 // Joshua - Reduced from 200 to fit the new label
     m_ILabelXPos=15
     m_ILabelWidth=250
     m_ILabelHeight=18

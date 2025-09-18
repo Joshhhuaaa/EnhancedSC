@@ -194,7 +194,7 @@ defaultproperties
     BeepSound1=Sound'Interface.Play_ActionChoice'
     BeepSound2=Sound'Interface.Play_ActionChoice'
     BeepSound3=Sound'Interface.Play_Validate'
-    MenuMusic=Sound'CommonMusic.Play_theme_Menu'
+    MenuMusic=None // Joshua - Fixes a bug where two instances of the music played simultaneously, the PC version should only use EchelonMenus.EPCConsole
     bHidden=true
     bAlwaysTick=true
 }

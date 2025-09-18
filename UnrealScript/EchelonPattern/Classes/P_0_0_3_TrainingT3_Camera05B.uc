@@ -74,12 +74,11 @@ Setup:
     End();
 CheckIfValid:
     Log("CheckIfValid - Camera05B.");
-    //InventoryManager(0, false, '', 0, true, class 'EFn7', false); // Joshua - Don't remove the SC Pistol until completing the section to prevent a bug
+    InventoryManager(0, false, '', 0, true, class 'EFn7', false);
     LockDoor('Door05B05', FALSE, TRUE);
     End();
 Completed:
     Log("Completed - Camera05B");
-    InventoryManager(0, false, '', 0, true, class 'EFn7', false); // Joshua - Removing the SC pistol here instead
     SendPatternEvent('GroupTicker','End05B');
     SendPatternEvent('T3CommsGroup','Camera05');
     End();

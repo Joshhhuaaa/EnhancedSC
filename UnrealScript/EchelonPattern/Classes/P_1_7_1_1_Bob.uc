@@ -38,7 +38,11 @@ function InitPattern()
     ForEach DynamicActors(class'Pawn', P)
     {
         if(P.name == 'EBobrov0')
+        {
             Characters[1] = P.controller;
+            // Joshua - Set Bobrov as dying so Sam crouches during this conversation
+            EPawn(P).bDyingDude = true;
+        }
         if(P.name == 'ELambert0')
             Characters[2] = P.controller;
     }
