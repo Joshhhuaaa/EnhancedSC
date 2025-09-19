@@ -19,6 +19,9 @@ namespace ConfigKeys
     constexpr const char* DisableMenuIdleTimers_Section = "Various";
     constexpr const char* DisableMenuIdleTimers_Setting = "Disable Menu Idle Timers";
 
+    constexpr const char* UseXboxFonts_Section = "Various";
+    constexpr const char* UseXboxFonts_Setting = "Use Xbox Fonts";
+
     // Internal
     constexpr const char* CheckForUpdates_Section = "Update Notifications";
     constexpr const char* CheckForUpdates_Setting = "Check For EnhancedSC Updates";
