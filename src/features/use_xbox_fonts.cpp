@@ -1,18 +1,17 @@
 #include "stdafx.h"
-#include "steam_deck_features.hpp"
+#include "use_xbox_fonts.hpp"
 
 #include "common.hpp"
 #include "logging.hpp"
-
 namespace
 {
-    void UpdateSteamDeckINIVar()
+    void UpdateXboxFontsINIVar()
     {
-        spdlog::info("Syncing bSteamDeckMode in Enhanced.ini");
-        std::filesystem::path SplinterCellUserIni = sExePath / "Enhanced.ini";
+        spdlog::info("Syncing bUseXboxFonts in SplinterCell.ini");
+        std::filesystem::path SplinterCellUserIni = sExePath / "SplinterCell.ini";
         if (!std::filesystem::exists(SplinterCellUserIni))
         {
-            spdlog::warn("SplinterCellUser.ini not found!");
+            spdlog::warn("SplinterCell.ini not found!");
             return;
         }
 
@@ -27,12 +26,12 @@ namespace
         std::string line;
         while (std::getline(iniFile, line))
         {
-            lines.push_back(line);
+            lines.push_back(line); // getline strips \r\n
         }
         iniFile.close();
 
-        constexpr const char* SectionHeader = "[Echelon.EchelonGameInfo]";
-        const char* DesiredSetting = Util::IsSteamOS() ? "bSteamDeckMode=True" : "bSteamDeckMode=False";
+        constexpr const char* SectionHeader = "[Echelon.ECanvas]";
+        const char* DesiredSetting = g_UseXboxFonts.bXboxFont ? "ETextFont=Font'ETextFont'" : "ETextFont=Font'ETextFontPC'";
 
         bool insideSection = false;
         bool foundSetting = false;
@@ -56,7 +55,7 @@ namespace
 
             if (insideSection)
             {
-                if (current.find("bSteamDeckMode") == 0)
+                if (current.find("ETextFont") == 0)
                 {
                     if (current != DesiredSetting)
                     {
@@ -68,37 +67,60 @@ namespace
             }
         }
 
-        if (!foundSetting && insertPos < lines.size())
+        if (!foundSetting)
         {
-            lines.insert(lines.begin() + insertPos, DesiredSetting);
+            if (insertPos < lines.size())
+            {
+                // Section exists but missing setting
+                lines.insert(lines.begin() + insertPos, DesiredSetting);
+            }
+            else
+            {
+                // Section missing -> always append at EOF
+                if (!lines.empty() && !lines.back().empty())
+                {
+                    lines.push_back("");
+                }
+                lines.push_back(SectionHeader);
+                lines.push_back(DesiredSetting);
+            }
             modified = true;
         }
 
         if (modified)
         {
-            std::ofstream outFile(SplinterCellUserIni, std::ios::trunc);
+            std::ofstream outFile(SplinterCellUserIni, std::ios::binary | std::ios::trunc);
             if (!outFile)
             {
                 spdlog::error("Error writing ini file {}.", SplinterCellUserIni.string());
                 return;
             }
+
             for (const auto& l : lines)
             {
-                outFile << l << "\n";
+                outFile << l << "\r\n";
             }
-            spdlog::info("{} SteamDeck mode updated to: {}", SplinterCellUserIni.string(), DesiredSetting);
+
+            // Ensure exactly one trailing blank line at EOF
+            if (lines.empty() || !lines.back().empty())
+            {
+                outFile << "\r\n";
+            }
+
+
+            spdlog::info("{} bXboxFont updated to: {}", SplinterCellUserIni.string(), DesiredSetting);
         }
         else
         {
 #if !defined(RELEASE_BUILD)
-            spdlog::info("No changes needed - SteamDeckMode already set correctly.");
+            spdlog::info("No changes needed - bXboxFont already set correctly.");
 #endif
         }
     }
 }
 
 
-void SteamDeckFeatures::Toggle()
+void UseXboxFonts::Toggle()
 {
-    UpdateSteamDeckINIVar();
+    UpdateXboxFontsINIVar();
 }

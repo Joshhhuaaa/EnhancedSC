@@ -24,6 +24,7 @@
 #include "asi_loader_checks.hpp"
 #include "steam_deck_features.hpp"
 #include "submodule_initiailization.hpp"
+#include "use_xbox_fonts.hpp"
 #include "version_checker.hpp"
 
 ///WIP
@@ -97,6 +98,7 @@ void InitializeSubsystems()
         INITIALIZE(g_IntroSkip.Initialize());
         INITIALIZE(RestoreEAX::Initialize());
         INITIALIZE(DPadKeybinds::Initialize());
+        INITIALIZE(UseXboxFonts::Toggle());
 
         INITIALIZE(CheckForUpdates());
     }
