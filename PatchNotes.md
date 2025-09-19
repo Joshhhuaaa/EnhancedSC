@@ -11,6 +11,8 @@
 - The selected rate of fire is now saved before entering sniper mode and correctly restored after exiting.
 - Sam now adjusts his stance to match the NPC's during conversations, similar to Pandora Tomorrow.
 - Added the ability to quickly drop a carried body by pressing the Jump key, similar to Chaos Theory.
+- Keyboard variable speeds now affect player movement when using Sniper Mode or the Laser Mic.
+- Added a crouch speed multiplier while sniping, making movement slower when crouched.
 - Increased the lifespan for bullet shell casings from 3 seconds to 30 seconds.
 - Added an option to whistle similar to later Splinter Cell games.
 - Added an option to use zoom levels (2x/4x) for the SC-20K, similar to Pandora Tomorrow.
@@ -46,7 +48,7 @@
 - Xbox renderer textures have been restored to bring lighting closer to the Xbox version.
 - Restored the Xbox light effect for alarm lights when they are triggered.
 - Fixed a bug where the mouse wheel changed variable speeds while a weapon was drawn or when using a Sticky Camera or Diversion Camera.
-- Fixed a bug where the interact button wouldn't work in controller menus if the game was paused with a weapon drawn.
+- Fixed a bug where losing an equipped item while Back to Wall peeking now correctly holsters the item automatically.
 - Sniper sway is no longer disabled when player input is blocked.
 
 ### Input
@@ -59,6 +61,7 @@
 - [@Shryder](https://github.com/shryder): Added support for Mouse 4 and Mouse 5 (side buttons).
 - Added support for using the NumPad on keypads.
 - Sniper mode now uses a dedicated keybind, similar to later Splinter Cell games, instead of being triggered by the Accelerate key.
+- Added support for keyboard variable speeds in targeting modes.
 - Added dedicated keybinds to cycle through the inventory (Previous Weapon and Next Weapon), similar to Pandora Tomorrow.
 - Pressing the Crouch key now exits the Optic Cable, Lockpick, Keypad, and Elevator interactions.
 - Improved controller support to more closely match the Xbox version.
@@ -78,6 +81,9 @@
 - [@TGP482](https://www.youtube.com/@TGP482): Restored numerous textures that were previously downscaled to their full resolution.
 - All mission parts now require a keypress to continue after loading, not just the initial part.
 - Save games now use a new file extension for Enhanced to prevent incompatible saves from the original game from being displayed.
+- Added numerical values to Sound Options sliders to display their exact setting.
+- Added a Discord button in the Main Menu that links directly to the Enhanced SC Discord server.
+- The game now automatically detects if it is running on Steam Deck and disables menu links, displaying a QR code instead to prevent crashes.
 - Fixed a bug in the PC version where inactivity videos couldn't be skipped.
 - Restored the Wall Mine gadget video on the OPSAT, which was accidentally left out of the PC release.
 - The "Mission Complete" screen now requires a keypress to continue, giving players the chance to view their Mission Statistics without a timer.
@@ -94,7 +100,6 @@
 ### Maps
 - Training
   - Based on the Xbox version for both parts, featuring lighting improvements.
-  - Fixed a bug by no longer removing the pistol from the player's inventory immediately after shooting the camera, as this could lead to issues when using Back to Wall peeking. The pistol is now removed at the start of the next section instead.
   - Training popups will now dynamically display either the Keyboard or Controller instructions, depending on the last input used.
 ---
 - Police Station
@@ -134,6 +139,7 @@
   - Based on the Xbox version for the first part, featuring mesh improvements.
   - Applied alternate character meshes to increase NPC variety.
   - The kill objective will no longer complete from knocking out the primary target.
+  - Fixed a bug where killing unrelated NPCs triggered incorrect dialogue.
   - Fixed a bug where the player could keep retriggering the same objective and dialogue.
   - After completing the final objective, the player can still move around in case enemies are still around.
   - Changed the default mesh for Sam to Partial Sleeves.
@@ -155,6 +161,7 @@
   - The level now transitions directly into Vselka Submarine, treating them as a single mission.
   - Alarm stages will no longer be ignored for the initial part.
   - Added a new alarm light for the Cafeteria ceiling camera as none was assigned.
+  - Sam now adjusts his stance to crouched when speaking with Bobrov.
   - On Elite mode, the extraction timer has been reduced from 150 seconds to 100 seconds.
   - Restored the Russian stress and fight soundtracks.
   - Added alternate mix of common fight theme.
@@ -162,7 +169,9 @@
 - Nuclear Power Plant
   - Removed a vent frame's collision that was preventing the player from progressing.
   - Removed a conflicting NPC that caused the game to crash due to broken pathing.
+  - Fixed the technician who was frozen in an idle stance until alerted, due to a missing animation attempting to be played.
   - Improved the turret section so that shooting the glass allows you to pass through.
+  - Replaced Chemical Flares with standard Flares in the turret section.
   - Fixed keypad doors that were sliding in the wrong direction.
   - Various lighting fixes in the second part.
   - Added turret controllers for the turrets.
