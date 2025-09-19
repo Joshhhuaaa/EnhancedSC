@@ -35,6 +35,9 @@ function SetSelectedItem(UWindowListBoxItem NewSelected)
 function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H)
 {
     local EPCOptionsKeyListBoxItem listBoxItem;
+    local int i;
+    local EPCHScrollBar ScrollBar;
+    local UWindowLabelControl ValueLabel;
 
     listBoxItem = EPCOptionsKeyListBoxItem(Item);
 
@@ -45,12 +48,33 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
             listBoxItem.m_Control.WinTop = Y;
             listBoxItem.m_Control.WinLeft = X + W - m_IHighLightWidth - m_IHighLightRightPadding - m_IRightPadding;
             listBoxItem.m_Control.ShowWindow();
+            
+            // Joshua - Position value labels to the right of scrollbars
+            ScrollBar = EPCHScrollBar(listBoxItem.m_Control);
+            if (ScrollBar != None)
+            {
+                // Look for the corresponding value label (should be the next control in the array)
+                for (i = 0; i < m_Controls.Length - 1; i++)
+                {
+                    if (m_Controls[i] == ScrollBar)
+                    {
+                        ValueLabel = UWindowLabelControl(m_Controls[i + 1]);
+                        if (ValueLabel != None)
+                        {
+                            ValueLabel.WinTop = Y - 1; // Joshua - Subtracting 1 from WinTop seems better alligned
+                            ValueLabel.WinLeft = ScrollBar.WinLeft + ScrollBar.WinWidth + 5;
+                            ValueLabel.ShowWindow();
+                        }
+                        break;
+                    }
+                }
+            }
         }
         else
         {
             // For Fire Equip line, draw the check box real far
             listBoxItem.m_Control.WinTop = Y;
-            listBoxItem.m_Control.WinLeft = X + W - 32 ;
+            listBoxItem.m_Control.WinLeft = X + W - 32;
             listBoxItem.m_Control.ShowWindow();           
         }
     }

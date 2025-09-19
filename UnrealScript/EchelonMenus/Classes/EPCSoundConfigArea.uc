@@ -108,22 +108,23 @@ function Created()
     m_LSFXSound.TextColor   = m_TextColor;
 
     // Joshua - Label for each of the scroll bars
-    m_LAmbiantSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_AmbiantSoundScroll.WinTop, 40, m_ILabelHeight, self));
+    // Joshua - Subtracting 1 from WinTop seems better alligned
+    m_LAmbiantSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_AmbiantSoundScroll.WinTop - 1, 40, m_ILabelHeight, self));
     m_LAmbiantSoundValue.Font = F_Normal;
     m_LAmbiantSoundValue.TextColor = m_TextColor;
     m_LAmbiantSoundValue.SetLabelText("0", TXT_LEFT);
 
-    m_LVoicesSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_VoicesSoundScroll.WinTop, 40, m_ILabelHeight, self));
+    m_LVoicesSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_VoicesSoundScroll.WinTop - 1, 40, m_ILabelHeight, self));
     m_LVoicesSoundValue.Font = F_Normal;
     m_LVoicesSoundValue.TextColor = m_TextColor;
     m_LVoicesSoundValue.SetLabelText("0", TXT_LEFT);
 
-    m_LMusicSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_LMusicSoundScroll.WinTop, 40, m_ILabelHeight, self));
+    m_LMusicSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_LMusicSoundScroll.WinTop - 1, 40, m_ILabelHeight, self));
     m_LMusicSoundValue.Font = F_Normal;
     m_LMusicSoundValue.TextColor = m_TextColor;
     m_LMusicSoundValue.SetLabelText("0", TXT_LEFT);
 
-    m_LSFXSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_SFXSoundScroll.WinTop, 40, m_ILabelHeight, self));
+    m_LSFXSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_SFXSoundScroll.WinTop - 1, 40, m_ILabelHeight, self));
     m_LSFXSoundValue.Font = F_Normal;
     m_LSFXSoundValue.TextColor = m_TextColor;
     m_LSFXSoundValue.SetLabelText("0", TXT_LEFT);

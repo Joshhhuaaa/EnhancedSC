@@ -13,6 +13,7 @@ var EPCOptionKeysListBox m_ListBox;
 var EPCMessageBox        m_MessageBox;
 
 var EPCHScrollBar        m_MouseSensitivityScroll;
+var UWindowLabelControl  m_LMouseSensitivityValue; // Joshua - Label for the mouse sensitivity scroll bar
 var EPCHScrollBar        m_InitialSpeedScroll; // Joshua - Enhanced setting
 var EPCCheckBox          m_InvertMouseButton;
 var EPCCheckBox          m_FireEquipGun;
@@ -222,6 +223,10 @@ function Refresh()
 
     if (m_ControllerScheme != None)
         m_ControllerScheme.SetSelectedIndex(Clamp(EPC.ControllerScheme, 0, m_ControllerScheme.List.Items.Count() - 1));
+
+    // Joshua - Update mouse sensitivity value label
+    if (m_LMouseSensitivityValue != None && m_MouseSensitivityScroll != None)
+        m_LMouseSensitivityValue.SetLabelText(string(int(m_MouseSensitivityScroll.Pos)), TXT_LEFT);
 
     // MClarke - Patch 1 Beta 2 - Added false parameter 
     RefreshKeyList(false);
@@ -459,8 +464,18 @@ function AddControls()
     m_MouseSensitivityScroll.SetScrollHeight(12);
     m_MouseSensitivityScroll.SetRange(1, 100, 1);
 
+    // Joshua - Create value label for mouse sensitivity scrollbar
+    m_LMouseSensitivityValue = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 0, 0, 40, 18));
+    m_LMouseSensitivityValue.Font = F_Normal;
+    m_LMouseSensitivityValue.TextColor.R = 71;
+    m_LMouseSensitivityValue.TextColor.G = 71;
+    m_LMouseSensitivityValue.TextColor.B = 71;
+    m_LMouseSensitivityValue.TextColor.A = 255;
+    m_LMouseSensitivityValue.SetLabelText("1", TXT_LEFT);
+
     NewItem.m_Control = m_MouseSensitivityScroll;
     m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_MouseSensitivityScroll;
+    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_LMouseSensitivityValue;
 }
 
 //===============================================================================
@@ -504,6 +519,11 @@ function RefreshKeyList(bool bKeysOnly) // MClarke - Patch 1 Beta 2 - Added bool
         GO = class'Actor'.static.GetGameOptions();
 
         m_MouseSensitivityScroll.Pos = Clamp(GO.MouseSensitivity, 1,100);    
+
+        // Joshua - Update value label for mouse sensitivity scrollbar
+        if (m_LMouseSensitivityValue != None)
+            m_LMouseSensitivityValue.SetLabelText(string(int(m_MouseSensitivityScroll.Pos)), TXT_LEFT);
+
         m_InvertMouseButton.m_bSelected = GO.InvertMouse;    
 	    m_FireEquipGun.m_bSelected = GO.FireEquipGun;
         m_InitialSpeedScroll.Pos = Clamp(EPC.eGame.m_defautSpeed, 1,6);
@@ -729,6 +749,9 @@ function Notify(UWindowDialogControl C, byte E)
     else if(E == DE_Change && C == m_MouseSensitivityScroll)
     {
         m_bModified = true;
+        // Joshua - Update value label for mouse sensitivity scrollbar
+        if (m_LMouseSensitivityValue != None)
+            m_LMouseSensitivityValue.SetLabelText(string(int(m_MouseSensitivityScroll.Pos)), TXT_LEFT);
     }
     else if(E == DE_Change && C == m_InitialSpeedScroll)
     {

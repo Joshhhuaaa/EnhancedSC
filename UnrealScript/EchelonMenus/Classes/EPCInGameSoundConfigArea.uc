@@ -38,7 +38,7 @@ defaultproperties
     m_IResetToDefaultYPos=186
     m_IResetToDefaultWidth=240
     m_IResetToDefaultHeight=18
-    m_IScrollWidth=150
+    m_IScrollWidth=130 // Joshua - Reduced from 150 to fit the new label
     m_IDropDownLabelYPos=110
     m_ILabel3DAccXPos=250
     m_IEaxYPos=135

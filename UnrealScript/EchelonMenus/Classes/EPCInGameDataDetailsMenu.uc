@@ -15,14 +15,13 @@ var INT             m_IReturnButtonsXPos, m_IReturnButtonsHeight, m_IReturnButto
 
 var ERecon	        m_Recon;
 
-var   EPCVScrollBar     m_ScrollBar;
-var   BOOL              m_BInitScrollBar;
+var   EPCVScrollBar m_ScrollBar;
+var   BOOL          m_BInitScrollBar;
 
 var INT             m_INbScroll, m_INbLinesDisplayed;
   
 function Created()
 {
- 
 	SetAcceptsFocus();
     m_Return  = EPCTextButton(CreateControl( class'EPCTextButton', m_IReturnButtonsXPos, m_IReturnButtonsYPos, m_IReturnButtonsWidth, m_IReturnButtonsHeight, self));
     m_Return.SetButtonText(Caps(Localize("HUD","BACK","Localization\\HUD")) ,TXT_CENTER);
@@ -107,8 +106,8 @@ function Notify(UWindowDialogControl C, byte E)
 
 defaultproperties
 {
-    m_IReturnButtonsXPos=80
+    m_IReturnButtonsXPos=68 //80 // Joshua - Fixed the "Back" button size/location
     m_IReturnButtonsHeight=18
-    m_IReturnButtonsWidth=150
+    m_IReturnButtonsWidth=240 //150 // Joshua - Fixed the "Back" button size/location
     m_IReturnButtonsYPos=353
 }

@@ -40,14 +40,40 @@ function LMouseDown(float X, float Y)
 function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H)
 {
     local EPCEnhancedListBoxItem listBoxItem;
+    local int i;
+    local EPCHScrollBar ScrollBar;
+    local UWindowLabelControl ValueLabel;
     
-    listBoxItem = EPCEnhancedListBoxItem(Item);    if(listBoxItem != None)
-    {        if(listBoxItem.m_Control != None)
+    listBoxItem = EPCEnhancedListBoxItem(Item);
+    if(listBoxItem != None)
+    {
+        if(listBoxItem.m_Control != None)
         {
             listBoxItem.m_Control.WinTop = Y;
-            // Left-align controls using same method as sound config (labelXPos + labelWidth)
+            // Joshua - Left-align controls using same method as sound config (labelXPos + labelWidth)
             listBoxItem.m_Control.WinLeft = X + m_ILabelXPos + m_ILabelWidth;
             listBoxItem.m_Control.ShowWindow();
+            
+            // Joshua - Position value labels to the right of scrollbars
+            ScrollBar = EPCHScrollBar(listBoxItem.m_Control);
+            if (ScrollBar != None)
+            {
+                // Joshua - Look for the corresponding value label (should be the next control in the array)
+                for (i = 0; i < m_Controls.Length - 1; i++)
+                {
+                    if (m_Controls[i] == ScrollBar)
+                    {
+                        ValueLabel = UWindowLabelControl(m_Controls[i + 1]);
+                        if (ValueLabel != None)
+                        {
+                            ValueLabel.WinTop = Y - 1; // Joshua - Subtracting 1 from WinTop seems better alligned
+                            ValueLabel.WinLeft = ScrollBar.WinLeft + ScrollBar.WinWidth + 5;
+                            ValueLabel.ShowWindow();
+                        }
+                        break;
+                    }
+                }
+            }
         }
     }
 
