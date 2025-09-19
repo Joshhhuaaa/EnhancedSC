@@ -1,4 +1,5 @@
 class ECanvas extends Canvas 
+	config // Joshua - Allowing SplinterCell.ini to change fonts
 	native
 	noexport;
 
@@ -32,6 +33,14 @@ var color black;
 var color white;
 var color TextBlack;
 var color TextGreen;
+
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
+
+var Font ETextFontPC; // Joshua - Xbox font support
 
 native(3000) final function BeginScene( int X, int Y, int Width, int Height,float RWidth, float RHeight, optional int ClearFlags );
 native(3001) final function DrawPlayerPortal(PlayerController Player, optional int ClearFlags ,optional float blur_coef);
@@ -96,4 +105,5 @@ defaultproperties
     TextBlack=(R=51,G=51,B=51,A=255)
     TextGreen=(R=77,G=77,B=77,A=255)
     MedFont=Font'Engine.SmallFont'
+	ETextFontPC=Font'Engine.ETextFontPC' // Joshua - Xbox font support
 }

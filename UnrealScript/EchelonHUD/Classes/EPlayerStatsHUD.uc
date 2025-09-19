@@ -178,7 +178,7 @@ function DrawPlayerStats(ECanvas Canvas)
         
     playerStats = Epc.playerStats;
         
-    Canvas.Font = Canvas.ETextFont;
+    Canvas.Font = Canvas.ETextFontPC;
     Canvas.TextSize("T", xLen, yLen);
     
     TitleColor.R = 96;

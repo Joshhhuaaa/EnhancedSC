@@ -204,6 +204,7 @@ var(Enhanced) config ETurnOffDistanceScale TurnOffDistanceScale;
 // Native Variables
 var(Enhanced) config bool bSkipIntroVideos;
 var(Enhanced) config bool bDisableMenuIdleTimer; // Joshua - Disables inactivity videos
+var(Enhanced) config bool bXboxFont;
 var(Enhanced) config bool bLODDistance;
 var(Enhanced) config bool bPauseOnFocusLoss;
 var(Enhanced) config bool bCheckForUpdates;
@@ -449,6 +450,7 @@ defaultproperties
     ESam_KolaCell=SMT_Default
     ESam_Vselka=SMT_Default
     TurnOffDistanceScale=TurnOffDistance_4x
+    bXboxFont=true
     bLODDistance=true
     bPauseOnFocusLoss=true
     bCheckForUpdates=true

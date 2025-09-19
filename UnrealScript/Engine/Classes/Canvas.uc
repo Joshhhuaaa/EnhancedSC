@@ -14,7 +14,8 @@ class Canvas extends Object
 // * BEGIN UBI MODIF 
 // * fschelling (23 mar 2002)
 // ***********************************************************************************************
-#exec Font IMPORT NAME=ETextFont        FILE="..\Textures\Font\txt_integration.pcx"
+#exec Font IMPORT NAME=ETextFont        FILE="..\Textures\Font\txt_integration_xbox.pcx"
+#exec Font IMPORT NAME=ETextFontPC      FILE="..\Textures\Font\txt_integration.pcx"
 #exec Font IMPORT NAME=ETitleFont       FILE="..\Textures\Font\titre_regular_integration.pcx"
 #exec Font IMPORT NAME=ETitleBoldFont   FILE="..\Textures\Font\titre_bold_integration.pcx"
 #exec Font IMPORT NAME=EHUDFont         FILE="..\Textures\Font\txt_hud.pcx"
@@ -22,7 +23,8 @@ class Canvas extends Object
 #exec new TrueTypeFontFactory Name=Verdana FontName="Verdana" Height=12 AntiAlias=1 CharactersPerPage=64
 #exec Font IMPORT NAME=EMissionFont     FILE="..\Textures\Font\txt_mission.pcx"
 
-var Font ETextFont, ETitleFont, ETitleBoldFont, EHUDFont, Verdana, EMissionFont;
+// Joshua - Allowing SplinterCell.ini to change fonts
+var config Font ETextFont, ETitleFont, ETitleBoldFont, EHUDFont, Verdana, EMissionFont;
 var bool bDrawTile;
 // ***********************************************************************************************
 // * END UBI MODIF 
