@@ -17,6 +17,7 @@ class EPCMainMenuRootWindow extends UWindowRootWindow
 //
 
 #exec Font IMPORT NAME=ETextFont        FILE="..\Textures\Font\txt_integration.pcx"
+#exec Font IMPORT NAME=ETextFontXbox    FILE="..\Textures\Font\txt_integration_xbox.pcx"
 #exec Font IMPORT NAME=ETitleFont       FILE="..\Textures\Font\titre_regular_integration.pcx"
 #exec Font IMPORT NAME=ETitleBoldFont   FILE="..\Textures\Font\titre_bold_integration.pcx"
 #exec Font IMPORT NAME=EHUDFont         FILE="..\Textures\Font\txt_hud.pcx"
@@ -281,7 +282,9 @@ function SetupFonts()
         Fonts[F_Normal]     = Font'ETextFont';
 	    Fonts[F_Bold]       = Font'EMissionFont';
 	    Fonts[F_Large]      = Font'ETitleFont';
-	    Fonts[F_LargeBold]  = Font'ETitleBoldFont';	
+	    Fonts[F_LargeBold]  = Font'ETitleBoldFont';
+		// Joshua - Xbox font support
+		Fonts[4]			= Font'ETextFontXbox';
     }
 
 	//

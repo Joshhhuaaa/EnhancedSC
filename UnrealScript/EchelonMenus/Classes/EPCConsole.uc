@@ -424,7 +424,8 @@ state UWindow
             MenuHUD = EchelonMainHUD(ViewportOwner.Actor.myHUD).MainMenuHUD;
             if(MenuHUD != None && MenuHUD.bInactVideoPlaying)
             {
-                MenuHUD.bStopInactVideo = True;
+                bMusicPlaying = false; // Joshua - Fixes a bug where music stops playing after skipping inactivity video
+                MenuHUD.bStopInactVideo = true;
                 return true;
             }
         }

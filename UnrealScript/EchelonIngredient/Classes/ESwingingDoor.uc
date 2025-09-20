@@ -47,12 +47,6 @@ function PostBeginPlay()
 
 	Super.PostBeginPlay();
 
-	// Joshua - Option to randomize lock pick combinations
-	if(EchelonGameInfo(Level.Game).bRandomizeLockpick)
-    {
-        RandomizeLockPattern();
-    }
-
 	// Validate opening direction
 	if( KeyRot[1].Yaw < 0 && KeyRot[2].Yaw > 0 )
 	{

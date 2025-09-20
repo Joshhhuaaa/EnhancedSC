@@ -16,7 +16,11 @@ var INT                     m_IListBoxXPos, m_IListBoxYPos, m_IListBoxWidth, m_I
 function Created()
 {
     m_ListBox           = EPCReconListBox(CreateControl( class'EPCReconListBox', m_IListBoxXPos, m_IListBoxYPos, m_IListBoxWidth, m_IListBoxHeight, self));        
-    m_ListBox.Font      = F_Normal;
+    // Joshua - Xbox font support
+    if (EPlayerController(GetPlayerOwner()).eGame.bXboxFont)
+        m_ListBox.Font  = 4;
+    else
+        m_ListBox.Font  = F_Normal;
     m_ListBox.Align     = TXT_LEFT;
     
 }

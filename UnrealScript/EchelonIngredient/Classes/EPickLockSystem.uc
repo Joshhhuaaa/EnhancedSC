@@ -38,6 +38,12 @@ function Init( Controller Instigator, EPickLockInteraction plint )
 	bRenderAtEndOfFrame=true;
 
 	PlaySound(PLI.LockPick.StartLockPick, SLOT_Interface);
+
+	// Joshua - Option to randomize lock pick combinations
+	if(EchelonGameInfo(Level.Game).bRandomizeLockpick)
+    {
+        PLI.MyDoor.RandomizeLockPattern();
+    }
 }
 
 //------------------------------------------------------------------------
