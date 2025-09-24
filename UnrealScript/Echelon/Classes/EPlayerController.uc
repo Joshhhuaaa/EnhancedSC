@@ -246,6 +246,15 @@ enum EControllerScheme
 };
 var(Enhanced) config EControllerScheme ControllerScheme;
 
+enum EControllerIcon
+{
+	CI_Xbox,
+	CI_PlayStation,
+	CI_GameCube,
+	CI_None
+};
+var(Enhanced) config EControllerIcon ControllerIcon;
+
 var(Enhanced) config bool bNormalizeMovement; // Joshua - Option to normalize movement
 var(Enhanced) config bool bCrouchDrop; // Joshua - When hanging or using a zipline, crouch drops and jump raises legs
 
@@ -3318,8 +3327,8 @@ state s_Carry
 	function bool CanAddInteract( EInteractObject IntObj )
 	{
 		//return false;
-		// Joshua - PT carry interact
-		if( !bInTransition && ( IntObj.class.name == 'EDoorInteraction' ) )
+		// Joshua - Adding interactions for doors and triggers
+		if( !bInTransition && ( IntObj.class.name == 'EDoorInteraction' || IntObj.class.name == 'ETriggerInteraction' ) )
 			return true;
 		else
 			return false;
@@ -3345,6 +3354,12 @@ state s_Carry
 
 		if( !bInTransition && ePawn.Physics != PHYS_Falling)
 			GoToState(, 'Drop');
+	}
+
+	// Joshua - Adding interactions for doors and triggers
+	function ReturnFromInteraction()
+	{
+		bInTransition = false;
 	}
 
 	function PlayerTick( float deltaTime )
@@ -10268,6 +10283,7 @@ state s_ZipLine
 	ignores Fire;
     function BeginState()
     {
+		ePawn.bWantsToCrouch = false; // Joshua - Prevents animation bug when entering zipline while holding crouch
 		ePawn.SetZipLineZones();
 		ePawn.PlaySound(Sound'FisherFoley.Play_MLayer_FisherZipLine', SLOT_SFX);
 		m_camera.SetMode(ECM_FSphere);
@@ -10275,6 +10291,7 @@ state s_ZipLine
 
     function EndState()
     {
+		ePawn.bWantsToCrouch = false; // Joshua - Prevents animation bug when entering zipline while holding crouch
         ePawn.ResetZones();
 		ePawn.StopSound(Sound'FisherFoley.Play_MLayer_FisherZipLine');
 		m_LastZipLineTime = Level.TimeSeconds;
@@ -10770,6 +10787,7 @@ defaultproperties
 	CheckpointLevel="None" // Joshua - New variable to keep track which level the Checkpoint was on
 	InputMode=IM_Auto // Joshua - Input mode
 	ControllerScheme=CS_Default // Joshua - Default, Pandora, PlayStation
+	ControllerIcon=CI_Xbox // Joshua - Xbox, PlayStation, GameCube
 	bNormalizeMovement=true // Joshua - Option to normalize movement
 	bToggleBTWTargeting=true // Joshua - Used to toggle BTW targeting instead of holding direction
 	bWhistle=true // Joshua - Option to enable whlisting in keybinds

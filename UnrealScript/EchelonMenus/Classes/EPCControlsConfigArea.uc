@@ -21,8 +21,10 @@ var EPCCheckBox          m_bNormalizeMovement; // Joshua - Enhanced setting
 var EPCCheckBox          m_bCrouchDrop; // Joshua - Enhanced setting
 var EPCCheckBox          m_bToggleBTWTargeting; // Joshua - Enhanced setting
 var EPCCheckBox          m_bToggleInventory; // Joshua - Enhanced setting
+var EPCCheckBox          m_bEnableRumble; // Joshua - Enhanced setting
 var EPCComboControl      m_InputMode; // Joshua - Enhanced setting
 var EPCComboControl      m_ControllerScheme; // Joshua - Enhnaced setting
+var EPCComboControl      m_ControllerIcon; // Joshua - Enhnaced setting
 
 var bool                    m_bModified;    //A setting has changed
 var bool					m_bFirstRefresh;
@@ -127,6 +129,10 @@ function InitOptionControls()
     AddInputModeControls();
     AddLineItem();
     AddControllerSchemeControls();
+    AddLineItem();
+    AddControllerIconControls();
+    AddLineItem();
+    AddEnableRumbleControls();
 }
 
 //==============================================================================
@@ -182,6 +188,25 @@ function SaveOptions()
             EPC.ControllerScheme = CS_Default;
             break;
     }
+    switch (m_ControllerIcon.GetSelectedIndex())
+    {
+        case 0:
+            EPC.ControllerIcon = CI_Xbox;
+            break;
+        case 1:
+            EPC.ControllerIcon = CI_PlayStation;
+            break;
+        case 2:
+            EPC.ControllerIcon = CI_GameCube;
+            break;
+        case 3:
+            EPC.ControllerIcon = CI_None;
+            break;
+        default:
+            EPC.ControllerIcon = CI_Xbox;
+            break;
+    }
+    EPC.eGame.bEnableRumble = m_bEnableRumble.m_bSelected;
     
     // Reset all m_bDrawFlipped's
     for ( ListItem = m_ListBox.Items.Next; ListItem != None ; ListItem = ListItem.Next)
@@ -223,6 +248,12 @@ function Refresh()
 
     if (m_ControllerScheme != None)
         m_ControllerScheme.SetSelectedIndex(Clamp(EPC.ControllerScheme, 0, m_ControllerScheme.List.Items.Count() - 1));
+
+    if (m_ControllerIcon != None)
+        m_ControllerIcon.SetSelectedIndex(Clamp(EPC.ControllerIcon, 0, m_ControllerIcon.List.Items.Count() - 1));
+
+    if (m_bEnableRumble != None)
+        m_bEnableRumble.m_bSelected = EPC.eGame.bEnableRumble;
 
     // Joshua - Update mouse sensitivity value label
     if (m_LMouseSensitivityValue != None && m_MouseSensitivityScroll != None)
@@ -268,6 +299,8 @@ function ResetToDefault()
     m_bToggleInventory.m_bSelected = false;
     m_InputMode.SetSelectedIndex(0);
     m_ControllerScheme.SetSelectedIndex(0);
+    m_ControllerIcon.SetSelectedIndex(0);
+    m_bEnableRumble.m_bSelected = true;
 }
 //===============================================================================
 // AddFireEquipControls
@@ -390,6 +423,26 @@ function AddToggleInventoryControls()
 }
 
 //===============================================================================
+// AddEnableRumbleControls
+//===============================================================================
+function AddEnableRumbleControls()
+{
+    // Joshua - Enhanced rumble
+    local EPCOptionsKeyListBoxItem NewItem;
+
+    NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
+    NewItem.Caption			        = Localize("Controls","EnableRumble","Localization\\Enhanced");
+    NewItem.m_bIsNotSelectable  = true;
+
+    m_bEnableRumble = EPCCheckBox(CreateControl( class'EPCCheckBox', 0, 0, 20, 18, self));    
+    m_bEnableRumble.ImageX      = 5;
+    m_bEnableRumble.ImageY      = 5;
+    NewItem.m_Control = m_bEnableRumble;
+    NewItem.bIsCheckBoxLine = true;
+    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_bEnableRumble;
+}
+
+//===============================================================================
 // AddInputModeControls
 //===============================================================================
 function AddInputModeControls()
@@ -435,6 +488,31 @@ function AddControllerSchemeControls()
 
     NewItem.m_Control = m_ControllerScheme;
     m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_ControllerScheme;
+}
+
+//===============================================================================
+// AddControllerIconControls
+//===============================================================================
+function AddControllerIconControls()
+{
+    // Joshua - Enhanced controller icons
+    local EPCOptionsKeyListBoxItem NewItem;
+
+    NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
+    NewItem.Caption			        = Localize("Controls","ControllerIcon","Localization\\Enhanced");
+    NewItem.m_bIsNotSelectable  = true;
+
+    m_ControllerIcon = EPCComboControl(CreateControl( class'EPCComboControl', 265, 105, 150, 18, self));    
+    m_ControllerIcon.SetFont(F_Normal);
+    m_ControllerIcon.SetEditable(False);
+    m_ControllerIcon.AddItem(Localize("Controls","CI_Xbox","Localization\\Enhanced"));
+    m_ControllerIcon.AddItem(Localize("Controls","CI_PlayStation","Localization\\Enhanced"));
+    m_ControllerIcon.AddItem(Localize("Controls","CI_GameCube","Localization\\Enhanced"));
+    m_ControllerIcon.AddItem(Localize("Controls","CI_None","Localization\\Enhanced"));
+    m_ControllerIcon.SetSelectedIndex(0);
+
+    NewItem.m_Control = m_ControllerIcon;
+    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_ControllerIcon;
 }
 
 //===============================================================================
@@ -533,6 +611,8 @@ function RefreshKeyList(bool bKeysOnly) // MClarke - Patch 1 Beta 2 - Added bool
         m_bToggleInventory.m_bSelected = EPC.bToggleInventory;
         m_InputMode.SetSelectedIndex(Clamp(EPC.InputMode,0,m_InputMode.List.Items.Count()));
         m_ControllerScheme.SetSelectedIndex(Clamp(EPC.ControllerScheme,0,m_ControllerScheme.List.Items.Count()));
+        m_ControllerIcon.SetSelectedIndex(Clamp(EPC.ControllerIcon,0,m_ControllerScheme.List.Items.Count()));
+        m_bEnableRumble.m_bSelected = EPC.eGame.bEnableRumble;
     }
 }
 
@@ -778,6 +858,14 @@ function Notify(UWindowDialogControl C, byte E)
         m_bModified = true;
     }
     else if(E==DE_Change && C == m_ControllerScheme)
+    {
+        m_bModified = true;
+    }
+    else if(E==DE_Change && C == m_ControllerIcon)
+    {
+        m_bModified = true;
+    }
+    else if(E==DE_Click && C == m_bEnableRumble)
     {
         m_bModified = true;
     }

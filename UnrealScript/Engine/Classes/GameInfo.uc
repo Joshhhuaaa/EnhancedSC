@@ -19,15 +19,15 @@ class GameInfo extends Info
 //-----------------------------------------------------------------------------
 // Variables.
 
-var byte  Difficulty;									// 0=easy, 1=medium, 2=hard, 3=very hard.
+var byte					  Difficulty;				// 0=easy, 1=medium, 2=hard, 3=very hard.
 var bool				      bRestartLevel;			// Level should be restarted when player dies
 var bool				      bPauseable;				// Whether the game is pauseable.
 var	bool					  bGameEnded;				// set when game ends
 var bool					  bWaitingToStartMatch;
 var globalconfig bool		  bChangeLevels;
-var		bool				  bAlreadyChanged;
-var   float                   StartTime;
-var   string				  DefaultPlayerClassName;
+var bool					  bAlreadyChanged;
+var float	                  StartTime;
+var string					  DefaultPlayerClassName;
 
 var localized string	      DefaultPlayerName;
 var localized string	      GameName;
@@ -47,7 +47,9 @@ var(Stealth) config 	float	VisSpeedGain;		// divide current player speed by this
 var(Stealth) config 	float	VisCrouchMul;			// crouching subtracts this amount from base light calculation
 var(Stealth) config		float	VisBackToWallMul;
 
-var			 config		bool	UseRumble;
+// Joshua - Removed 'config' keyword so SplinterCell.ini no longer affects this option
+// Rumble is now controlled by bEnableRumble in EchelonGameInfo
+var	bool UseRumble;
 
 // ***********************************************************************************************
 // * END UBI MODIF 
@@ -438,4 +440,5 @@ defaultproperties
     DefaultPlayerName="Player"
     GameName="Game"
     PlayerControllerClassName="Engine.PlayerController"
+	UseRumble=true // Joshua - Always set to true, Rumble is now toggled via bEnableRumble in EchelonGameInfo
 }

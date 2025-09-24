@@ -614,11 +614,24 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 			// Color given by the interface artist (Veronique)
 			if (eGame.bUseController)
 			{
-				Canvas.SetDrawColor(92,109,76);
 				Canvas.SetPos( 640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - 30 ,eGame.HUD_OFFSET_Y + (INTER_BOX_HEIGHT/2) - 11 );
-				eLevel.Tmenu.DrawTileFromManager(Canvas, eLevel.TMENU.but_s_a, 22, 22, 0, 0, 22, 22);		
+				Canvas.SetDrawColor(92,109,76);
+				switch (Epc.ControllerIcon)
+				{
+					case CI_Xbox:
+						eLevel.Tmenu.DrawTileFromManager(Canvas, eLevel.TMENU.but_s_a, 22, 22, 0, 0, 22, 22);
+						break;
+						
+					case CI_PlayStation:
+						Canvas.DrawTile(Texture'HUD_Enhanced.HUD.PS2_Cross', 22, 22, 3, 3, 26, 26);
+						break;
+						
+					case CI_GameCube:
+						Canvas.DrawTile(Texture'HUD_Enhanced.HUD.GameCube_A', 22, 22, 3, 3, 26, 26);
+						break;
+				}
 			}
-		}										
+		}
 				
 		// Reset color
 		Canvas.SetDrawColor(128,128,128,255);

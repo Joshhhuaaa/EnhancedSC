@@ -202,6 +202,7 @@ enum ETurnOffDistanceScale
 var(Enhanced) config ETurnOffDistanceScale TurnOffDistanceScale;
 
 // Native Variables
+var(Enhanced) config bool bEnableRumble; // Joshua - UseRumble in Engine.GameInfo  is now deprecated, this setting will now toggle rumble
 var(Enhanced) config bool bSkipIntroVideos;
 var(Enhanced) config bool bDisableMenuIdleTimer; // Joshua - Disables inactivity videos
 var(Enhanced) config bool bXboxFont;
@@ -450,6 +451,7 @@ defaultproperties
     ESam_KolaCell=SMT_Default
     ESam_Vselka=SMT_Default
     TurnOffDistanceScale=TurnOffDistance_4x
+    bEnableRumble=True
     bXboxFont=true
     bLODDistance=true
     bPauseOnFocusLoss=true

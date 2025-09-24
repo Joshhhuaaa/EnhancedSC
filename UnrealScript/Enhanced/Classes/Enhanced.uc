@@ -12,6 +12,8 @@ class Enhanced extends Actor;
 // Joshua - Uncomment to generate a new HUD_Enhanced.utx with modified or new textures
 // Textures must be extracted into Textures\HUD_Enhanced
 /*
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\PS2_Cross.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="PS2_Cross" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\GameCube_A.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="GameCube_A" MIPS=0
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Alarm.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Alarm" MIPS=0
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\AlarmBackground.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="AlarmBackground" MIPS=0
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Discord.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Discord" MIPS=0

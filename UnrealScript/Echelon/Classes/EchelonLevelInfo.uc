@@ -765,6 +765,27 @@ function SendMusicRequest(int _Type, bool _bPlay, Actor _Instigator, optional bo
 		MusicObj.SendMusicRequest( _Type,  _bPlay,  _Instigator, DontPlayPunch );
 }
 
+// Joshua - Override rumble functions to check bEnableRumble setting
+function RumbleShake(float Duration, float Strenth)
+{
+	local EchelonGameInfo eGame;
+	
+	eGame = EchelonGameInfo(Game);
+
+	if(eGame != None && eGame.bUseController && eGame.bEnableRumble && Rumble != None)
+		Rumble.Shake(Duration, Strenth);
+}
+
+function RumbleVibrate(float Duration, float Strenth)
+{
+	local EchelonGameInfo eGame;
+	
+	eGame = EchelonGameInfo(Game);
+
+	if(eGame != None && eGame.bUseController && eGame.bEnableRumble && Rumble != None)
+		Rumble.Vibrate(Duration, Strenth);
+}
+
 defaultproperties
 {
     AlarmPatternClass=Class'LambertWarnings'
