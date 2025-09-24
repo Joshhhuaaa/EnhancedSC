@@ -26,6 +26,7 @@
 #include "submodule_initiailization.hpp"
 #include "use_xbox_fonts.hpp"
 #include "version_checker.hpp"
+#include "controller_rumble.hpp"
 
 ///WIP
 //#include "msaa.hpp"
@@ -72,7 +73,8 @@ void InitUWindow() //g_GameDLLs.UWindow
 {
 }
 void InitWinDrv() //g_GameDLLs.WinDrv
-{}
+{
+}
 
 void InitD3DDrv() //g_GameDLLs.D3DDrv
 {
@@ -99,6 +101,8 @@ void InitializeSubsystems()
         INITIALIZE(RestoreEAX::Initialize());
         INITIALIZE(DPadKeybinds::Initialize());
         INITIALIZE(UseXboxFonts::Toggle());
+        INITIALIZE(ControllerRumble::Fix());
+
 
         INITIALIZE(CheckForUpdates());
     }
