@@ -8,17 +8,17 @@ namespace
     void UpdateXboxFontsINIVar()
     {
         spdlog::info("Syncing bUseXboxFonts in SplinterCell.ini");
-        std::filesystem::path SplinterCellUserIni = sExePath / "SplinterCell.ini";
-        if (!std::filesystem::exists(SplinterCellUserIni))
+        std::filesystem::path SplinterCellIni = sExePath / "SplinterCell.ini";
+        if (!std::filesystem::exists(SplinterCellIni))
         {
             spdlog::warn("SplinterCell.ini not found!");
             return;
         }
 
-        std::ifstream iniFile(SplinterCellUserIni.string());
+        std::ifstream iniFile(SplinterCellIni.string());
         if (!iniFile)
         {
-            spdlog::error("Error opening ini file {}.", SplinterCellUserIni.string());
+            spdlog::error("Error opening ini file {}.", SplinterCellIni.string());
             return;
         }
 
@@ -89,10 +89,18 @@ namespace
 
         if (modified)
         {
-            std::ofstream outFile(SplinterCellUserIni, std::ios::binary | std::ios::trunc);
+            std::filesystem::path tmpPath = SplinterCellIni;
+            tmpPath += ".tmp";
+
+            if (std::filesystem::exists(tmpPath))
+            {
+                std::filesystem::remove(tmpPath);
+            }
+
+            std::ofstream outFile(tmpPath, std::ios::binary | std::ios::trunc);
             if (!outFile)
             {
-                spdlog::error("Error writing ini file {}.", SplinterCellUserIni.string());
+                spdlog::error("Error writing tmp ini file {}.", tmpPath.string());
                 return;
             }
 
@@ -101,14 +109,10 @@ namespace
                 outFile << l << "\r\n";
             }
 
-            // Ensure exactly one trailing blank line at EOF
-            if (lines.empty() || !lines.back().empty())
-            {
-                outFile << "\r\n";
-            }
+            outFile.close();
 
-
-            spdlog::info("{} bXboxFont updated to: {}", SplinterCellUserIni.string(), DesiredSetting);
+            std::filesystem::rename(tmpPath, SplinterCellIni);
+            spdlog::info("{} bXboxFont updated to: {}", SplinterCellIni.string(), DesiredSetting);
         }
         else
         {
