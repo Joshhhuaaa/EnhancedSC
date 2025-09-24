@@ -12,6 +12,7 @@
 #include "distance_culling.hpp"
 #include "idle_timers.hpp"
 #include "use_xbox_fonts.hpp"
+#include "controller_rumble.hpp"
 
 // -----------------------------------------------------------------------------
 // ConfigHelper: A type-safe, case-insensitive, error-checked INI config reader.
@@ -171,6 +172,9 @@ void Config::Read()
 
     ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bXboxFont", g_UseXboxFonts.bXboxFont);
     LOG_CONFIG(ConfigKeys::UseXboxFonts_Section, ConfigKeys::UseXboxFonts_Setting, g_UseXboxFonts.bXboxFont);
+
+    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bEnableRumble", g_ControllerRumble.bEnabled);
+    LOG_CONFIG(ConfigKeys::EnableRumble_Section, ConfigKeys::EnableRumble_Setting, g_ControllerRumble.bEnabled);
 
     ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bCheckForUpdates", bShouldCheckForUpdates);
     LOG_CONFIG(ConfigKeys::CheckForUpdates_Section, ConfigKeys::CheckForUpdates_Setting, bShouldCheckForUpdates);

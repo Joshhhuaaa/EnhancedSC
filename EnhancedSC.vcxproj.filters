@@ -92,6 +92,9 @@
     <ClCompile Include="src\features\use_xbox_fonts.cpp">
       <Filter>Features</Filter>
     </ClCompile>
+    <ClCompile Include="src\features\controller_rumble.cpp">
+      <Filter>Features</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\features\intro_skip.hpp">
@@ -176,6 +179,9 @@
       <Filter>Features\Headers</Filter>
     </ClInclude>
     <ClInclude Include="src\features\use_xbox_fonts.hpp">
+      <Filter>Features\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\features\controller_rumble.hpp">
       <Filter>Features\Headers</Filter>
     </ClInclude>
   </ItemGroup>

@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\features\controller_rumble.cpp" />
     <ClCompile Include="src\features\dpad_keybinds.cpp" />
     <ClCompile Include="external\safetyhook\src\allocator.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -71,6 +72,7 @@
     <ClCompile Include="src\features\use_xbox_fonts.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\features\controller_rumble.hpp" />
     <ClInclude Include="src\features\dpad_keybinds.hpp" />
     <ClInclude Include="external\safetyhook\include\safetyhook.hpp" />
     <ClInclude Include="src\fixes\mouse_xbuttons_support.hpp" />
