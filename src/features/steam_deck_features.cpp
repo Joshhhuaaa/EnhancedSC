@@ -76,16 +76,28 @@ namespace
 
         if (modified)
         {
-            std::ofstream outFile(SplinterCellUserIni, std::ios::trunc);
+            std::filesystem::path tmpPath = SplinterCellUserIni;
+            tmpPath += ".tmp";
+
+            if (std::filesystem::exists(tmpPath))
+            {
+                std::filesystem::remove(tmpPath);
+            }
+
+            std::ofstream outFile(tmpPath, std::ios::trunc);
             if (!outFile)
             {
-                spdlog::error("Error writing ini file {}.", SplinterCellUserIni.string());
+                spdlog::error("Error writing tmp ini file {}.", tmpPath.string());
                 return;
             }
             for (const auto& l : lines)
             {
                 outFile << l << "\n";
             }
+
+            outFile.close();
+
+            std::filesystem::rename(tmpPath, SplinterCellUserIni);
             spdlog::info("{} SteamDeck mode updated to: {}", SplinterCellUserIni.string(), DesiredSetting);
         }
         else
