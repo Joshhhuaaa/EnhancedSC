@@ -26,6 +26,7 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
 function InitPattern()
 {
     local Pawn P;
+    local ESoundVolume SoundVolume;
 
     Super.InitPattern();
 
@@ -38,10 +39,20 @@ function InitPattern()
     // Joshua - Defense Ministry requires 1 bullet to shoot a unavoidable camera for Elite mode
     if (!bInit && EchelonGameInfo(Level.Game).bEliteMode && EPlayerController(Characters[0]) != None && EPlayerController(Characters[0]).HandGun != None)
     {
-        if(EPlayerController(Characters[0]).HandGun.Ammo == 0 && EPlayerController(Characters[0]).HandGun.ClipAmmo == 0 && EPlayerController(Characters[0]).playerStats.BulletFired == 0)
+        if (EPlayerController(Characters[0]).HandGun.Ammo == 0 && EPlayerController(Characters[0]).HandGun.ClipAmmo == 0 && EPlayerController(Characters[0]).playerStats.BulletFired == 0)
         {
             EPlayerController(Characters[0]).HandGun.Ammo = 1;
             EPlayerController(Characters[0]).HandGun.ClipAmmo = 1;
+        }
+    }
+
+    // Joshua - Fixes sound volume that has incorrect sound slot assigned
+    if (!bInit)
+    {
+        ForEach AllActors(class'ESoundVolume', SoundVolume)
+        {
+            if(SoundVolume.name == 'ESoundVolume4')
+                SoundVolume.m_eSoundSlot = SLOT_SFX;
         }
     }
 
