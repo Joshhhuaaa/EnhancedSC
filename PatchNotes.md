@@ -65,8 +65,6 @@
 - Added dedicated keybinds to cycle through the inventory (Previous Weapon and Next Weapon), similar to Pandora Tomorrow.
 - Pressing the Crouch key now exits the Optic Cable, Lockpick, Keypad, and Elevator interactions.
 - Improved controller support to more closely match the Xbox version.
-  - Vibration is not supported due to the game using DirectInput.
-  - Some visual errors may appear on the Xbox inventory and pause screens when using the ThirteenAG Widescreen Fix.
 - Added an option to change the default controller layout with alternate control schemes.
 - Added Alt+F4 support to exit the game during menus or in-game.
 
@@ -183,4 +181,5 @@
   - The second part now starts the player with the same equipment as the first part.
   - Fixed a StaticMesh that was clipping through a ceiling.
   - Added textures for several StaticMeshes that had none assigned.
+
 
