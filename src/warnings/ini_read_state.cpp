@@ -63,7 +63,7 @@ void CheckINIReadPermissions::CheckStatus()
         std::cout << "Settings menus may not function as intended until these files are made writable.\n" << std::endl;
 
         spdlog::warn("{} .ini file{} detected as read-only.", readOnlyCount, (readOnlyCount > 1 ? "s" : ""));
-        spdlog::warn("Settings menus may not function as intended until these files are made writeable.");
+        spdlog::warn("Settings menus may not function as intended until these files are made writable.");
     }
     else
     {
