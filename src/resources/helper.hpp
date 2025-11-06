@@ -75,6 +75,9 @@ namespace Util
 
     int compareSemVer(const std::string& a, const std::string& b);
 
+
+    bool IsFileReadOnly(const std::filesystem::path& path);
+
 }
 
 

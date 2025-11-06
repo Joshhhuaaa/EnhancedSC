@@ -36,4 +36,7 @@ namespace ConfigKeys
     constexpr const char* WarnReadOnlyINIFiles_Section = "Warnings";
     constexpr const char* WarnReadOnlyINIFiles_Setting = "Check for read-only INI files.";
 
+    constexpr const char* WarnReadOnlySaveFiles_Section = "Warnings";
+    constexpr const char* WarnReadOnlySaveFiles_Setting = "Check for read-only gamesave files.";
+
 }

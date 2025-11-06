@@ -651,6 +651,17 @@ namespace Util
     }
 
 
+    bool IsFileReadOnly(const std::filesystem::path& path)
+    {
+        DWORD attrs = GetFileAttributesW(path.wstring().c_str());
+        if (attrs == INVALID_FILE_ATTRIBUTES)
+        {
+            std::wcerr << L"[ERROR] Failed to get attributes for: " << path << std::endl;
+            spdlog::error("Failed to get attributes for file: {}", path.string());
+            return false;
+        }
 
+        return (attrs & FILE_ATTRIBUTE_READONLY) != 0;
+    }
 
 }
