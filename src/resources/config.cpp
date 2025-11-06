@@ -4,6 +4,7 @@
 
 #include <inipp/inipp.h>
 
+#include "check_gamesave_folder.hpp"
 #include "logging.hpp"
 #include "version_checker.hpp"
 #include "config_keys.hpp"
@@ -184,6 +185,9 @@ void Config::Read()
 
     ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bWarnReadOnlyInis", CheckINIReadPermissions::Enabled);
     LOG_CONFIG(ConfigKeys::WarnReadOnlyINIFiles_Section, ConfigKeys::WarnReadOnlyINIFiles_Setting, CheckINIReadPermissions::Enabled);
+
+    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bWarnReadOnlySaveFiles", CheckGamesaveFolderWritable::CheckSaveFiles);
+    LOG_CONFIG(ConfigKeys::WarnReadOnlySaveFiles_Section, ConfigKeys::WarnReadOnlySaveFiles_Setting, CheckGamesaveFolderWritable::CheckSaveFiles);
 
     bool bSteamDeckMode = false;
     ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bSteamDeckMode", bSteamDeckMode); // Not actually used, just to verify config key exists.

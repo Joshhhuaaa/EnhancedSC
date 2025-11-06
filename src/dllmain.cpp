@@ -22,6 +22,7 @@
 
 //Warnings
 #include "asi_loader_checks.hpp"
+#include "check_gamesave_folder.hpp"
 #include "steam_deck_features.hpp"
 #include "submodule_initiailization.hpp"
 #include "use_xbox_fonts.hpp"
@@ -104,6 +105,7 @@ void InitializeSubsystems()
         INITIALIZE(UseXboxFonts::Toggle());
         INITIALIZE(ControllerRumble::Fix());
         INITIALIZE(CheckINIReadPermissions::CheckStatus());
+        INITIALIZE(CheckGamesaveFolderWritable::CheckStatus());
 
 
         INITIALIZE(CheckForUpdates());
