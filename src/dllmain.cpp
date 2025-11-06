@@ -27,6 +27,7 @@
 #include "use_xbox_fonts.hpp"
 #include "version_checker.hpp"
 #include "controller_rumble.hpp"
+#include "ini_read_state.hpp"
 
 ///WIP
 //#include "msaa.hpp"
@@ -102,6 +103,7 @@ void InitializeSubsystems()
         INITIALIZE(DPadKeybinds::Initialize());
         INITIALIZE(UseXboxFonts::Toggle());
         INITIALIZE(ControllerRumble::Fix());
+        INITIALIZE(CheckINIReadPermissions::CheckStatus());
 
 
         INITIALIZE(CheckForUpdates());

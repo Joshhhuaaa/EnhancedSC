@@ -13,6 +13,7 @@
 #include "idle_timers.hpp"
 #include "use_xbox_fonts.hpp"
 #include "controller_rumble.hpp"
+#include "ini_read_state.hpp"
 
 // -----------------------------------------------------------------------------
 // ConfigHelper: A type-safe, case-insensitive, error-checked INI config reader.
@@ -180,6 +181,9 @@ void Config::Read()
     LOG_CONFIG(ConfigKeys::CheckForUpdates_Section, ConfigKeys::CheckForUpdates_Setting, bShouldCheckForUpdates);
 
     bConsoleUpdateNotifications = bShouldCheckForUpdates;
+
+    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bWarnReadOnlyInis", CheckINIReadPermissions::Enabled);
+    LOG_CONFIG(ConfigKeys::WarnReadOnlyINIFiles_Section, ConfigKeys::WarnReadOnlyINIFiles_Setting, CheckINIReadPermissions::Enabled);
 
     bool bSteamDeckMode = false;
     ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bSteamDeckMode", bSteamDeckMode); // Not actually used, just to verify config key exists.
