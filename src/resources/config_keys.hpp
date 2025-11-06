@@ -31,4 +31,9 @@ namespace ConfigKeys
 
     constexpr const char* VerboseLogging_Section = "Internal Settings";
     constexpr const char* VerboseLogging_Setting = "Debug Logging";
+
+    // Warnings
+    constexpr const char* WarnReadOnlyINIFiles_Section = "Warnings";
+    constexpr const char* WarnReadOnlyINIFiles_Setting = "Check for read-only INI files.";
+
 }

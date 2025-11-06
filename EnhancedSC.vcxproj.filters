@@ -95,6 +95,9 @@
     <ClCompile Include="src\features\controller_rumble.cpp">
       <Filter>Features</Filter>
     </ClCompile>
+    <ClCompile Include="src\warnings\ini_read_state.cpp">
+      <Filter>Warnings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\features\intro_skip.hpp">
@@ -183,6 +186,9 @@
     </ClInclude>
     <ClInclude Include="src\features\controller_rumble.hpp">
       <Filter>Features\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\warnings\ini_read_state.hpp">
+      <Filter>Warnings\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
