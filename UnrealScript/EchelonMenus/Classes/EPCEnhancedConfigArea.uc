@@ -5,7 +5,8 @@ class EPCEnhancedConfigArea extends UWindowDialogClientWindow;
 
 var EPCEnhancedListBox      m_ListBox;
 
-var EPCCheckBox             m_bInteractionPause,
+var EPCCheckBox             m_bEnablePlayerStats,
+                            m_bInteractionPause,
                             m_bEnableCheckpoints,
                             m_bXboxDifficulty,
                             m_bLetterBoxCinematics,
@@ -37,8 +38,10 @@ var EPCCheckBox             m_bShowHUD,
 // Native
 var EPCCheckBox             m_bCheckForUpdates,
                             m_bSkipIntroVideos,
-                            m_bDisableMenuIdleTimer,
-                            m_bXboxFont;
+                            m_bDisableMenuIdleTimer;
+
+// Native
+var EPCComboControl         m_FontType;
 
 var EPCComboControl         m_LevelUnlock;
                             
@@ -68,8 +71,8 @@ function Created()
 
     m_ListBox = EPCEnhancedListBox(CreateWindow(class'EPCEnhancedListBox', 0, 0, WinWidth, WinHeight));
     m_ListBox.SetAcceptsFocus();
-    m_ListBox.TitleFont=F_Normal;
-    
+    m_ListBox.TitleFont = F_Normal;
+
     InitEnhancedSettings();
 }
 
@@ -82,16 +85,23 @@ function InitEnhancedSettings()
     AddCheckBoxItem("CheckForUpdates", m_bCheckForUpdates);
     AddCheckBoxItem("SkipIntroVideos", m_bSkipIntroVideos);
     AddCheckBoxItem("DisableMenuIdleTimer", m_bDisableMenuIdleTimer);
-    AddCheckBoxItem("XboxFont", m_bXboxFont);
+
+    AddCheckBoxItem("EnablePlayerStats", m_bEnablePlayerStats);
     AddCheckBoxItem("InteractionPause", m_bInteractionPause);
     AddCheckBoxItem("EnableCheckpoints", m_bEnableCheckpoints);
     AddCheckBoxItem("XboxDifficulty", m_bXboxDifficulty);
+
     AddCheckBoxItem("LetterBoxCinematics", m_bLetterBoxCinematics);
-    AddLineItem();
+
+    AddCompactLineItem();
+
+    AddComboBoxItem("FontType", m_FontType);
+    AddFontTypeCombo(m_FontType);
+
+    AddCompactLineItem();
 
     AddComboBoxItem("LevelUnlock", m_LevelUnlock);
     AddLevelUnlockCombo(m_LevelUnlock);
-    AddLineItem();
 
     AddLineItem();
     AddTitleItem(Caps(Localize("Enhanced", "Title_Equipment", "Localization\\Enhanced")));
@@ -107,11 +117,10 @@ function InitEnhancedSettings()
     AddCheckBoxItem("OpticCableVisions", m_bOpticCableVisions);
     AddCheckBoxItem("ThermalOverride", m_bThermalOverride);
     AddCheckBoxItem("ScaleGadgetDamage", m_bScaleGadgetDamage);
-    AddLineItem();
 
+    AddCompactLineItem();
     AddComboBoxItem("MineDelay", m_MineDelay);
     AddMineDelayCombo(m_MineDelay);
-    AddLineItem();
 
     AddLineItem();
     AddTitleItem(Caps(Localize("Enhanced", "Title_HUD", "Localization\\Enhanced")));
@@ -138,59 +147,59 @@ function InitEnhancedSettings()
 
     AddComboBoxItem("TrainingSamMesh", m_TrainingSamMesh); 
     AddSamMeshCombo(m_TrainingSamMesh);
-    AddLineItem();
+    AddCompactLineItem();
 
     AddComboBoxItem("TbilisiSamMesh", m_TbilisiSamMesh);
     AddSamMeshCombo(m_TbilisiSamMesh);
-    AddLineItem();
+    AddCompactLineItem();
 
     AddComboBoxItem("DefenseMinistrySamMesh", m_DefenseMinistrySamMesh);
     AddSamMeshCombo(m_DefenseMinistrySamMesh);
-    AddLineItem();
+    AddCompactLineItem();    
 
     AddComboBoxItem("CaspianOilRefinerySamMesh", m_CaspianOilRefinerySamMesh);
     AddSamMeshCombo(m_CaspianOilRefinerySamMesh);
-    AddLineItem();
+    AddCompactLineItem();
 
     AddComboBoxItem("CIASamMesh", m_CIASamMesh);
     AddSamMeshCombo(m_CIASamMesh);
-    AddLineItem();
+    AddCompactLineItem();
 
     AddComboBoxItem("KalinatekSamMesh", m_KalinatekSamMesh);
     AddSamMeshCombo(m_KalinatekSamMesh);
-    AddLineItem();
+    AddCompactLineItem();
 
     AddComboBoxItem("ChineseEmbassySamMesh", m_ChineseEmbassySamMesh);
     AddSamMeshCombo(m_ChineseEmbassySamMesh);
-    AddLineItem();
+    AddCompactLineItem();
 
     AddComboBoxItem("AbattoirSamMesh", m_AbattoirSamMesh);
     AddSamMeshCombo(m_AbattoirSamMesh);
-    AddLineItem();
+    AddCompactLineItem();
 
     AddComboBoxItem("ChineseEmbassy2SamMesh", m_ChineseEmbassy2SamMesh);
     AddSamMeshCombo(m_ChineseEmbassy2SamMesh);
-    AddLineItem();
+    AddCompactLineItem();
 
     AddComboBoxItem("PresidentialPalaceSamMesh", m_PresidentialPalaceSamMesh);
     AddSamMeshCombo(m_PresidentialPalaceSamMesh);
-    AddLineItem();
+    AddCompactLineItem();
 
     AddComboBoxItem("KolaCellSamMesh", m_KolaCellSamMesh);
     AddSamMeshCombo(m_KolaCellSamMesh);
-    AddLineItem();
+    AddCompactLineItem();
 
     AddComboBoxItem("VselkaSamMesh", m_VselkaSamMesh);
     AddSamMeshCombo(m_VselkaSamMesh);
-    AddLineItem();
+    AddCompactLineItem();
 
     AddComboBoxItem("PowerPlantSamMesh", m_PowerPlantSamMesh);
     AddSamMeshCombo(m_PowerPlantSamMesh);
-    AddLineItem();
+    AddCompactLineItem();
 
     AddComboBoxItem("SeveronickelSamMesh", m_SeveronickelSamMesh);
     AddSamMeshCombo(m_SeveronickelSamMesh);
-    AddLineItem();
+    AddCompactLineItem();
 }
 
 function AddCheckBoxItem(string LocalizationKey, out EPCCheckBox CheckBox)
@@ -244,6 +253,15 @@ function AddLineItem()
     NewItem.m_bIsNotSelectable = true;
 }
 
+function AddCompactLineItem()
+{
+    local EPCEnhancedListBoxItem NewItem;
+    
+    NewItem = EPCEnhancedListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
+    NewItem.bIsCompactLine = true;
+    NewItem.m_bIsNotSelectable = true;
+}
+
 function AddLevelUnlockCombo(EPCComboControl ComboBox)
 {
     ComboBox.AddItem(Localize("Enhanced","LevelUnlock_Disabled","Localization\\Enhanced"));
@@ -269,20 +287,24 @@ function AddSamMeshCombo(EPCComboControl ComboBox)
     ComboBox.SetSelectedIndex(0);
 }
 
+function AddFontTypeCombo(EPCComboControl ComboBox)
+{
+    ComboBox.AddItem(Localize("Enhanced", "FontType_PC", "Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced", "FontType_Xbox", "Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced", "FontType_GameCube", "Localization\\Enhanced"));
+    ComboBox.SetSelectedIndex(1); // Default to Xbox
+}
+
 function Notify(UWindowDialogControl C, byte E)
 {
-    if(E == DE_Click)
+    if (E == DE_Click)
     {
-        switch(C)
+        switch (C)
         {
             case m_bCheckForUpdates:
             case m_bSkipIntroVideos:
             case m_bDisableMenuIdleTimer:
-            case m_bXboxFont:
-                // Joshua - Show restart required message for native settings
-                EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "RestartRequired", "Localization\\Enhanced"), Localize("Common", "RestartRequiredWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
-                m_bModified = true;
-                break;
+            case m_bEnablePlayerStats:
             case m_bInteractionPause:
             case m_bEnableCheckpoints:
             case m_bXboxDifficulty:
@@ -327,10 +349,11 @@ function Notify(UWindowDialogControl C, byte E)
                 break;
         }
     }
-    else if(E == DE_Change)
+    else if (E == DE_Change)
     {
-        switch(C)
+        switch (C)
         {
+            case m_FontType:
             case m_LevelUnlock:
             case m_MineDelay:
             case m_TrainingSamMesh:
@@ -376,7 +399,15 @@ function SaveOptions()
     EPC.eGame.bCheckForUpdates = m_bCheckForUpdates.m_bSelected;
     EPC.eGame.bSkipIntroVideos = m_bSkipIntroVideos.m_bSelected;
     EPC.eGame.bDisableMenuIdleTimer = m_bDisableMenuIdleTimer.m_bSelected;
-    EPC.eGame.bXboxFont = m_bXboxFont.m_bSelected;
+    
+    switch (m_FontType.GetSelectedIndex())
+    {
+        case 0: EPC.eGame.FontType = Font_PC; break;
+        case 1: EPC.eGame.FontType = Font_Xbox; break;
+        case 2: EPC.eGame.FontType = Font_GameCube; break;
+        default: EPC.eGame.FontType = Font_Xbox; break;
+    }
+    EPC.bEnablePlayerStats = m_bEnablePlayerStats.m_bSelected;
     EPC.bInteractionPause = m_bInteractionPause.m_bSelected;
     EPC.eGame.bEnableCheckpoints = m_bEnableCheckpoints.m_bSelected;
     EPC.eGame.bXboxDifficulty = m_bXboxDifficulty.m_bSelected;
@@ -385,14 +416,14 @@ function SaveOptions()
     EPC.bF2000ZoomLevels = m_bF2000ZoomLevels.m_bSelected;
     if (bPreviousF2000ZoomLevels && !EPC.bF2000ZoomLevels)
     {
-        if(EPC.MainGun != None)
+        if (EPC.MainGun != None)
         {
             F2000 = EF2000(EPC.MainGun);
-            if(F2000 != None)
+            if (F2000 != None)
             {
                 F2000.ValidateZoomLevel();
 
-                if(EPC.ActiveGun == EPC.MainGun && F2000.bSniperMode)
+                if (EPC.ActiveGun == EPC.MainGun && F2000.bSniperMode)
                 {
                     EPC.SetCameraFOV(EPC, F2000.GetZoom());
                 }
@@ -401,7 +432,7 @@ function SaveOptions()
     }
 
     EPC.bLaserMicZoomLevels = m_bLaserMicZoomLevels.m_bSelected;
-    if (bPreviousLaserMicZoomLevels && !Epc.bLaserMicZoomLevels)
+    if (bPreviousLaserMicZoomLevels && !Epc.bLaserMicZoomLevels && Epc.GetStateName() == 's_LaserMicTargeting')
     {
         EPC.SetCameraFOV(ELaserMic(EPC.ePawn.HandItem), 30.0);
         ELaserMic(EPC.ePawn.HandItem).current_fov = 30.0;
@@ -410,10 +441,10 @@ function SaveOptions()
     EPC.bBurstFire = m_bBurstFire.m_bSelected;
     if (bPreviousBurstFire && !EPC.bBurstFire)
     {
-        if(EPC.MainGun != None)
+        if (EPC.MainGun != None)
         {
             F2000 = EF2000(EPC.MainGun);
-            if(F2000 != None)
+            if (F2000 != None)
             {
                 F2000.ValidateROFMode();
             }
@@ -614,7 +645,7 @@ function SaveOptions()
     EPC.playerInfo.SaveEnhancedOptions();
 }
 
-// Joshua - Function to refresh the current door interaction the player is touching
+// Function to refresh the current door interaction the player is touching
 function RefreshCurrentDoorInteraction(EPlayerController EPC)
 {
     local EDoorInteraction DoorInteraction;
@@ -636,7 +667,8 @@ function ResetToDefault()
     m_bCheckForUpdates.m_bSelected = true;
     m_bSkipIntroVideos.m_bSelected = false;
     m_bDisableMenuIdleTimer.m_bSelected = false;
-    m_bXboxFont.m_bSelected = true;
+    m_FontType.SetSelectedIndex(1); // Default to Xbox
+    m_bEnablePlayerStats.m_bSelected = true;
     m_bInteractionPause.m_bSelected = false;
     m_bEnableCheckpoints.m_bSelected = true;
     m_bXboxDifficulty.m_bSelected = false;
@@ -694,6 +726,9 @@ function Refresh()
     EPC = EPlayerController(GetPlayerOwner());
     HUD = EchelonMainHUD(EPC.myHUD);
 
+    if (m_FontType != None && EPC != None)
+        m_FontType.SetSelectedIndex(Clamp(EPC.eGame.FontType, 0, m_FontType.List.Items.Count() - 1));
+
     if (m_bCheckForUpdates != None)
         m_bCheckForUpdates.m_bSelected = EPC.eGame.bCheckForUpdates;
 
@@ -703,8 +738,8 @@ function Refresh()
     if (m_bDisableMenuIdleTimer != None)
         m_bDisableMenuIdleTimer.m_bSelected = EPC.eGame.bDisableMenuIdleTimer;
 
-    if (m_bXboxFont != None)
-        m_bXboxFont.m_bSelected = EPC.eGame.bXboxFont;
+    if (m_bEnablePlayerStats != None)
+        m_bEnablePlayerStats.m_bSelected = EPC.bEnablePlayerStats;
 
     if (m_bInteractionPause != None)
         m_bInteractionPause.m_bSelected = EPC.bInteractionPause;
