@@ -29,13 +29,13 @@ function PostBeginPlay()
 
 function ResetTarget()
 {
-	if( LaserMicTarget != None )
+	if (LaserMicTarget != None)
 		LaserMicTarget.TouchedByLaserMic = false;
 	LaserMicTarget	= None;
 	Epc.MicroTarget = None;
 }
 
-function Select( EInventory Inv )
+function Select(EInventory Inv)
 {
 	Super.Select(Inv);
 	PlaySound(Sound'Interface.Play_FisherEquipLaserMic', SLOT_Interface);
@@ -55,7 +55,7 @@ state s_Microiing
 	function BeginState()
 	{
 		Epc = EPlayerController(controller);
-		if( Epc == None )
+		if (Epc == None)
 			Log(self$" ERROR: Controller is not a EPlayerController");
 
 		// Once Micro set, send Controller into lasermic state
@@ -70,8 +70,8 @@ state s_Microiing
 		// Joshua - Zoom functionality
 		if (Epc.bLaserMicZoomLevels)
 		{
-			Epc.SetCameraFOV(self, (MaxFov + MinFov)/2);
-			current_fov = (MaxFov + MinFov)/2;
+			Epc.SetCameraFOV(self, (MaxFov + MinFov) / 2);
+			current_fov = (MaxFov + MinFov) / 2;
 		}
 		else
 		{
@@ -102,12 +102,16 @@ state s_Microiing
 	function Zoom(float DeltaTime)
 	{
 		local bool Zoomed;
+		local float simDeltaTime;
+
+		// Joshua - Made zooming frame rate independent by using a consistent DeltaTime
+		simDeltaTime = 1.0f / 30.0f;
 
 		// Zoom in
 		if (Epc.bIncSpeedPressed == true)
 		{
 			Epc.bIncSpeedPressed = false;
-			current_fov -= DeltaTime * ZoomSpeed;
+			current_fov -= simDeltaTime * ZoomSpeed;
 			if (current_fov >= MinFov)
 			{
 				Zoomed = true;
@@ -117,7 +121,7 @@ state s_Microiing
 		else if (Epc.bDecSpeedPressed == true)
 		{
 			Epc.bDecSpeedPressed = false;
-			current_fov += DeltaTime * ZoomSpeed;	    
+			current_fov += simDeltaTime * ZoomSpeed;	    
 			if (current_fov <= MaxFov)
 			{
 				Zoomed = true;
@@ -127,7 +131,7 @@ state s_Microiing
 		// Zoom in
 		if (Epc.bDPadUp != 0)
 		{
-			current_fov -= DeltaTime * ZoomSpeed;
+			current_fov -= simDeltaTime * ZoomSpeed;
 			if (current_fov >= MinFov)
 			{
 				Zoomed = true;
@@ -136,7 +140,7 @@ state s_Microiing
 		// Zoom out
 		else if (Epc.bDPadDown != 0)
 		{
-			current_fov += DeltaTime * ZoomSpeed;	    
+			current_fov += simDeltaTime * ZoomSpeed;	    
 			if (current_fov <= MaxFov)
 			{
 				Zoomed = true;
@@ -152,7 +156,7 @@ state s_Microiing
 		// Clamp fov and calculate zoom factor
 		current_fov = FClamp(current_fov, MinFov, MaxFov);
 		//		MaxDamping = Damping;
-		//		MaxDamping /= (MaxFov)/current_fov;
+		//		MaxDamping /= (MaxFov) / current_fov;
 
 		// Modify vision fov
 		Epc.SetCameraFOV(self, current_fov);
@@ -160,24 +164,24 @@ state s_Microiing
 	//	Super.Tick(DeltaTime);
 	}		
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
 		// Update mic location for sound engine
-		Micro.SetLocation(Epc.m_TargetLocation-Epc.ToWorldDir(vect(25,0,0)));
+		Micro.SetLocation(Epc.m_TargetLocation - Epc.ToWorldDir(vect(25,0,0)));
 
 		// Always look up CurrentTarget if it's a Mic Mover, in case the conversation is turned on/off while pointing it.  
 		// Else, the conversation will only get detected unless you change to a different target
-		if( Epc.m_targetActor != CurrentTarget || CurrentTarget.IsA('ELaserMicMover') )
+		if (Epc.m_targetActor != CurrentTarget || CurrentTarget.IsA('ELaserMicMover'))
 		{
 			// Only change target (and log) when actually true
-			if( Epc.m_targetActor != CurrentTarget )
+			if (Epc.m_targetActor != CurrentTarget)
 			{
 				//Log("s_Microiing new TARGET ="@Epc.m_targetActor);
 				CurrentTarget = Epc.m_targetActor;
 			}
 			
 			// process valid target
-			if( CurrentTarget.IsA('ELaserMicMover') )
+			if (CurrentTarget.IsA('ELaserMicMover'))
 			{
 				LaserMicTarget = ELaserMicMover(CurrentTarget);
 				LaserMicTarget.TouchedByLaserMic = true;
@@ -189,7 +193,7 @@ state s_Microiing
 				//Log("Valid Target"@LaserMicTarget);
 			}
 			// If not touching a valid target, reset flags
-			else if( LaserMicTarget != None )
+			else if (LaserMicTarget != None)
 			{
 				LaserMicTarget.TouchedByLaserMic = false;
 				SetLaserLocked(false);
@@ -198,7 +202,7 @@ state s_Microiing
 		}
 
 		// Reset pointers if the mic mover pattern is not yet started
-		if( LaserMicTarget != None && LaserMicTarget.LinkedSession == None )
+		if (LaserMicTarget != None && LaserMicTarget.LinkedSession == None)
 			ResetTarget();
 		
 		// Joshua - Zoom functionality
