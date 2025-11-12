@@ -3,12 +3,11 @@ class ECanvas extends Canvas
 	native
 	noexport;
 
-const E_CLEAR_NONE=0;
-const E_CLEAR_CBUFFER=1;
-const E_CLEAR_ZBUFFER=2;
-const E_CLEAR_STENCIL=4;
-const E_CLEAR_ALL=7;
-
+const E_CLEAR_NONE = 0;
+const E_CLEAR_CBUFFER = 1;
+const E_CLEAR_ZBUFFER = 2;
+const E_CLEAR_STENCIL = 4;
+const E_CLEAR_ALL = 7;
 
 enum EPortalTextureEffect
 {
@@ -41,22 +40,23 @@ var color TextGreen;
 //=============================================================================
 
 var Font ETextFontPC; // Joshua - Xbox font support
+var Font ETextFontGameCube; // Joshua - GameCube font support
 
-native(3000) final function BeginScene( int X, int Y, int Width, int Height,float RWidth, float RHeight, optional int ClearFlags );
+native(3000) final function BeginScene(int X, int Y, int Width, int Height,float RWidth, float RHeight, optional int ClearFlags);
 native(3001) final function DrawPlayerPortal(PlayerController Player, optional int ClearFlags ,optional float blur_coef);
 native(3002) final function DrawCameraPortal(vector CamLocation, rotator CamRotation, optional float FOV, optional int ClearFlags,optional float blur_coef);
-native(3003) final function DrawScaleText( coerce string Text, float Scale, optional bool CR );
-//native(3004) final function DrawTextZone( coerce string Text, float Scale, int Line1, int Line2, optional bool CR );
+native(3003) final function DrawScaleText(coerce string Text, float Scale, optional bool CR);
+//native(3004) final function DrawTextZone(coerce string Text, float Scale, int Line1, int Line2, optional bool CR);
 native(3005) final function SetRenderState(int State, bool Value);
 native(3006) final function DrawActorPortal(actor Actor, vector CamLocation, rotator CamRotation, optional int FOV, optional int ClearFlags, optional bool WireFrame);
-native(3007) final function CreateDepthMask( int X, int Y, int Width, int Height, texture clear_mask, byte alpha_ref, bool inv); 
+native(3007) final function CreateDepthMask(int X, int Y, int Width, int Height, texture clear_mask, byte alpha_ref, bool inv); 
 native(3008) final function SetRenderTarget(EPortalTarget handle);
 native(3009) final function DrawPortalTexture(EPortalTarget handle,int X, int Y, int Width,int Height, optional EPortalTextureEffect effect, optional float Anim);
-native(1508) final function Draw3DLine( vector Start, vector End, optional Color DrawColor );
-native(3013) final function int     GetNbStringLines( string Text, optional float scale );
+native(1508) final function Draw3DLine(vector Start, vector End, optional Color DrawColor);
+native(3013) final function int     GetNbStringLines(string Text, optional float scale);
 native(3011) final function int     ViewportSizeX();
 native(3012) final function int     ViewportSizeY();
-native(1301) final function string  GetStringAtPos( string Text, int Pos, /*out int OldTextPos, */optional float scale );
+native(1301) final function string  GetStringAtPos(string Text, int Pos, /*out int OldTextPos, */optional float scale);
 native(1304) final function DrawLine(int x, int y, int width, int height, Color c, int alpha, ETextureManager t);
 native(1311) final function DrawRectangle(int x, int y, int width, int height, int lineWidth, Color c, int alpha, ETextureManager t);
 native(1319) final function DrawTextAligned(string szText, optional ETextAligned a, optional float scaleX, optional float scaleY);
@@ -106,4 +106,5 @@ defaultproperties
     TextGreen=(R=77,G=77,B=77,A=255)
     MedFont=Font'Engine.SmallFont'
 	ETextFontPC=Font'Engine.ETextFontPC' // Joshua - Xbox font support
+	ETextFontGameCube=Font'Engine.ETextFontGameCube' // Joshua - GameCube font support
 }

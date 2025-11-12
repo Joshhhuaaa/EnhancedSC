@@ -16,12 +16,13 @@ class EPCMainMenuRootWindow extends UWindowRootWindow
 // NORMAL FONT - to be commented if font needed needs to be extended
 //
 
-#exec Font IMPORT NAME=ETextFont        FILE="..\Textures\Font\txt_integration.pcx"
-#exec Font IMPORT NAME=ETextFontXbox    FILE="..\Textures\Font\txt_integration_xbox.pcx"
-#exec Font IMPORT NAME=ETitleFont       FILE="..\Textures\Font\titre_regular_integration.pcx"
-#exec Font IMPORT NAME=ETitleBoldFont   FILE="..\Textures\Font\titre_bold_integration.pcx"
-#exec Font IMPORT NAME=EHUDFont         FILE="..\Textures\Font\txt_hud.pcx"
-#exec Font IMPORT NAME=EMissionFont     FILE="..\Textures\Font\txt_mission.pcx"
+#exec Font IMPORT NAME=ETextFont         FILE="..\Textures\Font\txt_integration.pcx"
+#exec Font IMPORT NAME=ETextFontXbox     FILE="..\Textures\Font\txt_integration_xbox.pcx"
+#exec Font IMPORT NAME=ETextFontGameCube FILE="..\Textures\Font\txt_integration_gamecube.pcx"
+#exec Font IMPORT NAME=ETitleFont        FILE="..\Textures\Font\titre_regular_integration.pcx"
+#exec Font IMPORT NAME=ETitleBoldFont    FILE="..\Textures\Font\titre_bold_integration.pcx"
+#exec Font IMPORT NAME=EHUDFont          FILE="..\Textures\Font\txt_hud.pcx"
+#exec Font IMPORT NAME=EMissionFont      FILE="..\Textures\Font\txt_mission.pcx"
 
 //
 // EXTENDED FONT - to be commented if font needed is simple a-z
@@ -101,7 +102,7 @@ function Created()
    
     m_MessageBoxCW = EPCPopUpController(CreateWindow(class'EPCPopUpController', WinLeft, WinTop, WinWidth, WinHeight,self));       
 
-    if( EPCConsole(Console).HideMenusAtStart || IsTimeDemo() )
+    if (EPCConsole(Console).HideMenusAtStart || IsTimeDemo())
         EPCConsole(Console).LaunchGame();    
     else
         ChangeCurrentWidget(WidgetID_MainMenu);      
@@ -115,7 +116,7 @@ function ResetMenus()
     //in the main menu
 }
 
-function ChangeCurrentWidget( eGameWidgetID widgetID)
+function ChangeCurrentWidget(eGameWidgetID widgetID)
 {   
 
     bSkipLaptopOverlay = false;
@@ -129,12 +130,12 @@ function ChangeCurrentWidget( eGameWidgetID widgetID)
 	m_OptionsWidget.m_EnhancedArea.m_bFirstRefresh = true; // Joshua - Enhanced area settings
 
 
-    if(m_CurrentWidget != None)
+    if (m_CurrentWidget != None)
     {
         m_CurrentWidget.HideWindow();        
     }
 
-    switch( widgetID)
+    switch (widgetID)
 	{
     case WidgetID_None :	
 		EPCConsole(Console).bMainMenuActive = false;
@@ -192,7 +193,7 @@ function ChangeCurrentWidget( eGameWidgetID widgetID)
 		m_CurrentWidget.ShowWindow();
 		break;
     case WidgetID_Previous:           //Used For back button in in-game full screen menus
-        if(m_PreviousWidget != None)
+        if (m_PreviousWidget != None)
         {                     
             m_CurrentWidget     = m_PreviousWidget;
             m_PreviousWidget    = None;
@@ -206,21 +207,21 @@ function ChangeCurrentWidget( eGameWidgetID widgetID)
 
 function GameSaved(bool success)
 {
-	if(m_InGameMenu.WindowIsVisible())
+	if (m_InGameMenu.WindowIsVisible())
 		m_InGameMenu.GameSaved(success);
 }
 
 function GameLoaded(bool success)
 {
-	if(m_InGameMenu.WindowIsVisible())
+	if (m_InGameMenu.WindowIsVisible())
 	    m_InGameMenu.GameLoaded(success);
 }
 
 function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) 
 {
-	if(Msg == WM_Paint)
+	if (Msg == WM_Paint)
 	{
-		if(Console.GetStateName() == 'UWindow')
+		if (Console.GetStateName() == 'UWindow')
 		{
 			Paint(C, X, Y);
 			PaintClients(C, X, Y);
@@ -234,7 +235,7 @@ function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
 // Check valid CD in
 function bool CheckCD()
 {
-	if( !m_FileManager.ValidateCD() )
+	if (!m_FileManager.ValidateCD())
 	{
 		PopCD();
 		return false;	
@@ -250,7 +251,7 @@ function PopCD()
 
 function MessageBoxDone(UWindowWindow W, MessageBoxResult Result)
 {
-	if( m_MessageBox != W )
+	if (m_MessageBox != W)
 		return;
 	m_MessageBox = None;
 	CheckCD();
@@ -258,10 +259,10 @@ function MessageBoxDone(UWindowWindow W, MessageBoxResult Result)
 
 function AfterPaint(Canvas C, float X, float Y) 
 {
-	if( bSkipLaptopOverlay )
+	if (bSkipLaptopOverlay)
 		return;
-    if( m_CurrentWidget != None || m_MessageBox != None )
-	    PostRender( C , X, Y);	
+    if (m_CurrentWidget != None || m_MessageBox != None)
+	    PostRender(C , X, Y);	
 }
 
 
@@ -270,7 +271,7 @@ function SetupFonts()
 	//
 	// NORMAL FONT
 	//
-    if(ForceSmallFonts)
+    if (ForceSmallFonts)
     {
         Fonts[F_Normal]     = Font'ETextFont';
 	    Fonts[F_Bold]       = Font'ETextFont';
@@ -283,8 +284,10 @@ function SetupFonts()
 	    Fonts[F_Bold]       = Font'EMissionFont';
 	    Fonts[F_Large]      = Font'ETitleFont';
 	    Fonts[F_LargeBold]  = Font'ETitleBoldFont';
-		// Joshua - Xbox font support
+		// Joshua - Xbox Font support
 		Fonts[4]			= Font'ETextFontXbox';
+		// Joshua - GameCube Font support
+		Fonts[5]			= Font'ETextFontGameCube';
     }
 
 	//
