@@ -17,9 +17,11 @@ var UWindowLabelControl  m_LMouseSensitivityValue; // Joshua - Label for the mou
 var EPCHScrollBar        m_InitialSpeedScroll; // Joshua - Enhanced setting
 var EPCCheckBox          m_InvertMouseButton;
 var EPCCheckBox          m_FireEquipGun;
+var EPCCheckBox          m_bSnipeToResetCamera; // Joshua - Enhanced setting
 var EPCCheckBox          m_bNormalizeMovement; // Joshua - Enhanced setting
 var EPCCheckBox          m_bCrouchDrop; // Joshua - Enhanced setting
 var EPCCheckBox          m_bToggleBTWTargeting; // Joshua - Enhanced setting
+var EPCCheckBox          m_bCameraJammerAutoLock; // Joshua - Enhanced setting
 var EPCCheckBox          m_bToggleInventory; // Joshua - Enhanced setting
 var EPCCheckBox          m_bEnableRumble; // Joshua - Enhanced setting
 var EPCComboControl      m_InputMode; // Joshua - Enhanced setting
@@ -39,10 +41,10 @@ function Created()
 
 	m_MessageBox = none;
 	
-    m_ListBox = EPCOptionKeysListBox(CreateControl( class'EPCOptionKeysListBox', 0, 0, WinWidth, WinHeight, self));            
+    m_ListBox = EPCOptionKeysListBox(CreateControl(class'EPCOptionKeysListBox', 0, 0, WinWidth, WinHeight, self));            
     m_ListBox.bAlwaysBehind = true;
     InitOptionControls();
-    m_ListBox.TitleFont=F_Normal;
+    m_ListBox.TitleFont = F_Normal;
 }
 
 //==============================================================================
@@ -53,69 +55,71 @@ function InitOptionControls()
 	// MOVEMENT
 	// add items in display order
     AddLineItem();
-	AddTitleItem( Caps(Localize("Keys","Title_Move","Localization\\HUD")));
+	AddTitleItem(Caps(Localize("Keys","Title_Move","Localization\\HUD")));
     AddLineItem();
     
-	AddKeyItem( Localize("Keys","K_MoveForward","Localization\\HUD"),"MoveForward");
-	AddKeyItem( Localize("Keys","K_MoveBackward","Localization\\HUD"), "MoveBackward");
-    AddKeyItem( Localize("Keys","K_StrafeLeft","Localization\\HUD"),"StrafeLeft");
-	AddKeyItem( Localize("Keys","K_StrafeRight","Localization\\HUD"), "StrafeRight");
-    AddKeyItem( Localize("Keys","K_Duck","Localization\\HUD"),"Duck");
-	AddKeyItem( Localize("Keys","K_Accel","Localization\\HUD"), "IncSpeed");
-    AddKeyItem( Localize("Keys","K_Decell","Localization\\HUD"),"DecSpeed");
-    AddKeyItem( Localize("Keys","k_BackToWall","Localization\\HUD"),"BackToWall");
+	AddKeyItem(Localize("Keys","K_MoveForward","Localization\\HUD"),"MoveForward");
+	AddKeyItem(Localize("Keys","K_MoveBackward","Localization\\HUD"), "MoveBackward");
+    AddKeyItem(Localize("Keys","K_StrafeLeft","Localization\\HUD"),"StrafeLeft");
+	AddKeyItem(Localize("Keys","K_StrafeRight","Localization\\HUD"), "StrafeRight");
+    AddKeyItem(Localize("Keys","K_Duck","Localization\\HUD"),"Duck");
+	AddKeyItem(Localize("Keys","K_Accel","Localization\\HUD"), "IncSpeed");
+    AddKeyItem(Localize("Keys","K_Decell","Localization\\HUD"),"DecSpeed");
+    AddKeyItem(Localize("Keys","k_BackToWall","Localization\\HUD"),"BackToWall");
     
     AddLineItem();
     AddInitialSpeedControls();
-    AddNormalizedMovementControls();
-    AddCrouchDropControls();
+    AddEnhancedCheckBoxControl("NormalizedMovement", m_bNormalizeMovement);
+    AddEnhancedCheckBoxControl("CrouchDrop", m_bCrouchDrop);
     AddLineItem();
 	
     // Actions
 	AddLineItem();
-	AddTitleItem( Caps(Localize("Keys","Title_Actions","Localization\\HUD")));
+	AddTitleItem(Caps(Localize("Keys","Title_Actions","Localization\\HUD")));
     AddLineItem();
 
-	AddKeyItem( Localize("Keys","K_Fire","Localization\\HUD"), "Fire");
-	AddKeyItem( Localize("Keys","K_AltFire","Localization\\HUD"), "AltFire");
-    AddKeyItem( Localize("Keys","K_Snipe","Localization\\Enhanced"), "Snipe");
-    AddKeyItem( Localize("Keys","K_Scope","Localization\\HUD"), "Scope");
-    AddKeyItem( Localize("Keys","K_Jump","Localization\\HUD"), "Jump");
-    AddKeyItem( Localize("Keys","K_Interaction","Localization\\HUD"), "Interaction");
-    AddKeyItem( Localize("Keys","K_Reload","Localization\\HUD"), "ReloadGun");
-    AddKeyItem( Localize("Keys","K_SwitchROF","Localization\\HUD"), "SwitchROF");
-    AddKeyItem( Localize("Keys","K_Whistle","Localization\\Enhanced"), "Whistle");
-    AddKeyItem( Localize("Keys","K_QuickSave","Localization\\HUD"), "QuickSave");
-	AddKeyItem( Localize("Keys","K_QuickLoad","Localization\\HUD"), "QuickLoad");
-    AddKeyItem( Localize("Keys","K_NightVision","Localization\\HUD"), "DPadLeft");
-    AddKeyItem( Localize("Keys","K_HeatVision","Localization\\HUD"), "DPadRight");
-    AddKeyItem( Localize("Keys","K_Pause","Localization\\HUD"), "Pause");
-    AddKeyItem( Localize("Keys","K_ToggleHUD","Localization\\Enhanced"), "ToggleHUD");
-    AddKeyItem( Localize("Keys","K_PlayerStats","Localization\\Enhanced"), "PlayerStats");
+	AddKeyItem(Localize("Keys","K_Fire","Localization\\HUD"), "Fire");
+	AddKeyItem(Localize("Keys","K_AltFire","Localization\\HUD"), "AltFire");
+    AddKeyItem(Localize("Keys","K_Snipe","Localization\\Enhanced"), "Snipe");
+    AddKeyItem(Localize("Keys","K_Scope","Localization\\HUD"), "Scope");
+    AddKeyItem(Localize("Keys","K_Jump","Localization\\HUD"), "Jump");
+    AddKeyItem(Localize("Keys","K_Interaction","Localization\\HUD"), "Interaction");
+    AddKeyItem(Localize("Keys","K_Reload","Localization\\HUD"), "ReloadGun");
+    AddKeyItem(Localize("Keys","K_SwitchROF","Localization\\HUD"), "SwitchROF");
+    AddKeyItem(Localize("Keys","K_Whistle","Localization\\Enhanced"), "Whistle");
+    AddKeyItem(Localize("Keys","K_QuickSave","Localization\\HUD"), "QuickSave");
+	AddKeyItem(Localize("Keys","K_QuickLoad","Localization\\HUD"), "QuickLoad");
+    AddKeyItem(Localize("Keys","K_NightVision","Localization\\HUD"), "DPadLeft");
+    AddKeyItem(Localize("Keys","K_HeatVision","Localization\\HUD"), "DPadRight");
+    AddKeyItem(Localize("Keys","K_Pause","Localization\\HUD"), "Pause");
+    AddKeyItem(Localize("Keys","K_ToggleHUD","Localization\\Enhanced"), "ToggleHUD");
+    AddKeyItem(Localize("Keys","K_PlayerStats","Localization\\Enhanced"), "PlayerStats");
 
     AddLineItem();
 	AddFireEquipControls();
-    AddToggleBTWTargetingControls();
+    AddEnhancedCheckBoxControl("SnipeToResetCamera", m_bSnipeToResetCamera);
+    AddEnhancedCheckBoxControl("ToggleBTWTargeting", m_bToggleBTWTargeting);
+    AddEnhancedCheckBoxControl("CameraJammerAutoLock", m_bCameraJammerAutoLock);
     AddLineItem();
     
     // Gadgets
 	AddLineItem();
-	AddTitleItem( Caps(Localize("Keys","Title_Inventory","Localization\\HUD")));
+	AddTitleItem(Caps(Localize("Keys","Title_Inventory","Localization\\HUD")));
     AddLineItem();
 
-	AddKeyItem( Localize("Keys","K_QuickInventory","Localization\\HUD"), "QuickInventory");
-    AddKeyItem( Localize("Keys","K_PreviousGadget","Localization\\Enhanced"), "PreviousGadget");
-    AddKeyItem( Localize("Keys","K_NextGadget","Localization\\Enhanced"), "NextGadget");
-    //AddKeyItem( Localize("Keys","K_FullInventory","Localization\\HUD"), "FullInventory");
+	AddKeyItem(Localize("Keys","K_QuickInventory","Localization\\HUD"), "QuickInventory");
+    AddKeyItem(Localize("Keys","K_PreviousGadget","Localization\\Enhanced"), "PreviousGadget");
+    AddKeyItem(Localize("Keys","K_NextGadget","Localization\\Enhanced"), "NextGadget");
+    //AddKeyItem(Localize("Keys","K_FullInventory","Localization\\HUD"), "FullInventory");
 
     AddLineItem();
-    AddToggleInventoryControls();
+    AddEnhancedCheckBoxControl("ToggleInventory", m_bToggleInventory);
     AddLineItem();
 
 
     // Mouse
     AddLineItem();
-	AddTitleItem( Caps(Localize("HUD","MOUSE","Localization\\HUD")));
+	AddTitleItem(Caps(Localize("HUD","MOUSE","Localization\\HUD")));
     AddLineItem();
 
     AddControls();
@@ -123,7 +127,7 @@ function InitOptionControls()
 
     // Enhanced
     AddLineItem();
-	AddTitleItem( Caps(Localize("HUD","Enhanced","Localization\\Enhanced")));
+	AddTitleItem(Caps(Localize("HUD","Enhanced","Localization\\Enhanced")));
     AddLineItem();
 
     AddInputModeControls();
@@ -132,7 +136,7 @@ function InitOptionControls()
     AddLineItem();
     AddControllerIconControls();
     AddLineItem();
-    AddEnableRumbleControls();
+    AddEnhancedCheckBoxControl("EnableRumble", m_bEnableRumble);
 }
 
 //==============================================================================
@@ -152,9 +156,11 @@ function SaveOptions()
 	GO.FireEquipGun = m_FireEquipGun.m_bSelected;
 
     EPC.eGame.m_defautSpeed = m_InitialSpeedScroll.Pos;
+    EPC.bSnipeToResetCamera = m_bSnipeToResetCamera.m_bSelected;
     EPC.bNormalizeMovement = m_bNormalizeMovement.m_bSelected;
     EPC.bCrouchDrop = m_bCrouchDrop.m_bSelected;
     EPC.bToggleBTWTargeting = m_bToggleBTWTargeting.m_bSelected;
+    EPC.bCameraJammerAutoLock = m_bCameraJammerAutoLock.m_bSelected;
     EPC.bToggleInventory = m_bToggleInventory.m_bSelected;
     switch (m_InputMode.GetSelectedIndex())
     {
@@ -209,7 +215,7 @@ function SaveOptions()
     EPC.eGame.bEnableRumble = m_bEnableRumble.m_bSelected;
     
     // Reset all m_bDrawFlipped's
-    for ( ListItem = m_ListBox.Items.Next; ListItem != None ; ListItem = ListItem.Next)
+    for (ListItem = m_ListBox.Items.Next; ListItem != None ; ListItem = ListItem.Next)
 	{
 		EPCOptionsKeyListBoxItem(ListItem).m_bDrawFlipped = false;
 	}     
@@ -231,6 +237,9 @@ function Refresh()
     if (m_InitialSpeedScroll != None)
         m_InitialSpeedScroll.Pos = EPC.eGame.m_defautSpeed;
 
+    if (m_bSnipeToResetCamera != None)
+        m_bSnipeToResetCamera.m_bSelected = EPC.bSnipeToResetCamera;
+
     if (m_bNormalizeMovement != None)
         m_bNormalizeMovement.m_bSelected = EPC.bNormalizeMovement;
 
@@ -239,6 +248,9 @@ function Refresh()
 
     if (m_bToggleBTWTargeting != None)
         m_bToggleBTWTargeting.m_bSelected = EPC.bToggleBTWTargeting;
+
+    if (m_bCameraJammerAutoLock != None)
+        m_bCameraJammerAutoLock.m_bSelected = EPC.bCameraJammerAutoLock;
 
     if (m_bToggleInventory != None)
         m_bToggleInventory.m_bSelected = EPC.bToggleInventory;
@@ -276,7 +288,7 @@ function ResetToDefault()
     local EPlayerController EPC; // Joshua - Enhanced saving controls
 
     // Reset all m_bDrawFlipped's
-    for ( ListItem = m_ListBox.Items.Next; ListItem != None ; ListItem = ListItem.Next)
+    for (ListItem = m_ListBox.Items.Next; ListItem != None ; ListItem = ListItem.Next)
 	{
 		EPCOptionsKeyListBoxItem(ListItem).m_bDrawFlipped = false;
 	} 
@@ -293,9 +305,11 @@ function ResetToDefault()
 
     EPC = EPlayerController(GetPlayerOwner());
     m_InitialSpeedScroll.Pos = 5;
+    m_bSnipeToResetCamera.m_bSelected = false;
     m_bNormalizeMovement.m_bSelected = true;
     m_bCrouchDrop.m_bSelected = true;
     m_bToggleBTWTargeting.m_bSelected = true;
+    m_bCameraJammerAutoLock.m_bSelected = false;
     m_bToggleInventory.m_bSelected = false;
     m_InputMode.SetSelectedIndex(0);
     m_ControllerScheme.SetSelectedIndex(0);
@@ -311,12 +325,12 @@ function AddFireEquipControls()
     local EPCOptionsKeyListBoxItem NewItem;
 
     NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
-    NewItem.Caption			        = Localize("HUD","FIRETODRAWGUN","Localization\\HUD");
-    NewItem.m_bIsNotSelectable  = true;
+    NewItem.Caption = Localize("HUD","FIRETODRAWGUN","Localization\\HUD");
+    NewItem.m_bIsNotSelectable = true;
 
-    m_FireEquipGun = EPCCheckBox(CreateControl( class'EPCCheckBox', 0, 0, 20, 18, self));    
-    m_FireEquipGun.ImageX      = 5;
-    m_FireEquipGun.ImageY      = 5;
+    m_FireEquipGun = EPCCheckBox(CreateControl(class'EPCCheckBox', 0, 0, 20, 18, self));    
+    m_FireEquipGun.ImageX = 5;
+    m_FireEquipGun.ImageY = 5;
     NewItem.m_Control = m_FireEquipGun;
     NewItem.bIsCheckBoxLine = true;
     m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_FireEquipGun;
@@ -332,9 +346,9 @@ function AddInitialSpeedControls()
     
     NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
     NewItem.Caption = Localize("Controls","InitialSpeed","Localization\\Enhanced");
-    NewItem.m_bIsNotSelectable  = true;
+    NewItem.m_bIsNotSelectable = true;
 	
-    m_InitialSpeedScroll = EPCHScrollBar(CreateControl( class'EPCHScrollBar', 0, 0, 150, LookAndFeel.Size_HScrollbarHeight, self));
+    m_InitialSpeedScroll = EPCHScrollBar(CreateControl(class'EPCHScrollBar', 0, 0, 150, LookAndFeel.Size_HScrollbarHeight, self));
     m_InitialSpeedScroll.SetScrollHeight(12);
     m_InitialSpeedScroll.SetRange(1, 6, 1);
 
@@ -343,103 +357,25 @@ function AddInitialSpeedControls()
 }
 
 //===============================================================================
-// AddNormalizedMovementControls
+// AddEnhancedCheckBoxControl - Helper function for Enhanced checkbox controls
 //===============================================================================
-function AddNormalizedMovementControls()
+function EPCCheckBox AddEnhancedCheckBoxControl(string LocalizationKey, out EPCCheckBox CheckBoxVar)
 {
-    // Joshua - Enhanced noramlized movement
+    // Joshua - Enhanced generic checkbox
     local EPCOptionsKeyListBoxItem NewItem;
 
     NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
-    NewItem.Caption			        = Localize("Controls","NormalizedMovement","Localization\\Enhanced");
-    NewItem.m_bIsNotSelectable  = true;
+    NewItem.Caption = Localize("Controls", LocalizationKey, "Localization\\Enhanced");
+    NewItem.m_bIsNotSelectable = true;
 
-    m_bNormalizeMovement = EPCCheckBox(CreateControl( class'EPCCheckBox', 0, 0, 20, 18, self));    
-    m_bNormalizeMovement.ImageX      = 5;
-    m_bNormalizeMovement.ImageY      = 5;
-    NewItem.m_Control = m_bNormalizeMovement;
+    CheckBoxVar = EPCCheckBox(CreateControl(class'EPCCheckBox', 0, 0, 20, 18, self));    
+    CheckBoxVar.ImageX = 5;
+    CheckBoxVar.ImageY = 5;
+    NewItem.m_Control = CheckBoxVar;
     NewItem.bIsCheckBoxLine = true;
-    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_bNormalizeMovement;
-}
-
-//===============================================================================
-// AddCrouchDropControls
-//===============================================================================
-function AddCrouchDropControls()
-{
-    // Joshua - Enhanced noramlized movement
-    local EPCOptionsKeyListBoxItem NewItem;
-
-    NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
-    NewItem.Caption			        = Localize("Controls","CrouchDrop","Localization\\Enhanced");
-    NewItem.m_bIsNotSelectable  = true;
-
-    m_bCrouchDrop = EPCCheckBox(CreateControl( class'EPCCheckBox', 0, 0, 20, 18, self));    
-    m_bCrouchDrop.ImageX      = 5;
-    m_bCrouchDrop.ImageY      = 5;
-    NewItem.m_Control = m_bCrouchDrop;
-    NewItem.bIsCheckBoxLine = true;
-    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_bCrouchDrop;
-}
-
-//===============================================================================
-// AddToggleBTWTargetingControls
-//===============================================================================
-function AddToggleBTWTargetingControls()
-{
-    // Joshua - Enhanced toggle back to wall targetting
-    local EPCOptionsKeyListBoxItem NewItem;
-
-    NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
-    NewItem.Caption			        = Localize("Controls","ToggleBTWTargeting","Localization\\Enhanced");
-    NewItem.m_bIsNotSelectable  = true;
-
-    m_bToggleBTWTargeting = EPCCheckBox(CreateControl( class'EPCCheckBox', 0, 0, 20, 18, self));    
-    m_bToggleBTWTargeting.ImageX      = 5;
-    m_bToggleBTWTargeting.ImageY      = 5;
-    NewItem.m_Control = m_bToggleBTWTargeting;
-    NewItem.bIsCheckBoxLine = true;
-    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_bToggleBTWTargeting;
-}
-
-//===============================================================================
-// AddToggleInventoryControls
-//===============================================================================
-function AddToggleInventoryControls()
-{
-    // Joshua - Enhanced toggle inventory
-    local EPCOptionsKeyListBoxItem NewItem;
-
-    NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
-    NewItem.Caption			        = Localize("Controls","ToggleInventory","Localization\\Enhanced");
-    NewItem.m_bIsNotSelectable  = true;
-
-    m_bToggleInventory = EPCCheckBox(CreateControl( class'EPCCheckBox', 0, 0, 20, 18, self));    
-    m_bToggleInventory.ImageX      = 5;
-    m_bToggleInventory.ImageY      = 5;
-    NewItem.m_Control = m_bToggleInventory;
-    NewItem.bIsCheckBoxLine = true;
-    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_bToggleInventory;
-}
-
-//===============================================================================
-// AddEnableRumbleControls
-//===============================================================================
-function AddEnableRumbleControls()
-{
-    // Joshua - Enhanced rumble
-    local EPCOptionsKeyListBoxItem NewItem;
-
-    NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
-    NewItem.Caption			        = Localize("Controls","EnableRumble","Localization\\Enhanced");
-    NewItem.m_bIsNotSelectable  = true;
-
-    m_bEnableRumble = EPCCheckBox(CreateControl( class'EPCCheckBox', 0, 0, 20, 18, self));    
-    m_bEnableRumble.ImageX      = 5;
-    m_bEnableRumble.ImageY      = 5;
-    NewItem.m_Control = m_bEnableRumble;
-    NewItem.bIsCheckBoxLine = true;
-    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_bEnableRumble;
+    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = CheckBoxVar;
+    
+    return CheckBoxVar;
 }
 
 //===============================================================================
@@ -451,10 +387,10 @@ function AddInputModeControls()
     local EPCOptionsKeyListBoxItem NewItem;
 
     NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
-    NewItem.Caption			        = Localize("Controls","InputMode","Localization\\Enhanced");
-    NewItem.m_bIsNotSelectable  = true;
+    NewItem.Caption = Localize("Controls","InputMode","Localization\\Enhanced");
+    NewItem.m_bIsNotSelectable = true;
 
-    m_InputMode = EPCComboControl(CreateControl( class'EPCComboControl', 265, 105, 150, 18, self));    
+    m_InputMode = EPCComboControl(CreateControl(class'EPCComboControl', 265, 105, 150, 18, self));    
     m_InputMode.SetFont(F_Normal);
 	m_InputMode.SetEditable(False);
     m_InputMode.AddItem(Localize("Controls","IM_Automatic","Localization\\Enhanced"));
@@ -475,10 +411,10 @@ function AddControllerSchemeControls()
     local EPCOptionsKeyListBoxItem NewItem;
 
     NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
-    NewItem.Caption			        = Localize("Controls","ControllerScheme","Localization\\Enhanced");
-    NewItem.m_bIsNotSelectable  = true;
+    NewItem.Caption = Localize("Controls","ControllerScheme","Localization\\Enhanced");
+    NewItem.m_bIsNotSelectable = true;
 
-    m_ControllerScheme = EPCComboControl(CreateControl( class'EPCComboControl', 265, 105, 150, 18, self));    
+    m_ControllerScheme = EPCComboControl(CreateControl(class'EPCComboControl', 265, 105, 150, 18, self));    
     m_ControllerScheme.SetFont(F_Normal);
 	m_ControllerScheme.SetEditable(False);
     m_ControllerScheme.AddItem(Localize("Controls","CS_Default","Localization\\Enhanced"));
@@ -499,10 +435,10 @@ function AddControllerIconControls()
     local EPCOptionsKeyListBoxItem NewItem;
 
     NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
-    NewItem.Caption			        = Localize("Controls","ControllerIcon","Localization\\Enhanced");
-    NewItem.m_bIsNotSelectable  = true;
+    NewItem.Caption	= Localize("Controls","ControllerIcon","Localization\\Enhanced");
+    NewItem.m_bIsNotSelectable = true;
 
-    m_ControllerIcon = EPCComboControl(CreateControl( class'EPCComboControl', 265, 105, 150, 18, self));    
+    m_ControllerIcon = EPCComboControl(CreateControl(class'EPCComboControl', 265, 105, 150, 18, self));    
     m_ControllerIcon.SetFont(F_Normal);
     m_ControllerIcon.SetEditable(False);
     m_ControllerIcon.AddItem(Localize("Controls","CI_Xbox","Localization\\Enhanced"));
@@ -527,7 +463,7 @@ function AddControls()
     NewItem.Caption			        = Localize("HUD","INVERTMOUSE","Localization\\HUD");
     NewItem.m_bIsNotSelectable  = true;
 
-    m_InvertMouseButton = EPCCheckBox(CreateControl( class'EPCCheckBox', 0, 0, 20, 18, self));    
+    m_InvertMouseButton = EPCCheckBox(CreateControl(class'EPCCheckBox', 0, 0, 20, 18, self));    
     m_InvertMouseButton.ImageX      = 5;
     m_InvertMouseButton.ImageY      = 5;
     NewItem.m_Control = m_InvertMouseButton;
@@ -538,9 +474,9 @@ function AddControls()
     NewItem.Caption			        = Localize("HUD","MOUSESENSITIVITY","Localization\\HUD");
     NewItem.m_bIsNotSelectable  = true;       
 
-    m_MouseSensitivityScroll   = EPCHScrollBar(CreateControl( class'EPCHScrollBar', 0, 0, 150, LookAndFeel.Size_HScrollbarHeight, self));
+    m_MouseSensitivityScroll   = EPCHScrollBar(CreateControl(class'EPCHScrollBar', 0, 0, 150, LookAndFeel.Size_HScrollbarHeight, self));
     m_MouseSensitivityScroll.SetScrollHeight(12);
-    m_MouseSensitivityScroll.SetRange(1, 100, 1);
+    m_MouseSensitivityScroll.SetRange(1, 101, 1); // Joshua - Set 101 instead of 100 for full 1-100, instead of 1-99 slider
 
     // Joshua - Create value label for mouse sensitivity scrollbar
     m_LMouseSensitivityValue = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 0, 0, 40, 18));
@@ -559,15 +495,15 @@ function AddControls()
 //===============================================================================
 // AddKeyItem: Add a key item
 //===============================================================================
-function AddKeyItem( string _szTitle, string _szActionKey)
+function AddKeyItem(string _szTitle, string _szActionKey)
 {
 	local EPCOptionsKeyListBoxItem NewItem;
 
     NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
     NewItem.Caption			        = _szTitle;
 	NewItem.m_szActionKey			= _szActionKey;
-	NewItem.HelpText	= GetLocKeyNameByActionKey( _szActionKey, false); // value to display "the key name"
-    NewItem.HelpText2	= GetLocKeyNameByActionKey( _szActionKey, true); // value to display "the ALT key name"    
+	NewItem.HelpText	= GetLocKeyNameByActionKey(_szActionKey, false); // value to display "the key name"
+    NewItem.HelpText2	= GetLocKeyNameByActionKey(_szActionKey, true); // value to display "the ALT key name"    
 }
 
 //===============================================================================
@@ -582,7 +518,7 @@ function RefreshKeyList(bool bKeysOnly) // MClarke - Patch 1 Beta 2 - Added bool
 
     EPC = EPlayerController(GetPlayerOwner());
 
-	for ( ListItem = m_ListBox.Items.Next; ListItem != None ; ListItem = ListItem.Next)
+	for (ListItem = m_ListBox.Items.Next; ListItem != None ; ListItem = ListItem.Next)
 	{
 		if (!EPCOptionsKeyListBoxItem(ListItem).m_bIsNotSelectable)	
         {
@@ -592,7 +528,7 @@ function RefreshKeyList(bool bKeysOnly) // MClarke - Patch 1 Beta 2 - Added bool
 	}     
 	
     // MClarke - Patch 1 Beta 2 - Added bKeysOnly check 
-    if(!bKeysOnly)
+    if (!bKeysOnly)
     {
         GO = class'Actor'.static.GetGameOptions();
 
@@ -605,9 +541,11 @@ function RefreshKeyList(bool bKeysOnly) // MClarke - Patch 1 Beta 2 - Added bool
         m_InvertMouseButton.m_bSelected = GO.InvertMouse;    
 	    m_FireEquipGun.m_bSelected = GO.FireEquipGun;
         m_InitialSpeedScroll.Pos = Clamp(EPC.eGame.m_defautSpeed, 1,6);
+        m_bSnipeToResetCamera.m_bSelected = EPC.bSnipeToResetCamera;
         m_bNormalizeMovement.m_bSelected = EPC.bNormalizeMovement;
         m_bCrouchDrop.m_bSelected = EPC.bCrouchDrop;
         m_bToggleBTWTargeting.m_bSelected = EPC.bToggleBTWTargeting;
+        m_bCameraJammerAutoLock.m_bSelected = EPC.bCameraJammerAutoLock;
         m_bToggleInventory.m_bSelected = EPC.bToggleInventory;
         m_InputMode.SetSelectedIndex(Clamp(EPC.InputMode,0,m_InputMode.List.Items.Count()));
         m_ControllerScheme.SetSelectedIndex(Clamp(EPC.ControllerScheme,0,m_ControllerScheme.List.Items.Count()));
@@ -619,14 +557,14 @@ function RefreshKeyList(bool bKeysOnly) // MClarke - Patch 1 Beta 2 - Added bool
 //===============================================================================
 // GetLocKeyNameByActionKey: Get the localization name of the key to display
 //===============================================================================
-function string GetLocKeyNameByActionKey( string _szActionKey, bool bAltKey)
+function string GetLocKeyNameByActionKey(string _szActionKey, bool bAltKey)
 {
 	local string szTemp;
 	local BYTE Key;
 
 	Key =    GetPlayerOwner().GetKey(_szActionKey, bAltKey);
-	szTemp = GetPlayerOwner().GetEnumName( Key);
-	szTemp = EPCConsole(Root.Console).ConvertKeyToLocalisation( Key, szTemp);
+	szTemp = GetPlayerOwner().GetEnumName(Key);
+	szTemp = EPCConsole(Root.Console).ConvertKeyToLocalisation(Key, szTemp);
 
 	return szTemp;
 }
@@ -645,7 +583,7 @@ function AddLineItem()
 //===============================================================================
 // AddTitleItem: Add a title item only
 //===============================================================================
-function AddTitleItem( string _szTitle)
+function AddTitleItem(string _szTitle)
 {
 	local EPCOptionsKeyListBoxItem NewItem;
 
@@ -658,7 +596,7 @@ function AddTitleItem( string _szTitle)
 //==============================================================================
 // KeyPressed -  Set the new key pressed  
 //==============================================================================
-function KeyPressed( int Key)
+function KeyPressed(int Key)
 {
 	local string szKeyName;
     local string szKeyToReplace;        // Tells whether we want to replace the primary or alt key
@@ -667,12 +605,12 @@ function KeyPressed( int Key)
 
     KeyOld = GetPlayerOwner().GetKey(EPCOptionsKeyListBoxItem(m_ListBox.SelectedItem).m_szActionKey, m_ListBox.m_bDoingAltMapping);
     OtherKey = GetPlayerOwner().GetKey(EPCOptionsKeyListBoxItem(m_ListBox.SelectedItem).m_szActionKey, !m_ListBox.m_bDoingAltMapping);
-	szKeyToReplace = GetPlayerOwner().GetEnumName( KeyOld);
+	szKeyToReplace = GetPlayerOwner().GetEnumName(KeyOld);
 
 	// set the key and refresh the list
 	szKeyName = GetPlayerOwner().GetEnumName(Key);
 
-    if((OtherKey != 0) && (m_ListBox.m_bDoingAltMapping == (Key < OtherKey)))
+    if ((OtherKey != 0) && (m_ListBox.m_bDoingAltMapping == (Key < OtherKey)))
     {
         EPCOptionsKeyListBoxItem(m_ListBox.SelectedItem).m_bDrawFlipped = !EPCOptionsKeyListBoxItem(m_ListBox.SelectedItem).m_bDrawFlipped;  
     }
@@ -681,7 +619,7 @@ function KeyPressed( int Key)
         EPCOptionsKeyListBoxItem(m_ListBox.SelectedItem).m_bDrawFlipped = EPCOptionsKeyListBoxItem(m_ListBox.SelectedItem).m_bDrawFlipped;
     }
 	
-	GetPlayerOwner().SetKey( szKeyName@ EPCOptionsKeyListBoxItem(m_ListBox.SelectedItem).m_szActionKey, szKeyToReplace);
+	GetPlayerOwner().SetKey(szKeyName@ EPCOptionsKeyListBoxItem(m_ListBox.SelectedItem).m_szActionKey, szKeyToReplace);
 	
     // MClarke - Patch 1 Beta 2 - Added true parameter 
     RefreshKeyList(true);
@@ -694,7 +632,7 @@ function KeyDown(int Key, float X, float Y)
 {
 	//local string szTemp, szKeyName;
 
-	if(m_MessageBox != None)
+	if (m_MessageBox != None)
     {
 		// set the key and refresh the list
 		//szKeyName = GetPlayerOwner().GetEnumName(Key);
@@ -703,15 +641,15 @@ function KeyDown(int Key, float X, float Y)
 		//szTemp = Caps(Left(szKeyName, 7));
 		
 		// No joystick/gamepad support for the PC version
-		if( Key >= 196 && Key <= 215 ) return;
+		if (Key >= 196 && Key <= 215) return;
 
         // Joshua - Prevent binding Windows left (92) and Windows right (93)
-        If( Key == 92 || Key == 93 ) return;
+        If (Key == 92 || Key == 93) return;
 
         // Joshua - Allow binding unknown keys (used for Mouse 4 / Mouse 5)
-		//if(szTemp == "UNKNOWN") return;
+		//if (szTemp == "UNKNOWN") return;
 		
-		if(Key != GetPlayerOwner().Player.Console.EInputKey.IK_Escape)
+		if (Key != GetPlayerOwner().Player.Console.EInputKey.IK_Escape)
 		{
 			 EPCMainMenuRootWindow(Root).m_MessageBoxCW.Close();
 			 KeyPressed(Key);
@@ -726,7 +664,7 @@ function KeyDown(int Key, float X, float Y)
 //==============================================================================
 function LMouseDown(float X, float Y)
 {
-	if(m_MessageBox != None)
+	if (m_MessageBox != None)
     {
          EPCMainMenuRootWindow(Root).m_MessageBoxCW.Close();
          KeyPressed(Root.Console.EInputKey.IK_LeftMouse);
@@ -740,7 +678,7 @@ function LMouseDown(float X, float Y)
 //==============================================================================
 function MMouseDown(float X, float Y) 
 {
-    if(m_MessageBox != None)
+    if (m_MessageBox != None)
     {
          EPCMainMenuRootWindow(Root).m_MessageBoxCW.Close();
          KeyPressed(Root.Console.EInputKey.IK_MiddleMouse);
@@ -754,7 +692,7 @@ function MMouseDown(float X, float Y)
 //==============================================================================
 function RMouseDown(float X, float Y) 
 {
-	if(m_MessageBox != None)
+	if (m_MessageBox != None)
     {
          EPCMainMenuRootWindow(Root).m_MessageBoxCW.Close();
          KeyPressed(Root.Console.EInputKey.IK_RightMouse);
@@ -768,7 +706,7 @@ function RMouseDown(float X, float Y)
 //==============================================================================
 function MouseWheelDown(FLOAT X, FLOAT Y)
 {
-	if(m_MessageBox != None)
+	if (m_MessageBox != None)
     {
          EPCMainMenuRootWindow(Root).m_MessageBoxCW.Close();
          KeyPressed(Root.Console.EInputKey.IK_MouseWheelDown);
@@ -782,7 +720,7 @@ function MouseWheelDown(FLOAT X, FLOAT Y)
 //==============================================================================
 function MouseWheelUp(FLOAT X, FLOAT Y)
 {
-	if(m_MessageBox != None)
+	if (m_MessageBox != None)
     {
          EPCMainMenuRootWindow(Root).m_MessageBoxCW.Close();
          KeyPressed(Root.Console.EInputKey.IK_MouseWheelUp);
@@ -802,12 +740,12 @@ function Notify(UWindowDialogControl C, byte E)
 
     fOffsetFromMiddle = 6.50;
         
-    if(E == DE_DoubleClick && C == m_ListBox && m_ListBox.SelectedItem != None)
+    if (E == DE_DoubleClick && C == m_ListBox && m_ListBox.SelectedItem != None)
     {    
         GetMouseXY(iMouseX, iMouseY);
 
         // Now we want to know whether primary or alternate config has been selected
-        if((iMouseX - ((m_ListBox.WinWidth / 2) -  fOffsetFromMiddle)) > (m_ListBox.m_IHighLightWidth / 1.4) )
+        if ((iMouseX - ((m_ListBox.WinWidth / 2) -  fOffsetFromMiddle)) > (m_ListBox.m_IHighLightWidth / 1.4))
         {
             m_ListBox.m_bDoingAltMapping = !EPCOptionsKeyListBoxItem(m_ListBox.SelectedItem).m_bDrawFlipped;           
         }
@@ -818,54 +756,62 @@ function Notify(UWindowDialogControl C, byte E)
 
         m_MessageBox = EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("OPTIONS","MAPKEYTITLE","Localization\\HUD"), Localize("OPTIONS","MAPKEYMESSAGE","Localization\\HUD"), MB_Cancel, MR_Cancel, MR_None, true);                
     }
-    else if(E==DE_Click && C == m_InvertMouseButton)
+    else if (E == DE_Click && C == m_InvertMouseButton)
     {
         m_bModified = true;
     }
-    else if(E==DE_Click && C == m_FireEquipGun)
+    else if (E == DE_Click && C == m_FireEquipGun)
     {
         m_bModified = true;
     }
-    else if(E == DE_Change && C == m_MouseSensitivityScroll)
+    else if (E == DE_Change && C == m_MouseSensitivityScroll)
     {
         m_bModified = true;
         // Joshua - Update value label for mouse sensitivity scrollbar
         if (m_LMouseSensitivityValue != None)
             m_LMouseSensitivityValue.SetLabelText(string(int(m_MouseSensitivityScroll.Pos)), TXT_LEFT);
     }
-    else if(E == DE_Change && C == m_InitialSpeedScroll)
+    else if (E == DE_Change && C == m_InitialSpeedScroll)
     {
         m_bModified = true;
     }
-    else if(E==DE_Click && C == m_bNormalizeMovement)
+    else if (E == DE_Click && C == m_bSnipeToResetCamera)
     {
         m_bModified = true;
     }
-    else if(E==DE_Click && C == m_bCrouchDrop)
+    else if (E == DE_Click && C == m_bNormalizeMovement)
     {
         m_bModified = true;
     }
-    else if(E==DE_Click && C == m_bToggleBTWTargeting)
+    else if (E == DE_Click && C == m_bCrouchDrop)
     {
         m_bModified = true;
     }
-    else if(E==DE_Click && C == m_bToggleInventory)
+    else if (E == DE_Click && C == m_bToggleBTWTargeting)
     {
         m_bModified = true;
     }
-    else if(E==DE_Change && C == m_InputMode)
+    else if (E == DE_Click && C == m_bCameraJammerAutoLock)
     {
         m_bModified = true;
     }
-    else if(E==DE_Change && C == m_ControllerScheme)
+    else if (E == DE_Click && C == m_bToggleInventory)
     {
         m_bModified = true;
     }
-    else if(E==DE_Change && C == m_ControllerIcon)
+    else if (E == DE_Change && C == m_InputMode)
     {
         m_bModified = true;
     }
-    else if(E==DE_Click && C == m_bEnableRumble)
+    else if (E == DE_Change && C == m_ControllerScheme)
+    {
+        m_bModified = true;
+    }
+    else if (E == DE_Change && C == m_ControllerIcon)
+    {
+        m_bModified = true;
+    }
+    else if (E == DE_Click && C == m_bEnableRumble)
     {
         m_bModified = true;
     }
