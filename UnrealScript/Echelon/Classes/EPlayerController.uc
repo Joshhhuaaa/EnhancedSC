@@ -183,7 +183,7 @@ struct native CameraInfo
 var array<CameraInfo> CamControllers;
 
 // Rendering mode
-var int	iRenderMask; // 1=SniperMode, 2=OpticCable, 3=LaserMic, 4=SmokeGrenade
+var int	iRenderMask; // 1 = SniperMode, 2 = OpticCable, 3 = LaserMic, 4 = SmokeGrenade
 
 // AI - Smell stuff //
 var vector	SmellArray[20];
@@ -257,6 +257,8 @@ var(Enhanced) config EControllerIcon ControllerIcon;
 
 var(Enhanced) config bool bNormalizeMovement; // Joshua - Option to normalize movement
 var(Enhanced) config bool bCrouchDrop; // Joshua - When hanging or using a zipline, crouch drops and jump raises legs
+var float m_CrouchTimer; // Joshua - // Joshua - Anti-spam crouch timer
+var float m_ZipLineDropTimer; // Joshua - Anti-spam stance change on zipline
 
 var(Enhanced) config bool bToggleInventory;	// Joshua - Option to use toggle inventory instead of hold
 var(Enhanced) config bool bInteractionPause; // Joshua - If the interaction box or inventory is active, pause the game
@@ -280,14 +282,23 @@ var bool m_ChooseNextGadget;
 var bool bDPadUpPressed, bDPadDownPressed;
 var bool bUsingAirCamera; // Joshua - True when the player is using a camera, prevents movement speed changes with mouse wheel
 
+var(Enhanced) config bool bSnipeToResetCamera; // Joshua - Snipe key will reset the camera
+
+// Joshua - Adding the option to use Camera Jammer camera behavior from Pandora Tomorrow
+var(Enhanced) config bool bCameraJammerAutoLock;
+var Actor JammedCam; 
+
 var(Enhanced) bool bToggleBTWTargeting; // Joshua - Used to toggle BTW targeting instead of holding direction
 
 var EInventoryItem OpticCableItem; // Joshua - Optic Cable interaction
 
-var(Enhanced) config bool bShowKeypadGoal; // Joshua - Show keypad as goal
+// Joshua - Show keypad as goal
+var(Enhanced) config bool bShowKeypadGoal; 
 var bool bShowKeyNum;
 
-var EPlayerStats playerStats; // Joshua - Player statistics tracking
+// Joshua - Player statistics tracking
+var(Enhanced) config bool bEnablePlayerStats;
+var EPlayerStats playerStats; 
 var bool bConfirmStats;
 var bool bDebugStats;
 
@@ -301,9 +312,9 @@ var(Enhanced) config bool bShowCrosshair;
 var(Enhanced) config bool bShowScope;
 var(Enhanced) config bool bShowAlarms;
 
-native(1290) final function SetCameraFOV( actor Owner, float NewFOV );
-native(1291) final function SetCameraMode( actor Owner, int NewRendMap );
-native(1292) final function PopCamera( actor Owner );
+native(1290) final function SetCameraFOV(actor Owner, float NewFOV);
+native(1291) final function SetCameraMode(actor Owner, int NewRendMap);
+native(1292) final function PopCamera(actor Owner);
 
 event EmptyRecons()
 {
@@ -357,14 +368,14 @@ function MouseClick(FLOAT MouseX, FLOAT MouseY)
 	m_FakeMouseY = MouseY;
 }
 
-function FakeMouseToggle( bool bStart )
+function FakeMouseToggle(bool bStart)
 {
-    local ecanvas C;
+    local ECanvas C;
     C = ECanvas(class'Actor'.static.GetCanvas());
 
 	//Log("MouseToggle start="$bStart);
 
-    if(bStart)
+    if (bStart)
         C.Viewport.Console.ShowFakeWindow();
     else
         C.Viewport.Console.HideFakeWindow();
@@ -379,7 +390,7 @@ event bool GetPause()
 function JumpRelease()
 {
 	local vector localSpeed;
-	if(ePawn.FastPointCheck(ePawn.Location + vect(0,0,-10.0), ePawn.GetExtent(), true, true))
+	if (ePawn.FastPointCheck(ePawn.Location + vect(0,0,-10.0), ePawn.GetExtent(), true, true))
 	{
 		GoToState('s_PlayerJumping');
 		localSpeed.X = -0.5;
@@ -418,7 +429,7 @@ event ReduceCameraSpeed(out float turnMul)
 
 function ForceGunAway(optional bool forceAway)
 {
-	if(bInGunTransition || forceAway)
+	if (bInGunTransition || forceAway)
 	{
 		DoSheath();
 		bInGunTransition = false;
@@ -439,23 +450,28 @@ function UpdateCameraRotation(actor ViewActor)
 	local int			PillTag;
 	local ESniperGun	snipeGun;
 
+	// Joshua - Adding the option to use Camera Jammer camera behavior from Pandora Tomorrow
+	if(bCameraJammerAutoLock && GetStateName() == 's_CameraJammerTargeting' && JammedCam != None)
+		SetRotation(Rotator(JammedCam.Location - Location));
+
 	snipeGun = ESniperGun(ePawn.HandItem);
+
 	// Joshua - Continue sniper noise even when the player's input is being blocked
-	if( snipeGun != None && snipeGun.bSniperMode /*&& !bStopInput*/ )
+	if (snipeGun != None && snipeGun.bSniperMode /*&& !bStopInput*/)
 		ViewRotation = snipeGun.SniperNoisedRotation;
 	else
 		ViewRotation = Rotation;
 
-	if( m_lastRotationTick != Level.TimeSeconds )
+	if (m_lastRotationTick != Level.TimeSeconds)
 		m_camera.UpdateRotation(ViewActor);
 
-	if( m_useTarget )
+	if (m_useTarget)
 	{
 		StartTrace	= GetFireStart();
 		EndTrace	= StartTrace + 10000 * (Vect(1,0,0) >> ViewRotation);
 		m_targetActor = ePawn.TraceBone(PillTag, HitLocation, HitNormal, EndTrace, StartTrace);
 
-		if( m_targetActor == None )
+		if (m_targetActor == None)
 			m_targetLocation = EndTrace;
 		else
 			m_targetLocation = HitLocation;
@@ -472,7 +488,7 @@ event AddMultiMapInformation()
 {
 	local EPattern startPattern;
 
-	if(EchelonLevelInfo(Level).StartPatternClass != None)
+	if (EchelonLevelInfo(Level).StartPatternClass != None)
 	{
 		startPattern = Spawn(EchelonLevelInfo(Level).StartPatternClass, Level);
 		startPattern.InitPattern();
@@ -482,13 +498,13 @@ event AddMultiMapInformation()
 
 event StartInitialPattern()
 {
-	if(EchelonPlayerStart(StartSpot) != None)
+	if (EchelonPlayerStart(StartSpot) != None)
 		EchelonPlayerStart(StartSpot).SendInitialPattern();
 }
 
 event InitialSave()
 {
-	if( myHUD.GetStateName() != 's_QuickSaveMenu' )
+	if (myHUD.GetStateName() != 's_QuickSaveMenu')
 	{
 		EMainHUD(myHUD).SaveState();
 		myHUD.GotoState('s_QuickSaveMenu');
@@ -503,9 +519,9 @@ function PawnLookAt()
 	lookAtRotPawn.Pitch = 0;
 	lookAtRotEPC = Rotation;
 	lookAtRotEPC.Pitch = 0;
-	if(Vector(lookAtRotPawn) dot Vector(lookAtRotEPC) > -0.4)
+	if (Vector(lookAtRotPawn) dot Vector(lookAtRotEPC) > -0.4)
 	{
-		if(ePawn.bIsCrouched)
+		if (ePawn.bIsCrouched)
 			ePawn.LookAt(LANORMAL, Vector(Rotation), Vector(ePawn.Rotation), -45, 45, -45, 45);
 		else
 			ePawn.LookAt(LANORMAL, Vector(Rotation), Vector(ePawn.Rotation), -60, 60, -60, 60);
@@ -535,7 +551,7 @@ function SetPawnRotation(float rotSpeed)
 	local vector pushingDir;
 
 	pushingDir = GetPushingDir();
-	if(VSize(pushingDir) > 0.0)
+	if (VSize(pushingDir) > 0.0)
 	{
 		newRot.Yaw = Rotation.Yaw + Rotator(pushingDir).Yaw;
 		ePawn.RotateTowardsRotator(newRot, rotSpeed / 0.5, 0.5);
@@ -547,12 +563,12 @@ function SetPawnAccel(vector X, float accel)
 	local rotator targetRot;
 	local vector NewAccel;
 
-	if(IsPushing())
+	if (IsPushing())
 	{
 		targetRot = Rotation + Rotator(GetPushingDir());
 		targetRot.Pitch = 0;
 		targetRot.Roll = 0;
-		if(X dot Vector(targetRot) > 0.5)
+		if (X dot Vector(targetRot) > 0.5)
 			NewAccel = X;
 	}
 	NewAccel.Z          = 0;
@@ -563,7 +579,7 @@ function SetPawnAccel(vector X, float accel)
 function SetPawnHoriVel(vector dir, float speed, optional bool add)
 {
 	dir.Z = 0.0;
-	if(add)
+	if (add)
 		ePawn.Velocity += ePawn.ToWorldDir(Normal(dir)) * speed;
 	else
 		ePawn.Velocity = ePawn.ToWorldDir(Normal(dir)) * speed;
@@ -571,16 +587,16 @@ function SetPawnHoriVel(vector dir, float speed, optional bool add)
 
 function HandleBreathSounds(float deltaTime)
 {
-	if ( VSize(ePawn.Velocity) != 0.0f )
+	if (VSize(ePawn.Velocity) != 0.0f)
 		ElapsedTime += deltaTime;
 	else
 		ElapsedTime = 0.0f;
 
-	if ( ElapsedTime > 5.0f )
+	if (ElapsedTime > 5.0f)
 	{
 		if (!bIsPlaying)
 		{
-			ePawn.PlaySound( Sound'FisherVoice.Play_Sq_FisherBreathLong', SLOT_SFX );
+			ePawn.PlaySound(Sound'FisherVoice.Play_Sq_FisherBreathLong', SLOT_SFX);
 			bIsPlaying = true;
 		}
 	}
@@ -588,7 +604,7 @@ function HandleBreathSounds(float deltaTime)
 	{
 		if (bIsPlaying)
 		{
-			ePawn.PlaySound( Sound'FisherVoice.Stop_Sq_FisherBreathLong', SLOT_SFX );
+			ePawn.PlaySound(Sound'FisherVoice.Stop_Sq_FisherBreathLong', SLOT_SFX);
 			bIsPlaying = false;
 		}
 	}
@@ -654,7 +670,7 @@ function PostBeginPlay()
 
 event PlayerGiven()
 {
-	if( Player == None )
+	if (Player == None)
 		Log(self$" Player shouldn't be None");
 
 	egi	= EGameInteraction(Player.InteractionMaster.AddInteraction("Echelon.EGameInteraction", Player));
@@ -690,17 +706,17 @@ function AddTrainingData(EPattern TrainingPattern, String TrainingDesc, array<Ec
 	tData = new class'ETrainingData';
 	tData.Description = TrainingDesc;
 
-    for(i = 0; i < TrainingKey.length; i++)
+    for (i = 0; i < TrainingKey.length; i++)
     {
         tData.ArrayKey[i] = TrainingKey[i];
     }
 
     tData.bShowController = (!bHideController);
 
-    TrainingList.Length = TrainingList.Length+1;
-    TrainingList[TrainingList.Length-1] = tData;
+    TrainingList.Length = TrainingList.Length + 1;
+    TrainingList[TrainingList.Length - 1] = tData;
 
-	if( MyHud.GetStateName() != 's_Training' )
+	if (MyHud.GetStateName() != 's_Training')
 	{
 		EMainHUD(myHud).SaveState();
 		myHud.GotoState('s_Training');
@@ -733,9 +749,9 @@ event AddNote(string NoteString, string Section, string Key, string Package, boo
 
 	//Create the object
 	Note = new class'ENote';
-	if(NoteString != "")
+	if (NoteString != "")
 		Note.Note = NoteString;
-	else if(Section != "" && Key != "" && Package != "")
+	else if (Section != "" && Key != "" && Package != "")
 		Note.Note = Localize(Section, Key, Package);
 	else
 		Note.Note = "killme";
@@ -758,13 +774,13 @@ event AddNote(string NoteString, string Section, string Key, string Package, boo
 //
 //
 //------------------------------------------------------------------------
-event AddRecon( class<ERecon> _ClassName, optional bool Completed )
+event AddRecon(class<ERecon> _ClassName, optional bool Completed)
 {
 	local ERecon Recon;
 
 	//Create the object	
 	Recon = new _ClassName;
-	if ( Recon != none) 
+	if (Recon != none) 
 	{
 		// Set flag to true to display icon in HUD
 		bNewRecon = true;
@@ -781,7 +797,7 @@ event AddRecon( class<ERecon> _ClassName, optional bool Completed )
 //
 //
 //------------------------------------------------------------------------
-event AddReconText(	string ObjName,
+event AddReconText(string ObjName,
 					string MemoryTextSection,
 					string From,
 					string To,
@@ -794,7 +810,7 @@ event AddReconText(	string ObjName,
 
 	//Create the object	
 	DataStick = new class'EReconDataStick';
-	if(DataStick != none)
+	if (DataStick != none)
 	{
 		// Set flag to true to display icon in HUD
 		bNewRecon = true;
@@ -825,20 +841,20 @@ event AddGoal(Name NameID, String GoalString, string GoalSection, string GoalKey
 	// Create the object
 	Goal = new class'ENote';
 
-	if(GoalString != "")
+	if (GoalString != "")
 	{
 		Goal.Note = GoalString;
 	}
-	else if(GoalSection != "" && GoalKey != "" && GoalPackage != "")
+	else if (GoalSection != "" && GoalKey != "" && GoalPackage != "")
 	{		
 		Goal.Note = Localize(GoalSection, GoalKey, GoalPackage);
 	}
 	else
 		Goal.Note = "killme";
 
-	if(GoalStringShort != "")
+	if (GoalStringShort != "")
 		Goal.NoteShrink = GoalStringShort;
-	else if(ShortSection != "" && ShortKey != "" && ShortPackage != "")
+	else if (ShortSection != "" && ShortKey != "" && ShortPackage != "")
 		Goal.NoteShrink = Localize(ShortSection, ShortKey, ShortPackage);
 	else
 		Goal.NoteShrink = "killme";
@@ -875,11 +891,11 @@ event AddGoal(Name NameID, String GoalString, string GoalSection, string GoalKey
     if (GoalList.FirstNode != None)
     {
         // Insert node at beginning of nodes with our priority
-        for(Node = GoalList.FirstNode; Node != None; Node = Node.NextNode)
+        for (Node = GoalList.FirstNode; Node != None; Node = Node.NextNode)
         {
             oTempGoal = ENote(Node.Data);
 
-            if(oTempGoal.iPriority >= Goal.iPriority)
+            if (oTempGoal.iPriority >= Goal.iPriority)
             {
                 GoalList.InsertBefore(Goal, oTempGoal);				
                 break;
@@ -900,10 +916,10 @@ event AddGoal(Name NameID, String GoalString, string GoalSection, string GoalKey
 
 	// Find the high priority goal
 	Node = GoalList.FirstNode;
-	while(Node != None)
+	while (Node != None)
 	{
 		Goal = ENote(Node.Data);
-		if( !Goal.bCompleted )
+		if (!Goal.bCompleted)
 		{		
 			bGotNewGoal = true;
 			CurrentGoal = Goal.NoteShrink; 
@@ -917,7 +933,7 @@ event AddGoal(Name NameID, String GoalString, string GoalSection, string GoalKey
 		Node = Node.NextNode;
 	}
 	// If we didn`t find one, they`re all completed so display nothing
-	if ( !bGotNewGoal ) CurrentGoal = ""; 
+	if (!bGotNewGoal) CurrentGoal = ""; 
 }
 
 //---------------------------------[Francois Schelling - 4 June 2001]-----
@@ -937,14 +953,14 @@ event SetGoalStatus(Name ID, bool status)
 	bGotNewGoal = false;
 	Node = GoalList.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
 		Note = ENote(Node.Data);
-		if(Note.ID == ID)
+		if (Note.ID == ID)
 		{			
 			// We completed the current goal, we'll have to search for 
 			// a new one to display
-			if ( Note.NoteShrink == CurrentGoal )
+			if (Note.NoteShrink == CurrentGoal)
 			{
 				bChangeGoal = true;
 			}
@@ -955,13 +971,13 @@ event SetGoalStatus(Name ID, bool status)
 	}
 
 	// We need to display a new one, scan the list
-	if ( bChangeGoal ) 
+	if (bChangeGoal) 
 	{
 		Node = GoalList.FirstNode;
-		while(Node != None)
+		while (Node != None)
 		{
 			Note = ENote(Node.Data);
-			if( !Note.bCompleted )
+			if (!Note.bCompleted)
 			{		
 				bNewGoal = true;
 				bGotNewGoal = true;
@@ -974,7 +990,7 @@ event SetGoalStatus(Name ID, bool status)
 			Node = Node.NextNode;
 		}
 		// If we didn`t find one, they`re all completed so display nothing
-		if ( !bGotNewGoal ) 
+		if (!bGotNewGoal) 
 		{
 			CurrentGoal = ""; 
 			bNewGoal = false;
@@ -993,10 +1009,10 @@ function RefreshGoals()
 
 	// Find the high priority goal
 	Node = GoalList.FirstNode;
-	while(Node != None)
+	while (Node != None)
 	{
 		Goal = ENote(Node.Data);
-		if( !Goal.bCompleted )
+		if (!Goal.bCompleted)
 		{
 			bGotNewGoal = true;
 			CurrentGoal = Goal.NoteShrink;
@@ -1009,7 +1025,7 @@ function RefreshGoals()
 		Node = Node.NextNode;
 	}
 	// If we didn't find one, they're all completed so display nothing
-	if ( !bGotNewGoal ) CurrentGoal = "";
+	if (!bGotNewGoal) CurrentGoal = "";
 }
 
 //----------------------------------------[David Kalina - 7 Mar 2001]-----
@@ -1037,18 +1053,18 @@ function Possess(Pawn aPawn)
 
 	ePawn.Tag = 'ESam';			// set our pawn's tag
 
-	// Copy _UNIQUE IN MAP_ EchelonPlayerStart Initial Inventory in the EPAWN
+	// Copy _UNIQUE IN MAP_ EchelonPlayerStart Initial Inventory in the EPawn
 	EPlayerStart = EchelonPlayerStart(StartSpot);
-	if(EPlayerStart != None)
+	if (EPlayerStart != None)
 	{
-		for(i=0; i<EPlayerStart.DynInitialInventory.Length; i++ )
+		for (i = 0; i < EPlayerStart.DynInitialInventory.Length; i++)
 		{
-			if( EPlayerStart.DynInitialInventory[i].ItemClass == None ||
-				EPlayerStart.DynInitialInventory[i].Qty <= 0 )
+			if (EPlayerStart.DynInitialInventory[i].ItemClass == None ||
+				EPlayerStart.DynInitialInventory[i].Qty <= 0)
 				continue;
 			
 			// From the first (1) to Qty
-			for( j=0; j<EPlayerStart.DynInitialInventory[i].Qty; j++ )
+			for (j = 0; j < EPlayerStart.DynInitialInventory[i].Qty; j++)
 			{
 				ePawn.DynInitialInventory[Index] = EPlayerStart.DynInitialInventory[i].ItemClass;
 				Index++;
@@ -1064,24 +1080,24 @@ function Possess(Pawn aPawn)
 
 	// Give Sam's Goggle
 	Goggle = spawn(class'EGoggle', self);
-	if(EPlayerStart != None)
+	if (EPlayerStart != None)
 		Goggle.bNoThermalAvailable = EPlayerStart.bNoThermalAvailable;
 
 	// Set weapon
-	if( HandGun != None )
+	if (HandGun != None)
 		AttachObject(HandGun, HandGun.AttachAwayTag);
 
 	// Try to give one of the guns
 	SelectWeapon();
 
-	if( MainGun != None )
+	if (MainGun != None)
 		DoSheath();
 
 	// Init animation
 	ePawn.PlayAnim(ePawn.AWait);
 
 	// Init PlayerInfo Stuff (TEMP for debuging) (Yanick Mimee)
-/*	if ( playerInfo != None)
+/*	if (playerInfo != None)
 	{
 		playerInfo.PlayerName = "";	
 		playerInfo.ControllerScheme = 1;		
@@ -1089,7 +1105,7 @@ function Possess(Pawn aPawn)
 
 		if (eGame != None)
 		{
-			if ( eGame.bDemoMode )
+			if (eGame.bDemoMode)
 				playerInfo.GameSave[0] = "LAST CHECKPOINT";
 			else
 				playerInfo.GameSave[0] = "";
@@ -1138,7 +1154,7 @@ function Destroyed()
 
 function PawnDied()
 {
-	if( ePawn != None )
+	if (ePawn != None)
 	{
 		SetLocation(ePawn.Location);
 		ePawn.UnPossessed();
@@ -1160,18 +1176,64 @@ function EnterStartState()
 //	DD  D   EEEE    BBBB    UU  U   GG GG           AAAAA   N N N   DD  D           CC      HHHHH   EEEE    AAAAA    TT     
 //	DD DD   EE      BB  B   UU  U   GG  G           AA  A   N  NN   DD DD           CC      HH  H   EE      AA  A    TT     
 //	DDDD    EEEEE   BBBB    UUUUU    GGGG           AA  A   N   N   DDDD             CCCC   HH  H   EEEEE   AA  A    TT     
-//	
-function ShowDebugInput( canvas Canvas )
+//
+
+// Joshua - Refactored for clearer formatting
+function ShowDebugInput(Canvas Canvas, out float YL, out float YPos)
 {
-    Canvas.DrawText
-       ("AMOUSE X:" @ aMouseX @ "Y:" @ aMouseY @
-        "AFORWARD :" @ aForward @
-        "ASTRAFE : " @ aStrafe @
-        "ATURN : " @ aTurn @
-        "ALOOKUP: " @ aLookUp @
-        "BPRESSEDJUMP : " @ bPressedJump @
-        "bInterpolating : " @ bInterpolating @
-        "ePawn.bInterpolating : " @ ePawn.bInterpolating);
+    local string T;
+    local float XL;
+    
+    Canvas.SetDrawColor(255,255,255);
+    Canvas.SetPos(4,YPos);
+    Canvas.Style = ERenderStyle.STY_Normal;
+    
+    Canvas.StrLen("TEST", XL, YL);
+    
+    T = "[DebugInput]";
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "aMouseX: " @ aMouseX @ " aMouseY: " @ aMouseY;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "aForward: " @ aForward;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "aStrafe: " @ aStrafe;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "aTurn: " @ aTurn;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "aLookUp: " @ aLookUp;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "bPressedJump: " @ bPressedJump;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "bInterpolating: " @ bInterpolating;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
+    
+    T = "ePawn.bInterpolating: " @ ePawn.bInterpolating;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4,YPos);
 }
 
 exec function FreezePawns()
@@ -1185,7 +1247,7 @@ exec function FreezePawns()
 
 	ForEach DynamicActors(class'EPawn', P)
 	{
-		if(!P.bIsPlayerPawn)
+		if (!P.bIsPlayerPawn)
 			P.bDisableAI = true; 
 	}
 }
@@ -1210,16 +1272,16 @@ exec function Reverse()
 
 	playerStats.bCheatsActive = true;
 
-	if ( ViewTarget != none && EPawn(ViewTarget) != none )
+	if (ViewTarget != none && EPawn(ViewTarget) != none)
 		AI = EAIController(EPawn(ViewTarget).Controller);
 	else
 		return;
 
-	if ( AI != none )
+	if (AI != none)
 	{
 		goal = AI.m_pGoalList.GetCurrent();
 
-		if ( goal != none && goal.m_GoalType == GOAL_Patrol )
+		if (goal != none && goal.m_GoalType == GOAL_Patrol)
 		{
 			if (AI.m_pNextPatrolPoint != none)
 			{
@@ -1251,7 +1313,7 @@ exec function IncSpeed()
 	if (GetStateName() != 's_PlayerSniping' && GetStateName() != 's_LaserMicTargeting' && !bUsingAirCamera)
 	{
 		m_curWalkSpeed += 1;
-		if(m_curWalkSpeed > eGame.m_maxSpeedInterval)
+		if (m_curWalkSpeed > eGame.m_maxSpeedInterval)
 		{
 			m_curWalkSpeed = eGame.m_maxSpeedInterval;
 		}
@@ -1279,7 +1341,7 @@ exec function DecSpeed()
 	if (GetStateName() != 's_PlayerSniping' && GetStateName() != 's_LaserMicTargeting' && !bUsingAirCamera)
 	{
 		m_curWalkSpeed -= 1;
-		if (m_curWalkSpeed <= 0 )
+		if (m_curWalkSpeed <= 0)
 		{
 			m_curWalkSpeed = 1;
 		}
@@ -1295,7 +1357,7 @@ exec function Snipe()
 /*	local ESniperGun	snipeGun;
 	snipeGun = ESniperGun(ePawn.HandItem);
 
-	if ( snipeGun != None && snipeGun.bSniperMode && !bStopInput )
+	if (snipeGun != None && snipeGun.bSniperMode && !bStopInput)
 	{
 		bMustZoomIn = false;
 		bMustZoomOut = true;
@@ -1306,11 +1368,13 @@ exec function Snipe()
 		bMustZoomOut = false;
 	}
 */
-	if ( Level.Pauser != None || bStopInput )
+	if (Level.Pauser != None || bStopInput)
 		return;
 
-	if (ActiveGun != None && ActiveGun == MainGun && !bInGunTransition)
+	if (ActiveGun != None && ActiveGun == MainGun && ePawn.HandItem == ActiveGun && !bInGunTransition)
 		bPressSnip = true;
+	else if (bSnipeToResetCamera)
+		bResetCamera = 1;
 }
 
 //---------------------------------------[Joshua - 15 Jul 2025]-----
@@ -1319,10 +1383,10 @@ exec function Snipe()
 //------------------------------------------------------------------------
 exec function SnipeZoomIn()
 {
-	if ( Level.Pauser != None || bStopInput )
+	if (Level.Pauser != None || bStopInput)
 		return;
 
-	if ( bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping' )
+	if (bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping')
 		ESniperGun(ActiveGun).ZoomIn();
 }
 
@@ -1332,10 +1396,10 @@ exec function SnipeZoomIn()
 //------------------------------------------------------------------------
 exec function SnipeZoomOut()
 {
-	if ( Level.Pauser != None || bStopInput )
+	if (Level.Pauser != None || bStopInput)
 		return;
 
-	if ( bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping' )
+	if (bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping')
 		ESniperGun(ActiveGun).ZoomOut();
 }
 
@@ -1345,7 +1409,7 @@ exec function SnipeZoomOut()
 //------------------------------------------------------------------------
 exec function ResetCamera()
 {
-	if ( Level.Pauser != None || bStopInput )
+	if (Level.Pauser != None || bStopInput)
 		return;
 
 	bResetCamera = 1;
@@ -1385,10 +1449,10 @@ exec function ShowNavPoints()
 
 	bDebugNavPoints = !bDebugNavPoints;
 
-	for ( nav = Level.NavigationPointList; nav != None; nav = nav.NextNavigationPoint )
+	for (nav = Level.NavigationPointList; nav != None; nav = nav.NextNavigationPoint)
 		nav.bHidden = bDebugNavPoints;
 	
-	for ( key = eGame.ELevel.InfoPointList; key != none; key = key.NextInfoPoint )
+	for (key = eGame.ELevel.InfoPointList; key != none; key = key.NextInfoPoint)
 		key.bHidden = bDebugNavPoints;
 	
 }
@@ -1401,7 +1465,7 @@ exec function Invincible()
 	playerStats.bCheatsActive = true;
 
 	bInvincible = !bInvincible;
-	if ( bInvincible )
+	if (bInvincible)
 		Pawn.Style = STY_Translucent;
 	else
 		Pawn.style = STY_Normal;
@@ -1414,7 +1478,7 @@ exec function Health()
 
 	playerStats.bCheatsActive = true;
 
-	if( ePawn.Health > 0 )
+	if (ePawn.Health > 0)
 		ePawn.Health = ePawn.InitialHealth;
 }
 
@@ -1425,7 +1489,7 @@ exec function StopTimer()
 
 	playerStats.bCheatsActive = true;
 
-	if( EMainHUD(MyHud).TimerView != None )
+	if (EMainHUD(MyHud).TimerView != None)
 		EMainHUD(MyHud).TimerView.Disable('Tick');
 }
 
@@ -1436,9 +1500,9 @@ exec function Ammo()
 
 	playerStats.bCheatsActive = true;
 
-	if( MainGun != None )
+	if (MainGun != None)
 		MainGun.Ammo = MainGun.default.MaxAmmo;
-	if( HandGun != None )
+	if (HandGun != None)
 		HandGun.Ammo = HandGun.default.MaxAmmo;
 }
 
@@ -1471,13 +1535,13 @@ exec function KillAll(class<actor> aClass)
 
 	playerStats.bCheatsActive = true;
 
-	if ( ClassIsChildOf(aClass, class'Pawn') )
+	if (ClassIsChildOf(aClass, class'Pawn'))
 	{
 		KillAllPawns(class<Pawn>(aClass));
 		return;
 	}
 	ForEach DynamicActors(class 'Actor', A)
-		if ( ClassIsChildOf(A.class, aClass) )
+		if (ClassIsChildOf(A.class, aClass))
 			A.Destroy();
 }
 
@@ -1492,12 +1556,12 @@ function KillAllPawns(class<Pawn> aClass)
 	playerStats.bCheatsActive = true;
 	
 	ForEach DynamicActors(class'Pawn', P)
-		if ( ClassIsChildOf(P.Class, aClass)
-			&& !P.IsHumanControlled() )
+		if (ClassIsChildOf(P.Class, aClass)
+			&& !P.IsHumanControlled())
 		{
 			//P.TakeDamage(0, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), class'EBurned'); 
 			P.TakeDamage(P.Health, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), None);
-			if ( P.Controller != None )
+			if (P.Controller != None)
 				P.Controller.Destroy();
 			P.Destroy();
 		}
@@ -1543,16 +1607,16 @@ exec function IM()
 		return;
 
 	Log("* IM ["$IManager.Interactions.Length$"]");
-	for( i=0; i<IManager.Interactions.Length; i++ )
+	for (i = 0; i < IManager.Interactions.Length; i++)
 		Log("	"$IManager.Interactions[i].name@IManager.Interactions[i].iPriority);
 }
 
-exec function Mission( optional float i )
+exec function Mission(optional float i)
 {
 	if (eGame.bEliteMode || eGame.bPermadeathMode)
 		return;
 
-	EndMission(i==0, 4);
+	EndMission(i == 0, 4);
 }
 
 // Joshua - Console shortcuts to cut levels
@@ -1593,7 +1657,7 @@ exec function FixCam()
 
 	playerStats.bCheatsActive = true;
 
-	if(m_camera.IsInState('s_Fixed'))
+	if (m_camera.IsInState('s_Fixed'))
 		m_camera.GotoState('s_Following');
 	else
 		m_camera.GotoState('s_Fixed');
@@ -1607,7 +1671,7 @@ exec function SaveEnhancedOptions()
 // Joshua - Temporary PlayerStats debug
 exec function Stat(string Stat)
 {
-	switch(Stat)
+	switch (Stat)
 	{
 	case "A": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("PlayerIdentified"); break;
 	case "B": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BodyFound"); break;
@@ -1857,11 +1921,11 @@ function NotifyFiring()
 {
 	local EWeapon w;
 	w = EWeapon(ePawn.HandItem);
-	if(w != None)
+	if (w != None)
 	{
 		playerStats.AddStat("BulletFired");
 		Level.RumbleVibrate(0.07, 0.75);
-		if(w.IsA('ETwoHandedWeapon'))
+		if (w.IsA('ETwoHandedWeapon'))
 			ePawn.Recoil(Vector(Rotation), w.RecoilStrength, w.RecoilAngle, w.RecoilStartAlpha, w.RecoilFadeIn, w.RecoilFadeOut);
 	}
 }
@@ -1888,13 +1952,13 @@ function vector GetFireStart()
 //          CameraRotation :    Camera Orientation
 //
 //------------------------------------------------------------------------
-event PlayerCalcView(out actor ViewActor, out vector CameraLocation, out rotator CameraRotation )
+event PlayerCalcView(out actor ViewActor, out vector CameraLocation, out rotator CameraRotation)
 {
 	local ESniperGun		snipeGun;
 
-	if ( (ViewTarget == None) || ViewTarget.bDeleteMe )
+	if ((ViewTarget == None) || ViewTarget.bDeleteMe)
 	{
-		if ( (ePawn != None) && !ePawn.bDeleteMe )
+		if ((ePawn != None) && !ePawn.bDeleteMe)
 			SetViewTarget(ePawn);
 		else
 			SetViewTarget(self);
@@ -1903,7 +1967,7 @@ event PlayerCalcView(out actor ViewActor, out vector CameraLocation, out rotator
 	ViewActor = ViewTarget;
 	snipeGun = ESniperGun(ePawn.HandItem);
 
-	if( m_lastLocationTick == Level.TimeSeconds || bLockedCamera )
+	if (m_lastLocationTick == Level.TimeSeconds || bLockedCamera)
 	{
 		CameraLocation = Location;
 		CameraRotation = Rotation;
@@ -1915,7 +1979,7 @@ event PlayerCalcView(out actor ViewActor, out vector CameraLocation, out rotator
 	}
 
 	// Joshua - Continue sniper noise even when the player's input is being blocked
-	if( snipeGun != None && snipeGun.bSniperMode /*&& !bStopInput*/ )
+	if (snipeGun != None && snipeGun.bSniperMode /*&& !bStopInput*/)
 		CameraRotation = snipeGun.SniperNoisedRotation;
 }
 
@@ -1925,40 +1989,40 @@ event PlayerCalcView(out actor ViewActor, out vector CameraLocation, out rotator
 // Description		Calc view for all Type of goggles
 //					Should be in EController coz EyeBoneName in EPawn
 //------------------------------------------------------------------------
-event PlayerCalcEye( out vector EyeLocation, out rotator EyeRotation )
+event PlayerCalcEye(out vector EyeLocation, out rotator EyeRotation)
 {
 	local vector X,Y,Z;
 	EyeRotation = ePawn.GetBoneRotation(ePawn.EyeBoneName);
 	GetAxes(EyeRotation, X,Y,Z);
 	EyeRotation = Rotator(Y);
 	EyeLocation = ePawn.GetBoneCoords(ePawn.EyeBoneName).Origin;
-	EyeLocation += Y*ePawn.CollisionRadius/4;
+	EyeLocation += Y * ePawn.CollisionRadius / 4;
 }
 
-function AdjustView(float DeltaTime );
+function AdjustView(float DeltaTime);
 
 // ***********************************************************************************************
 // * Gun stuff
 // ***********************************************************************************************
 
-exec function Fire( optional float F )
+exec function Fire(optional float F)
 {
-	if( Level.Pauser != None || bStopInput )
+	if (Level.Pauser != None || bStopInput)
 		return;
 	ProcessFire();
 }
 
 function ProcessFire()
 {
-	if(PlayerInput.bFireToDrawGun)
+	if (PlayerInput.bFireToDrawGun)
 	{
 // ATURCOTTE HACKY DRAW WEAPON
-		if( bInGunTransition )
+		if (bInGunTransition)
 			return;
 		// If nothing in hands but a gun is available, draw it on first fire click
-		else if( ePawn.HandItem == None && ActiveGun != None )
+		else if (ePawn.HandItem == None && ActiveGun != None)
 			ProcessScope();
-		else if( ePawn.HandItem == ActiveGun || !ePawn.HandItem.bIsProjectile )
+		else if (ePawn.HandItem == ActiveGun || !ePawn.HandItem.bIsProjectile)
 			ePawn.HandItem.Use();
 // ATURCOTTE HACKY DRAW WEAPON
 		else
@@ -1966,32 +2030,32 @@ function ProcessFire()
 	}
 	else
 	{
-		if( ePawn.HandItem == None || bInGunTransition )
+		if (ePawn.HandItem == None || bInGunTransition)
 			return;
-		if( ePawn.HandItem == ActiveGun || !ePawn.HandItem.bIsProjectile )
+		if (ePawn.HandItem == ActiveGun || !ePawn.HandItem.bIsProjectile)
 			ePawn.HandItem.Use();
 		else
 			DiscardPickup();
 	}
 }
 
-exec function AltFire( optional float F )
+exec function AltFire(optional float F)
 {
-	if( Level.Pauser != None || bStopInput )
+	if (Level.Pauser != None || bStopInput)
 		return;
 	ProcessAltFire();
 }
 function ProcessAltFire()
 {
-	if( ePawn.HandItem == None || bInGunTransition ) 
+	if (ePawn.HandItem == None || bInGunTransition) 
 		return;
-	if( ePawn.HandItem == ActiveGun )
+	if (ePawn.HandItem == ActiveGun)
 		ActiveGun.AltFire();
 }
 
 exec function Scope()
 {
-	if( Level.Pauser != None || bStopInput )
+	if (Level.Pauser != None || bStopInput)
 		return;
 	ProcessScope();
 }
@@ -2004,7 +2068,7 @@ function bool MayReload()
 
 exec function Interact()
 {
-	if( Level.Pauser != None || bStopInput )
+	if (Level.Pauser != None || bStopInput)
 		return;
 
 	bInteraction = true;
@@ -2016,7 +2080,7 @@ function ProcessInteract();
 //clauzon process the back to Wall alone
 exec function BackToWall()
 {
-	if( Level.Pauser != None || bStopInput )
+	if (Level.Pauser != None || bStopInput)
 		return;
 
 	ProcessBackToWall();
@@ -2027,7 +2091,7 @@ function ProcessBackToWall();
 //clauzon process the Reload Gun alone
 exec function ReloadGun()
 {
-	if( Level.Pauser != None || bStopInput )
+	if (Level.Pauser != None || bStopInput)
 		return;
 
 	ProcessReloadGun();
@@ -2036,7 +2100,7 @@ exec function ReloadGun()
 function ProcessReloadGun()
 {
 	// Interact can call reload with a ActiveGun and no Interactions in the Mngr.
-	if( MayReload() )
+	if (MayReload())
 		ActiveGun.Reload();
 }
 
@@ -2058,46 +2122,46 @@ function NotifyReloading()
 
 exec function SwitchROF()
 {
-	if( Level.Pauser != None || bStopInput )
+	if (Level.Pauser != None || bStopInput)
 		return;
-	if( ePawn.HandItem != ActiveGun || bInGunTransition || bInTransition ) 
+	if (ePawn.HandItem != ActiveGun || bInGunTransition || bInTransition) 
 		return;
-	if( ActiveGun != None )
+	if (ActiveGun != None)
 	{
-		if( ActiveGun.SwitchROF() )
+		if (ActiveGun.SwitchROF())
 			ePawn.PlaySound(Sound'FisherEquipement.Play_FisherSelectFireMode', SLOT_SFX);
 	}
 }
-exec function SwitchHeadset( optional float i )
+exec function SwitchHeadset(optional float i)
 {
-	if( Level.Pauser != None || bStopInput )
+	if (Level.Pauser != None || bStopInput)
 		return;
 	ProcessHeadset(i);
 }
-function ProcessHeadSet( float i )
+function ProcessHeadSet(float i)
 {
 	// Quick switch goggle mode
-	if( bInGunTransition )
+	if (bInGunTransition)
 		return;
 	Goggle.SwitchMode(i);
 }
 
-exec function Jump( optional float F )
+exec function Jump(optional float F)
 {
-	if( Level.Pauser != None || bStopInput )
+	if (Level.Pauser != None || bStopInput)
 		return;
 	bPressedJump = true;
 }
 
 
-function bool ToggleCinematic( EPattern CinematicPattern, bool bStart )
+function bool ToggleCinematic(EPattern CinematicPattern, bool bStart)
 {
 	// Make sure to never start a cinematic delayed
-	if( iGameOverMsg != -1 )
+	if (iGameOverMsg != -1)
 		return false;
 
 	//Log("ToggleCinematic"@bStart@bInCinematic);
-	if( bStart && !bInCinematic )
+	if (bStart && !bInCinematic)
 	{
 		EMainHUD(myHUD).SaveState();
 		myHUD.GoToState('s_Cinematic');
@@ -2114,7 +2178,7 @@ function bool ToggleCinematic( EPattern CinematicPattern, bool bStart )
 
 		m_camera.GoToState('s_Fixed');
 	}
-	else if( !bStart && bInCinematic )
+	else if (!bStart && bInCinematic)
 	{
 		bInCinematic	= false;
 		PopCamera(CinematicPattern);
@@ -2138,18 +2202,21 @@ function ProcessToggleCinematic()
 // Description		
 //		Called as soon as a mission is game over/failed. No state changes
 //------------------------------------------------------------------------
-function EndMission( bool bMissionComplete, int iFailureType )
+function EndMission(bool bMissionComplete, int iFailureType)
 {
+	// Joshua - Prevents player from dying during GameOver and prevents NPC barks
+	EchelonLevelInfo(Level).GameOver();
+
 	// Stop player input
 	bStopInput = true;
 	
 	// Check if wouldn't be already in mission state
 	// Or allow the same for timer
-	if( iGameOverMsg != -1 && iGameOverMsg != iFailureType )
+	if (iGameOverMsg != -1 && iGameOverMsg != iFailureType)
 		return;
 
 	// Joshua - Hack for Presidential Palace to display player statistics before ending cutscene
-	if (GetCurrentMapName() == "5_1_2_PresidentialPalace" && bMissionComplete && iFailureType == 0)
+	if (bEnablePlayerStats && GetCurrentMapName() == "5_1_2_PresidentialPalace" && bMissionComplete && iFailureType == 0)
 	{
 		playerStats.OnMissionComplete(); // Joshua - For player statistics, pauses the mission time
 		myHUD.GoToState('s_FinalMapStats');
@@ -2165,14 +2232,14 @@ function EndMission( bool bMissionComplete, int iFailureType )
 	iGameOverMsg = iFailureType;
 
 	// Change hud state
-	if( bMissionComplete )
+	if (bMissionComplete)
 	{
 		playerStats.OnMissionComplete(); // Joshua - For player statistics, pauses the mission time
 		myHUD.GotoState('s_Mission', 'Complete');
 	}
 	else
 	{
-		if(eGame.bPermadeathMode)
+		if (eGame.bPermadeathMode)
 			bProfileDeletionPending = true;
 		myHUD.GoToState('s_Mission', 'Failed');
 	}
@@ -2197,7 +2264,7 @@ function vector GetTargetPosition()
 //------------------------------------------------------------------------
 function CheckForCrouch()
 {
-    if( bDuck > 0 )
+    if (bDuck > 0)
     {
 		ePawn.bWantsToCrouch = !ePawn.bWantsToCrouch;
 		bDuck = 0;
@@ -2222,36 +2289,36 @@ exec function FullInv()
 // Description		
 //		Catch all animEnd
 //------------------------------------------------------------------------
-event AnimEnd( int Channel )
+event AnimEnd(int Channel)
 {
 	local float blendTime;
 	//Log("AnimEnd"@Channel);
 
 	// action channel ends
-	if( Channel == EPawn.ACTIONCHANNEL )
+	if (Channel == EPawn.ACTIONCHANNEL)
 	{
-		if( !ePawn.IsAnimating(EPawn.ACTIONCHANNEL) )
+		if (!ePawn.IsAnimating(EPawn.ACTIONCHANNEL))
 		{
-			//Log("AnimEnd Resetting Channel=3 alpha");
-			if(SlowGunBack())
+			//Log("AnimEnd Resetting Channel = 3 alpha");
+			if (SlowGunBack())
 				blendTime = 0.25;
 			else
 				blendTime = 0.25;
 			ePawn.AnimBlendToAlpha(EPawn.ACTIONCHANNEL,0,blendTime);
 		}
 
-		if( bInGunTransition )
+		if (bInGunTransition)
 		{
 			//Log("AnimEnd EPawn.ACTIONCHANNEL .. not in scope transition anymore");
 			bInGunTransition = false;
 		}
 
 		// If weapon in Reload state, will catch the AnimEnd
-		if( ActiveGun != None && ePawn.HandItem == ActiveGun )
+		if (ActiveGun != None && ePawn.HandItem == ActiveGun)
 			ActiveGun.AnimEnd(69);
 	}
 	// Goggle stuff
-	else if( Channel == EPawn.PERSONALITYCHANNEL )
+	else if (Channel == EPawn.PERSONALITYCHANNEL)
 	{
 		//Log("* * * * AnimEnd on PERSONALITYCHANNEL");
 		ePawn.AnimBlendToAlpha(EPawn.PERSONALITYCHANNEL,0,0.20);
@@ -2287,7 +2354,7 @@ function SendTransmissionMessage(string TextData, EchelonEnums.eTransmissionType
 	local ETransmissionObj T;
 	local ESList TransmissionList;
 		
-	switch(eType)
+	switch (eType)
 	{
 		case TR_HINT:
 		case TR_CONSOLE:
@@ -2302,17 +2369,17 @@ function SendTransmissionMessage(string TextData, EchelonEnums.eTransmissionType
 			break;
 		default:
 			// For other types, don't check for duplicates in the list
-			EMainHUD(myHUD).CommunicationBox.AddTransmission( self, eType, TextData, None);
+			EMainHUD(myHUD).CommunicationBox.AddTransmission(self, eType, TextData, None);
 			return;
 	}
 	
 	// Check if the same message already exists in the transmission list
 	if (TransmissionList != None && TransmissionList.FirstNode != None)
 	{
-		for(Node = TransmissionList.FirstNode; Node != None; Node = Node.NextNode)
+		for (Node = TransmissionList.FirstNode; Node != None; Node = Node.NextNode)
 		{
 			T = ETransmissionObj(Node.Data);
-			if(T != None && T.Data == TextData)
+			if (T != None && T.Data == TextData)
 			{
 				// Same message already exists, don't add it
 				return;
@@ -2321,7 +2388,7 @@ function SendTransmissionMessage(string TextData, EchelonEnums.eTransmissionType
 	}
 	
 	// Joshua - Original behavior: Message doesn't exist, add it
-	EMainHUD(myHUD).CommunicationBox.AddTransmission( self, eType, TextData, None);
+	EMainHUD(myHUD).CommunicationBox.AddTransmission(self, eType, TextData, None);
 }
 
 //************************************************************************
@@ -2331,28 +2398,28 @@ function SendTransmissionMessage(string TextData, EchelonEnums.eTransmissionType
 //*********														   *******
 //************************************************************************
 //************************************************************************
-function NotifyLostInventoryItem( EInventoryItem Item )
+function NotifyLostInventoryItem(EInventoryItem Item)
 {
-	if( Item == None ) 
+	if (Item == None) 
         return;
 	
-	if( EWeapon(Item) == MainGun )
+	if (EWeapon(Item) == MainGun)
 		MainGun = None;
-	else if( EWeapon(Item) == HandGun )
+	else if (EWeapon(Item) == HandGun)
 		HandGun = None;
 
-    if( EWeapon(Item) == ActiveGun )
+    if (EWeapon(Item) == ActiveGun)
         ActiveGun = None;
 }
 
-function bool CanSwitchToHandItem( EInventoryItem Item )
+function bool CanSwitchToHandItem(EInventoryItem Item)
 {
 	return !bInGunTransition;
 }
 
 function bool CanSwitchGoggleManually();
 
-function ChangeHeadObject( EInventoryItem HeadObj )
+function ChangeHeadObject(EInventoryItem HeadObj)
 {
 	//Log("* * * * CHangeHeadObject to="$HeadObj);
 	Goggle.SwitchVisionMode(EAbstractGoggle(HeadObj).RendType);
@@ -2366,25 +2433,25 @@ event GoggleDown() // Low
 	Goggle.Down();
 }
 
-function DiscardPickup( optional bool bSheathItem, optional bool bNoVelocity )
+function DiscardPickup(optional bool bSheathItem, optional bool bNoVelocity)
 {
 	local vector DropVel;
 
 	//Log("* * DiscardPickup HAND="$ePawn.HandItem$" Gun="$ActiveGun$" SEL="$ePawn.FullInventory.GetSelectedItem()@bSheathItem);
-	if( ePawn.HandItem == None )
+	if (ePawn.HandItem == None)
 		return;
 	
 	DropVel = ePawn.Velocity;
-	if( !bNoVelocity )
+	if (!bNoVelocity)
 		DropVel += ePawn.ToWorldDir(Vect(50,50,0));
 
 	// If it's a simple g.o. so item can not be added to inventory
-	if( !ePawn.HandItem.IsA('EInventoryItem') )
+	if (!ePawn.HandItem.IsA('EInventoryItem'))
 	{
 		ePawn.SetBoneRotation('B R Hand',Rot(-2000,-8000,0),,10,3,1);
 		ePawn.HandItem.Throw(self, DropVel);
 	}
-	else if( bSheathItem )
+	else if (bSheathItem)
 		SelectWeapon(,bSheathItem);
 }
 
@@ -2392,24 +2459,24 @@ function DiscardPickup( optional bool bSheathItem, optional bool bNoVelocity )
 // Description		
 //		Fall back on available weapon
 //------------------------------------------------------------------------
-function SelectWeapon( optional bool bForceHandGun, optional bool bChangeToNone )
+function SelectWeapon(optional bool bForceHandGun, optional bool bChangeToNone)
 {
 	//Log("SelectWeapon ActiveGun["$ActiveGun$"] HandItem["$ePawn.HandItem$"]"@bChangeToNone);
 	
 	// Force HandGun
-	if( bForceHandGun && HandGun != None )
+	if (bForceHandGun && HandGun != None)
 		ePawn.FullInventory.SetSelectedItem(HandGun);
 	
 	// Fallback to currently active gun
-	else if( ActiveGun != None )
+	else if (ActiveGun != None)
 		ePawn.FullInventory.SetSelectedItem(ActiveGun);
 	
 	// Fallback to any available weapon
-	else if( MainGun != None )
+	else if (MainGun != None)
 		ePawn.FullInventory.SetSelectedItem(MainGun);
-	else if( HandGun != None )
+	else if (HandGun != None)
 		ePawn.FullInventory.SetSelectedItem(HandGun);
-	else if( bChangeToNone )
+	else if (bChangeToNone)
 		ePawn.FullInventory.UnEquipItem(ePawn.FullInventory.GetSelectedItem());
 }
 
@@ -2417,41 +2484,41 @@ function SelectWeapon( optional bool bForceHandGun, optional bool bChangeToNone 
 // Description
 //		Do the actual handItem change, for egameplayobject
 //------------------------------------------------------------------------
-function ChangeHandObject( EGameplayObject Obj, optional bool bSheathItem )
+function ChangeHandObject(EGameplayObject Obj, optional bool bSheathItem)
 {
 	//Log("* * * * CHangeHandObject to="$Obj$" HAND="$ePawn.HandItem$" SEL="$ePawn.FullInventory.GetSelectedItem());
 
 	// Do nothing for maingun and handgun
-	if( Obj != MainGun && Obj != HandGun )
+	if (Obj != MainGun && Obj != HandGun)
 	{
 		// if ePawn.HandItem != None .. maybe should drop it
 		DiscardPickup(bSheathItem);
 
 		ePawn.HandItem = Obj;
-		if( Obj != None )
+		if (Obj != None)
 			AttachObject(Obj, Obj.GetHandAttachTag());
 	}
 	// Only nonify inventory item if selecting a weapon
-	else if( ePawn.HandItem != None && ePawn.HandItem.IsA('EInventoryItem') )
+	else if (ePawn.HandItem != None && ePawn.HandItem.IsA('EInventoryItem'))
 		ePawn.HandItem = None;
 
 	// Set ActiveGun for any weapon coming in hands
-	if( EWeapon(Obj) != None )
+	if (EWeapon(Obj) != None)
 		ActiveGun = EWeapon(Obj);
 
 	CheckHandObject();
 
 	// Auto Switch to maingun
-	if( Obj == None )
+	if (Obj == None)
 		SelectWeapon();
 }
 
 function CheckHandObject()
 {
-	if( EWeapon(ePawn.HandItem) != None )
+	if (EWeapon(ePawn.HandItem) != None)
 	{
 		// test case one or two handed weapon
-		if( ePawn.HandItem.IsA('ETwoHandedWeapon') )
+		if (ePawn.HandItem.IsA('ETwoHandedWeapon'))
 			ePawn.WeaponStance = 2;
 		else
 			ePawn.WeaponStance = 1;
@@ -2459,7 +2526,7 @@ function CheckHandObject()
 	else
 		ePawn.WeaponStance = 0;
 
-	//Log("@ calling switchanims"@ePawn.WeaponStance@epawn.handitem@activegun);
+	//Log("@ calling switchanims"@ePawn.WeaponStance@ePawn.HandItem@ActiveGun);
 
 	// call to set animations for each different character
 	ePawn.SwitchAnims();
@@ -2468,9 +2535,9 @@ function CheckHandObject()
 //------------------------------------------------------------------------
 //		Attach an object to a bone name
 //------------------------------------------------------------------------
-event AttachObject( EGameplayObject Obj, name AttachTag )
+event AttachObject(EGameplayObject Obj, name AttachTag)
 {
-	if( Obj == None )
+	if (Obj == None)
 		return;
 
 	//Log("Attaching "$Obj$" to bone "$AttachTag$" of "$ePawn);
@@ -2485,16 +2552,16 @@ event AttachObject( EGameplayObject Obj, name AttachTag )
 //------------------------------------------------------------------------
 function name GetWeaponAnimation()
 {
-	if( /*ActiveGun == None ||*/ ActiveGun.IsA('EOneHandedWeapon') )
+	if (/*ActiveGun == None ||*/ ActiveGun.IsA('EOneHandedWeapon'))
 	{
-		if( !ePawn.bIsCrouched )
+		if (!ePawn.bIsCrouched)
 			return 'DrawStSpBg1';
 		else
 			return 'DrawCrSpBg1';
 	}
 	else
 	{
-		if( !ePawn.bIsCrouched )
+		if (!ePawn.bIsCrouched)
 			return 'DrawStSpBg2';
 		else
 			return 'DrawCrSpBg2';
@@ -2504,7 +2571,7 @@ function name GetWeaponAnimation()
 //------------------------------------------------------------------------
 //		Restore back weapon in pawn's hands
 //------------------------------------------------------------------------
-function DrawWeapon( optional Name AnimName, optional bool bFullSkel, optional bool bForceHandGun )
+function DrawWeapon(optional Name AnimName, optional bool bFullSkel, optional bool bForceHandGun)
 {
 	local name BoneStart;
 	//Log("* * * DrawWeapon "$ePawn.HandItem@ActiveGun);
@@ -2516,15 +2583,15 @@ function DrawWeapon( optional Name AnimName, optional bool bFullSkel, optional b
 	bDrawWeapon = true;
 
 	// Give default anim
-	if( AnimName == '' )
+	if (AnimName == '')
 		AnimName = GetWeaponAnimation();
 
 	//Log("bInGunTransition = true;");
 	bInGunTransition = true;
 
-	if ( ActiveGun == MainGun )
+	if (ActiveGun == MainGun)
 	{
-		if(GetStateName() == 's_RappellingTargeting')
+		if (GetStateName() == 's_RappellingTargeting')
 			ePawn.AddSoundRequest(Sound'FisherEquipement.Play_FN2000Aim', SLOT_SFX, 1.0f);
 		else
 			ePawn.PlaySound(Sound'FisherEquipement.Play_FN2000Aim', SLOT_SFX);
@@ -2533,7 +2600,7 @@ function DrawWeapon( optional Name AnimName, optional bool bFullSkel, optional b
 		ePawn.PlaySound(Sound'FisherEquipement.Play_FisherPistolAim', SLOT_SFX);
 
 
-	if( bFullSkel )
+	if (bFullSkel)
 		BoneStart = '';
 	else
 		BoneStart = ePawn.UpperBodyBoneName;
@@ -2543,35 +2610,35 @@ function DrawWeapon( optional Name AnimName, optional bool bFullSkel, optional b
 //------------------------------------------------------------------------
 //		Send in hand weapon in pawn's back
 //------------------------------------------------------------------------
-function SheathWeapon( optional name AnimName, optional name BoneStart, optional bool bFullSkel )
+function SheathWeapon(optional name AnimName, optional name BoneStart, optional bool bFullSkel)
 {
 	//Log("* * * SheathWeapon handitem["$ePawn.HandItem$"] activeGun["$ActiveGun$"] in state["$GetStateName()$"]");
 
 	bDrawWeapon = false;
 
-	if( ActiveGun == None )
+	if (ActiveGun == None)
 		Log("Trying to Sheath no active gun ..."@ePawn.HandItem@ActiveGun);
 
-	else if( ActiveGun != ePawn.FullInventory.GetSelectedItem() )
+	else if (ActiveGun != ePawn.FullInventory.GetSelectedItem())
 	{
 		Log("ERROR: SheathWeapon called when ActiveGun not selected"@ActiveGun@ePawn.FullInventory.GetSelectedItem());
 		//return; // so that we may call Sheath on a picked up main/hand gun
 	}
 
 	// Give default anim
-	if( AnimName == '' )
+	if (AnimName == '')
 		AnimName = GetWeaponAnimation();
 
 	bInGunTransition = true;
 
-	if ( ActiveGun == MainGun )
+	if (ActiveGun == MainGun)
 		ePawn.PlaySound(Sound'FisherEquipement.Play_FN2000AimBack', SLOT_SFX);
 	else
 		ePawn.PlaySound(Sound'FisherEquipement.Play_FisherPistolAimBack', SLOT_SFX);
 
-	if(bFullSkel)
+	if (bFullSkel)
 		BoneStart = '';
-	else if( BoneStart == '' || ePawn.bIsCrouched )
+	else if (BoneStart == '' || ePawn.bIsCrouched)
 		BoneStart = ePawn.UpperBodyBoneName;
 	ePawn.BlendAnimOverCurrent(AnimName, 1, BoneStart,,,,true);
 }
@@ -2580,7 +2647,7 @@ function SheathWeapon( optional name AnimName, optional name BoneStart, optional
 function NotifyWeapon()
 {
 	//Log("NotifyWeapon"@bDrawWeapon);
-	if( bDrawWeapon )
+	if (bDrawWeapon)
 		DoDraw();
 	else
 		DoSheath();
@@ -2590,12 +2657,12 @@ function DoSheath()
 {
 	//Log("DoSheath"@ePawn.HandItem@ActiveGun);
 	// Grab release will call this .. do nothing if no weapon in hands
-	if( ActiveGun == None )
+	if (ActiveGun == None)
 		return;
 
 	ActiveGun.InTargetingMode = false;
 
-	if( ActiveGun == MainGun || ActiveGun == HandGun )
+	if (ActiveGun == MainGun || ActiveGun == HandGun)
 		ePawn.HandItem = None;
 
 	AttachObject(ActiveGun, ActiveGun.AttachAwayTag);
@@ -2609,7 +2676,7 @@ function DoDraw()
 {
 	//Log("DoDraw"@ePawn.HandItem@ActiveGun);
 	// Grab start will call this .. do nothing if no weapon in hands
-	if( ActiveGun == None )
+	if (ActiveGun == None)
 		return;
 
 	ActiveGun.InTargetingMode = true;
@@ -2643,7 +2710,7 @@ function Reload4()
 }
 
 // Toggle to prevent paying extra anim
-function Trigger( actor Other, pawn EventInstigator, optional name InTag )
+function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 {
 	SpecialWaitAnim = '';
 }
@@ -2657,12 +2724,12 @@ exec function ToggleHUD()
 // Joshua - New function to whistle
 exec function Whistle()
 {
-	if(Level.Pauser != None || bStopInput || bDisableWhistle)
+	if (Level.Pauser != None || bStopInput || bDisableWhistle)
 	{
 		return;
 	}
 
-	if(!EPawn.IsPawnTalking() && bWhistle && Level.TimeSeconds - m_WhistleTime > 1.0)
+	if (!EPawn.IsPawnTalking() && bWhistle && Level.TimeSeconds - m_WhistleTime > 1.0)
 	{
 		// Joshua - Doesn't look the best with SC1 SkeletalMesh
 		//ePawn.BlendAnimOverCurrent('PT_Whistle', 1, 'B Head');
@@ -2679,17 +2746,17 @@ exec function Whistle()
 
 exec function PreviousGadget()
 {
-	if( Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput)
 		return;
 
 	// Joshua - If the player is in sniping mode, don't change gadget
-	if( ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping' )
+	if (ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping')
 		return;
 
-	if(!CanAccessQuick())
+	if (!CanAccessQuick())
 		return;
 
-	if(GetStateName() == 's_FirstPersonTargeting' && ePawn.HandItem.IsA('EFn7'))
+	if (GetStateName() == 's_FirstPersonTargeting' && ePawn.HandItem.IsA('EFn7'))
 		return;
 
 	m_ChoosePreviousGadget = true;
@@ -2697,17 +2764,17 @@ exec function PreviousGadget()
 
 exec function NextGadget()
 {
-	if( Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput)
 		return;
 
 	// Joshua - If the player is in sniping mode, don't change gadget
-	if( ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping' )
+	if (ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping')
 		return;
 
-	if(!CanAccessQuick())
+	if (!CanAccessQuick())
 		return;
 
-	if(GetStateName() == 's_FirstPersonTargeting' && ePawn.HandItem.IsA('EFn7'))
+	if (GetStateName() == 's_FirstPersonTargeting' && ePawn.HandItem.IsA('EFn7'))
 		return;
 
 	m_ChooseNextGadget = true;
@@ -2739,7 +2806,7 @@ state s_Grab
     function BeginState()
     {
 		local vector EndPos, offset;
-		if(!m_GrabTargeting)
+		if (!m_GrabTargeting)
 		{
 			m_AttackTarget.Controller.GoTostate('s_Grabbed');
 			bInTransition = true;
@@ -2769,14 +2836,14 @@ state s_Grab
     function EndState()
 	{
 		bNoLedgePush = false;
-		if(!m_GrabTargeting)
+		if (!m_GrabTargeting)
 		{
-			if( ePawn.Health <= 0 )
+			if (ePawn.Health <= 0)
 			{
 				KillPawnSpeed();
 				m_AttackTarget.Controller.GotoState(,'FinishAlone');
 			}
-			else if( m_AttackTarget != None )
+			else if (m_AttackTarget != None)
 			{
 				m_AttackTarget.RandomizedAnimRate = 0.97f + RandRange(0.0f, 0.06f);
 				m_AttackTarget = None;
@@ -2785,15 +2852,15 @@ state s_Grab
 		m_SMInTrans = false;
 	}
 
-	function bool CanAddInteract( EInteractObject IntObj )
+	function bool CanAddInteract(EInteractObject IntObj)
 	{
 		local bool bTalking;
-		if( m_AttackTarget != None && m_AttackTarget.Interaction != None )
+		if (m_AttackTarget != None && m_AttackTarget.Interaction != None)
 			bTalking = m_AttackTarget.Interaction.GetStateName() == 's_NpcTalking';
 
 		// Case 1 : When not conversating, any of these interactions are available
 		// Case 2 : Target interaction is always valid (talking or not talking)
-		if( (!bTalking && 
+		if ((!bTalking && 
 			 (IntObj.class.name == 'ERetinalScannerInteraction'	 ||
 			IntObj.class.name == 'ERetinalSafeInteraction'		||
 			IntObj.class.name == 'EForceRetinalSafeInteraction'	||
@@ -2813,7 +2880,7 @@ state s_Grab
 		local vector pushingDir;
 
 		pushingDir = GetPushingDir();
-		if(VSize(pushingDir) > 0.0)
+		if (VSize(pushingDir) > 0.0)
 		{
 			newRot.Yaw = 32768 + Rotation.Yaw + Rotator(pushingDir).Yaw;
 			ePawn.RotateTowardsRotator(newRot, rotSpeed / 0.5, 0.5);
@@ -2822,13 +2889,13 @@ state s_Grab
 
 	function ProcessFire()
 	{
-		if( !bInTransition && ePawn.Physics != PHYS_Falling)
+		if (!bInTransition && ePawn.Physics != PHYS_Falling)
 			GoToState(, 'ReleaseKnock');
 	}
 
 	function ProcessScope()
 	{
-		if( bInTransition || HandGun == None || ePawn.Physics == PHYS_Falling)
+		if (bInTransition || HandGun == None || ePawn.Physics == PHYS_Falling)
 			return;
 
 		m_GrabTargeting = true;
@@ -2837,7 +2904,7 @@ state s_Grab
 
 	event MayFall()
 	{
-		if( !bInTransition && ShouldReleaseNPC())
+		if (!bInTransition && ShouldReleaseNPC())
 		{
 			CheckFallGrab();
 			GotoState(, 'Falling');
@@ -2850,12 +2917,12 @@ state s_Grab
 		return true;
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
         local vector X,Y,Z, NewAccel, targetDir;
 		local float dist;
 
-		if(m_SMInTrans)
+		if (m_SMInTrans)
 		{
 			m_AttackTarget.SetPhysics(PHYS_None);
 			m_AttackTarget.Velocity = vect(0,0,0);
@@ -2863,21 +2930,21 @@ state s_Grab
 			m_AttackTarget.RotateTowardsRotator(ePawn.m_orientationEnd, 70000);
 			targetDir.Z = ePawn.Location.Z - m_AttackTarget.Location.Z;
 			dist = FMin(Abs(targetDir.Z), 90.0f * DeltaTime);
-			if(dist > 0.001)
+			if (dist > 0.001)
 			{
 				m_AttackTarget.Move(Normal(targetDir) * dist);
 			}
 		}
 
 		// if Npc is on fire
-		if( m_AttackTarget != None && m_AttackTarget.Base == ePawn && m_AttackTarget.BodyFlames.Length > 0 )
+		if (m_AttackTarget != None && m_AttackTarget.Base == ePawn && m_AttackTarget.BodyFlames.Length > 0)
 		{
 			m_AttackTarget.AttenuateFire(0.8);
 			ePawn.TakeDamage(0, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), class'EBurned'); 
 		}
 
 		// If npc dies while being grabbed
-		if( m_AttackTarget != None && m_AttackTarget.GetStateName() != 's_Grabbed' )
+		if (m_AttackTarget != None && m_AttackTarget.GetStateName() != 's_Grabbed')
 		{
 			GoToState(, 'ReleaseDead');
 			bInTransition = true;
@@ -2885,10 +2952,10 @@ state s_Grab
 			return;
 		}
 
-		if(ePawn.Physics == PHYS_Falling)
+		if (ePawn.Physics == PHYS_Falling)
 			return ;
 
-		if(bInTransition)
+		if (bInTransition)
 			return;
 
 		PawnLookAt();
@@ -2899,12 +2966,12 @@ state s_Grab
 		SetPawnAccel(-X, eGame.m_onGroundAccel);
 		SetPawnRotation(40000);
 
-		if(IsPushing())
+		if (IsPushing())
 			ePawn.GroundSpeed = m_speedGrab;
 		else
 			ePawn.GroundSpeed = 0.0;
 
-		if(VSize(ePawn.Velocity) > 0)
+		if (VSize(ePawn.Velocity) > 0)
 		{
 			ePawn.LoopAnim(ePawn.ABlendGrab.m_backward,,0.05);
 			m_AttackTarget.LoopAnimOnly(m_AttackTarget.ABlendGrab.m_backward,,0.05);
@@ -2916,18 +2983,18 @@ state s_Grab
 		}
 	}
 
-	function Trigger( actor Other, pawn EventInstigator, optional name InTag )
+	function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 	{
 		//Global.Trigger(Other, EventInstigator);
-		if( Interaction == None )
+		if (Interaction == None)
 			Log(self$" Interaction shouldn't be None in s_grab computer");
 		Interaction.PostInteract(self);
 	}
 
 	event NotifyAction()
 	{
-		if(m_AttackTarget != None)
-			m_AttackTarget.TakeDamage(m_AttackTarget.health / 2.0, ePawn, m_AttackTarget.Location, ePawn.Velocity, ePawn.Velocity, class'EKnocked', EPawn.P_Head);
+		if (m_AttackTarget != None)
+			m_AttackTarget.TakeDamage(m_AttackTarget.Health / 2.0, ePawn, m_AttackTarget.Location, ePawn.Velocity, ePawn.Velocity, class'EKnocked', EPawn.P_Head);
 	}
 
 Falling:
@@ -2948,7 +3015,7 @@ Begin:
 	ePawn.SetPhysics(PHYS_Walking);
 	DiscardPickup();
 	SelectWeapon(true);
-	if( HandGun != None )
+	if (HandGun != None)
 		ePawn.WeaponStance = 1;
 	ePawn.SwitchAnims();
 	bDrawWeapon = true;
@@ -2967,7 +3034,7 @@ Begin:
 
 ForceInterrogate:
 	// Don't shake Npc if already shaking him
-	if( ePawn.IsAnimating(EPawn.ACTIONCHANNEL) )
+	if (ePawn.IsAnimating(EPawn.ACTIONCHANNEL))
 		Stop;
 	ePawn.BlendAnimOverCurrent(ePawn.AGrabSqeeze,1,ePawn.UpperBodyBoneName,,0.05);
 	m_AttackTarget.BlendAnimOverCurrent(m_AttackTarget.AGrabSqeeze,1,ePawn.UpperBodyBoneName,,0.05);
@@ -3096,7 +3163,7 @@ RetinalEnd:
 	bInTransition = false;
 	m_camera.SetMode(ECM_Grab);
 
-	if( JumpLabel != '' )
+	if (JumpLabel != '')
 		Goto(JumpLabel);
 	Stop;
 
@@ -3127,7 +3194,7 @@ state s_GrabTargeting
 		ePawn.AnimBlendToAlpha(ePawn.BLENDMOVEMENTCHANNEL,0,0.10);
 
 		// If Sam dies, release Npc
-		if( ePawn.Health <= 0 )
+		if (ePawn.Health <= 0)
 		{
 			KillPawnSpeed();
 			m_AttackTarget.Controller.GotoState(,'FinishAlone');
@@ -3141,19 +3208,19 @@ state s_GrabTargeting
 
 	function ProcessScope()
 	{
-		if(ePawn.Physics != PHYS_Falling)
-			GoToState( ,'UnAim');
+		if (ePawn.Physics != PHYS_Falling)
+			GoToState(,'UnAim');
 	}
 
 	function ProcessFire()
 	{
-		if(ePawn.Physics != PHYS_Falling)
+		if (ePawn.Physics != PHYS_Falling)
 			Global.ProcessFire();
 	}
 
 	event MayFall()
 	{
-		if( !bInTransition && ShouldReleaseNPC())
+		if (!bInTransition && ShouldReleaseNPC())
 		{
 			CheckFallGrab();
 			GotoState('s_Grab', 'Falling');
@@ -3166,7 +3233,7 @@ state s_GrabTargeting
 		return true;
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
         local vector X,Y,Z, NewAccel;
 		local float pushingForce;
@@ -3178,14 +3245,14 @@ state s_GrabTargeting
 		//pushingForce = GetPushingForce();
 
 		// if Npc is on fire
-		if( m_AttackTarget != None && m_AttackTarget.Base == ePawn && m_AttackTarget.BodyFlames.Length > 0 )
+		if (m_AttackTarget != None && m_AttackTarget.Base == ePawn && m_AttackTarget.BodyFlames.Length > 0)
 		{
 			m_AttackTarget.AttenuateFire(0.8);
 			ePawn.TakeDamage(0, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), class'EBurned'); 
 		}
 
 		// If npc dies while being grabbed
-		if( m_AttackTarget != None && m_AttackTarget.GetStateName() != 's_Grabbed' )
+		if (m_AttackTarget != None && m_AttackTarget.GetStateName() != 's_Grabbed')
 		{
 			GoToState('s_Grab', 'ReleaseDead');
 			bInTransition = true;
@@ -3193,13 +3260,13 @@ state s_GrabTargeting
 			return;
 		}
 
-		if(ePawn.Physics == PHYS_Falling)
+		if (ePawn.Physics == PHYS_Falling)
 			return ;
 
-		if( bInGunTransition && (ePawn.Rotation.yaw&65535) == (Rotation.yaw&65535) )
+		if (bInGunTransition && (ePawn.Rotation.Yaw&65535) == (Rotation.Yaw&65535))
 			GotoState(,'Aim');
 
-		if( bInTransition )
+		if (bInTransition)
 			return;
 
 		GetAxes(Rotation,X,Y,Z);
@@ -3215,7 +3282,7 @@ state s_GrabTargeting
 		pushingForce = sqrt(aForward * aForward + aStrafe * aStrafe);
 
         // Joshua - Variable speeds for keyboard in targeting mode
-        if(m_curWalkSpeed != 0)
+        if (m_curWalkSpeed != 0)
         {
             accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
             
@@ -3231,13 +3298,17 @@ state s_GrabTargeting
 
 		ePawn.AimAt(AAHOH, Vector(Rotation), Vector(ePawn.Rotation), 0, 0, -30, 40);
 
-		if(pushingForce > 0.3)
+		if (pushingForce > 0.3)
 		{
 			// Joshua - Variable speeds for keyboard in targeting mode
 			finalSpeed = pushingForce;
 			finalSpeed *= (float(m_curWalkSpeed) / eGame.m_maxSpeedInterval);
 			ePawn.GroundSpeed = finalSpeed * m_speedGrabFP;
 			ePawn.WalkingRatio = VSize(ePawn.Velocity / m_speedGrabFP);
+			
+			// Joshua - Update SoundWalkingRatio based on variable speed
+			ePawn.SoundWalkingRatio = finalSpeed;
+			
 			m_AttackTarget.WalkingRatio = ePawn.WalkingRatio;
 			ePawn.PlayMove(ePawn.ABlendGrab, Rotation, ePawn.Velocity, 0.0, true, true);
 			m_AttackTarget.PlayMove(m_AttackTarget.ABlendGrab, Rotation, ePawn.Velocity, 0.0,true,true);
@@ -3290,9 +3361,9 @@ state s_Carry
 	{
 		bNoLedgePush = false;
 		// If Sam dies, release Npc
-		if( ePawn.Health <= 0 )
+		if (ePawn.Health <= 0)
 		{
-			if( !ePawn.bIsCrouched )
+			if (!ePawn.bIsCrouched)
 				NpcSetup(ePawn.ToWorldDir(vect(-200,0,200)), 'CaryStAlQk0', true);
 			else
 				NpcSetup(ePawn.ToWorldDir(vect(-200,0,200)),'CaryCrAlQk0', true);
@@ -3303,7 +3374,7 @@ state s_Carry
 		ElapsedTime = 0.0f;
 		if (bIsPlaying)
 		{
-			ePawn.PlaySound( Sound'FisherVoice.Stop_Sq_FisherBreathLong', SLOT_SFX );
+			ePawn.PlaySound(Sound'FisherVoice.Stop_Sq_FisherBreathLong', SLOT_SFX);
 			bIsPlaying = false;
 		}
 		ePawn.SetPhysics(PHYS_Walking);
@@ -3311,7 +3382,7 @@ state s_Carry
 
 	event MayFall()
 	{
-		if( !bInTransition && ShouldReleaseNPC())
+		if (!bInTransition && ShouldReleaseNPC())
 		{
 			CheckFallGrab();
 			GotoState(, 'Falling');
@@ -3324,11 +3395,11 @@ state s_Carry
 		return true;
 	}
 
-	function bool CanAddInteract( EInteractObject IntObj )
+	function bool CanAddInteract(EInteractObject IntObj)
 	{
 		//return false;
 		// Joshua - Adding interactions for doors and triggers
-		if( !bInTransition && ( IntObj.class.name == 'EDoorInteraction' || IntObj.class.name == 'ETriggerInteraction' ) )
+		if (!bInTransition && (IntObj.class.name == 'EDoorInteraction' || IntObj.class.name == 'ETriggerInteraction'))
 			return true;
 		else
 			return false;
@@ -3342,17 +3413,17 @@ state s_Carry
 
 	function ProcessScope()
 	{
-		if( !bInTransition && ePawn.Physics != PHYS_Falling)
+		if (!bInTransition && ePawn.Physics != PHYS_Falling)
 			GotoState(, 'QuickDrop');
 	}
 
 	function ProcessInteract()
 	{
 		// Joshua - PT carry interact
-		if(IManager.Interactions.length != 0)
+		if (IManager.Interactions.length != 0)
 			return;
 
-		if( !bInTransition && ePawn.Physics != PHYS_Falling)
+		if (!bInTransition && ePawn.Physics != PHYS_Falling)
 			GoToState(, 'Drop');
 	}
 
@@ -3362,29 +3433,29 @@ state s_Carry
 		bInTransition = false;
 	}
 
-	function PlayerTick( float deltaTime )
+	function PlayerTick(float deltaTime)
 	{		
 		Super.PlayerTick(DeltaTime);
 		HandleBreathSounds(deltaTime);
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
         local vector X,Y,Z;
 		local float tweenTime;
 		local bool wasCrouch;
 
-		if(m_SMInTrans)
+		if (m_SMInTrans)
 			m_AttackTarget.RollPawn(0);
 
 		// if Npc is on fire
-		if( m_AttackTarget != None && m_AttackTarget.Base == ePawn && m_AttackTarget.BodyFlames.Length > 0 )
+		if (m_AttackTarget != None && m_AttackTarget.Base == ePawn && m_AttackTarget.BodyFlames.Length > 0)
 		{
 			m_AttackTarget.AttenuateFire(0.8);
 			ePawn.TakeDamage(0, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), class'EBurned'); 
 		}
 
-		if(bInTransition)
+		if (bInTransition)
 			return;
 
 		GetAxes(ePawn.Rotation,X,Y,Z);
@@ -3394,19 +3465,19 @@ state s_Carry
 		SetPawnRotation(40000);
 
 		// Joshua - Pressing jump will QuickDrop the body like Chaos Theory
-		if( bPressedJump )
+		if (bPressedJump)
 		{
 			bInTransition = true;
 			GotoState(, 'QuickDropJump');
 		}
 
-		if( bDuck > 0 )
+		if (bDuck > 0)
 		{
 			ePawn.bWantsToCrouch = !ePawn.bWantsToCrouch;
 			bDuck = 0;
-			if(VSize(ePawn.Velocity) == 0)
+			if (VSize(ePawn.Velocity) == 0)
 			{
-				if(ePawn.bIsCrouched)
+				if (ePawn.bIsCrouched)
 					GoToState(,'UnCrouch');
 				else
 					GoToState(,'Crouch');
@@ -3414,14 +3485,14 @@ state s_Carry
 			}
 		}
 
-		if(ePawn.bIsCrouched)
+		if (ePawn.bIsCrouched)
 			m_camera.SetMode(ECM_CarryCr);
 		else
 			m_camera.SetMode(ECM_Carry);
 
-		if(IsPushingGentle())
+		if (IsPushingGentle())
 		{
-			if(ePawn.bIsCrouched)
+			if (ePawn.bIsCrouched)
 				ePawn.GroundSpeed = m_speedCarry * 0.8;
 			else
 				ePawn.GroundSpeed = m_speedCarry;
@@ -3432,28 +3503,28 @@ state s_Carry
 		}
 
 		wasCrouch = ePawn.GetAnimName() == 'CaryCrAlFd0' || ePawn.GetAnimName() == 'CaryCrAlNt0';
-		if(!wasCrouch && ePawn.bIsCrouched || wasCrouch && !ePawn.bIsCrouched)
+		if (!wasCrouch && ePawn.bIsCrouched || wasCrouch && !ePawn.bIsCrouched)
 			tweenTime = 0.3;
 		else
 			tweenTime = 0.15;
 
-		if(VSize(ePawn.Velocity) > 0)
+		if (VSize(ePawn.Velocity) > 0)
 		{
-			if(ePawn.bIsCrouched)
+			if (ePawn.bIsCrouched)
 				ePawn.LoopAnimOnly('CaryCrAlFd0', , tweenTime);
 			else
 				ePawn.LoopAnimOnly('CaryStAlFd0', , tweenTime);
 		}
 		else
 		{
-			if(ePawn.bIsCrouched)
+			if (ePawn.bIsCrouched)
 				ePawn.LoopAnimOnly('CaryCrAlNt0', , tweenTime);
 			else
 				ePawn.LoopAnimOnly('CaryStAlNt0', , tweenTime);
 		}
     }
 
-	function NpcSetup( vector speed,  name AnimName, optional bool halfTurn )
+	function NpcSetup(vector speed,  name AnimName, optional bool halfTurn)
 	{
 		local vector DropPos;
 		local float randNum;
@@ -3462,29 +3533,29 @@ state s_Carry
 		ePawn.DetachFromBone(m_AttackTarget);
 		m_AttackTarget.SetCollision(false, false, false);
 		DropPos = ePawn.Location;
-		if(ePawn.bIsCrouched)
+		if (ePawn.bIsCrouched)
 			DropPos.Z += (ePawn.default.CollisionHeight - ePawn.CollisionHeight);
 		m_AttackTarget.SetLocation(DropPos);
 		m_AttackTarget.SetRotation(ePawn.Rotation);
 		m_AttackTarget.SetCollision(true, false, false);
 		m_AttackTarget.PlayAnimOnly(AnimName);
-		if ( m_AttackTarget.Interaction != none )
+		if (m_AttackTarget.Interaction != none)
 			ENpcZoneInteraction(m_AttackTarget.Interaction).ResetInert();
 		m_AttackTarget.SetBase(None);
 		m_AttackTarget.SetPhysics(PHYS_Falling);
 		m_AttackTarget.Velocity = speed;
-		if(ePawn.Base != None)
+		if (ePawn.Base != None)
 			m_AttackTarget.Velocity += ePawn.Base.Velocity;
 		m_AttackTarget.bCollideWorld = true;
-		if( m_AttackTarget.Controller != None )
+		if (m_AttackTarget.Controller != None)
 			m_AttackTarget.Controller.GoTostate('s_Unconscious');
-		if( m_AttackTarget.Health > 0 )
+		if (m_AttackTarget.Health > 0)
 			m_AttackTarget.GoTostate('s_Unconscious');
 		else
 			m_AttackTarget.GoTostate('s_Dying');
 
 		m_AttackTarget.m_locationEnd = vect(0,0,0);
-		if(halfTurn)
+		if (halfTurn)
 		{
 			m_AttackTarget.ADeathNeutral = m_AttackTarget.ADeathLeftNtrl;
 			m_AttackTarget.m_orientationEnd = rot(0, 32768, 0);
@@ -3498,7 +3569,7 @@ state s_Carry
 	}
 
 Falling:
-	if(!ePawn.bIsCrouched)
+	if (!ePawn.bIsCrouched)
 		NpcSetup(ePawn.ToWorldDir(vect(-200,0,200)),'CaryStAlQk0', true);
 	else
 		NpcSetup(ePawn.ToWorldDir(vect(-200,0,200)),'CaryCrAlQk0', true);
@@ -3508,7 +3579,7 @@ Falling:
 
 QuickDrop:
 	bNoLedgePush = true;
-	if(!ePawn.bIsCrouched)
+	if (!ePawn.bIsCrouched)
 	{
 		NpcSetup(ePawn.ToWorldDir(vect(-200,0,200)),'CaryStAlQk0', true);
 		ePawn.PlayAnimOnly('CaryStAlQk0');
@@ -3519,7 +3590,7 @@ QuickDrop:
 		ePawn.PlayAnimOnly('CaryCrAlQk0');
 	}
 	m_AttackTarget.bWasCarried = true;
-	if(ActiveGun != None)
+	if (ActiveGun != None)
 		Sleep(ePawn.GetAnimTime('CaryCrAlQk0') * 0.8);
 	else
 		FinishAnim();
@@ -3527,7 +3598,7 @@ QuickDrop:
 	bNoLedgePush = false;
 	m_AttackTarget = None; // Joshua - PT carry interact
 	// if ActiveGun, go in targeting mode automatically
-	if( ActiveGun != None )
+	if (ActiveGun != None)
 		OnGroundScope();
 	else
 		GotoState('s_PlayerWalking');
@@ -3536,7 +3607,7 @@ QuickDrop:
 QuickDropJump:
 	// Joshua - Pressing jump will QuickDrop the body like Chaos Theory
 	bNoLedgePush = true;
-	if(!ePawn.bIsCrouched)
+	if (!ePawn.bIsCrouched)
 	{
 		NpcSetup(ePawn.ToWorldDir(vect(-200,0,200)),'CaryStAlQk0', true);
 		ePawn.PlayAnimOnly('CaryStAlQk0');
@@ -3559,7 +3630,7 @@ Drop:
 	bNoLedgePush = true;
 	KillPawnSpeed();
 	m_camera.SetMode(ECM_CarryCr);
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 	{
 		ePawn.PlayAnimOnly('CaryStAlBg0', 1.3, 0.1, true);
 		FinishAnim();
@@ -3576,7 +3647,7 @@ Drop:
 	m_AttackTarget.SetBase(None);
 	m_AttackTarget.SetPhysics(PHYS_Falling);
 	ePawn.SetPhysics(PHYS_Walking);
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 	{
 		ePawn.PlayAnim(ePawn.AWaitCrouchIn, 1.3,,,true);
 		FinishAnim();
@@ -3610,12 +3681,12 @@ Begin:
 	ePawn.SetRotation(ePawn.m_orientationEnd);
 	ePawn.SetPhysics(PHYS_Walking);
 	KillPawnSpeed();
-	if(!ePawn.bIsCrouched)
+	if (!ePawn.bIsCrouched)
 	{
 		ePawn.PlayAnimOnly('CaryCrAlUp0', 0.001, 0.3);
 		Sleep(0.3);
 	}
-	if( m_AttackTarget.Controller != None )
+	if (m_AttackTarget.Controller != None)
 		m_AttackTarget.Controller.GoTostate('s_Carried');
 	m_AttackTarget.GoTostate('s_Carried');
 	m_SMInTrans = true;
@@ -3634,7 +3705,7 @@ Begin:
 
 	m_AttackTarget.SetRelativeRotation(rot(1796, -8345, 15840));
 	m_AttackTarget.SetRelativeLocation(vect(17.152830, -0.340918, 0.698137));
-	if(!ePawn.bIsCrouched)
+	if (!ePawn.bIsCrouched)
 	{
 		ePawn.PlayAnimOnly('CaryStAlBg0', 1.3);
 		FinishAnim();
@@ -3661,7 +3732,7 @@ OpenDoorBack:
 
 	m_AttackTarget.SetRelativeRotation(rot(1796, -8345, 15840));
 	m_AttackTarget.SetRelativeLocation(vect(17.152830, -0.340918, 0.698137));
-	if(!ePawn.bIsCrouched)
+	if (!ePawn.bIsCrouched)
 	{
 		m_camera.SetMode(ECM_Carry);
 		ePawn.LoopAnimOnly('CaryStAlNt0', , 0.3);
@@ -3679,7 +3750,7 @@ OpenDoorBack:
 
 function bool OnGroundScope()
 {
-	if( ePawn.HandItem != None && ePawn.HandItem.bIsProjectile )
+	if (ePawn.HandItem != None && ePawn.HandItem.bIsProjectile)
 	{
 		GotoState('s_Throw');
 		return true;
@@ -3688,23 +3759,23 @@ function bool OnGroundScope()
 	//Log("ONGROUNDSCOPE"@ePawn.HandItem@ActiveGun@bInGunTransition);
 
 	// Do Nothing if busy with weapon
-	if( bInGunTransition )
+	if (bInGunTransition)
 		return false;
 
 	// May draw weapon if nothing in hand
-	if( ActiveGun != None && ePawn.HandItem == None )
+	if (ActiveGun != None && ePawn.HandItem == None)
 		GotoState('s_FirstPersonTargeting');
 
 	// Allow drawing other items than ActiveGun
-	if( ePawn.HandItem != None && !ePawn.HandItem.Scope() )
+	if (ePawn.HandItem != None && !ePawn.HandItem.Scope())
 	{
 		// only aim if we have a gun
-		if( MainGun != None || HandGun != None )
+		if (MainGun != None || HandGun != None)
 			GotoState('s_FirstPersonTargeting');
 	}
 
 	// Do Nothing if no weapon in inventory
-	else if( ActiveGun == None )
+	else if (ActiveGun == None)
 		return false;
 
 	return true;
@@ -3719,7 +3790,7 @@ state s_PlayerWalking
 
     function BeginState()
     {
-		if(ePawn.WeaponStance != 0 && !ePawn.IsAnimating(ePawn.ACTIONCHANNEL))
+		if (ePawn.WeaponStance != 0 && !ePawn.IsAnimating(ePawn.ACTIONCHANNEL))
 		{
 			ForceGunAway(true);
 			ePawn.WeaponStance = 0;
@@ -3736,12 +3807,12 @@ state s_PlayerWalking
 
     function EndState()
     {
-		ePawn.IdleTime=0;
+		ePawn.IdleTime = 0;
 		prevWalkingRatio = 0.0;
 		ElapsedTime = 0.0;
 		if (bIsPlaying)
 		{
-			ePawn.PlaySound( Sound'FisherVoice.Stop_Sq_FisherBreathRun', SLOT_SFX );
+			ePawn.PlaySound(Sound'FisherVoice.Stop_Sq_FisherBreathRun', SLOT_SFX);
 			bIsPlaying = false;
 		}
     }
@@ -3751,18 +3822,18 @@ state s_PlayerWalking
 		local rotator targetRot;
 		local vector NewAccel;
 
-		if(IsPushing())
+		if (IsPushing())
 		{
 			targetRot = Rotation + Rotator(GetPushingDir());
 			targetRot.Pitch = 0;
 			targetRot.Roll = 0;
-			if(X dot Vector(targetRot) > 0.5)
+			if (X dot Vector(targetRot) > 0.5)
 			{
 				NewAccel = X;
 			}
 		}
 		NewAccel.Z = 0;
-		if(!IsPushing() || !((VSize(NewAccel) == 0) && (VSize(ePawn.Velocity) > 0.0)))
+		if (!IsPushing() || !((VSize(NewAccel) == 0) && (VSize(ePawn.Velocity) > 0.0)))
 		{
 			ePawn.Acceleration  = NewAccel;
 			ePawn.Acceleration *= accel;
@@ -3776,16 +3847,16 @@ state s_PlayerWalking
 		local float speedRatio, turnSpeedRatio;
 
 		pushingDir = GetPushingDir();
-		if(VSize(pushingDir) > 0.0)
+		if (VSize(pushingDir) > 0.0)
 		{
 			newRot.Yaw = Rotation.Yaw + Rotator(pushingDir).Yaw;
 			prevRot = ePawn.Rotation;
 			rotSpeed = FMin(rotSpeed, rotSpeed *  (1.0 - (VSize(ePawn.Velocity) / (m_speedRun * 4.0))));
 			ePawn.RotateTowardsRotator(newRot, rotSpeed / 0.5, 0.5);
 			deltaRot = ePawn.Rotation - prevRot;
-			if(ePawn.Velocity dot Vector(ePawn.Rotation) > 0.0)
+			if (ePawn.Velocity dot Vector(ePawn.Rotation) > 0.0)
 				ePawn.Velocity = ePawn.Velocity >> deltaRot;
-			if(ePawn.Acceleration dot Vector(ePawn.Rotation) > 0.0)
+			if (ePawn.Acceleration dot Vector(ePawn.Rotation) > 0.0)
 				ePawn.Acceleration = ePawn.Acceleration >> deltaRot;
 		}
 		speedRatio = FClamp(VSize(ePawn.Velocity) / m_speedRun, 0.0, 1.0);
@@ -3796,7 +3867,7 @@ state s_PlayerWalking
 
 	function ProcessScope()
 	{
-		if( !bInTransition )
+		if (!bInTransition)
 			OnGroundScope();
 	}
 
@@ -3807,7 +3878,7 @@ state s_PlayerWalking
 		local Actor NearActor;
 		local float AngleDir;
 
-		if(PlayerInput.bFireToDrawGun)
+		if (PlayerInput.bFireToDrawGun)
 		{
 			GetAxes(ePawn.Rotation,X,Y,Z);
 
@@ -3817,7 +3888,7 @@ state s_PlayerWalking
 			NearActor = ePawn.Trace(HitLocation, HitNormal, End, Start, , , , true);
 
 			// Check if breakable stuff
-			if(NearActor != None && NearActor.IsA('EBreakableGlass'))
+			if (NearActor != None && NearActor.IsA('EBreakableGlass'))
 			{
 				m_targetObject = NearActor;
 				GotoState('s_BreakObject');
@@ -3826,27 +3897,27 @@ state s_PlayerWalking
 
 			// Check if it's a pawn
 			NearPawn = EPawn(NearActor);
-			if(NearPawn == None)
+			if (NearPawn == None)
 			{
 				// check right
 				Start += Y * 30.0;
 				End += Y * 30.0;
 				NearPawn = EPawn(ePawn.Trace(HitLocation, HitNormal, End, Start, , , , true));
 			}
-			if(NearPawn == None)
+			if (NearPawn == None)
 			{
 				// check left
 				Start -= Y * 60.0;
 				End -= Y * 60.0;
 				NearPawn = EPawn(ePawn.Trace(HitLocation, HitNormal, End, Start, , , , true));
 			}
-			if( NearPawn != None && !NearPawn.bIsDog && !NearPawn.bDyingDude) // bDyingDude is for special case (1_1_0 and 2_2_2)
+			if (NearPawn != None && !NearPawn.bIsDog && !NearPawn.bDyingDude) // bDyingDude is for special case (1_1_0 and 2_2_2)
 			{
 				NearPawnDir		= NearPawn.ToWorldDir(Vect(1,0,0));
 				AngleDir		= NearPawnDir Dot Normal(ePawn.Location - NearPawn.Location);
 				m_AttackTarget	= NearPawn;
 
-				if(AngleDir < -0.3)
+				if (AngleDir < -0.3)
 					JumpLabelPrivate = 'Back';
 				else
 					JumpLabelPrivate = 'Front';
@@ -3862,32 +3933,32 @@ state s_PlayerWalking
 
 	function ProcessBackToWall()
 	{
-		if(CheckBTW(, true))
+		if (CheckBTW(, true))
 		{
 			bIntransition = true;
 			GotoState('s_PlayerBTW', 'Entering');
 		}
-		else if(CheckBTW(true, true))
+		else if (CheckBTW(true, true))
 		{
 			bIntransition = true;
 			GotoState('s_PlayerBTW', 'EnteringBack');
 		}
 	}
 
-	function PlayerTick( float deltaTime )
+	function PlayerTick(float deltaTime)
 	{		
 		Super.PlayerTick(DeltaTime);
 
-		if ( ePawn.SoundWalkingRatio >= 0.65f && VSize(ePawn.Velocity) != 0.0f && !ePawn.bIsCrouched)
+		if (ePawn.SoundWalkingRatio >= 0.65f && VSize(ePawn.Velocity) != 0.0f && !ePawn.bIsCrouched)
 			ElapsedTime += deltaTime;
 		else
 			ElapsedTime = 0.0f;
 
-		if ( ElapsedTime > 7.0f )
+		if (ElapsedTime > 7.0f)
 		{
 			if (!bIsPlaying)
 			{
-				ePawn.PlaySound( Sound'FisherVoice.Play_Sq_FisherBreathRun', SLOT_SFX );
+				ePawn.PlaySound(Sound'FisherVoice.Play_Sq_FisherBreathRun', SLOT_SFX);
 				bIsPlaying = true;
 			}
 		}
@@ -3895,13 +3966,13 @@ state s_PlayerWalking
 		{
 			if (bIsPlaying)
 			{
-				ePawn.PlaySound( Sound'FisherVoice.Stop_Sq_FisherBreathRun', SLOT_SFX );
+				ePawn.PlaySound(Sound'FisherVoice.Stop_Sq_FisherBreathRun', SLOT_SFX);
 				bIsPlaying = false;
 			}
 		}
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
         local vector X,Y,Z, HitLocation, HitNormal, Start, End, NearPawnDir;
 		local ePawn NearPawn;
@@ -3913,10 +3984,10 @@ state s_PlayerWalking
 
 		inputMagnitude = sqrt(aForward * aForward + aStrafe * aStrafe); // Joshua - Normalize movement
 
-		if(m_camera.m_volSize != EVS_Minute)
+		if (m_camera.m_volSize != EVS_Minute)
 			PawnLookAt();
 
-		if( bInTransition )
+		if (bInTransition)
 			return;
         
 		GetAxes(ePawn.Rotation,X,Y,Z);
@@ -3929,7 +4000,7 @@ state s_PlayerWalking
 		}
 
 		//clauzon the player can now change is speed level
-		if(m_curWalkSpeed!=0)
+		if (m_curWalkSpeed != 0)
 		{
 			accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval; 
 			aForward *= accelModif;
@@ -3946,23 +4017,29 @@ state s_PlayerWalking
 		// Must be going forward (Over a certain speed?)
 		//
 
-		if( bDuck > 0 &&  IsPushingFull() && (VSize(ePawn.Velocity) > (m_speedRunCr - 1.0)))
+		if (bDuck > 0 &&  IsPushingFull() && (VSize(ePawn.Velocity) > (m_speedRunCr - 1.0)) && m_CrouchTimer <= 0.0)
 		{
 			//Log("playermove walking"@bIntransition);
+			m_CrouchTimer = 0.35; // Joshua - Anti-spam crouch timer
 			GotoState('s_Roll', 'FromWalking');
 			return;
 		}
 
 		CheckForCrouch();
+		
+		// Joshua - Anti-spam crouch timer
+		if (m_CrouchTimer > 0.0)
+			m_CrouchTimer -= DeltaTime;
+			
 		ePawn.ResetZones();
 
 	    SetGroundSpeed();
 		PlayOnGround(0.4);
 
-		if( m_camera.m_volSize == EVS_Minute || bInGunTransition )
+		if (m_camera.m_volSize == EVS_Minute || bInGunTransition)
 			return;
 
-		if( bFire == 1 && !PlayerInput.bFireToDrawGun)
+		if (bFire == 1 && !PlayerInput.bFireToDrawGun)
 		{
 			bFire = 0;
 			Start = ePawn.Location;
@@ -3971,7 +4048,7 @@ state s_PlayerWalking
 			NearActor = ePawn.Trace(HitLocation, HitNormal, End, Start, , , , true);
 
 			// Check if breakable stuff
-			if(NearActor != None && NearActor.IsA('EBreakableGlass'))
+			if (NearActor != None && NearActor.IsA('EBreakableGlass'))
 			{
 				m_targetObject = NearActor;
 				GotoState('s_BreakObject');
@@ -3980,27 +4057,27 @@ state s_PlayerWalking
 
 			// Check if it's a pawn
 			NearPawn = EPawn(NearActor);
-			if(NearPawn == None)
+			if (NearPawn == None)
 			{
 				// check right
 				Start += Y * 30.0;
 				End += Y * 30.0;
 				NearPawn = EPawn(ePawn.Trace(HitLocation, HitNormal, End, Start, , , , true));
 			}
-			if(NearPawn == None)
+			if (NearPawn == None)
 			{
 				// check left
 				Start -= Y * 60.0;
 				End -= Y * 60.0;
 				NearPawn = EPawn(ePawn.Trace(HitLocation, HitNormal, End, Start, , , , true));
 			}
-			if( NearPawn != None && !NearPawn.bIsDog && !NearPawn.bDyingDude) // bDyingDude is for special case (1_1_0 and 2_2_2)
+			if (NearPawn != None && !NearPawn.bIsDog && !NearPawn.bDyingDude) // bDyingDude is for special case (1_1_0 and 2_2_2)
 			{
 				NearPawnDir		= NearPawn.ToWorldDir(Vect(1,0,0));
 				AngleDir		= NearPawnDir Dot Normal(ePawn.Location - NearPawn.Location);
 				m_AttackTarget	= NearPawn;
 
-				if(AngleDir < -0.3)
+				if (AngleDir < -0.3)
 					JumpLabelPrivate = 'Back';
 				else
 					JumpLabelPrivate = 'Front';
@@ -4008,22 +4085,33 @@ state s_PlayerWalking
 				GotoState('s_ShortRangeAttack');
 			}
 		}
-    	else if( bPressedJump )
+    	else if (bPressedJump)
         {
-			if(ePawn.bIsCrouched)
+			if (ePawn.bIsCrouched)
 			{
 				Start = ePawn.Location;
 				Start.Z += ePawn.Default.CollisionHeight - ePawn.Default.CrouchHeight;
 				End.X = ePawn.Default.CollisionRadius;
 				End.Y = End.X;
 				End.Z = ePawn.Default.CollisionHeight;
-				if(ePawn.FastPointCheck(Start, End, true, true))
+				if (ePawn.FastPointCheck(Start, End, true, true))
 					GoToState(, 'jumpstart');
 			}
 			else
 				GoToState(, 'jumpstart');
         }
     }
+
+	// Joshua - Anti-spam crouch timer
+	function CheckForCrouch()
+	{
+		if (bDuck > 0 && m_CrouchTimer <= 0.0)
+		{
+			m_CrouchTimer = 0.35;
+			ePawn.bWantsToCrouch = !ePawn.bWantsToCrouch;
+			bDuck = 0;
+		}
+	}
 
 	function bool CanSwitchGoggleManually()
 	{
@@ -4040,7 +4128,7 @@ state s_PlayerWalking
 		return !bInGunTransition;
 	}
 
-	function bool CanAddInteract( EInteractObject IntObj )
+	function bool CanAddInteract(EInteractObject IntObj)
 	{
 		return true;
 	}
@@ -4062,15 +4150,15 @@ state s_PlayerWalking
 	{
 		local vector HitLocation, HitNormal;
 		// We hit a ladder with the arms zone. If we push long enough on it, we grab it
-		if(IsPushingToward(-ePawn.m_geoNormal, m_towardAngle))
+		if (IsPushingToward(-ePawn.m_geoNormal, m_towardAngle))
 		{
-			if(ePawn.bIsCrouched)
+			if (ePawn.bIsCrouched)
 			{
 				GEOUnCrouch();
 			}
-			else if(m_LPStartTime < (Level.TimeSeconds - eGame.m_grabbingDelay))
+			else if (m_LPStartTime < (Level.TimeSeconds - eGame.m_grabbingDelay))
 			{
-				if(ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, false, ePawn.GetExtent(), , true) == None)
+				if (ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, false, ePawn.GetExtent(), , true) == None)
 				{
 					// We grab it
 					GoToState('s_GrabbingNarrowLadder', 'FromGround');
@@ -4090,18 +4178,18 @@ state s_PlayerWalking
 	{
 		local vector HitLocation, HitNormal, destination, extent;
 		// We hit a ladder with the feet zone. If we push long enough on it, we grab it
-		if(IsPushingToward(ePawn.m_geoNormal, m_towardAngle))
+		if (IsPushingToward(ePawn.m_geoNormal, m_towardAngle))
 		{
-			if(ePawn.bIsCrouched)
+			if (ePawn.bIsCrouched)
 			{
 				GEOUnCrouch();
 			}
-			else if(m_LPStartTime < (Level.TimeSeconds - eGame.m_grabbingDelay))
+			else if (m_LPStartTime < (Level.TimeSeconds - eGame.m_grabbingDelay))
 			{
 				extent = ePawn.GetExtent();
 				destination = locationEnd + ((vect(1,0,0) >> orientationEnd) * (extent.X + extent.X + 7.0));
 				destination.Z -= extent.Z;
-				if(	ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, false, extent, , true) == None &&
+				if (ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, false, extent, , true) == None &&
 					ePawn.FastPointCheck(destination, extent, true, true) &&
 					ePawn.FastPointCheck(destination + vect(0,0,40.0), extent, true, true))
 				{
@@ -4123,16 +4211,16 @@ state s_PlayerWalking
 	{
 		local vector HitLocation, HitNormal;
 		// We hit a zone with the arms zone. If we push long enough on it, we grab it
-		if(IsPushingTowardFront(m_towardAngle))
+		if (IsPushingTowardFront(m_towardAngle))
 		{
-			if(ePawn.bIsCrouched)
+			if (ePawn.bIsCrouched)
 			{
 				GEOUnCrouch();
 			}
-			else if(m_LPStartTime < (Level.TimeSeconds - eGame.m_grabbingDelay))
+			else if (m_LPStartTime < (Level.TimeSeconds - eGame.m_grabbingDelay))
 			{
 				// We have a Pole in the arms zone.
-				if(	(RType == 0 || RType == 2) &&
+				if ((RType == 0 || RType == 2) &&
 					(ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, false, ePawn.GetExtent(), , true) == None))
 				{
 					// We grab it
@@ -4153,15 +4241,15 @@ state s_PlayerWalking
 	{
 		local vector HitLocation, HitNormal;
 		// We hit a pipe with the arms zone. If we push long enough on it, we grab it
-		if(IsPushingToward(-ePawn.m_geoNormal, m_towardAngle))
+		if (IsPushingToward(-ePawn.m_geoNormal, m_towardAngle))
 		{
-			if(ePawn.bIsCrouched)
+			if (ePawn.bIsCrouched)
 			{
 				GEOUnCrouch();
 			}
-			else if(m_LPStartTime < (Level.TimeSeconds - eGame.m_grabbingDelay))
+			else if (m_LPStartTime < (Level.TimeSeconds - eGame.m_grabbingDelay))
 			{
-				if(ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, false, ePawn.GetExtent(), , true) == None)
+				if (ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, false, ePawn.GetExtent(), , true) == None)
 				{
 					// We grab it
 					GoToState('s_GrabbingPipe', 'FromGround');
@@ -4181,15 +4269,15 @@ state s_PlayerWalking
 	{
 		local vector HitLocation, HitNormal;
 		// We hit a pipe with the feet zone. If we push long enough on it, we grab it
-		if(IsPushingToward(ePawn.m_geoNormal, m_towardAngle))
+		if (IsPushingToward(ePawn.m_geoNormal, m_towardAngle))
 		{
-			if(ePawn.bIsCrouched)
+			if (ePawn.bIsCrouched)
 			{
 				GEOUnCrouch();
 			}
-			else if(m_LPStartTime < (Level.TimeSeconds - eGame.m_grabbingDelay))
+			else if (m_LPStartTime < (Level.TimeSeconds - eGame.m_grabbingDelay))
 			{
-				if(ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, false, ePawn.GetExtent(), , true) == None)
+				if (ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, false, ePawn.GetExtent(), , true) == None)
 				{
 					// We grab it
 					GoToState('s_GrabbingPipe', 'FromTop');
@@ -4209,24 +4297,24 @@ state s_PlayerWalking
 	{
 		local vector normal, position;
 
-		if(m_camera.m_volSize == EVS_Minute)
+		if (m_camera.m_volSize == EVS_Minute)
 			return true;
 
 		// Because of the StepUp function in UnPhysics.cpp
 		position = ePawn.Location;
 		position.Z = ePawn.OldZ;
 
-		if(	IsPushingTowardFront(m_towardAngle) &&
+		if (IsPushingTowardFront(m_towardAngle) &&
 			ePawn.CheckFence(normal, wall, position) &&
 			((HitNormal dot Vector(ePawn.Rotation)) < -0.707))
 		{
-			if(ePawn.bIsCrouched)
+			if (ePawn.bIsCrouched)
 			{
 				ePawn.bWantsToCrouch = false;
 				ePawn.UnCrouch(false);
 				m_LPStartTime = Level.TimeSeconds;
 			}
-			else if(m_LPStartTime < (Level.TimeSeconds - eGame.m_grabbingDelay))
+			else if (m_LPStartTime < (Level.TimeSeconds - eGame.m_grabbingDelay))
 			{
 				m_EnterDir = GetPushingDir();
 				ePawn.m_validFence = true;
@@ -4239,7 +4327,7 @@ state s_PlayerWalking
     }
 
 begin:
-	if( bInTransition )
+	if (bInTransition)
 	{
 		LOG("ERROR: This shouldn't be happening anymore. Each states finish his own stuff before coming back to PlayerWalking");
 		//FinishAnim();           // finish any transitions from other states
@@ -4251,9 +4339,9 @@ begin:
 jumpstart:
 	bInTransition = true;
 	bJump = 0;
-	if(ePawn.PlayJumpStart())
+	if (ePawn.PlayJumpStart())
 		FinishAnim();
-	else if( ePawn.bWantsToCrouch )
+	else if (ePawn.bWantsToCrouch)
 		Sleep(0.2);
 	ePawn.DoJumping();
 	m_NbJump = 1;
@@ -4278,16 +4366,16 @@ function PlayOnGround(float waitTween)
 	speed = VSize(ePawn.Velocity);
 
 	// For breaking
-	if(speed < eGame.m_PlayerJoggingThreshold)
+	if (speed < eGame.m_PlayerJoggingThreshold)
 		m_RunStartTime = Level.TimeSeconds;
 
 	// Reset time when moving, turning or when you're frozen
-	if( speed > 0 || aTurn != 0 || bStopInput )
+	if (speed > 0 || aTurn != 0 || bStopInput)
 	{
 		ePawn.IdleTime = 0;
 	}
 	// If is 0, reset to current time to begin idle timer
-	else if( ePawn.IdleTime == 0 )
+	else if (ePawn.IdleTime == 0)
 	{
 		ePawn.IdleTime = Level.TimeSeconds;
 	}
@@ -4295,9 +4383,9 @@ function PlayOnGround(float waitTween)
 	// Clean ref pose
 	ePawn.AnimBlendParams(EPawn.REFPOSECHANNEL,0,0,0);
 
-	if(m_camera.m_volSize == EVS_Minute)
+	if (m_camera.m_volSize == EVS_Minute)
 	{
-		if(speed > 0.0)
+		if (speed > 0.0)
 		{
 			ePawn.SoundWalkingRatio = 0.5f;
 			ePawn.AnimBlendToAlpha(1,0,0.10);
@@ -4311,14 +4399,14 @@ function PlayOnGround(float waitTween)
 		return;
 	}
 
-	if(	speed > 100.0 ||
-		speed > 0.0 && speed < 100.0 && VSize(ePawn.Acceleration) > 0.0 )
+	if (speed > 100.0 ||
+		speed > 0.0 && speed < 100.0 && VSize(ePawn.Acceleration) > 0.0)
 	{
-		if( ePawn.IsJumpingForward() )	// If we're jumping forward
+		if (ePawn.IsJumpingForward())	// If we're jumping forward
 		{
-			if( ePawn.IsAnimating() )	// Do nothing, wait for anim to finish
+			if (ePawn.IsAnimating())	// Do nothing, wait for anim to finish
 			{
-				if(CurrentFrame < 0.59) // Hit head on something, cancel landing to prevent slide
+				if (CurrentFrame < 0.59) // Hit head on something, cancel landing to prevent slide
 					waitTween = 0.2;
 				else
 					return;	// normal running landing
@@ -4327,7 +4415,7 @@ function PlayOnGround(float waitTween)
 				waitTween = 0.01;
 		}
 
-		if( ePawn.bIsCrouched )
+		if (ePawn.bIsCrouched)
 		{
 			blendRate = (1.0 - ePawn.WalkingRatio) + ((ePawn.GetAnimTime(ePawn.AWalkCrouch) / ePawn.GetAnimTime(ePawn.AJoggCrouch)) * ePawn.WalkingRatio);
 			ePawn.LoopAnim(ePawn.AWalkCrouch, blendRate, waitTween * 0.5);
@@ -4359,7 +4447,7 @@ function PlayOnGround(float waitTween)
 
 
 
-function PlayOnGroundSniping( bool bMoving, float Speed, optional bool bBlendRefPose )
+function PlayOnGroundSniping(bool bMoving, float Speed, optional bool bBlendRefPose)
 {
 	local ePawn.SAnimBlend AnimSet;
 	
@@ -4368,10 +4456,10 @@ function PlayOnGroundSniping( bool bMoving, float Speed, optional bool bBlendRef
 	//
 	// Lower body movement/wait
 	//
-    if( bMoving )
+    if (bMoving)
 	{
 		ePawn.GroundSpeed = Speed;
-		if(ePawn.bIsCrouched)
+		if (ePawn.bIsCrouched)
 			AnimSet = ePawn.ABlendSnipingCrouch;
 		else
 			AnimSet = ePawn.ABlendSniping;
@@ -4387,12 +4475,12 @@ function PlayOnGroundSniping( bool bMoving, float Speed, optional bool bBlendRef
 	//
 	// Upper body pose
 	//
-	if( !bBlendRefPose )
+	if (!bBlendRefPose)
 		return;
 
 	// Loop extra wait animation on Channel REFPOSECHANNEL. To be able to have different weapon with same base leg movement
     ePawn.AnimBlendParams(EPawn.REFPOSECHANNEL, 1, 0.0, 0.0, ePawn.UpperBodyBoneName);
-	if( ePawn.bIsCrouched )
+	if (ePawn.bIsCrouched)
 		ePawn.LoopAnim(ePawn.AWaitCrouch, 1, 0.2, EPawn.REFPOSECHANNEL);
 	else
 		ePawn.LoopAnim(ePawn.AWait, 1, 0.2, EPawn.REFPOSECHANNEL);
@@ -4425,30 +4513,30 @@ state s_Roll
 		local vector pushingDir;
 
 		pushingDir = GetPushingDir();
-		if(VSize(pushingDir) > 0.0)
+		if (VSize(pushingDir) > 0.0)
 		{
 			newRot.Yaw = Rotation.Yaw + Rotator(pushingDir).Yaw;
-			if((Vector(newRot) dot Vector(ePawn.Rotation)) > 0.0)
+			if ((Vector(newRot) dot Vector(ePawn.Rotation)) > 0.0)
 			{
 				ePawn.RotateTowardsRotator(newRot, rotSpeed / 0.5, 0.5);
 			}
 		}
 	}
 
-	function PlayerMove( Float DeltaTime )
+	function PlayerMove(Float DeltaTime)
 	{
 		local rotator prevRot, deltaRot;
 		
 		// Check to get out crouched/uncrouched
-		if( bInTransition && bDuck > 0 )
+		if (bInTransition && bDuck > 0)
 		{
 			m_rollGetUp = !m_rollGetUp;
 			bDuck = 0;
 		}
 
-		if( !bInTransition && bDuck == 0 )
+		if (!bInTransition && bDuck == 0)
 		{
-			if(m_rollCrouch)
+			if (m_rollCrouch)
 				m_rollGetUp = true;
 			GotoState('s_PlayerWalking');
 			prevWalkingRatio = ePawn.WalkingRatio;
@@ -4464,7 +4552,7 @@ state s_Roll
 
 	event NotifyAction()
 	{
-		if(!IsPushingGentle())
+		if (!IsPushingGentle())
 			KillPawnSpeed();
 	}
 
@@ -4492,13 +4580,13 @@ DoRoll:
 	FinishAnim();
 
 	bInTransition = false;
-	if( m_rollScope )
+	if (m_rollScope)
 	{
 		OnGroundScope();
 	}
 	else
 	{
-		if( m_rollGetUp )
+		if (m_rollGetUp)
 			ePawn.bWantsToCrouch = false;
 		ePawn.LoopAnim(ePawn.AWalkCrouch, 1.0, 0.0);
 		ePawn.SynchAnim(ePawn.AJoggCrouch, 1, 0.0, 1.0);
@@ -4516,12 +4604,12 @@ state PlayerFlying
 {
 	Ignores Bump;
 		
-	function PlayerMove( float DeltaTime )
+	function PlayerMove(float DeltaTime)
 	{
 		local vector X,Y,Z;
 
 		GetAxes(Rotation,X,Y,Z);
-		Pawn.Acceleration = (aForward*X + aStrafe*Y) * 30000;
+		Pawn.Acceleration = (aForward * X + aStrafe * Y) * 30000;
 		
 		ePawn.bVisibilityCalculated = true;
 		ePawn.VisibilityFactor = 0.0f;
@@ -4573,14 +4661,14 @@ Begin:
 	// wait for end of weapon sheathing
 	FinishAnim(EPawn.ACTIONCHANNEL);
 
-	if( JumpLabelPrivate != '' )
+	if (JumpLabelPrivate != '')
 	{
 		OnGroundScope();
 		Stop;
 	}
 
 	ePawn.AnimBlendParams(EPawn.ACTIONCHANNEL, 1,,,ePawn.UpperBodyBoneName);
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 		ePawn.LoopAnim('palmstalnt0',,0.8, EPawn.ACTIONCHANNEL);
 	else
 		ePawn.LoopAnim('palmcralnt0',,0.8, EPawn.ACTIONCHANNEL);
@@ -4588,7 +4676,7 @@ Begin:
 
 function float GetGroundSpeed()
 {	
-	if( ePawn.bIsCrouched )
+	if (ePawn.bIsCrouched)
 		return m_speedWalkFPCr;
 	else
 		return m_speedWalkFP;
@@ -4615,10 +4703,10 @@ state s_Targeting
 	function EndState()
 	{
 		m_useTarget	= false;
-		if( EMainHUD(myHud).hud_master == ePawn.HandItem )
+		if (EMainHUD(myHud).hud_master == ePawn.HandItem)
 			EMainHUD(myHud).NormalView();
 
-		if( !bInTransition )
+		if (!bInTransition)
 			SheathWeapon();
 	}
 
@@ -4630,11 +4718,11 @@ state s_Targeting
 	}
 
 	// Make sure we don't lose weapon while using it
-	function NotifyLostInventoryItem( EInventoryItem Item )
+	function NotifyLostInventoryItem(EInventoryItem Item)
 	{
 		// Force release fire
 		bFire = 0;
-		if( Item != None && Item == ePawn.HandItem )
+		if (Item != None && Item == ePawn.HandItem)
 			ProcessScope();
 		// Reset things
 		Global.NotifyLostInventoryItem(Item);
@@ -4642,13 +4730,13 @@ state s_Targeting
 
 	function SwitchCameraMode()
 	{
-		if(ePawn.bIsCrouched)
+		if (ePawn.bIsCrouched)
 			m_camera.SetMode(ECM_FirstPersonCr);
 		else
 			m_camera.SetMode(ECM_FirstPerson);
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
         local vector X,Y,Z, NewAccel;
 		local float pushingForce;
@@ -4672,7 +4760,7 @@ state s_Targeting
 		pushingForce = sqrt(aForward * aForward + aStrafe * aStrafe);
 
         // Joshua - Variable speeds for keyboard in targeting mode
-        if(m_curWalkSpeed != 0)
+        if (m_curWalkSpeed != 0)
         {
             accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
             
@@ -4680,12 +4768,12 @@ state s_Targeting
             aStrafe  *= accelModif;
         }
 
-		if( bLockedCamera )
+		if (bLockedCamera)
 			KillPawnSpeed();
 		else
 		{
 			// Update acceleration.
-			NewAccel            = aForward*X + aStrafe*Y;
+			NewAccel            = aForward * X + aStrafe * Y;
 			NewAccel.Z          = 0;
 			ePawn.Acceleration  = NewAccel;
 			ePawn.Acceleration *= eGame.m_onGroundAccel;
@@ -4700,6 +4788,10 @@ state s_Targeting
 		// Joshua - Variable speeds for keyboard in targeting mode
 		finalSpeed = pushingForce;
 		finalSpeed *= (float(m_curWalkSpeed) / eGame.m_maxSpeedInterval);
+		
+		// Joshua - Update SoundWalkingRatio based on variable speed
+		ePawn.SoundWalkingRatio = finalSpeed;
+		
 		PlayOnGroundSniping((pushingForce > 0.3), finalSpeed * GetGroundSpeed(), true);
 
 		//PlayOnGroundSniping((pushingForce > 0.3), pushingForce * GetGroundSpeed(), true);
@@ -4715,7 +4807,7 @@ state s_Targeting
 		return false; //!bInGunTransition && !bLockedCamera;
 	}
 
-	function bool CanSwitchToHandItem( EInventoryItem Item )
+	function bool CanSwitchToHandItem(EInventoryItem Item)
 	{
 		return Item.IsA('ESecondaryAmmo');
 	}
@@ -4730,7 +4822,7 @@ state s_FirstPersonTargeting extends s_Targeting
 	{
 		Super.BeginState();
 
-		if( !bInTransition )
+		if (!bInTransition)
 			DrawWeapon();
 
 		ePawn.SoundWalkingRatio = 0.45f;
@@ -4748,9 +4840,9 @@ state s_FirstPersonTargeting extends s_Targeting
 		return true;
 	}
 
-	function bool CanAddInteract( EInteractObject IntObj )
+	function bool CanAddInteract(EInteractObject IntObj)
 	{
-		if( IntObj.class.name == 'EDoorInteraction' )
+		if (IntObj.class.name == 'EDoorInteraction')
 			return true;
 	}
 
@@ -4762,23 +4854,23 @@ state s_FirstPersonTargeting extends s_Targeting
 	// Prevent gun shot when in air camera
 	function ProcessFire()
 	{
-		if( !bLockedCamera )
+		if (!bLockedCamera)
 			Global.ProcessFire();
 	}
 
 	function ProcessAltFire()
 	{
-		if( !bLockedCamera )
+		if (!bLockedCamera)
 			Global.ProcessAltFire();
 	}
 
 	function NotifyFiring()
 	{
-		if( ePawn.WeaponStance == 1 )
+		if (ePawn.WeaponStance == 1)
 		{
 			playerStats.AddStat("BulletFired");
 			Level.RumbleVibrate(0.07, 0.75);
-			if( !ePawn.bIsCrouched )
+			if (!ePawn.bIsCrouched)
 				ePawn.BlendAnimOverCurrent('WaitStSpFr1', 1, ePawn.UpperBodyBoneName);
 			else
 				ePawn.BlendAnimOverCurrent('WaitCrSpFr1', 1, ePawn.UpperBodyBoneName);
@@ -4789,10 +4881,10 @@ state s_FirstPersonTargeting extends s_Targeting
 
 	function ProcessScope()
 	{
-		if( bLockedCamera )
+		if (bLockedCamera)
 			return;
 
-		if( !bInGunTransition && !ePawn.PressingFire() )
+		if (!bInGunTransition && !ePawn.PressingFire())
 			GotoState('s_PlayerWalking');
 	}
 
@@ -4813,11 +4905,11 @@ state s_FirstPersonTargeting extends s_Targeting
 		m_camera.SetMode(ECM_FirstPerson);
 	}
 
-	function PlayerMove( float DeltaTime )
+	function PlayerMove(float DeltaTime)
     {	
         Super.PlayerMove(DeltaTime);
 
-        if( bPressSnip && ActiveGun == MainGun && !bInGunTransition && !bLockedCamera )
+        if (bPressSnip && ActiveGun == MainGun && !bInGunTransition && !bLockedCamera)
         {
             bPressSnip = false;
             bInTransition = true; // prevent the SheathWeapon
@@ -4827,8 +4919,8 @@ state s_FirstPersonTargeting extends s_Targeting
 
 Begin:
 	// will not happen from Sniper mode
-	// DrawWeapon in BeginState to prevent a PlayerMove with bInGunTransition==false
-	if( !bInTransition )
+	// DrawWeapon in BeginState to prevent a PlayerMove with bInGunTransition == false
+	if (!bInTransition)
 		FinishAnim(EPawn.ACTIONCHANNEL);
 
 	SwitchCameraMode();
@@ -4837,7 +4929,7 @@ Begin:
 
 	// If mission failed happened during draw weapon anim
 	// send after anim is over.
-	if( iGameOverMsg != -1 )
+	if (iGameOverMsg != -1)
 		ProcessScope();
 }
 
@@ -4865,7 +4957,7 @@ state s_PlayerSniping extends s_Targeting
 
 	function float GetSniperPosVar()
 	{
-		if(ePawn.bIsCrouched)
+		if (ePawn.bIsCrouched)
 			return 1.2;
 		else
 			return 1.0;
@@ -4873,9 +4965,9 @@ state s_PlayerSniping extends s_Targeting
 
 	function ReduceCameraSpeed(out float turnMul)
 	{
-		if(m_camera.m_camMode == ECM_FirstPerson)	// turn fast like OverShoulder while reloading
+		if (m_camera.m_camMode == ECM_FirstPerson)	// turn fast like OverShoulder while reloading
 			turnMul = m_turnMul;
-		else if(!m_holdingBreath)
+		else if (!m_holdingBreath)
 			turnMul = (ESniperGun(ActiveGun).GetZoom() / DesiredFOV) * 0.5;
 		else
 			turnMul = (ESniperGun(ActiveGun).GetZoom() / DesiredFOV) * 0.25;
@@ -4890,7 +4982,7 @@ state s_PlayerSniping extends s_Targeting
 	function NotifyReloading()
 	{
 		// Joshua - Save the current FOV index before reloading
-		if(ESniperGun(ActiveGun) != None)
+		if (ESniperGun(ActiveGun) != None)
 			LastSniperFOVIndex = ESniperGun(ActiveGun).FOVIndex;
 
 		ZoomLevel			= 0.0f;
@@ -4905,56 +4997,56 @@ state s_PlayerSniping extends s_Targeting
 
 	function ProcessScope()
 	{
-		if( !bInGunTransition )
+		if (!bInGunTransition)
 			GotoState('s_PlayerWalking');
 	}
 
-	function ProcessHeadSet( float i )
+	function ProcessHeadSet(float i)
 	{
-		if( ePawn.HandItem == None || bInGunTransition || bInTransition ) 
+		if (ePawn.HandItem == None || bInGunTransition || bInTransition) 
 			return;
 		Global.ProcessHeadSet(i);
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
 		// No update on ZoomLevel when reloading
-		if( bHideSam )
+		if (bHideSam)
 		{
 			// Update this value for motion blur		
-			ZoomLevel=FMax(Abs(aTurn),Abs(aLookUp));		  
-			ZoomLevel=FClamp(ZoomLevel,0.0f,1.0f);
-			ZoomLevel*=0.7f;
+			ZoomLevel = FMax(Abs(aTurn),Abs(aLookUp));		  
+			ZoomLevel = FClamp(ZoomLevel,0.0f,1.0f);
+			ZoomLevel *= 0.7f;
 		}
 
-		if( bPressSnip && !bInGunTransition )
+		if (bPressSnip && !bInGunTransition)
 		{
 			bPressSnip = false;
 			bInTransition = true; // prevent the DrawWeapon
 			GotoState('s_FirstPersonTargeting');
 		}
-		else if( !m_holdingBreath )
+		else if (!m_holdingBreath)
    			Super.PlayerMove(DeltaTime);
 		else
 			KillPawnSpeed();
 
 		// Joshua - Controller support for zoom levels
-		if( bDPadUp != 0 && !bDPadUpPressed )
+		if (bDPadUp != 0 && !bDPadUpPressed)
 		{
 			bDPadUpPressed = true;
 			SnipeZoomIn();
 		}
-		else if( bDPadUp == 0 )
+		else if (bDPadUp == 0)
 		{
 			bDPadUpPressed = false;
 		}
 
-		if( bDPadDown != 0 && !bDPadDownPressed )
+		if (bDPadDown != 0 && !bDPadDownPressed)
 		{
 			bDPadDownPressed = true;
 			SnipeZoomOut();
 		}
-		else if( bDPadDown == 0 )
+		else if (bDPadDown == 0)
 		{
 			bDPadDownPressed = false;
 		}
@@ -4963,7 +5055,7 @@ state s_PlayerSniping extends s_Targeting
 	function float GetGroundSpeed()
 	{
 		// Joshua - QoL improvement: Ubisoft forgot to apply a crouch speed multiplier while sniping
-		if( ePawn.bIsCrouched )
+		if (ePawn.bIsCrouched)
 			return m_speedWalkSniping / (m_speedWalkFP / m_speedWalkFPCr);
 		else
 			return m_speedWalkSniping;
@@ -4978,9 +5070,9 @@ Begin:
 	ESniperGun(ActiveGun).SetSniperMode(true);
 
     // Joshua - Restore the previous zoom level if we have one
-    if(LastSniperFOVIndex > 0)
+    if (LastSniperFOVIndex > 0)
     {
-        while(ESniperGun(ActiveGun).FOVIndex < LastSniperFOVIndex)
+        while (ESniperGun(ActiveGun).FOVIndex < LastSniperFOVIndex)
             ESniperGun(ActiveGun).ZoomIn();
     }
 
@@ -5000,6 +5092,15 @@ state s_CameraJammerTargeting extends s_Targeting
 		bInTransition = true;
 	}
 
+	// Joshua - Disable camera turning while jaming camera with autolock to prevent camera jitter
+	event ReduceCameraSpeed(out float turnMul)
+	{
+		if (bCameraJammerAutoLock && JammedCam != None)
+			turnMul = 0.0f;
+		else
+			turnMul = m_turnMul;
+	}
+
 	function EndState()
 	{
 		bInTransition = true; // Prevents s_Targeting::EndState()
@@ -5010,20 +5111,20 @@ state s_CameraJammerTargeting extends s_Targeting
 
 	function ProcessFire()
 	{
-		if( !bInTransition )
+		if (!bInTransition)
 			Global.ProcessFire();
 	}
 
 	function ProcessScope()
 	{
-		if( !bInTransition )
+		if (!bInTransition)
 			ePawn.HandItem.Scope();
 	}
 
 	// Force one hand animation even if ActiveGun != None
 	function name GetWeaponAnimation()
 	{
-		if( !ePawn.bIsCrouched )
+		if (!ePawn.bIsCrouched)
 			return 'DrawStSpBg1';
 		else
 			return 'DrawCrSpBg1';
@@ -5033,6 +5134,7 @@ state s_CameraJammerTargeting extends s_Targeting
 	{
 		m_camera.SetMode(ECM_FirstPersonCr);
 	}
+	
 	function NotifyEndCrouch()
 	{
 		m_camera.SetMode(ECM_FirstPerson);
@@ -5085,7 +5187,7 @@ state s_LaserMicTargeting extends s_Targeting
 
 	function ProcessScope()
 	{
-		if( !bInTransition )
+		if (!bInTransition)
 			ePawn.HandItem.Scope();
 	}
 
@@ -5113,7 +5215,7 @@ function bool CheckInAirHoist(vector locationEnd, rotator orientationEnd, name h
 	m_HoistStOffset = hoistStOffset;
 	m_HoistCrOffset = hoistCrOffset;
 
-	if(	!bInTransition &&
+	if (!bInTransition &&
 		(m_LastLedgeFenceTime + 0.2 < Level.TimeSeconds) &&
 		ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, true, ePawn.GetExtent(), , true) == None &&
 		TryHoisting(locationEnd, orientationEnd, m_HoistStOffset, m_HoistCrOffset, m_HoistSt, m_HoistCr))
@@ -5163,9 +5265,9 @@ state s_PlayerJumping
 		local rotator flatRot;
 		local actor wall;
 
-		if(bInTransition)
+		if (bInTransition)
 		{
-			if(ePawn.m_climbingUpperHand != CHNONE)
+			if (ePawn.m_climbingUpperHand != CHNONE)
 			{
 				ePawn.Acceleration = DampVec(ePawn.Acceleration, ePawn.m_locationEnd, VSize(ePawn.m_locationEnd) / ePawn.GetAnimTime('spltstalrt0'), deltaTime);
 				ePawn.RotateTowardsRotator(ePawn.m_orientationEnd, 40000, 0.9);
@@ -5175,7 +5277,7 @@ state s_PlayerJumping
 
 		PawnLookAt();
 
-		if(VSize(m_FallGrabDir) > 0.0 && ePawn.m_climbingUpperHand == CHNONE)
+		if (VSize(m_FallGrabDir) > 0.0 && ePawn.m_climbingUpperHand == CHNONE)
 		{
 			ePawn.Velocity.X = 0.0;
 			ePawn.Velocity.Y = 0.0;
@@ -5192,24 +5294,24 @@ state s_PlayerJumping
 		SetPawnAccel(X, eGame.m_inAirAccel);
 
 		// No turning when FallGrab, WallJump or SplitJump
-		if(ePawn.m_climbingUpperHand == CHNONE && m_NbJump < 2)
+		if (ePawn.m_climbingUpperHand == CHNONE && m_NbJump < 2)
 			SetPawnRotation(20000);
 
 		CheckForCrouch();
 		ePawn.SetNormalZones(); // No Crouching zones in air
 
 		// Look for a fence in front
-		if(	ePawn.Velocity.Z < eGame.m_FMaxGrabbingSpeed &&
+		if (ePawn.Velocity.Z < eGame.m_FMaxGrabbingSpeed &&
 			ePawn.Velocity.Z > eGame.m_FMinGrabbingSpeed &&
 			(m_LastLedgeFenceTime + 0.3 < Level.TimeSeconds))
 		{
-			if(ePawn.CheckFence(HitNormal, wall, ePawn.Location))
+			if (ePawn.CheckFence(HitNormal, wall, ePawn.Location))
 			{
 				ePawn.m_validFence = true;
 				ePawn.SetRotation(Rotator(-HitNormal));
-				if ( wall.SurfaceType == SURFACE_FenceMetal )
+				if (wall.SurfaceType == SURFACE_FenceMetal)
 					ePawn.PlaySound(Sound'FisherFoley.Play_Random_FisherFenceVib', SLOT_SFX);
-				else if ( wall.SurfaceType == SURFACE_FenceVine )
+				else if (wall.SurfaceType == SURFACE_FenceVine)
 					ePawn.PlaySound(Sound'FisherFoley.Play_Random_VineVibration', SLOT_SFX);
 				ePawn.MakeNoise(500.0, NOISE_HeavyFootstep);
 				GoToState('s_Fence', 'FromAir');
@@ -5218,7 +5320,7 @@ state s_PlayerJumping
 			}
 		}
 
-		if(CheckWallJump(X, Y, Z))
+		if (CheckWallJump(X, Y, Z))
 			return;
 		ePawn.PlayInAir();
     }
@@ -5230,7 +5332,7 @@ state s_PlayerJumping
 
 		CurrentAnimSeq = ePawn.GetAnimName();
 
-		if(CurrentAnimSeq == ePawn.AJumpForwardL)
+		if (CurrentAnimSeq == ePawn.AJumpForwardL)
 		{
 			standing = 'ledgstalftl';
 			crouch = 'ledgcralftl';
@@ -5255,7 +5357,7 @@ state s_PlayerJumping
 		local vector handsPosition, handsSize, HitLocation, HitNormal;
 
 		// We have a ledge in the arms zone.
-		if(	!bInTransition &&
+		if (!bInTransition &&
 			(m_LastLedgeFenceTime + eGame.m_grabbingDelay < Level.TimeSeconds) &&	// dont grab twice too fast
 			ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, true, ePawn.GetExtent(), , true) == None)
 		{
@@ -5267,7 +5369,7 @@ state s_PlayerJumping
 			handsPosition.Y = 0;
 			handsPosition.Z = ePawn.CollisionHeight + handsSize.Z;
 			handsPosition = locationEnd + (handsPosition >> orientationEnd);
-			if(ePawn.FastPointCheck(handsPosition, handsSize, true, true))
+			if (ePawn.FastPointCheck(handsPosition, handsSize, true, true))
 			{
 				GoToState('s_GrabbingLedge', 'Above');
 				return true;
@@ -5280,7 +5382,7 @@ state s_PlayerJumping
 	{
 		local vector HitLocation, HitNormal;
 		// We have a hoh in the arms zone.
-		if(	!bInTransition &&
+		if (!bInTransition &&
 			(ePawn.CollisionHeight == ePawn.default.CollisionHeight) &&
 			(m_LastHOHTime + eGame.m_grabbingDelay < Level.TimeSeconds) &&	// dont grab twice too fast
 			(ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, false, ePawn.GetExtent(), , true) == None))
@@ -5295,15 +5397,15 @@ state s_PlayerJumping
 	{
 		local vector HitLocation, HitNormal;
 		// We have a narrowladder in the arms zone.
-		if(	!bInTransition &&
+		if (!bInTransition &&
 			(m_LastNLPipeTime + eGame.m_grabbingDelay < Level.TimeSeconds) &&	// dont grab twice too fast
 			(ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, false, ePawn.GetExtent(), , true) == None))
 		{
-			if(NLType == 0)
+			if (NLType == 0)
 			{
 				GoToState('s_GrabbingNarrowLadder', 'FromAir');
 			}
-			else if(NLType == 1)
+			else if (NLType == 1)
 			{
 				GoToState('s_GrabbingNarrowLadder', 'FromUnder');
 			}
@@ -5316,7 +5418,7 @@ state s_PlayerJumping
 	{
 		local vector HitLocation, HitNormal;
 		// We have a Pipe in the arms zone.
-		if(	!bInTransition &&
+		if (!bInTransition &&
 			(m_LastNLPipeTime + eGame.m_grabbingDelay < Level.TimeSeconds) &&	// dont grab twice too fast
 			(ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, false, ePawn.GetExtent(), , true) == None))
 		{
@@ -5330,7 +5432,7 @@ state s_PlayerJumping
 	{
 		local vector HitLocation, HitNormal;
 		// We have a Pole in the arms zone.
-		if(	(RType == 0 || RType == 2) &&
+		if ((RType == 0 || RType == 2) &&
 			!bInTransition &&
 			(m_LastNLPipeTime + eGame.m_grabbingDelay < Level.TimeSeconds) &&	// dont grab twice too fast
 			(ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, false, ePawn.GetExtent(), , true) == None))
@@ -5346,7 +5448,7 @@ state s_PlayerJumping
 		local vector HitLocation, HitNormal;
 
 		// We have a ZipLine in the arms zone.
-		if(	!bInTransition &&
+		if (!bInTransition &&
 			((m_LastZipLineTime * 2.0) + eGame.m_grabbingDelay < Level.TimeSeconds) &&	// dont grab twice too fast
 			ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, true, ePawn.GetExtent(), , true) == None)
 		{
@@ -5380,14 +5482,14 @@ state s_PlayerJumping
 		*********************************************** */
 
 		other = EPawn(HitActor);
-			if(abs(ePawn.Velocity.Z) >= eGame.MinBeforeDamage)
+			if (abs(ePawn.Velocity.Z) >= eGame.MinBeforeDamage)
 			{
-				damage = (Abs(ePawn.Velocity.Z) - eGame.MinBeforeDamage) / (eGame.MaxBeforeDeath-eGame.MinBeforeDamage) * ePawn.default.Health;
-			if(other != None)
+				damage = (Abs(ePawn.Velocity.Z) - eGame.MinBeforeDamage) / (eGame.MaxBeforeDeath - eGame.MinBeforeDamage) * ePawn.default.Health;
+			if (other != None)
 				damage /= eGame.NPCCushionDivider;
 
 				ePawn.TakeDamage(damage, ePawn, ePawn.Location, HitNormal, ePawn.Velocity, class'Crushed');
-				if( CurrentVolume == None || !CurrentVolume.bLiquid )
+				if (CurrentVolume == None || !CurrentVolume.bLiquid)
 				{
 					ePawn.PlaySound(Sound'FisherVoice.Play_Random_FisherHitGeometry', SLOT_SFX);
 					ePawn.PlaySound(Sound'FisherFoley.Play_FisherAnkleCreak', SLOT_SFX);
@@ -5395,16 +5497,16 @@ state s_PlayerJumping
 			}
 				}
 
-		if(other != None)
+		if (other != None)
 			other.TakeDamage(other.Health / 2, ePawn, other.Location, HitNormal, ePawn.Velocity, class'EKnocked', EPawn.P_Head);
 
-				if( ePawn.Health <= 0 )
+				if (ePawn.Health <= 0)
 					return true;
 
 		//Log("Notify Landed");
 
 		// Handle landing animation here to prevent losing velocity values
-		if( ShouldRoll() )
+		if (ShouldRoll())
 		{
 			bInTransition = true;
 			GotoState('s_Roll', 'DoRoll');
@@ -5412,7 +5514,7 @@ state s_PlayerJumping
 		}
 
 		bInTransition = true;
-		if( ePawn.PlayLanding() )
+		if (ePawn.PlayLanding())
 			GotoState(,'Land');
 		else
 			GotoState(,'FinishNoLand');
@@ -5422,7 +5524,7 @@ state s_PlayerJumping
 
 	event bool NotifyHitWall(vector HitNormal, actor Wall)
 	{
-		if(bInTransition && ePawn.Physics == PHYS_Linear)
+		if (bInTransition && ePawn.Physics == PHYS_Linear)
 		{
 			ePawn.Acceleration = 0.5 * ((ePawn.Acceleration dot HitNormal) * HitNormal * (-2.0) + ePawn.Acceleration);
 			ePawn.Velocity = ePawn.Acceleration;
@@ -5448,7 +5550,7 @@ state s_PlayerJumping
 LedgeHoist:
 	bInTransition = true;
 	m_LastLedgeFenceTime = Level.TimeSeconds;
-	if(ePawn.bWantsToCrouch)
+	if (ePawn.bWantsToCrouch)
 		ePawn.PlayAnimOnly(m_HoistCr, , 0.2);
 	else
 		ePawn.PlayAnimOnly(m_HoistSt, , 0.2);
@@ -5456,7 +5558,7 @@ LedgeHoist:
 	ePawn.m_orientationEnd = ePawn.m_orientationStart;
 	MoveToDestination(ArrivalSpeedApprox(2.0));
 	bInTransition = false;
-	if(TryHoisting(ePawn.Location, hoistTargetRot, m_HoistStOffset, m_HoistCrOffset, m_HoistSt, m_HoistCr))
+	if (TryHoisting(ePawn.Location, hoistTargetRot, m_HoistStOffset, m_HoistCrOffset, m_HoistSt, m_HoistCr))
 		GoToState('s_HoistingAboveLedge', 'NoPlay');
 	ePawn.SetPhysics(PHYS_Falling);
 	Stop;
@@ -5464,7 +5566,7 @@ LedgeHoist:
 PushSide:
 	bInTransition = true;
 	ePawn.SetPhysics(PHYS_Linear);
-	if(ePawn.m_climbingUpperHand == CHRIGHT)
+	if (ePawn.m_climbingUpperHand == CHRIGHT)
 		ePawn.PlayAnimOnly('spltstalrt0', 1.0, 0.05);
 	else
 		ePawn.PlayAnimOnly('spltstallt0', 1.0, 0.05);
@@ -5480,7 +5582,7 @@ PushSide:
 SlipSide:
 	bInTransition = true;
 	ePawn.SetPhysics(PHYS_None);
-	if(ePawn.m_climbingUpperHand == CHRIGHT)
+	if (ePawn.m_climbingUpperHand == CHRIGHT)
 		ePawn.PlayAnimOnly('spltstalrt0', 1.0, 0.05);
 	else
 		ePawn.PlayAnimOnly('spltstallt0', 1.0, 0.05);
@@ -5503,7 +5605,7 @@ FinishNoLand:
 	Goto('Finish');
 Finish:
 	bInTransition = false;
-	if( IsPushingGentle() )
+	if (IsPushingGentle())
 	{
 		prevWalkingRatio = 1.0;
 		ePawn.WalkingRatio = prevWalkingRatio;
@@ -5523,7 +5625,7 @@ state s_Throw
 		m_ThrowSpeed = m_ThrowMinSpeed;
 		FastIKFade();
 		bInTransition = false;
-		if(bShowCrosshair && bShowHUD) // Joshua - Hide throw targeting if crosshair hidden
+		if (bShowCrosshair && bShowHUD) // Joshua - Hide throw targeting if crosshair hidden
 			bThrowTargeting = true;
 		else
 			bThrowTargeting = false;
@@ -5553,17 +5655,17 @@ state s_Throw
 
 	function ProcessFire()
 	{
-		if(!bInTransition)
+		if (!bInTransition)
 			GotoState(, 'Throw');
 	}
 
 	function ProcessScope()
 	{
-		if(!bInTransition)
+		if (!bInTransition)
 			GotoState('s_PlayerWalking');
 	}
 
-	function PlayerMove( float DeltaTime )
+	function PlayerMove(float DeltaTime)
 	{
         local vector X,Y,Z, NewAccel;
 		local float pushingForce;
@@ -5576,12 +5678,12 @@ state s_Throw
 
 		ePawn.AimAt(AAVERT, Vector(Rotation), Vector(ePawn.Rotation), 0, 0, -60, 80);
 
-		if(bAltFire != 0)
+		if (bAltFire != 0)
 			m_ThrowSpeed = DampVec(m_ThrowSpeed, m_ThrowMaxSpeed, m_ThrowVarSpeed, DeltaTime);
 		else
 			m_ThrowSpeed = DampVec(m_ThrowSpeed, m_ThrowMinSpeed, m_ThrowVarSpeed, DeltaTime);
 
-		if(bInTransition)
+		if (bInTransition)
 			return;
 
         GetAxes(Rotation,X,Y,Z);
@@ -5597,7 +5699,7 @@ state s_Throw
 		pushingForce = sqrt(aForward * aForward + aStrafe * aStrafe);
 
         // Joshua - Variable speeds for keyboard in targeting mode
-        if(m_curWalkSpeed != 0)
+        if (m_curWalkSpeed != 0)
         {
             accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
             
@@ -5605,7 +5707,7 @@ state s_Throw
             aStrafe  *= accelModif;
         }
 
-		NewAccel            = aForward*X + aStrafe*Y;
+		NewAccel            = aForward * X + aStrafe * Y;
 		NewAccel.Z          = 0;
 		ePawn.Acceleration  = NewAccel;
 		ePawn.Acceleration *= eGame.m_onGroundAccel;
@@ -5614,7 +5716,7 @@ state s_Throw
 
 		CheckForCrouch();
 
-		if(bShowCrosshair && bShowHUD) // Joshua - Hide throw targeting if crosshair hidden
+		if (bShowCrosshair && bShowHUD) // Joshua - Hide throw targeting if crosshair hidden
 			bThrowTargeting = true;
 		else
 			bThrowTargeting = false;
@@ -5622,13 +5724,17 @@ state s_Throw
 		// Joshua - Variable speeds for keyboard in targeting mode
 		finalSpeed = pushingForce;
 		finalSpeed *= (float(m_curWalkSpeed) / eGame.m_maxSpeedInterval);
+		
+		// Joshua - Update SoundWalkingRatio based on variable speed
+		ePawn.SoundWalkingRatio = finalSpeed;
+		
 		PlayOnGroundSniping((pushingForce > 0.3), finalSpeed * GetGroundSpeed(), false);
 
 		//PlayOnGroundSniping((pushingForce > 0.3), pushingForce * GetGroundSpeed(), false);
 
 		ePawn.AnimBlendParams(ePawn.ACTIONCHANNEL, 1, 0.0, 0.0, ePawn.UpperBodyBoneName);
 
-		if(ePawn.bIsCrouched)
+		if (ePawn.bIsCrouched)
 			ePawn.LoopAnim('throCrAlNtH', 1, 0.3, ePawn.ACTIONCHANNEL);
 		else
 			ePawn.LoopAnim('throStAlNtH', 1, 0.3, ePawn.ACTIONCHANNEL);
@@ -5643,7 +5749,7 @@ Throw:
 	bThrowTargeting = false;
 	bInTransition = true;
 	KillPawnSpeed();
-	if(ePawn.bIsCrouched )
+	if (ePawn.bIsCrouched)
 		ePawn.PlayAnimOnly('throCrAlEdH', 1.0 + 0.5 * ((VSize(m_ThrowSpeed) - VSize(m_ThrowMinSpeed)) / (VSize(m_ThrowMaxSpeed) - VSize(m_ThrowMinSpeed))),0.05);
 	else
 		ePawn.PlayAnimOnly('throStAlEdH', 1.0 + 0.5 * ((VSize(m_ThrowSpeed) - VSize(m_ThrowMinSpeed)) / (VSize(m_ThrowMaxSpeed) - VSize(m_ThrowMinSpeed))),0.05);
@@ -5663,7 +5769,7 @@ state s_InteractWithObject
 		
 		KillPawnSpeed();
 
-		if(ePawn.bIsCrouched)
+		if (ePawn.bIsCrouched)
 			m_camera.SetMode(ECM_WalkingCr);
 		else
 			m_camera.SetMode(ECM_Walking);
@@ -5672,7 +5778,7 @@ state s_InteractWithObject
 	function EndState()
 	{
 		bNoLedgePush = false;
-		if( Interaction != None )
+		if (Interaction != None)
 			Interaction.PostInteract(self);
 	}
 
@@ -5681,16 +5787,16 @@ state s_InteractWithObject
 	event NotifyAction()
 	{
 		// Might happen in open door for a backward anim at the end doesn't need to call this
-		if( Interaction != None )
+		if (Interaction != None)
 			Interaction.Interact(self);
 	}
 
-    event bool KeyEvent( string Key, EInputAction Action, FLOAT Delta )
+    event bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
     {
         Super.KeyEvent(Key, Action, Delta);
 
 		// Prevent 
-        if( Interaction != None && Level.Pauser == None )
+        if (Interaction != None && Level.Pauser == None)
             Interaction.KeyEvent(Key, Action, Delta);
 
         return false;
@@ -5716,7 +5822,7 @@ state s_Conversation extends s_InteractWithObject
 	function BeginState()
 	{
 		Super.BeginState();
-		if( !ePawn.bIsCrouched )
+		if (!ePawn.bIsCrouched)
 			ePawn.LoopAnimOnly(ePawn.AWait,,0.2);
 		else
 			ePawn.LoopAnimOnly(ePawn.AWaitCrouch,,0.2);
@@ -5733,7 +5839,7 @@ state s_Conversation extends s_InteractWithObject
 		return true;
 	}
 
-	function bool CanAddInteract( EInteractObject IntObj )
+	function bool CanAddInteract(EInteractObject IntObj)
 	{
 		// Allow only current conversation
 		return IntObj.class.name == 'ENpcZoneInteraction' && 
@@ -5741,10 +5847,10 @@ state s_Conversation extends s_InteractWithObject
 			   ENpcZoneInteraction(IntObj).Epc == self;
 	}
 
-	function PlayerMove( float DeltaTime )
+	function PlayerMove(float DeltaTime)
 	{
 		// Always look toward Npc while talking
-		if( Interaction != None )
+		if (Interaction != None)
 			ePawn.RotateTowardsRotator(Rotator(Interaction.Owner.Location - ePawn.Location));
 	}
 
@@ -5807,9 +5913,9 @@ state s_Turret extends s_InteractWithObject
 		return false;
 	}
 
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta )
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
-		if( !bInTransition )
+		if (!bInTransition)
 			return Super.KeyEvent(Key, Action, Delta);
 	}
 
@@ -5823,7 +5929,7 @@ Begin:
 	ePawn.SetPhysics(PHYS_Walking);
 
 	// Check if needs to crouch
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 	{
 		ePawn.bWantsToCrouch = true;
 		ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, ,0.1);
@@ -5868,9 +5974,9 @@ End:
 // ----------------------------------------------------------------------
 state s_PickUp extends s_InteractWithObject
 {
-	event bool NotifyHitWall( Vector hitNormal, Actor Wall )
+	event bool NotifyHitWall(Vector hitNormal, Actor Wall)
 	{
-		if( !bInTransition )
+		if (!bInTransition)
 			GotoState(,'Interrupted');
 		return true;
 	}
@@ -5894,19 +6000,19 @@ Interrupted:
 	// Drop handItem within cylinder with no extra velocity
 	DiscardPickup(,true);
 
-	if( JumpLabel == '' )
+	if (JumpLabel == '')
 		Log("ERROR : JumpLabel should be defined in PickUp interaction");
 	Goto(JumpLabel);
 
 PickupHigh:
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 		ePawn.PlayAnimOnly('PickStAlFd0', ,0.1);
 	else
 		ePawn.PlayAnimOnly('PickCrAlFd0', ,0.1);
 	goto('Finish');
 
 PickupLow:
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 		ePawn.PlayAnimOnly('PickStAlUp0', ,0.1);
 	else
 		ePawn.PlayAnimOnly('PickCrAlUp0', ,0.1);
@@ -5930,7 +6036,7 @@ state s_PushNPCOffChair
 Begin:
 	KillPawnSpeed();
 	ePawn.SetPhysics(PHYS_Walking);
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 		ePawn.PlayAnimOnly('PickStAlFd0', 1.5, 0.1, true);
 	else
 		ePawn.PlayAnimOnly('PickCrAlFd0', 1.5, 0.1, true);
@@ -6012,10 +6118,10 @@ state s_Computer extends s_InteractWithObject
 		return NotifyHitWall(HitNormal, Wall);
 	}
 
-	function PlayerMove( float DeltaTime )
+	function PlayerMove(float DeltaTime)
 	{
 		// if !bInTransition, means collision interrupted, make it go to rotation
-		if( !bInTransition && Interaction != None )
+		if (!bInTransition && Interaction != None)
 			ePawn.RotateTowardsRotator(Rotator(Interaction.Owner.Location - ePawn.Location));
 	}
 
@@ -6027,7 +6133,7 @@ Begin:
 	MoveToDestination(300,true);
 
 DoInteract:
-	if( ePawn.bIsCrouched )
+	if (ePawn.bIsCrouched)
 	{
 		ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, 2,,true);
 		FinishAnim();
@@ -6044,7 +6150,7 @@ DoInteract:
 	ePawn.PlayAnimOnly('kbrdstalbg0',,,true);
 	FinishAnim();
 
-	if( ePawn.bIsCrouched )
+	if (ePawn.bIsCrouched)
 		ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn);
 	// No FinishAnim to be able to start moving
 
@@ -6059,7 +6165,7 @@ state s_OpticCable extends s_InteractWithObject
 {
 	Ignores ProcessHeadset;
 
-	function PlayerMove( float DeltaTime )
+	function PlayerMove(float DeltaTime)
 	{
 		// Joshua - Crouching will exit the optic cable
 		if (bDuck > 0)
@@ -6086,12 +6192,12 @@ state s_OpticCable extends s_InteractWithObject
 
 		// If exiting because of death, remove control
 		// Joshua - Optic Cable interaction
-		if( ePawn.HandItem.IsA('EOpticCable') && ePawn.HandItem.GetStateName() != 's_Selected' )
+		if (ePawn.HandItem.IsA('EOpticCable') && ePawn.HandItem.GetStateName() != 's_Selected')
 		{
 			ePawn.HandItem.GotoState('s_Selected');
 			SetRotation(backupRotation);
 		}
-		else if( eGame.bNewDoorInteraction && OpticCableItem != None && OpticCableItem.GetStateName() != 's_Selected')
+		else if (eGame.bNewDoorInteraction && OpticCableItem != None && OpticCableItem.GetStateName() != 's_Selected')
 		{
 			OpticCableItem.GotoState('s_Selected');
 			SetRotation(backupRotation);
@@ -6100,7 +6206,7 @@ state s_OpticCable extends s_InteractWithObject
 
 	function ProcessFire()
 	{
-		if( !bInTransition )
+		if (!bInTransition)
 		{
 			// Joshua - Optic Cable interaction
 			if (ePawn.HandItem.IsA('EOpticCable'))
@@ -6116,7 +6222,7 @@ begin:
 	if (!eGame.bNewDoorInteraction)
 	{
 		// Original method
-		if( !ePawn.bIsCrouched )
+		if (!ePawn.bIsCrouched)
 		{
 			ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, , 0.1);
 			FinishAnim();
@@ -6140,12 +6246,12 @@ begin:
 		if (OpticCableItem != None && OpticCableItem.GetStateName() == 's_InteractSelected')
 		{
 			// New interaction box method
-			Interaction.SetInteractLocation( EPawn );
+			Interaction.SetInteractLocation(EPawn);
 			ePawn.SetPhysics(PHYS_Linear);
 			ePawn.PlayMoveTo(Rotation);
-			ePawn.m_locationEnd = ePawn.location;
+			ePawn.m_locationEnd = ePawn.Location;
 			MoveToDestination(300, false);
-			if( !ePawn.bIsCrouched )
+			if (!ePawn.bIsCrouched)
 			{
 				ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, , 0.1);
 				FinishAnim();
@@ -6160,7 +6266,7 @@ begin:
 		else
 		{
 			// Original method
-			if( !ePawn.bIsCrouched )
+			if (!ePawn.bIsCrouched)
 			{
 				ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, , 0.1);
 				FinishAnim();
@@ -6184,7 +6290,7 @@ End:
 
 	ePawn.BlendAnimOverCurrent('LockStAlNt0',1,ePawn.UpperBodyBoneName,1,0.2);
 	Sleep(ePawn.GetAnimtime('LockStAlNt0') * 0.5);
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 	{
 		ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn,,,true);
 		FinishAnim();
@@ -6200,7 +6306,7 @@ state s_PickLock extends s_InteractWithObject
 {
 	Ignores NotifyHitWall; // Make sure pick lock always work (often with large door frame)
 
-	function PlayerMove( float DeltaTime )
+	function PlayerMove(float DeltaTime)
 	{
 		// Give Axis to interaction, move camera
 		Interaction.ProcessAxis(self, aForward, aStrafe, aTurn, aLookUp);
@@ -6216,7 +6322,7 @@ state s_PickLock extends s_InteractWithObject
 
 	function ProcessFire()
 	{
-		if( Interaction != None )
+		if (Interaction != None)
 			Interaction.PostInteract(self);
 	}
 
@@ -6300,7 +6406,7 @@ Begin:
 
 	// Begin
 	bInTransition = true;
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 		ePawn.PlayAnimOnly('minestalbg0',,0.1);
 	else
 		ePawn.PlayAnimOnly('minecralbg0',,0.1);
@@ -6308,7 +6414,7 @@ Begin:
 	ePawn.HandItem.GotoState('s_PawnPlacement','QuickCheck');
 
 	// Loop
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 		ePawn.PlayAnimOnly('minestalnt0');
 	else
 		ePawn.PlayAnimOnly('minecralnt0');
@@ -6316,7 +6422,7 @@ Begin:
 	ePawn.HandItem.GotoState('s_PawnPlacement','PlaceOnWall');
 
 	// End
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 		ePawn.PlayAnimOnly('minestaled0');
 	else
 		ePawn.PlayAnimOnly('minecraled0');
@@ -6324,7 +6430,7 @@ Begin:
 
 Aborted:
 	bInTransition = false;
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 		ePawn.PlayAnimOnly('minestalbg0',,0.1, true, ePawn.GetAnimName()=='minestalbg0');
 	else
 		ePawn.PlayAnimOnly('minecralbg0',,0.1, true, ePawn.GetAnimName()=='minecralbg0');
@@ -6354,15 +6460,15 @@ state s_DisableWallMine extends s_InteractWithObject
 		GoToState(,'Aborted');
 	}
 
-	function PlayerMove( float DelaTime )
+	function PlayerMove(float DelaTime)
 	{
 		Super.PlayerMove(DelaTime);
 
-		if( bInTransition || Interaction == None )
+		if (bInTransition || Interaction == None)
 			return;
 
 		// Check if wallmine wouldn't be on a moving surface
-		if( Interaction.Owner.Location != m_HoistStOffset )
+		if (Interaction.Owner.Location != m_HoistStOffset)
 			GotoState(,'Aborted');
 	}
 
@@ -6377,13 +6483,13 @@ Begin:
 	m_HoistStOffset = Interaction.Owner.Location;
 	bInTransition = false;
 
-	if( JumpLabel == '' )
+	if (JumpLabel == '')
 		Log("ERROR : JumpLabel should be defined in DisableWallMine interaction");
 	Goto(JumpLabel);
 
 DefuseCrouch:
 	// Check if needs to crouch
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 	{
 		ePawn.bWantsToCrouch = true;
 		ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, ,0.1);
@@ -6393,7 +6499,7 @@ DefuseCrouch:
 
 DefuseStand:
 	// Check if needs to uncrouch
-	if( ePawn.bIsCrouched )
+	if (ePawn.bIsCrouched)
 	{
 		ePawn.bWantsToCrouch = false;
 		ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn,,0.1,true);
@@ -6403,7 +6509,7 @@ DefuseStand:
 
 Defuse:
 	// Begin
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 		ePawn.PlayAnimOnly('minestaled0',,0.1, true);
 	else
 		ePawn.PlayAnimOnly('minecraled0',,0.1, true);
@@ -6412,7 +6518,7 @@ Defuse:
 	Interaction.Owner.PlaySound(Sound'FisherEquipement.Play_WallMineRemove', SLOT_SFX);
 
 	// Cycle
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 		ePawn.LoopAnimOnly('minestalnt0');
 	else
 		ePawn.LoopAnimOnly('minecralnt0');
@@ -6423,7 +6529,7 @@ Defuse:
 	
 SheathMine:
 	// End
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 		ePawn.PlayAnimOnly('minestalbg0',,, true);
 	else
 		ePawn.PlayAnimOnly('minecralbg0',,, true);
@@ -6470,9 +6576,9 @@ state s_OpenDoor extends s_InteractWithObject
 		Interaction = None;
 	}
 
-	function bool NotifyBump( Actor Other, optional int Pill )
+	function bool NotifyBump(Actor Other, optional int Pill)
 	{
-		if( Other.bIsPawn )
+		if (Other.bIsPawn)
 			MoveToDestinationFailed();
 		return false;
 	}
@@ -6487,11 +6593,11 @@ state s_OpenDoor extends s_InteractWithObject
 	}
 
 LockedRt:
-	ePawn.AddSoundRequest(Sound'Door.Play_DoorJam', SLOT_SFX, 0.4f );
+	ePawn.AddSoundRequest(Sound'Door.Play_DoorJam', SLOT_SFX, 0.4f);
 	JumpLabelPrivate = 'JmpLockedRt';
 	Goto('DoDoor');
 LockedLt:
-	ePawn.AddSoundRequest(Sound'Door.Play_DoorJam', SLOT_SFX, 0.4f );
+	ePawn.AddSoundRequest(Sound'Door.Play_DoorJam', SLOT_SFX, 0.4f);
 	JumpLabelPrivate = 'JmpLockedLt';
 	Goto('DoDoor');
 UnLockedRt:
@@ -6503,13 +6609,13 @@ UnLockedLt:
 
 DoDoor:
 	bInTransition = true;
-	Interaction.SetInteractLocation( EPawn );
+	Interaction.SetInteractLocation(EPawn);
 	ePawn.SetPhysics(PHYS_Linear);
 	ePawn.PlayMoveTo(Rotation);
 	MoveToDestination(300, true);
 
 	// Joshua - Adding Pandora animations for door interactions
-	//if( ePawn.bIsCrouched )
+	//if (ePawn.bIsCrouched)
 	//{
 	//	ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, 2,,true);
 	//	FinishAnim();
@@ -6524,7 +6630,7 @@ JmpLockedLt:
 //	Goto('EndState');
 
 	// Joshua - Adding Pandora animations for door interactions
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 	{
 		ePawn.PlayAnimOnly('DoorStAlBgl');
 		FinishAnim();
@@ -6548,7 +6654,7 @@ JmpLockedRt:
 //	Goto('EndState');
 
 	// Joshua - Adding Pandora animations for door interactions
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 	{
 		ePawn.PlayAnimOnly('DoorStAlBgr');
 		FinishAnim();
@@ -6574,9 +6680,9 @@ JmpUnLockedLt:
 //	Goto('EndState');
 
 	// Joshua - Adding Pandora animations for door interactions
-	if(m_AttackTarget != None && m_AttackTarget.GetStateName()=='s_Carried')
+	if (m_AttackTarget != None && m_AttackTarget.GetStateName()=='s_Carried')
 	{
-		if( !ePawn.bIsCrouched )
+		if (!ePawn.bIsCrouched)
 		{
 			ePawn.PlayAnimOnly('PT_CaryDoorStBgL');
 			FinishAnim();
@@ -6595,7 +6701,7 @@ JmpUnLockedLt:
 	}
 	else
 	{
-		if( !ePawn.bIsCrouched )
+		if (!ePawn.bIsCrouched)
 		{
 			ePawn.PlayAnimOnly('DoorStAlBgl');
 			FinishAnim();
@@ -6622,9 +6728,9 @@ JmpUnLockedRt:
 //	Goto('EndState');
 
 	// Joshua - Adding Pandora animations for door interactions
-	if(m_AttackTarget != None && m_AttackTarget.GetStateName()=='s_Carried')
+	if (m_AttackTarget != None && m_AttackTarget.GetStateName()=='s_Carried')
 	{
-		if( !ePawn.bIsCrouched )
+		if (!ePawn.bIsCrouched)
 		{
 			ePawn.PlayAnimOnly('PT_CaryDoorStBgR');
 			FinishAnim();
@@ -6643,7 +6749,7 @@ JmpUnLockedRt:
 	}
 	else
 	{
-		if( !ePawn.bIsCrouched )
+		if (!ePawn.bIsCrouched)
 		{
 			ePawn.PlayAnimOnly('DoorStAlBgr');
 			FinishAnim();
@@ -6665,7 +6771,7 @@ EndState:
 	JumpLabelPrivate = '';
 	FinishAnim();
 	// Joshua - Adding Pandora animations for door interactions
-	//if( ePawn.bIsCrouched )
+	//if (ePawn.bIsCrouched)
 	//	ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn);
 	// No FinishAnim to be able to start moving
 
@@ -6674,7 +6780,7 @@ EndState:
 	
 GetOut:
 	// Check if coming from first person
-	if( JumpLabel == 'BackToFirstPerson' )
+	if (JumpLabel == 'BackToFirstPerson')
 	{
 		JumpLabel = '';
 		//bInTransition = true;
@@ -6682,7 +6788,7 @@ GetOut:
 		GotoState('s_FirstPersonTargeting');
 	}
 	// Joshua - PT carry interaction
-	else if(m_AttackTarget != None && m_AttackTarget.GetStateName()=='s_Carried')
+	else if (m_AttackTarget != None && m_AttackTarget.GetStateName()=='s_Carried')
 	{
 		GotoState('s_Carry','OpenDoorBack');
 	}
@@ -6705,7 +6811,7 @@ state s_OpenDoorStealth extends s_OpenDoor
 	// No call to parent in case we want to finish opening door.
 	function EndState()
 	{
-		if(m_SMInTrans)
+		if (m_SMInTrans)
 		{
 			m_camera.StopFixeTarget();
 			bInTransition = false;
@@ -6734,25 +6840,25 @@ state s_OpenDoorStealth extends s_OpenDoor
 
 	function NotifyAction()
 	{
-		if( !m_GrabTargeting )
+		if (!m_GrabTargeting)
 			Super.NotifyAction();
 	}
 
-	function PlayerMove( float DeltaTime )
+	function PlayerMove(float DeltaTime)
 	{
-		if( bInTransition ) return;
+		if (bInTransition) return;
 
 		// Pushing forward open door
-		if( aForward == 0 )
+		if (aForward == 0)
 		{
 			Interaction.KeyEvent("Neutral", IST_Hold, 1);
 		}
-		else if( aForward > eGame.m_fullForce )
+		else if (aForward > eGame.m_fullForce)
 		{
 			Interaction.KeyEvent("Forward", IST_Press, 1);
 		}
 		// Pushing back close door
-		else if( aForward < -eGame.m_fullForce )
+		else if (aForward < -eGame.m_fullForce)
 		{
 			Interaction.KeyEvent("Backward", IST_Press, 1);
 		}
@@ -6760,7 +6866,7 @@ state s_OpenDoorStealth extends s_OpenDoor
 
 BeginStealth:
 	bInTransition = true;
-	Interaction.SetInteractLocation( EPawn );
+	Interaction.SetInteractLocation(EPawn);
 	ePawn.SetPhysics(PHYS_Linear);
 	ePawn.PlayMoveTo(Rotation);
 	MoveToDestination(300, true);
@@ -6769,20 +6875,20 @@ BeginStealth:
 	ePawn.bWantsToCrouch = false;
 
 	// Play turn on Door
-	if( m_BTWSide )
+	if (m_BTWSide)
 		ePawn.PlayAnimOnly('doorstpkbgr',,0.2);
 	else
 		ePawn.PlayAnimOnly('doorstpkbgl',,0.2);
 	
 	// Finish turn
 	FinishAnim();
-	if( m_BTWSide )
+	if (m_BTWSide)
 		m_camera.SetMode(ECM_DoorPeekRight);
 	else
 		m_camera.SetMode(ECM_DoorPeekLeft);
 
 	// Loop wait on door
-	if( m_BTWSide )
+	if (m_BTWSide)
 		ePawn.LoopAnimOnly('doorstpkntr');
 	else
 		ePawn.LoopAnimOnly('doorstpkntl');
@@ -6795,13 +6901,13 @@ OpenDoor:
 	bIntransition = true;
 	m_SMInTrans = true;
 	m_camera.SetMode(ECM_Walking);
-	m_camera.SetFixeTarget(ePawn.ToWorld(2*ePawn.CollisionRadius*Vect(1,0,0)), (2*ePawn.CollisionRadius) / ePawn.GetAnimTime('doorstpkedr'));
-	if( m_BTWSide )
+	m_camera.SetFixeTarget(ePawn.ToWorld(2 * ePawn.CollisionRadius * Vect(1,0,0)), (2 * ePawn.CollisionRadius) / ePawn.GetAnimTime('doorstpkedr'));
+	if (m_BTWSide)
 		ePawn.PlayAnimOnly('doorstpkedr',,,);
 	else
 		ePawn.PlayAnimOnly('doorstpkedl',,,);
 	FinishAnim();
-	ePawn.SetLocation(ePawn.ToWorld(2*ePawn.CollisionRadius*Vect(1,0,0)));
+	ePawn.SetLocation(ePawn.ToWorld(2 * ePawn.CollisionRadius * Vect(1,0,0)));
 	ePawn.PlayAnimOnly(ePawn.AWait);
 	m_camera.StopFixeTarget();
 	m_SMInTrans = false;
@@ -6814,7 +6920,7 @@ InterruptOpening:
 	bIntransition = true;
 	m_camera.StopFixeTarget();
 	m_camera.SetMode(ECM_Walking);
-	if( m_BTWSide )
+	if (m_BTWSide)
 		ePawn.PlayAnimOnly('doorstpkedr',,,true,true);
 	else
 		ePawn.PlayAnimOnly('doorstpkedl',,,true,true);
@@ -6827,7 +6933,7 @@ InterruptStealth:
 CloseDoor:
 	bInTransition = true;
 	m_camera.SetMode(ECM_Walking);
-	if( m_BTWSide )
+	if (m_BTWSide)
 		ePawn.PlayAnimOnly('doorstpkbgr',,0.05, true, m_GrabTargeting);
 	else
 		ePawn.PlayAnimOnly('doorstpkbgl',,0.05, true, m_GrabTargeting);
@@ -6864,7 +6970,7 @@ Low:
 
 Trap:
 	MoveToDestination(200, true);
-	if( !ePawn.bIsCrouched )
+	if (!ePawn.bIsCrouched)
 		ePawn.PlayAnimOnly('trapstalup0', ,0.1);
 	else
 		ePawn.PlayAnimOnly('trapcralup0', ,0.1);
@@ -6884,7 +6990,7 @@ state s_BreakObject
 
 	function BeginState()
 	{
-		if( m_targetObject == None )
+		if (m_targetObject == None)
 			GotoState('s_PlayerWalking');
 		KillPawnSpeed();
 	}
@@ -6895,7 +7001,7 @@ state s_BreakObject
 		JumpLabelPrivate = '';
 	}
 
-	function PlayerMove( float DeltaTime )
+	function PlayerMove(float DeltaTime)
 	{
 		PawnLookAt();
 	}
@@ -6923,7 +7029,7 @@ state s_ShortRangeAttack extends s_BreakObject
 		Super.BeginState();
 	}
 
-	function PlayerMove( float DeltaTime )
+	function PlayerMove(float DeltaTime)
 	{
 		ePawn.RotateTowardsRotator(Rotator(m_AttackTarget.Location - ePawn.Location));
 		m_AttackTarget.Velocity = vect(0,0,0);
@@ -6938,16 +7044,16 @@ state s_ShortRangeAttack extends s_BreakObject
 		local bool AttackingSomething;
 		normal = Vector(ePawn.Rotation);
 
-		if ( EAIController(m_AttackTarget.Controller) != None )
+		if (EAIController(m_AttackTarget.Controller) != None)
 			AttackingSomething = ((EAIController(m_AttackTarget.Controller).m_pGoalList.GetCurrent().m_GoalType == GOAL_Attack) && ((EAIController(m_AttackTarget.Controller).m_pGoalList.GetCurrent().GoalTarget) != (EchelonGameInfo(Level.Game).pPlayer.Pawn)));
 		else
 			AttackingSomething = false;
 
 		// Check JumpLabelPrivate for front/back attack
-		if( JumpLabelPrivate == 'front' && m_AttackTarget.bHostile && !EAIPawn(m_AttackTarget).AI.Pattern.IsInState('Hide') && !AttackingSomething )
-			m_AttackTarget.TakeDamage(m_AttackTarget.InitialHealth/2, ePawn, m_AttackTarget.Location, -normal, normal, class'EKnocked');
+		if (JumpLabelPrivate == 'front' && m_AttackTarget.bHostile && !EAIPawn(m_AttackTarget).AI.Pattern.IsInState('Hide') && !AttackingSomething)
+			m_AttackTarget.TakeDamage(m_AttackTarget.InitialHealth / 2, ePawn, m_AttackTarget.Location, -normal, normal, class'EKnocked');
 		else
-			m_AttackTarget.TakeDamage(m_AttackTarget.InitialHealth/2, ePawn, m_AttackTarget.Location, -normal, normal, class'EKnocked', EPawn.P_Head);
+			m_AttackTarget.TakeDamage(m_AttackTarget.InitialHealth / 2, ePawn, m_AttackTarget.Location, -normal, normal, class'EKnocked', EPawn.P_Head);
 	}
 }
 
@@ -6968,7 +7074,7 @@ state s_PlayerBTWBase
 
 	function ProcessBackToWall()
 	{
-		if(!bIntransition && CheckBTWRelease())
+		if (!bIntransition && CheckBTWRelease())
 		{
 			JumpLabel = '';
 			GotoState(, 'Release');
@@ -6977,7 +7083,7 @@ state s_PlayerBTWBase
 	
 	function ProcessScope()
 	{
-		if(!bIntransition && CheckBTWRelease() && ActiveGun != None)
+		if (!bIntransition && CheckBTWRelease() && ActiveGun != None)
 		{
 			JumpLabel = 'Scope';
 			GotoState(, 'Release');
@@ -6993,11 +7099,11 @@ function StickBTW()
 		horiNorm.Z = 0;
 	horiNorm = Normal(horiNorm);
 
-	if(!ePawn.m_LegdePushing && (horiNorm dot Vector(ePawn.Rotation)) > 0.0)
+	if (!ePawn.m_LegdePushing && (horiNorm dot Vector(ePawn.Rotation)) > 0.0)
 	{
 		ePawn.bBatmanHack = false;
 		ePawn.SetRotation(InterpolateRotator(0.5, Rotator(horiNorm), ePawn.Rotation));
-		ePawn.Move(-horiNorm*0.1);
+		ePawn.Move(-horiNorm * 0.1);
 		ePawn.Move(horiNorm);
 		ePawn.bBatmanHack = true;
 	}
@@ -7011,23 +7117,23 @@ state s_PlayerBTW extends s_PlayerBTWBase
     {
 		StickBTW();
 
-		if(bIntransition || CheckForCrouchBTW())
+		if (bIntransition || CheckForCrouchBTW())
 			return;
 
-		if(!CheckBTW() && CheckBTWRelease())
+		if (!CheckBTW() && CheckBTWRelease())
 		{
 			GotoState(, 'Release');
 		}
-		else if(Abs(aStrafe) > eGame.m_gentleForce)
+		else if (Abs(aStrafe) > eGame.m_gentleForce)
 		{
-			if(aStrafe > eGame.m_gentleForce)
+			if (aStrafe > eGame.m_gentleForce)
 				m_BTWSide = true;
 			else
 				m_BTWSide = false;
 
-			if(CheckBTWEyes() > 0)
+			if (CheckBTWEyes() > 0)
 				GotoState('s_PlayerBTWPeek');
-			else if(CheckBTWSide())
+			else if (CheckBTWSide())
 				GotoState('s_PlayerBTWMove');
 		}
 		else
@@ -7048,19 +7154,19 @@ ToggleCrouch:
 Release:
 	bIntransition = true;
 	SetBTWCamera(ECM_WalkingCr, ECM_WalkingCr, ECM_Walking, ECM_Walking);
-	if(JumpLabel == 'Scope')
+	if (JumpLabel == 'Scope')
 		ePawn.PlayBTW('BackCrAlEd0', '', 'BackStAlEd0', '', false, 1.5, 0.0);
 	else
 		ePawn.PlayBTW('BackCrAlEd0', '', 'BackStAlEd0', '', false, 1.0, 0.0);
 	FinishAnim(0);
 	ePawn.SetRotation(ePawn.Rotation + rot(0, 32768, 0));
 	FlipCameraLocalTarget();
-	if(ePawn.bIsCrouched)
+	if (ePawn.bIsCrouched)
 		ePawn.PlayAnimOnly(ePawn.AWaitCrouch);
 	else
 		ePawn.PlayAnimOnly(ePawn.AWait);
 	bIntransition = false;
-	if(JumpLabel == 'Scope')
+	if (JumpLabel == 'Scope')
 		OnGroundScope();
 	else
 		GotoState('s_PlayerWalking');
@@ -7103,26 +7209,26 @@ state s_PlayerBTWMove extends s_PlayerBTWBase
     {
 		StickBTW();
 
-		if(ePawn.bIsCrouched)
+		if (ePawn.bIsCrouched)
 			ePawn.GroundSpeed = m_speedBTWCr;
 		else
 			ePawn.GroundSpeed = m_speedBTW;
 
-		if(bIntransition)
+		if (bIntransition)
 		{
-			if(CheckBTWEyes() > 0)
+			if (CheckBTWEyes() > 0)
 				KillPawnSpeed();
 			return;
 		}
 
-		if(CheckForCrouchBTW())
+		if (CheckForCrouchBTW())
 			return;
 
-		if(!CheckBTW() && CheckBTWRelease())
+		if (!CheckBTW() && CheckBTWRelease())
 		{
 			GotoState(, 'Release');
 		}
-		else if( (m_BTWSide && (aStrafe < -eGame.m_gentleForce)) ||
+		else if ((m_BTWSide && (aStrafe < -eGame.m_gentleForce)) ||
 				(!m_BTWSide && (aStrafe > eGame.m_gentleForce)))
 		{
 			m_BTWSide = !m_BTWSide;
@@ -7130,19 +7236,19 @@ state s_PlayerBTWMove extends s_PlayerBTWBase
 			SetBTWAcceleration(0.2);
 			ePawn.PlayBTW('BackCrAlFdL', 'BackCrAlFdR', 'BackStAlFdL', 'BackStAlFdR', m_BTWSide, 1.0, 0.4);
 		}
-		else if(((Abs(aStrafe) < eGame.m_gentleForce) && (VSize(ePawn.Velocity) == 0.0)) ||
+		else if (((Abs(aStrafe) < eGame.m_gentleForce) && (VSize(ePawn.Velocity) == 0.0)) ||
 				!CheckBTWSide())
 		{
 			GotoState(, 'GoBack');
 		}
-		else if(CheckBTWEyes() > 0)
+		else if (CheckBTWEyes() > 0)
 		{
 			KillPawnSpeed();
 			GotoState('s_PlayerBTWPeek');
 		}
 		else
 		{
-			if(Abs(aStrafe) < eGame.m_gentleForce)
+			if (Abs(aStrafe) < eGame.m_gentleForce)
 				SetBTWAcceleration(0.0);
 			else
 				SetBTWAcceleration(1.0);
@@ -7160,19 +7266,19 @@ Release:
 	bIntransition = true;
 	SetBTWCamera(ECM_WalkingCr, ECM_WalkingCr, ECM_Walking, ECM_Walking);
 	SetBTWAcceleration(0.0);
-	if(JumpLabel == 'Scope')
+	if (JumpLabel == 'Scope')
 		ePawn.PlayBTW('BackCrAlOfL', 'BackCrAlOfR', 'BackStAlOfL', 'BackStAlOfR', m_BTWSide, 1.5, 0.1);
 	else
 		ePawn.PlayBTW('BackCrAlOfL', 'BackCrAlOfR', 'BackStAlOfL', 'BackStAlOfR', m_BTWSide, 1.0, 0.1);
 	FinishAnim(0);
 	ePawn.SetRotation(ePawn.Rotation + rot(0, 32768, 0));
 	FlipCameraLocalTarget();
-	if(ePawn.bIsCrouched)
+	if (ePawn.bIsCrouched)
 		ePawn.PlayAnimOnly(ePawn.AWaitCrouch);
 	else
 		ePawn.PlayAnimOnly(ePawn.AWait);
 	bIntransition = false;
-	if(JumpLabel == 'Scope')
+	if (JumpLabel == 'Scope')
 		OnGroundScope();
 	else
 		GotoState('s_PlayerWalking');
@@ -7191,7 +7297,7 @@ state s_PlayerBTWPeek extends s_PlayerBTWBase
 {
 	function ProcessScope()
 	{
-		if( CheckBTWEyes() == 2 && CheckBTWRelease() && HandGun != None )
+		if (CheckBTWEyes() == 2 && CheckBTWRelease() && HandGun != None)
 			GotoState('s_PlayerBTWTargeting', 'Entering');
 	}
 
@@ -7205,17 +7311,17 @@ state s_PlayerBTWPeek extends s_PlayerBTWBase
 
     function PlayerMove(float deltaTime)
     {
-		if(bIntransition)
+		if (bIntransition)
 			return;
 
-		if(CheckForCrouchBTW())
+		if (CheckForCrouchBTW())
 			return;
 
-		if(!CheckBTW() && CheckBTWRelease())
+		if (!CheckBTW() && CheckBTWRelease())
 		{
 			GotoState(, 'Release');
 		}
-		else if((m_BTWSide && (aStrafe < eGame.m_gentleForce)) ||
+		else if ((m_BTWSide && (aStrafe < eGame.m_gentleForce)) ||
 				(!m_BTWSide && (aStrafe > -eGame.m_gentleForce)))
 		{
 			m_camera.SetMode(ECM_BTW);
@@ -7284,13 +7390,13 @@ state s_PlayerBTWTargeting extends s_PlayerBTWBase
 		Super.EndState();
 
 		// If gun is still in hands, remove view
-		if( EMainHUD(myHud).hud_master == ActiveGun )
+		if (EMainHUD(myHud).hud_master == ActiveGun)
 			EMainHUD(myHud).NormalView();
 	}
 
 	function ProcessScope()
 	{
-		if( !bIntransition && !bInGunTransition )
+		if (!bIntransition && !bInGunTransition)
 			GotoState(, 'GoBack');
 	}
 
@@ -7306,25 +7412,25 @@ state s_PlayerBTWTargeting extends s_PlayerBTWBase
 
     function PlayerMove(float deltaTime)
     {
-		if(!m_SMInTrans && !bInGunTransition)
+		if (!m_SMInTrans && !bInGunTransition)
 		{
-			if(m_BTWSide)
+			if (m_BTWSide)
 				ePawn.AimAt(AABTW, Normal(m_targetLocation - Location), Vector(ePawn.Rotation), -65, 10, -70, 70);
 			else
 				ePawn.AimAt(AAHOH, Normal(m_targetLocation - Location), Vector(ePawn.Rotation), -10, 65, -70, 70);
 		}
 
-		if(bIntransition || bInGunTransition || CheckForCrouchBTW())
+		if (bIntransition || bInGunTransition || CheckForCrouchBTW())
 			return;
 
-		if(!CheckBTW() && CheckBTWRelease())
+		if (!CheckBTW() && CheckBTWRelease())
 		{
 			JumpLabelPrivate = 'Release';
 			ProcessScope();
 		}
-		if(!bToggleBTWTargeting) // Joshua - Toggle BTW targetting
+		if (!bToggleBTWTargeting) // Joshua - Toggle BTW targetting
 		{
-			if((m_BTWSide && (aStrafe < eGame.m_gentleForce)) ||
+			if ((m_BTWSide && (aStrafe < eGame.m_gentleForce)) ||
 					(!m_BTWSide && (aStrafe > -eGame.m_gentleForce)) ||
 					(CheckBTWEyes() < 2))
 			{
@@ -7339,16 +7445,16 @@ state s_PlayerBTWTargeting extends s_PlayerBTWBase
 
 	function name GetWeaponAnimation()
 	{
-		if( ePawn.bIsCrouched )
+		if (ePawn.bIsCrouched)
 		{
-			if( m_BTWSide )
+			if (m_BTWSide)
 				return 'BackCrSpBgR';
 			else
 				return 'BackCrSpBgL';
 		}
 		else
 		{
-			if( m_BTWSide )
+			if (m_BTWSide)
 				return 'BackStSpBgR';
 			else
 				return 'BackStSpBgL';
@@ -7364,7 +7470,7 @@ state s_PlayerBTWTargeting extends s_PlayerBTWBase
 	{
 		playerStats.AddStat("BulletFired");
 		Level.RumbleVibrate(0.07, 0.75);
-		if(m_BTWSide)
+		if (m_BTWSide)
 			ePawn.BlendAnimOverCurrent('BackStSpFrR', 1, ePawn.UpperBodyBoneName);
 		else
 			ePawn.BlendAnimOverCurrent('BackStSpFrL', 1, ePawn.UpperBodyBoneName);
@@ -7378,11 +7484,11 @@ state s_PlayerBTWTargeting extends s_PlayerBTWBase
 	}
 
 	// Joshua - Make sure we don't lose weapon while using it
-	function NotifyLostInventoryItem( EInventoryItem Item )
+	function NotifyLostInventoryItem(EInventoryItem Item)
 	{
 		// Force release fire
 		bFire = 0;
-		if( Item != None && Item == ePawn.HandItem )
+		if (Item != None && Item == ePawn.HandItem)
 			ProcessScope();
 		// Reset things
 		Global.NotifyLostInventoryItem(Item);
@@ -7424,23 +7530,23 @@ native(1170) final function bool CheckForCrouchBTW();
 
 function SetBTWAcceleration(float alpha)
 {
-	if(!m_BTWSide)
+	if (!m_BTWSide)
 		alpha = -alpha;
 	ePawn.Acceleration = ePawn.ToWorldDir(vect(0, 1, 0)) * eGame.m_onGroundAccel * alpha;
 }
 
 function SetBTWCamera(ECamMode camModeCrL, ECamMode camModeCrR, ECamMode camModeStL, ECamMode camModeStR)
 {
-	if(ePawn.bIsCrouched)
+	if (ePawn.bIsCrouched)
 	{
-		if(m_BTWSide)
+		if (m_BTWSide)
 			m_camera.SetMode(camModeCrR);
 		else
 			m_camera.SetMode(camModeCrL);
 	}
 	else
 	{
-		if(m_BTWSide)
+		if (m_BTWSide)
 			m_camera.SetMode(camModeStR);
 		else
 			m_camera.SetMode(camModeStL);
@@ -7451,7 +7557,7 @@ native(1167) final function bool CheckBTWRelease();
 native(1168) final function int CheckBTWEyes();
 native(1169) final function bool CheckBTWSide();
 
-function int CheckRappellingFeet( out actor HitActor, out vector HitLocation, out vector HitNormal )
+function int CheckRappellingFeet(out actor HitActor, out vector HitLocation, out vector HitNormal)
 {
 	local Vector	X,Y,Z, traceStart, traceEnd;
 
@@ -7462,9 +7568,9 @@ function int CheckRappellingFeet( out actor HitActor, out vector HitLocation, ou
 	traceEnd    = traceStart + 25.0 * X;
 
 	hitActor = ePawn.Trace(HitLocation, HitNormal, TraceEnd, TraceStart);
-	if( HitActor == None )
+	if (HitActor == None)
 		return 0;
-	else if( HitActor.IsA('EBreakableGlass') )
+	else if (HitActor.IsA('EBreakableGlass'))
 		return 1;
 	else
 		return 2;
@@ -7489,7 +7595,7 @@ state s_Rappelling
 	{
 		ePawn.bKeepNPCAlive = false;
 		RapelRopeType = 0;
-		if(bInTransition)
+		if (bInTransition)
 			m_camera.StopFixeTarget();
 	}
 
@@ -7498,27 +7604,27 @@ state s_Rappelling
 		turnMul = m_turnMul;
 	}
 
-	function PlayerMove( float DeltaTime )
+	function PlayerMove(float DeltaTime)
 	{
 		local vector NewAccel;
 
 		PawnLookAt();
 
-		if( bIntransition || bInGunTransition )
+		if (bIntransition || bInGunTransition)
 			return;
 
 		ePawn.SetPhysics(PHYS_Linear);
 
 		// Do pulsed jump
-		if( bPressedJump )
+		if (bPressedJump)
 		{
 			GotoState('s_RappellingFall');
 			return;
 		}
 
-		if( aForward != 0 )
+		if (aForward != 0)
 		{
-			NewAccel = aForward/Abs(aForward) * 50.0 * Vect(0,0,1);
+			NewAccel = aForward / Abs(aForward) * 50.0 * Vect(0,0,1);
 
 			ePawn.m_locationStart	= ePawn.Location;
 			ePawn.m_locationEnd		= ePawn.ToWorld(NewAccel);
@@ -7526,13 +7632,13 @@ state s_Rappelling
 			ePawn.m_orientationEnd	= ePawn.Rotation;
 
 			// If there is no wall in front of top cylinder, don't move up
-			if( AForward > 0 )
+			if (AForward > 0)
 			{
 				// Check to see if under ledge
-				if( IsUnderLedge() )
+				if (IsUnderLedge())
 				{
 					// If something under his feet
-					if( HasObjectInFront() )
+					if (HasObjectInFront())
 						ePawn.LoopAnimOnly('raplstaldn0',,0.1, true, true);
 					else
 					{
@@ -7551,7 +7657,7 @@ state s_Rappelling
 			else
 			{
 				// Make sure rappelling height is respected. m_Elongation is in World coordinate.
-				if( HasObjectInFront(true) && ePawn.Location.z > m_Elongation )
+				if (HasObjectInFront(true) && ePawn.Location.Z > m_Elongation)
 					ePawn.LoopAnimOnly('raplstaldn0',,0.1,, true);
 				else
 				{
@@ -7573,18 +7679,18 @@ state s_Rappelling
 	function bool IsUnderLedge()
 	{
 		local vector CylinderHighPoint;
-		CylinderHighPoint = ePawn.ToWorld(ePawn.CollisionHeight*Vect(0,0,1));
-		return CylinderHighPoint.z < m_HoistStOffset.Z;
+		CylinderHighPoint = ePawn.ToWorld(ePawn.CollisionHeight * Vect(0,0,1));
+		return CylinderHighPoint.Z < m_HoistStOffset.Z;
 	}
 
-	function bool HasObjectInFront( optional bool bMovingDown )
+	function bool HasObjectInFront(optional bool bMovingDown)
 	{
 		local vector HitLocation, HitNormal, TraceStart1, TraceStart2, TraceEnd1, TraceEnd2, X,Y,Z;
 		GetAxes(ePawn.Rotation,X,Y,Z);
 
 		TraceStart1  = ePawn.Location;
 		TraceStart1 += ePawn.CollisionRadius * X;
-		if( bMovingDown )
+		if (bMovingDown)
 		{
 			TraceStart1 -= ePawn.CollisionHeight * 0.5f * Z;
 			TraceStart2  = TraceStart1 - 20.0 * Z;
@@ -7609,9 +7715,9 @@ state s_Rappelling
 		return !bInGunTransition;
 	}
 
-	function bool CanAddInteract( EInteractObject IntObj )
+	function bool CanAddInteract(EInteractObject IntObj)
 	{
-		if( IntObj.class.name == 'EWindowInteraction' )
+		if (IntObj.class.name == 'EWindowInteraction')
 			return true;
 	}
 
@@ -7622,15 +7728,15 @@ state s_Rappelling
 
 	event NotifyAction()
 	{
-		if( Interaction != None )
+		if (Interaction != None)
 			Interaction.Interact(self);
-		if(bInGunTransition)
+		if (bInGunTransition)
 			RapelRopeType = 1;
 	}
 
 	function ProcessScope()
 	{
-		if( bInTransition || bInGunTransition || ActiveGun == None )
+		if (bInTransition || bInGunTransition || ActiveGun == None)
 			return;
 		bInGunTransition = true;
 		GotoState('s_RappellingTargeting');
@@ -7701,7 +7807,7 @@ OverEdge:
 OpenWindow:
 	bIntransition = true;
 	ePawn.Acceleration = Vect(0,0,0);
-	epawn.PlayAnimOnly('raplStAlOp0',,0.1);
+	ePawn.PlayAnimOnly('raplStAlOp0',,0.1);
 	FinishAnim();
 	Goto('Begin');
 
@@ -7712,7 +7818,7 @@ EnterWindow:
 	ePawn.m_locationEnd = ePawn.ToWorld(Vect(40.4f, 0, 78.1f));
 	m_camera.SetFixeTarget(ePawn.m_locationEnd, VSize(ePawn.m_locationEnd - ePawn.Location) / ePawn.GetAnimTime('raplstalbg0'));
 
-	epawn.PlayAnimOnly('raplstalin0',,0.1);
+	ePawn.PlayAnimOnly('raplstalin0',,0.1);
 	FinishAnim();
 	
 	ePawn.SetLocation(ePawn.m_locationEnd);
@@ -7744,7 +7850,7 @@ state s_RappellingTargeting
 		ePawn.SoundWalkingRatio = 0;
 		ePawn.Acceleration = Vect(0,0,0);
 
-		if( !bInTransition )
+		if (!bInTransition)
 			DrawWeapon();
 	}
 
@@ -7755,26 +7861,26 @@ state s_RappellingTargeting
 
 		EMainHUD(myHud).NormalView();
 
-		if( !bInTransition )
+		if (!bInTransition)
 			SheathWeapon();
 	}
 
 	function ProcessScope()
 	{
-		if( !bInTransition && !bInGunTransition )
+		if (!bInTransition && !bInGunTransition)
 			GoToState(,'PutGunBack');
 	}
 
-	function ProcessHeadSet( float i )
+	function ProcessHeadSet(float i)
 	{
-		if( bInTransition ) 
+		if (bInTransition) 
 			return;
 		Global.ProcessHeadSet(i);
 	}
 
 	function UsePalm()
 	{
-		if( !bInTransition && !bInGunTransition )
+		if (!bInTransition && !bInGunTransition)
 			GotoState(,'BeginUsingPalm');
 	}
 	// Called from AirCamera for both split and rapel targeting)
@@ -7796,9 +7902,9 @@ state s_RappellingTargeting
 		m_camera.SetMode(ECM_RapelFP);
 	}
 
-	function PlayerMove( float DeltaTime )
+	function PlayerMove(float DeltaTime)
 	{
-		if( bIntransition )
+		if (bIntransition)
 			return;
 
 		ePawn.LoopAnimOnly(StateWaitLoopingAnim(),,0.2);
@@ -7808,7 +7914,7 @@ state s_RappellingTargeting
 		// Check under feet
 		CheckFeet();
 
-		if( bPressSnip && ActiveGun == MainGun && !bInGunTransition )
+		if (bPressSnip && ActiveGun == MainGun && !bInGunTransition)
 		{
 			bPressSnip = false;
 			bInTransition = true;
@@ -7821,13 +7927,13 @@ state s_RappellingTargeting
 		local actor HitActor;
 		local vector HitLocation, HitNormal;
 
-		if( CheckRappellingFeet(HitActor, HitLocation, HitNormal) == 0 )
+		if (CheckRappellingFeet(HitActor, HitLocation, HitNormal) == 0)
 			GotoState(,'WindowBrokeUnderMyFeet');
 	}
 
 	function name GetWeaponAnimation()
 	{
-		if( ActiveGun.IsA('EOneHandedWeapon') )
+		if (ActiveGun.IsA('EOneHandedWeapon'))
 			return 'RaplStSpBg1';
 		else
 			return 'RaplStSpBg2';
@@ -7843,7 +7949,7 @@ state s_RappellingTargeting
 		return true;
 	}
 
-	function bool CanSwitchToHandItem( EInventoryItem Item )
+	function bool CanSwitchToHandItem(EInventoryItem Item)
 	{
 		return Item.IsA('ESecondaryAmmo');
 	}
@@ -7860,7 +7966,7 @@ state s_RappellingTargeting
 
 	function NotifyFiring()
 	{
-		if( ePawn.WeaponStance == 1 )
+		if (ePawn.WeaponStance == 1)
 		{
 			playerStats.AddStat("BulletFired");
 			Level.RumbleVibrate(0.07, 0.75);
@@ -7898,7 +8004,7 @@ WindowBrokeUnderMyFeet:
 
 Begin:
 	// will not happen from Sniper mode
-	if( !bInTransition )
+	if (!bInTransition)
 	{
 		RapelRopeType = 1;
 		ePawn.AddSoundRequest(Sound'FisherFoley.Play_RappelSecure', SLOT_SFX, 0.25f);
@@ -7940,7 +8046,7 @@ state s_RappellingSniping extends s_PlayerSniping
 
 	function ProcessScope()
 	{
-		if( bInTransition || bInGunTransition )
+		if (bInTransition || bInGunTransition)
 			return;
 		JumpLabelPrivate = 'PutGunBack';
 		GotoState(,'BackToFirstPerson');
@@ -7959,16 +8065,16 @@ state s_RappellingSniping extends s_PlayerSniping
 		GotoState(,'Reload');
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
 		// Prevents glitch when coming back in targeting mode
 		ePawn.AimAt(AAFULL, Vector(Rotation), Vector(ePawn.Rotation), -90, 90, -90, 90);
 
 		CheckFeet();
 
-		if( bPressSnip &&			// Go into sniper mode
+		if (bPressSnip &&			// Go into sniper mode
 			!bInGunTransition &&	// No drawing or sheating gun
-			JumpLabelPrivate == '' )// Scope wasn't just pushed
+			JumpLabelPrivate == '')// Scope wasn't just pushed
 		{
 			bPressSnip = false;
 			bInTransition = true;
@@ -7981,7 +8087,7 @@ state s_RappellingSniping extends s_PlayerSniping
 		local actor HitActor;
 		local vector HitLocation, HitNormal;
 
-		if( CheckRappellingFeet(HitActor, HitLocation, HitNormal) == 0 )
+		if (CheckRappellingFeet(HitActor, HitLocation, HitNormal) == 0)
 		{
 			JumpLabelPrivate = 'WindowBrokeUnderMyFeet';
 			GotoState(,'BackToFirstPerson');
@@ -8015,11 +8121,11 @@ state s_RappellingFall
 		local actor HitActor;
 		local vector HitLocation, HitNormal;
 
-		switch( CheckRappellingFeet(HitActor, HitLocation, HitNormal) )
+		switch (CheckRappellingFeet(HitActor, HitLocation, HitNormal))
 		{
 		// Hitting glass
 		case 1:
-			HitActor.TakeDamage(0, ePawn, HitLocation, HitNormal, HitLocation-ePawn.Location, None, 69);
+			HitActor.TakeDamage(0, ePawn, HitLocation, HitNormal, HitLocation - ePawn.Location, None, 69);
 		// Going through
 		case 0:
 			GotoState(,'ThroughWindow');
@@ -8031,31 +8137,31 @@ state s_RappellingFall
 		}
 	}
 
-	function PlayerMove( float DeltaTime )
+	function PlayerMove(float DeltaTime)
 	{
-		if( bInTransition )
+		if (bInTransition)
 			return;
 		
-		if( m_LPStartTime != -1 && Level.TimeSeconds - m_LPStartTime > 0.2f )
+		if (m_LPStartTime != -1 && Level.TimeSeconds - m_LPStartTime > 0.2f)
 			CheckWallLand();
 
 		// Jump almost horizontal if not holding down
-		if( AForward == 0 )
-			epawn.velocity.Z = 0;
+		if (AForward == 0)
+			ePawn.Velocity.Z = 0;
 
 		// Kill speed while doing the jump cycle
-		if( ePawn.Location.z <= m_Elongation )
+		if (ePawn.Location.Z <= m_Elongation)
 			KillPawnSpeed();
 	}
 
-	function AnimEnd( int Channel )
+	function AnimEnd(int Channel)
 	{
 		// If the ending anim is the jump air one
 		// If not pushing down to do a longer jump
-		if( Channel == 0 && !bInTransition )
+		if (Channel == 0 && !bInTransition)
 		{
 			// When cycle finishes, abort if height is limited or player not pushing down
-			if( AForward >= 0 || ePawn.Location.z <= m_Elongation )
+			if (AForward >= 0 || ePawn.Location.Z <= m_Elongation)
 				CheckWallLand();
 
 			// Begin fall timer
@@ -8067,7 +8173,7 @@ state s_RappellingFall
 
 	event bool NotifyLanded(vector HitNormal, Actor HitActor)
 	{
-		if( HitActor != None && !HitActor.bIsMover )
+		if (HitActor != None && !HitActor.bIsMover)
 			GotoState(,'Land');
 		return true;
 	}
@@ -8079,7 +8185,7 @@ begin:
 	FinishAnim();
 
 	ePawn.PlaySound(Sound'FisherFoley.Play_RappelSlide', SLOT_SFX);
-	if( ePawn.Location.z > m_Elongation )
+	if (ePawn.Location.Z > m_Elongation)
 		ePawn.SetPhysics(PHYS_Falling);
 	ePawn.PlayAnimOnly('raplstaljc0');
 	bInTransition = false;
@@ -8127,7 +8233,7 @@ state s_Split
 
 	function EndState()
 	{
-		if(bInTransition)
+		if (bInTransition)
 			m_camera.StopFixeTarget();
 		ePawn.SetCollisionSize(ePawn.CollisionRadius, ePawn.Default.CollisionHeight);
 	}
@@ -8149,7 +8255,7 @@ state s_Split
 
 	function ProcessScope()
 	{
-		if( bInTransition || bInGunTransition || ActiveGun == None )
+		if (bInTransition || bInGunTransition || ActiveGun == None)
 			return;
 		bInGunTransition = true;
 		GotoState('s_SplitTargeting');
@@ -8161,22 +8267,22 @@ state s_Split
 
 		PawnLookAt();
 
-		if(bInTransition)
+		if (bInTransition)
 		{
 			testPos = DampVec(ePawn.Location, ePawn.m_locationEnd, VSize(ePawn.m_locationEnd - ePawn.m_locationStart) / ePawn.GetAnimTime('spltstalbgr'), deltaTime);
-			if(ePawn.FastPointCheck(testPos, ePawn.GetExtent(), true, true))
+			if (ePawn.FastPointCheck(testPos, ePawn.GetExtent(), true, true))
 				ePawn.SetLocation(testPos);
 			else
 				GoToState('s_PlayerJumping');
 			return;
 		}
 
-		if(bPressedJump)
+		if (bPressedJump)
 		{
 			testExt.X = ePawn.CollisionRadius;
 			testExt.Y = ePawn.CollisionRadius;
 			testExt.Z = ePawn.default.CollisionHeight;
-			if(!ePawn.FastPointCheck(ePawn.Location, testExt, true, true, true))
+			if (!ePawn.FastPointCheck(ePawn.Location, testExt, true, true, true))
 			{
 				moveDir = vect(0,0,-1);
 				moveDir *= ePawn.CollisionHeight;
@@ -8194,7 +8300,7 @@ Split:
 	m_camera.SetFixeTarget(ePawn.m_locationEnd + vect(0,0,20.0), VSize(ePawn.m_locationEnd - ePawn.m_locationStart) / (ePawn.GetAnimTime('spltstalbgr') * 0.5));
 	KillPawnSpeed();
 	ePawn.SetPhysics(PHYS_None);
-	if(ePawn.m_climbingUpperHand == CHRIGHT)
+	if (ePawn.m_climbingUpperHand == CHRIGHT)
 		ePawn.PlayAnimOnly('spltstalbgr', , 0.1);
 	else
 		ePawn.PlayAnimOnly('spltstalbgl', , 0.1);
@@ -8223,7 +8329,7 @@ state s_SplitTargeting extends s_RappellingTargeting
 
 		EMainHUD(myHud).NormalView();
 
-		if( !bInTransition )
+		if (!bInTransition)
 			SheathWeapon();
 	}
 
@@ -8241,7 +8347,7 @@ state s_SplitTargeting extends s_RappellingTargeting
 
 	function name GetWeaponAnimation()
 	{
-		if( ActiveGun.IsA('EOneHandedWeapon') )
+		if (ActiveGun.IsA('EOneHandedWeapon'))
 			return 'SpltStSpBg1';
 		else
 			return 'SpltStSpBg2';
@@ -8254,7 +8360,7 @@ state s_SplitTargeting extends s_RappellingTargeting
 
 	function NotifyFiring()
 	{
-		if( ePawn.WeaponStance == 1 )
+		if (ePawn.WeaponStance == 1)
 		{
 			playerStats.AddStat("BulletFired");
 			Level.RumbleVibrate(0.07, 0.75);
@@ -8272,7 +8378,7 @@ PutGunBack:
 
 Begin:
 	// will not happen from Sniper mode
-	if( !bInTransition )
+	if (!bInTransition)
 		FinishAnim(EPawn.ACTIONCHANNEL);
 
 	SwitchCameraMode();
@@ -8328,7 +8434,7 @@ state s_Fence
     function EndState()
     {
 		ePawn.bKeepNPCAlive = false;
-		if(bInTransition)
+		if (bInTransition)
 		{
 			bInTransition = false;
 			m_camera.StopFixeTarget();
@@ -8340,7 +8446,7 @@ state s_Fence
 	event bool NotifyLanded(vector HitNormal, Actor HitActor)
 	{
 		// We got a floor so get out of the fence
-		if(!bInTransition)
+		if (!bInTransition)
 			GoToState(, 'OutBottom');
 		return true;
 	}
@@ -8349,19 +8455,19 @@ state s_Fence
 	{
 		local vector testOffset, testPos;
 
-		if(!bInTransition && aForward > eGame.m_gentleForce)
+		if (!bInTransition && aForward > eGame.m_gentleForce)
 		{
-			if(m_didCrossFence)
+			if (m_didCrossFence)
 			{
 				m_GECanGoForward = false;
 				return false;
 			}
 
-			if(ePawn.FastPointCheck(locationEnd, ePawn.GetExtent(), true, true))
+			if (ePawn.FastPointCheck(locationEnd, ePawn.GetExtent(), true, true))
 			{
 				testOffset.X = (ePawn.CollisionRadius * 2.0) + 4.0;
 				testPos = locationEnd + ePawn.ToWorldDir(testOffset);
-				if(ePawn.FastPointCheck(testPos, ePawn.GetExtent(), true, true))
+				if (ePawn.FastPointCheck(testPos, ePawn.GetExtent(), true, true))
 				{
 					GoToState(, 'OverTop');
 					return true;
@@ -8376,7 +8482,7 @@ state s_Fence
 		local vector HitLocation, HitNormal;
 
 		// We have a ledge in the arms zone.
-		if(	!bInTransition &&
+		if (!bInTransition &&
 			ePawn.Trace(HitLocation, HitNormal, locationEnd, ePawn.Location, true, ePawn.GetExtent(), , true) == None)
 		{
 			GoToState('s_GrabbingLedge', 'Above');
@@ -8389,9 +8495,9 @@ state s_Fence
     {
         local vector X,Y,Z, Xv,Yv,Zv, NewAccel;
 
-        if(bInTransition)
+        if (bInTransition)
 		{
-			if(m_SMInTrans && IsPushingFull() && ((m_EnterDir dot GetPushingDir()) < -0.7))
+			if (m_SMInTrans && IsPushingFull() && ((m_EnterDir dot GetPushingDir()) < -0.7))
 			{
 				m_SMInTrans = false;
 				GotoState(, 'OutFast');
@@ -8399,7 +8505,7 @@ state s_Fence
 			return;
 		}
 
-		if(m_didCrossFence && aForward < eGame.m_gentleForce)
+		if (m_didCrossFence && aForward < eGame.m_gentleForce)
 		{
 			m_GECanGoForward = true;
 			m_didCrossFence = false;
@@ -8412,36 +8518,36 @@ state s_Fence
 
 		Xv.Z = 0.0;
 
-		if(m_GECanGoForward)
+		if (m_GECanGoForward)
 			NewAccel = aForward * Z;
-		if((X dot Xv) > 0.0)
+		if ((X dot Xv) > 0.0)
 			NewAccel += aStrafe * Y;
 		else
 			NewAccel -= aStrafe * Y;
 		ePawn.Acceleration   = NewAccel;
 		ePawn.Acceleration *= eGame.m_onGroundAccel;
 
-		if(((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) || !ePawn.m_validFence)
+		if (((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) || !ePawn.m_validFence)
 		{
 			if (bCrouchDrop)
 				bDuck = 0;
 			ePawn.Velocity = X * -200.0;
-			if ( ePawn.Base.SurfaceType == SURFACE_FenceMetal )
+			if (ePawn.Base.SurfaceType == SURFACE_FenceMetal)
 				ePawn.PlaySound(Sound'FisherFoley.Play_Random_FisherFenceVib', SLOT_SFX);
-			else if ( ePawn.Base.SurfaceType == SURFACE_FenceVine )
+			else if (ePawn.Base.SurfaceType == SURFACE_FenceVine)
 				ePawn.PlaySound(Sound'FisherFoley.Play_Random_VineVibration', SLOT_SFX);
 			ePawn.MakeNoise(500.0, NOISE_HeavyFootstep);
 			JumpRelease();
 			return;
 		}
-		else if(IsPushingGentle())
+		else if (IsPushingGentle())
 		{
 			ePawn.GroundSpeed = DampFloat(ePawn.GroundSpeed, m_speedFence, 150.0, Level.m_dT);
 		}
 		else
 			ePawn.GroundSpeed = 0.0;
 
-		if(VSize(ePawn.Velocity) > 0)
+		if (VSize(ePawn.Velocity) > 0)
 			ePawn.PlayFenceBlend();
 		else
 			ePawn.LoopAnimOnly('fencstalnt0', , 0.2);
@@ -8474,7 +8580,7 @@ FromGround:
 	FinishAnim();
 	m_SMInTrans = false;
 	bInTransition = false;
-	if( IsElectrocutingFence() )
+	if (IsElectrocutingFence())
 		Goto('Electrocuted');
 	Stop;
 
@@ -8484,7 +8590,7 @@ FromAir:
 	ePawn.PlayAnim('FencStAlBg0', , 0.1);
 	FinishAnim();
 	bInTransition = false;
-	if( IsElectrocutingFence() )
+	if (IsElectrocutingFence())
 		Goto('Electrocuted');
 	Stop;
 
@@ -8497,7 +8603,7 @@ OverTop:
 	ePawn.m_locationEnd.Y = 0.0;
 	ePawn.m_locationEnd.Z = 0.0;
 	ePawn.m_locationEnd = ePawn.ToWorld(ePawn.m_locationEnd);
-	if(ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
+	if (ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
 	{
 		m_camera.SetFixeTarget(ePawn.m_locationEnd, VSize(ePawn.m_locationEnd - ePawn.Location) / ePawn.GetAnimTime('fencstalco0'));
 		ePawn.PlayAnimOnly('fencstalco0');
@@ -8511,6 +8617,7 @@ OverTop:
 	}
 	ePawn.SetPhysics(PHYS_Fence);
 	ePawn.bKeepNPCAlive = false;
+	Sleep(0.1); // Joshua - Added small delay to prevent animation bug during transition
 	bInTransition = false;
 	Stop;
 
@@ -8587,7 +8694,7 @@ state s_Ledge
 	function EndState()
     {
 		ePawn.bKeepNPCAlive = false;
-		if(bInTransition)
+		if (bInTransition)
 		{
 			m_camera.StopFixeTarget();
 			bInTransition = false;
@@ -8598,7 +8705,7 @@ state s_Ledge
 		ElapsedTime = 0.0f;
 		if (bIsPlaying)
 		{
-			ePawn.PlaySound( Sound'FisherVoice.Stop_Sq_FisherBreathLong', SLOT_SFX );
+			ePawn.PlaySound(Sound'FisherVoice.Stop_Sq_FisherBreathLong', SLOT_SFX);
 			bIsPlaying = false;
 		}
     }
@@ -8634,7 +8741,7 @@ state s_Ledge
 		local vector checkLocation, extent, deltaMove;
 		local bool pushingSide;
 
-		if(bInTransition)
+		if (bInTransition)
 			return false;
 
 		m_LedgeTurnRight = (LType & 16) != 0;
@@ -8644,29 +8751,29 @@ state s_Ledge
 		// Try to reposition on the ledge if the gap is big enough
 		m_GECanGoLeft = (LType & 1) != 0;
 		m_GECanGoRight = (LType & 2) != 0;
-		if(!m_GECanGoLeft  && !m_GECanGoRight)
+		if (!m_GECanGoLeft  && !m_GECanGoRight)
 			GoToState('s_PlayerJumping');
-		else if((LType & 4) != 0 && pushingSide)
+		else if ((LType & 4) != 0 && pushingSide)
 				GoToState(, 'TurnIn');
-		else if((LType & 8) != 0 && pushingSide)
+		else if ((LType & 8) != 0 && pushingSide)
 		{
 			extent = ePawn.GetExtent();
-			if(m_LedgeTurnRight)
+			if (m_LedgeTurnRight)
 				checkLocation = ePawn.ToWorldDir(vect(72.0,  72.0, 0.0));
 			else
 				checkLocation = ePawn.ToWorldDir(vect(72.0, -72.0, 0.0));
 			checkLocation += locationEnd;
-			if(ePawn.FastPointCheck(checkLocation, extent, true, true))
+			if (ePawn.FastPointCheck(checkLocation, extent, true, true))
 			{
 				GoToState(, 'TurnOut');
 				return true;
 			}
 		}
-		else if(VSize(deltaMove) > 0.1 && (LType & 8) == 0)
+		else if (VSize(deltaMove) > 0.1 && (LType & 8) == 0)
 		{
 			// Relocate
 			ePawn.Move(deltaMove);
-			if(VSize(ePawn.Location - locationEnd) > 1.0)
+			if (VSize(ePawn.Location - locationEnd) > 1.0)
 				GoToState('s_PlayerWalking');
 
 			// Reoriente
@@ -8675,7 +8782,7 @@ state s_Ledge
 		return false;
 	}
 
-	function PlayerTick( float deltaTime )
+	function PlayerTick(float deltaTime)
 	{		
 		Super.PlayerTick(DeltaTime);
 
@@ -8683,26 +8790,26 @@ state s_Ledge
 	}
 
 	// Can only move sideway
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
 		local vector X, Y, Z, localSpeed;
 		local vector extent, checkLocationUp, checkLocationDown;
 		local float halfAdjustHeight;
 		local vector HitLocation, HitNormal;
 
-		if(bInTransition)
+		if (bInTransition)
 			return;
 
 		PawnLookAt();
 
         GetAxes(ePawn.Rotation,X,Y,Z);
 
-		if(aForward < eGame.m_backwardFull || ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0))) // Joshua - PT controls
+		if (aForward < eGame.m_backwardFull || ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0))) // Joshua - PT controls
 		{
 			ePawn.SetPhysics(PHYS_Falling);
 			GoToState('s_PlayerJumping');
 		}
-		else if((aForward > eGame.m_forwardFull) &&
+		else if ((aForward > eGame.m_forwardFull) &&
 				m_GECanHoist &&
 				TryHoisting(ePawn.Location, ePawn.Rotation, ePawn.m_HoistOffset, ePawn.m_HoistCrOffset, 'ledgstalup0', 'ledgcralup0'))
 		{
@@ -8711,13 +8818,13 @@ state s_Ledge
 		}
 		else
 		{
-			if(aStrafe < eGame.m_leftGentle && m_GECanGoLeft)
+			if (aStrafe < eGame.m_leftGentle && m_GECanGoLeft)
 			{
 				ePawn.Acceleration = Y * -eGame.m_LGShimmySpeed;
 			}
 			else
 			{
-				if(aStrafe > eGame.m_rightGentle && m_GECanGoRight)
+				if (aStrafe > eGame.m_rightGentle && m_GECanGoRight)
 					ePawn.Acceleration = Y * eGame.m_LGShimmySpeed;
 				else
 					ePawn.Acceleration = vect(0, 0, 0);
@@ -8725,13 +8832,13 @@ state s_Ledge
 
 			localSpeed = ePawn.ToLocalDir(ePawn.Velocity);
 
-			if(localSpeed.Y < -eGame.m_LGSpeedThreshold)
+			if (localSpeed.Y < -eGame.m_LGSpeedThreshold)
 			{
 				ePawn.LoopAnimOnly('ledgstallt0');
 			}
 			else
 			{
-				if(localSpeed.Y > eGame.m_LGSpeedThreshold)
+				if (localSpeed.Y > eGame.m_LGSpeedThreshold)
 					ePawn.LoopAnimOnly('ledgstalrt0');
 				else
 					ePawn.LoopAnimOnly('ledgstalnt0', , 0.2);
@@ -8742,7 +8849,7 @@ state s_Ledge
 TurnIn:
 	bInTransition = true;
 	KillPawnSpeed();
-	if(m_LedgeTurnRight)
+	if (m_LedgeTurnRight)
 	{
 		ePawn.PlayAnimOnly('LedgStAlTiR', , 0.15);
 		FinishAnim(0);
@@ -8765,7 +8872,7 @@ TurnOut:
 	ePawn.bKeepNPCAlive = true;
 	MoveToDestination(100);
 	KillPawnSpeed();
-	if(m_LedgeTurnRight)
+	if (m_LedgeTurnRight)
 	{
 		m_camera.SetFixeTarget(ePawn.ToWorld(vect(0.0, 72.0, 0.0)), 144.0 / ePawn.GetAnimTime('LedgStAlToR'), ePawn.ToWorld(vect(72.0, 72.0, 0.0)));
 		ePawn.PlayAnimOnly('LedgStAlToR', , 0.15);
@@ -8806,7 +8913,7 @@ state s_HoistingAboveLedge
 		m_HoistDeltaTime = ePawn.GetAnimTime(m_HoistingAnim);
 		m_HoistingDelta = (ePawn.m_locationEnd.Z - ePawn.Location.Z) - m_HoistAnimOffset.Z;
 		camTarget = ePawn.m_locationEnd;
-		if(ePawn.bWantsToCrouch)
+		if (ePawn.bWantsToCrouch)
 			camTarget.Z -= (ePawn.CollisionHeight - ePawn.CrouchHeight);
 		m_camera.SetFixeTarget(camTarget, VSize(camTarget - ePawn.Location) / m_HoistDeltaTime);
 		bInTransition = true;
@@ -8824,7 +8931,7 @@ state s_HoistingAboveLedge
 		ePawn.bCanCrouch = true;
     }
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
 	{
 		local vector delta;
 		delta.Z = (DeltaTime / m_HoistDeltaTime) * m_HoistingDelta;
@@ -8837,9 +8944,9 @@ begin:
 NoPlay:
 	FinishAnim();
 	ePawn.SetRotation(hoistTargetRot);
-	if(ePawn.bWantsToCrouch)
+	if (ePawn.bWantsToCrouch)
 		ePawn.Crouch(false);
-	if(ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
+	if (ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
 		ePawn.SetLocation(ePawn.m_locationEnd);
 	else
 	{
@@ -8871,7 +8978,7 @@ state s_GrabbingHandOverHand extends s_GrabbingGE
 	function EndState()
 	{
 		m_LastHOHTime = Level.TimeSeconds;
-		if(bInTransition)
+		if (bInTransition)
 		{
 			m_camera.StopFixeTarget();
 			bInTransition = false;
@@ -8881,7 +8988,7 @@ state s_GrabbingHandOverHand extends s_GrabbingGE
 FromPipe:
 	bInTransition = true;
 	m_camera.SetFixeTarget(ePawn.ToWorld(vect(0.0, 0.0, -22.0)), 22.0 / ePawn.GetAnimTime('Pipvstalbhr'));
-	if(ePawn.m_climbingUpperHand == CHRIGHT)
+	if (ePawn.m_climbingUpperHand == CHRIGHT)
 		ePawn.PlayAnimOnly('Pipvstalbhr');
 	else
 		ePawn.PlayAnimOnly('Pipvstalbhl');
@@ -8923,14 +9030,14 @@ state s_HandOverHand
 		ElapsedTime = 0.0f;
 		if (bIsPlaying)
 		{
-			ePawn.PlaySound( Sound'FisherVoice.Stop_Sq_FisherBreathLong', SLOT_SFX );
+			ePawn.PlaySound(Sound'FisherVoice.Stop_Sq_FisherBreathLong', SLOT_SFX);
 			bIsPlaying = false;
 		}
     }
 
 	event bool NotifyHitWall(vector HitNormal, actor Wall)
 	{
-		if(m_PipeInFeet)
+		if (m_PipeInFeet)
 		{
 			GoToState('s_GrabbingPipe', 'FromHOH');
 		}
@@ -8950,7 +9057,7 @@ state s_HandOverHand
 
 	event bool HandOverHand(vector locationEnd, rotator orientationEnd)
 	{
-		if(!bInTransition && VSize(locationEnd - ePawn.Location) > 0.01)
+		if (!bInTransition && VSize(locationEnd - ePawn.Location) > 0.01)
 		{
 			ePawn.SetLocation(locationEnd);
 			ePawn.SetRotation(orientationEnd);
@@ -8966,7 +9073,7 @@ state s_HandOverHand
 		lookAtRotPawn.Pitch = 0;
 		lookAtRotEPC = Rotation;
 		lookAtRotEPC.Pitch = 0;
-		if(Vector(lookAtRotPawn) dot Vector(lookAtRotEPC) > -0.3)
+		if (Vector(lookAtRotPawn) dot Vector(lookAtRotEPC) > -0.3)
 			ePawn.LookAt(LANORMAL, Vector(Rotation), Vector(ePawn.Rotation), -50, 70, -70, 70);
 	}
 
@@ -8974,12 +9081,12 @@ state s_HandOverHand
 	{
 		local vector checkPos, extent;
 
-		if( bInTransition || HandGun == None )
+		if (bInTransition || HandGun == None)
 			return;
 
 		checkPos = ePawn.ToWorld(vect(60.0, 10.0, 40.0));
 		extent = vect(8.0, 8.0, 8.0);
-		if(ePawn.FastPointCheck(checkPos, extent, true, true))
+		if (ePawn.FastPointCheck(checkPos, extent, true, true))
 		GotoState('s_HOHTargeting', 'TakeGunOut');
 	}
 
@@ -8993,37 +9100,37 @@ state s_HandOverHand
 		return true;
 	}
 
-	function PlayerTick( float deltaTime )
+	function PlayerTick(float deltaTime)
 	{		
 		Super.PlayerTick(DeltaTime);
 
 		HandleBreathSounds(deltaTime);
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
 		local vector X, Y, Z;
 		local vector localSpeed, hohDir, gap, testOffset;
 
-		if(bInTransition)
+		if (bInTransition)
 			return;
 
 		PawnLookAt();
 
         GetAxes(ePawn.Rotation, X, Y, Z);
 
-		if((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) // Joshua - PT controls
+		if ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) // Joshua - PT controls
 		{
 			GoToState(,'FallDown');
 		}
-		else if((bCrouchDrop && bPressedJump) || (!bCrouchDrop && bDuck > 0)) // PT controls
+		else if ((bCrouchDrop && bPressedJump) || (!bCrouchDrop && bDuck > 0)) // PT controls
 		{
 			if (bCrouchDrop)
 				bPressedJump = False;
 			else
 				bDuck = 0;
 			hohDir = Normal(ePawn.m_geoTopPoint - ePawn.m_geoBottomPoint);
-			if((hohDir dot X)  > 0.0)
+			if ((hohDir dot X)  > 0.0)
 			{
 				// looking torward m_geoTopPoint
 				gap = ePawn.m_geoTopPoint - ePawn.Location;
@@ -9035,7 +9142,7 @@ state s_HandOverHand
 			}
 			gap.Z = 0.0;
 			testOffset.X = eGame.m_HOHFeetUpColHoriOffset;
-			if(	(VSize(gap) > eGame.m_HOHFeetUpGap) &&
+			if ((VSize(gap) > eGame.m_HOHFeetUpGap) &&
 				ePawn.FastPointCheck(ePawn.Location + (X * eGame.m_HOHFeetUpColHoriOffset), ePawn.GetExtent(), true, true))
 			{
 				GoToState('s_HandOverHandFeetUp', 'FeetUp');
@@ -9043,18 +9150,18 @@ state s_HandOverHand
 		}
 		else
 		{
-			if(IsPushingTowardFront(0.0) && m_GECanGoForward)
+			if (IsPushingTowardFront(0.0) && m_GECanGoForward)
 				ePawn.Acceleration = DampVec(ePawn.Acceleration, X * eGame.m_HOHForwardSpeed, 100.0, Level.m_dT);
 			else
 			{
 				ePawn.Acceleration = vect(0, 0, 0);
-				if(IsPushingTowardBack(0.0))
+				if (IsPushingTowardBack(0.0))
 					GoToState(, 'TurnAround');
 			}
 
 			localSpeed = ePawn.ToLocalDir(ePawn.Velocity);
 
-			if(localSpeed.X > 0)
+			if (localSpeed.X > 0)
 				ePawn.LoopAnimOnly('piphstalfd0', , 0.2);
 			else
 				ePawn.LoopAnimOnly('piphstalnt0', 1.0, 0.2);
@@ -9097,7 +9204,7 @@ state s_HandOverHandFeetUp
 		ElapsedTime = 0.0f;
 		if (bIsPlaying)
 		{
-			ePawn.PlaySound( Sound'FisherVoice.Stop_Sq_FisherBreathLong', SLOT_SFX );
+			ePawn.PlaySound(Sound'FisherVoice.Stop_Sq_FisherBreathLong', SLOT_SFX);
 			bIsPlaying = false;
 		}
 	}
@@ -9109,7 +9216,7 @@ state s_HandOverHandFeetUp
 
 	event bool HandOverHand(vector locationEnd, rotator orientationEnd)
 	{
-		if(!bInTransition && VSize(locationEnd - ePawn.Location) > 0.01)
+		if (!bInTransition && VSize(locationEnd - ePawn.Location) > 0.01)
 		{
 			ePawn.SetLocation(locationEnd);
 			ePawn.SetRotation(orientationEnd);
@@ -9117,25 +9224,25 @@ state s_HandOverHandFeetUp
 		return false;
 	}
 
-	function PlayerTick( float deltaTime )
+	function PlayerTick(float deltaTime)
 	{		
 		Super.PlayerTick(DeltaTime);
 
 		HandleBreathSounds(deltaTime);
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
 		local vector localSpeed, X, Y, Z, testPos, testExtent;
 
-		if(bInTransition)
+		if (bInTransition)
 			return;
 
 		GetAxes(ePawn.Rotation,X,Y,Z);
 
 		ePawn.LookAt(LAHOH, Vector(Rotation), Vector(ePawn.Rotation), 0, 0, -70, 70);
 
-		if( bDuck > 0 || bPressedJump )
+		if (bDuck > 0 || bPressedJump)
 		{
 			bDuck = 0;
 			testPos = ePawn.Location;
@@ -9143,9 +9250,9 @@ state s_HandOverHandFeetUp
 			testExtent.X = ePawn.CollisionRadius;
 			testExtent.Y = ePawn.CollisionRadius;
 			testExtent.Z = ePawn.default.CollisionHeight;
-			if(ePawn.FastPointCheck(testPos, testExtent, true, true))
+			if (ePawn.FastPointCheck(testPos, testExtent, true, true))
 			{
-				if((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+				if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
 					JumpLabelPrivate = 'FallDown';
 				else
 					JumpLabelPrivate = '';
@@ -9154,13 +9261,13 @@ state s_HandOverHandFeetUp
 		}
 		else
 		{
-			if(	IsPushingTowardBack(0.0) &&
+			if (IsPushingTowardBack(0.0) &&
 				m_GECanGoBackward &&
 				ePawn.FastPointCheck(ePawn.Location + (X * -3.0), ePawn.GetExtent(), true, true))
 			{
 				ePawn.Acceleration = DampVec(ePawn.Acceleration, X * -eGame.m_HOHFeetUpMoveSpeed, 100.0, Level.m_dT);
 			}
-			else if(IsPushingTowardFront(0.0) &&
+			else if (IsPushingTowardFront(0.0) &&
 					m_GECanGoForward &&
 					ePawn.FastPointCheck(ePawn.Location + (X * eGame.m_HOHFeetUpColHoriOffset), ePawn.GetExtent(), true, true))
 			{
@@ -9173,9 +9280,9 @@ state s_HandOverHandFeetUp
 
 			localSpeed = ePawn.ToLocalDir(ePawn.Velocity);
 
-			if(localSpeed.X > 0)
+			if (localSpeed.X > 0)
 				ePawn.LoopAnimOnly('piphpralfd0', , , true);
-			else if(localSpeed.X < 0)
+			else if (localSpeed.X < 0)
 				ePawn.LoopAnimOnly('piphpralfd0');
 			else
 				ePawn.LoopAnimOnly('piphpralnt0', , 0.2);
@@ -9188,7 +9295,7 @@ FeetUp:
 	ePawn.SetCollisionSize(ePawn.CollisionRadius, eGame.m_HOHFeetUpColHeight);
 	ePawn.Move(vect(0.0, 0.0, 1.0) * eGame.m_HOHFeetUpColVertOffset);
 	ePawn.m_CurrentArmsZone.Z -= eGame.m_HOHFeetUpColVertOffset;
-	ePawn.PlaySound( Sound'FisherFoley.Play_Fisher_StandToCrouchGear', SLOT_SFX );
+	ePawn.PlaySound(Sound'FisherFoley.Play_Fisher_StandToCrouchGear', SLOT_SFX);
 	ePawn.PlayAnimOnly('piphpralbg0');
 	FinishAnim();
 	bInTransition = false;
@@ -9201,7 +9308,7 @@ FeetDown:
 	ePawn.Move(vect(0.0, 0.0, -1.0) * eGame.m_HOHFeetUpColVertOffset);
 	ePawn.SetCollisionSize(ePawn.CollisionRadius, ePawn.default.CollisionHeight);
 	ePawn.m_CurrentArmsZone.Z += eGame.m_HOHFeetUpColVertOffset;
-	ePawn.PlaySound( Sound'FisherFoley.Play_Fisher_CrouchToStandGear', SLOT_SFX );
+	ePawn.PlaySound(Sound'FisherFoley.Play_Fisher_CrouchToStandGear', SLOT_SFX);
 	ePawn.PlayAnimOnly('piphpraled0');
 	FinishAnim();
 	bInTransition = false;
@@ -9229,14 +9336,14 @@ state s_HOHTargeting extends s_FirstPersonTargeting
 	{
 		m_useTarget = false;
 		// If gun is still in hands, remove view
-		if( EMainHUD(myHud).hud_master == ActiveGun )
+		if (EMainHUD(myHud).hud_master == ActiveGun)
 			EMainHUD(myHud).NormalView();
 	}
 
 	function ProcessScope()
 	{
-		if( !bInTransition )
-			GoToState( ,'PutGunBack');
+		if (!bInTransition)
+			GoToState(,'PutGunBack');
 	}
 
 	function SwitchCameraMode()
@@ -9244,16 +9351,16 @@ state s_HOHTargeting extends s_FirstPersonTargeting
 		m_camera.SetMode(ECM_HOHFP);
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
 		ePawn.LoopAnim('PipHStSpNt1', , 0.2);
 		
-		if(bInTransition)
+		if (bInTransition)
 			return;
 
 		ePawn.AimAt(AAHOH, Vector(Rotation), Vector(ePawn.Rotation), -80, 50, -80, 80);
 
-		if( (!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
 		{
 			JumpLabelPrivate = 'FallDown';
 			GoToState(,'PutGunBack');
@@ -9303,7 +9410,7 @@ state s_GrabbingNarrowLadder extends s_GrabbingGE
 
     function EndState()
     {
-		if(bInTransition)
+		if (bInTransition)
 		{
 			m_camera.StopFixeTarget();
 			bInTransition = false;
@@ -9314,7 +9421,7 @@ state s_GrabbingNarrowLadder extends s_GrabbingGE
 
     function PlayerMove(float deltaTime)
     {
-		if(m_SMInTrans && IsPushingFull() && ((m_EnterDir dot GetPushingDir()) < -0.7))
+		if (m_SMInTrans && IsPushingFull() && ((m_EnterDir dot GetPushingDir()) < -0.7))
 		{
 			bIntransition = false;
 			m_SMInTrans = false;
@@ -9338,7 +9445,7 @@ FromUnder:
 	m_camera.StopFixeTarget();
 	ePawn.PlayNarrowLadderWait(0.0);
 	ePawn.Move(ePawn.ToWorldDir(vect(0.0,0.0,193.0)));
-	if(CalculateLadderDestination())
+	if (CalculateLadderDestination())
 		ePawn.m_topClimbing = true;
 	MoveToDestination(ArrivalSpeedApprox(1.0));
 	bInTransition = false;
@@ -9386,7 +9493,7 @@ FromGround:
 	FinishAnim(0);
 	m_SMInTrans = false;
 	ePawn.PlayNarrowLadderWait(0.0);
-	if(CalculateLadderDestination())
+	if (CalculateLadderDestination())
 		ePawn.m_topClimbing = true;
 	MoveToDestination(ArrivalSpeedApprox(1.0));
 	bInTransition = false;
@@ -9406,7 +9513,7 @@ state s_NarrowLadder
 		return true;
 	}
 
-	function bool CanAddInteract( EInteractObject IntObj )
+	function bool CanAddInteract(EInteractObject IntObj)
 	{
 		return (IntObj.class.name == 'ETrapInteraction' && ePawn.m_topHanging && ePawn.m_topClimbing && !bInTransition);
 	}
@@ -9422,7 +9529,7 @@ state s_NarrowLadder
     function EndState()
     {
 		ePawn.bKeepNPCAlive = false;
-		if(m_camera.m_fixedTarget)
+		if (m_camera.m_fixedTarget)
 			m_camera.StopFixeTarget();
 		m_SMInTrans = false;
 		bInTransition = false;
@@ -9440,7 +9547,7 @@ state s_NarrowLadder
 
 	event bool NotifyLanded(vector HitNormal, Actor HitActor)
 	{
-		if(!m_SMInTrans)
+		if (!m_SMInTrans)
 		{
 			GoToState(, 'OutBottom');
 			ePawn.m_topHanging = false;
@@ -9449,33 +9556,33 @@ state s_NarrowLadder
 		return true;
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
 		local vector localSpeed, locationEnd;
 
-		if(m_SMInTrans)
+		if (m_SMInTrans)
 			return;
 
 		PawnLookAt();
 
-		if(aForward > eGame.m_backwardFull)
+		if (aForward > eGame.m_backwardFull)
 			m_LPSlideStartTime = Level.TimeSeconds;
 
-		if((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
 		{
 			JumpRelease();
 		}
-		else if( bInTransition )
+		else if (bInTransition)
 		{
 			return;
 		}
-		else if(aForward > eGame.m_forwardGentle)
+		else if (aForward > eGame.m_forwardGentle)
 		{
 			ePawn.Acceleration.Z = eGame.m_NLUpwardSpeed;
 			// Play a little anim for one loop
 			GoToState(, 'GoUp');
 		}
-		else if(aForward < eGame.m_backwardFull &&
+		else if (aForward < eGame.m_backwardFull &&
 				!ePawn.m_topHanging &&
 				!ePawn.m_topClimbing &&
 				(m_LPSlideStartTime < (Level.TimeSeconds - eGame.m_NLSlideDelay)) &&
@@ -9489,9 +9596,9 @@ state s_NarrowLadder
 			ePawn.m_topHanging = false;
 			GoToState('s_NarrowLadderSlideDown');
 		}
-		else if(aForward < eGame.m_backwardGentle && m_GECanGoBackward)
+		else if (aForward < eGame.m_backwardGentle && m_GECanGoBackward)
 		{
-			if(ePawn.FastPointCheck(ePawn.Location + vect(0,0,-10.0), ePawn.GetExtent(), true, true))
+			if (ePawn.FastPointCheck(ePawn.Location + vect(0,0,-10.0), ePawn.GetExtent(), true, true))
 			{
 				ePawn.Acceleration.Z = eGame.m_NLDownwardSpeed;
 				// Play a little anim for one loop
@@ -9518,10 +9625,10 @@ OpenTrap:
 
 GoUp:
 	bInTransition = true;
-	if(ePawn.m_topHanging)
+	if (ePawn.m_topHanging)
 	{
 		ePawn.m_locationEnd = ePawn.ToWorld(ePawn.m_NLOutTopAnimOffset);
-		if(CanGetOutTopLadder())
+		if (CanGetOutTopLadder())
 		{
 			// Already at most top, get out
 			ePawn.m_topHanging = false;
@@ -9535,7 +9642,7 @@ GoUp:
 	}
 	else
 	{
-		if(ePawn.m_topClimbing)
+		if (ePawn.m_topClimbing)
 		{
 			// At the top with one hand, get both hands at top
 			KillPawnSpeed();
@@ -9544,7 +9651,7 @@ GoUp:
 
 			// Find justified position and move there
 			CalculateLadderDestination();
-			if(ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
+			if (ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
 				MoveToDestination(ArrivalSpeedApprox(1.0));
 			ePawn.m_topHanging = true;
 		}
@@ -9555,12 +9662,12 @@ GoUp:
 			FinishAnim();
 
 			// Find justified position and move there
-			if(CalculateLadderDestination())
+			if (CalculateLadderDestination())
 				ePawn.m_topClimbing = true;
-			if(ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
+			if (ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
 			{
 				ePawn.SetLocation(ePawn.m_locationEnd);
-				if(aForward > eGame.m_forwardGentle)
+				if (aForward > eGame.m_forwardGentle)
 				{
 					ePawn.Acceleration.Z = eGame.m_NLUpwardSpeed;
 					GoTo('GoUp');
@@ -9577,12 +9684,12 @@ GoUp:
 
 GoDown:
 	bInTransition = true;
-	if(!ePawn.FastPointCheck(ePawn.Location + vect(0,0,-10.0), ePawn.GetExtent(), true, true))
+	if (!ePawn.FastPointCheck(ePawn.Location + vect(0,0,-10.0), ePawn.GetExtent(), true, true))
 	{
 		bInTransition = false;
 		GoToState(, 'OutBottom');
 	}
-	if(ePawn.m_topHanging)
+	if (ePawn.m_topHanging)
 	{
 		ePawn.m_topHanging = false;
 		KillPawnSpeed();
@@ -9592,7 +9699,7 @@ GoDown:
 	}
 	else
 	{
-		if(ePawn.PlayNarrowLadderDown())
+		if (ePawn.PlayNarrowLadderDown())
 			KillPawnSpeed();
 		ePawn.m_topClimbing = false;
 	}
@@ -9600,10 +9707,10 @@ GoDown:
 
 	// Find justified position and move there
 	CalculateLadderDestination();
-	if(ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
+	if (ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
 	{
 		ePawn.SetLocation(ePawn.m_locationEnd);
-		if(	aForward < eGame.m_backwardFull &&
+		if (aForward < eGame.m_backwardFull &&
 			!ePawn.m_topHanging &&
 			!ePawn.m_topClimbing &&
 			(m_LPSlideStartTime < (Level.TimeSeconds - eGame.m_NLSlideDelay)) &&
@@ -9616,7 +9723,7 @@ GoDown:
 			ePawn.m_topHanging = false;
 			GoToState('s_NarrowLadderSlideDown');
 		}
-		else if(aForward < -eGame.m_forwardGentle && m_GECanGoBackward)
+		else if (aForward < -eGame.m_forwardGentle && m_GECanGoBackward)
 		{
 			ePawn.Acceleration.Z = eGame.m_NLDownwardSpeed;
 			GoTo('GoDown');
@@ -9641,11 +9748,11 @@ Adjust:
 	bInTransition = true;
 	CalculateLadderDestination();
 	KillPawnSpeed();
-	if(ePawn.m_locationEnd.Z > ePawn.Location.Z && m_GECanGoBackward)
+	if (ePawn.m_locationEnd.Z > ePawn.Location.Z && m_GECanGoBackward)
 		ePawn.m_locationEnd.Z -= eGame.m_NLStepSize * 2.0;
-	if(ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
+	if (ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
 	{
-		if(m_GECanGoBackward)
+		if (m_GECanGoBackward)
 			MoveToDestination(ArrivalSpeedApprox(1.0));
 		else
 			MoveToDestination(100.0);
@@ -9663,7 +9770,7 @@ OutTop:
 	m_camera.SetFixeTarget(ePawn.m_locationEnd, VSize(ePawn.m_NLOutTopAnimOffset) / ePawn.GetAnimTime('laddstaleu0'));
 	ePawn.PlayAnimOnly('laddstaleu0');
 	FinishAnim();
-	if(ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
+	if (ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
 		ePawn.SetLocation(ePawn.m_locationEnd);
 	else
 	{
@@ -9700,7 +9807,7 @@ state s_SlideDownBase
 
 	event NoGE()
 	{
-		if(bInTransition)
+		if (bInTransition)
 			return;
 		GoToState('s_PlayerJumping');
 	}
@@ -9713,7 +9820,7 @@ state s_SlideDownBase
 
 landed:
 	bInTransition = true;
-	if(ePawn.PlayNLPLand(bDuck > 0, m_SMTemp))
+	if (ePawn.PlayNLPLand(bDuck > 0, m_SMTemp))
 		FinishAnim();
 	else
 		Sleep(0.15);
@@ -9741,7 +9848,7 @@ state s_NarrowLadderSlideDown extends s_SlideDownBase
 	{
 		ePawn.SetLocation(locationEnd);
 		ePawn.SetRotation(orientationEnd);
-		if(!bInTransition && !m_GECanGoBackward)
+		if (!bInTransition && !m_GECanGoBackward)
 		{
 			KillPawnSpeed();
 			bInTransition = true;
@@ -9750,7 +9857,7 @@ state s_NarrowLadderSlideDown extends s_SlideDownBase
 		return false;
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
 		local vector X, Y, Z, localSpeed;
 
@@ -9759,18 +9866,18 @@ state s_NarrowLadderSlideDown extends s_SlideDownBase
 
 		m_SMTemp = ePawn.Acceleration.Z;
 
-		if(bInTransition)
+		if (bInTransition)
 		{
 			return;
 		}
-		else if((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		else if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
 		{
 			JumpRelease();
 		}
-		else if(aForward < eGame.m_backwardFull)
+		else if (aForward < eGame.m_backwardFull)
 		{
 			// Acceleration
-			ePawn.Velocity.Z = FMax(	ePawn.Velocity.Z - (eGame.m_NLSlideDownInertia * DeltaTime),
+			ePawn.Velocity.Z = FMax(ePawn.Velocity.Z - (eGame.m_NLSlideDownInertia * DeltaTime),
 									-eGame.m_NLSlideDownMaxSpeed);
 			ePawn.Acceleration = Z * ePawn.Velocity.Z;
 		}
@@ -9780,7 +9887,7 @@ state s_NarrowLadderSlideDown extends s_SlideDownBase
 			ePawn.Velocity.Z += (eGame.m_NLSlideDownInertia * DeltaTime);
 			ePawn.Acceleration = Z * ePawn.Velocity.Z;
 
-			if(ePawn.Velocity.Z > -eGame.m_NLSlideDownMinSpeed)
+			if (ePawn.Velocity.Z > -eGame.m_NLSlideDownMinSpeed)
 				GoToState(, 'GoBack');
 		}
     }
@@ -9816,7 +9923,7 @@ state s_GrabbingPipe extends s_GrabbingGE
 
     function EndState()
     {
-		if(m_camera.m_fixedTarget)
+		if (m_camera.m_fixedTarget)
 			m_camera.StopFixeTarget();
 		bInTransition = false;
 		ePawn.bKeepNPCAlive = false;
@@ -9825,7 +9932,7 @@ state s_GrabbingPipe extends s_GrabbingGE
 
     function PlayerMove(float deltaTime)
     {
-		if(m_SMInTrans && IsPushingFull() && ((m_EnterDir dot GetPushingDir()) < -0.7))
+		if (m_SMInTrans && IsPushingFull() && ((m_EnterDir dot GetPushingDir()) < -0.7))
 		{
 			bIntransition = false;
 			m_SMInTrans = false;
@@ -9903,7 +10010,7 @@ state s_Pipe
 
     function EndState()
     {
-		if(m_camera.m_fixedTarget)
+		if (m_camera.m_fixedTarget)
 			m_camera.StopFixeTarget();
 		bInTransition = false;
 		m_SMInTrans = false;
@@ -9913,7 +10020,7 @@ state s_Pipe
 		ElapsedTime = 0.0f;
 		if (bIsPlaying)
 		{
-			ePawn.PlaySound( Sound'FisherVoice.Stop_Sq_FisherBreathLong', SLOT_SFX );
+			ePawn.PlaySound(Sound'FisherVoice.Stop_Sq_FisherBreathLong', SLOT_SFX);
 			bIsPlaying = false;
 		}
 		ePawn.bKeepNPCAlive = false;
@@ -9921,7 +10028,7 @@ state s_Pipe
 
 	event NoGE()
 	{
-		if(bInTransition)
+		if (bInTransition)
 			return;
 
 		GoToState('s_PlayerJumping');
@@ -9929,7 +10036,7 @@ state s_Pipe
 
 	event bool Pipe(vector locationEnd, rotator orientationEnd)
 	{
-		if(!m_SMInTrans && VSize(locationEnd - ePawn.Location) > 0.01)
+		if (!m_SMInTrans && VSize(locationEnd - ePawn.Location) > 0.01)
 		{
 			ePawn.SetLocation(locationEnd);
 			ePawn.SetRotation(orientationEnd);
@@ -9939,7 +10046,7 @@ state s_Pipe
 
 	event bool NotifyLanded(vector HitNormal, Actor HitActor)
 	{
-		if(!m_SMInTrans)
+		if (!m_SMInTrans)
 		{
 			GoToState(, 'OutBottom');
 			ePawn.m_topHanging = false;
@@ -9948,20 +10055,20 @@ state s_Pipe
 		return true;
 	}
 
-	function PlayerTick( float deltaTime )
+	function PlayerTick(float deltaTime)
 	{		
 		Super.PlayerTick(DeltaTime);
 
 		HandleBreathSounds(deltaTime);
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
 		local vector X, Y, Z, localSpeed, preferedCheckLocation, otherCheckLocation, revOffset;
 		local bool canGoUp;
 		local int outTopResult;
 
-		if(m_SMInTrans)
+		if (m_SMInTrans)
 			return;
 
 		canGoUp = true;
@@ -9969,11 +10076,11 @@ state s_Pipe
         GetAxes(ePawn.Rotation,X,Y,Z);
 		PawnLookAt();
 
-		if(CalculatePipeDestination() && aForward > eGame.m_forwardGentle)
+		if (CalculatePipeDestination() && aForward > eGame.m_forwardGentle)
 		{
 			revOffset = ePawn.m_POutTopAnimOffset;
 			revOffset.Y = -revOffset.Y;
-			if(ePawn.m_climbingUpperHand == CHRIGHT)
+			if (ePawn.m_climbingUpperHand == CHRIGHT)
 			{
 				preferedCheckLocation = ePawn.ToWorld(ePawn.m_POutTopAnimOffset);
 				otherCheckLocation = ePawn.ToWorld(revOffset);
@@ -9985,21 +10092,21 @@ state s_Pipe
 			}
 
 			outTopResult = CanGetOutTopPipe(preferedCheckLocation, otherCheckLocation);
-			if(outTopResult == 1)
+			if (outTopResult == 1)
 			{
 				GoToState(, 'OutTopNormal');
 				return;
 			}
-			else if(outTopResult == 2)
+			else if (outTopResult == 2)
 			{
 				GoToState(, 'OutTopReverse');
 				return;
 			}
 			else
 			{
-				if(m_PType > 0)
+				if (m_PType > 0)
 				{
-					if(m_PType == 1)
+					if (m_PType == 1)
 						GoToState('s_GrabbingHandOverHand', 'FromPipe');
 					else
 						GoToState('s_GrabbingZipLine', 'FromPipe');
@@ -10011,23 +10118,23 @@ state s_Pipe
 			ePawn.Acceleration = vect(0, 0, 0);
 		}
 
-		if((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
 		{
 			JumpRelease();
 		}
-		else if( bInTransition )
+		else if (bInTransition)
 		{
-			if(!m_GECanGoBackward && ePawn.Acceleration.Z < 0.0)
+			if (!m_GECanGoBackward && ePawn.Acceleration.Z < 0.0)
 				KillPawnSpeed();
 			return;
 		}
-		else if(aForward > eGame.m_forwardGentle && canGoUp)
+		else if (aForward > eGame.m_forwardGentle && canGoUp)
 		{
 			ePawn.Acceleration = Z * eGame.m_PUpwardSpeed;
 			ePawn.PlayPipe('pipvstalupl', 'pipvstalupr');
 			GoToState('s_Pipe', 'Move');
 		}
-		else if((aForward < eGame.m_backwardFull) &&
+		else if ((aForward < eGame.m_backwardFull) &&
 				m_GECanSlide &&
 				m_GECanGoBackward &&
 				ePawn.FastPointCheck(ePawn.Location - vect(0,0,20.0), ePawn.GetExtent(), true, true))
@@ -10036,10 +10143,10 @@ state s_Pipe
 			ePawn.Acceleration = Z * eGame.m_PDownwardSpeed;
 			GoToState('s_PipeSlideDown');
 		}	
-		else if(aForward < eGame.m_backwardGentle &&
+		else if (aForward < eGame.m_backwardGentle &&
 				m_GECanGoBackward)
 		{
-			if(ePawn.FastPointCheck(ePawn.Location + vect(0,0,-10.0), ePawn.GetExtent(), true, true))
+			if (ePawn.FastPointCheck(ePawn.Location + vect(0,0,-10.0), ePawn.GetExtent(), true, true))
 			{
 				ePawn.Acceleration = Z * eGame.m_PDownwardSpeed;
 				ePawn.PlayPipe('pipvstalupr', 'pipvstalupl', , true);
@@ -10070,7 +10177,7 @@ OutBottom:
 Move:
 	bInTransition = true;
 	FinishAnim();
-	if(CalculatePipeDestination() && ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
+	if (CalculatePipeDestination() && ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
 		MoveToDestination(ArrivalSpeedApprox(1.0));
 	KillPawnSpeed();
 	bInTransition = false;
@@ -10079,7 +10186,7 @@ Move:
 Adjust:
 	bInTransition = true;
 	CalculatePipeDestination();
-	if(ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
+	if (ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
 		MoveToDestination(ArrivalSpeedApprox(1.0));
 	bInTransition = false;
 	Stop;
@@ -10087,7 +10194,7 @@ Adjust:
 OutTopReverse:
 	bInTransition = true;
 	m_SMInTrans = true;
-	if(ePawn.m_climbingUpperHand == CHLEFT)
+	if (ePawn.m_climbingUpperHand == CHLEFT)
 		ePawn.m_climbingUpperHand = CHRIGHT;
 	else
 		ePawn.m_climbingUpperHand = CHLEFT;
@@ -10102,9 +10209,9 @@ OutTopNormal:
 	ePawn.m_locationStart = ePawn.Location;
 	ePawn.m_orientationStart = ePawn.Rotation;
 	ePawn.m_orientationEnd = ePawn.Rotation;
-	if(ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
+	if (ePawn.FastPointCheck(ePawn.m_locationEnd, ePawn.GetExtent(), true, true))
 		MoveToDestination(ArrivalSpeedApprox(1.0));
-	if(ePawn.m_climbingUpperHand == CHRIGHT)
+	if (ePawn.m_climbingUpperHand == CHRIGHT)
 		ePawn.m_locationEnd = ePawn.ToWorld(ePawn.m_POutTopAnimOffset);
 	else
 	{
@@ -10146,7 +10253,7 @@ state s_PipeSlideDown extends s_SlideDownBase
 
 	event bool Pipe(vector locationEnd, rotator orientationEnd)
 	{
-		if(VSize(locationEnd - ePawn.Location) > 0.01)
+		if (VSize(locationEnd - ePawn.Location) > 0.01)
 		{
 			ePawn.SetLocation(locationEnd);
 			ePawn.SetRotation(orientationEnd);
@@ -10154,7 +10261,7 @@ state s_PipeSlideDown extends s_SlideDownBase
 		return false;
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
 		local vector X, Y, Z, localSpeed;
 
@@ -10163,23 +10270,23 @@ state s_PipeSlideDown extends s_SlideDownBase
 
 		m_SMTemp = ePawn.Acceleration.Z;
 
-		if(bInTransition)
+		if (bInTransition)
 		{
 			return;
 		}
-		else if((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		else if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
 		{
 			JumpRelease();
 		}
-		else if(!m_GECanGoBackward)
+		else if (!m_GECanGoBackward)
 		{
 			KillPawnSpeed();
 			GoToState(, 'GoBack');
 		}
-		else if(aForward < eGame.m_backwardFull)
+		else if (aForward < eGame.m_backwardFull)
 		{
 			// Acceleration
-			ePawn.Velocity.Z = FMax(	ePawn.Velocity.Z - (eGame.m_PSlideDownInertia * DeltaTime),
+			ePawn.Velocity.Z = FMax(ePawn.Velocity.Z - (eGame.m_PSlideDownInertia * DeltaTime),
 									-eGame.m_PSlideDownMaxSpeed);
 			ePawn.Acceleration = Z * ePawn.Velocity.Z;
 		}
@@ -10189,7 +10296,7 @@ state s_PipeSlideDown extends s_SlideDownBase
 			ePawn.Velocity.Z = FMin(ePawn.Velocity.Z + (eGame.m_PSlideDownInertia * DeltaTime), 0.0);
 			ePawn.Acceleration = Z * ePawn.Velocity.Z;
 
-			if(ePawn.Velocity.Z > -eGame.m_PSlideDownMinSpeed)
+			if (ePawn.Velocity.Z > -eGame.m_PSlideDownMinSpeed)
 				GoToState(, 'GoBack');
 		}
     }
@@ -10224,7 +10331,7 @@ state s_GrabbingZipLine extends s_GrabbingGE
     function EndState()
     {
 		m_LastZipLineTime = Level.TimeSeconds;
-		if(bInTransition)
+		if (bInTransition)
 		{
 			m_camera.StopFixeTarget();
 			bInTransition = false;
@@ -10232,11 +10339,11 @@ state s_GrabbingZipLine extends s_GrabbingGE
 		m_SMInTrans = false;
     }
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
         local vector flatDir;
 
-		if(m_SMInTrans)
+		if (m_SMInTrans)
 		{
 			flatDir = ePawn.m_geoNormal;
 			flatDir.Z = 0;
@@ -10250,7 +10357,7 @@ FromPipe:
 	m_camera.SetFixeTarget(ePawn.ToWorld(vect(0.0, 0.0, -22.0)), 22.0 / ePawn.GetAnimTime('Pipvstalbhr'));
 	ePawn.SetPhysics(PHYS_Linear);
 	ePawn.Acceleration = vect(0.0, 0.0, 0.0);
-	if(ePawn.m_climbingUpperHand == CHRIGHT)
+	if (ePawn.m_climbingUpperHand == CHRIGHT)
 		ePawn.PlayAnimOnly('Pipvstalbhr', , 0.2);
 	else
 		ePawn.PlayAnimOnly('Pipvstalbhl', , 0.2);
@@ -10281,9 +10388,17 @@ FromAir:
 state s_ZipLine
 {
 	ignores Fire;
+
     function BeginState()
     {
+		// Joshua - Dirty hack to automatically raise legs up on Oil Rig's zipline, preventing players from falling into the water at higher FPS
+		if (GetCurrentMapName() == "1_3_2CaspianOilRefinery")
+		{
+			GotoState(, 'AutoLegsUp');
+		}
+
 		ePawn.bWantsToCrouch = false; // Joshua - Prevents animation bug when entering zipline while holding crouch
+		m_ZipLineDropTimer = 0.0; // Joshua - Anti-spam stance change on zipline
 		ePawn.SetZipLineZones();
 		ePawn.PlaySound(Sound'FisherFoley.Play_MLayer_FisherZipLine', SLOT_SFX);
 		m_camera.SetMode(ECM_FSphere);
@@ -10304,7 +10419,7 @@ state s_ZipLine
 
 	event bool NotifyHitWall(vector HitNormal, actor Wall)
 	{
-		if(!Wall.IsA('EBreakableGlass'))
+		if (!Wall.IsA('EBreakableGlass'))
 			GoToState('s_PlayerJumping');
 
 		return true;
@@ -10320,13 +10435,13 @@ state s_ZipLine
 
 	event bool ZipLine(vector locationEnd, rotator orientationEnd, int ZLType)
 	{
-		if(ZLType == 1)
+		if (ZLType == 1)
 		{
 			GoToState('s_PlayerJumping');
 		}
 		else
 		{
-			if(VSize(locationEnd - ePawn.Location) > 0.01)
+			if (VSize(locationEnd - ePawn.Location) > 0.01)
 			{
 				ePawn.SetLocation(locationEnd);
 				ePawn.SetRotation(orientationEnd);
@@ -10339,19 +10454,33 @@ state s_ZipLine
 	function CheckForCrouch()
 	{
 		local vector extent;
-		if((bCrouchDrop && bPressedJump) || (!bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		local bool bWantsToChangeCrouch;
+		
+		// Joshua - Anti-spam stance change on zipline
+		bWantsToChangeCrouch = (bCrouchDrop && bPressedJump) || (!bCrouchDrop && bDuck > 0);
+		
+		if (bWantsToChangeCrouch)
 		{
-			ePawn.bWantsToCrouch = !ePawn.bWantsToCrouch;
-			ePawn.PlayZipLineTransition(ePawn.bWantsToCrouch);
+			if (m_ZipLineDropTimer <= 0.0)
+			{
+				ePawn.bWantsToCrouch = !ePawn.bWantsToCrouch;
+				ePawn.PlayZipLineTransition(ePawn.bWantsToCrouch);
+				m_ZipLineDropTimer = 0.75;
+			}
+			
 			if (!bCrouchDrop) // Joshua - PT controls
 				bDuck = 0;
 		}
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
 		local vector localSpeed;
 		local float speed, minSpeed, maxSpeed;
+
+		// Joshua - Anti-spam stance change on zipline
+		if (m_ZipLineDropTimer > 0.0)
+			m_ZipLineDropTimer -= DeltaTime;
 
 		PawnLookAt();
 		CheckForCrouch();
@@ -10359,13 +10488,13 @@ state s_ZipLine
 		speed = VSize(ePawn.Velocity);
 		maxSpeed = eGame.m_ZLSlideDownMaxSpeed;
 		minSpeed = eGame.m_ZLSlideDownMinSpeed;
-		if(ePawn.bWantsToCrouch)
+		if (ePawn.bWantsToCrouch)
 		{
 			maxSpeed *= 2.0;
 			minSpeed *= 2.0;
 		}
 
-		if((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
 		{
 			if (bCrouchDrop) // Joshua - PT controls
 				bDuck = 0;
@@ -10374,7 +10503,7 @@ state s_ZipLine
 			return;
 		}
 
-		if(aForward < eGame.m_backwardGentle)
+		if (aForward < eGame.m_backwardGentle)
 			speed = DampFloat(speed, minSpeed, eGame.m_ZLSlideDownInertia, Level.m_dT);
 		else
 			speed = DampFloat(speed, maxSpeed, eGame.m_ZLSlideDownInertia, Level.m_dT);
@@ -10384,6 +10513,14 @@ state s_ZipLine
 
 		ePawn.PlayZipLineWait(ePawn.bWantsToCrouch);
     }
+
+Begin:
+
+// Joshua - Dirty hack to automatically raise legs up on Oil Rig's zipline, preventing players from falling into the water at higher FPS
+AutoLegsUp:
+    Sleep(0.5);
+    ePawn.bWantsToCrouch = true;
+    ePawn.PlayZipLineTransition(true);
 }
 
 state s_GrabbingPole extends s_GrabbingGE
@@ -10419,9 +10556,9 @@ state s_GrabbingPole extends s_GrabbingGE
 		return true;
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
-		if(m_SMInTrans && IsPushingFull() && ((m_EnterDir dot GetPushingDir()) < -0.7))
+		if (m_SMInTrans && IsPushingFull() && ((m_EnterDir dot GetPushingDir()) < -0.7))
 		{
 			bIntransition = false;
 			m_SMInTrans = false;
@@ -10473,7 +10610,7 @@ state s_Pole
 		ElapsedTime = 0.0f;
 		if (bIsPlaying)
 		{
-			ePawn.PlaySound( Sound'FisherVoice.Stop_Sq_FisherBreathLong', SLOT_SFX );
+			ePawn.PlaySound(Sound'FisherVoice.Stop_Sq_FisherBreathLong', SLOT_SFX);
 			bIsPlaying = false;
 		}
     }
@@ -10481,7 +10618,7 @@ state s_Pole
 	event bool Pole(vector locationEnd, rotator orientationEnd, int RType)
 	{
 		m_GECanGoForward = (RType != 1);
-		if((!bInTransition) && (RType != 1) && (VSize(ePawn.Velocity) > 0.0))
+		if ((!bInTransition) && (RType != 1) && (VSize(ePawn.Velocity) > 0.0))
 		{
 			ePawn.SetLocation(locationEnd);
 			ePawn.SetRotation(orientationEnd);
@@ -10500,14 +10637,14 @@ state s_Pole
 		return true;
 	}
 
-	function PlayerTick( float deltaTime )
+	function PlayerTick(float deltaTime)
 	{		
 		Super.PlayerTick(DeltaTime);
 
 		HandleBreathSounds(deltaTime);
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
 		local vector X, Y, Z, localSpeed, forwardDir;
 		local rotator turnRotator;
@@ -10515,14 +10652,14 @@ state s_Pole
 		local float deltaYaw;
 
 		PawnLookAt();
-		if( bInTransition )
+		if (bInTransition)
 			return;
 
         GetAxes(ePawn.Rotation,X,Y,Z);
 
-		if(Abs(aStrafe) > eGame.m_forwardGentle)
+		if (Abs(aStrafe) > eGame.m_forwardGentle)
 		{
-			if(aStrafe > 0)
+			if (aStrafe > 0)
 				turnRotator.Yaw = eGame.m_PLRotationSpeed * DeltaTime;
 			else
 				turnRotator.Yaw = -eGame.m_PLRotationSpeed * DeltaTime;
@@ -10538,11 +10675,11 @@ state s_Pole
 			deltaYaw = turnRotator.Yaw - ePawn.Rotation.Yaw;
 			ePawn.SetRotation(turnRotator);
 
-			if((!m_GEgoingUp) && ((Abs(aForward) < eGame.m_forwardGentle) || ((aForward > eGame.m_forwardGentle) && (!m_GECanGoForward))) && deltaYaw != 0)
+			if ((!m_GEgoingUp) && ((Abs(aForward) < eGame.m_forwardGentle) || ((aForward > eGame.m_forwardGentle) && (!m_GECanGoForward))) && deltaYaw != 0)
 			{
 				ePawn.Acceleration = vect(0, 0, 0);
 
-				if(aStrafe < 0)
+				if (aStrafe < 0)
 					ePawn.PlayPole('RopeStAlTrR', 'RopeStAlTrL', 0.2, false, false);
 				else
 					ePawn.PlayPole('RopeStAlTrR', 'RopeStAlTrL', 0.2, false, true);
@@ -10551,38 +10688,38 @@ state s_Pole
 			}
 		}
 
-		if((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
 		{
 			JumpRelease();
 		}
-		else if( m_GEgoingUp )
+		else if (m_GEgoingUp)
 		{
-			if(m_GECanGoForward)
+			if (m_GECanGoForward)
 				ePawn.Acceleration = DampVec(ePawn.Acceleration, Z * eGame.m_PLUpwardSpeed, 120, deltaTime);
 			else
 				ePawn.Acceleration = vect(0, 0, 0);
 
 			return;
 		}
-		else if(aForward > eGame.m_forwardGentle &&
+		else if (aForward > eGame.m_forwardGentle &&
 				m_GECanGoForward &&
 				ePawn.FastPointCheck(ePawn.Location + vect(0,0,5.0), ePawn.GetExtent(), true, true))
 		{
-			if(VSize(ePawn.Acceleration) == 0)
+			if (VSize(ePawn.Acceleration) == 0)
 				ePawn.PlayPole('RopeStAlUpR', 'RopeStAlUpL', 0.2, true);
 			else
 				ePawn.PlayPole('RopeStAlUpR', 'RopeStAlUpL', 0.0, true);
 			ePawn.Acceleration = DampVec(ePawn.Acceleration, Z * eGame.m_PLUpwardSpeed, 120, deltaTime);
 			GoToState(, 'MoveUp');
 		}
-		else if(aForward < eGame.m_backwardGentle)
+		else if (aForward < eGame.m_backwardGentle)
 		{
-			if(ePawn.FastPointCheck(ePawn.Location + vect(0,0,-10.0), ePawn.GetExtent(), true, true))
+			if (ePawn.FastPointCheck(ePawn.Location + vect(0,0,-10.0), ePawn.GetExtent(), true, true))
 				GoToState('s_PoleSlideDown');
 			else
 				GoToState(, 'OutBottom');
 		}
-		else if(!turning)
+		else if (!turning)
 		{
 			ePawn.PlayPole('RopeStAlNtR', 'RopeStAlNtL', 0.2, false);
 			ePawn.Acceleration = vect(0, 0, 0);
@@ -10623,7 +10760,7 @@ state s_PoleSlideDown extends s_SlideDownBase
 
 	event bool Pole(vector locationEnd, rotator orientationEnd, int RType)
 	{
-		if(RType == 3)
+		if (RType == 3)
 		{
 			ePawn.SetPhysics(PHYS_Falling);
 			GoToState('s_PlayerJumping');
@@ -10634,7 +10771,7 @@ state s_PoleSlideDown extends s_SlideDownBase
 		return false;
 	}
 
-    function PlayerMove( float DeltaTime )
+    function PlayerMove(float DeltaTime)
     {
 		local vector X, Y, Z, localSpeed, forwardDir;
 		local rotator turnRotator;
@@ -10644,12 +10781,12 @@ state s_PoleSlideDown extends s_SlideDownBase
 
 		m_SMTemp = ePawn.Acceleration.Z;
 
-		if(bInTransition)
+		if (bInTransition)
 			return;
 
-		if(Abs(aStrafe) > eGame.m_forwardGentle)
+		if (Abs(aStrafe) > eGame.m_forwardGentle)
 		{
-			if(aStrafe > 0)
+			if (aStrafe > 0)
 				turnRotator.Yaw = eGame.m_PLRotationSpeed * DeltaTime;
 			else
 				turnRotator.Yaw = -eGame.m_PLRotationSpeed * DeltaTime;
@@ -10664,14 +10801,14 @@ state s_PoleSlideDown extends s_SlideDownBase
 			ePawn.SetRotation(Rotator(forwardDir));
 		}
 
-		if((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
 		{
 			JumpRelease();
 		}
-		else if(aForward < eGame.m_backwardGentle)
+		else if (aForward < eGame.m_backwardGentle)
 		{
 			// Acceleration
-			ePawn.Velocity.Z = FMax(	ePawn.Velocity.Z - (eGame.m_PLSlideDownInertia * DeltaTime),
+			ePawn.Velocity.Z = FMax(ePawn.Velocity.Z - (eGame.m_PLSlideDownInertia * DeltaTime),
 									-eGame.m_PLSlideDownMaxSpeed);
 			ePawn.Acceleration = Z * ePawn.Velocity.Z;
 		}
@@ -10681,14 +10818,14 @@ state s_PoleSlideDown extends s_SlideDownBase
 			ePawn.Velocity.Z += (eGame.m_PLSlideDownInertia * DeltaTime);
 			ePawn.Acceleration = Z * ePawn.Velocity.Z;
 
-			if(ePawn.Velocity.Z > -eGame.m_PLSlideDownMinSpeed)
+			if (ePawn.Velocity.Z > -eGame.m_PLSlideDownMinSpeed)
 				GoToState('s_Pole');
 		}
 	}
 
 landed:
 	bInTransition = true;
-	if(!ePawn.PlayNLPLand(bDuck > 0, m_SMTemp))
+	if (!ePawn.PlayNLPLand(bDuck > 0, m_SMTemp))
 		ePawn.PlayPole('RopeStAlIOR', 'RopeStAlIOL', 0.1, false, true);
 	FinishAnim(0);
 	bInTransition = false;
@@ -10696,7 +10833,7 @@ landed:
 
 begin:
 	ePawn.PlayPole('RopeStAlNtR', 'RopeStAlNtL', 0.2, false);
-	if(m_SMTemp < -400)
+	if (m_SMTemp < -400)
 		ePawn.Acceleration.Z = m_SMTemp * 0.5;
 }
 
@@ -10720,7 +10857,7 @@ state s_Dead
 		// Prevents having another EndMission overwrite this one, set failure type
 		iGameOverMsg = 0;
 
-		if(eGame.bPermaDeathMode)
+		if (eGame.bPermaDeathMode)
 			bProfileDeletionPending = true;
 
 		ePawn.bCollideSB = false;
@@ -10730,10 +10867,10 @@ state s_Dead
 
 		DiscardPickup();
 
-		if(m_camera.IsBTW())
+		if (m_camera.IsBTW())
 			ePawn.bBatmanHack = true;
 
-		if(!(m_camera.IsBTW() && m_camera.m_volSize == EVS_Minute))
+		if (!(m_camera.IsBTW() && m_camera.m_volSize == EVS_Minute))
 			m_camera.SetMode(ECM_FSphere);
 
 		// reset all channels
@@ -10756,7 +10893,7 @@ state s_Dead
 Begin:
 	Sleep(0.5f);
 	// PlayTest temp
-	if(eGame.bDemoMode && myHUD.GetStateName() != 's_QuickLoadMenu')
+	if (eGame.bDemoMode && myHUD.GetStateName() != 's_QuickLoadMenu')
 	{
 		EMainHUD(myHUD).SaveState();
 		myHUD.GotoState('s_QuickLoadMenu');
@@ -10795,6 +10932,8 @@ defaultproperties
 	bF2000ZoomLevels=true // Joshua - Enables 2x/4x/6x zoom for F2000 sniper (default game had 6x only)
 	bLaserMicZoomLevels=true // Joshua - Enables zoom functionality for the Laser Mic
 	bBurstFire=true // Joshua - Restoring burst fire from early Splinter Cell builds
+	bCameraJammerAutoLock=false // Joshua - Adding the option to use Camera Jammer camera behavior from Pandora Tomorrow
+	bEnablePlayerStats=true // Joshua -  Player statistics tracking
 	bShowHUD=true
 	bShowInventory=true
 	bShowStealthMeter=true
