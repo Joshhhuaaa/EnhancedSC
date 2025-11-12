@@ -31,7 +31,6 @@ var INT                     m_ILabelXPos, m_ILabelWidth, m_ILineItemHeight, m_IT
 
 var bool                    m_bModified;    //A setting has changed
 var bool					m_bFirstRefresh;
-var int                     m_iPreviousLODDistance; // Joshua - Track previous value for Restart Required message
 
 function Created()
 {
@@ -45,7 +44,7 @@ function Created()
     m_ListBox.m_ILineItemHeight = m_ILineItemHeight;
     m_ListBox.m_ITitleLineItemHeight = m_ITitleLineItemHeight;
     InitVideoOptions();
-    m_ListBox.TitleFont=F_Normal;
+    m_ListBox.TitleFont = F_Normal;
 }
 
 function InitVideoOptions()
@@ -84,12 +83,13 @@ function InitVideoOptions()
     //InitPauseOnFocusLossCombo(m_ComboPauseOnFocusLoss);
     //AddLineItem();
 
-    AddScrollBarItem("GAMMA", m_GammaScroll);
-    InitGammaScrollBar(m_GammaScroll);
-    AddLineItem();
-
     AddScrollBarItem("BRIGHTNESS", m_BrightnessScroll);
     InitBrightnessScrollBar(m_BrightnessScroll);
+    AddLineItem();
+    
+    // Joshua - Move Gamma (actually adjusts Contrast) to appear after Brightness
+    AddScrollBarItem("CONTRAST", m_GammaScroll);
+    InitGammaScrollBar(m_GammaScroll);
     AddLineItem();
 }
 
@@ -177,7 +177,7 @@ function AddScrollBarItem(string LocalizationKey, out EPCHScrollBar ScrollBar)
     ValueLabel.SetLabelText("0", TXT_LEFT);
 
     // Store references to value labels
-    if (LocalizationKey == "GAMMA")
+    if (LocalizationKey == "CONTRAST") // Joshua - Ubisoft mislabeled this as Gamma, it actually controls Contrast in SplinterCell.ini
         m_LGammaValue = ValueLabel;
     else if (LocalizationKey == "BRIGHTNESS")
         m_LBrightnessValue = ValueLabel;
@@ -243,12 +243,12 @@ function InitEffectsQualityCombo(EPCComboControl ComboBox, EPCGameOptions GO)
 
 function InitGammaScrollBar(EPCHScrollBar ScrollBar)
 {
-    ScrollBar.SetRange(0, 100, 1);
+    ScrollBar.SetRange(0, 101, 1); // Joshua - Set 101 instead of 100 for full 0-100, instead of 0-99 slider
 }
 
 function InitBrightnessScrollBar(EPCHScrollBar ScrollBar)
 {
-    ScrollBar.SetRange(0, 100, 1);
+    ScrollBar.SetRange(0, 101, 1); // Joshua - Set 101 instead of 100 for full 0-100, instead of 0-99 slider
 }
 
 function InitTurnOffDistanceScaleCombo(EPCComboControl ComboBox)
@@ -282,8 +282,8 @@ function Refresh()
     GO = class'Actor'.static.GetGameOptions();
     EPC = EPlayerController(GetPlayerOwner());
 
-	m_GammaScroll.Pos = Clamp(GO.Gamma,0,99);	
-	m_BrightnessScroll.Pos = Clamp(GO.Brightness,0,99);    
+	m_GammaScroll.Pos = Clamp(GO.Gamma,0,100); // Joshua - Set 99 clamp to be 100 instead for full 0.0 to 1.0 range
+	m_BrightnessScroll.Pos = Clamp(GO.Brightness,0,100); // Joshua - Set 99 clamp to be 100 instead for full 0.0 to 1.0 range
 	
     // Joshua - Update value labels for scrollbars
     if (m_LGammaValue != None)
@@ -299,14 +299,8 @@ function Refresh()
     if (m_ComboTurnOffDistanceScale != None && EPC != None)
         m_ComboTurnOffDistanceScale.SetSelectedIndex(Clamp(EPC.eGame.TurnOffDistanceScale, 0, m_ComboTurnOffDistanceScale.List.Items.Count() - 1));
 
-    //if (m_ComboLODDistance != None && EPC != None)
-    //    m_ComboLODDistance.SetSelectedIndex(Clamp(int(EPC.eGame.bLODDistance), 0, m_ComboLODDistance.List.Items.Count() - 1));
-
     if (m_ComboLODDistance != None && EPC != None)
-    {
         m_ComboLODDistance.SetSelectedIndex(Clamp(int(EPC.eGame.bLODDistance), 0, m_ComboLODDistance.List.Items.Count() - 1));
-        m_iPreviousLODDistance = m_ComboLODDistance.GetSelectedIndex(); // Joshua - Store initial value
-    }
 
     //if (m_ComboPauseOnFocusLoss != None && EPC != None)
     //    m_ComboPauseOnFocusLoss.SetSelectedIndex(Clamp(int(EPC.eGame.bPauseOnFocusLoss), 0, m_ComboPauseOnFocusLoss.List.Items.Count() - 1));
@@ -319,10 +313,6 @@ function ResetToDefault()
 {
     local EPCGameOptions GO; 
     local EPlayerController EPC;
-    local string oldRes;
-    local bool oldLODDistance;
-
-    m_bFirstRefresh = true; // Joshua - Prevent native restart message during reset to default
 
 	GO = class'Actor'.static.GetGameOptions();
     EPC = EPlayerController(GetPlayerOwner());
@@ -330,7 +320,6 @@ function ResetToDefault()
 	GO.oldResolution = GO.Resolution;
 	GO.oldEffectsQuality = GO.EffectsQuality;
 	GO.oldShadowResolution = GO.ShadowResolution;
-    oldLODDistance = EPC.eGame.bLODDistance;
 
 	GO.ResetGraphicsToDefault();
 	GO.UpdateEngineSettings();   
@@ -341,13 +330,7 @@ function ResetToDefault()
     //EPC.eGame.bPauseOnFocusLoss = EPC.eGame.default.bPauseOnFocusLoss;
     EPC.eGame.SaveEnhancedOptions();
 
-	Refresh(); 
-
-    // Joshua - Show restart message if LODDistance actually changed during reset
-    if (oldLODDistance != EPC.eGame.bLODDistance)
-    {
-        EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "RestartRequired", "Localization\\Enhanced"), Localize("Common", "RestartRequiredWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
-    }
+	Refresh();
 }
 
 function SaveOptions()
@@ -395,9 +378,9 @@ function SaveOptions()
 
 function Notify(UWindowDialogControl C, byte E)
 {
-    if(E == DE_Change)
+    if (E == DE_Change)
     {
-        switch(C)
+        switch (C)
         {
         case m_ComboResolution: 
         case m_ComboShadowResolution:        
@@ -414,12 +397,6 @@ function Notify(UWindowDialogControl C, byte E)
                 m_LGammaValue.SetLabelText(string(int(m_GammaScroll.Pos)), TXT_LEFT);
             if (C == m_BrightnessScroll && m_LBrightnessValue != None)
                 m_LBrightnessValue.SetLabelText(string(int(m_BrightnessScroll.Pos)), TXT_LEFT);
-            // Joshua - Show restart required message for native settings
-            if (C == m_ComboLODDistance && !m_bFirstRefresh && m_ComboLODDistance.GetSelectedIndex() != m_iPreviousLODDistance)
-            {
-                EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "RestartRequired", "Localization\\Enhanced"), Localize("Common", "RestartRequiredWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
-                m_iPreviousLODDistance = m_ComboLODDistance.GetSelectedIndex(); // Update previous value
-            }
             break;
         }
     }
@@ -428,20 +405,20 @@ function Notify(UWindowDialogControl C, byte E)
 function MouseWheelDown(FLOAT X, FLOAT Y)
 {
     CloseActiveComboBoxes();
-    if(m_ListBox != None)
+    if (m_ListBox != None)
         m_ListBox.MouseWheelDown(X, Y);
 }
 
 function MouseWheelUp(FLOAT X, FLOAT Y)
 {
     CloseActiveComboBoxes();
-    if(m_ListBox != None)
+    if (m_ListBox != None)
         m_ListBox.MouseWheelUp(X, Y);
 }
 
 function CloseActiveComboBoxes()
 {
-    if(m_ListBox != None)
+    if (m_ListBox != None)
         m_ListBox.CloseActiveComboBoxes();
 }
 
@@ -449,7 +426,7 @@ defaultproperties
 {
     m_ILabelXPos=15
     m_ILabelWidth=250
-    m_IScrollWidth=165 // Joshua - Reduced from 190 to fit the new label
+    m_IScrollWidth=160 // Joshua - Reduced from 190 to fit the new label
     m_ITitleLineItemHeight=2
     m_ILineItemHeight=8
 }
