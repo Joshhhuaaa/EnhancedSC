@@ -173,7 +173,7 @@ function PostBeginPlay()
     GameMainMenuHUD = spawn(class'EGameMainMenuHUD',self);
 
     EpcInventory = Epc.ePawn.FullInventory;
-	if( EpcInventory == None )
+	if (EpcInventory == None)
 		Log("Problem to get player inventory in Game Menu HUD.");
 }
 
@@ -182,9 +182,9 @@ function PostBeginPlay()
 
  Description:   Be able to switch owner state in c++
 -----------------------------------------------------------------------------*/
-event OwnerGotoStateSafe( name newState )
+event OwnerGotoStateSafe(name newState)
 {
-	if( newState == '' )
+	if (newState == '')
 		newState = EchelonMainHUD(owner).RestoreState();
     EchelonMainHUD(owner).GotoState(newState);
 }
@@ -196,7 +196,7 @@ event OwnerGotoStateSafe( name newState )
 
 state s_QuickSave
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_QuickSave(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_QuickSave(Key, Action, Delta);}
 
 	function PostRender(ECanvas Canvas)	{PostRender_s_QuickSave(Canvas);}
     
@@ -209,7 +209,7 @@ state s_QuickSave
 
 state s_QuickLoad
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_QuickLoad(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_QuickLoad(Key, Action, Delta);}
 
 	function PostRender(ECanvas Canvas)	{PostRender_s_QuickLoad(Canvas);}
     
@@ -224,7 +224,7 @@ auto state s_Inventory // Joshua - Controller function
 {
 	function PostRender(ECanvas Canvas)	{PostRender_s_Inventory(Canvas);}
 
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_Inventory(Key, Action, Delta);}	
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_Inventory(Key, Action, Delta);}	
     
     function BeginState() {BeginState_s_Inventory();}
 
@@ -236,7 +236,7 @@ auto state s_Inventory // Joshua - Controller function
 =============================================================================*/
 state s_GameInfo
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_GameInfo(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_GameInfo(Key, Action, Delta);}
 
 	function PostRender(ECanvas Canvas)	{PostRender_s_GameInfo(Canvas);}
     
@@ -249,14 +249,14 @@ state s_GameInfo
 state s_MainMenu
 {
 /*
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_MainMenu(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_MainMenu(Key, Action, Delta);}
 
 	function PostRender(ECanvas Canvas)	{PostRender_s_MainMenu(Canvas);}
     
     function BeginState() {BeginState_s_MainMenu();}
  */
  // Joshua - Replaced with s_GameInfo to prevent accessing Xbox-specific menus that crash the game
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_GameInfo(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_GameInfo(Key, Action, Delta);}
 
 	function PostRender(ECanvas Canvas)	{PostRender_s_GameInfo(Canvas);}
     
@@ -268,7 +268,7 @@ state s_MainMenu
 =============================================================================*/
 state s_Training
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_Training(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_Training(Key, Action, Delta);}
 
 	function PostRender(ECanvas Canvas)	{PostRender_s_Training(Canvas);}
 
@@ -280,19 +280,19 @@ state s_Training
 =============================================================================*/
 state s_MissionFailed
 {
-	function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_MissionFailed(Key, Action, Delta);}
+	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_MissionFailed(Key, Action, Delta);}
 
 	function PostRender(ECanvas Canvas)	{PostRender_s_MissionFailed(Canvas);}
     
     function BeginState() {BeginState_s_MissionFailed();}
 
     function Tick(float DeltaTime) { Tick_s_MissionFailed(DeltaTime);}
-
+/*
 Begin:
     // Joshua - Load game automatically after game over for controller mode
     if (!EPC.eGame.bPermadeathMode)
     {
-        if(EPC.eGame.bUseController)
+        if (EPC.eGame.bUseController)
         {
             Sleep(6.0);
             if (EPC.myHUD.IsPlayerGameOver() && Epc.CheckpointLevel == GetCurrentMapName())
@@ -301,6 +301,7 @@ Begin:
                 ConsoleCommand("LOADGAME FILENAME=" $ Localize("HUD", "AUTOSAVENAME", "Localization\\HUD") $ ".en2");
         }
     }
+*/
 }
 
 /*=============================================================================
@@ -308,7 +309,7 @@ Begin:
 =============================================================================*/
 state s_MissionComplete
 {
-	function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_MissionComplete(Key, Action, Delta);}
+	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_MissionComplete(Key, Action, Delta);}
 
 	function PostRender(ECanvas Canvas)	{PostRender_s_MissionComplete(Canvas);}
     
@@ -319,10 +320,13 @@ state s_MissionComplete
 // Joshua - s_MissionComplete is handled in C++, so its behavior can't be changed in UnrealScript.
 // The game transitions to the next level after 13 seconds, so we reset the timer to allow the player to view their Player Statistics until a key press.
 Begin:
-    while(true)
+    if (Epc.bEnablePlayerStats)
     {
-        Sleep(12.9);
-        missionFilterTimer = 0;
+        while (true)
+        {
+            Sleep(12.9);
+            missionFilterTimer = 0;
+        }
     }
 }
 
@@ -347,13 +351,13 @@ state s_TrainingFailed
     {
         blackAlphaTimer += DeltaTime;
 
-        if(bIncrease)
+        if (bIncrease)
         {
-            if(blackAlphaTimer < 1.5f)
+            if (blackAlphaTimer < 1.5f)
             {
                 blackAlpha = 255.0f * (blackAlphaTimer / 1.5f);
             }
-            else if(blackAlphaTimer > 2.5f)
+            else if (blackAlphaTimer > 2.5f)
             {
                 bIncrease = false;
                 blackAlphaTimer = 0.0f;
@@ -365,7 +369,7 @@ state s_TrainingFailed
         }
         else
         {
-            if(blackAlphaTimer < 1.5)
+            if (blackAlphaTimer < 1.5)
             {
                 blackAlpha = 255.0f * (1.0f - (blackAlphaTimer / 1.5f));
             }
