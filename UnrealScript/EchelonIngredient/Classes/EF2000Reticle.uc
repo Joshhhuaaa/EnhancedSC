@@ -123,30 +123,30 @@ function PostBeginPlay()
 
  Be carefull so that any state ObjectHudTick are not declared in SuperClasses
 -----------------------------------------------------------------------------*/
-function ObjectHudTick( float DeltaTime )
+function ObjectHudTick(float DeltaTime)
 {  
     local int               i;
 
-    if(Epc.m_useTarget)
+    if (Epc.m_useTarget)
     {
 /*
         // Update Direction //
-        for(i = NB_TURN_VALUE - 1; i > 0; i--)
-            fTurn[i] = fTurn[i-1];
+        for (i = NB_TURN_VALUE - 1; i > 0; i--)
+            fTurn[i] = fTurn[i - 1];
         fTurn[0] = Epc.Rotation.Yaw;
 
-        for(i = NB_TURN_VALUE - 1; i > 0; i--)
-            fLookUp[i] = fLookUp[i-1];
+        for (i = NB_TURN_VALUE - 1; i > 0; i--)
+            fLookUp[i] = fLookUp[i - 1];
         fLookUp[0] = Epc.Rotation.Pitch;
 */
         // Update Target in sniper mode //
-        if( F2000 != None && F2000.bSniperMode )
+        if (F2000 != None && F2000.bSniperMode)
         {
-			if(Epc.m_targetActor != None)
+			if (Epc.m_targetActor != None)
 			{
 				fDistDistance = VSize(Epc.m_targetLocation-Epc.Location);
 
-				if(Epc.m_targetActor.bIsPawn && !EPawn(Epc.m_targetActor).bHostile)
+				if (Epc.m_targetActor.bIsPawn && !EPawn(Epc.m_targetActor).bHostile)
 					chStyle = CH_NONHOSTILE;
 				else
 					chStyle = CH_NONE;
@@ -165,7 +165,7 @@ function ObjectHudTick( float DeltaTime )
 //------------------------------------------------------------------------
 state s_Selected
 {
-	function ObjectHudTick( float DeltaTime )
+	function ObjectHudTick(float DeltaTime)
 	{
 		Global.ObjectHudTick(DeltaTime);
         Super.ObjectHudTick(DeltaTime);
@@ -189,7 +189,7 @@ state s_Blinking
     function Timer()
     {
 		bBlinkOff = !bBlinkOff;
-		if(F2000 == None && !F2000.bSniperMode)
+		if (F2000 == None && !F2000.bSniperMode)
 			GotoState('s_Selected');
     }
 }
@@ -202,7 +202,7 @@ function DrawView(HUD Hud, ECanvas Canvas)
 {
 	Super.DrawView(Hud, Canvas);
 
-	if( F2000 != None && F2000.bSniperMode && Epc.bShowScope && Epc.bShowHUD) // Joshua - Show scope toggle
+	if (F2000 != None && F2000.bSniperMode && Epc.bShowScope && Epc.bShowHUD) // Joshua - Show scope toggle
 	{			
         DrawDistanceMeter(Canvas);
         DrawQuickInv(Canvas);		
@@ -210,7 +210,7 @@ function DrawView(HUD Hud, ECanvas Canvas)
         DrawNoiseBars(Canvas);
         DrawGreenRing(Canvas);
         DrawSniperMask(Canvas);		
-		if(F2000.Sn != None)
+		if (F2000.Sn != None)
 			DrawFatigueMeter(Canvas, F2000.Sn.fatigueLevel);
 	}
 }
@@ -219,7 +219,7 @@ function DrawFatigueMeter(ECanvas Canvas, float fatigueLevel)
 {			
     // Fill
     Canvas.SetDrawColor(128,128,128);
-	Canvas.Style=ERenderStyle.STY_Alpha;
+	Canvas.Style = ERenderStyle.STY_Alpha;
 
 	DrawLine(0 + DIST_METER_END + 1, SCREEN_HALF_Y - DIST_METER_VERT_SIZE + 1,
              0 + DIST_METER_START - 1  , SCREEN_HALF_Y + DIST_METER_VERT_SIZE    , EHC_ALPHA_GREEN, Canvas);
@@ -231,7 +231,7 @@ function DrawFatigueMeter(ECanvas Canvas, float fatigueLevel)
     DrawRectangle(0 + DIST_METER_END - 1, SCREEN_HALF_Y - DIST_METER_VERT_SIZE + 1, 0 + DIST_METER_START + 1, SCREEN_HALF_Y + DIST_METER_VERT_SIZE    , 1, EHC_BLACK, Canvas);	
         
 	Canvas.SetDrawColor(128,128,128);
-	Canvas.Style=ERenderStyle.STY_Normal;
+	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
 
@@ -243,7 +243,7 @@ function DrawGreenRing(ECanvas Canvas)
 {                
 	// (Yanick Mimee) July-04-2002	
 	// Green border
-	Canvas.Style=ERenderStyle.STY_Alpha;
+	Canvas.Style = ERenderStyle.STY_Alpha;
 	Canvas.SetDrawColor(128,128,128);
 
     Canvas.SetPos(0,0);
@@ -300,7 +300,7 @@ function DrawGreenRing(ECanvas Canvas)
 
     DrawLine(SCREEN_END_X - GREEN_BORDER_CORNER_X - 2, SCREEN_END_Y - GREEN_BORDER_CORNER_Y - GREEN_BORDER_CORNER2_LENGTH - 2, SCREEN_END_X - GREEN_BORDER_CORNER_X - 1, SCREEN_END_Y - GREEN_BORDER_CORNER_Y - 2, EHC_GREEN, Canvas);
     DrawLine(SCREEN_END_X - GREEN_BORDER_CORNER_X - 3, SCREEN_END_Y - GREEN_BORDER_CORNER_Y - GREEN_BORDER_CORNER2_LENGTH - 2, SCREEN_END_X - GREEN_BORDER_CORNER_X - 2, SCREEN_END_Y - GREEN_BORDER_CORNER_Y - 2, EHC_BLACK, Canvas);
-	Canvas.Style=ERenderStyle.STY_Normal;
+	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
 //------------------------------------------------------------------------
@@ -310,7 +310,7 @@ function DrawGreenRing(ECanvas Canvas)
 function DrawStems(ECanvas Canvas)
 {
     Canvas.SetDrawColor(128,128,128);
-	Canvas.Style=ERenderStyle.STY_Alpha;
+	Canvas.Style = ERenderStyle.STY_Alpha;
 
     // North Stem //
     DrawLine(SCREEN_HALF_X - 1, STEMS_NORTH_START, SCREEN_HALF_X    , STEMS_VERT_1ST_STOP, EHC_GREEN, Canvas);
@@ -390,7 +390,7 @@ function DrawStems(ECanvas Canvas)
     DrawLine(SCREEN_END_X - STEMS_HORIZ_END - 2, SCREEN_HALF_Y - 2, SCREEN_END_X - STEMS_HORIZ_END - 1, SCREEN_HALF_Y + 3, EHC_GREEN, Canvas);
     DrawLine(SCREEN_END_X - STEMS_HORIZ_END - 3, SCREEN_HALF_Y - 2, SCREEN_END_X - STEMS_HORIZ_END - 2, SCREEN_HALF_Y + 3, EHC_BLACK, Canvas);
 
-	Canvas.Style=ERenderStyle.STY_Normal;
+	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
 //------------------------------------------------------------------------
@@ -405,7 +405,7 @@ function DrawDistanceMeter(ECanvas Canvas)
 
     // Fill
     Canvas.SetDrawColor(128,128,128);
-	Canvas.Style=ERenderStyle.STY_Alpha;
+	Canvas.Style = ERenderStyle.STY_Alpha;
 
     DrawLine(SCREEN_END_X - DIST_METER_START + 1, SCREEN_HALF_Y - DIST_METER_VERT_SIZE + 1,
              SCREEN_END_X - DIST_METER_END - 1  , SCREEN_HALF_Y + DIST_METER_VERT_SIZE    , EHC_ALPHA_GREEN, Canvas);
@@ -431,7 +431,7 @@ function DrawDistanceMeter(ECanvas Canvas)
         
     Canvas.SetPos(SCREEN_END_X - DIST_METER_END - 5, SCREEN_HALF_Y - DIST_METER_VERT_SIZE + 4);
     Canvas.DrawTextRightAligned(strFormattedDistance);    
-	Canvas.Style=ERenderStyle.STY_Normal;
+	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
 //------------------------------------------------------------------------
@@ -447,7 +447,7 @@ function DrawQuickInv(ECanvas Canvas)
     local float             xLen, yLen; // Joshua - Display zoom level in SC-20K scope
 
     Canvas.SetDrawColor(128,128,128); 
-    Canvas.Style=ERenderStyle.STY_Alpha;
+    Canvas.Style = ERenderStyle.STY_Alpha;
     // Fond Vert Transparent
     DrawLine(QUICK_INV_LEFT + 2, QUICK_INV_TOP + 2, QUICK_INV_RIGHT - 2, QUICK_INV_BOTTOM - 2, EHC_ALPHA_GREEN, Canvas);
 
@@ -462,7 +462,7 @@ function DrawQuickInv(ECanvas Canvas)
     DrawLine(QUICK_INV_LEFT + 59, QUICK_INV_TOP + 1, QUICK_INV_LEFT + 60, QUICK_INV_BOTTOM - 1, EHC_BLACK, Canvas);
     
     // Gun Icon
-    Canvas.SetPos(QUICK_INV_LEFT - 14, QUICK_INV_TOP+2);
+    Canvas.SetPos(QUICK_INV_LEFT - 14, QUICK_INV_TOP + 2);
 
     Canvas.SetDrawColor(64,64,64);
     Canvas.Style = ERenderStyle.STY_Modulated;
@@ -470,7 +470,7 @@ function DrawQuickInv(ECanvas Canvas)
     Canvas.Style = ERenderStyle.STY_Normal;
 
     Canvas.SetDrawColor(128,128,128);
-	Canvas.Style=ERenderStyle.STY_Alpha;
+	Canvas.Style = ERenderStyle.STY_Alpha;
 
     // Primary ammo qty
     Canvas.SetPos(QUICK_INV_LEFT + 50, QUICK_INV_TOP + 27);
@@ -483,9 +483,9 @@ function DrawQuickInv(ECanvas Canvas)
     Canvas.DrawTextRightAligned(strPrimAmmoNb);
 
     // Joshua - Display zoom level in SC-20K scope
-    if( F2000 != None && Epc.bF2000ZoomLevels)
+    if (F2000 != None && Epc.bF2000ZoomLevels)
     {
-        switch(F2000.FOVIndex)
+        switch (F2000.FOVIndex)
         {
         case 0: // 2x Zoom
             strZoomLevel = "2X";
@@ -501,23 +501,22 @@ function DrawQuickInv(ECanvas Canvas)
         Canvas.Font = font'EHUDFont';
         Canvas.SetDrawColor(128,128,128);
         Canvas.DrawColor = Green;
-        Canvas.Style=ERenderStyle.STY_Alpha;
+        Canvas.Style = ERenderStyle.STY_Alpha;
         
         Canvas.TextSize(strZoomLevel, xLen, yLen);
     
-        Canvas.SetPos(QUICK_INV_LEFT + 60 + (23 - xLen)/2, QUICK_INV_TOP + 10 + (25 - yLen)/2);
+        Canvas.SetPos(QUICK_INV_LEFT + 60 + (23 - xLen) / 2, QUICK_INV_TOP + 10 + (25 - yLen) / 2);
         Canvas.DrawText(strZoomLevel);
 
-        Canvas.Style= ERenderStyle.STY_Normal;
+        Canvas.Style = ERenderStyle.STY_Normal;
     }
 
-	/*
     // Secondary Ammo, if any 
-	if( F2000 == None )
+	if (F2000 == None)
 		return;
 
 	SecAmmo = ESecondaryAmmo(F2000.SecondaryAmmo);
-    if( SecAmmo != None )
+    if (SecAmmo != None && !Epc.bF2000ZoomLevels)
     {
         // Secondary Ammo Icon
         Canvas.SetPos(QUICK_INV_LEFT + 62, QUICK_INV_TOP + 2);
@@ -529,14 +528,14 @@ function DrawQuickInv(ECanvas Canvas)
         Canvas.DrawColor = Green;
 
         // Secondary Ammo qty
-        if(SecAmmo.Quantity < 10)
+        if (SecAmmo.Quantity < 10)
             Canvas.SetPos(QUICK_INV_LEFT + 76, QUICK_INV_TOP + 27);
         else
             Canvas.SetPos(QUICK_INV_LEFT + 81, QUICK_INV_TOP + 27);
 
         //Canvas.DrawColor = Green;
         Canvas.DrawTextRightAligned(String(SecAmmo.Quantity));
-    }*/
+    }
 }
 
 //------------------------------------------------------------------------
@@ -610,7 +609,7 @@ function DrawNoiseBars(ECanvas Canvas)
             break;
     }
 
-	Canvas.Style=ERenderStyle.STY_Alpha;	
+	Canvas.Style = ERenderStyle.STY_Alpha;	
 
     // Draw Compas Coordinates //
     Canvas.Font = font'EHUDFont';
@@ -619,34 +618,34 @@ function DrawNoiseBars(ECanvas Canvas)
     Canvas.SetPos(SCREEN_HALF_X - rPos, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST + 4);
     Canvas.DrawText("["$szFirstDir$"]");
 
-    Canvas.SetPos(SCREEN_HALF_X - rPos + p1, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST-11);
+    Canvas.SetPos(SCREEN_HALF_X - rPos + p1, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST - 11);
     Canvas.DrawText(".");
-    Canvas.SetPos(SCREEN_HALF_X - rPos + p1, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST-10);
+    Canvas.SetPos(SCREEN_HALF_X - rPos + p1, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST - 10);
     Canvas.DrawText(".");
 
     Canvas.SetPos(SCREEN_HALF_X + (630 - rPos), SCREEN_HALF_Y - NOISE_BARS_VERT_DIST + 4);
     Canvas.DrawText("["$szSecondDir$"]");
 
-    Canvas.SetPos(SCREEN_HALF_X + (630 - rPos) + p2, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST-11);
+    Canvas.SetPos(SCREEN_HALF_X + (630 - rPos) + p2, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST - 11);
     Canvas.DrawText(".");
-    Canvas.SetPos(SCREEN_HALF_X + (630 - rPos) + p2, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST-10);
+    Canvas.SetPos(SCREEN_HALF_X + (630 - rPos) + p2, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST - 10);
     Canvas.DrawText(".");
 
     // Draw noise bars //	
     DrawNoiseBar(SCREEN_HALF_X - NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST - 6, 
                  SCREEN_HALF_X + NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST - 2, 
-                 -rPos%126, Canvas);
+                 -rPos % 126, Canvas);
     DrawNoiseBar(SCREEN_HALF_X - NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST, 
                  SCREEN_HALF_X + NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST + 4, 
-                 rPos%126, Canvas);
+                 rPos % 126, Canvas);
 
     DrawNoiseBar(SCREEN_HALF_X - NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y + NOISE_BARS_VERT_DIST - 4, 
                  SCREEN_HALF_X + NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y + NOISE_BARS_VERT_DIST, 
-                 rPos%126, Canvas);
+                 rPos % 126, Canvas);
     DrawNoiseBar(SCREEN_HALF_X - NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y + NOISE_BARS_VERT_DIST + 2, 
                  SCREEN_HALF_X + NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y + NOISE_BARS_VERT_DIST + 6, 
-                 -rPos%126, Canvas);
-	Canvas.Style=ERenderStyle.STY_Normal;
+                 -rPos % 126, Canvas);
+	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
 //------------------------------------------------------------------------
@@ -665,28 +664,28 @@ function DrawCrosshair(ECanvas Canvas)
 /*
     turnValue = 0;
     lookUpValue = 0;
-    for(i = NB_TURN_VALUE - 1; i > 0; i--)
+    for (i = NB_TURN_VALUE - 1; i > 0; i--)
     {
-        turn = fTurn[i-1] - fTurn[i];
-        if(turn > DELTA_TURN_AVERAGE)
+        turn = fTurn[i - 1] - fTurn[i];
+        if (turn > DELTA_TURN_AVERAGE)
             turn = DELTA_TURN_AVERAGE;
-        else if(turn < -DELTA_TURN_AVERAGE)
+        else if (turn < -DELTA_TURN_AVERAGE)
             turn = -DELTA_TURN_AVERAGE;
 
-        lookUp = fLookUp[i] - fLookUp[i-1];
-        if(lookUp > DELTA_LOOKUP_AVERAGE)
+        lookUp = fLookUp[i] - fLookUp[i - 1];
+        if (lookUp > DELTA_LOOKUP_AVERAGE)
             lookUp= DELTA_LOOKUP_AVERAGE;
-        else if(lookUp < -DELTA_LOOKUP_AVERAGE)
+        else if (lookUp < -DELTA_LOOKUP_AVERAGE)
             lookUp = -DELTA_LOOKUP_AVERAGE;
 
-        turnValue   += turn   / DELTA_TURN_AVERAGE   * (1.0f/(NB_TURN_VALUE-1));
-        lookUpValue += lookUp / DELTA_LOOKUP_AVERAGE * (1.0f/(NB_TURN_VALUE-1));
+        turnValue   += turn   / DELTA_TURN_AVERAGE   * (1.0f / (NB_TURN_VALUE - 1));
+        lookUpValue += lookUp / DELTA_LOOKUP_AVERAGE * (1.0f / (NB_TURN_VALUE - 1));
     }
 */
     // Calculate Crosshair Position //
 	CROSSHAIR_CENTER_X = SCREEN_HALF_X;
 	CROSSHAIR_CENTER_Y = SCREEN_HALF_Y;
-	if( F2000 != None && F2000.bSniperMode )
+	if (F2000 != None && F2000.bSniperMode)
 	{
 		CENTERSCALE = 0.5;
 	}
@@ -706,7 +705,7 @@ function DrawCrosshair(ECanvas Canvas)
 	BOTTOMRIGHT_DEP_Y = 4 + MAX_CROSSHAIR_DEP_X * CENTERSCALE;
 	
     
-    switch(chStyle)
+    switch (chStyle)
     {
         
         case CH_NONE:
@@ -717,104 +716,104 @@ function DrawCrosshair(ECanvas Canvas)
             break;
     }
 	
-	Canvas.Style=ERenderStyle.STY_Alpha;
+	Canvas.Style = ERenderStyle.STY_Alpha;
 
-	if(F2000 == None || !F2000.bSniperMode)
+	if (F2000 == None || !F2000.bSniperMode)
 	{	
-		if ( F2000 != None )
+		if (F2000 != None)
 		{
 			
 			// Top Right Corner 
-			Canvas.SetPos( CROSSHAIR_CENTER_X + TOPRIGHT_DEP_X - 3, CROSSHAIR_CENTER_Y + TOPRIGHT_DEP_Y + 1);			
-			eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.svf2_mire, 7, 7, 0, 0, 7, 7); 		
+			Canvas.SetPos(CROSSHAIR_CENTER_X + TOPRIGHT_DEP_X - 3, CROSSHAIR_CENTER_Y + TOPRIGHT_DEP_Y + 1);			
+			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 7, 7, 0, 0, 7, 7); 		
 
 			// Top Left Corner 			
-			Canvas.SetPos( CROSSHAIR_CENTER_X + TOPLEFT_DEP_X + 1, CROSSHAIR_CENTER_Y + TOPLEFT_DEP_Y + 1);
-			eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.svf2_mire, 7, 7, 7, 0, -7, 7); 		
+			Canvas.SetPos(CROSSHAIR_CENTER_X + TOPLEFT_DEP_X + 1, CROSSHAIR_CENTER_Y + TOPLEFT_DEP_Y + 1);
+			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 7, 7, 7, 0, -7, 7); 		
 
 			// Bottom Right Corner 			
-			Canvas.SetPos( CROSSHAIR_CENTER_X + BOTTOMRIGHT_DEP_X - 3,CROSSHAIR_CENTER_Y + BOTTOMRIGHT_DEP_Y - 3);
-			eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.svf2_mire, 7, 7, 0, 7, 7, -7); 		
+			Canvas.SetPos(CROSSHAIR_CENTER_X + BOTTOMRIGHT_DEP_X - 3,CROSSHAIR_CENTER_Y + BOTTOMRIGHT_DEP_Y - 3);
+			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 7, 7, 0, 7, 7, -7); 		
 
 			// Bottom Left Corner			
-			Canvas.SetPos( CROSSHAIR_CENTER_X + BOTTOMLEFT_DEP_X + 1, CROSSHAIR_CENTER_Y + BOTTOMLEFT_DEP_Y - 3);
-			eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.svf2_mire, 7, 7, 7, 7, -7, -7); 		
+			Canvas.SetPos(CROSSHAIR_CENTER_X + BOTTOMLEFT_DEP_X + 1, CROSSHAIR_CENTER_Y + BOTTOMLEFT_DEP_Y - 3);
+			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 7, 7, 7, 7, -7, -7); 		
 		}
 		else
 		{  
 			// Top 
-			Canvas.SetPos( CROSSHAIR_CENTER_X - 2, CROSSHAIR_CENTER_Y - (MAX_CROSSHAIR_DEP_X * CENTERSCALE) - 10 );
-			eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.pi_mire_top_bas, 5, 6, 0, 0, 5, 6); 		
+			Canvas.SetPos(CROSSHAIR_CENTER_X - 2, CROSSHAIR_CENTER_Y - (MAX_CROSSHAIR_DEP_X * CENTERSCALE) - 10);
+			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.pi_mire_top_bas, 5, 6, 0, 0, 5, 6); 		
 
 			// Right
-			Canvas.SetPos( CROSSHAIR_CENTER_X + (MAX_CROSSHAIR_DEP_X * CENTERSCALE) + 5, CROSSHAIR_CENTER_Y - 2);
-			eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.pi_mire_cote, 6, 5, 0, 0, 6, 5); 		
+			Canvas.SetPos(CROSSHAIR_CENTER_X + (MAX_CROSSHAIR_DEP_X * CENTERSCALE) + 5, CROSSHAIR_CENTER_Y - 2);
+			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.pi_mire_cote, 6, 5, 0, 0, 6, 5); 		
 
 			// Bottom
-			Canvas.SetPos( CROSSHAIR_CENTER_X - 2, CROSSHAIR_CENTER_Y + (MAX_CROSSHAIR_DEP_X * CENTERSCALE) + 5 );
-			eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.pi_mire_top_bas, 5, 6, 5, 6, -5, -6); 		
+			Canvas.SetPos(CROSSHAIR_CENTER_X - 2, CROSSHAIR_CENTER_Y + (MAX_CROSSHAIR_DEP_X * CENTERSCALE) + 5);
+			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.pi_mire_top_bas, 5, 6, 5, 6, -5, -6); 		
 
 			// Left
-			Canvas.SetPos( CROSSHAIR_CENTER_X - (MAX_CROSSHAIR_DEP_X * CENTERSCALE) - 5 - 5, CROSSHAIR_CENTER_Y - 2);
-			eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.pi_mire_cote, 6, 5, 6, 5, -6, -5); 		
+			Canvas.SetPos(CROSSHAIR_CENTER_X - (MAX_CROSSHAIR_DEP_X * CENTERSCALE) - 5 - 5, CROSSHAIR_CENTER_Y - 2);
+			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.pi_mire_cote, 6, 5, 6, 5, -6, -5); 		
 		}
 	}
 
     // crosshair dot //
-	if(!bBlinkOff)
+	if (!bBlinkOff)
 	{
-		//Canvas.DrawLine(CROSSHAIR_CENTER_X - CROSSHAIR_WIDTH/2, CROSSHAIR_CENTER_Y - CROSSHAIR_HEIGHT/2, CROSSHAIR_WIDTH, CROSSHAIR_HEIGHT, chColor, -1, eLevel.TGAME);
+		//Canvas.DrawLine(CROSSHAIR_CENTER_X - CROSSHAIR_WIDTH / 2, CROSSHAIR_CENTER_Y - CROSSHAIR_HEIGHT / 2, CROSSHAIR_WIDTH, CROSSHAIR_HEIGHT, chColor, -1, eLevel.TGAME);
 		// (Yanick Mimee) July-05-2002
 		// New aim
-		if ( F2000 != None)
+		if (F2000 != None)
 		{
-			Canvas.SetPos(CROSSHAIR_CENTER_X - CROSSHAIR_WIDTH/2, CROSSHAIR_CENTER_Y - CROSSHAIR_HEIGHT/2);
-			eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.svf2_mire_fond, CROSSHAIR_WIDTH, CROSSHAIR_HEIGHT, 0, 0, 17, 17); 
+			Canvas.SetPos(CROSSHAIR_CENTER_X - CROSSHAIR_WIDTH / 2, CROSSHAIR_CENTER_Y - CROSSHAIR_HEIGHT / 2);
+			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire_fond, CROSSHAIR_WIDTH, CROSSHAIR_HEIGHT, 0, 0, 17, 17); 
 		}
 		else
 		{
-			Canvas.SetPos(CROSSHAIR_CENTER_X - CROSSHAIR_WIDTH_SMALL/2, CROSSHAIR_CENTER_Y - CROSSHAIR_HEIGHT_SMALL/2);
-			eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.pi_fond_mire, CROSSHAIR_WIDTH_SMALL, CROSSHAIR_HEIGHT_SMALL, 0, 0, 11, 11); 
+			Canvas.SetPos(CROSSHAIR_CENTER_X - CROSSHAIR_WIDTH_SMALL / 2, CROSSHAIR_CENTER_Y - CROSSHAIR_HEIGHT_SMALL / 2);
+			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.pi_fond_mire, CROSSHAIR_WIDTH_SMALL, CROSSHAIR_HEIGHT_SMALL, 0, 0, 11, 11); 
 		}
 	}
 
 	/* REMOVE THE DOUBLE CIRCLE THING - KEEP THE CODE IN CASE THEY WANT IT BACK (Yanick Mimee)
     // Corners around crosshair thinggy
-    if(!bBlinkOff && (chStyle != CH_NONE || (F2000 != None && F2000.bSniperMode)))
+    if (!bBlinkOff && (chStyle != CH_NONE || (F2000 != None && F2000.bSniperMode)))
     {		
         // Top Left Corner 
-		Canvas.SetPos( CROSSHAIR_CENTER_X + TOPLEFT_DEP_X, 
-			           CROSSHAIR_CENTER_Y + TOPLEFT_DEP_Y );
-		eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.svf2_mire, 
+		Canvas.SetPos(CROSSHAIR_CENTER_X + TOPLEFT_DEP_X, 
+			           CROSSHAIR_CENTER_Y + TOPLEFT_DEP_Y);
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 
 			                              9, 
 										  9, 
 										  0, 0, 9, 9); 
 
 		// Top Right Corner
-		Canvas.SetPos( CROSSHAIR_CENTER_X + TOPRIGHT_DEP_X - 4, 
-					   CROSSHAIR_CENTER_Y + TOPRIGHT_DEP_Y );
-		eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.svf2_mire, 
+		Canvas.SetPos(CROSSHAIR_CENTER_X + TOPRIGHT_DEP_X - 4, 
+					   CROSSHAIR_CENTER_Y + TOPRIGHT_DEP_Y);
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 
 			                              9, 
 										  9, 
 										  9, 0, -9, 9); 
 
 		// Bottom Left Corner 
-		Canvas.SetPos( CROSSHAIR_CENTER_X + BOTTOMLEFT_DEP_X, 
-					   CROSSHAIR_CENTER_Y + BOTTOMLEFT_DEP_Y - 4 );
-		eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.svf2_mire, 
+		Canvas.SetPos(CROSSHAIR_CENTER_X + BOTTOMLEFT_DEP_X, 
+					   CROSSHAIR_CENTER_Y + BOTTOMLEFT_DEP_Y - 4);
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 
 			                              9, 
 										  9, 										  
 										  0, 9, 9, -9); 
 
 		// Bottom right Corner //
-		Canvas.SetPos( CROSSHAIR_CENTER_X + BOTTOMRIGHT_DEP_X - 4,
-			           CROSSHAIR_CENTER_Y + BOTTOMRIGHT_DEP_Y - 4 );
-		eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.svf2_mire, 
+		Canvas.SetPos(CROSSHAIR_CENTER_X + BOTTOMRIGHT_DEP_X - 4,
+			           CROSSHAIR_CENTER_Y + BOTTOMRIGHT_DEP_Y - 4);
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 
 			                              9, 
 										  9, 
 										  9, 9, -9, -9);		
     }*/	
-	Canvas.Style=ERenderStyle.STY_Normal;
+	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
 //------------------------------------------------------------------------
@@ -829,9 +828,9 @@ function DrawNoiseBar(int AX, int AY, int BX, int BY, int OffsetX, ECanvas Canva
     Canvas.DrawColor.A = 255; 
 
     Canvas.SetPos(AX, AY);
-	Canvas.Style=ERenderStyle.STY_Alpha;
+	Canvas.Style = ERenderStyle.STY_Alpha;
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_anim_border, 630, abs(BY - AY), OffsetX, 0, 630, 4); 
-	Canvas.Style=ERenderStyle.STY_Normal;
+	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
 defaultproperties
