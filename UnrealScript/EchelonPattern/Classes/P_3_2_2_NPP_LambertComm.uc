@@ -20,9 +20,9 @@ var int WhatWeNeedDialog;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -43,16 +43,16 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[1] = P.controller;
-        if(P.name == 'ECIABureaucratF0')
+        if (P.name == 'ECIABureaucratF0')
             Characters[2] = P.controller;
-        if(P.Name == 'EMercenaryTechnician0')
+        if (P.Name == 'EMercenaryTechnician0')
         {
             Characters[3] = P.controller;
             EAIController(Characters[3]).bAllowKnockout = true;
         }
-        if(P.Name == 'EMercenaryTechnician1')
+        if (P.Name == 'EMercenaryTechnician1')
         {
             Characters[4] = P.controller;
             EAIController(Characters[4]).bAllowKnockout = true;
@@ -72,7 +72,7 @@ function InitPattern()
             }
 
             // Joshua - Destroying the concussion grenade (canceled gadget) to prevent a crash
-            if(EGO.name == 'EConcussionGrenade0')
+            if (EGO.name == 'EConcussionGrenade0')
                 EGO.Destroy();
 
             // Joshua - Replacing the Chemcial Flares for Flares for the turret section (possibly revert later)
@@ -80,65 +80,65 @@ function InitPattern()
                 EGO.Destroy();
 
             // Joshua - Disposable pick was assigned the incorrect mesh
-            if(EGO.name == 'EDisposablePick0')
+            if (EGO.name == 'EDisposablePick0')
             {
                 EGO.SetStaticMesh(StaticMesh'EMeshIngredient.Item.DisposablePick');
                 EGO.SetLocation(EGO.Location + vect(0,0,-13.5));
             }
 
             // Joshua - Door nametag placement fix
-            if(EGO.name == 'EGameplayObject18' && !bInit)
+            if (EGO.name == 'EGameplayObject18' && !bInit)
             {
                 // This is not working properly yet location remains static instead attached to door
                 // EGO.SetLocation(vect(13971.016602, -6400.000000, 984.000000));
                 // Going to hide the object for now.
                 EGO.bHidden = true;
-                // Location=(X=13971.016602,Y=-6315.776367,Z=984.000000)
+                // Location = (X = 13971.016602, Y = -6315.776367, Z = 984.000000)
             }
         }
 
         // Joshua - Fixing some broken lighting
         ForEach AllActors(class'Actor', A)
         {
-            if(A.name == 'ELight48' || A.name == 'ELight56')
-                A.bAffectOwnZoneOnly=true;
+            if (A.name == 'ELight48' || A.name == 'ELight56')
+                A.bAffectOwnZoneOnly = true;
 
-            if(A.name == 'ELight55')
-                A.LightEffect=LE_ESpotShadow;
+            if (A.name == 'ELight55')
+                A.LightEffect = LE_ESpotShadow;
 
-            if(A.name == 'ELight117')
-                A.LightEffect=LE_ESpotShadowDistAtten;
+            if (A.name == 'ELight117')
+                A.LightEffect = LE_ESpotShadowDistAtten;
         }
 
         // Joshua - Fixing doors that slide in the wrong direction
         ForEach AllActors(class'Mover', M)
         {
             if (M.name == 'ESlidingDoor3')
-                M.KeyPos[1]=(vect(0,112,0)); // Joshua - Originally, 144, lowered to 128.
+                M.KeyPos[1] = (vect(0,112,0)); // Joshua - Originally, 144, lowered to 128.
 
             if (M.name == 'ESlidingDoor10')
-                M.KeyPos[1]=(vect(0,0,0)); //0,-144,0 // Joshua - Going to keep this mover static since it clips through wall
+                M.KeyPos[1] = (vect(0,0,0)); //0,-144,0 // Joshua - Going to keep this mover static since it clips through wall
         }
 
         // Joshua - Adding turret controllers for the turrets
         TurretController = Spawn(class'ETurretController', , , vect(12000, -6680, 430), rot(0, 16384, 0));
         ForEach AllActors(class'Actor', A)
         {
-            if(A.name == 'ETurret0')
+            if (A.name == 'ETurret0')
                 TurretController.LinkedTurret = ETurret(A);
         }
 
         TurretController = Spawn(class'ETurretController', , , vect(13080, -3440, 430), rot(0, 32768, 0));
         ForEach AllActors(class'Actor', A)
         {
-            if(A.name == 'ETurret1')
+            if (A.name == 'ETurret1')
                 TurretController.LinkedTurret = ETurret(A);
         }
 
         TurretController = Spawn(class'ETurretController', , , vect(14100, -5016, 430), rot(0, 49152, 0));
         ForEach AllActors(class'Actor', A)
         {
-            if(A.name == 'ETurret2')
+            if (A.name == 'ETurret2')
                 TurretController.LinkedTurret = ETurret(A);
         }
 
@@ -146,14 +146,14 @@ function InitPattern()
         TurretController = Spawn(class'ETurretController', , , vect(12670, -3310, 430), rot(0, 49152, 0));
         ForEach AllActors(class'Actor', A)
         {
-            if(A.name == 'ETurret4')
+            if (A.name == 'ETurret4')
                 TurretController.LinkedTurret = ETurret(A);
         }
 
         TurretController = Spawn(class'ETurretController', , , vect(13360, -7180, 430), rot(0, 16384, 0));
         ForEach AllActors(class'Actor', A)
         {
-            if(A.name == 'ETurret5')
+            if (A.name == 'ETurret5')
                 TurretController.LinkedTurret = ETurret(A);
         }
 
@@ -163,7 +163,7 @@ function InitPattern()
         Spawn(class'EFlare', , , vect(12110.436523, -4891.073730, 400.750000), rot(16384, -19344, 0));
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     CommCenterDialog=0;

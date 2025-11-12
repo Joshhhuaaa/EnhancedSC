@@ -19,7 +19,7 @@ var int i;                // Internal counter.
 //
 // When EDispatcher is triggered...
 //
-function Trigger( actor Other, pawn EventInstigator, optional name InTag )
+function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 {
 	Instigator = EventInstigator;
 	gotostate('Dispatch');
@@ -33,11 +33,11 @@ state Dispatch
 	ignores trigger;
 
 Begin:
-	for( i=0; i<ArrayCount(OutEvents); i++ )
+	for (i = 0; i < ArrayCount(OutEvents); i++)
 	{
-		if( (OutEvents[i] != '') && (OutEvents[i] != 'None') )
+		if ((OutEvents[i] != '') && (OutEvents[i] != 'None'))
 		{
-			Sleep( OutDelays[i] );
+			Sleep(OutDelays[i]);
 			TriggerEvent(OutEvents[i],self,Instigator);
 		}
 	}

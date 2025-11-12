@@ -109,7 +109,7 @@ function			GetReactionAnim(out name Anim, out name AnimB, out float BlendAlpha, 
 //Note that MoveTo sets the actor's Destination, and MoveToward sets the
 //actor's MoveTarget.  Actor will rotate towards destination unless the optional ViewFocus is specified.
 
-native(500) final latent function MoveTo( vector NewDestination, optional Actor ViewFocus, optional float speed);
+native(500) final latent function MoveTo(vector NewDestination, optional Actor ViewFocus, optional float speed);
 native(502) final latent function MoveToward(actor NewTarget, optional Actor ViewFocus, optional float speed);
 native(508) final latent function FinishRotation();
 
@@ -172,12 +172,12 @@ function bool MayReload()
 event MoveToDestinationFailed();
 event MoveToDestinationSucceeded();
 
-function Vector AdjustTarget( Vector ShotDirection )
+function Vector AdjustTarget(Vector ShotDirection)
 {
 	return ShotDirection;
 }
 
-event PlayerCalcEye( out vector EyeLocation, out rotator EyeRotation );
+event PlayerCalcEye(out vector EyeLocation, out rotator EyeRotation);
 
 // ***********************************************************************************************
 // * END UBI MODIF 
@@ -197,7 +197,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 	Canvas.DrawText("PAWN "$Pawn);
 	YPos += YL;
 	Canvas.SetPos(4,YPos);
-	if ( Pawn == None )
+	if (Pawn == None)
 	{
 		Super.DisplayDebug(Canvas,YL,YPos);
 		return;
@@ -225,7 +225,7 @@ interface for hearing appropriate sounds instead
 // ***********************************************************************************************
 // * BEGIN UBI MODIF mlaforce 
 // ***********************************************************************************************
-event AIHearSound ( 
+event AIHearSound (
 	actor Actor,  
 	sound S 
 );
@@ -238,7 +238,7 @@ function Possess(Pawn aPawn)
 	aPawn.PossessedBy(self);
 	Pawn = aPawn;
 	// preserve Pawn's rotation initially for placed Pawns
-	FocalPoint = Pawn.Location + 512*vector(Pawn.Rotation);
+	FocalPoint = Pawn.Location + 512 * vector(Pawn.Rotation);
 	Restart();
 }
 
@@ -247,14 +247,14 @@ function Possess(Pawn aPawn)
  */
 function PawnDied()
 {
-	if ( Pawn != None )
+	if (Pawn != None)
 	{
 		SetLocation(Pawn.Location);
 		Pawn.UnPossessed();
 	}
 	Pawn = None;
 	PendingMover = None;
-	if ( bIsPlayer )
+	if (bIsPlayer)
 		GotoState('Dead'); // can respawn
 	else
 		Destroy();
@@ -291,7 +291,7 @@ function NotifyTakeHit(pawn InstigatedBy, vector HitLocation, int Damage, class<
 // * BEGIN UBI MODIF 
 // * ATurcotte (MTL) (15 Dec 2001)
 // ***********************************************************************************************
-	if ( (instigatedBy != None) && (instigatedBy != pawn) )
+	if ((instigatedBy != None) && (instigatedBy != pawn))
 		damageAttitudeTo(instigatedBy, Damage, damageType);
 // ***********************************************************************************************
 // * END UBI MODIF 
@@ -306,7 +306,7 @@ event PreBeginPlay()
 {
 	AddController();
 	Super.PreBeginPlay();
-	if ( bDeleteMe )
+	if (bDeleteMe)
 		return;
 
 	SightCounter = 0.2 * FRand();  //offset randomly 
@@ -324,15 +324,15 @@ by default, check and see if pawn still needs to update eye height
 (only if some playercontroller still has pawn as its viewtarget)
 Overridden in playercontroller
 */
-function AdjustView( float DeltaTime )
+function AdjustView(float DeltaTime)
 {
 	local Controller C;
 
-	for ( C=Level.ControllerList; C!=None; C=C.NextController )
-		if ( C.IsA('PlayerController') && (PlayerController(C).ViewTarget == Pawn) )
+	for (C = Level.ControllerList; C != None; C = C.NextController)
+		if (C.IsA('PlayerController') && (PlayerController(C).ViewTarget == Pawn))
 			return;
 
-	Pawn.bUpdateEyeHeight =false;
+	Pawn.bUpdateEyeHeight = false;
 	Pawn.Eyeheight = Pawn.BaseEyeheight;
 }
 			
@@ -348,16 +348,16 @@ event PrepareForMove(NavigationPoint Goal, ReachSpec Path);
 function WaitForMover(Mover M);
 function MoverFinished();
 
-event HearNoise( float Loudness, Actor NoiseMaker);
-event SeePlayer( Pawn Seen );	// called when a player (bIsPlayer==true) pawn is seen
-event SeeMonster( Pawn Seen );	// called when a non-player (bIsPlayer==false) pawn is seen
+event HearNoise(float Loudness, Actor NoiseMaker);
+event SeePlayer(Pawn Seen);	// called when a player (bIsPlayer == true) pawn is seen
+event SeeMonster(Pawn Seen);	// called when a non-player (bIsPlayer == false) pawn is seen
 
 event UpdateTactics(); // for advanced tactics
 event EnemyNotVisible();
 
 function NotifyKilled(Controller Killer, Controller Killed, pawn Other)
 {
-	if ( Enemy == Other )
+	if (Enemy == Other)
 		Enemy = None;
 }
 
@@ -386,7 +386,7 @@ ignores SeePlayer, HearNoise, KilledBy, NotifyBump, HitWall, NotifyPhysicsVolume
 
 	function BeginState()
 	{
-		if ( Pawn != None )
+		if (Pawn != None)
 		{
 			Pawn.bPhysicsAnimUpdate = false;
 			Pawn.StopAnimating();
@@ -395,7 +395,7 @@ ignores SeePlayer, HearNoise, KilledBy, NotifyBump, HitWall, NotifyPhysicsVolume
 			Pawn.SetPhysics(PHYS_None);
 			Pawn.UnPossessed();
 		}
-		if ( !bIsPlayer )
+		if (!bIsPlayer)
 			Destroy();
 	}
 }

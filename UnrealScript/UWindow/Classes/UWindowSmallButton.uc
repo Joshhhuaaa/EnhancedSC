@@ -20,7 +20,7 @@ function AutoWidth(Canvas C)
 	
 	TextSize(C, RemoveAmpersand(Text), W, H);
 
-	if(WinWidth < W + 10)
+	if (WinWidth < W + 10)
 		WinWidth = W + 10;
 }
 
@@ -31,10 +31,10 @@ function BeforePaint(Canvas C, float X, float Y)
 	
 	TextSize(C, RemoveAmpersand(Text), W, H);
 
-	TextX = (WinWidth-W)/2;
-	TextY = (WinHeight-H)/2;
+	TextX = (WinWidth - W) / 2;
+	TextY = (WinHeight - H) / 2;
 
-	if(bMouseDown)
+	if (bMouseDown)
 	{
 		TextX += 1;
 		TextY += 1;

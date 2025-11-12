@@ -13,9 +13,9 @@ class P_4_3_1_HallTurretAttackA extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -31,13 +31,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EChineseSoldier15')
+        if (P.name == 'EChineseSoldier15')
             Characters[1] = P.controller;
-        if(P.name == 'EChineseSoldier16')
+        if (P.name == 'EChineseSoldier16')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

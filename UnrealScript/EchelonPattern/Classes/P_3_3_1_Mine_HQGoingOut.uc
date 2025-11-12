@@ -11,9 +11,9 @@ class P_3_3_1_Mine_HQGoingOut extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_SEE_PLAYER_ALERT:
             EventJump('Alerted');
@@ -35,13 +35,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz7')
+        if (P.name == 'spetsnaz7')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz3')
+        if (P.name == 'spetsnaz3')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

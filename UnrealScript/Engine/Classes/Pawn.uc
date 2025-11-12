@@ -46,13 +46,13 @@ var bool bWasOnGround;
 var bool bInitializeAnimation;
 
 // AI basics.
-var 	byte	Visibility;			//How visible is the pawn? 0=invisible, 128=normal, 255=highly visible 
+var 	byte	Visibility;			//How visible is the pawn? 0 = invisible, 128 = normal, 255 = highly visible 
 var		float	DesiredSpeed;
 var		float	MaxDesiredSpeed;
 
 var(Display) name         AnimSequence;  // Animation sequence we're playing.
 var(Display) float        AnimFrame;     // Current animation frame, 0.0 to 1.0.
-var(Display) float        AnimRate;      // Animation rate in frames per second, 0=none, negative=velocity scaled.
+var(Display) float        AnimRate;      // Animation rate in frames per second, 0 = none, negative = velocity scaled.
 
 var const float	AvgPhysicsTime;		// Physics updating time monitoring (for AI monitoring reaching destinations)
 var		float	MeleeRange;			// Max range for melee attack (not including collision radii)
@@ -118,7 +118,7 @@ var(Nav) bool		bCanOpenDoors;
 
 // Don't merge the following - i use them for my own purposes now..
 var(Hearing) bool	bLOSHearing;			// can hear sounds from line-of-sight sources (which are close enough to hear)
-											// bLOSHearing=true is like UT/Unreal hearing
+											// bLOSHearing = true is like UT/Unreal hearing
 var(Hearing) bool	bSameZoneHearing;		//can hear any sound in same zone (if close enough to hear)
 var(Hearing) bool	bAdjacentZoneHearing;	// can hear any sound in adjacent zone (if close enough to hear)
 var(Hearing) bool	bMuffledHearing;		// can hear sounds through walls (but muffled - sound distance increased to double plus 4x the distance through walls
@@ -172,7 +172,7 @@ reset actor to initial state - used when restarting level without reloading.
 */
 function Reset()
 {
-	if ( (Controller == None) || Controller.bIsPlayer )
+	if ((Controller == None) || Controller.bIsPlayer)
 		Destroy();
 	else
 		Super.Reset();
@@ -184,7 +184,7 @@ function Reset()
 function PossessedBy(Controller C)
 {
 	Controller = C;
-	if ( C.IsA('PlayerController') )
+	if (C.IsA('PlayerController'))
 		BecomeViewTarget();
 
 	SetOwner(Controller);
@@ -204,7 +204,7 @@ function BecomeViewTarget()
 
 function SetWalking(bool bNewIsWalking)
 {
-	if ( bNewIsWalking != bIsWalking )
+	if (bNewIsWalking != bIsWalking)
 	{
 		bIsWalking = bNewIsWalking;
 	}
@@ -228,7 +228,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 	Canvas.SetPos(4,YPos);
 	Canvas.SetDrawColor(255,0,0);
 
-	if ( Controller == None )
+	if (Controller == None)
 	{
 		Canvas.DrawText("NO CONTROLLER");
 		YPos += YL;
@@ -244,47 +244,47 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 // return true if controlled by a Player (AI or human)
 function bool IsPlayerPawn()
 {
-	return ( (Controller != None) && Controller.bIsPlayer );
+	return ((Controller != None) && Controller.bIsPlayer);
 }
 
 // return true if controlled by a real live human
 function bool IsHumanControlled()
 {
-	return ( PlayerController(Controller) != None );
+	return (PlayerController(Controller) != None);
 }
 
 function rotator GetViewRotation()
 {
-	if ( Controller == None )
+	if (Controller == None)
 		return Rotation;
 	else
 		return Controller.Rotation;
 }
 
-function SetViewRotation(rotator NewRotation )
+function SetViewRotation(rotator NewRotation)
 {
-	if ( Controller != None )
+	if (Controller != None)
 		Controller.SetRotation(NewRotation);
 }
 
 function bool PressingFire()
 {
-	return ( (Controller != None) && (Controller.bFire != 0) );
+	return ((Controller != None) && (Controller.bFire != 0));
 }
 
 final function bool PressingAltFire()
 {
-	return ( (Controller != None) && (Controller.bAltFire != 0) );
+	return ((Controller != None) && (Controller.bAltFire != 0));
 }
 
 function bool LineOfSightTo(actor Other)
 {
-	return ( (Controller != None) && Controller.LineOfSightTo(Other) );
+	return ((Controller != None) && Controller.LineOfSightTo(Other));
 } 
 
-function Trigger( actor Other, pawn EventInstigator, optional name InTag ) // UBI MODIF - Additional parameter
+function Trigger(actor Other, pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 {
-	if ( Controller != None )
+	if (Controller != None)
 		Controller.Trigger(Other, EventInstigator);
 }
 
@@ -325,23 +325,23 @@ event StartCrouch(float HeightAdjust)
 }
 
 function RestartPlayer();
-function AddVelocity( vector NewVelocity)
+function AddVelocity(vector NewVelocity)
 {
-	if ( Physics == PHYS_Walking)
+	if (Physics == PHYS_Walking)
 		SetPhysics(PHYS_Falling);
-	if ( (Velocity.Z > 380) && (NewVelocity.Z > 0) )
+	if ((Velocity.Z > 380) && (NewVelocity.Z > 0))
 		NewVelocity.Z *= 0.5;
 	Velocity += NewVelocity;
 }
 
-function KilledBy( pawn EventInstigator )
+function KilledBy(pawn EventInstigator)
 {
 	local Controller Killer;
 
 	Health = 0;
-	if ( EventInstigator != None )
+	if (EventInstigator != None)
 		Killer = EventInstigator.Controller;
-	Died( Killer, class'Crushed', Location );
+	Died(Killer, class'Crushed', Location);
 }
 
 function ClientReStart()
@@ -354,12 +354,12 @@ function ClientReStart()
 
 //==============
 // Encroachment
-event bool EncroachingOn( actor Other )
+event bool EncroachingOn(actor Other)
 {
-	if ( (Other.Brush != None) || (Brush(Other) != None) )
+	if ((Other.Brush != None) || (Brush(Other) != None))
 		return true;
 		
-	if ( ((Controller == None) || !Controller.bIsPlayer ) && (Pawn(Other) != None) )
+	if (((Controller == None) || !Controller.bIsPlayer) && (Pawn(Other) != None))
 		return true;
 		
 	return false;
@@ -379,23 +379,23 @@ singular event BaseChange()
 {
 	local float decorMass;
 
-	if ( bInterpolating )
+	if (bInterpolating)
 		return;
-	if ( (base == None) && (Physics == PHYS_None) )
+	if ((base == None) && (Physics == PHYS_None))
 		SetPhysics(PHYS_Falling);
-	else if ( Pawn(Base) != None )
+	else if (Pawn(Base) != None)
 	{
-		Base.TakeDamage( (1-Velocity.Z/400)* Mass/Base.Mass, Self,Location,vect(0,0,1), 0.5 * Velocity , class'Crushed');
+		Base.TakeDamage((1 - Velocity.Z / 400) * Mass / Base.Mass, Self,Location,vect(0,0,1), 0.5 * Velocity , class'Crushed');
 		JumpOffPawn();
 	}
 }
 
-event UpdateEyeHeight( float DeltaTime )
+event UpdateEyeHeight(float DeltaTime)
 {
 	local float smooth;
 	local float OldEyeHeight;
 
-	if (Controller == None )
+	if (Controller == None)
 	{
 		EyeHeight = 0;
 		return;
@@ -403,7 +403,7 @@ event UpdateEyeHeight( float DeltaTime )
 
 	// smooth up/down stairs
 	smooth = FMin(1.0, 10.0 * DeltaTime);
-	If( Physics==PHYS_Walking )
+	If (Physics == PHYS_Walking)
 	{
 		OldEyeHeight = EyeHeight;
 		EyeHeight = FClamp((EyeHeight - Location.Z + OldZ) * (1 - smooth) + BaseEyeHeight * smooth,
@@ -412,7 +412,7 @@ event UpdateEyeHeight( float DeltaTime )
 	}
 	else
 	{
-		EyeHeight = EyeHeight * ( 1 - smooth) + BaseEyeHeight * smooth;
+		EyeHeight = EyeHeight * (1 - smooth) + BaseEyeHeight * smooth;
 	}
 	Controller.AdjustView(DeltaTime);
 }
@@ -430,9 +430,9 @@ function vector EyePosition()
 
 event Destroyed()
 {
-	if ( Shadow != None )
+	if (Shadow != None)
 		Shadow.Destroy();
-	if ( Controller != None )
+	if (Controller != None)
 		Controller.PawnDied();
 
 	Super.Destroyed();
@@ -447,20 +447,20 @@ event PreBeginPlay()
 	Super.PreBeginPlay();
 	Instigator = self;
 	DesiredRotation = Rotation;
-	if ( bDeleteMe )
+	if (bDeleteMe)
 		return;
 
-	if ( DrawScale != Default.Drawscale )
+	if (DrawScale != Default.Drawscale)
 	{
-		SetCollisionSize(CollisionRadius*DrawScale/Default.DrawScale, CollisionHeight*DrawScale/Default.DrawScale);
-		Health = Health * DrawScale/Default.DrawScale;
+		SetCollisionSize(CollisionRadius * DrawScale / Default.DrawScale, CollisionHeight * DrawScale / Default.DrawScale);
+		Health = Health * DrawScale / Default.DrawScale;
 	}
 
-	if ( BaseEyeHeight == 0 )
+	if (BaseEyeHeight == 0)
 		BaseEyeHeight = 0.8 * CollisionHeight;
 	EyeHeight = BaseEyeHeight;
 
-	if ( menuname == "" )
+	if (menuname == "")
 		menuname = GetItemName(string(class));
 }
 
@@ -473,11 +473,11 @@ event PostBeginPlay()
 
 	// automatically add controller to pawns which were placed in level
 	// NOTE: pawns spawned during gameplay are not automatically possessed by a controller
-	if ( Level.bStartup && (Health > 0) && !bDontPossess )
+	if (Level.bStartup && (Health > 0) && !bDontPossess)
 	{
-		if ( (ControllerClass != None) && (Controller == None) )
+		if ((ControllerClass != None) && (Controller == None))
 			Controller = spawn(ControllerClass);
-		if ( Controller != None )
+		if (Controller != None)
 			Controller.Possess(self);
 	}
 }
@@ -489,27 +489,27 @@ function SetMesh()
 
 function Died(Controller Killer, class<DamageType> damageType, vector HitLocation)
 {
-	if ( bDeleteMe )
+	if (bDeleteMe)
 		return; //already destroyed
 
 	Health = Min(0, Health);
 	Level.Game.Killed(Killer, Controller, self, damageType);
 
-	if ( Killer != None )
+	if (Killer != None)
 		TriggerEvent(Event, self, Killer.Pawn);
 	else
 		TriggerEvent(Event, self, None);
 
 	Velocity.Z *= 1.3;
 	PlayDying(DamageType, HitLocation);
-	if ( Level.Game.bGameEnded )
+	if (Level.Game.bGameEnded)
 		return;
 }
 
 event Falling()
 {
 	//SetPhysics(PHYS_Falling); //Note - physics changes type to PHYS_Falling by default
-	if ( Controller != None )
+	if (Controller != None)
 		Controller.SetFall();
 }
 
@@ -521,7 +521,7 @@ event Falling()
 event PlayDying(class<DamageType> DamageType, vector HitLoc)
 {
 	GotoState('Dying');
-	if ( bPhysicsAnimUpdate )
+	if (bPhysicsAnimUpdate)
 	{
 		SetPhysics(PHYS_Falling);
 	}

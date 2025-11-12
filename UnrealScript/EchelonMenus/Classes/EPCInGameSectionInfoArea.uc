@@ -17,7 +17,7 @@ var Color                   m_TextColor;
 
 function Created()
 {
-    m_LHelpText       = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_IXLabelPos, m_IYLabelPos, m_ILabelWidth, m_ILabelHeight, self));
+    m_LHelpText       = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_IXLabelPos, m_IYLabelPos, m_ILabelWidth, m_ILabelHeight, self));
     m_LHelpText.Font        = F_Normal;
     m_LHelpText.TextColor   = m_TextColor;    
 }

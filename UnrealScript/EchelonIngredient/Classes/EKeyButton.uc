@@ -13,27 +13,27 @@ function PostBeginPlay()
 	SetBase(Owner);
 }
 
-function Tick( float DeltaTime )
+function Tick(float DeltaTime)
 {
-	if( !bFading ) 
+	if (!bFading) 
 		return;
 
 	HeatIntensity -= DeltaTime / 5;
 
-	if( HeatIntensity > 0 ) 
+	if (HeatIntensity > 0) 
 		return;
 
 	HeatIntensity = 0;
 	bFading = false;
 }
 
-function SetRelativeOffset( Vector Offset )
+function SetRelativeOffset(Vector Offset)
 {
 	RelativeOffset = Offset;
 	SetRelativeLocation(RelativeOffset);
 }
 
-function Push( bool bShouldFade )
+function Push(bool bShouldFade)
 {
 	HeatIntensity = 1;
 	bFading = bShouldFade;
@@ -53,7 +53,7 @@ state Pushed
 {
 	function BeginState()
 	{
-		SetRelativeLocation(RelativeOffset+Vect(-0.22,0,0));
+		SetRelativeLocation(RelativeOffset + Vect(-0.22,0,0));
 		SetTimer(0.2, false);
 	}
 

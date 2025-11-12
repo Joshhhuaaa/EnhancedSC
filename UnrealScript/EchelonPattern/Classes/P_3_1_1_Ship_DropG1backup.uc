@@ -13,9 +13,9 @@ var int pass2;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_SEE_PLAYER_ALERT:
             EventJump('AlarmPpl');
@@ -43,11 +43,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz6')
+        if (P.name == 'spetsnaz6')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     pass1=0;

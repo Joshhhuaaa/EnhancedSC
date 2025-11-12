@@ -48,9 +48,9 @@ function PostBeginPlay()
 
 	AI = EAIController(Controller);
 
-	if(AI != None)
+	if (AI != None)
 	{
-		AI.Master =	EPawn(GetMatchingActor( MasterTag )); 
+		AI.Master =	EPawn(GetMatchingActor(MasterTag)); 
 	}
 }
 
@@ -120,12 +120,16 @@ function SwitchAnims()
 
 function PlayDogBark()
 {
-	PlaySound(DogBark, SLOT_SFX);
+	// Joshua - Prevents player from dying during GameOver and prevents NPC barks
+	if (!EchelonLevelInfo(Level).bGameOver)
+		PlaySound(DogBark, SLOT_SFX);
 }
 
 function PlayDogAttack()
 {
-	PlaySound(DogAttack, SLOT_SFX);
+	// Joshua - Prevents player from dying during GameOver and prevents NPC barks
+	if (!EchelonLevelInfo(Level).bGameOver)
+		PlaySound(DogAttack, SLOT_SFX);
 }
 
 /*************  SET ANIMATION SPEED FOR MODEL  ******************/
@@ -138,8 +142,8 @@ event float GetMoveSpeed(MoveFlags MoveFlags)
 	//check if we are waiting for that goal
 	Goal = EAIController(Controller).m_pGoalList.GetCurrent();
 
-	if(Goal.m_GoalType == GOAL_Charge)
-		dist= VSize(Location-Goal.GoalTarget.Location);
+	if (Goal.m_GoalType == GOAL_Charge)
+		dist = VSize(Location - Goal.GoalTarget.Location);
 
 	// apply speed based on move flag
 	switch (MoveFlags)
@@ -147,13 +151,13 @@ event float GetMoveSpeed(MoveFlags MoveFlags)
 		case MOVE_JogAlert :
 		case MOVE_JogNoWeapon: 
 
-			if( Goal.m_GoalType == GOAL_Charge && dist < 90)
+			if (Goal.m_GoalType == GOAL_Charge && dist < 90)
 				return 100.0f;
-			if( Goal.m_GoalType == GOAL_Charge && dist < 105)
+			if (Goal.m_GoalType == GOAL_Charge && dist < 105)
 				return 200.0f;
-			else if( Goal.m_GoalType == GOAL_Charge && dist < 120)
+			else if (Goal.m_GoalType == GOAL_Charge && dist < 120)
 				return 400.0f;
-			else if( Goal.m_GoalType == GOAL_Charge && dist < 150)
+			else if (Goal.m_GoalType == GOAL_Charge && dist < 150)
 				return 445.0f;
 			else					
 				return 490.0f;
@@ -163,24 +167,24 @@ event float GetMoveSpeed(MoveFlags MoveFlags)
 	}
 }
 
-event CheckForTransition( MoveFlags NewMoveFlags )
+event CheckForTransition(MoveFlags NewMoveFlags)
 {
 
 	// CHECK FOR CROUCH / UNCROUCH
 
-	switch ( BaseMoveFlags )
+	switch (BaseMoveFlags)
 	{
-		case MOVE_WalkRelaxed :
-		case MOVE_WalkNormal :
-		case MOVE_WalkAlert :
-		case MOVE_Search :
+		case MOVE_WalkRelaxed:
+		case MOVE_WalkNormal:
+		case MOVE_WalkAlert:
+		case MOVE_Search:
 		case MOVE_JogAlert:
-		case MOVE_JogNoWeapon :
+		case MOVE_JogNoWeapon:
 			
 			// are we crouching?
-			if ( !bIsCrouched )
+			if (!bIsCrouched)
 			{
-				switch ( NewMoveFlags )
+				switch (NewMoveFlags)
 				{
 					case MOVE_CrouchJog:
 					case MOVE_CrouchWalk:
@@ -198,9 +202,9 @@ event CheckForTransition( MoveFlags NewMoveFlags )
 
 			// are we uncrouching?
 
-			if ( bIsCrouched )
+			if (bIsCrouched)
 			{
-				switch ( NewMoveFlags ) 
+				switch (NewMoveFlags) 
 				{
 					case MOVE_WalkRelaxed:
 					case MOVE_WalkNormal:
@@ -231,30 +235,30 @@ event GetRandomWaitAnim(out name ReturnName)
 
 	choice = rand(6);
 
-	switch ( BaseMoveFlags )
+	switch (BaseMoveFlags)
 	{				
-		case MOVE_WalkRelaxed :
-		case MOVE_WalkNormal :
-		case MOVE_WalkAlert :
-		case MOVE_Search :
+		case MOVE_WalkRelaxed:
+		case MOVE_WalkNormal:
+		case MOVE_WalkAlert:
+		case MOVE_Search:
 		case MOVE_JogAlert:
-		case MOVE_JogNoWeapon :
-			if(choice < 1) { ReturnName = 'PrsoStNmAA0'; return; }
-			if(choice < 2) { ReturnName = 'PrsoStNmBB0'; return; }
-			if(choice < 4) { ReturnName = 'LookStNmLt0'; return; }
-			if(choice < 5) { ReturnName = 'LookStNmRt0'; return; }
-			if(choice < 6) { ReturnName = 'LookStNmUp0'; return; }
+		case MOVE_JogNoWeapon:
+			if (choice < 1) { ReturnName = 'PrsoStNmAA0'; return; }
+			if (choice < 2) { ReturnName = 'PrsoStNmBB0'; return; }
+			if (choice < 4) { ReturnName = 'LookStNmLt0'; return; }
+			if (choice < 5) { ReturnName = 'LookStNmRt0'; return; }
+			if (choice < 6) { ReturnName = 'LookStNmUp0'; return; }
 
 			return;
 
 		case MOVE_CrouchJog:
 		case MOVE_CrouchWalk:
 
-			if(choice < 1) { ReturnName = 'PrsoCrNmAA0'; return; }
-			if(choice < 2) { ReturnName = 'PrsoCrNmBB0'; return; }
-			if(choice < 4) { ReturnName = 'LookCrNmLt0'; return; }
-			if(choice < 5) { ReturnName = 'LookCrNmRt0'; return; }
-			if(choice < 6) { ReturnName = 'LookCrNmUp0'; return; }
+			if (choice < 1) { ReturnName = 'PrsoCrNmAA0'; return; }
+			if (choice < 2) { ReturnName = 'PrsoCrNmBB0'; return; }
+			if (choice < 4) { ReturnName = 'LookCrNmLt0'; return; }
+			if (choice < 5) { ReturnName = 'LookCrNmRt0'; return; }
+			if (choice < 6) { ReturnName = 'LookCrNmUp0'; return; }
 
 			return;
 
@@ -275,7 +279,7 @@ function PlayBlend(SAnimBlend	anims,
 				   float		tweenTime,
 				   optional bool noloop)
 {	
-	if ( !IsPlaying(PlayBreath))
+	if (!IsPlaying(PlayBreath))
 		PlaySound(PlayBreath, SLOT_SFX);
 
 	// loop movement animation
@@ -288,7 +292,7 @@ function PlayBlend(SAnimBlend	anims,
 
 event PlayWaitingBlend(vector Fwd, vector Focus, float YawDiff, float TweenTime)
 {
-	if ( IsPlaying(PlayBreath))
+	if (IsPlaying(PlayBreath))
 		PlaySound(StopBreath, SLOT_SFX);
 
 	ResetMotionBones();
@@ -307,16 +311,16 @@ event bool RotateTowardsRotator(rotator Target, optional int TurnSpeed, optional
 // DAMAGE STUFF 
 //
 // ***********************************************************
-function ResolveDamageType( int PillTag, vector Momentum, class<DamageType> DamageType )
+function ResolveDamageType(int PillTag, vector Momentum, class<DamageType> DamageType)
 {
 	local int Speed;
 	//Log("Global ResolveDamageType"@PillTag@Momentum@DamageType);
 
-	if( DamageType == None )
+	if (DamageType == None)
 		return;
 
 	Speed = VSize(Velocity);
-	switch( DamageType.name )
+	switch (DamageType.name)
 	{
 		case 'EKnocked':
 		case 'EElectrocuted':
@@ -326,20 +330,20 @@ function ResolveDamageType( int PillTag, vector Momentum, class<DamageType> Dama
 
 		case 'ESleepingGas':
 		case 'EBurned':
-			if( Speed < 0.7f*GetMoveSpeed(MOVE_JogAlert) || Health <= 50 )
+			if (Speed < 0.7f * GetMoveSpeed(MOVE_JogAlert) || Health <= 50)
 				GotoState('s_Stunned','Gassed'); 
 			break;
 	}
 }
 
-function PlayHitE( int PillTag, Vector HitLocation, Vector Momentum )
+function PlayHitE(int PillTag, Vector HitLocation, Vector Momentum)
 {
 	PlayAnimOnly('PainStNmNt0',,0.10);
 }
 
-function name GetFireBone( int i )
+function name GetFireBone(int i)
 {
-	switch( i )
+	switch (i)
 	{
 	case 0: return 'DOGik Neck1'; break;
 	case 1: return 'DOGik L UpperArm'; break;
@@ -367,7 +371,7 @@ Stunned:
 	//log("Dog stuff");
 	bInTransition = true;
 	Bark_Type = BARK_Cough;
-	if( AStunned == 'prsostnmaa0' )
+	if (AStunned == 'prsostnmaa0')
 		Goto('RefreshTimer');
 	AStunned	= 'prsostnmaa0';
 	Goto('Begin');

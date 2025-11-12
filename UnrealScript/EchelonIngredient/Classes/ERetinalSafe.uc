@@ -8,13 +8,13 @@ var()	class<EPawn>		GrantedClass;
 var		EPawn				User;
 var		PlayerController	oPC;
 
-function ValidateUser( Pawn Scanned )
+function ValidateUser(Pawn Scanned)
 {
 	User = EPawn(Scanned);
 	GotoState(,'Validate');
 }
 
-function bool IsValid( Pawn Scanned )
+function bool IsValid(Pawn Scanned)
 {
 	return EPawn(Scanned).IsA(GrantedClass.name);
 }
@@ -24,7 +24,7 @@ state s_Use
 Validate:
 	// Get the player controller
 	oPC = Level.Game.PlayerC;
-	if( oPC == None )
+	if (oPC == None)
 		Log("ERROR: Level PlayerController shouldn't be None");
 
 	PlaySound(Sound'Electronic.Play_RetinalScan', SLOT_SFX);
@@ -32,7 +32,7 @@ Validate:
 	Sleep(3);
 
     // Restore View if set above
-    if( User.Controller.bIsPlayer || User.Controller.GetStateName() == 's_Grabbed' )
+    if (User.Controller.bIsPlayer || User.Controller.GetStateName() == 's_Grabbed')
 		//oPC.AnimEnd(79);
 		Interaction.PostInteract(oPC);
 	else
@@ -40,7 +40,7 @@ Validate:
 		Interaction.PostInteract(User.Controller);
 
 	// Inform alarm that access was denied
-    if( IsValid(User) )
+    if (IsValid(User))
 	{
 		PlayAnim('Open');
 		ResetInteraction();
@@ -48,7 +48,7 @@ Validate:
 		PlaySound(Sound'Door.Play_SafeOpen1', SLOT_SFX);
 		AddSoundRequest(Sound'Door.Play_SafeOpen2', SLOT_SFX, 1.5f);
 	}
-	else if( Alarm != None )
+	else if (Alarm != None)
 		Alarm.EnableAlarm(self, User.Controller);
 
 	GotoState('');

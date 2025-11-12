@@ -15,9 +15,9 @@ var int InCombat;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('AISeePlayer');
@@ -51,21 +51,21 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EChineseSoldier5')
+        if (P.name == 'EChineseSoldier5')
         {            
             Characters[1] = P.controller;
             EAIController(Characters[1]).bAllowKnockout = true;
             EAIController(Characters[1]).bBlockDetection = true;
             EAIController(Characters[1]).bWasFound = true;
         }
-        if(P.name == 'EChineseSoldier4')
+        if (P.name == 'EChineseSoldier4')
         {            
             Characters[2] = P.controller;
             EAIController(Characters[2]).bAllowKnockout = true;
             EAIController(Characters[2]).bBlockDetection = true;
             EAIController(Characters[2]).bWasFound = true;
         }
-        if(P.name == 'EChineseSoldier11')
+        if (P.name == 'EChineseSoldier11')
         {            
             Characters[3] = P.controller;
             EAIController(Characters[3]).bAllowKnockout = true;
@@ -74,7 +74,7 @@ function InitPattern()
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     DestroyedByNPC=0;

@@ -36,7 +36,7 @@ function PostBeginPlay()
 }
 
 function DrawView(HUD Hud, ECanvas Canvas);		// Drawing
-function ObjectHudTick( float DeltaTime );		// Ticking
+function ObjectHudTick(float DeltaTime);		// Ticking
 
 //------------------------------------------------------------------------
 // Description		
@@ -62,7 +62,7 @@ function DrawLine(int AX, int AY, int BX, int BY, EHUD_COLOR eColor, ECanvas Can
     }
 	
     // Get color index //
-    switch(eColor)
+    switch (eColor)
     {
 	case EHC_GREEN:
 		Canvas.DrawColor = Green;
@@ -98,7 +98,7 @@ function DrawLine(int AX, int AY, int BX, int BY, EHUD_COLOR eColor, ECanvas Can
     }
 	
     Canvas.SetPos(AX, AY);
-    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.pixel, BX-AX, BY-AY, 0, 0, 1, 1);
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.pixel, BX - AX, BY - AY, 0, 0, 1, 1);
 }
 
 //------------------------------------------------------------------------
@@ -139,7 +139,7 @@ function DrawSniperMask(ECanvas Canvas)
     height = eLevel.TGAME.GetHeight(eLevel.TGAME.svf2_bordernoir);
 
     Canvas.SetDrawColor(128,128,128);
-	Canvas.Style=ERenderStyle.STY_Alpha;
+	Canvas.Style = ERenderStyle.STY_Alpha;
     // Black Mask
     Canvas.SetPos(0,0);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_bordernoir, width ,height, 0, 0, width, height);
@@ -152,7 +152,7 @@ function DrawSniperMask(ECanvas Canvas)
     
     Canvas.SetPos(SCREEN_END_X - width, SCREEN_END_Y - height);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_bordernoir, width ,height, width, height, -width, -height);
-	Canvas.Style=ERenderStyle.STY_Normal;
+	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
 defaultproperties

@@ -13,10 +13,10 @@ class AIController extends Controller
 event PreBeginPlay()
 {
 	Super.PreBeginPlay();
-	if ( bDeleteMe )
+	if (bDeleteMe)
 		return;
 
-	if ( Level.Game != None )
+	if (Level.Game != None)
 		Skill += Level.Game.Difficulty; 
 	Skill = FClamp(Skill, 0, 3);
 }
@@ -29,7 +29,7 @@ function Reset()
 	Super.Reset();
 
 	// by default destroy bots (let game re-create)
-	if ( bIsPlayer )
+	if (bIsPlayer)
 		Destroy();
 }
 
@@ -61,15 +61,15 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 	YPos += YL;
 	Canvas.SetPos(4,YPos);
 
-	for ( i=0; i<16; i++ )
+	for (i = 0; i < 16; i++)
 	{
-		if ( RouteCache[i] == None )
+		if (RouteCache[i] == None)
 		{
-			if ( i > 5 )
-				T = T$"--"$GetItemName(string(RouteCache[i-1]));
+			if (i > 5)
+				T = T$"--"$GetItemName(string(RouteCache[i - 1]));
 			break;
 		}
-		else if ( i < 5 )
+		else if (i < 5)
 			T = T$GetItemName(string(RouteCache[i]))$"-";
 	}
 
@@ -81,15 +81,15 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 performing a latent MoveToward() */
 event UpdateTactics()
 {
-	if ( bTacticalDir )
+	if (bTacticalDir)
 	{
 		bTacticalDir = false;
-		bNoTact = ( FRand() < 0.3 );
+		bNoTact = (FRand() < 0.3);
 	}
 	else
 	{
 		bTacticalDir = true;
-		bNoTact = ( FRand() < 0.3 );
+		bNoTact = (FRand() < 0.3);
 	}
 }
 

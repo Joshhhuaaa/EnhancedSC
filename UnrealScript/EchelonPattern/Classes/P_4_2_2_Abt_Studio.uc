@@ -15,9 +15,9 @@ var int OnBoard;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -33,27 +33,27 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ENikoladze0')
+        if (P.name == 'ENikoladze0')
             Characters[1] = P.controller;
-        if(P.name == 'EGrinko1')
+        if (P.name == 'EGrinko1')
             Characters[2] = P.controller;
-        if(P.name == 'EEliteForce0')
+        if (P.name == 'EEliteForce0')
             Characters[3] = P.controller;
-        if(P.name == 'EEliteForce1')
+        if (P.name == 'EEliteForce1')
             Characters[4] = P.controller;
-        if(P.name == 'EGeorgianSoldier35')
+        if (P.name == 'EGeorgianSoldier35')
             Characters[5] = P.controller;
-        if(P.name == 'EAzeriColonel4')
+        if (P.name == 'EAzeriColonel4')
             Characters[6] = P.controller;
-        if(P.name == 'EMercenaryTechnician0')
+        if (P.name == 'EMercenaryTechnician0')
             Characters[7] = P.controller;
-        if(P.name == 'EGeorgianSoldier38')
+        if (P.name == 'EGeorgianSoldier38')
             Characters[8] = P.controller;
-        if(P.name == 'EGeorgianSoldier37')
+        if (P.name == 'EGeorgianSoldier37')
             Characters[9] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     GdeadPass1=0;

@@ -15,9 +15,9 @@ var int CallGuards;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -34,11 +34,11 @@ function InitPattern()
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'EGameplayObject4')
+        if (A.name == 'EGameplayObject4')
             SoundActors[0] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     Active=0;

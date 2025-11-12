@@ -4,13 +4,13 @@ var int		Ammo;
 
 function EWeapon GetAmmoWeapon(EPlayerController Epc);
 
-function bool NotifyPickup( Controller Instigator )
+function bool NotifyPickup(Controller Instigator)
 {
 	local EPlayerController Epc;
 	local int TransferedBullets;
 
 	Epc = EPlayerController(Instigator);
-	if( Epc == None || GetAmmoWeapon(Epc) == None )
+	if (Epc == None || GetAmmoWeapon(Epc) == None)
 	{
 		Throw(Instigator, Vect(0,0,0));
 		return false;
@@ -28,11 +28,11 @@ function bool NotifyPickup( Controller Instigator )
 	//Log("Is"@Ammo@GetAmmoWeapon(Epc).Ammo);
 
 	// Joshua - Improvement: Only show pickup message if ammo was transfered
-	if(TransferedBullets>0)
+	if (TransferedBullets > 0)
 		Epc.SendTransmissionMessage(Localize("InventoryItem", ItemName, "Localization\\HUD") $ Localize("Transmission", "PickUp", "Localization\\HUD"), TR_INVENTORY);
 	
 
-	if( Ammo <= 0 )
+	if (Ammo <= 0)
 		Destroy();
 	else
 	{

@@ -42,8 +42,8 @@ function ResolutionChanged(float W, float H)
 	
 	if (Items != none)
 	{
-		for( I = UWindowMenuBarItem(Items.Next);I != None; I = UWindowMenuBarItem(I.Next) )
-			if(I.Menu != None)
+		for (I = UWindowMenuBarItem(Items.Next);I != None; I = UWindowMenuBarItem(I.Next))
+			if (I.Menu != None)
 				I.Menu.ResolutionChanged(W, H);
 	}
 
@@ -58,12 +58,12 @@ function Paint(Canvas C, float MouseX, float MouseY)
 
 	DrawMenuBar(C);
 
-	for( I = UWindowMenuBarItem(Items.Next);I != None; I = UWindowMenuBarItem(I.Next) )
+	for (I = UWindowMenuBarItem(Items.Next);I != None; I = UWindowMenuBarItem(I.Next))
 	{
 		C.Font = Root.Fonts[F_Normal];
-		TextSize( C, RemoveAmpersand(I.Caption), W, H );
+		TextSize(C, RemoveAmpersand(I.Caption), W, H);
 
-		if(I.bHelp)
+		if (I.bHelp)
 		{
 			DrawItem(C, I, (WinWidth - (W + Spacing)), 1, W + Spacing, 14);
 		}
@@ -82,12 +82,12 @@ function MouseMove(float X, float Y)
 
 	Over = None;
 
-	for( I = UWindowMenuBarItem(Items.Next);I != None; I = UWindowMenuBarItem(I.Next) )
+	for (I = UWindowMenuBarItem(Items.Next);I != None; I = UWindowMenuBarItem(I.Next))
 	{
-		if(X >= I.ItemLeft && X <= I.ItemLeft + I.ItemWidth)
+		if (X >= I.ItemLeft && X <= I.ItemLeft + I.ItemWidth)
 		{
-			if(Selected != None) {
-				if(Selected != I)
+			if (Selected != None) {
+				if (Selected != I)
 				{
 					Selected.DeSelect();
 					Selected = I;
@@ -104,7 +104,7 @@ function MouseMove(float X, float Y)
 function MouseLeave()
 {
 	Super.MouseLeave();
-	Over=None;
+	Over = None;
 }
 
 function Select(UWindowMenuBarItem I)
@@ -115,17 +115,17 @@ function LMouseDown(float X, float Y)
 {
 	local UWindowMenuBarItem I;
 
-	for( I = UWindowMenuBarItem(Items.Next);I != None; I = UWindowMenuBarItem(I.Next) )
+	for (I = UWindowMenuBarItem(Items.Next);I != None; I = UWindowMenuBarItem(I.Next))
 	{
-		if(X >= I.ItemLeft && X <= I.ItemLeft + I.ItemWidth)
+		if (X >= I.ItemLeft && X <= I.ItemLeft + I.ItemWidth)
 		{
 			//Log("Click "$I.Caption);
 
-			if(Selected != None) {
+			if (Selected != None) {
 				Selected.DeSelect();
 			}
 
-			if(Selected == I)
+			if (Selected == I)
 			{
 				Selected = None;
 				Over = I;
@@ -141,7 +141,7 @@ function LMouseDown(float X, float Y)
 		}
 	}
 
-	if(Selected != None)
+	if (Selected != None)
 	{
 		Selected.DeSelect();
 	}
@@ -166,12 +166,12 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 
 function DrawMenuBar(Canvas C)
 {
-	DrawStretchedTexture( C, 0, 0, WinWidth, 16, Texture'MenuBar' );
+	DrawStretchedTexture(C, 0, 0, WinWidth, 16, Texture'MenuBar');
 }
 
 function CloseUp()
 {
-	if(Selected != None) 
+	if (Selected != None) 
 	{
 		Selected.DeSelect();
 		Selected = None;
@@ -193,17 +193,17 @@ function bool HotKeyDown(int Key, float X, float Y)
 {
 	local UWindowMenuBarItem I;
 
-	if(Key == 0x12)
+	if (Key == 0x12)
 		bAltDown = True;
 
-	if(bAltDown)
+	if (bAltDown)
 	{
 		// Check for hotkeys in each menu item
-		for( I = UWindowMenuBarItem(Items.Next);I != None; I = UWindowMenuBarItem(I.Next) )
+		for (I = UWindowMenuBarItem(Items.Next);I != None; I = UWindowMenuBarItem(I.Next))
 		{
-			if(Key == I.HotKey) 
+			if (Key == I.HotKey) 
 			{
-				if(Selected != None)
+				if (Selected != None)
 					Selected.DeSelect();
 				Selected = I;
 				Selected.Select();
@@ -218,7 +218,7 @@ function bool HotKeyDown(int Key, float X, float Y)
 
 function bool HotKeyUp(int Key, float X, float Y)
 {
-	if(Key == 0x12)
+	if (Key == 0x12)
 		bAltDown = False;
 
 	return False;
@@ -228,14 +228,14 @@ function KeyDown(int Key, float X, float Y)
 {
 	local UWindowMenuBarItem I;
 
-	switch(Key)
+	switch (Key)
 	{
 	case 0x25: // Left
 		I = UWindowMenuBarItem(Selected.Prev);
-		if(I==None || I==Items)
+		if (I == None || I == Items)
 			I = UWindowMenuBarItem(Items.Last);
 
-		if(Selected != None)
+		if (Selected != None)
 			Selected.DeSelect();	
 
 		Selected = I;
@@ -246,10 +246,10 @@ function KeyDown(int Key, float X, float Y)
 		break;
 	case 0x27: // Right
 		I = UWindowMenuBarItem(Selected.Next);
-		if(I==None)
+		if (I == None)
 			I = UWindowMenuBarItem(Items.Next);
 
-		if(Selected != None)
+		if (Selected != None)
 			Selected.DeSelect();
 		
 
@@ -267,12 +267,12 @@ function MenuCmd(int Menu, int Item)
 	local UWindowMenuBarItem I;
 	local int j;
 
-	j=0;
-	for(I = UWindowMenuBarItem(Items.Next); I != None; I = UWindowMenuBarItem(I.Next))
+	j = 0;
+	for (I = UWindowMenuBarItem(Items.Next); I != None; I = UWindowMenuBarItem(I.Next))
 	{
-		if(j == Menu && I.Menu != None)
+		if (j == Menu && I.Menu != None)
 		{
-			if(Selected != None)
+			if (Selected != None)
 				Selected.DeSelect();
 			Selected = I;
 			Selected.Select();

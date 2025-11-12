@@ -13,9 +13,9 @@ event SetSecondaryAmmo(EInventoryItem Item)
 function bool SwitchROF()
 {
     // switch ROF
-    if( !bSniperMode )
+    if (!bSniperMode)
     {
-        switch( eROFMode )
+        switch (eROFMode)
         {
         case ROF_Single:
 			eROFMode = ROF_Burst;
@@ -36,7 +36,7 @@ function bool SwitchROF()
 
 function bool IsROFModeAvailable(ERateOfFireMode rof)
 {
-    switch( rof )
+    switch (rof)
     {
         case ROF_Single:
 		case ROF_Burst:
@@ -53,7 +53,7 @@ function bool IsROFModeAvailable(ERateOfFireMode rof)
 // Description		
 //		Do own treatment when selected in inventory
 //------------------------------------------------------------------------
-function Select( EInventory Inv )
+function Select(EInventory Inv)
 {
 	Super.Select(Inv);
 
@@ -61,7 +61,7 @@ function Select( EInventory Inv )
 
 	// Get secondary Ammo
 	// if there's already one selected
-	if( Inv.BackPackSecSelectedItem != None )
+	if (Inv.BackPackSecSelectedItem != None)
 		Link(ESecondaryAmmo(Inv.BackPackSecSelectedItem));
 }
 
@@ -72,7 +72,7 @@ function AddedToInventory()
 	Super.AddedToInventory();
 }
 
-function bool NotifyPickup( Controller Instigator )
+function bool NotifyPickup(Controller Instigator)
 {
 	local EPlayerController Epc;
 	
@@ -90,15 +90,15 @@ function bool NotifyPickup( Controller Instigator )
 // Description		
 //		Link the maingun to its ammo
 //------------------------------------------------------------------------
-function Link( ESecondaryAmmo Ammo )
+function Link(ESecondaryAmmo Ammo)
 {
 	SecondaryAmmo		= Ammo;
 
-	if( Ammo != None )
+	if (Ammo != None)
 		Ammo.OwnerGun = self;
 }
 
-function bool CanAddThisItem( EInventoryItem ItemToAdd )
+function bool CanAddThisItem(EInventoryItem ItemToAdd)
 {
 	return ItemToAdd == self;
 }
@@ -107,9 +107,9 @@ function Fire()
 {
 	Log(BulletsAccuracy);
 	// Normal behavior
-	if( BulletsAccuracy == -1 )
+	if (BulletsAccuracy == -1)
 		Super.Fire();
-	else if( BulletsAccuracy > 0 )
+	else if (BulletsAccuracy > 0)
 	{
 		BulletsAccuracy--;
 		Super.Fire();
@@ -124,12 +124,12 @@ state s_Selected
 	function AltFire()
 	{
 		// no secondary fire in sniper mode
-		if( bSniperMode )
+		if (bSniperMode)
 			return;
 
 		Super.AltFire();
 
-		if( SecondaryAmmo != None )
+		if (SecondaryAmmo != None)
 		{
 			// let's use the secondary ammo
 			PlaySound(Sound'FisherEquipement.Play_FN2000Launch', SLOT_SFX);

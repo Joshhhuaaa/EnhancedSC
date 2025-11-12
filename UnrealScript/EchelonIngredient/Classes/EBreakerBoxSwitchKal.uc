@@ -10,7 +10,7 @@ auto state s_On
 	{
 		local Rotator r;
 
-		if( bDoRotation )
+		if (bDoRotation)
 		{
 			r = Rotation;
 			r.Pitch -= 16384;
@@ -28,7 +28,7 @@ state s_Off
 	{
 		local Rotator r;
 
-		if( bDoRotation )
+		if (bDoRotation)
 		{
 			r = Rotation;
 			r.Pitch += 16384;

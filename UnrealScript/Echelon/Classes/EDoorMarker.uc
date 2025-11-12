@@ -30,14 +30,14 @@ var	EDoorMover Door;		// pointer to the door mover which we refer to
 
 function PawnEnteringRadius(ePawn TouchingPawn)
 {
-	if ( bHasNoDoorPoints )
+	if (bHasNoDoorPoints)
 		return;
 
-	if ( !TouchingPawn.Controller.bIsPlayer )
+	if (!TouchingPawn.Controller.bIsPlayer)
 	{
 		// make sure Pawn is really ENTERING (heading in direction of Door) ..
 		// plog(Level.TimeSeconds @ "door to pawn : " $ Normal(Door.myMarker.Location - TouchingPawn.Location) @ TouchingPawn $ ".velocity:  " $ Normal(TouchingPawn.Velocity));
-		if ( Normal(Door.myMarker.Location - TouchingPawn.Location) dot Normal(TouchingPawn.Velocity) > 0 )
+		if (Normal(Door.myMarker.Location - TouchingPawn.Location) dot Normal(TouchingPawn.Velocity) > 0)
 		{
 			//plog("dotproduct:   "  $  Normal(Door.myMarker.Location - TouchingPawn.Location) dot Normal(TouchingPawn.Velocity) $ TouchingPawn $ " entering door radius.");
 			EAIController(TouchingPawn.Controller).EnteringDoorRadius(Door);
@@ -55,10 +55,10 @@ function PawnEnteringRadius(ePawn TouchingPawn)
 
 function PawnLeavingRadius(ePawn LeavingPawn)
 {
-	if ( bHasNoDoorPoints )
+	if (bHasNoDoorPoints)
 		return;
 
-	if ( LeavingPawn.Controller != none && !LeavingPawn.Controller.bIsPlayer )
+	if (LeavingPawn.Controller != none && !LeavingPawn.Controller.bIsPlayer)
 		EAIController(LeavingPawn.Controller).LeavingDoorRadius();
 }
 
@@ -76,7 +76,7 @@ auto state s_Untouched
 	{
 		local actor A;
 		
-		if( Other.bIsPawn /*&& !Other.bIsPlayerPawn*/ )
+		if (Other.bIsPawn /*&& !Other.bIsPlayerPawn*/)
 		{			
 			// EPawn is entering our radius
 			PawnEnteringRadius(ePawn(Other));
@@ -94,7 +94,7 @@ state s_Touched
 	{
 		local actor A;
 		
-		if ( Other.bIsPawn )
+		if (Other.bIsPawn)
 		{			
 			//plog("Touched by : " $ Other);
 			
@@ -107,7 +107,7 @@ state s_Touched
 	{
 		local actor A;
 		
-		if ( Other.bIsPawn )
+		if (Other.bIsPawn)
 		{
 			//plog("Untouched by : " $ Other);
 			PawnLeavingRadius(ePawn(Other));
@@ -116,7 +116,7 @@ state s_Touched
 		foreach TouchingActors(class'Actor', A)
 		{
 			// discount Other if still in the Touching array
-			if ( A.bIsPawn && A != Other )
+			if (A.bIsPawn && A != Other)
 			{
 				//plog("		TouchingActors Array includes : " $ A);
 				return;
@@ -132,27 +132,27 @@ state s_Touched
         local bool    pawnOpen, playerOpen;
 		local vector  dist2D;
 
-		//plog("tick: "@ Door @ Door.IsOpened() @ !Door.bOpening @ !Door.bClosing );
+		//plog("tick: "@ Door @ Door.IsOpened() @ !Door.bOpening @ !Door.bClosing);
 
-		if ( Door != none && Door.IsOpened() && !Door.bOpening && !Door.bClosing )
+		if (Door != none && Door.IsOpened() && !Door.bOpening && !Door.bClosing)
 		{
 			//plog("STAY OPEN DOOR!");
 			
             // Force staying open if there is an Pawn touching the DoorMarker
  			foreach TouchingActors(class'EPawn', EP)
 			{
-				if(EP.bIsPlayerPawn)
+				if (EP.bIsPlayerPawn)
 				{
 					dist2D = EP.Location - Location;
 					dist2D.Z = 0.0;
-					if(	EP.Health > 0 &&
+					if (EP.Health > 0 &&
 						VSize(dist2D) < 140.0)	// should be PlayerKeepOpenRadius
 						playerOpen = true;
 				}
                 else
                 {
 					// Don't stay open for dead ppl
-					if(!EP.bOrientOnSlope && (EP.GetStateName() != 's_Carry') && (EP.GetStateName() != 's_Grabbed'))
+					if (!EP.bOrientOnSlope && (EP.GetStateName() != 's_Carry') && (EP.GetStateName() != 's_Grabbed'))
 						pawnOpen = true;
                 }
 			}

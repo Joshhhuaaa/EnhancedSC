@@ -46,7 +46,7 @@ function Created()
 
 }
 
-function ChangeTopButtonSelection( EPCTextButton _SelectMe)
+function ChangeTopButtonSelection(EPCTextButton _SelectMe)
 {
     m_Controls.m_bSelected      =  false;
     m_Graphics.m_bSelected      =  false;
@@ -58,7 +58,7 @@ function ChangeTopButtonSelection( EPCTextButton _SelectMe)
     m_ControlsArea.HideWindow();
     m_EnhancedArea.HideWindow();  // Joshua - Enhanced settings
     
-    switch(_SelectMe)
+    switch (_SelectMe)
     {
     case m_Controls:
         m_Controls.m_bSelected      =  true;
@@ -86,9 +86,9 @@ function Reset()
     m_GraphicArea.Refresh(); 
     m_EnhancedArea.Refresh(); 
 
-	if(m_Sounds.m_bSelected)
+	if (m_Sounds.m_bSelected)
 		ChangeTopButtonSelection(m_Sounds);    
-	else if(m_Graphics.m_bSelected)
+	else if (m_Graphics.m_bSelected)
 		ChangeTopButtonSelection(m_Graphics);    
 	else if (m_Controls.m_bSelected)
 		ChangeTopButtonSelection(m_Controls);

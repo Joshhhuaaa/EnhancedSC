@@ -15,9 +15,9 @@ var int Regular;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -34,29 +34,29 @@ function InitPattern()
     ForEach DynamicActors(class'Pawn', P)
     {
         // Joshua - These are the NPCs who explode from the chopper cinematic, it shouldn't be included in stats
-        if(P.name == 'EGeorgianSoldier6')
+        if (P.name == 'EGeorgianSoldier6')
         {
             Characters[1] = P.controller;
             EAIController(Characters[1]).bNotInStats = true;
         }
-        if(P.name == 'EGeorgianSoldier7')
+        if (P.name == 'EGeorgianSoldier7')
         {
             Characters[2] = P.controller;
             EAIController(Characters[2]).bNotInStats = true;
         }
-        if(P.name == 'EGeorgianSoldier8')
+        if (P.name == 'EGeorgianSoldier8')
         {
             Characters[3] = P.controller;
             EAIController(Characters[3]).bNotInStats = true;
         }
-        if(P.name == 'EGeorgianSoldier9')
+        if (P.name == 'EGeorgianSoldier9')
         {
             Characters[4] = P.controller;
             EAIController(Characters[4]).bNotInStats = true;
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     AlreadyFlag=0;

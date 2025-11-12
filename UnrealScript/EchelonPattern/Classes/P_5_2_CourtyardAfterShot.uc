@@ -11,9 +11,9 @@ class P_5_2_CourtyardAfterShot extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,17 +29,17 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EEliteForceCristavi12')
+        if (P.name == 'EEliteForceCristavi12')
             Characters[1] = P.controller;
-        if(P.name == 'EEliteForceCristavi9')
+        if (P.name == 'EEliteForceCristavi9')
             Characters[2] = P.controller;
-        if(P.name == 'EEliteForceCristavi10')
+        if (P.name == 'EEliteForceCristavi10')
             Characters[3] = P.controller;
-        if(P.name == 'EEliteForceCristavi11')
+        if (P.name == 'EEliteForceCristavi11')
             Characters[4] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

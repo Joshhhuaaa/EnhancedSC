@@ -131,7 +131,7 @@ static function int InStrAfter(string Text, string Match, int Pos)
 	local int i;
 	
 	i = InStr(Mid(Text, Pos), Match);
-	if(i != -1)
+	if (i != -1)
 		return i + Pos;
 	return -1;
 }
@@ -144,15 +144,15 @@ static function Object BuildObjectWithProperties(string Text)
 	local Object O;
 	
 	i = InStr(Text, ",");
-	if(i == -1)
+	if (i == -1)
 	{
-		ObjectClass=Text;
+		ObjectClass = Text;
 		Text="";
 	}
 	else
 	{
-		ObjectClass=Left(Text, i);
-		Text=Mid(Text, i+1);
+		ObjectClass = Left(Text, i);
+		Text = Mid(Text, i + 1);
 	}
 	
 	//Log("Class: "$ObjectClass);
@@ -160,48 +160,48 @@ static function Object BuildObjectWithProperties(string Text)
 	C = class<Object>(DynamicLoadObject(ObjectClass, class'Class'));
 	O = new C;
 
-	while(Text != "")
+	while (Text != "")
 	{
 		i = InStr(Text, "=");
-		if(i == -1)
+		if (i == -1)
 		{
 			Log("Missing value for property "$ObjectClass$"."$Text);
-			PropertyName=Text;
-			PropertyValue="";
+			PropertyName = Text;
+			PropertyValue = "";
 		}
 		else
 		{
-			PropertyName=Left(Text, i);
-			Text=Mid(Text, i+1);
+			PropertyName = Left(Text, i);
+			Text = Mid(Text, i + 1);
 		}
 
-		if(Left(Text, 1) == "\"")
+		if (Left(Text, 1) == "\"")
 		{
 			i = InStrAfter(Text, "\"", 1);
-			if(i == -1)
+			if (i == -1)
 			{
 				Log("Missing quote for "$ObjectClass$"."$PropertyName);
 				return O;
 			}
-			PropertyValue = Mid(Text, 1, i-1);
+			PropertyValue = Mid(Text, 1, i - 1);
 			
-			Temp = Mid(Text, i+1, 1);
-			if(Temp != "" && Temp != ",")
+			Temp = Mid(Text, i + 1, 1);
+			if (Temp != "" && Temp != ",")
 				Log("Missing comma after close quote for "$ObjectClass$"."$PropertyName);
-			Text = Mid(Text, i+2);	
+			Text = Mid(Text, i + 2);	
 		}
 		else
 		{
 			i = InStr(Text, ",");
-			if(i == -1)
+			if (i == -1)
 			{
-				PropertyValue=Text;
+				PropertyValue = Text;
 				Text="";
 			}
 			else
 			{
-				PropertyValue=Left(Text, i);
-				Text=Mid(Text, i+1);
+				PropertyValue = Left(Text, i);
+				Text = Mid(Text, i + 1);
 			}
 		}
 				

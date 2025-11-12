@@ -11,13 +11,13 @@ function PostBeginPlay()
 
 state s_DyingSpill
 {
-	function Tick( float deltaTime )
+	function Tick(float deltaTime)
 	{
 		Emitters[0].MaxAbsVelocity.X -= DeltaTime * 100;
 
 		//Log(Emitters[0].MaxAbsVelocity.X);
 
-		if( Emitters[0].MaxAbsVelocity.X <= 0 )
+		if (Emitters[0].MaxAbsVelocity.X <= 0)
 		{
 			PlaySound(Sound'Water.Stop_barrilFuelLeak', SLOT_SFX);
 			Destroy();

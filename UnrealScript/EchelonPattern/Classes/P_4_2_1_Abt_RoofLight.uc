@@ -13,9 +13,9 @@ class P_4_2_1_Abt_RoofLight extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -32,11 +32,11 @@ function InitPattern()
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'StaticMeshActor83')
+        if (A.name == 'StaticMeshActor83')
             SoundActors[0] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

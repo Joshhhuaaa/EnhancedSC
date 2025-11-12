@@ -14,9 +14,9 @@ var int pass1;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -32,11 +32,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EUSPrisoner4')
+        if (P.name == 'EUSPrisoner4')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     pass1=0;
@@ -54,7 +54,7 @@ Begin:
 UShostage2:
     Log("");
     CheckFlags(pass1,FALSE,'Talk1');
-    JumpRandom('Talk2', 0.50, 'Talk3', 1.00, , , , , , ); 
+    JumpRandom('Talk2', 0.50, 'Talk3', 1.00, , , , , ,); 
 Talk1:
     Log("");
     SetFlags(pass1,TRUE);

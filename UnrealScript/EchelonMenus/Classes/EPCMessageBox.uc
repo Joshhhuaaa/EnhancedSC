@@ -24,19 +24,19 @@ var Color  m_TextAreaColor;
 function Created()
 {
     //Creating All controls   
-    m_TitleLabel        =  UWindowLabelControl(CreateWindow( class'UWindowLabelControl', 0, 0, 0, 0, self)); 
+    m_TitleLabel        =  UWindowLabelControl(CreateWindow(class'UWindowLabelControl', 0, 0, 0, 0, self)); 
 
 
-    m_YesButton         = EPCTextButton(CreateControl( class'EPCTextButton', 0, 0, 0, 0, self));    
-    m_NoButton          = EPCTextButton(CreateControl( class'EPCTextButton', 0, 0, 0, 0, self));
-    m_OKButton          = EPCTextButton(CreateControl( class'EPCTextButton', 0, 0, 0, 0, self));
-    m_CancelButton      = EPCTextButton(CreateControl( class'EPCTextButton', 0, 0, 0, 0, self));
+    m_YesButton         = EPCTextButton(CreateControl(class'EPCTextButton', 0, 0, 0, 0, self));    
+    m_NoButton          = EPCTextButton(CreateControl(class'EPCTextButton', 0, 0, 0, 0, self));
+    m_OKButton          = EPCTextButton(CreateControl(class'EPCTextButton', 0, 0, 0, 0, self));
+    m_CancelButton      = EPCTextButton(CreateControl(class'EPCTextButton', 0, 0, 0, 0, self));
     m_YesButton.Text    = Localize("MESSAGEBOX","YES","Localization\\HUD");
     m_NoButton.Text     = Localize("MESSAGEBOX","NO","Localization\\HUD");
     m_OKButton.Text     = Localize("MESSAGEBOX","OK","Localization\\HUD");
     m_CancelButton.Text = Localize("MESSAGEBOX","CANCEL","Localization\\HUD");
 
-    m_MessageArea       = UWindowWrappedTextArea(CreateWindow( class'UWindowWrappedTextArea', 0, 0, 0, 0, self));     
+    m_MessageArea       = UWindowWrappedTextArea(CreateWindow(class'UWindowWrappedTextArea', 0, 0, 0, 0, self));     
 }
 
 
@@ -58,7 +58,7 @@ function SetupMessageArea(INT X, INT Y, INT W, INT H, INT TextXOffset, INT TextY
     m_MessageArea.SBVClass = class'EPCVScrollBar';
     m_MessageArea.SetScrollable(_SetScrollable);
  
-    if(_SetScrollable)
+    if (_SetScrollable)
         m_MessageArea.VertSB.SetHideWhenDisable(_HideScrollWhenDisable);
     
     m_MessageArea.m_fXOffset = TextXOffset;
@@ -115,15 +115,15 @@ function SetupButtons(Region _Left, Region _Mid, Region _Right, INT _FONT, ECanv
     m_CancelButton.Align = _Align;
     m_CancelButton.TextColor = _TextColor;
 
-    Left=_Left;
-    Mid=_Mid;
-    Right=_Right;
+    Left = _Left;
+    Mid = _Mid;
+    Right = _Right;
 
 }
 
 function CancelMouseFocus(BOOL _CancelMouseFocus)
 {
-    if(_CancelMouseFocus)
+    if (_CancelMouseFocus)
     {
         m_TitleLabel.bAcceptsMouseFocus = false;
         m_MessageArea.bAcceptsMouseFocus = false;
@@ -148,7 +148,7 @@ function Setup(string InTitle, string InMessage, MessageBoxButtons InButtons, Me
 
 
 	// Create buttons
-	switch(InButtons)
+	switch (InButtons)
 	{
 	case MB_YesNoCancel:
         m_OKButton.HideWindow();        
@@ -219,9 +219,9 @@ function Notify(UWindowDialogControl C, byte E)
 
 	P = EPCPopUpController(OwnerWindow);
 
-	if(E == DE_Click)
+	if (E == DE_Click)
 	{
-		switch(C)
+		switch (C)
 		{
 		case m_YesButton:
 			P.Result = MR_Yes;
@@ -275,13 +275,13 @@ function KeyDown(int Key, float X, float Y)
 
 	P = EPCPopUpController(OwnerWindow);
     
-	if(Key == GetPlayerOwner().Player.Console.EInputKey.IK_Enter && EnterResult != MR_None)
+	if (Key == GetPlayerOwner().Player.Console.EInputKey.IK_Enter && EnterResult != MR_None)
 	{        
 		P = EPCPopUpController(OwnerWindow);
 		P.Result = EnterResult;
 		P.Close();
 	}
-    else if(Key == GetPlayerOwner().Player.Console.EInputKey.IK_Escape && P.Result != MR_None)
+    else if (Key == GetPlayerOwner().Player.Console.EInputKey.IK_Escape && P.Result != MR_None)
     {
         P.Close();
     }

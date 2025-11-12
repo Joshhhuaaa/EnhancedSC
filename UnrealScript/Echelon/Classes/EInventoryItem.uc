@@ -34,7 +34,7 @@ function DrawAdditionalInfo(HUD Hud, ECanvas Canvas);
 // Description		
 //		Do own treatment when equipped as current item
 //------------------------------------------------------------------------
-event Select( EInventory Inv )
+event Select(EInventory Inv)
 {
 	GotoState('s_Selected');
 }
@@ -43,9 +43,9 @@ event Select( EInventory Inv )
 // Description		
 //		Weapon has been put away / deselected
 //------------------------------------------------------------------------
-function UnSelect( EInventory Inv )
+function UnSelect(EInventory Inv)
 {
-	if( GetStateName() == 's_Selected' )
+	if (GetStateName() == 's_Selected')
 		GotoState('s_Inventory');
 }
 
@@ -62,11 +62,11 @@ function ResetController()
 	local EPawn OwnerPawn;
 	
 	// if picking up a weapon owned by someone else, remove it from their inventory
-	if ( Controller != none )
+	if (Controller != none)
 	{
 		// Remove it from inventory
 		OwnerPawn = EPawn(Controller.Pawn);
-		if ( OwnerPawn != none )
+		if (OwnerPawn != none)
 		{
 			OwnerPawn.FullInventory.RemoveItem(self,1);
 		}
@@ -79,7 +79,7 @@ function ResetController()
 // Description		
 //		Set Controller plus bas class processing
 //------------------------------------------------------------------------
-function bool NotifyPickup( Controller Instigator )
+function bool NotifyPickup(Controller Instigator)
 {
 	local EInventory Inv;
 	Inv = EPawn(Instigator.Pawn).FullInventory;
@@ -88,10 +88,10 @@ function bool NotifyPickup( Controller Instigator )
 	
 	// Controller needs to be set before going into s_Selected
 	Controller = Instigator;
-	if( Controller == None )
+	if (Controller == None)
 		Log(self$" ERROR: EInventoryItem should always have an owner controller.");
 	
-	if( Controller.bIsPlayer )
+	if (Controller.bIsPlayer)
 		EPlayerController(Controller).SendTransmissionMessage(Localize("InventoryItem", ItemName, "Localization\\HUD") $ Localize("Transmission", "PickUp", "Localization\\HUD"), TR_INVENTORY);
 
 	// Add to inventory
@@ -104,17 +104,17 @@ function bool NotifyPickup( Controller Instigator )
 // Description		
 //		Called from inventory only 
 //------------------------------------------------------------------------
-event bool CanAddThisItem( EInventoryItem ItemToAdd )
+event bool CanAddThisItem(EInventoryItem ItemToAdd)
 {
 	// If item is first to be added
-	if( ItemToAdd == self )
+	if (ItemToAdd == self)
 		return true;
 
 	// Check if the item is a bundle
-	if( MaxQuantity > 1 )
+	if (MaxQuantity > 1)
 	{
 		// Check if we can add the quantity requested
-		if( Quantity < MaxQuantity )
+		if (Quantity < MaxQuantity)
 			return true;
 	}
 
@@ -140,7 +140,7 @@ function ProcessUseItem()
 	local EInventoryItem	NextItem;
 
 	// May go into flying mode from an explosion when on ground.
-	if( Controller == None )
+	if (Controller == None)
 		return;
 
 	Inv = EPawn(Controller.Pawn).FullInventory;
@@ -169,7 +169,7 @@ event AddedToInventory()
 //------------------------------------------------------------------------
 event RemovedFromInventory()
 {
-	if( Controller != None && Controller.bIsPlayer )
+	if (Controller != None && Controller.bIsPlayer)
 		EPlayerController(Controller).NotifyLostInventoryItem(self);
 }
 
@@ -186,19 +186,19 @@ function BaseChange();
 //		Wrapper to put and item into an inventory, link to its owner and set its controller
 //		Controller and Owner might not be the same (see EGameplayObject owns an Inventory)
 //------------------------------------------------------------------------
-function Add( Actor NewOwner, Controller NewController, EInventory Inventory )
+function Add(Actor NewOwner, Controller NewController, EInventory Inventory)
 {
 	// Set its Owner .. not necessary anymore
-	if( NewOwner != None )
+	if (NewOwner != None)
 		SetOwner(NewOwner);
 
 	// Set Controller to process specific message to pawn/controller
 	ResetController();
-	if( NewController != None )
+	if (NewController != None)
 		Controller = NewController;
 
 	// Add to Inventory
-	if( Inventory == None )
+	if (Inventory == None)
 		Log(self@"Problem in EInventoryItem::Add inventory == None");
 
 	Inventory.AddInventoryItem(self);
@@ -216,7 +216,7 @@ state s_Pickup
 		
 		// Give interaction
 		ResetInteraction();
-		if(InteractionClass != None)
+		if (InteractionClass != None)
 			Interaction = Spawn(InteractionClass,self);
 
 		// turn on collision
@@ -237,14 +237,14 @@ state s_Inventory
 	function BeginState()
 	{
 		// Checks
-		if( Controller == None )
+		if (Controller == None)
 			Log(self$" ERROR: has no Controller");
 
-		if( Owner == None )
+		if (Owner == None)
 			Log(self$" PROBLEM: has no Owner");
 
 		// Restore valid StaticMesh if it was changed for qty
-		if( StaticMesh != default.StaticMesh )
+		if (StaticMesh != default.StaticMesh)
 			SetStaticMesh(default.StaticMesh);
 
 		// Inactive, invisible

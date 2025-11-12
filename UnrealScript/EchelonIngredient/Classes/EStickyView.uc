@@ -56,10 +56,10 @@ state s_Online
 function DrawIcon(ECanvas Canvas)
 {
     Canvas.DrawColor = White;
-	Canvas.Style=ERenderStyle.STY_Alpha;    
+	Canvas.Style = ERenderStyle.STY_Alpha;    
     Canvas.SetPos(EYE_ICON_LEFT, EYE_ICON_TOP);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_ic_surveillance, 64, 32, 0, 0, 64, 32);
-	Canvas.Style=ERenderStyle.STY_Normal;    
+	Canvas.Style = ERenderStyle.STY_Normal;    
 }
 
 /*-----------------------------------------------------------------------------
@@ -138,32 +138,32 @@ function DrawButtons(ECanvas Canvas)
         xPos = CAM_X + SIDEBAR_WIDTH;
         yPos = SCREEN_END_Y - BOTTOM_CAM_Y - (BUTTONBAR_HEIGHT - BUTTON_BOX_HEIGHT) / 2;
 
-        Canvas.Style=ERenderStyle.STY_Alpha;
+        Canvas.Style = ERenderStyle.STY_Alpha;
 
         // Right arrow to change vision to thermal view
-        Canvas.SetPos( xPos + BUTTON_THERMAL_BOX_X + BUTTON_BOX_WIDTH/2 - eLevel.TGAME.GetWidth(eLevel.TGAME.sc_fleche)/2,																	
-                    yPos - BUTTON_BOX_HEIGHT + BUTTON_BOX_HEIGHT/2 - eLevel.TGAME.GetHeight(eLevel.TGAME.sc_fleche)/2 );
+        Canvas.SetPos(xPos + BUTTON_THERMAL_BOX_X + BUTTON_BOX_WIDTH / 2 - eLevel.TGAME.GetWidth(eLevel.TGAME.sc_fleche) / 2,																	
+                    yPos - BUTTON_BOX_HEIGHT + BUTTON_BOX_HEIGHT / 2 - eLevel.TGAME.GetHeight(eLevel.TGAME.sc_fleche) / 2);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_fleche2, 12, 13, 12, 13, -12, -13);	
             
 
         // Left arrow to change vision to night view
-        Canvas.SetPos( xPos + BUTTON_NIGHT_BOX_X + BUTTON_BOX_WIDTH/2 - eLevel.TGAME.GetWidth(eLevel.TGAME.sc_fleche)/2,																	
-                    yPos - BUTTON_BOX_HEIGHT + BUTTON_BOX_HEIGHT/2 - eLevel.TGAME.GetHeight(eLevel.TGAME.sc_fleche)/2 );
+        Canvas.SetPos(xPos + BUTTON_NIGHT_BOX_X + BUTTON_BOX_WIDTH / 2 - eLevel.TGAME.GetWidth(eLevel.TGAME.sc_fleche) / 2,																	
+                    yPos - BUTTON_BOX_HEIGHT + BUTTON_BOX_HEIGHT / 2 - eLevel.TGAME.GetHeight(eLevel.TGAME.sc_fleche) / 2);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_fleche2, 12, 13, 0, 0, 12, 13);	
         
         xPos = SCREEN_END_X - CAM_X - SIDEBAR_WIDTH;
         
         // Down arrow to zoom out
-        Canvas.SetPos( xPos - BUTTON_ZOOMP_BOX_X + BUTTON_BOX_WIDTH/2 - eLevel.TGAME.GetWidth(eLevel.TGAME.sc_fleche)/2,																	
-                    yPos - BUTTON_BOX_HEIGHT + BUTTON_BOX_HEIGHT/2 - eLevel.TGAME.GetHeight(eLevel.TGAME.sc_fleche)/2 );
+        Canvas.SetPos(xPos - BUTTON_ZOOMP_BOX_X + BUTTON_BOX_WIDTH / 2 - eLevel.TGAME.GetWidth(eLevel.TGAME.sc_fleche) / 2,																	
+                    yPos - BUTTON_BOX_HEIGHT + BUTTON_BOX_HEIGHT / 2 - eLevel.TGAME.GetHeight(eLevel.TGAME.sc_fleche) / 2);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_fleche, 13, 12, 13, 12, -13, -12);	
 
         // Up arrow to zoom in
-        Canvas.SetPos( xPos - BUTTON_ZOOMM_BOX_X + BUTTON_BOX_WIDTH/2 - eLevel.TGAME.GetWidth(eLevel.TGAME.sc_fleche)/2,
-                    yPos - BUTTON_BOX_HEIGHT + BUTTON_BOX_HEIGHT/2 - eLevel.TGAME.GetHeight(eLevel.TGAME.sc_fleche)/2 );
+        Canvas.SetPos(xPos - BUTTON_ZOOMM_BOX_X + BUTTON_BOX_WIDTH / 2 - eLevel.TGAME.GetWidth(eLevel.TGAME.sc_fleche) / 2,
+                    yPos - BUTTON_BOX_HEIGHT + BUTTON_BOX_HEIGHT / 2 - eLevel.TGAME.GetHeight(eLevel.TGAME.sc_fleche) / 2);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_fleche, 13, 12, 0, 0, 13, 12);
 
-        Canvas.Style=ERenderStyle.STY_Normal;    
+        Canvas.Style = ERenderStyle.STY_Normal;    
 
         Canvas.SetPos(xPos - BUTTON_EXIT_BOX_X + 5, yPos - BUTTON_BOX_HEIGHT + 2);
         Canvas.DrawText("R");
@@ -187,7 +187,7 @@ function UpdateDistanceMeter(float DeltaTime)
         
     Traced = Trace(HitLocation, HitNormal, TraceEnd, Location, True);
 
-    if(Traced != None)
+    if (Traced != None)
     {
         fDistance = Dist(HitLocation, Location);
     }
@@ -210,10 +210,10 @@ function DrawZoomMeter(ECanvas Canvas)
     local float     RADDef;
     local float     xLen, yLen;
 
-    RADCurr = (EStickyCamera(Camera).current_fov/180.0) * 3.1416;
-    RADDef = (90.0/180.0) * 3.1416;
+    RADCurr = (EStickyCamera(Camera).current_fov / 180.0) * 3.1416;
+    RADDef = (90.0 / 180.0) * 3.1416;
 
-    fZoomRatio = tan(RADDef/2.0)/tan(RADCurr/2.0);
+    fZoomRatio = tan(RADDef / 2.0) / tan(RADCurr / 2.0);
 
     if (fZoomRatio < 1.0)
         fZoomRatio = 1.0;
@@ -230,7 +230,7 @@ function DrawZoomMeter(ECanvas Canvas)
     Canvas.DrawText("--");
 
     Canvas.TextSize(strZoom, xLen, yLen);
-    Canvas.SetPos(CAM_X + SIDEBAR_WIDTH + (float(TOPBAR_CORNER_X-1) / 2.0f - xLen/2.0f), TOP_CAM_Y + 8);
+    Canvas.SetPos(CAM_X + SIDEBAR_WIDTH + (float(TOPBAR_CORNER_X - 1) / 2.0f - xLen / 2.0f), TOP_CAM_Y + 8);
     Canvas.DrawText(strZoom);
 }
 
@@ -257,7 +257,7 @@ function DrawDistanceMeter(ECanvas Canvas)
     if (fDistance <= 0.0)
         strFormattedDistance = "  - ";
 
-    //Canvas.SetPos(SCREEN_END_X - GADGETS_RIGHT + 67, GADGETS_TOP-3);
+    //Canvas.SetPos(SCREEN_END_X - GADGETS_RIGHT + 67, GADGETS_TOP - 3);
     Canvas.SetPos(SCREEN_END_X - CAM_X - SIDEBAR_WIDTH - 7, TOP_CAM_Y + 8);  
     Canvas.DrawTextRightAligned(strFormattedDistance); 
 }

@@ -1,10 +1,10 @@
 class EKolaVodka extends EGameplayObject; 
 
-function ProcessDamage( int Damage, class<DamageType> DamageType, Vector HitLocation, Vector HitNormal )
+function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocation, Vector HitNormal)
 {
 	Super.ProcessDamage(Damage, DamageType, HitLocation, HitNormal);
 
-	if( HitPoints <= 100 )
+	if (HitPoints <= 100)
 	{
 		bPickable = false;
 		ResetInteraction();

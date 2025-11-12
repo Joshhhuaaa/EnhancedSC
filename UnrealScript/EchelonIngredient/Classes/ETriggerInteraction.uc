@@ -4,7 +4,7 @@ function PostBeginPlay()
 {
 	Super.PostBeginPlay();
 
-	if( Owner.IsA('Mover') && (Owner.InitialState != 'TriggerOpenTimed' && Owner.InitialState != 'TriggerToggle') )
+	if (Owner.IsA('Mover') && (Owner.InitialState != 'TriggerOpenTimed' && Owner.InitialState != 'TriggerToggle'))
 		Log(self$" ERROR: ETriggerInteraction mover owner is not in state TriggerToggle/TriggerOpenTimed."@Owner.InitialState);
 }
 
@@ -13,9 +13,9 @@ function string	GetDescription()
 	return Localize("Interaction", "Switch", "Localization\\HUD");
 }
 
-function InitInteract( Controller Instigator )
+function InitInteract(Controller Instigator)
 {
-	if( !Instigator.bIsPlayer )
+	if (!Instigator.bIsPlayer)
 		Instigator.GotoState('s_SwitchObject');
 	else
 	{
@@ -24,22 +24,22 @@ function InitInteract( Controller Instigator )
 	}
 }
 
-function Interact( Controller Instigator )
+function Interact(Controller Instigator)
 {
 	Owner.Trigger(Self, Instigator.Pawn);
 }
 
-function PostInteract( Controller Instigator )
+function PostInteract(Controller Instigator)
 {
 	EPlayerController(Instigator).ReturnFromInteraction();
 
 	// Destroy interaction if owner switch is flagged trigger only once
-	if( Owner != None && Owner.IsA('ESwitchObject') && ESwitchObject(Owner).TriggerOnlyOnce )
+	if (Owner != None && Owner.IsA('ESwitchObject') && ESwitchObject(Owner).TriggerOnlyOnce)
 		Destroy();
 
 }
 
-function SetInteractLocation( Pawn InteractPawn )
+function SetInteractLocation(Pawn InteractPawn)
 {
 	local Vector X, Y, Z, MovePos;
 	local EPawn InteractEPawn;
@@ -56,13 +56,13 @@ function SetInteractLocation( Pawn InteractPawn )
 		MovePos -= (0.5 * InteractEPawn.CollisionRadius) * Y;
 		MovePos += (1.25 * InteractEPawn.CollisionRadius) * X;
 
-		if(InteractEPawn.bIsPlayerPawn)
+		if (InteractEPawn.bIsPlayerPawn)
         {
 			MovePos.Z	= InteractEPawn.Location.Z;									// keep on same Z
         }
 		else
 		{
-			if( Trace(HitLocation, HitNormal, MovePos + vect(0,0,-200), MovePos,,,,,true) != None )
+			if (Trace(HitLocation, HitNormal, MovePos + vect(0,0,-200), MovePos,,,,,true) != None)
         {
 				HitLocation.Z += InteractEPawn.CollisionHeight;
 				MovePos = HitLocation;

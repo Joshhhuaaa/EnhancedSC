@@ -19,9 +19,9 @@ var int Position3;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -38,15 +38,15 @@ function InitPattern()
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'StaticMeshActor653')
+        if (A.name == 'StaticMeshActor653')
             SoundActors[0] = A;
-        if(A.name == 'StaticMeshActor420')
+        if (A.name == 'StaticMeshActor420')
             SoundActors[1] = A;
-        if(A.name == 'StaticMeshActor654')
+        if (A.name == 'StaticMeshActor654')
             SoundActors[2] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     Pass1=0;
@@ -85,7 +85,7 @@ Pos3:
     SetFlags(Position3,TRUE);
 Start:
     Log("");
-    JumpRandom('Occurrence1', 0.34, 'Occurrence2', 0.67, 'Occurrence3', 1.00, , , , ); 
+    JumpRandom('Occurrence1', 0.34, 'Occurrence2', 0.67, 'Occurrence3', 1.00, , , ,); 
     End();
 Occurrence1:
     Log("");

@@ -13,9 +13,9 @@ class P_2_2_2_Ktech_HostageRescue extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('HostageDied');
@@ -37,15 +37,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMercenaryTechnician9')
+        if (P.name == 'EMercenaryTechnician9')
             Characters[1] = P.controller;
-        if(P.name == 'EMercenaryTechnician2')
+        if (P.name == 'EMercenaryTechnician2')
             Characters[2] = P.controller;
-        if(P.name == 'EMercenaryTechnician4')
+        if (P.name == 'EMercenaryTechnician4')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

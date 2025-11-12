@@ -13,9 +13,9 @@ class P_4_2_2_Abt_BasePatrolA extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -31,13 +31,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianSoldier23')
+        if (P.name == 'EGeorgianSoldier23')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianSoldier28')
+        if (P.name == 'EGeorgianSoldier28')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

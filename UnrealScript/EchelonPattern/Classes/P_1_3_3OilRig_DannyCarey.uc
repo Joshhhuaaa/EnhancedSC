@@ -12,9 +12,9 @@ var int EscortClear;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_GRABBED:
             EventJump('Exclu');
@@ -45,11 +45,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianSoldier16')
+        if (P.name == 'EGeorgianSoldier16')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     EscortClear=0;

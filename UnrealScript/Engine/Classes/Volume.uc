@@ -2,7 +2,7 @@
 // Volume:  a bounding volume
 // touch() and untouch() notifications to the volume as actors enter or leave it
 // enteredvolume() and leftvolume() notifications when center of actor enters the volume
-// pawns with bIsPlayer==true  cause playerenteredvolume notifications instead of actorenteredvolume()
+// pawns with bIsPlayer == true cause playerenteredvolume notifications instead of actorenteredvolume()
 // This is a built-in Unreal class and it shouldn't be modified.
 //=============================================================================
 class Volume extends Brush
@@ -26,7 +26,7 @@ final native(1551) function bool EncompLoc(Vector _Loc); // returns true if Loc 
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
-	if ( (AssociatedActorTag != '') && (AssociatedActorTag != 'None') )
+	if ((AssociatedActorTag != '') && (AssociatedActorTag != 'None'))
 		ForEach AllActors(class'Actor',AssociatedActor, AssociatedActorTag)
 			break;
 }
@@ -34,7 +34,7 @@ function PostBeginPlay()
 function SetAssociatedActor(Actor Other)
 {
 	AssociatedActor = Other;
-	if ( AssociatedActor != None )
+	if (AssociatedActor != None)
 		GotoState('AssociatedTouch');
 	else
 		GotoState('');
@@ -42,12 +42,12 @@ function SetAssociatedActor(Actor Other)
 
 State AssociatedTouch
 {
-	event touch( Actor Other )
+	event touch(Actor Other)
 	{
 		AssociatedActor.touch(Other);
 	}
 
-	event untouch( Actor Other )
+	event untouch(Actor Other)
 	{
 		AssociatedActor.untouch(Other);
 	}

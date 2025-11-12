@@ -16,26 +16,26 @@ function PostBeginPlay()
 // Description		
 //		Valid from EAlarm only
 //------------------------------------------------------------------------
-event Trigger( Actor Other, Pawn EventInstigator, optional name InTag )
+event Trigger(Actor Other, Pawn EventInstigator, optional name InTag)
 {
 	//log(self@"IM TRIGGERED");
 
 	// Special case where we only want to trigger the light to be blinking not from an Alarm
-	if( EPattern(Other) != None )
+	if (EPattern(Other) != None)
 	{
 		GotoState('s_Alert');
 		return;
 	}
 
-	if( Other != Alarm )
+	if (Other != Alarm)
 		return;
 
 	//log(alarm@alarm.event);
 
-	Switch( Alarm.Event )
+	Switch (Alarm.Event)
 	{
 	case AE_ENABLE_ALARM : 
-		if( GetStateName() != 's_Alert' )
+		if (GetStateName() != 's_Alert')
 			GotoState('s_Alert');
 		else
 			BeginState();
@@ -59,7 +59,7 @@ state s_Alert
 		bGlowDisplay = true;
 
 		Timer();
-		SetTimer(GetSoundDuration(AlertSound)+0.5, true);
+		SetTimer(GetSoundDuration(AlertSound) + 0.5, true);
 	}
 
 	function EndState()
@@ -84,18 +84,18 @@ state s_Alert
 		HeatIntensity	= 1;
 		LastTimeChange	= Level.TimeSeconds;
 
-        if(!((EchelonLevelInfo(Level)).bIgnoreAlarmStage))
+        if (!((EchelonLevelInfo(Level)).bIgnoreAlarmStage))
         {
 		    PlaySound(AlertSound, SLOT_Ambient);
         }
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
 		local int b;
 		b = LightBrightness - 128 * DeltaTime;
 
-		if( b >= default.LightBrightness )
+		if (b >= default.LightBrightness)
 			LightBrightness = b;
 		else
 		{
@@ -103,7 +103,7 @@ state s_Alert
 			Disable('Tick');
 		}
 
-		HeatIntensity	= float(LightBrightness)/255;
+		HeatIntensity	= float(LightBrightness) / 255;
 		LastTimeChange	= Level.TimeSeconds;
 	}
 }

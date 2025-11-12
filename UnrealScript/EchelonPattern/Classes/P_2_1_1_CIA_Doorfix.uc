@@ -14,9 +14,9 @@ var int Alerted;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('RemoveConv');
@@ -68,13 +68,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ECIAMaintenance0')
+        if (P.name == 'ECIAMaintenance0')
             Characters[1] = P.controller;
-        if(P.name == 'ECIASecurity2')
+        if (P.name == 'ECIASecurity2')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     Alerted=0;

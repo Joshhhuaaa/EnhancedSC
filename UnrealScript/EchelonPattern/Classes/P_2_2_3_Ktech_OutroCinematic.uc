@@ -11,9 +11,9 @@ class P_2_2_3_Ktech_OutroCinematic extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,19 +29,19 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EWilkes1')
+        if (P.name == 'EWilkes1')
             Characters[1] = P.controller;
-        if(P.name == 'EMafiaMuscle18')
+        if (P.name == 'EMafiaMuscle18')
         {
             Characters[2] = P.controller;
             EAIController(Characters[2]).bAllowKnockout = true;
         }
-        if(P.name == 'EMafiaMuscle19')
+        if (P.name == 'EMafiaMuscle19')
             Characters[3] = P.controller;
             EAIController(Characters[3]).bAllowKnockout = true;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

@@ -18,12 +18,12 @@ function PostBeginPlay()
 	VisibilityConeAngle = SpotWidth * 0.6f;
 	VisibilityMaxDistance = MaxDistance;
 
-	if( ProjectorPoints.Length < 0 )
+	if (ProjectorPoints.Length < 0)
 		SetPhysics(PHYS_None);
 
 	Super.PostBeginPlay();
 
-	if( ProjectorPoints.Length > 0 )
+	if (ProjectorPoints.Length > 0)
     {
 		SetRotation(Rotator(ProjectorPoints[CurrentPoint].Location - Location));
         
@@ -40,7 +40,7 @@ event Vector GetSensorDirection()
 {
 	return Vector(Rotation);
 }
-function SetSensorRotation( Rotator NewRotation )
+function SetSensorRotation(Rotator NewRotation)
 {
 	SetRotation(NewRotation);
 }
@@ -51,7 +51,7 @@ function SetSensorRotation( Rotator NewRotation )
 //------------------------------------------------------------------------
 function int GetNextPoint()
 {
-	if( CurrentPoint < ProjectorPoints.Length-1 )
+	if (CurrentPoint < ProjectorPoints.Length - 1)
 		return CurrentPoint + 1;
 	else
 		return 0;
@@ -84,13 +84,13 @@ function bool GroupsSeePlayer()
 //------------------------------------------------------------------------
 event Trigger(Actor other, Pawn EventInstigator, optional name InTag)
 {
-	if(LightType == LT_None)
+	if (LightType == LT_None)
 		LightType = LT_Steady;
 	else
 		LightType = LT_None;
 }
 
-function bool IsRotationValid( vector TargetLocation )
+function bool IsRotationValid(vector TargetLocation)
 {
 	local vector targetDir, initialDir;
 	local float dotP, Angle;
@@ -99,7 +99,7 @@ function bool IsRotationValid( vector TargetLocation )
 	dotP = initialDir dot targetDir;
 	Angle = (Acos(dotP) * 180.0) / PI;
 	//log("initialDir["$initialDir$"] targetDir["$targetDir$"] dotp["$dotp$"] Angle["$Angle$"]");
-	return Angle < (PatrolAngle/2);
+	return Angle < (PatrolAngle / 2);
 }
 
 //------------------------------------------------------------------------
@@ -110,7 +110,7 @@ auto state s_ProjectorPatrol
 {
 	function BeginState()
 	{
-		if(ProjPatrolSpeed != -1)
+		if (ProjPatrolSpeed != -1)
         {
             RotationRate.Pitch = ProjPatrolSpeed;
             RotationRate.Yaw = ProjPatrolSpeed;
@@ -120,21 +120,21 @@ auto state s_ProjectorPatrol
 		Super.BeginState();
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
-		if( ProjectorPoints.Length == 0 )
+		if (ProjectorPoints.Length == 0)
 			return;
 
 		// Check if point is reached
-		if( (Rotation.Pitch&65535) == (DesiredRotation.Pitch&65535) && 
+		if ((Rotation.Pitch&65535) == (DesiredRotation.Pitch&65535) && 
 			(Rotation.Yaw&65535) == (DesiredRotation.Yaw&65535)		&&
 			(Rotation.Roll&65535) == (DesiredRotation.Roll&65535)	&& 
-			TimerRate == 0 )
+			TimerRate == 0)
 		{
 			//Log("Point "$ProjectorPoints[CurrentPoint]$" found");
 			
 			// If this patrol point wants the projector to wait, else move to next
-			if( ProjectorPoints[CurrentPoint].PatrolWaitTime > 0 )
+			if (ProjectorPoints[CurrentPoint].PatrolWaitTime > 0)
 			{
 				//Log("Setting timer["$ProjectorPoints[CurrentPoint].PatrolWaitTime$"] at point="@ProjectorPoints[CurrentPoint]);
 				SetTimer(ProjectorPoints[CurrentPoint].PatrolWaitTime, false);
@@ -143,7 +143,7 @@ auto state s_ProjectorPatrol
 				Timer();
 		}
 		
-		if( FollowUponDetection &&
+		if (FollowUponDetection &&
 			(GroupsSeePlayer() && IsRotationValid(EchelonGameInfo(Level.Game).pPlayer.EPawn.Location)) ||
 			(FrustumScanning(Target,,,SensorDetectionType)) && IsRotationValid(Target.Location))
 		{
@@ -175,7 +175,7 @@ state s_ProjectorAlert
 		bAlarmMsgSent = false;
 		fDetectionElapsedTime = 0.0f;
 
-        if(ProjAlertSpeed != -1)
+        if (ProjAlertSpeed != -1)
         {
             RotationRate.Pitch = ProjAlertSpeed;
             RotationRate.Yaw = ProjAlertSpeed;
@@ -186,26 +186,26 @@ state s_ProjectorAlert
 		TriggerPattern();
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
-        if( GroupsSeePlayer() && IsRotationValid(EchelonGameInfo(Level.Game).pPlayer.EPawn.Location) )
+        if (GroupsSeePlayer() && IsRotationValid(EchelonGameInfo(Level.Game).pPlayer.EPawn.Location))
         {
 			//Log("Group see player");
             DesiredRotation = Rotator(EchelonGameInfo(Level.Game).pPlayer.EPawn.Location - Location);
         }
         
         // If Target can not be seen, pause then go back to patrol
-		else if( FrustumScanning(Target,,,SensorDetectionType) && IsRotationValid(Target.Location) )
+		else if (FrustumScanning(Target,,,SensorDetectionType) && IsRotationValid(Target.Location))
 		{
             //log("In frustum : "$Target);
 
 			// Update time
 			fDetectionElapsedTime += DeltaTime;
 
-			if( fDetectionElapsedTime >= AlarmDetectionDelay && Alarm != None && !bAlarmMsgSent )
+			if (fDetectionElapsedTime >= AlarmDetectionDelay && Alarm != None && !bAlarmMsgSent)
 			{
                 //log("Sending alarm primary message .... "$self);
-                if(Target.bIsPlayerPawn)
+                if (Target.bIsPlayerPawn)
                 {
                     // Alarm w/ ForceUpdateLocation
 				    Alarm.EnableAlarm(Target, None,true);
@@ -218,12 +218,12 @@ state s_ProjectorAlert
 				bAlarmMsgSent = true;
 			}
 
-			if( TimerRate != 0 )
+			if (TimerRate != 0)
 				SetTimer(0, false);
 
 			DesiredRotation = Rotator(Target.Location - Location);
 		}
-		else if( TimerRate == 0 )
+		else if (TimerRate == 0)
 		{
 			//Log("Target lost .. setting timer");
 			SetTimer(ResumePatrolTime, false);

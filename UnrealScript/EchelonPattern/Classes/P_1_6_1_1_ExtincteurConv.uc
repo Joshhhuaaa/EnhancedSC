@@ -13,9 +13,9 @@ class P_1_6_1_1_ExtincteurConv extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -31,13 +31,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz1')
+        if (P.name == 'spetsnaz1')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz0')
+        if (P.name == 'spetsnaz0')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }
@@ -70,7 +70,7 @@ MilestoneExtincteurConv:
     Talk(Sound'S3_4_2Voice.Play_34_40_07', 1, , TRUE, 0);
     Talk(Sound'S3_4_2Voice.Play_34_40_08', 2, , TRUE, 0);
     Talk(Sound'S3_4_2Voice.Play_34_40_09', 1, , TRUE, 0);
-    JumpRandom('AfterConvA', 0.33, 'AfterConvB', 0.67, 'AfterConvC', 1.00, , , , ); 
+    JumpRandom('AfterConvA', 0.33, 'AfterConvB', 0.67, 'AfterConvC', 1.00, , , ,); 
     End();
 AfterConvA:
     Log("AfterConvA");

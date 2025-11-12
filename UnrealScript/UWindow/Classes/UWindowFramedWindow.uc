@@ -33,7 +33,7 @@ function Created()
 	MinWinWidth = 50;
 	MinWinHeight = 50;
 	ClientArea = CreateWindow(ClientClass, 4, 16, WinWidth - 8, WinHeight - 20, OwnerWindow);
-	CloseBox = UWindowFrameCloseBox(CreateWindow(Class'UWindowFrameCloseBox', WinWidth-20, WinHeight-20, 11, 10));
+	CloseBox = UWindowFrameCloseBox(CreateWindow(Class'UWindowFrameCloseBox', WinWidth - 20, WinHeight - 20, 11, 10));
 }
 
 function Texture GetLookAndFeelTexture()
@@ -66,7 +66,7 @@ function LMouseDown(float X, float Y)
 	Super.LMouseDown(X, Y);
 
 
-	if(H == HT_TitleBar)
+	if (H == HT_TitleBar)
 	{
 		MoveX = X;
 		MoveY = Y;
@@ -76,9 +76,9 @@ function LMouseDown(float X, float Y)
 		return;
 	}
 
-	if(bSizable) 
+	if (bSizable) 
 	{
-		switch(H)
+		switch (H)
 		{
 		case HT_NW:
 			bTLSizing = True;
@@ -120,7 +120,7 @@ function Resized()
 {
 	local Region R;
 
-	if(ClientArea == None)
+	if (ClientArea == None)
 	{
 		Log("Client Area is None for "$Self);
 		return;
@@ -131,7 +131,7 @@ function Resized()
 	ClientArea.WinLeft = R.X;
 	ClientArea.WinTop = R.Y;
 
-	if((R.W != ClientArea.WinWidth) || (R.H != ClientArea.WinHeight)) 
+	if ((R.W != ClientArea.WinWidth) || (R.H != ClientArea.WinHeight)) 
 	{
 		ClientArea.SetSize(R.W, R.H);
 	}
@@ -145,7 +145,7 @@ function MouseMove(float X, float Y)
 	H = LookAndFeel.FW_HitTest(Self, X, Y);
 
 
-	if(bMoving && bMouseDown)
+	if (bMoving && bMouseDown)
 	{
 		WinLeft = Int(WinLeft + X - MoveX);
 		WinTop = Int(WinTop + Y - MoveY);
@@ -156,9 +156,9 @@ function MouseMove(float X, float Y)
 
 	Cursor = Root.NormalCursor;
 
-	if(bSizable && !bMoving)
+	if (bSizable && !bMoving)
 	{
-		switch(H)
+		switch (H)
 		{
 		case HT_NW:
 		case HT_SE:
@@ -180,7 +180,7 @@ function MouseMove(float X, float Y)
 	}	
 
 	// Top Left
-	if(bTLSizing && bMouseDown)
+	if (bTLSizing && bMouseDown)
 	{
 		Cursor = Root.DiagCursor1;	
 		OldW = WinWidth;
@@ -194,7 +194,7 @@ function MouseMove(float X, float Y)
 
 
 	// Top
-	if(bTSizing && bMouseDown)
+	if (bTSizing && bMouseDown)
 	{
 		Cursor = Root.NSCursor;
 		OldH = WinHeight;
@@ -205,7 +205,7 @@ function MouseMove(float X, float Y)
 		bTSizing = False;
 
 	// Top Right
-	if(bTRSizing && bMouseDown)
+	if (bTRSizing && bMouseDown)
 	{
 		Cursor = Root.DiagCursor2;
 		OldH = WinHeight;
@@ -217,7 +217,7 @@ function MouseMove(float X, float Y)
 
 
 	// Left
-	if(bLSizing && bMouseDown)
+	if (bLSizing && bMouseDown)
 	{
 		Cursor = Root.WECursor;
 		OldW = WinWidth;
@@ -228,7 +228,7 @@ function MouseMove(float X, float Y)
 		bLSizing = False;
 
 	// Right
-	if(bRSizing && bMouseDown)
+	if (bRSizing && bMouseDown)
 	{
 		Cursor = Root.WECursor;
 		SetSize(Max(MinWinWidth, X), WinHeight);
@@ -237,7 +237,7 @@ function MouseMove(float X, float Y)
 		bRSizing = False;
 
 	// Bottom Left
-	if(bBLSizing && bMouseDown)
+	if (bBLSizing && bMouseDown)
 	{
 		Cursor = Root.DiagCursor2;
 		OldW = WinWidth;
@@ -248,7 +248,7 @@ function MouseMove(float X, float Y)
 		bBLSizing = False;
 
 	// Bottom
-	if(bBSizing && bMouseDown)
+	if (bBSizing && bMouseDown)
 	{
 		Cursor = Root.NSCursor;
 		SetSize(WinWidth, Max(MinWinHeight, Y));
@@ -257,7 +257,7 @@ function MouseMove(float X, float Y)
 		bBSizing = False;
 
 	// Bottom Right
-	if(bBRSizing && bMouseDown)
+	if (bBRSizing && bMouseDown)
 	{
 		Cursor = Root.DiagCursor1;
 		SetSize(Max(MinWinWidth, X), Max(MinWinHeight, Y));
@@ -274,7 +274,7 @@ function ToolTip(string strTip)
 
 function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) 
 {
-	if(Msg == WM_Paint || !WaitModal())
+	if (Msg == WM_Paint || !WaitModal())
 		Super.WindowEvent(Msg, C, X, Y, Key);
 }
 

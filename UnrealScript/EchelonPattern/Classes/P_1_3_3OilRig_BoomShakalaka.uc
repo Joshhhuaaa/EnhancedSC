@@ -13,9 +13,9 @@ class P_1_3_3OilRig_BoomShakalaka extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -32,15 +32,15 @@ function InitPattern()
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'ESoundTrigger25')
+        if (A.name == 'ESoundTrigger25')
             SoundActors[0] = A;
-        if(A.name == 'ESoundTrigger26')
+        if (A.name == 'ESoundTrigger26')
             SoundActors[1] = A;
-        if(A.name == 'ESoundTrigger24')
+        if (A.name == 'ESoundTrigger24')
             SoundActors[2] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }
@@ -66,7 +66,7 @@ BoomTwo:
     End();
 Boom:
     Log("Explosion generator internal 50/50 random function.");
-    JumpRandom('BoomOne', 0.50, 'BoomTwo', 1.00, , , , , , ); 
+    JumpRandom('BoomOne', 0.50, 'BoomTwo', 1.00, , , , , ,); 
 
 }
 

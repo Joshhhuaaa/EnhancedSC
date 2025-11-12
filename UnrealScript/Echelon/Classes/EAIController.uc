@@ -17,7 +17,7 @@ class EAIController extends AIController
     native;
 
 
-var		EPawn					ePawn;							// EPAWN REFERENCE
+var		EPawn					ePawn;							// EPawn reference
 var		EchelonGameInfo			eGame;							// reference to our GameInfo - use to store the gloabl variables and constantes
 var		EPawn					Master;							// for AI - Dog relationship
 var		EPawn					Leader;							// for GOAL_Follow behavior
@@ -266,12 +266,12 @@ native(1424) final function CoverAttackDir EvaluateCorner(NavigationPoint CoverP
 // 
 //------------------------------------------------------------------------
 
-native(1509) final function NavigationPoint ChooseSearchPoint( vector StartPoint,
+native(1509) final function NavigationPoint ChooseSearchPoint(vector StartPoint,
 															  optional vector Direction, 
 															  optional float Angle,
 															  optional float MinDist,
 															  optional float MaxDist, 
-															  optional float Z_Threshold );
+															  optional float Z_Threshold);
 
 
 //---------------------------------------[David Kalina - 28 Apr 2002]-----
@@ -296,8 +296,8 @@ native(1545) final function UpdateSearchGoal(vector GoalLocation, bool GoalFlag,
 // 
 //------------------------------------------------------------------------
 
-native(1510) final function NavigationPoint ChooseAttackPoint( float MaxDist, optional float Z_Threshold );
-native(1511) final function NavigationPoint ChooseCoverPoint( float MaxDist, optional float Z_Threshold, optional vector TargetLocation );
+native(1510) final function NavigationPoint ChooseAttackPoint(float MaxDist, optional float Z_Threshold);
+native(1511) final function NavigationPoint ChooseCoverPoint(float MaxDist, optional float Z_Threshold, optional vector TargetLocation);
 
 
 //----------------------------------------[David Kalina - 3 May 2002]-----
@@ -349,7 +349,7 @@ native(1544) final function ClearRoutes();
 // 
 //------------------------------------------------------------------------
 
-native(1516) final function bool FindLadder( out byte bIsBottom, out byte bOtherSide, optional vector Destination );
+native(1516) final function bool FindLadder(out byte bIsBottom, out byte bOtherSide, optional vector Destination);
 
 
 
@@ -397,7 +397,7 @@ native(1522) final function EchelonEnums.GoalStatus ExecuteCurrentGoal();
 //------------------------------------------------------------------------
 
 
-native(1521) final function EchelonEnums.GoalStatus SubGoal_NavigateTo( vector Destination, MoveFlags MoveFlags );
+native(1521) final function EchelonEnums.GoalStatus SubGoal_NavigateTo(vector Destination, MoveFlags MoveFlags);
 
 
 //---------------------------------------[David Kalina - 23 Feb 2002]-----
@@ -439,7 +439,7 @@ native(1518) final function EchelonEnums.GoalStatus EMoveToward(Actor TargetActo
 // 
 //------------------------------------------------------------------------
 
-native(1520) final function StopMovement( vector Focus, MoveFlags MoveFlags );
+native(1520) final function StopMovement(vector Focus, MoveFlags MoveFlags);
 
 
 //---------------------------------------[David Kalina - 12 Jun 2001]-----
@@ -452,7 +452,7 @@ native(1520) final function StopMovement( vector Focus, MoveFlags MoveFlags );
 //
 //------------------------------------------------------------------------
 
-native(1527) final function SubGoal_AttackTarget( Actor Target, bool bForceFire );
+native(1527) final function SubGoal_AttackTarget(Actor Target, bool bForceFire);
 
 
 //---------------------------------------[David Kalina - 29 May 2002]-----
@@ -478,7 +478,7 @@ native(1519) final function bool CheckTargetDead(Actor _target);
 // 
 //------------------------------------------------------------------------
 
-native(1549) final function UpdatePlayerLocation( Pawn PlayerPawn, bool bIsSeen, optional bool ForcedUpdate );
+native(1549) final function UpdatePlayerLocation(Pawn PlayerPawn, bool bIsSeen, optional bool ForcedUpdate);
 
 //---------------------------------------[David Kalina - 30 Mar 2002]-----
 // 
@@ -564,14 +564,14 @@ function Possess(Pawn aPawn)
 	
 	// cast to EPawn
 	
-	EPawn = EPawn(aPawn);
+	ePawn = EPawn(aPawn);
 	eGame = EchelonGameInfo(Level.Game);
 	
-	if	(EPawn == none)
+	if	(ePawn == none)
 		Log("WARNING!!  AIController Pawn is NOT an EPawn.  This is bad.");
 	
 	// SPAWN INTERACTION ZONE FOR NPC
-    if(!ePawn.bForceNoInteraction && !ePawn.bIsDog)
+    if (!ePawn.bForceNoInteraction && !ePawn.bIsDog)
     {
 	    ePawn.InteractionClass = class'ENpcZoneInteraction';
 	    ePawn.Interaction = Spawn(ePawn.InteractionClass, ePawn);
@@ -579,7 +579,7 @@ function Possess(Pawn aPawn)
 
 
 	//set the actor to defend
-	EPawn.DefendActor = GetMatchingActor( EPawn.DefendActorTag );
+	ePawn.DefendActor = GetMatchingActor(ePawn.DefendActorTag);
 
     // can now call initialization
     GotoState('s_Init');
@@ -598,17 +598,17 @@ function FindGroup()
 	local EGroupAI pGroup;
 	
 	// if tag has been specified, match ourselves with a group
-	if (EPawn.m_GroupTag != '')
+	if (ePawn.m_GroupTag != '')
 	{
-		foreach DynamicActors( class'EGroupAI', pGroup, EPawn.m_GroupTag )
+		foreach DynamicActors(class'EGroupAI', pGroup, ePawn.m_GroupTag)
 		{
-			Log("GROUP MATCH : " $ EPawn.m_GroupTag,,LAICONTROLLER);
+			Log("GROUP MATCH : " $ ePawn.m_GroupTag,,LAICONTROLLER);
 			
-			pGroup.AddAIMember( self );	// add self to group
+			pGroup.AddAIMember(self);	// add self to group
 			Group = pGroup;				// set member pointer
 			
 			//set pawn variable
-			EAIPawn(epawn).Group = Group;
+			EAIPawn(ePawn).Group = Group;
 
 			break;  // first match is all we need right now
 		}
@@ -618,8 +618,8 @@ function FindGroup()
 	if (Group == none)
 	{
 		Log("FINDGROUP -- no match, spawning default EGroupAI object",,LAICONTROLLER);
-		Group = Spawn( class'EGroupAI',, EPawn.m_GroupTag );				
-		Group.AddAIMember( self );
+		Group = Spawn(class'EGroupAI',, ePawn.m_GroupTag);				
+		Group.AddAIMember(self);
 	}
 }
 
@@ -646,16 +646,16 @@ function SetupInitialGoal()
 	
 	goal.Clear();										// initialize
 	
-	goal.m_GoalType		= EPawn.InitialGoalType;		// set its Type
+	goal.m_GoalType		= ePawn.InitialGoalType;		// set its Type
 	
-	goal.GoalLocation	= EPawn.InitialGoalLocation;	// set its location
-	goal.GoalFocus		= EPawn.InitialGoalFocus;		// set its focus
-	goal.GoalTag		= EPawn.InitialGoalTag;			// set its tag
-	goal.GoalSound		= EPawn.InitialGoalSound;		// set its sound
-	goal.GoalAnim		= EPawn.InitialGoalAnim;		// set its anim
-	goal.GoalFlag		= EPawn.InitialGoalFlag;		// set its flag
-	goal.GoalValue		= EPawn.InitialGoalValue;
-	goal.GoalMoveFlags  = EPawn.InitialGoalMoveFlags;
+	goal.GoalLocation	= ePawn.InitialGoalLocation;	// set its location
+	goal.GoalFocus		= ePawn.InitialGoalFocus;		// set its focus
+	goal.GoalTag		= ePawn.InitialGoalTag;			// set its tag
+	goal.GoalSound		= ePawn.InitialGoalSound;		// set its sound
+	goal.GoalAnim		= ePawn.InitialGoalAnim;		// set its anim
+	goal.GoalFlag		= ePawn.InitialGoalFlag;		// set its flag
+	goal.GoalValue		= ePawn.InitialGoalValue;
+	goal.GoalMoveFlags  = ePawn.InitialGoalMoveFlags;
 	goal.GoalWaitFlags	= ePawn.InitialGoalWaitFlags;
 	
 	goal.Priority		= 0;							// default goal has lowest priority
@@ -664,7 +664,7 @@ function SetupInitialGoal()
 	// spawn list and add goal
 	m_pGoalList = Spawn(class'EGoalList',self);
 	m_pGoalList.pOwner = self;
-	m_pGoalList.Insert( goal );
+	m_pGoalList.Insert(goal);
 }
 
 
@@ -677,7 +677,7 @@ function SetupInitialGoal()
 // 
 //------------------------------------------------------------------------
 
-event InitPatrolNetwork( Name PatrolPointTag )
+event InitPatrolNetwork(Name PatrolPointTag)
 {
     local NavigationPoint pCurrentPoint;
 	
@@ -800,13 +800,13 @@ function touch(actor other)
 
 	Nav = NavigationPoint(other);
 
-	if ( Nav != None )
+	if (Nav != None)
 	{
 		//log("*************************** ---- Nav point was touched --- by pawn: "$Pawn$" *****************");
 
 		/**** FOR TOUCHING LADDER POINTS ****/
 
-		if ( Nav.bLadderPoint )
+		if (Nav.bLadderPoint)
 		{
 			// store ID of ladder point so we know we are in the vicinity of a ladder
 			//plog(" TOUCH --> Setting Current GEID to Ladder ID : " $ Nav.LadderID);
@@ -819,28 +819,28 @@ function touch(actor other)
 		//UnlockNavPoint();
 
 		//check if the AIController is currently controlled by a scripted pattern
-		else if( (Group.ScriptedPattern == None) || (Group.bExternEventWasSent && !Group.bEventExclusivity) )
+		else if ((Group.ScriptedPattern == None) || (Group.bExternEventWasSent && !Group.bEventExclusivity))
 		{
 			//log(" ---- Nav point was touched --- by pawn: "$Pawn$" TAKE 2");
 
 			//check it is a cover point
-			if( TakenPoint != Nav )
+			if (TakenPoint != Nav)
 			{
-				if( Nav.taken )
+				if (Nav.taken)
 					return;
 
-				if( eGame.pPlayer == None )
+				if (eGame.pPlayer == None)
 					return;
 
 				//check if our lastknownplayerLocation is reasonably close to do a cover point attack
-				if( VSize(eGame.pPlayer.EPawn.Location - LastKnownPlayerLocation) > 150 )
+				if (VSize(eGame.pPlayer.ePawn.Location - LastKnownPlayerLocation) > 150)
 					return;
 
-				if(EvaluateCorner(Nav,eGame.pPlayer.EPawn.Location) > CA_OFF)
+				if (EvaluateCorner(Nav,eGame.pPlayer.ePawn.Location) > CA_OFF)
 				{
 					LockNavPoint(Nav);
 
-					Pattern.CoverLocation=Nav.Location;
+					Pattern.CoverLocation = Nav.Location;
 		
 					AIEvent.Reset();
 					AIEvent.EventType			= AI_COVERPOINT_TOUCHED;	
@@ -867,16 +867,16 @@ function UnTouch(actor Other)
 {	
 	local NavigationPoint Nav;
 
-	if ( CurrentGEID <= 0 )
+	if (CurrentGEID <= 0)
 		return;
 
 	Nav = NavigationPoint(other);
 
-	if ( Nav != None )
+	if (Nav != None)
 	{
 		/**** FOR TOUCHING LADDER POINTS ****/
 		
-		if ( Nav.bLadderPoint && Nav.LadderID == CurrentGEID )
+		if (Nav.bLadderPoint && Nav.LadderID == CurrentGEID)
 		{			
 			UnlockLadder();	
 		}
@@ -897,7 +897,7 @@ function UnTouch(actor Other)
 // 
 //------------------------------------------------------------------------
 
-event bool NotifyBump( Actor Other, optional int Pill )
+event bool NotifyBump(Actor Other, optional int Pill)
 {
 	local EPawn BumpeePawn;
 	local Controller Bumpee;
@@ -907,19 +907,19 @@ event bool NotifyBump( Actor Other, optional int Pill )
 	local EGoal Goal;
 
 	BumpeePawn = EPawn(Other);
-	if ( BumpeePawn != none )
+	if (BumpeePawn != none)
 	{
 		Bumpee = BumpeePawn.Controller;
 
-		if ( Bumpee != none && Bumpee.bIsPlayer )
+		if (Bumpee != none && Bumpee.bIsPlayer)
 		{
 			// check if player is behind us - if so we want to give some leeway
 			BumpLoc = Bumpee.Pawn.Location;
-			BumpDir = Normal(BumpLoc - EPawn.Location);
+			BumpDir = Normal(BumpLoc - ePawn.Location);
 
 			//Log("BUMP:  " $BumpDir dot Vector(EPawn.Rotation));
 
-			if (BumpDir dot Vector(EPawn.Rotation) < -0.2f)
+			if (BumpDir dot Vector(ePawn.Rotation) < -0.2f)
 			{
 				if (BumpTimer == 0.0f)
 					BumpTimer = Level.TimeSeconds;
@@ -944,9 +944,9 @@ event bool NotifyBump( Actor Other, optional int Pill )
 			// standard response is to be surprised...
 
 
-			if ( !bPlayerSeen )
+			if (!bPlayerSeen)
 			{
-				UpdatePlayerLocation( Bumpee.Pawn, true );
+				UpdatePlayerLocation(Bumpee.Pawn, true);
 
 				AIEvent.Reset();
 				AIEvent.EventType			= AI_SEE_PLAYER_SURPRISED;		// maybe need bump event
@@ -956,13 +956,13 @@ event bool NotifyBump( Actor Other, optional int Pill )
 			}
 			else
 			{
-				UpdatePlayerLocation( Bumpee.Pawn, true );
+				UpdatePlayerLocation(Bumpee.Pawn, true);
 			}
 
 		}
 	}		
 
-	if( BumpeePawn == None )
+	if (BumpeePawn == None)
 		return true;
 
 	NotifyBumpPawn(BumpeePawn);
@@ -985,7 +985,7 @@ event bool NotifyBump( Actor Other, optional int Pill )
 //
 //------------------------------------------------------------------------
 
-event bool NotifyHitWall( vector HitNormal, actor Wall )
+event bool NotifyHitWall(vector HitNormal, actor Wall)
 {
 	bHittingWall = true;
 
@@ -1028,15 +1028,15 @@ function NotifyOutOfAmmo()
 //		Called from the weapon. NPC always reload
 //------------------------------------------------------------------------
 
-event AnimEnd( int Channel )
+event AnimEnd(int Channel)
 {
 	local EWeapon w;
 
-	if( Channel == ePawn.ACTIONCHANNEL && ePawn.HandItem != None )
+	if (Channel == ePawn.ACTIONCHANNEL && ePawn.HandItem != None)
 	{
 		// If weapon in Reload state, will catch the AnimEnd
 		w = EWeapon(ePawn.HandItem);
-		if( w != None )
+		if (w != None)
 			w.AnimEnd(69);
 	}
 	
@@ -1047,7 +1047,7 @@ event AnimEnd( int Channel )
 
 function  NotifyReloading()
 {
-	EPawn.PlayReload();
+	ePawn.PlayReload();
 }
 
 
@@ -1059,7 +1059,7 @@ function  NotifyReloading()
 // 
 //------------------------------------------------------------------------
 
-event Trigger( Actor other, Pawn EventInstigator, optional name InTag )
+event Trigger(Actor other, Pawn EventInstigator, optional name InTag)
 {
 	local EGoal goal;
 
@@ -1069,7 +1069,7 @@ event Trigger( Actor other, Pawn EventInstigator, optional name InTag )
 	//reach the default goal
 	while (goal != None)
 	{
-	if ( goal.m_GoalType == GOAL_Patrol )
+	if (goal.m_GoalType == GOAL_Patrol)
 	{
 		goal.GoalValue = 0.01f;		// reset timer so that next tick will advance patrol
         bWaitingForPatrolTrigger = false;
@@ -1078,7 +1078,7 @@ event Trigger( Actor other, Pawn EventInstigator, optional name InTag )
 		if (m_pNextPatrolPoint.Patrol.m_FocusTag != '')
 			goal.GoalFocus = GetMatchingActor(m_pNextPatrolPoint.Patrol.m_FocusTag).Location;							// use m_FocusTag if it exists
 		else
-			goal.GoalFocus = m_pNextPatrolPoint.location;
+			goal.GoalFocus = m_pNextPatrolPoint.Location;
 
 			break;
 		}
@@ -1100,7 +1100,7 @@ event Trigger( Actor other, Pawn EventInstigator, optional name InTag )
 // 
 //------------------------------------------------------------------------
 
-event GotoStateSafe( name State )
+event GotoStateSafe(name State)
 {
 	//log("GotoStateSafe - from : " $ GetStateName() $ "  to : " $ State);
 	GotoState(State);
@@ -1116,9 +1116,9 @@ event GotoStateSafe( name State )
 // 
 //------------------------------------------------------------------------
 
-event AttackFromCover( CoverAttackDir dir )
+event AttackFromCover(CoverAttackDir dir)
 {
-	switch ( dir )
+	switch (dir)
 	{
 		case CA_Off :
 
@@ -1149,11 +1149,11 @@ event AttackFromCover( CoverAttackDir dir )
 //		Send player dead message.
 //------------------------------------------------------------------------
 
-function NotifyKilledPlayer( EPawn Player )
+function NotifyKilledPlayer(EPawn Player)
 {
-	if( !Player.Controller.bIsPlayer )
+	if (!Player.Controller.bIsPlayer)
 		return;
-	if( Player.Health > 0 )
+	if (Player.Health > 0)
 		return;
 
 	log("TESTING NEW AI_PLAYER_DEAD LOC.");
@@ -1207,14 +1207,14 @@ event NotifyShotJustMissed(Pawn Instigator)
 // 
 //------------------------------------------------------------------------
 
-function NavigationPoint GetNavigationPoint( Name NavPointTag )
+function NavigationPoint GetNavigationPoint(Name NavPointTag)
 {
 	local NavigationPoint nav;
 
 	if  (NavPointTag != '') 
     {
 		// faster than iteration
-		for ( nav = Level.NavigationPointList; nav != None; nav = nav.NextNavigationPoint )
+		for (nav = Level.NavigationPointList; nav != None; nav = nav.NextNavigationPoint)
 		{
 			if (nav.Tag == NavPointTag)
 				return nav;
@@ -1285,10 +1285,10 @@ event bool SelectItem(class<EInventoryItem> ItemClass)
 	// Equip the next one
 	NewItem = ePawn.FullInventory.GetItemByClass(ItemClass.name);
 
-	if( NewItem != None )
+	if (NewItem != None)
 	{
 		// unequip current weapon if any
-		if(epawn.WeaponStance > 0)
+		if (ePawn.WeaponStance > 0)
 		ePawn.Transition_WeaponAway();
 
 		// queue transition to equip selected item
@@ -1309,7 +1309,7 @@ event bool SelectItem(class<EInventoryItem> ItemClass)
 function DropSelectedItem(vector DropVelocity)
 {
 	// Throw() function removes the HandItem reference if any ..
-	if ( ePawn.HandItem != none && ePawn.HandItem != ePawn.CurrentWeapon )
+	if (ePawn.HandItem != none && ePawn.HandItem != ePawn.CurrentWeapon)
 	{
 		ePawn.HandItem.Throw(self, DropVelocity);
 		ePawn.FullInventory.UnEquipItem(ePawn.FullInventory.GetSelectedItem());
@@ -1325,14 +1325,14 @@ function DropSelectedItem(vector DropVelocity)
 //		DEFAULT event uses INVESTIGATE table (because it is simpler - no TRAN_Investigate/Surprised returns)
 // 
 //------------------------------------------------------------------------
-event ETransitionType CheckTransitionTable( VisibilityRating VisRating, float distance )
+event ETransitionType CheckTransitionTable(VisibilityRating VisRating, float distance)
 {
 	local float ModDistance;
 
-	if(epawn.bSniper)
+	if (ePawn.bSniper)
 	{
 		//if the NPC is a sniper just consider one transition table
-		if ( distance < ePawn.VisTable_Alert[ VisRating ] )
+		if (distance < ePawn.VisTable_Alert[ VisRating ])
 		{
 			//log("CheckTransitionTable (SniperMode) -- VisRating " $ VisRating $ " at distance " $ distance $ "  returns TRAN_Alert");
 			return TRAN_Alert;
@@ -1341,16 +1341,16 @@ event ETransitionType CheckTransitionTable( VisibilityRating VisRating, float di
 	else
 	{
 
-		//check the zone info of the NPC to see if there's fog in the zone (assumption: DistanceFogStart=0)
-		if(Pawn.Region.Zone.bDistanceFog)
+		//check the zone info of the NPC to see if there's fog in the zone (assumption: DistanceFogStart = 0)
+		if (Pawn.Region.Zone.bDistanceFog)
 		{
-			if( distance > Pawn.Region.Zone.DistanceFogEnd )
+			if (distance > Pawn.Region.Zone.DistanceFogEnd)
 			{	
 				return TRAN_None;
 			}
 
 			//modifying the distance in function of the fog distance
-			ModDistance = distance *  epawn.m_VisibilityMaxDistance / Pawn.Region.Zone.DistanceFogEnd;
+			ModDistance = distance * ePawn.m_VisibilityMaxDistance / Pawn.Region.Zone.DistanceFogEnd;
 
 		}
 		else
@@ -1359,19 +1359,19 @@ event ETransitionType CheckTransitionTable( VisibilityRating VisRating, float di
 		}
 
 
-		if ( ModDistance < ePawn.VisTable_Surprised[ VisRating ] )
+		if (ModDistance < ePawn.VisTable_Surprised[ VisRating ])
 		{
 			//log("CheckTransitionTable -- VisRating " $ VisRating $ " at distance " $ distance $ "  returns TRAN_Surprised");
 			return TRAN_Surprised;
 		}
 
-		if ( ModDistance < ePawn.VisTable_Alert[ VisRating ] )
+		if (ModDistance < ePawn.VisTable_Alert[ VisRating ])
 		{
 			//log("CheckTransitionTable -- VisRating " $ VisRating $ " at distance " $ distance $ "  returns TRAN_Alert");
 			return TRAN_Alert;
 		}
 
-		if ( ModDistance < ePawn.VisTable_Investigate[ VisRating ] )
+		if (ModDistance < ePawn.VisTable_Investigate[ VisRating ])
 		{
 			//log("CheckTransitionTable -- VisRating " $ VisRating $ " at distance " $ distance $ "  returns TRAN_Investigate");
 			return TRAN_Investigate;
@@ -1397,39 +1397,39 @@ event SeePlayer(Pawn SeenPlayer)
 	local int				i;
 	local float				Distance;
 
-	if ( SeenPlayer != none )
+	if (SeenPlayer != none)
 	{
-		if ( !SeenPlayer.Controller.bIsPlayer )
+		if (!SeenPlayer.Controller.bIsPlayer)
 		{
 			log("WARNING!!  SeePlayer event called with non-player?  "  $ SeenPlayer);
 			return;
 		}
 
-		if ( SeenPlayer.bHidden )
+		if (SeenPlayer.bHidden)
 			return;
 
-		if(bPlayerSeen)
+		if (bPlayerSeen)
 		{
 			UpdatePlayerLocation(SeenPlayer, true);		// no table lookup if player already seen
 			return;
 		}
 
-		if(EPawn.bUseTransitionTable)
+		if (ePawn.bUseTransitionTable)
 		{
 
 			// obtain player distance
-			Distance = VSize(SeenPlayer.Location - EPawn.Location);
+			Distance = VSize(SeenPlayer.Location - ePawn.Location);
 			
 			// if player is 'invisible' send see_player_surprised event at close range
 			if (SeenPlayer.GetActorVisibility() == VIS_Invisible)
 			{
 				if (Distance < 180.0f)
 				{					
-					if ( (Normal(SeenPlayer.Location - ePawn.Location) dot vector(ePawn.Rotation)) > 0.85f )
+					if ((Normal(SeenPlayer.Location - ePawn.Location) dot vector(ePawn.Rotation)) > 0.85f)
 					{
-						if ( !bPlayerSeen )
+						if (!bPlayerSeen)
 						{
-							UpdatePlayerLocation( SeenPlayer, true );
+							UpdatePlayerLocation(SeenPlayer, true);
 
 							// only send event to group  if bplayerseen was previously false
 							AIEvent.Reset();
@@ -1440,7 +1440,7 @@ event SeePlayer(Pawn SeenPlayer)
 							Group.AIEventCallBack(self, AIEvent);
 						}
 						else
-							UpdatePlayerLocation( SeenPlayer, true );
+							UpdatePlayerLocation(SeenPlayer, true);
 					}
 				}
 
@@ -1448,7 +1448,7 @@ event SeePlayer(Pawn SeenPlayer)
 			}
 			
 			
-			switch ( CheckTransitionTable( SeenPlayer.GetActorVisibility(), Distance ) )
+			switch (CheckTransitionTable(SeenPlayer.GetActorVisibility(), Distance))
 			{
 				case TRAN_None :
 					
@@ -1469,9 +1469,9 @@ event SeePlayer(Pawn SeenPlayer)
 				case TRAN_Alert :
 					
 					// send message to group if player has not already been seen
-					if  ( !bPlayerSeen )
+					if  (!bPlayerSeen)
 					{
-						UpdatePlayerLocation( SeenPlayer, true );
+						UpdatePlayerLocation(SeenPlayer, true);
 						
 						AIEvent.Reset();
 						AIEvent.EventTarget   = SeenPlayer;
@@ -1481,16 +1481,16 @@ event SeePlayer(Pawn SeenPlayer)
 						Group.AIEventCallBack(self, AIEvent);
 					}
 					else								
-						UpdatePlayerLocation( SeenPlayer, true );
+						UpdatePlayerLocation(SeenPlayer, true);
 					
 					break;
 					
 				case TRAN_Surprised :
 					
 					// send message to group if player has not already been seen
-					if  ( !bPlayerSeen )
+					if  (!bPlayerSeen)
 					{
-						UpdatePlayerLocation( SeenPlayer, true );
+						UpdatePlayerLocation(SeenPlayer, true);
 						
 						AIEvent.Reset();
 						AIEvent.EventTarget   = SeenPlayer;
@@ -1500,7 +1500,7 @@ event SeePlayer(Pawn SeenPlayer)
 						Group.AIEventCallBack(self, AIEvent);
 					}
 					else
-						UpdatePlayerLocation( SeenPlayer, true );
+						UpdatePlayerLocation(SeenPlayer, true);
 					
 					break;
 			}
@@ -1509,12 +1509,12 @@ event SeePlayer(Pawn SeenPlayer)
 		else
 		{
 
-			if  ( !bPlayerSeen )
+			if  (!bPlayerSeen)
 			{
 				// compose AIEvent message to send to group
 				AIEvent.Reset();
 					
-				UpdatePlayerLocation( SeenPlayer, true );
+				UpdatePlayerLocation(SeenPlayer, true);
 
 				AIEvent.EventType			= AI_SEE_PLAYER_ALERT;
 				AIEvent.EventTarget			= SeenPlayer;
@@ -1524,7 +1524,7 @@ event SeePlayer(Pawn SeenPlayer)
 			}
 			else
 			{
-				UpdatePlayerLocation( SeenPlayer, true );
+				UpdatePlayerLocation(SeenPlayer, true);
 			}
 		}
 	}
@@ -1547,7 +1547,7 @@ function MonitorAlertState(float deltaTime)
 	local EPawn PlayerPawn;
 	local float DistanceToPlayer;
 
-	PlayerPawn = eGame.pPlayer.EPawn;
+	PlayerPawn = eGame.pPlayer.ePawn;
 
 	MonitorTimer += deltaTime;
 	if (MonitorTimer > 0.2f)		// every fifth of a second
@@ -1556,25 +1556,25 @@ function MonitorAlertState(float deltaTime)
 		if ((PlayerPawn != none) && (bPlayerSeen))
 		{
 			AIEvent.Reset();
-			DistanceToPlayer = VSize(PlayerPawn.Location - EPawn.Location);
+			DistanceToPlayer = VSize(PlayerPawn.Location - ePawn.Location);
 			
-			if (DistanceToPlayer > EPawn.GetPlayerFarDistance())
+			if (DistanceToPlayer > ePawn.GetPlayerFarDistance())
 			{
-				if ( LastAlertMonitorEventType != AI_PLAYER_FAR )
+				if (LastAlertMonitorEventType != AI_PLAYER_FAR)
 					AIEvent.EventType			= AI_PLAYER_FAR;
 			}
-			else if (DistanceToPlayer < EPawn.PlayerVeryCloseDistance)
+			else if (DistanceToPlayer < ePawn.PlayerVeryCloseDistance)
 			{
-				if ( LastAlertMonitorEventType != AI_PLAYER_VERYCLOSE ) 
+				if (LastAlertMonitorEventType != AI_PLAYER_VERYCLOSE) 
 					AIEvent.EventType			= AI_PLAYER_VERYCLOSE;
 			}
-			else if (DistanceToPlayer < EPawn.GetPlayerFarDistance() - 100.f)
+			else if (DistanceToPlayer < ePawn.GetPlayerFarDistance() - 100.f)
 			{
-				if ( LastAlertMonitorEventType != AI_PLAYER_CLOSE ) 
+				if (LastAlertMonitorEventType != AI_PLAYER_CLOSE) 
 					AIEvent.EventType			= AI_PLAYER_CLOSE;
 			}
 
-			if ( AIEvent.EventType > AI_NONE )
+			if (AIEvent.EventType > AI_NONE)
 			{
 				AIEvent.EventTarget		  = PlayerPawn;
 				LastAlertMonitorEventType = AIEvent.EventType;
@@ -1596,7 +1596,7 @@ function MonitorAlertState(float deltaTime)
 // TODO:  if we ever have EController, move this there...
 //------------------------------------------------------------------------
 
-event PlayerCalcEye( out vector EyeLocation, out rotator EyeRotation )
+event PlayerCalcEye(out vector EyeLocation, out rotator EyeRotation)
 {
 	local vector X,Y,Z;
 
@@ -1606,8 +1606,8 @@ event PlayerCalcEye( out vector EyeLocation, out rotator EyeRotation )
 	if (EyeLocation == vect(0,0,0))
 	{
 		// position and rotate according to pawn location
-		EyeLocation = EPawn.Location; // + vect(0,0, EPawn.CollisionHeight * 0.8);
-		EyeRotation = EPawn.Rotation;
+		EyeLocation = ePawn.Location; // + vect(0,0, ePawn.CollisionHeight * 0.8);
+		EyeRotation = ePawn.Rotation;
 	}
 	else
 	{
@@ -1643,7 +1643,7 @@ function vector GetTargetPosition()
 // Description
 //		Modify accuracy to be continued ...
 //------------------------------------------------------------------------
-function Vector AdjustTarget( Vector ShotDirection )
+function Vector AdjustTarget(Vector ShotDirection)
 {
 	local Rotator AdjustedAim;
 	local float DistanceModifier;
@@ -1652,9 +1652,9 @@ function Vector AdjustTarget( Vector ShotDirection )
 	AdjustedAim = Rotator(ShotDirection);
 
 	//In our case 10 meters is the MinAccuracyDistance 
-	if( VSize(ShotDirection) > 1000)
+	if (VSize(ShotDirection) > 1000)
 	{
-		DistanceModifier = 65536 / Pi * ATan(1000 * Tan(500/65536*2*Pi) / VSize(ShotDirection) );
+		DistanceModifier = 65536 / Pi * ATan(1000 * Tan(500 / 65536 * 2 * Pi) / VSize(ShotDirection));
 	}
 	else
 		DistanceModifier = 1000;
@@ -1663,22 +1663,22 @@ function Vector AdjustTarget( Vector ShotDirection )
 	AccuracyResult  = ePawn.AccuracyDeviation * EchelonLevelInfo(Level).AlarmModifier[EchelonLevelInfo(Level).AlarmStage];
 
 	//consider visibility of the target
-	if( TargetActorToFire == eGame.pPlayer.pawn )
+	if (TargetActorToFire == eGame.pPlayer.Pawn)
 	{
-		VisFact = Clamp(eGame.pPlayer.pawn.GetVisibilityFactor(), 0.f, 60.0f);
+		VisFact = Clamp(eGame.pPlayer.Pawn.GetVisibilityFactor(), 0.f, 60.0f);
 
-		AccuracyResult *=  (1.0f + ( 60.0f - VisFact ) / 60.0f); 
+		AccuracyResult *=  (1.0f + (60.0f - VisFact) / 60.0f); 
 	}
 
 	//consider the level of difficulty-FBLAIS
-	if(EchelonGameInfo(Level.Game).pPlayer.playerInfo.difficulty > 0)
+	if (EchelonGameInfo(Level.Game).pPlayer.playerInfo.difficulty > 0)
 	{
 		AccuracyResult *= 0.50f;
 	}
 
 	// -0.5 to get it varying from -0.5 to 0.5
-	AdjustedAim.Yaw	+=  AccuracyResult * ( (FRand()*0.6f) -0.3f) * DistanceModifier ;
-	AdjustedAim.Pitch	+=  AccuracyResult * ( (FRand()*0.6f) - 0.3f) * DistanceModifier;
+	AdjustedAim.Yaw	+=  AccuracyResult * ((FRand() * 0.6f) -0.3f) * DistanceModifier ;
+	AdjustedAim.Pitch	+=  AccuracyResult * ((FRand() * 0.6f) - 0.3f) * DistanceModifier;
 
 
 	return Vector(AdjustedAim);
@@ -1703,11 +1703,11 @@ function bool ReachedCurrentGoalLocation()
 
 	if (goal.GoalLocation != vect(0,0,0))
 	{
-		dist = VSize(goal.GoalLocation - EPawn.Location);
+		dist = VSize(goal.GoalLocation - ePawn.Location);
 
 		if (dist < 100.0f)
 		{
-			if (EPawn.IsWaiting())
+			if (ePawn.IsWaiting())
 				return true;
 		}
 
@@ -1756,39 +1756,39 @@ function AdjustAttackLocation()
 	{
 		Target = goal.GoalTarget;
 
-		if ( Target != none )
+		if (Target != none)
 		{
 			// check extents to target so weapon has room to operate
-			WidthLeft  = ((vect(0,-1,0) >> EPawn.Rotation) * (EPawn.CollisionRadius + 5.0));
-			WidthRight = ((vect(0, 1,0) >> EPawn.Rotation) * (EPawn.CollisionRadius + 5.0));
+			WidthLeft  = ((vect(0,-1,0) >> ePawn.Rotation) * (ePawn.CollisionRadius + 5.0));
+			WidthRight = ((vect(0, 1,0) >> ePawn.Rotation) * (ePawn.CollisionRadius + 5.0));
 
-			if (FastTrace(Target.Location + widthLeft, EPawn.Location + WidthLeft))
+			if (FastTrace(Target.Location + widthLeft, ePawn.Location + WidthLeft))
 			{
 				// not obstructed to the left, move that way
 
-				vDesiredLocation = EPawn.location + (widthLeft * 2);	
+				vDesiredLocation = ePawn.Location + (widthLeft * 2);	
 
 				// get floor location at specified location
-				temp = EPawn.CollisionHeight + 40.0;
+				temp = ePawn.CollisionHeight + 40.0;
 				vEndPoint = vDesiredLocation;
 				vEndPoint.Z -= temp;
 
-				if ( Trace(vFloorLocation, vTemp, vEndPoint, vDesiredLocation) != None )
+				if (Trace(vFloorLocation, vTemp, vEndPoint, vDesiredLocation) != None)
 					goal.GoalLocation = vDesiredLocation;
 			}
 
 
-			else if (FastTrace(Target.Location + widthRight, EPawn.Location + WidthRight))
+			else if (FastTrace(Target.Location + widthRight, ePawn.Location + WidthRight))
 			{
 				// obstructed to the right, move that way
 				
-				vDesiredLocation = EPawn.location + (widthRight * 2);  // change to Target.location for more aggressive behavior
+				vDesiredLocation = ePawn.Location + (widthRight * 2);  // change to Target.Location for more aggressive behavior
 
-				temp = EPawn.CollisionHeight + 40.0;
+				temp = ePawn.CollisionHeight + 40.0;
 				vEndPoint = vDesiredLocation;
 				vEndPoint.Z -= temp;
 
-				if ( Trace(vFloorLocation, vTemp, vEndPoint, vDesiredLocation) != None )
+				if (Trace(vFloorLocation, vTemp, vEndPoint, vDesiredLocation) != None)
 					goal.GoalLocation = vDesiredLocation;
 			}
 		}
@@ -1806,7 +1806,7 @@ function AdjustAttackLocation()
 
 event StartedMoving()
 {
-	if ( !bIsMoving )
+	if (!bIsMoving)
 	{
 		bIsMoving = true;
 		UpdateFocusSwitching(ePawn.BaseMoveFlags);
@@ -1823,7 +1823,7 @@ event StartedMoving()
 
 event StoppedMoving()
 {
-	if ( bIsMoving )
+	if (bIsMoving)
 	{
 		bIsMoving = false;
 		UpdateFocusSwitching(ePawn.BaseMoveFlags);
@@ -1839,7 +1839,7 @@ event StoppedMoving()
 
 event float GetPersonalityUpdateTime()
 {
-	if ( PersonalityUpdateTime > 0.0f )
+	if (PersonalityUpdateTime > 0.0f)
 		return PersonalityUpdateTime;
 
 	PersonalityUpdateTime = RandRange(ePawn.PrsoUpdate_DefaultMin, ePawn.PrsoUpdate_DefaultMax);   
@@ -1869,12 +1869,12 @@ event float GetLaziness()
 
 function UpdateFocusSwitching(MoveFlags CurMoveFlags)
 {
-	switch ( CurMoveFlags )
+	switch (CurMoveFlags)
 	{
 		case MOVE_WalkNormal : 
 		case MOVE_Search :
 
-			if ( bIsMoving )
+			if (bIsMoving)
 			{
 				// Walk - AWARE
 				
@@ -1903,7 +1903,7 @@ function UpdateFocusSwitching(MoveFlags CurMoveFlags)
 		case MOVE_WalkAlert :
 		case MOVE_JogAlert :
 			
-			if ( bIsMoving )
+			if (bIsMoving)
 			{
 				// Walk - ALERT
 				
@@ -1949,8 +1949,8 @@ event bool TargetIsFiring()
     {
         for (i = 0; i < EPC.LatestHits.Length; i++)
         {
-            if((abs(EPC.LatestHits[i].Time - Level.TimeSeconds) < 0.3)
-                && ((VSize(EPC.LatestHits[i].Location - EPawn.Location)) < 300.0))
+            if ((abs(EPC.LatestHits[i].Time - Level.TimeSeconds) < 0.3)
+                && ((VSize(EPC.LatestHits[i].Location - ePawn.Location)) < 300.0))
             {
                 return true;
             }
@@ -1980,7 +1980,7 @@ function RemoveStrategicPointFromVolume()
     }
 
     // Go through all Strategic points for this volume
-    for(i = 0; i < Pattern.CurrentVolume.StrategicPoints.Length; i++)
+    for (i = 0; i < Pattern.CurrentVolume.StrategicPoints.Length; i++)
 	{
         // If the strategic point matches where we were standing
         if (Pattern.CurrentVolume.StrategicPoints[i] == TakenPoint)
@@ -2001,7 +2001,7 @@ function RemoveReferencesInPatrolInfo()
 {
     local NavigationPoint Nav;
 
-	for ( Nav = Level.NavigationPointList; Nav != none; Nav = Nav.nextNavigationPoint )
+	for (Nav = Level.NavigationPointList; Nav != none; Nav = Nav.nextNavigationPoint)
 	{
         if ((Nav.Patrol != None) && (Nav.Patrol.m_waitingController == self))
         {
@@ -2038,7 +2038,7 @@ function RemoveReferencesInPatrolInfo()
 //
 //------------------------------------------------------------------------
 
-event EchelonEnums.GoalStatus ExecGoal_Wander( float deltaTime, EGoal goal )
+event EchelonEnums.GoalStatus ExecGoal_Wander(float deltaTime, EGoal goal)
 {
 	local NavigationPoint	tempNav;
 	local int				counter;
@@ -2048,23 +2048,23 @@ event EchelonEnums.GoalStatus ExecGoal_Wander( float deltaTime, EGoal goal )
 	if (!goal.bInitialized)
 	{
 		// set wander center point (target)
-		if ( Goal.GoalTag != '' && Goal.GoalTarget == none )
-			Goal.GoalTarget = GetMatchingActor( goal.GoalTag );
+		if (Goal.GoalTag != '' && Goal.GoalTarget == none)
+			Goal.GoalTarget = GetMatchingActor(goal.GoalTag);
 
-		if ( goal.GoalTarget == none )
+		if (goal.GoalTarget == none)
 			Goal.GoalTarget = spawn(class'EDynamicNavPoint', self, 'AutoWanderTag', Destination);
 
 		goal.GoalLocation = goal.GoalTarget.Location;
 
-		if ( goal.GoalValue == 0.0f )
+		if (goal.GoalValue == 0.0f)
 			goal.GoalValue = 1000.0f;
 
-		if ( goal.GoalWaitFlags == MOVE_NotSpecified )
+		if (goal.GoalWaitFlags == MOVE_NotSpecified)
 			goal.GoalWaitFlags = goal.GoalMoveFlags;
 		
 		// count number of navigation points might be used
 		NumWanderPoints = 0;
-		foreach RadiusActors( class'NavigationPoint', tempNav, goal.GoalValue, goal.GoalTarget.Location )
+		foreach RadiusActors(class'NavigationPoint', tempNav, goal.GoalValue, goal.GoalTarget.Location)
 		{
 			//log("WANDER NAV POINT #" $ NumWanderPoints @ " : " $ tempNav @ tempNav.Tag);
 			NumWanderPoints++;
@@ -2079,7 +2079,7 @@ event EchelonEnums.GoalStatus ExecGoal_Wander( float deltaTime, EGoal goal )
 
 	// check timer for location switch		
 	
-	if ( InternalGoalTimer > goal.GoalTimer )		// timer exceeded random value
+	if (InternalGoalTimer > goal.GoalTimer)		// timer exceeded random value
 	{
 		// reset focus temporarily
 		goal.GoalFocus = vect(0,0,0);
@@ -2088,11 +2088,11 @@ event EchelonEnums.GoalStatus ExecGoal_Wander( float deltaTime, EGoal goal )
 
 		counter = rand(NumWanderPoints);
 
-		foreach RadiusActors( class'NavigationPoint', tempNav, goal.GoalValue, goal.GoalTarget.Location )
+		foreach RadiusActors(class'NavigationPoint', tempNav, goal.GoalValue, goal.GoalTarget.Location)
 		{
 			counter--;
 
-			if ( counter == 0 )
+			if (counter == 0)
 			{
 				//log("WANDER choosing nav point : " $ tempNav);
 				goal.GoalLocation = tempNav.Location;
@@ -2102,22 +2102,22 @@ event EchelonEnums.GoalStatus ExecGoal_Wander( float deltaTime, EGoal goal )
 
 		// only if point chosen.  don't understand why it don't work 100% of the time.
 		// anyways, if we don't get one this frame, we'll surely get one next frame.
-		if ( tempNav != none ) 
+		if (tempNav != none) 
 		{
 			// choose entirely random yaw to use for our focus, unless specified by PatrolInfo
-			if ( tempNav.Patrol != none )
+			if (tempNav.Patrol != none)
 			{
 				// apply patrol info focus
-				if ( tempNav.Patrol.m_FocusTag != '' )
-					goal.GoalFocus = GetMatchingActor( tempNav.Patrol.m_FocusTag ).Location;
+				if (tempNav.Patrol.m_FocusTag != '')
+					goal.GoalFocus = GetMatchingActor(tempNav.Patrol.m_FocusTag).Location;
 				
-				if ( tempNav.Patrol.m_rSleepTime > 0.0f )
+				if (tempNav.Patrol.m_rSleepTime > 0.0f)
 					goal.GoalTimer = tempNav.Patrol.m_rSleepTime;
 			}
 		}
 
 		// always set new focus randomly if not previously set
-		if ( goal.GoalFocus == vect(0,0,0) )
+		if (goal.GoalFocus == vect(0,0,0))
 		{
 			RandomRotation.Yaw   = rand(32768) * 2;
 			RandomRotation.Pitch = 0;
@@ -2133,19 +2133,19 @@ event EchelonEnums.GoalStatus ExecGoal_Wander( float deltaTime, EGoal goal )
 
 		// set timer
 		InternalGoalTimer = 0.0f;
-		if ( goal.GoalTimer == 0.0f )
+		if (goal.GoalTimer == 0.0f)
 			goal.GoalTimer = FocusInfo.SwitchTimeBase + (FRand() * FocusInfo.SwitchTimeOffset);
 	
 	} 
 	
 	// move dammit
 	
-	switch ( SubGoal_NavigateTo( goal.GoalLocation, Goal.GoalMoveFlags ) )
+	switch (SubGoal_NavigateTo(goal.GoalLocation, Goal.GoalMoveFlags))
 	{
 		case GS_Complete : 
 		case GS_Failure : 
 			InternalGoalTimer += deltaTime;
-			StopMovement( goal.GoalFocus, goal.GoalWaitFlags );
+			StopMovement(goal.GoalFocus, goal.GoalWaitFlags);
 			return GS_Executing;
 
 		case GS_Executing :
@@ -2174,7 +2174,7 @@ event EchelonEnums.GoalStatus ExecGoal_Wander( float deltaTime, EGoal goal )
 //			
 //------------------------------------------------------------------------
 
-event EchelonEnums.GoalStatus ExecGoal_QuickSearch( float deltaTime, EGoal goal )
+event EchelonEnums.GoalStatus ExecGoal_QuickSearch(float deltaTime, EGoal goal)
 {
 	/****  GOAL INITIALIZATION  ****/
 
@@ -2183,7 +2183,7 @@ event EchelonEnums.GoalStatus ExecGoal_QuickSearch( float deltaTime, EGoal goal 
 
 		// get target from tag
 		if (goal.GoalTarget == none)
-			goal.GoalTarget = GetMatchingActor( goal.GoalTag );
+			goal.GoalTarget = GetMatchingActor(goal.GoalTag);
 		
 		// if target specified, take its location 
 		if (goal.GoalTarget != none)
@@ -2191,11 +2191,11 @@ event EchelonEnums.GoalStatus ExecGoal_QuickSearch( float deltaTime, EGoal goal 
 
 		// play initial sound if it exists
 		if (goal.GoalSound != none)
-			EPawn.PlaySound(goal.GoalSound, SLOT_SFX); // play sound from pawn
+			ePawn.PlaySound(goal.GoalSound, SLOT_SFX); // play sound from pawn
 
 		// play initial anim if it exists
 		if (goal.GoalAnim != '')
-			EPawn.BlendAnimOverCurrent(goal.GoalAnim,0.5,'B Spine2',,0.2);	
+			ePawn.BlendAnimOverCurrent(goal.GoalAnim,0.5,'B Spine2',,0.2);	
 
 		if (goal.GoalValue == 0.0f)
 			goal.GoalValue = 800.0f;		// TODO : add var QuickSearchVisibilityDistance??  
@@ -2210,7 +2210,7 @@ event EchelonEnums.GoalStatus ExecGoal_QuickSearch( float deltaTime, EGoal goal 
 	
 	InternalGoalTimer += deltaTime;
 
-	switch (SubGoal_NavigateTo( goal.GoalLocation, Goal.GoalMoveFlags ))
+	switch (SubGoal_NavigateTo(goal.GoalLocation, Goal.GoalMoveFlags))
 	{
 		case GS_Complete:  
 		case GS_Failure:   
@@ -2224,12 +2224,12 @@ event EchelonEnums.GoalStatus ExecGoal_QuickSearch( float deltaTime, EGoal goal 
 
 			// check visibility of location every quarter second
 
-			if ( InternalGoalTimer > 0.25f )
+			if (InternalGoalTimer > 0.25f)
 			{
 				// return complete if within range and point is visible
-				if ( VSize(goal.GoalLocation - ePawn.Location) < goal.GoalValue )
+				if (VSize(goal.GoalLocation - ePawn.Location) < goal.GoalValue)
 				{
-					if ( FastTrace(goal.GoalLocation, EPawn.Location) )
+					if (FastTrace(goal.GoalLocation, ePawn.Location))
 						return GS_Complete;
 				}
 			}
@@ -2303,11 +2303,11 @@ event AddGoal(EchelonEnums.GoalType					_Type,
 	local EGoal goal;	
 	
 
-	if(bNotResponsive && GetStateName() != 's_stunned')
+	if (bNotResponsive && GetStateName() != 's_stunned')
 		return;
 
 
-	//if(pawn.Health > 0)
+	//if (pawn.Health > 0)
 	//{
 		goal = Spawn(class'EGoal');  // new class'EGoal';
 
@@ -2332,13 +2332,13 @@ event AddGoal(EchelonEnums.GoalType					_Type,
 		goal.GoalUpdatePlayerPos = _UpdatePlayerPos;
 
 		// i am comment-happy
-		m_pGoalList.Insert( goal );							// add goal to list
+		m_pGoalList.Insert(goal);							// add goal to list
 	//}
 	}
 
 event SetDefaultGuard()
 {
-	ReplaceDefaultGoal(GOAL_Guard,0,EPawn.Location);
+	ReplaceDefaultGoal(GOAL_Guard,0,ePawn.Location);
 }
 //---------------------------------------[Frederic Blais]------------
 // 
@@ -2362,7 +2362,7 @@ event ReplaceDefaultGoal(EchelonEnums.GoalType				_Type,
 {
 	local EGoal goal;	
 	
-	if(pawn.Health > 0)
+	if (pawn.Health > 0)
 	{
 		goal = Spawn(class'EGoal');  // new class'EGoal';
 
@@ -2384,7 +2384,7 @@ event ReplaceDefaultGoal(EchelonEnums.GoalType				_Type,
 		goal.GoalDirection	= _Direction;					// your dad
 		
 
-		m_pGoalList.ReplaceDefaultGoal( goal );				//Replace the end of the list
+		m_pGoalList.ReplaceDefaultGoal(goal);				//Replace the end of the list
 	}
 }
 
@@ -2393,10 +2393,10 @@ event ReplaceDefaultGoal(EchelonEnums.GoalType				_Type,
 // AddGoalDirect
 //
 //-------------------------------------------------------------------
-event AddGoalDirect( EGoal G )
+event AddGoalDirect(EGoal G)
 {	
-	if(pawn.health > 0)
-		m_pGoalList.Insert( G );
+	if (pawn.Health > 0)
+		m_pGoalList.Insert(G);
 }
 
 //---------------------------------------[Frederic Blais]------------
@@ -2404,9 +2404,9 @@ event AddGoalDirect( EGoal G )
 // ReplaceGoal
 //
 //-------------------------------------------------------------------
-event ReplaceGoal( EGoal G )
+event ReplaceGoal(EGoal G)
 {
-	m_pGoalList.Replace( G );
+	m_pGoalList.Replace(G);
 }
 
 //-------------------------------[Matthew Clarke - July 15th 2002]---
@@ -2418,7 +2418,7 @@ event TimeoutHidePoint(NavigationPoint oNP, optional float fTime)
 {
     local SNavPointTimeout SNPT;
 
-	if((oNP == None) || (IsTimedOut(oNP)))
+	if ((oNP == None) || (IsTimedOut(oNP)))
     {
         //log("Can't disable hide point"@ oNP);
         return;
@@ -2436,7 +2436,7 @@ event TimeoutHidePoint(NavigationPoint oNP, optional float fTime)
 
     NavPointsTimedOut[NavPointsTimedOut.Length] = SNPT;
 
-    //log("TimingOut " $ oNP $ " for " $ fTime@"seconds" );
+    //log("TimingOut " $ oNP $ " for " $ fTime@"seconds");
     //log("NavPointsTimedOut.Length =  " $ NavPointsTimedOut.Length);
 }
 
@@ -2449,7 +2449,7 @@ event CheckHidePoints()
 {
     local int i;
 
-    if(NavPointsTimedOut.Length < 1)
+    if (NavPointsTimedOut.Length < 1)
     {
         return;    
     }
@@ -2457,7 +2457,7 @@ event CheckHidePoints()
     for (i = 0; i < NavPointsTimedOut.Length; i++)
     {
         // It's time to remove this one
-        if(NavPointsTimedOut[i].fReenableTime < Level.Level.TimeSeconds)
+        if (NavPointsTimedOut[i].fReenableTime < Level.Level.TimeSeconds)
         {
             //log("Reenabling " $  NavPointsTimedOut[i].oPoint);
             /*NavPointsTimedOut[i].oPoint.bHidePoint = true;*/
@@ -2480,7 +2480,7 @@ event bool IsTimedOut(NavigationPoint oNP)
 
     for (i = 0; i < NavPointsTimedOut.Length; i++)
     {
-        if(NavPointsTimedOut[i].oPoint == oNP)
+        if (NavPointsTimedOut[i].oPoint == oNP)
         {
             return true;
         }
@@ -2509,7 +2509,7 @@ function TimedForceFire()
 //-------------------------------------------------------------------
 function Timer()
 {
-    if(bTimedForceFire)
+    if (bTimedForceFire)
     {
         //log("Hold fire");
         bTimedForceFire = false;
@@ -2563,7 +2563,7 @@ state s_Init
 		ePawn.InitAnims();
 
 
-		switch(ePawn.InitialAIState)
+		switch (ePawn.InitialAIState)
 		{
 			case EAIS_Default : 
 				GotoStateSafe('s_Default');		
@@ -2579,7 +2579,7 @@ state s_Init
 
 			case EAIS_Dead :
 				
-				if ( !ePawn.bScriptInitialized )
+				if (!ePawn.bScriptInitialized)
 					ePawn.InitialState = 's_InitiallyDead';
 				else
 					ePawn.GotoState('s_InitiallyDead');
@@ -2589,7 +2589,7 @@ state s_Init
 
 			case EAIS_Unconscious :
 				
-				if ( !ePawn.bScriptInitialized )
+				if (!ePawn.bScriptInitialized)
 					ePawn.InitialState = 's_InitiallyUnconscious';
 				else
 					ePawn.GotoState('s_InitiallyUnconscious');
@@ -2623,11 +2623,11 @@ state s_Default
 	function BeginState() {}
 
 
-	function Tick ( float deltaTime )
+	function Tick (float deltaTime)
 	{
-		if ( Group != none )
+		if (Group != none)
 		{
-			switch ( ExecuteCurrentGoal() )
+			switch (ExecuteCurrentGoal())
 			{
 				case GS_Executing :
 
@@ -2665,13 +2665,13 @@ state s_Default
     {
 		local EPawn PlayerPawn;
 		
-		PlayerPawn = eGame.pPlayer.EPawn;
+		PlayerPawn = eGame.pPlayer.ePawn;
 		
 		if (bPlayerSeen)
 		{
-			UpdatePlayerLocation( PlayerPawn, false );
+			UpdatePlayerLocation(PlayerPawn, false);
 
-			if ( PlayerPawn != none && PlayerPawn.Health > 0 )
+			if (PlayerPawn != none && PlayerPawn.Health > 0)
 			{
 				AIEvent.Reset();
 				AIEvent.EventType	  = AI_LOST_PLAYER;
@@ -2682,7 +2682,7 @@ state s_Default
 		}
 		else
 		{
-			UpdatePlayerLocation( PlayerPawn, false );			// update last known position based on intuition 
+			UpdatePlayerLocation(PlayerPawn, false);			// update last known position based on intuition 
 		}
 	}
 
@@ -2725,9 +2725,9 @@ state s_Investigate
 	
 	function Tick(float deltaTime)
 	{
-		if ( Group != none )
+		if (Group != none)
 		{
-			switch ( ExecuteCurrentGoal() )
+			switch (ExecuteCurrentGoal())
 			{
 				case GS_Executing :
 					// keep on merrily executing
@@ -2764,14 +2764,14 @@ state s_Investigate
     {
 		local EPawn PlayerPawn;
 		
-		PlayerPawn = eGame.pPlayer.EPawn;
+		PlayerPawn = eGame.pPlayer.ePawn;
 		
 		if (bPlayerSeen)
 		{
 
-			UpdatePlayerLocation( PlayerPawn, false );
+			UpdatePlayerLocation(PlayerPawn, false);
 
-			if ( PlayerPawn != none && PlayerPawn.Health > 0 )
+			if (PlayerPawn != none && PlayerPawn.Health > 0)
 			{
 				AIEvent.Reset();
 				AIEvent.EventType	  = AI_LOST_PLAYER;
@@ -2782,14 +2782,14 @@ state s_Investigate
 		}
 		else
 		{
-			UpdatePlayerLocation( PlayerPawn, false );			// update last known position based on intuition 
+			UpdatePlayerLocation(PlayerPawn, false);			// update last known position based on intuition 
 		}
 	}
 
 	
 	event float GetPersonalityUpdateTime()
 	{
-		if ( PersonalityUpdateTime > 0.0f )
+		if (PersonalityUpdateTime > 0.0f)
 			return PersonalityUpdateTime;
 
 		PersonalityUpdateTime = RandRange(ePawn.PrsoUpdate_AwareMin, ePawn.PrsoUpdate_AwareMax);   
@@ -2832,12 +2832,12 @@ state s_Alert
 	
 	function Tick(float deltaTime)
 	{
-		if ( Group != none )
+		if (Group != none)
 		{
 			// check for alert-state-related events to send to group
 			MonitorAlertState(deltaTime);	
 
-			switch ( ExecuteCurrentGoal() )
+			switch (ExecuteCurrentGoal())
 			{
 				case GS_Executing :
 					// keep on merrily executing
@@ -2862,33 +2862,33 @@ state s_Alert
 		}
 
 		//adjust the transition table (the sniper tables will be Hardcoded)
-		if(epawn.bSniper)
+		if (ePawn.bSniper)
 		{
 			//check if the pawn is moving
-			if(epawn.velocity != vect(0,0,0))
+			if (ePawn.Velocity != vect(0,0,0))
 			{
-				epawn.m_VisibilityMaxDistance=1800;
+				ePawn.m_VisibilityMaxDistance = 1800;
 
-				epawn.VisTable_Alert[0] = 0.000000;
-				epawn.VisTable_Alert[1] = 400.000000;
-				epawn.VisTable_Alert[2] = 700.000000;
-				epawn.VisTable_Alert[3] = 1000.000000;
-				epawn.VisTable_Alert[4] = 1300.000000;
+				ePawn.VisTable_Alert[0] = 0.000000;
+				ePawn.VisTable_Alert[1] = 400.000000;
+				ePawn.VisTable_Alert[2] = 700.000000;
+				ePawn.VisTable_Alert[3] = 1000.000000;
+				ePawn.VisTable_Alert[4] = 1300.000000;
 
-				epawn.m_VisibilityConeAngle=55.50000;
+				ePawn.m_VisibilityConeAngle = 55.50000;
 
 			}
 			else
 			{
-				epawn.m_VisibilityMaxDistance=4000;
+				ePawn.m_VisibilityMaxDistance = 4000;
 
-				epawn.VisTable_Alert[0] = 0.000000;
-				epawn.VisTable_Alert[1] = 3000.000000;
-				epawn.VisTable_Alert[2] = 3300.000000;
-				epawn.VisTable_Alert[3] = 3600.000000;
-				epawn.VisTable_Alert[4] = 4000.000000;
+				ePawn.VisTable_Alert[0] = 0.000000;
+				ePawn.VisTable_Alert[1] = 3000.000000;
+				ePawn.VisTable_Alert[2] = 3300.000000;
+				ePawn.VisTable_Alert[3] = 3600.000000;
+				ePawn.VisTable_Alert[4] = 4000.000000;
 
-				epawn.m_VisibilityConeAngle=50.00000;
+				ePawn.m_VisibilityConeAngle = 50.000000;
 
 			}
 		}
@@ -2912,18 +2912,18 @@ state s_Alert
 		local int				i;
 		local float				Distance;
 		
-		bIsAboutToLostThePlayer=false;
+		bIsAboutToLostThePlayer = false;
 
 		// only send message to group if SeenPlayer is alive
 		if (SeenPlayer != none)
 		{			
-			if ( SeenPlayer.bHidden )
+			if (SeenPlayer.bHidden)
 				return;
 
 			if (SeenPlayer.Health > 0)
 			{
 				// obtain player distance
-				Distance = VSize(SeenPlayer.Location - EPawn.Location);
+				Distance = VSize(SeenPlayer.Location - ePawn.Location);
 
 				// no need to check transition table when in alert state
 				//Log("S_ALERT : Is Player Seen  ---  bPlayerSeen"  @ bPlayerSeen);
@@ -2933,9 +2933,9 @@ state s_Alert
 					// OR if the player is within PlayerCanHideDistance radius
 					//log("*** LastKnownPlayerLocation is : "$LastKnownPlayerLocation$" for Pawn: "$pawn);
 
-					if ( (LastKnownPlayerTime > 0) && (LastKnownPlayerLocation != vect(0,0,0)) &&
-						 (Level.TimeSeconds - LastKnownPlayerTime < EPawn.TimeBeforePlayerCanHide || 
-						  VSize(LastKnownPlayerLocation - SeenPlayer.Location) < EPawn.PlayerCanHideDistance ))
+					if ((LastKnownPlayerTime > 0) && (LastKnownPlayerLocation != vect(0,0,0)) &&
+						 (Level.TimeSeconds - LastKnownPlayerTime < ePawn.TimeBeforePlayerCanHide || 
+						  VSize(LastKnownPlayerLocation - SeenPlayer.Location) < ePawn.PlayerCanHideDistance))
 					{
 						pLog("********** S_ALERT automatically setting bPlayerSeen = true -- LastKnownPlayer Time / Location : " $ LastKnownPlayerTime @ LastKnownPlayerLocation);
 						
@@ -2950,7 +2950,7 @@ state s_Alert
 					else
 					{
 						// CHECK VISIBILITY via investigative transition table (mirror of code from s_Investigate SeePlayer()) 
-						if(EPawn.bUseTransitionTable)
+						if (ePawn.bUseTransitionTable)
 						{
 						
 							// if player is 'invisible' send see_player_surprised event at close range
@@ -2958,9 +2958,9 @@ state s_Alert
 							{
 								if (Distance < 180.0f)
 								{					
-									if ( (Normal(SeenPlayer.Location - ePawn.Location) dot vector(ePawn.Rotation)) > 0.85f )
+									if ((Normal(SeenPlayer.Location - ePawn.Location) dot vector(ePawn.Rotation)) > 0.85f)
 									{
-										UpdatePlayerLocation( SeenPlayer, true );
+										UpdatePlayerLocation(SeenPlayer, true);
 
 										//Log("S_ALERT See invisible player within 2 meters.");
 									
@@ -2976,7 +2976,7 @@ state s_Alert
 								return;
 							}
 						
-							switch ( CheckTransitionTable(SeenPlayer.GetActorVisibility(), Distance) )
+							switch (CheckTransitionTable(SeenPlayer.GetActorVisibility(), Distance))
 							{
 							
 								case TRAN_None :
@@ -2987,7 +2987,7 @@ state s_Alert
 									// compose AIEvent message to send to group
 									AIEvent.Reset();
 										
-									UpdatePlayerLocation( SeenPlayer, true );
+									UpdatePlayerLocation(SeenPlayer, true);
 
 									AIEvent.EventType			= AI_SEE_PLAYER_ALERT;
 									AIEvent.EventTarget			= SeenPlayer;
@@ -3001,7 +3001,7 @@ state s_Alert
 							// compose AIEvent message to send to group
 							AIEvent.Reset();
 								
-							UpdatePlayerLocation( SeenPlayer, true );
+							UpdatePlayerLocation(SeenPlayer, true);
 
 							AIEvent.EventType			= AI_SEE_PLAYER_ALERT;
 							AIEvent.EventTarget			= SeenPlayer;
@@ -3015,20 +3015,20 @@ state s_Alert
 				{
 
 					
-					if( (SeenPlayer.GetVisibilityFactor() < 1) && (Distance > 120))
+					if ((SeenPlayer.GetVisibilityFactor() < 1) && (Distance > 120))
 					{
 	
 						//check the darkness factor
-						if ( VSize(EPlayerController(SeenPlayer.Controller).LastVisibleLocation - LastKnownPlayerLocation) < 100)
+						if (VSize(EPlayerController(SeenPlayer.Controller).LastVisibleLocation - LastKnownPlayerLocation) < 100)
 						{
 							UpdatePlayerLocation(SeenPlayer, true);		// no table lookup if player already seen
 						}
 						else
 						{
-							if( (Level.TimeSeconds - LastKnownPlayerTime) > 10 )
+							if ((Level.TimeSeconds - LastKnownPlayerTime) > 10)
 								EnemyNotVisible();
-							else if( (Level.TimeSeconds - LastKnownPlayerTime) > 5 )
-								bIsAboutToLostThePlayer=true;
+							else if ((Level.TimeSeconds - LastKnownPlayerTime) > 5)
+								bIsAboutToLostThePlayer = true;
 
 						}
 					}
@@ -3047,14 +3047,14 @@ state s_Alert
     {
 		local EPawn PlayerPawn;
 		
-		PlayerPawn = eGame.pPlayer.EPawn;
+		PlayerPawn = eGame.pPlayer.ePawn;
 		
 		if (bPlayerSeen)
 		{
 
-			UpdatePlayerLocation( PlayerPawn, false );
+			UpdatePlayerLocation(PlayerPawn, false);
 
-			if ( PlayerPawn != none && PlayerPawn.Health > 0 )
+			if (PlayerPawn != none && PlayerPawn.Health > 0)
 			{
 				AIEvent.Reset();
 				AIEvent.EventType	  = AI_LOST_PLAYER;
@@ -3065,17 +3065,17 @@ state s_Alert
 		}
 		else
 		{
-			UpdatePlayerLocation( PlayerPawn, false );			// update last known position based on intuition 
+			UpdatePlayerLocation(PlayerPawn, false);			// update last known position based on intuition 
 		}
 	}
 
-	event bool NotifyBump( Actor Other, optional int Pill )
+	event bool NotifyBump(Actor Other, optional int Pill)
 	{
 		plog("1 - NotifyBump in alert...");
 
-		if(Pattern != None)
+		if (Pattern != None)
 		{
-			if(Pattern.GetStateName() == 'Attack')
+			if (Pattern.GetStateName() == 'Attack')
 				return true;
 		}
 
@@ -3088,7 +3088,7 @@ state s_Alert
 
 	event float GetPersonalityUpdateTime()
 	{
-		if ( PersonalityUpdateTime > 0.0f )
+		if (PersonalityUpdateTime > 0.0f)
 			return PersonalityUpdateTime;
 
 		PersonalityUpdateTime = RandRange(ePawn.PrsoUpdate_AlertMin, ePawn.PrsoUpdate_AlertMax);   
@@ -3117,9 +3117,9 @@ state s_Alert
 
 		ePawn.StopAllVoicesActor(false, true);
 
-		if ( epawn.WeaponHandedness > 0 && epawn.WeaponStance == 0 )
+		if (ePawn.WeaponHandedness > 0 && ePawn.WeaponStance == 0)
 		{
-			epawn.Transition_WeaponSelect();
+			ePawn.Transition_WeaponSelect();
 		}
 	}
 
@@ -3176,7 +3176,7 @@ state s_Alert
 // 
 //------------------------------------------------------------------------
 
-event bool InitInteraction( Actor InteractObject )
+event bool InitInteraction(Actor InteractObject)
 {
 	Interaction = InteractObject.GetInteraction(ePawn);
 
@@ -3252,8 +3252,8 @@ event UnlockLadder()
 
 	//plog("Unlocking Ladder : " $ CurrentGEID);
 	
-	if ( eGame.ELevel.IsLadderLockedBy(CurrentGEID,Pawn) )
-		eGame.ELevel.UnlockLadder( CurrentGEID );
+	if (eGame.ELevel.IsLadderLockedBy(CurrentGEID,Pawn))
+		eGame.ELevel.UnlockLadder(CurrentGEID);
 
 	//plog("resetting my ladder info : " $ CurrentGEID);
 
@@ -3263,12 +3263,12 @@ event UnlockLadder()
 	LadderExitLocation = vect(0,0,0);
 
 	// are we touching another ladder point?  if so, call SetCurrentLadder!
-	for ( i=0; i<ePawn.Touching.Length; i++)
+	for (i = 0; i < ePawn.Touching.Length; i++)
 	{
-		if ( ePawn.Touching[i] != none )
+		if (ePawn.Touching[i] != none)
 		{
 			 nav = NavigationPoint(ePawn.Touching[i]);
-			 if ( nav != none && nav.bLadderPoint && nav.LadderID != TempID )
+			 if (nav != none && nav.bLadderPoint && nav.LadderID != TempID)
 			 {
 				 SetCurrentLadder(nav.LadderID);
 				 return;
@@ -3287,7 +3287,7 @@ event UnlockLadder()
 
 Event SetCurrentLadder(int LadderID)
 {
-	if ( CurrentGEID < 0 )
+	if (CurrentGEID < 0)
 	{
 		//plog("Setting CurrentGEID to Ladder ID : " $ LadderID);
 		CurrentGEID = LadderID;
@@ -3329,9 +3329,9 @@ state s_ClimbLadderNEW
 	
 	function Tick(float deltaTime)
 	{
-		if ( Group != none )
+		if (Group != none)
 		{
-			switch ( ExecuteCurrentGoal() )
+			switch (ExecuteCurrentGoal())
 			{
 				case GS_Executing :
 					// keep on merrily executing
@@ -3356,7 +3356,7 @@ state s_ClimbLadderNEW
 		}
 	}
 
-	function GotoStateSafe( name State )
+	function GotoStateSafe(name State)
 	{
 		m_LastStateName = State;	// so when we get off the ladder, our state is coherent w/ our groups
 	}
@@ -3371,7 +3371,7 @@ state s_ClimbLadderNEW
 
 	event ClimbLadder(bool bClimbingUp)
 	{	
-		if ( !bInTransition )
+		if (!bInTransition)
 			ePawn.ClimbLadder(bClimbingUp);
 	}
 
@@ -3458,7 +3458,7 @@ state s_ClimbLadder
     }
 
 
-	function GotoStateSafe( name State )
+	function GotoStateSafe(name State)
 	{
 		m_LastStateName = State;	// so when we get off the ladder, our state is coherent w/ our groups
 	}
@@ -3467,7 +3467,7 @@ state s_ClimbLadder
 	event bool NotifyLanded(vector HitNormal, Actor HitActor)
 	{
 		// only "land" and exit state if climbing down (in transition)
-		if ( !bClimbingUp  )
+		if (!bClimbingUp)
 		{
 			GotoState(,'OutBottom');
 		}
@@ -3491,7 +3491,7 @@ state s_ClimbLadder
 	{
 		local vector Z;
 
-		Z = Vect(0,0,1) >> EPawn.Rotation;
+		Z = Vect(0,0,1) >> ePawn.Rotation;
 
 		ePawn.LinearSpeed = 106.666;
 		ePawn.Acceleration = Z * ePawn.LinearSpeed;  // (32.0f / GetAnimTime(ePawn.ANLUpLeft));           //eGame.m_NLUpwAardSpeed;	
@@ -3501,7 +3501,7 @@ state s_ClimbLadder
 	{
 		local vector Z;
 
-		Z = Vect(0,0,1) >> EPawn.Rotation;
+		Z = Vect(0,0,1) >> ePawn.Rotation;
 
 		ePawn.LinearSpeed = 106.666;
 		Pawn.Acceleration = Z * ePawn.LinearSpeed * -1.0f; 
@@ -3511,10 +3511,10 @@ state s_ClimbLadder
 	// s_ladder damage - send event to group but don't force a state change
 	function damageAttitudeTo(pawn Other, float Damage, class<DamageType> damageType,optional int PillTag)
 	{	
-		if (Other != none && Damage > 0 && DamageType==None)
+		if (Other != none && Damage > 0 && DamageType == None)
 		{	
 			// update last known player location if damage taken
-			if(Other.IsPlayerPawn())
+			if (Other.IsPlayerPawn())
 				UpdatePlayerLocation(Other, true, true);
 
 			AIEvent.Reset();
@@ -3524,7 +3524,7 @@ state s_ClimbLadder
 
 			Group.AIEventCallBack(self, AIEvent);
 		}
-        else if(Damage > 0) // Hit by Gameplayobject
+        else if (Damage > 0) // Hit by Gameplayobject
         {
 			AIEvent.Reset();
 			AIEvent.EventType		= AI_HEAR_SOMETHING;
@@ -3590,7 +3590,7 @@ FromGround:
 
 	// Find justified position and move there
 	ePawn.SetPhysics(PHYS_Linear);
-	if(CalculateLadderDestination())
+	if (CalculateLadderDestination())
 	{
 		ePawn.m_topClimbing = true;
 	}
@@ -3607,7 +3607,7 @@ GoUp:
 
 	//plog("-----Start Climbing Upwards - Location : " $ ePawn.Location $    " Speed : " $ ePawn.Acceleration);
 
-	if(ePawn.m_topClimbing)
+	if (ePawn.m_topClimbing)
 	{
 		GoTo('ClimbUpTop');
 	}
@@ -3620,7 +3620,7 @@ GoUp:
 		FinishAnim();
 	
 		// Find justified position and move there
-		if(CalculateLadderDestination())
+		if (CalculateLadderDestination())
 		{
 			// the justified position is at the top of the ladder
 			ePawn.m_topClimbing = true;
@@ -3644,7 +3644,7 @@ ClimbUpTop:
 
 	ePawn.SetCollision(true,false,false);
 	
-	switch(ePawn.m_climbingUpperHand)
+	switch (ePawn.m_climbingUpperHand)
 	{
 		case CHLEFT:
 			ePawn.PlayAnimOnly(ePawn.ANLTopUpLeft);
@@ -3722,7 +3722,7 @@ function bool CalculateLadderDestination()
 	//log("Step : " $ step);
 	//log("Remain : " $ remain);
 
-	if(remain > eGame.m_NLStepSize)
+	if (remain > eGame.m_NLStepSize)
 	{
 		// closer to the top, justify to the top
 		handsHeightJustified = handsHeight - remain + (eGame.m_NLStepSize * 2.0);
@@ -3740,7 +3740,7 @@ function bool CalculateLadderDestination()
 	ePawn.m_orientationStart	= ePawn.Rotation;
 	ePawn.m_orientationEnd		= ePawn.Rotation;
 
-	if((destination.Z + ePawn.m_NarrowLadderArmsZone.Z) > (ePawn.m_geoTopPoint.Z - 1.0))
+	if ((destination.Z + ePawn.m_NarrowLadderArmsZone.Z) > (ePawn.m_geoTopPoint.Z - 1.0))
 	{
 		return true;
 	}
@@ -3777,7 +3777,7 @@ event bool OpenDoor()
 	{
 		plog("OPEN DOOR :  Interaction found : " $ Interaction);
 		Interaction.InitInteract(self);
-		Interaction.SetInteractLocation(EPawn);
+		Interaction.SetInteractLocation(ePawn);
 		return true;
 	}
 	else
@@ -3798,12 +3798,12 @@ event bool OpenDoor()
 
 event EnteringDoorRadius(EDoorMover Door)
 {
-	if ( SpecialMoveDoor == none )
+	if (SpecialMoveDoor == none)
 		SpecialMoveDoor = Door;
 	else
 	{
 		// which is closer, the door whose radius we just entered or the current SpecialMoveDoor?
-		if ( VSize(Door.myMarker.Location - ePawn.Location) < VSize(SpecialMoveDoor.myMarker.Location - ePawn.Location) )
+		if (VSize(Door.myMarker.Location - ePawn.Location) < VSize(SpecialMoveDoor.myMarker.Location - ePawn.Location))
 		{
 			// distance to new door is closer - replace SpecialMoveDoor
 
@@ -3830,7 +3830,7 @@ function LeavingDoorRadius()
         return;
     }
 
-	if ( SpecialMoveDoor.UsingController == self )
+	if (SpecialMoveDoor.UsingController == self)
 	{
 		//plog("Unlocking SpecialMoveDoor by resetting UsingController.");
 		SpecialMoveDoor.UsingController = none;
@@ -3852,34 +3852,34 @@ state s_OpenDoor
 {
 	function BeginState()
 	{
-		bWaitForDoor=false;
+		bWaitForDoor = false;
 
 		//plog("BEGINSTATE - Interaction =>" $ Interaction);
-		if(Level.TimeSeconds - LastTryTime < 2.0f)
+		if (Level.TimeSeconds - LastTryTime < 2.0f)
 		{
 			NumberOfTry++;
 
-			if(NumberOfTry >= 1)
+			if (NumberOfTry >= 1)
 			{
 				//log("The door cannot open");
 
-				if( FRand() > 0.5f )
+				if (FRand() > 0.5f)
 				{
 					ePawn.Bark_Type = BARK_Mystified;
 					ePawn.Playsound(ePawn.Sounds_Barks,SLOT_Barks);
 				}
 
-				bWaitForDoor=true;
+				bWaitForDoor = true;
 				m_LastStateName = 's_investigate';
-				NumberOfTry=0;
+				NumberOfTry = 0;
 			}
 		}
 		else
 		{
-			NumberOfTry=0;
+			NumberOfTry = 0;
 		}
 
-		LastTryTime=Level.TimeSeconds;
+		LastTryTime = Level.TimeSeconds;
 	}
 
 	event bool OpenDoor()
@@ -3890,9 +3890,9 @@ state s_OpenDoor
 	// standard goal execution tick
 	function Tick(float deltaTime)
 	{
-		if ( Group != none )
+		if (Group != none)
 		{
-			switch ( ExecuteCurrentGoal() )
+			switch (ExecuteCurrentGoal())
 			{
 				case GS_Executing :
 					
@@ -3918,7 +3918,7 @@ state s_OpenDoor
 		}
 	}
 
-	function GotoStateSafe( name State )
+	function GotoStateSafe(name State)
 	{		
 		m_LastStateName = State;	// so when we stop using the door, our state is coherent w/ our groups
 		
@@ -3930,14 +3930,14 @@ state s_OpenDoor
 		Interaction.Interact(self);
 	}
 	
-	event bool NotifyBump( Actor Other, optional int Pill )
+	event bool NotifyBump(Actor Other, optional int Pill)
 	{
 		return true;
 	}
 
 	function EndState()
 	{
-		EPawn.SetPhysics(PHYS_Walking);
+		ePawn.SetPhysics(PHYS_Walking);
 
 		// used to block EMoveToward's execution
 		bInTransition = false;
@@ -3953,18 +3953,18 @@ state s_OpenDoor
 LockedRt:			// locked doors still open for NPCs
 UnLockedRt:
 	
-	if( bWaitForDoor )
-		Sleep( 1.25f + 2*FRand() );
+	if (bWaitForDoor)
+		Sleep(1.25f + 2 * FRand());
 
-	while( ePawn.bInTransition )
+	while (ePawn.bInTransition)
     {
 		Sleep(0.2);
     }
 
 	WalkToDestination(ePawn.m_locationEnd);
-	EPawn.SetPhysics(PHYS_Walking);
+	ePawn.SetPhysics(PHYS_Walking);
 
-	if( IsBumpingDoor() )
+	if (IsBumpingDoor())
 	{
 		Interaction.Interact(self);
 		Interaction.Owner.Owner.Bump(ePawn,0);
@@ -3980,18 +3980,18 @@ UnLockedRt:
 LockedLt:
 UnLockedLt:
 
-	if( bWaitForDoor )
-		Sleep( 1.25f + 2*FRand() );
+	if (bWaitForDoor)
+		Sleep(1.25f + 2 * FRand());
 
-	while ( ePawn.bInTransition )
+	while (ePawn.bInTransition)
     {
 		Sleep(0.2);
     }
 
 	WalkToDestination(ePawn.m_locationEnd);
-	EPawn.SetPhysics(PHYS_Walking);
+	ePawn.SetPhysics(PHYS_Walking);
 
-	if( IsBumpingDoor() )
+	if (IsBumpingDoor())
 	{
 		Interaction.Interact(self);
 		Interaction.Owner.Owner.Bump(ePawn,0);
@@ -4028,7 +4028,7 @@ state s_RetinalScanner
 {
 	function EndState()
 	{
-		EPawn.SetPhysics(PHYS_Walking);
+		ePawn.SetPhysics(PHYS_Walking);
 		bInteractionComplete = true;
 	}
 
@@ -4067,22 +4067,22 @@ state s_KeyPadInteract
 {
 	function EndState()
 	{
-		EPawn.SetPhysics(PHYS_Walking);
+		ePawn.SetPhysics(PHYS_Walking);
 		bInteractionComplete = true;
 
-		if( Interaction != None )
+		if (Interaction != None)
 			Interaction.LockOwner(false);
 			
 	}
 
 	function NotifyAction()
 	{
-		if( Interaction == None )
+		if (Interaction == None)
 			return;
 
 		Interaction.KeyEvent("Interaction", IST_Press, 1, true);
 		// If after interacting, the interaction is None, this means the code is completed for the Npc.
-		if( Interaction == None )
+		if (Interaction == None)
 			GotoState(m_LastStateName);
 	}
 
@@ -4104,13 +4104,13 @@ state s_ElevatorInteract
 {
 	function EndState()
 	{
-		EPawn.SetPhysics(PHYS_Walking);
+		ePawn.SetPhysics(PHYS_Walking);
 		bInteractionComplete = true;
 	}
 
 	function NotifyAction()
 	{
-		if( Interaction == None )
+		if (Interaction == None)
 			return;
 
 		Interaction.KeyEvent("Interaction", IST_Press, 1, true);
@@ -4139,43 +4139,43 @@ state s_SitDown extends s_Default
 
 	function AdjustStandUp()
 	{
-		if(m_LastStateName == 's_alert')
+		if (m_LastStateName == 's_alert')
 		{
-			if(EPawn.bSleeping)
+			if (ePawn.bSleeping)
 			{
-				EPawn.AStandUpR						= 'LaidBdAlUpR';
-				EPawn.AStandUpL						= 'LaidBdAlUpL';
+				ePawn.AStandUpR						= 'LaidBdAlUpR';
+				ePawn.AStandUpL						= 'LaidBdAlUpL';
 			}
 			else
 			{
-				if(!ePawn.bDrunk)
+				if (!ePawn.bDrunk)
 				{
-				EPawn.AStandUpR						= 'SittAsAlUpR';
-				EPawn.AStandUpL						= 'SittAsAlUpL';
-				EPawn.AStandUpF						= 'SittChAlUp0';
+					ePawn.AStandUpR						= 'SittAsAlUpR';
+					ePawn.AStandUpL						= 'SittAsAlUpL';
+					ePawn.AStandUpF						= 'SittChAlUp0';
+				}
 			}
-		}
 	}
 	}
 
-	function GotoStateSafe( name State )
+	function GotoStateSafe(name State)
 	{
-		plog("--------------------> GotoStateSafe called : " $ State$" Epawn current state: "$epawn.GetStateName());
+		plog("--------------------> GotoStateSafe called : " $ State$" EPawn current state: "$ePawn.GetStateName());
 
 		m_LastStateName = State;
 
 		// only stand when first interaction (sitting) is complete
-		/*if ( bInteractionComplete && !ePawn.bInTransition && (epawn.GetStateName() != 's_Transition') )
+		/*if (bInteractionComplete && !ePawn.bInTransition && (ePawn.GetStateName() != 's_Transition'))
 		{
 			log("Standing up... "$bTableChair);
 			ePawn.StandUp(true,bTableChair);
 		}*/
 
 		//else
-		if(epawn.TransitionQueue.Length > 0 )
+		if (ePawn.TransitionQueue.Length > 0)
 		{
-			if( (epawn.TransitionQueue[0].ATransition != EPawn.AStandUpR) && 
-				(epawn.TransitionQueue[0].ATransition != EPawn.AStandUpF))
+			if ((ePawn.TransitionQueue[0].ATransition != ePawn.AStandUpR) && 
+				(ePawn.TransitionQueue[0].ATransition != ePawn.AStandUpF))
             {
 				bStandUpASAP = true;
             }
@@ -4186,19 +4186,19 @@ state s_SitDown extends s_Default
 	{
 		local EGoal goal;
 
-		log("TransitionEnd: "$epawn.TransitionQueue[0].ATransition$" EPawn.AStandUpR: "$EPawn.AStandUpR$" for Pawn: "$pawn);
+		log("TransitionEnd: "$ePawn.TransitionQueue[0].ATransition$" EPawn.AStandUpR: "$ePawn.AStandUpR$" for Pawn: "$Pawn);
 
 		// 1st transition = sitting down
-		//if ( !bInteractionComplete )
-		if( (epawn.TransitionQueue[0].ATransition != EPawn.AStandUpR) && 
-			(epawn.TransitionQueue[0].ATransition != EPawn.AStandUpF))
+		//if (!bInteractionComplete)
+		if ((ePawn.TransitionQueue[0].ATransition != ePawn.AStandUpR) && 
+			(ePawn.TransitionQueue[0].ATransition != ePawn.AStandUpF))
 		{
-			if( (epawn.TransitionQueue[0].ATransition == EPawn.ASitDownR) ||
-				(epawn.TransitionQueue[0].ATransition == EPawn.ASitDownF) )
+			if ((ePawn.TransitionQueue[0].ATransition == ePawn.ASitDownR) ||
+				(ePawn.TransitionQueue[0].ATransition == ePawn.ASitDownF))
 			{
 				//plog("bInteractionComplete is false -- we just finished sitting down");
 
-				EPawn.SetRotation(Interaction.Rotation);
+				ePawn.SetRotation(Interaction.Rotation);
 				bInteractionComplete = true;
 
 			}
@@ -4210,11 +4210,11 @@ state s_SitDown extends s_Default
 			//log("Pawn: "$pawn$" GotoState: "$m_LastStateName);
 			//RelocatePawnOnGround();
 
-			epawn.ADeathForward				    = 'XxxxStAlFd0';
-			epawn.ADeathBack					= 'XxxxStAlBk0';
-			epawn.ADeathLeft					= 'XxxxStAlLt0';
-			epawn.ADeathRight					= 'XxxxStAlRt0';
-			epawn.ADeathDown					= 'XxxxStAlDn0';
+			ePawn.ADeathForward				    = 'XxxxStAlFd0';
+			ePawn.ADeathBack					= 'XxxxStAlBk0';
+			ePawn.ADeathLeft					= 'XxxxStAlLt0';
+			ePawn.ADeathRight					= 'XxxxStAlRt0';
+			ePawn.ADeathDown					= 'XxxxStAlDn0';
 
 			bInteractionComplete = true;
 
@@ -4223,21 +4223,21 @@ state s_SitDown extends s_Default
 		}
 	}
 
-	function Tick( float deltaTime )
+	function Tick(float deltaTime)
 	{
 		local EGoal goal;
 
 
 
-		if(epawn.TransitionQueue.Length > 0 )
+		if (ePawn.TransitionQueue.Length > 0)
 		{
-			if( (epawn.TransitionQueue[0].ATransition == EPawn.AStandUpR) ||
-				(epawn.TransitionQueue[0].ATransition == EPawn.AStandUpF))
+			if ((ePawn.TransitionQueue[0].ATransition == ePawn.AStandUpR) ||
+				(ePawn.TransitionQueue[0].ATransition == ePawn.AStandUpF))
 				return;
 		}
 
 		// if stand up is queued, perform action now
-		if ( bInteractionComplete && !ePawn.bInTransition && bStandUpASAP )
+		if (bInteractionComplete && !ePawn.bInTransition && bStandUpASAP)
 		{
 			AdjustStandUp();
 
@@ -4246,14 +4246,14 @@ state s_SitDown extends s_Default
 		}
 
 		// execute current goal
-		if ( Group != none )
+		if (Group != none)
 		{
 
 			goal = m_pGoalList.GetCurrent();
 
-			if(goal.m_GoalType != GOAL_Wait)
+			if (goal.m_GoalType != GOAL_Wait)
 			{
-				if ( (bInteractionComplete) && !ePawn.bInTransition && (epawn.GetStateName() != 's_Transition') )
+				if ((bInteractionComplete) && !ePawn.bInTransition && (ePawn.GetStateName() != 's_Transition'))
 				{
 					//log("Standing up... "$bTableChair);
 					AdjustStandUp();
@@ -4264,10 +4264,10 @@ state s_SitDown extends s_Default
 				return;
 			}
 
-			if(!bInteractionComplete)
+			if (!bInteractionComplete)
 				return;
 
-			switch ( ExecuteCurrentGoal() )
+			switch (ExecuteCurrentGoal())
 			{
 				case GS_Executing :
 
@@ -4305,7 +4305,7 @@ state s_SitDown extends s_Default
 	function EndState()
 	{
 		//log("Exiting sitdown state: for pawm: "$pawn);
-		EPawn.bYawDiffSet=false;
+		ePawn.bYawDiffSet = false;
 
 		Interaction.PostInteract(self);
 		
@@ -4321,12 +4321,12 @@ state s_SitDown extends s_Default
 		local bool bNoStand;
 
 		//don't stand up
-		if( Group != None  &&  Group.ScriptedPattern != None  && Group.bEventExclusivity == true)
-			bNoStand=true;
+		if (Group != None  &&  Group.ScriptedPattern != None  && Group.bEventExclusivity == true)
+			bNoStand = true;
 
-		if( ! bNoStand )
+		if (!bNoStand)
 		{
-			if ( bInteractionComplete && !ePawn.bInTransition && (epawn.GetStateName() != 's_Transition') )
+			if (bInteractionComplete && !ePawn.bInTransition && (ePawn.GetStateName() != 's_Transition'))
 			{
 				//plog("Taking damage - getttonup...");
 				AdjustStandUp();
@@ -4336,13 +4336,13 @@ state s_SitDown extends s_Default
 			else
 			{
 				//plog("Taking damage before sitting down -- stand up as soon as animation is complete.");
-				if( (epawn.TransitionQueue[0].ATransition != EPawn.AStandUpR) && 
-					(epawn.TransitionQueue[0].ATransition != EPawn.AStandUpF))
+				if ((ePawn.TransitionQueue[0].ATransition != ePawn.AStandUpR) && 
+					(ePawn.TransitionQueue[0].ATransition != ePawn.AStandUpF))
 					bStandUpASAP = true;
 			}
 		}
 
-        if(Other != None && DamageType==None)
+        if (Other != None && DamageType == None)
         {		
 		    // send event to group
 		    AIEvent.Reset();
@@ -4357,7 +4357,7 @@ state s_SitDown extends s_Default
 		    // send event to group
 			AIEvent.Reset();
 			AIEvent.EventType		= AI_HEAR_SOMETHING;
-	        AIEvent.EventTarget	    = Epawn;
+	        AIEvent.EventTarget	    = ePawn;
 	        AIEvent.EventNoiseType  = NOISE_HeavyFootstep;
 
 			Group.AIEventCallBack(self, AIEvent);             
@@ -4370,18 +4370,18 @@ state s_SitDown extends s_Default
 
 		goal = m_pGoalList.GetCurrent();
 
-		if( goal.GoalAnimB == '')
+		if (goal.GoalAnimB == '')
 		{
-			switch(Side)
+			switch (Side)
 			{
 			case 0:
-				goal.GoalAnim=EPawn.AWaitSitT;
+				goal.GoalAnim = ePawn.AWaitSitT;
 				break;
 			case 1:
-				goal.GoalAnim=EPawn.AWaitSitT;
+				goal.GoalAnim = ePawn.AWaitSitT;
 				break;
 			case 2:
-				goal.GoalAnim=EPawn.AWaitSitS;
+				goal.GoalAnim = ePawn.AWaitSitS;
 				break;
 			}
 		}
@@ -4390,21 +4390,21 @@ LeftSide:
 	WalkToDestination(ePawn.m_locationEnd);
 	ePawn.SitDown(false,true);
 	SetWaitAnim(0);
-	bTableChair=true;
+	bTableChair = true;
 	Stop;
 
 RightSide:
 	WalkToDestination(ePawn.m_locationEnd);
 	ePawn.SitDown(true,true);
 	SetWaitAnim(1);
-	bTableChair=true;
+	bTableChair = true;
 	Stop;
 
 FrontSide:
 	WalkToDestination(ePawn.m_locationEnd);
 	ePawn.SitDown(true,false);
 	SetWaitAnim(2);
-	bTableChair=false;
+	bTableChair = false;
 	Stop;
 
 }
@@ -4419,13 +4419,13 @@ event EchelonEnums.GoalStatus ThrowGrenade(vector Direction)
 	// must have grenade in hand to continue...
 
 
-	plog("		THROW GRENADE -- EPawn Hand Item " $ EPawn.HandItem);
+	plog("		THROW GRENADE -- EPawn Hand Item " $ ePawn.HandItem);
 
 	// wait for any scheduled transitions to complete before starting our throw
-	if ( ePawn.bInTransition )
+	if (ePawn.bInTransition)
 		return GS_Executing;
 
-	if ( ePawn.HandItem != none && ePawn.HandItem.IsA('EFragGrenade') || ePawn.HandItem.IsA('ESmokeNPCGrenade') || ePawn.HandItem.IsA('EConcussionGrenade') || ePawn.HandItem.IsA('EFlare') )
+	if (ePawn.HandItem != none && ePawn.HandItem.IsA('EFragGrenade') || ePawn.HandItem.IsA('ESmokeNPCGrenade') || ePawn.HandItem.IsA('EConcussionGrenade') || ePawn.HandItem.IsA('EFlare'))
 	{
 		ePawn.HandItem.Use();		// should send us to state s_Throw
 		return GS_Executing;
@@ -4451,7 +4451,7 @@ state s_Throw extends s_Alert
 	function BeginState()
 	{
 		// SelectGrenade call now in ExecGoal_ThrowGrenade
-		ePawn.GetBoneCoords('WeaponBone', true );
+		ePawn.GetBoneCoords('WeaponBone', true);
 
 		bThrowNow = false;
 	}
@@ -4466,12 +4466,12 @@ state s_Throw extends s_Alert
 		// will be blocked by EPawn s_Transition after playback starts
 		ePawn.PlayThrowGrenade(Direction);
 
-		if ( bThrowNow )
+		if (bThrowNow)
 		{
-			if ( ePawn.HandItem != none )
+			if (ePawn.HandItem != none)
 			{
 				log("s_Throw: "$ePawn.HandItem);
-				ePawn.HandItem.SetLocation(ePawn.GetBoneCoords('WeaponBone', true ).Origin);
+				ePawn.HandItem.SetLocation(ePawn.GetBoneCoords('WeaponBone', true).Origin);
 				ePawn.HandItem.Throw(self, Direction);
 				
 				return GS_Complete;
@@ -4532,9 +4532,9 @@ state s_ReviveAnotherNPC
 
 begin:
 	// will call NotifyAction at correct moment in animation
-	ePawn.CurrentYawDiff=0;
+	ePawn.CurrentYawDiff = 0;
 	
-	ePawn.PlayAnimNoMovement(EPawn.AReviveBody,,0.2f);		
+	ePawn.PlayAnimNoMovement(ePawn.AReviveBody,,0.2f);		
 	FinishAnim();
 
 	GotoState(m_LastStateName);
@@ -4562,8 +4562,8 @@ state s_Turret
 begin:
 	// will call NotifyAction at correct moment in animation
 	// TODO : REPLACE ANIMATION!
-	ePawn.CurrentYawDiff=0;
-	ePawn.PlayAnimNoMovement(EPawn.ASearchBody);		
+	ePawn.CurrentYawDiff = 0;
+	ePawn.PlayAnimNoMovement(ePawn.ASearchBody);		
 	FinishAnim();
 	GotoState(m_LastStateName);
 }
@@ -4580,7 +4580,7 @@ event EchelonEnums.GoalStatus PlaceWallMine(vector Location)
 {
 	//plog("CALLING PLACE WALL MINE ..");
 
-	if ( ePawn.HandItem != none && ePawn.HandItem.IsA('EWallMine') )
+	if (ePawn.HandItem != none && ePawn.HandItem.IsA('EWallMine'))
 	{
 		//plog("CALLING USE ****** ..");
 	
@@ -4614,7 +4614,7 @@ state s_PlaceWallMine
 	}
 
 begin:
-	ePawn.CurrentYawDiff=0;
+	ePawn.CurrentYawDiff = 0;
 	ePawn.PlayAnimNoMovement(ePawn.APlaceWallMineBegin,,0.3);
 	FinishAnim();
 
@@ -4644,7 +4644,7 @@ state s_DisableWallMine
 	}
 	
 Begin:
-	ePawn.CurrentYawDiff=0;
+	ePawn.CurrentYawDiff = 0;
 	ePawn.PlayAnimNoMovement(ePawn.APlaceWallMineEnd,,0.1,true);
 	FinishAnim();
 
@@ -4674,7 +4674,7 @@ state s_AlarmSwitch extends s_Alert
 		//Interaction.Interact(self);
 	}
 	
-	function Tick( float deltaTime ) {}
+	function Tick(float deltaTime) {}
 
 	function EndState()
 	{		
@@ -4701,13 +4701,13 @@ state s_SwitchObject extends s_default
 {
 	Ignores GotoStateSafe;
 
-	function Tick( float deltaTime )
+	function Tick(float deltaTime)
 	{
 	}
 
 	function EndState()
 	{
-		if(Interaction!=None)
+		if (Interaction !=None)
 			Interaction.Interact(self);
 
 		bInteractionComplete = true;
@@ -4754,14 +4754,14 @@ function damageAttitudeTo(pawn Other, float Damage, class<DamageType> damageType
 
     //log("damageAttitudeTo");
 	
-	if( DamageType == class'EKnocked' && PillTag != 1 && Other.IsPlayerPawn() )
+	if (DamageType == class'EKnocked' && PillTag != 1 && Other.IsPlayerPawn())
 	{
-		bShootTarget=true;
+		bShootTarget = true;
 
-		if( EchelonLevelInfo(Level).bOnlyUseSingleShot )
-			bAccFire=true;
+		if (EchelonLevelInfo(Level).bOnlyUseSingleShot)
+			bAccFire = true;
 		else
-			NextFireTime	= Level.TimeSeconds+0.3;
+			NextFireTime = Level.TimeSeconds + 0.3;
 		
 
 		//check if the NPC is in a reaction
@@ -4769,22 +4769,22 @@ function damageAttitudeTo(pawn Other, float Damage, class<DamageType> damageType
 
 		log("Goal priority: "$goal.priority);
 
-		if(goal.priority >= 50)
+		if (goal.priority >= 50)
 		{
 			//stun the NPC
-			EPawn.GotoState('s_Stunned','Stunned'); 
+			ePawn.GotoState('s_Stunned','Stunned'); 
 		}
 		else
 		{
 
-			if(Pattern != None &&  Pattern.GetStateName() == 'attack')
+			if (Pattern != None &&  Pattern.GetStateName() == 'attack')
 			{
-				EPawn.BlendAnimOverCurrent(epawn.ADamageHeadShotForward, 1, epawn.UpperBodyBoneName,1.0,0.2);
+				ePawn.BlendAnimOverCurrent(ePawn.ADamageHeadShotForward, 1, ePawn.UpperBodyBoneName,1.0,0.2);
 
 				return;
 			}
 
-			if(!bPlayerSeen)
+			if (!bPlayerSeen)
 			{
 				AIEvent.Reset();
 				AIEvent.EventType		= AI_TAKE_DAMAGE;
@@ -4802,25 +4802,25 @@ function damageAttitudeTo(pawn Other, float Damage, class<DamageType> damageType
 	}
 
 	// damage handled entirely by pawn
-	//else if( damageType != None )
+	//else if (damageType != None)
 	//	return;
 
 	// update last known player location if damage taken
-	else if( Other != None && Damage > 0 && Other.IsPlayerPawn() )
+	else if (Other != None && Damage > 0 && Other.IsPlayerPawn())
 		UpdatePlayerLocation(Other, true, true);
 
 	//damage from turret
-	if(Other == None && Damage > 0 && DamageType==None)
+	if (Other == None && Damage > 0 && DamageType == None)
 		return;
 
 
 
 	// only block other commands by changing states within range of timer ..
-	if ( Level.TimeSeconds - DamageTimer > 1.5f )
+	if (Level.TimeSeconds - DamageTimer > 1.5f)
 	{
-        if(Other != None && DamageType==None)
+        if (Other != None && DamageType == None)
         {
-			if(Other.IsPlayerPawn())
+			if (Other.IsPlayerPawn())
         {
             AIEvent.Reset();
 		    AIEvent.EventType		= AI_TAKE_DAMAGE;
@@ -4868,7 +4868,7 @@ state s_TakingDamage extends s_Alert
 		Global.AnimEnd(Channel);
 
 		// if damage animation completes, return to last state
-		if ( Channel == 0 )
+		if (Channel == 0)
 			GotoState(m_LastStateName);
 	}
 
@@ -4878,7 +4878,7 @@ state s_TakingDamage extends s_Alert
 	}
 
 begin:
-	EPawn.Acceleration = vect(0,0,0);
+	ePawn.Acceleration = vect(0,0,0);
 }
 
 
@@ -4906,7 +4906,7 @@ function SetFall()
 
 state s_Falling
 {
-	function GotoStateSafe( name State )
+	function GotoStateSafe(name State)
 	{
 		//plog("GotoStateSafe called from falling w/ state : " $ state);
 		m_LastStateName = State;
@@ -4964,23 +4964,23 @@ state s_Grabbed
 		bNotResponsive = false;
 
 		goal = m_pGoalList.GetCurrent();
-		goal.bInitialized=false;
+		goal.bInitialized = false;
 
-		m_vPrevDestination=vect(0,0,0);
+		m_vPrevDestination = vect(0,0,0);
 
 		//if the NPC is out of his ZoneAI kill him
-		if(ePawn.bDisableAI)
+		if (ePawn.bDisableAI)
 		{
-			ePawn.Health=0.0f;
+			ePawn.Health = 0.0f;
 		}
 
-		if(eGame.pPlayer.pawn.Physics == PHYS_Falling)
+		if (eGame.pPlayer.Pawn.Physics == PHYS_Falling)
 		{
 			//trigger an attack against the player
 			AIEvent.Reset();
 			AIEvent.EventType		= AI_TAKE_DAMAGE;
-			AIEvent.EventTarget		= eGame.pPlayer.pawn;
-			AIEvent.EventLocation	= eGame.pPlayer.pawn.Location;
+			AIEvent.EventTarget		= eGame.pPlayer.Pawn;
+			AIEvent.EventLocation	= eGame.pPlayer.Pawn.Location;
 			Group.AIEventCallBack(self, AIEvent);
 		}
 
@@ -4988,7 +4988,7 @@ state s_Grabbed
 
 	function GrabReset()
 	{
-		ePawn.CurrentYawDiff=0; //reset turning
+		ePawn.CurrentYawDiff = 0; //reset turning
 		m_pGoalList.Reset();
 		UnlockNavPoint();				// unlock existing nav points
 		ClearRoutes();					// clear the existing WeightedRoute array and the route cache
@@ -4998,13 +4998,13 @@ state s_Grabbed
 		bInteractionActive		= false;
 		bInteractionComplete	= false;
 
-		if(Pattern != None)
-			Pattern.bDisableMessages=false;
+		if (Pattern != None)
+			Pattern.bDisableMessages = false;
 
 	}
 
 Fall:
-	if( ePawn.Interaction != None )
+	if (ePawn.Interaction != None)
 		ENpcZoneInteraction(ePawn.Interaction).Release();
 	ePawn.GotoState('s_Falling');
 	ePawn.bCollideWorld = true;
@@ -5012,13 +5012,13 @@ Fall:
 	GotoState('s_Falling');
 
 FinishAlone:
-	EPawn.PlayAnimOnly(EPawn.AWait, , 0.2);
+	ePawn.PlayAnimOnly(ePawn.AWait, , 0.2);
 	Goto('EndConscious');
 
 Release:
 	ePawn.PlayAnimOnly(ePawn.AGrabRelease);
 	FinishAnim();
-	ePawn.PlayAnimOnly(EPawn.AWait);
+	ePawn.PlayAnimOnly(ePawn.AWait);
 	ePawn.SetCollision(false);
 	ePawn.Move(ToWorldDir(vect(72,0,0)));
 	ePawn.SetCollision(true);
@@ -5027,7 +5027,7 @@ Release:
 EndConscious:
 	ePawn.SetPhysics(PHYS_Walking);
 
-	if( ePawn.Interaction != None )
+	if (ePawn.Interaction != None)
 		ENpcZoneInteraction(ePawn.Interaction).Release();
 	GotoState('s_default');
 }
@@ -5043,9 +5043,9 @@ state s_Carried
 	function EndState()
 	{
 		//if the NPC is out of his ZoneAI kill him
-		if(ePawn.bDisableAI)
+		if (ePawn.bDisableAI)
 		{
-			ePawn.Health=0.0f;
+			ePawn.Health = 0.0f;
 		}
 
 
@@ -5067,15 +5067,15 @@ state s_Stunned
 	function BeginState()
 	{
 
-		ePawn.CurrentYawDiff=0;
+		ePawn.CurrentYawDiff = 0;
 		bNotResponsive = true;
 		bPlayerSeen = false;			// no need to call UpdatePlayerLocation, just set this to false
 
-		if(Pattern != None && !Pattern.bRunningAlarm)
-			Pattern.bDisableMessages=false;
+		if (Pattern != None && !Pattern.bRunningAlarm)
+			Pattern.bDisableMessages = false;
 
 
-		if( Pattern != None &&  Pattern.GetStateName() != 'attack' && !Pattern.bRunningAlarm )
+		if (Pattern != None &&  Pattern.GetStateName() != 'attack' && !Pattern.bRunningAlarm)
 		{
 			m_pGoalList.Reset();
 			bPlayerSeen = false;			// no need to call UpdatePlayerLocation, just set this to false
@@ -5087,7 +5087,7 @@ state s_Stunned
 
 	}
 
-	event GotoStateSafe( name State )
+	event GotoStateSafe(name State)
 	{
 		m_LastStateName = State;
 	}
@@ -5096,17 +5096,17 @@ state s_Stunned
 	function EndState()
 	{
 		bNotResponsive = false;
-		bPlayerSeen=false;
+		bPlayerSeen = false;
 
 
-		if( Pattern != None) 
+		if (Pattern != None) 
 		{
-			if(!Pattern.bRunningAlarm)
+			if (!Pattern.bRunningAlarm)
 			{
 
-				if( Pattern.GetStateName() != 'attack' )
+				if (Pattern.GetStateName() != 'attack')
 				{
-					if(group != None)
+					if (group != None)
 					{
 						AIEvent.Reset();
 						AIEvent.EventType		= AI_HEAR_SOMETHING;
@@ -5118,12 +5118,12 @@ state s_Stunned
 				}
 				else
 				{
-					if(TargetActorToFire.GetVisibilityFactor() < 1)
+					if (TargetActorToFire.GetVisibilityFactor() < 1)
 					{
 
 						Pattern.GotoState('idle');
 						
-						if(! (Group!=None && Group.ScriptedPattern!=None && Group.ScriptedPattern.bEventExclusivity) )
+						if (!(Group != None && Group.ScriptedPattern != None && Group.ScriptedPattern.bEventExclusivity))
 						{
 							m_pGoalList.Reset();
 						}
@@ -5161,7 +5161,7 @@ state s_Groggy
 		ePawn.GotoState('DefaultState');
 		
 		// If We don't want the grab interaction to be active immediately, set it here.
-		if( ePawn.Interaction != None )
+		if (ePawn.Interaction != None)
 			ePawn.Interaction.SetCollision(false);
 
       	ePawn.SetCollision(true,true,true);
@@ -5171,11 +5171,11 @@ state s_Groggy
 	{
 		bNotResponsive = false;
 						
-		if( Pattern != None )
+		if (Pattern != None)
 			Pattern.SetPostAttackBehavior(1);
 	
 		// Restore Interaction
-		if( ePawn.Interaction != None )
+		if (ePawn.Interaction != None)
 			ePawn.Interaction.SetCollision(true);
 
 		AIEvent.Reset();
@@ -5188,7 +5188,7 @@ state s_Groggy
     {
         m_LastStateName = 's_alert';
 
-        Global.damageAttitudeTo( Other,  Damage,  damageType);
+        Global.damageAttitudeTo(Other,  Damage,  damageType);
     }
 
 
@@ -5198,14 +5198,14 @@ begin:
 	//ePawn.LoopAnimOnly(Epawn.ARecover,,0.2);
     m_LastStateName = 's_Investigate'; //be sure to not go back in unconscious
 
-	ePawn.CurrentYawDiff=0;
+	ePawn.CurrentYawDiff = 0;
 	SetTimer(1.0f, false);
 	ePawn.SetCollision(false,false,false);
     
 
-    if(!ePawn.bKeepNPCAlive)          // This lets the NPC up on its feet real quick for E3 resets in DemoX
+    if (!ePawn.bKeepNPCAlive)          // This lets the NPC up on its feet real quick for E3 resets in DemoX
     {
-	    ePawn.PlayAnimNoMovement(EPawn.ARecover,,0.4);		
+	    ePawn.PlayAnimNoMovement(ePawn.ARecover,,0.4);		
 	    FinishAnim();
     }
     else
@@ -5224,7 +5224,7 @@ state s_Inert
 {
 	Ignores SeePlayer, HearNoise, KilledBy, NotifyBump, GotoStateSafe, damageAttitudeTo;
 
-	event AnimEnd( int Channel )
+	event AnimEnd(int Channel)
 	{
 		ePawn.AnimEnd(Channel);
 	}
@@ -5237,7 +5237,7 @@ state s_Inert
 		bPlayerSeen = false;			// no need to call UpdatePlayerLocation, just set this to false
 		bNotResponsive = true;			// either dead or unconscious, no longer respond to / search for stimuli
 
-		if ( (ePawn.HandItem != none) && (ePawn.HandItem == ePawn.CurrentWeapon) && (GetStateName() != 's_Dead') )
+		if ((ePawn.HandItem != none) && (ePawn.HandItem == ePawn.CurrentWeapon) && (GetStateName() != 's_Dead'))
 		{
 			ePawn.CurrentWeapon.StopLoopSound();
 		}
@@ -5248,7 +5248,7 @@ state s_Inert
 
 		LockedSwitches.Remove(0, LockedSwitches.Length);
 
-		ePawn.CurrentYawDiff=0;
+		ePawn.CurrentYawDiff = 0;
 
 		UnlockNavPoint();				// unlock existing nav points
 
@@ -5276,9 +5276,9 @@ state s_Dead extends s_Inert
 
 		bBlockJumpDetection = false;
 
-		if (EPawn.bKilledByPlayer && !EPawn.bIsPlayerPawn && !bNotInStats)
+		if (ePawn.bKilledByPlayer && !ePawn.bIsPlayerPawn && !bNotInStats)
 		{
-			if (EPawn.bIsDog)
+			if (ePawn.bIsDog)
 			{
 				if (bAllowKill)
 					EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKilledRequired");
@@ -5299,7 +5299,7 @@ state s_Dead extends s_Inert
 				}
 			}
 			// Regular NPCs
-			else if (EPawn.bHostile)
+			else if (ePawn.bHostile)
 			{
 				if (bAllowKill)
 					EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKilledRequired");
@@ -5341,16 +5341,16 @@ state s_Dead extends s_Inert
 			}
 		}
 
-		if(m_LastStateName != 's_Carried' || (group != None && group.ScriptedPattern !=  None && group.bAlwaysKeepScriptedPattern))
+		if (m_LastStateName != 's_Carried' || (group != None && group.ScriptedPattern !=  None && group.bAlwaysKeepScriptedPattern))
 		{
 			AIEvent.Reset();
 			AIEvent.EventType = AI_DEAD;
 
-			if(Group != None)
+			if (Group != None)
 				Group.AIEventCallBack(self, AIEvent);
 		}
 
-		if(m_pGoalList != None)
+		if (m_pGoalList != None)
 		{
 			m_pGoalList.Reset();
 			m_pGoalList.PopDefault();
@@ -5358,17 +5358,17 @@ state s_Dead extends s_Inert
 
 		// unlock any ladders or doors:
 		
-		if ( CurrentGEID >= 0 )
+		if (CurrentGEID >= 0)
 			UnlockLadder();		
 
-		if ( SpecialMoveDoor != none )
+		if (SpecialMoveDoor != none)
 			LeavingDoorRadius();
 		
 
 		Group = None;
 
 		//destroy the default pattern
-		if(Pattern != None)
+		if (Pattern != None)
 			Pattern.Destroy();
 	}
 }
@@ -5385,10 +5385,10 @@ state s_Unconscious extends s_Inert
 
 		bBlockJumpDetection = false;
 
-		if (EPawn.bKnockedByPlayer && !EPawn.bIsPlayerPawn && !bWasKnockedOut && !bNotInStats)
+		if (ePawn.bKnockedByPlayer && !ePawn.bIsPlayerPawn && !bWasKnockedOut && !bNotInStats)
 		{
 			// Special handling for dogs
-			if (EPawn.bIsDog)
+			if (ePawn.bIsDog)
 			{
 				// Count dogs as enemy knockouts regardless of hostility
 				if (bAllowKnockout)
@@ -5405,7 +5405,7 @@ state s_Unconscious extends s_Inert
 				}
 			}
 			// Regular NPCs
-			else if (EPawn.bHostile)
+			else if (ePawn.bHostile)
 			{
 				if (bAllowKnockout)
 					EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKnockedOutRequired");
@@ -5439,23 +5439,23 @@ state s_Unconscious extends s_Inert
 
 		// unlock any ladders or doors:
 		
-		if ( CurrentGEID >= 0 )
+		if (CurrentGEID >= 0)
 			UnlockLadder();		
 		
-		else if ( SpecialMoveDoor != none )
+		else if (SpecialMoveDoor != none)
 			LeavingDoorRadius();
 
 		// only add to changed actor list if not by a door or ladder -- revival near these objects could be tricky..
-		if(m_LastStateName != 's_Carried')
+		if (m_LastStateName != 's_Carried')
 		{
 			AIEvent.Reset();
 			AIEvent.EventType = AI_UNCONSCIOUS;
 			Group.AIEventCallBack(self, AIEvent);
 		}
 
-		if(Pattern != None)
+		if (Pattern != None)
 		{
-			Pattern.bDisableMessages=false;
+			Pattern.bDisableMessages = false;
 			Pattern.GotoState('Idle');
 		}
 	}

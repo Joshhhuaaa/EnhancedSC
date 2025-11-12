@@ -2,7 +2,7 @@ class ECeilingCamera extends EBaseCam;
 
 function PostBeginPlay()
 {
-	if( !bDamageable )
+	if (!bDamageable)
 	{
 		Mesh = SkeletalMesh'ceilCamUnbreakMesh';
 		CameraHeadMesh = StaticMesh'EMeshIngredient.object.CeilUnCamCMesh';

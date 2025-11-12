@@ -12,40 +12,40 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 
 	// optimization
-	SetCollisionSize(1.5f*SprayDistance, 100.f);
+	SetCollisionSize(1.5f * SprayDistance, 100.f);
 	SetTimer(0.2f, true);
 }
 
-function Touch( Actor Other )
+function Touch(Actor Other)
 {
 	//Log("Touch");
-	if( Other.bIsPawn )
+	if (Other.bIsPawn)
 		GotoState('s_RayTracing');
 }
-function UnTouch( Actor Other )
+function UnTouch(Actor Other)
 {
 	local int i;
 	//Log("UnTouch");
-	for( i=0; i<Touching.Length; i++ )
+	for (i = 0; i < Touching.Length; i++)
 	{
-		if( Touching[i].bIsPawn )
+		if (Touching[i].bIsPawn)
 			return;
 	}
 		GotoState('');
 }
 
-function Tick( float DeltaTime )
+function Tick(float DeltaTime)
 {
-	if( StopDamageTime == 0 )
+	if (StopDamageTime == 0)
 		return;
 
 	ElapsedTime += DeltaTime;
-	if( ElapsedTime > StopDamageTime )
+	if (ElapsedTime > StopDamageTime)
 		StopDamage();
 }
 
 function StopDamage()
-	{
+{
 	//LOG("DAMAGE TIMER STOPPED"@StopDamageTime);
 	Disable('Tick');
 	Disable('Touch');
@@ -72,7 +72,7 @@ state s_RayTracing
 			DotP = EmittingDir Dot PawnDir;
 			//log("hitting"@P@DotP);
 			// If we're not in range, try on head
-			if( DotP <= 0.75 )
+			if (DotP <= 0.75)
 			{
 				TestLocation += 0.8f * P.CollisionHeight * Vect(0,0,1);
 				PawnDir = Normal(TestLocation - Location);
@@ -80,10 +80,10 @@ state s_RayTracing
 			}
 
 			//log("hitting"@P@DotP);
-			if( DotP > 0.75 )
+			if (DotP > 0.75)
 			{
 				// Joshua - Scaling damage as NPCs have 150 HP on Hard diffculty
-				if(EchelonGameInfo(Level.Game).pPlayer.playerInfo.Difficulty > 0 && EchelonGameInfo(Level.Game).bScaleGadgetDamage)
+				if (EchelonGameInfo(Level.Game).pPlayer.playerInfo.Difficulty > 0 && EchelonGameInfo(Level.Game).bScaleGadgetDamage)
 					P.TakeDamage(SprayDamage * 1.5f, None, P.Location, Vect(0,0,0), Vect(0,0,0), DamageType);
 				else
 					P.TakeDamage(SprayDamage, None, P.Location, Vect(0,0,0), Vect(0,0,0), DamageType);
@@ -94,9 +94,9 @@ state s_RayTracing
 
 defaultproperties
 {
-    SprayDistance=150.000000
-    SprayDamage=2
-    DamageType=Class'ESleepingGas'
-    bCollideActors=true
-    bDirectional=true
+    SprayDistance150.000000
+    SprayDamage2
+    DamageTypeClass'ESleepingGas'
+    bCollideActorstrue
+    bDirectionaltrue
 }

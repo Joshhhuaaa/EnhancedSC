@@ -14,9 +14,9 @@ var int IgnoreSounds;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_HEAR_RICOCHET:
             EventJump('CheckIfValid');
@@ -38,17 +38,17 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EUSPrisoner0')
+        if (P.name == 'EUSPrisoner0')
             Characters[1] = P.controller;
-        if(P.name == 'EUSPrisoner1')
+        if (P.name == 'EUSPrisoner1')
             Characters[2] = P.controller;
-        if(P.name == 'EUSPrisoner2')
+        if (P.name == 'EUSPrisoner2')
             Characters[3] = P.controller;
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[4] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     IgnoreSounds=0;

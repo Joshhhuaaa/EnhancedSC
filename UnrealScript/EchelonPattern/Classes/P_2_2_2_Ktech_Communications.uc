@@ -13,9 +13,9 @@ class P_2_2_2_Ktech_Communications extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -32,19 +32,19 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[1] = P.controller;
-        if(P.name == 'ECIABureaucratF0')
+        if (P.name == 'ECIABureaucratF0')
             Characters[2] = P.controller;
     }
 
     // Joshua - Adjusting timer for Elite mode
-    if(IsEliteMode())
+    if (IsEliteMode())
     {
         ForEach AllActors(class'ETimer', Timer)
         {
-            if(Timer.Name == 'ETimer0')
-                Timer.TimerDelay = 100.0; // 150.0
+            if (Timer.Name == 'ETimer0')
+                Timer.TimerDelay = 120.0; // 150.0
         }
     }
 
@@ -53,22 +53,22 @@ function InitPattern()
     {
         ForEach DynamicActors(class'Pawn', P)
         {
-            if(P.name == 'EMafiaMuscle5' || P.name == 'EMafiaMuscle11' || P.name =='EMafiaMuscle13')
+            if (P.name == 'EMafiaMuscle5' || P.name == 'EMafiaMuscle11' || P.name =='EMafiaMuscle13')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.Grunt.GruntA", class'Texture'));
             }
-            if(P.name == 'EMafiaMuscle8' || P.name == 'EMafiaMuscle12' || P.name == 'EMafiaMuscle17')
+            if (P.name == 'EMafiaMuscle8' || P.name == 'EMafiaMuscle12' || P.name == 'EMafiaMuscle17')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.Grunt.GruntB", class'Texture'));
             }
-            if(P.name == 'EMercenaryTechnician7')
+            if (P.name == 'EMercenaryTechnician7')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.MercTech.MercTechB", class'Texture'));
             }
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

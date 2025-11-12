@@ -11,9 +11,9 @@ class P_4_1_1_CEmb_WaitECS005 extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,13 +29,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EChineseSoldier21')
+        if (P.name == 'EChineseSoldier21')
             Characters[1] = P.controller;
-        if(P.name == 'EChineseSoldier13')
+        if (P.name == 'EChineseSoldier13')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

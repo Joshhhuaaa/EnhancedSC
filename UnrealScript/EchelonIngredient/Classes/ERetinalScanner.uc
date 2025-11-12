@@ -168,11 +168,11 @@ function DrawView(HUD Hud, ECanvas Canvas)
 	oRot.Roll += rrr.Roll;
 	
 	oLoc = Location;
-	oLoc += lll.x * (Vect(1,0,0) >> oRot);
-	oLoc += lll.y * (Vect(0,1,0) >> oRot);
-	oLoc += lll.z * (Vect(0,0,1) >> oRot);
+	oLoc += lll.X * (Vect(1,0,0) >> oRot);
+	oLoc += lll.Y * (Vect(0,1,0) >> oRot);
+	oLoc += lll.Z * (Vect(0,0,1) >> oRot);
 
-    if(eGame.pPlayer.bShowInventory && eGame.pPlayer.bShowHUD) // Joshua - Show Retinal Scanner info only if inventory enabled
+    if (eGame.pPlayer.bShowInventory && eGame.pPlayer.bShowHUD) // Joshua - Show Retinal Scanner info only if inventory enabled
 	{
         Canvas.BeginScene(0, 0, Canvas.ViewPortSizeX(), Canvas.ViewPortSizeY(), Canvas.ViewPortSizeX(), Canvas.ViewPortSizeY(), Canvas.E_CLEAR_ALL);
         bHidden = TRUE;
@@ -186,18 +186,18 @@ function DrawView(HUD Hud, ECanvas Canvas)
     }
 }
 
-function TileTex( int xTopLeft, int yTopLeft, int width, int height, ECanvas Canvas, int TextInd )
+function TileTex(int xTopLeft, int yTopLeft, int width, int height, ECanvas Canvas, int TextInd)
 {	
 	// LEFT BORDER
 	Canvas.SetPos(xTopLeft, yTopLeft);
-	eLevel.TGAME.DrawTileFromManager( Canvas, 
+	eLevel.TGAME.DrawTileFromManager(Canvas, 
 		                              TextInd, 
 									  width, 
 									  height, 
 									  0, 0, eLevel.TGAME.GetWidth(TextInd), eLevel.TGAME.GetHeight(TextInd));	
 }
 
-function DrawSquareLine( int xTopLeft, int yTopLeft, int width, int height, ECanvas Canvas, int TexInd, Color myColor )
+function DrawSquareLine(int xTopLeft, int yTopLeft, int width, int height, ECanvas Canvas, int TexInd, Color myColor)
 {	
 	// LEFT BORDER	
 	Canvas.DrawColor = myColor;
@@ -222,7 +222,7 @@ function DrawSquareLine( int xTopLeft, int yTopLeft, int width, int height, ECan
 	Canvas.SetDrawColor(128,128,128,255);
 }
 
-function DrawWhiteSquareCorner( int xTopLeft, int yTopLeft, int width, int height, ECanvas Canvas )
+function DrawWhiteSquareCorner(int xTopLeft, int yTopLeft, int width, int height, ECanvas Canvas)
 {
 	
 	Canvas.SetDrawColor(128,128,128,255);
@@ -279,9 +279,9 @@ function DrawStaticFrame(ECanvas Canvas)
 	// Fill the background			
 	Canvas.DrawLine(xPos, yPos, RETICAL_BOX_WIDTH, RETICAL_BOX_HEIGHT, FrameDarkerGreen, -1, eLevel.TGAME);
 
-	DrawWhiteSquareCorner( xPos, yPos, RETICAL_BOX_WIDTH, RETICAL_BOX_HEIGHT, Canvas );
+	DrawWhiteSquareCorner(xPos, yPos, RETICAL_BOX_WIDTH, RETICAL_BOX_HEIGHT, Canvas);
 	
-	DrawSquareLine( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH, 
+	DrawSquareLine(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH, 
 					yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH, 
 					BOX_PICTURE_WIDTH, 
 					BOX_PICTURE_HEIGHT, 
@@ -289,7 +289,7 @@ function DrawStaticFrame(ECanvas Canvas)
 					eLevel.TGAME.rs_stroke_v,
 					DarkWhite);
 
-	DrawSquareLine( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1, 
+	DrawSquareLine(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1, 
 					yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + 1, 
 					BOX_PICTURE_WIDTH - 2, 
 					BOX_PICTURE_HEIGHT - 2, 
@@ -298,16 +298,16 @@ function DrawStaticFrame(ECanvas Canvas)
 					Black);
 
 	// Display eye texture
-	Canvas.SetPos( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 2,
+	Canvas.SetPos(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 2,
 		           yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + 2);
 
-	eLevel.TGAME.DrawTileFromManager( Canvas, 
+	eLevel.TGAME.DrawTileFromManager(Canvas, 
 		                              eLevel.TGAME.rs_oeil, 
 									  EYE_PICTURE_WIDTH, 
 									  EYE_PICTURE_HEIGHT, 
 									  0, 0, EYE_PICTURE_WIDTH, EYE_PICTURE_HEIGHT);
 
-	DrawSquareLine( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH, 
+	DrawSquareLine(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH, 
 					yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1, 
 					BOX_PICTURE_WIDTH, 
 					BOX_TOP_TEXT_HEIGHT, 
@@ -315,15 +315,15 @@ function DrawStaticFrame(ECanvas Canvas)
 					eLevel.TGAME.rs_stroke_v,
 					DarkWhite);
 
-	TileTex( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1, 
+	TileTex(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1, 
 		     yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1 + 1, 
 			 BOX_PICTURE_WIDTH - 2, 
 			 3, 
 			 Canvas, 
-			 eLevel.TGAME.rs_fond_stroke );
+			 eLevel.TGAME.rs_fond_stroke);
 
 	// Fill the background			
-	Canvas.DrawLine( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK, 
+	Canvas.DrawLine(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK, 
 		             yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1 + 1 + BOX_BOTTOM_PALE_HOR_THICK,
 					 BOX_TOP_TEXT_BLACK_ZONE_WIDTH, 
 					 BOX_TOP_TEXT_BLACK_ZONE_HEIGHT, 
@@ -331,15 +331,15 @@ function DrawStaticFrame(ECanvas Canvas)
 
 	Canvas.SetDrawColor(128,128,128,255);
 
-	TileTex( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1, 
+	TileTex(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1, 
 		     yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1 + 1 + BOX_TOP_TEXT_BLACK_ZONE_HEIGHT + BOX_BOTTOM_PALE_HOR_THICK, 
 			 BOX_PICTURE_WIDTH - 2, 
 			 3, 
 			 Canvas, 
-			 eLevel.TGAME.rs_fond_stroke );
+			 eLevel.TGAME.rs_fond_stroke);
 
 	// Bottom text
-	DrawSquareLine( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH, 
+	DrawSquareLine(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH, 
 					yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1 + BOX_TOP_TEXT_HEIGHT - 1, 
 					BOX_PICTURE_WIDTH, 
 					BOX_TOP_TEXT_HEIGHT, 
@@ -347,15 +347,15 @@ function DrawStaticFrame(ECanvas Canvas)
 					eLevel.TGAME.rs_stroke_v,
 					DarkWhite);
 
-	TileTex( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1, 
+	TileTex(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1, 
 		     yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1 + 1 + BOX_TOP_TEXT_HEIGHT - 1, 
 			 BOX_PICTURE_WIDTH - 2, 
 			 3, 
 			 Canvas, 
-			 eLevel.TGAME.rs_fond_stroke );
+			 eLevel.TGAME.rs_fond_stroke);
 
 	// Fill the background			
-	Canvas.DrawLine( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK , 
+	Canvas.DrawLine(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK , 
 		             yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1 + 1 + BOX_BOTTOM_PALE_HOR_THICK + BOX_TOP_TEXT_HEIGHT - 1,
 					 BOX_TOP_TEXT_BLACK_ZONE_WIDTH, 
 					 BOX_TOP_TEXT_BLACK_ZONE_HEIGHT, 
@@ -363,12 +363,12 @@ function DrawStaticFrame(ECanvas Canvas)
 
 	Canvas.SetDrawColor(128,128,128,255);
 
-	TileTex( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1, 
+	TileTex(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1, 
 		     yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1 + 1 + BOX_TOP_TEXT_HEIGHT - 1 + BOX_TOP_TEXT_BLACK_ZONE_HEIGHT + BOX_BOTTOM_PALE_HOR_THICK , 
 			 BOX_PICTURE_WIDTH - 2, 
 			 3, 
 			 Canvas, 
-			 eLevel.TGAME.rs_fond_stroke );			    
+			 eLevel.TGAME.rs_fond_stroke);			    
 }
 
 /*-----------------------------------------------------------------------------
@@ -451,20 +451,20 @@ function DrawTextOutput(ECanvas Canvas)
         Canvas.DrawColor.B = 101;
         		
 
-        Canvas.SetPos( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK + 1 ,
+        Canvas.SetPos(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK + 1 ,
 		               yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1 + 1 + BOX_BOTTOM_PALE_HOR_THICK);
         Canvas.DrawText(Canvas.LocalizeStr("IDENTITY"));
 		
 
-		Canvas.SetPos( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK + 1 ,
-		               yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1 + 1 + BOX_BOTTOM_PALE_HOR_THICK + yLen - 3  );
+		Canvas.SetPos(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK + 1 ,
+		               yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1 + 1 + BOX_BOTTOM_PALE_HOR_THICK + yLen - 3);
         Canvas.DrawText(Canvas.LocalizeStr("UNKNOWN"));
 		
         
         Canvas.DrawColor.R = 255;
         Canvas.DrawColor.G = 161;
         Canvas.DrawColor.B = 101;
-        Canvas.SetPos( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK + 1 ,
+        Canvas.SetPos(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK + 1 ,
 			           yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1 + 1 + BOX_BOTTOM_PALE_HOR_THICK + BOX_TOP_TEXT_HEIGHT - 1);
         Canvas.DrawText(Canvas.LocalizeStr("ACCESS_DENIED"));
 		
@@ -476,21 +476,21 @@ function DrawTextOutput(ECanvas Canvas)
         Canvas.DrawColor.R = 75;
         Canvas.DrawColor.G = 128;
         Canvas.DrawColor.B= 82;        
-        Canvas.SetPos( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK + 1 ,
+        Canvas.SetPos(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK + 1 ,
 		               yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1 + 1 + BOX_BOTTOM_PALE_HOR_THICK);
 		 
         //Canvas.DrawText("KOMBAYN");
 		Canvas.DrawText(Canvas.LocalizeStr("KNOWN")); 
 
-        Canvas.SetPos( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK + 1 ,
-		               yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1 + 1 + BOX_BOTTOM_PALE_HOR_THICK + yLen - 3 );
+        Canvas.SetPos(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK + 1 ,
+		               yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1 + 1 + BOX_BOTTOM_PALE_HOR_THICK + yLen - 3);
 
         Canvas.DrawText(Canvas.LocalizeStr("COLONEL"));
         
         Canvas.DrawColor.R = 98;
         Canvas.DrawColor.G = 161;
         Canvas.DrawColor.B = 101;
-        Canvas.SetPos( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK + 1,
+        Canvas.SetPos(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH + 1 + BOX_BOTTOM_PALE_VER_THICK + 1,
 			           yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + BOX_PICTURE_HEIGHT - 1 + 1 + BOX_BOTTOM_PALE_HOR_THICK + BOX_TOP_TEXT_HEIGHT - 1);
         Canvas.DrawText(Canvas.LocalizeStr("GRANT_ACCESS")); 
 		
@@ -504,7 +504,7 @@ function DrawTextOutput(ECanvas Canvas)
 -----------------------------------------------------------------------------*/
 function DrawEffects(ECanvas Canvas)
 {
-    switch(eRetinalScanStatus)
+    switch (eRetinalScanStatus)
     {
     case ERSS_WAITING:                      // Don't show anything
         break;
@@ -609,19 +609,19 @@ function DrawScanEffect(ECanvas Canvas)
 
     if (iEffectCounter < SCAN_WIDTH)   // Not completely in yet, clip me at top
     {
-        Canvas.SetPos( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH, 
-			           yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH );
+        Canvas.SetPos(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH, 
+			           yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH);
         Canvas.DrawTile(Texture'rs_animvideo', BOX_PICTURE_WIDTH, iEffectCounter, 0, SCAN_WIDTH - iEffectCounter, 8, iEffectCounter);    			
     }
     else if (iEffectCounter < (BOX_PICTURE_HEIGHT)) // Contained
     {
-        Canvas.SetPos( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH, 
+        Canvas.SetPos(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH, 
 			           yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + (iEffectCounter - SCAN_WIDTH));
         Canvas.DrawTile(Texture'rs_animvideo', BOX_PICTURE_WIDTH, SCAN_WIDTH, 0, 0, 8, SCAN_WIDTH);      		
     }
-    else if (iEffectCounter < (BOX_PICTURE_HEIGHT + 8) )    // Going out, clip me at bottom
+    else if (iEffectCounter < (BOX_PICTURE_HEIGHT + 8))    // Going out, clip me at bottom
     {
-        Canvas.SetPos( xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH, 
+        Canvas.SetPos(xPos + WHITE_BORDER_WIDTH + GREEN_BORDER_V_WIDTH, 
 			           yPos + WHITE_BORDER_WIDTH + GREEN_BORDER_H_WIDTH + (iEffectCounter - SCAN_WIDTH));
         Canvas.DrawTile(Texture'rs_animvideo', BOX_PICTURE_WIDTH, SCAN_WIDTH - (iEffectCounter - BOX_PICTURE_HEIGHT) , 0, 0, 8, SCAN_WIDTH - (iEffectCounter - BOX_PICTURE_HEIGHT));           
     }
@@ -632,11 +632,11 @@ function DrawScanEffect(ECanvas Canvas)
 
     Description:    -
 -----------------------------------------------------------------------------*/
-function ValidateUser( Pawn Scanned )
+function ValidateUser(Pawn Scanned)
 {
 	User = EPawn(Scanned);
 
-	if( User == None )
+	if (User == None)
     {
 		Log("Problem with ValidateUser type");
     }
@@ -778,17 +778,17 @@ Validate:
 
 	// Get the player controller
 	oPC = Level.Game.PlayerC;
-	if( oPC == None )
+	if (oPC == None)
 		Log("ERROR: Level PlayerController shouldn't be None");
 
 	// If it's the player or a Npc forced retinal scanning, pop the interface
-	if( User.Controller.bIsPlayer || User.Controller.GetStateName() == 's_Grabbed' )
+	if (User.Controller.bIsPlayer || User.Controller.GetStateName() == 's_Grabbed')
 	{
         my_hud = EMainHUD(oPC.myHud);		
 		my_hud.Slave(self);
 	}
 
-    if(User.Controller.GetStateName() == 's_Grabbed')
+    if (User.Controller.GetStateName() == 's_Grabbed')
     {
         bWasAGrabbedScan = true;
     }
@@ -808,11 +808,11 @@ Validate:
 
 	Sleep(3);
 
-    if( User.IsA(GrantedClass.name) )
+    if (User.IsA(GrantedClass.name))
 	{
 		// Send 
-		if( User.Controller.GetStateName() == 's_Grabbed' )
-			TriggerLinkedActors(oPC.pawn);
+		if (User.Controller.GetStateName() == 's_Grabbed')
+			TriggerLinkedActors(oPC.Pawn);
 		else
 			TriggerLinkedActors(User);
 
@@ -823,14 +823,14 @@ Validate:
         eRetinalScanStatus = ERSS_DENYING;
 
 		// Inform alarm that access was denied
-		if( Alarm != None )
+		if (Alarm != None)
 			Alarm.EnableAlarm(self, User.Controller);
 	}
 
     Sleep(2);
 
     // Restore View if set above
-    if( User.Controller.bIsPlayer || bWasAGrabbedScan )
+    if (User.Controller.bIsPlayer || bWasAGrabbedScan)
 	{
 		EMainHUD(oPC.myHud).NormalView();
 		oPC.AnimEnd(79);

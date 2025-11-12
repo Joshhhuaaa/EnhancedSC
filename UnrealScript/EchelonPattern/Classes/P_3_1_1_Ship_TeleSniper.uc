@@ -11,9 +11,9 @@ class P_3_1_1_Ship_TeleSniper extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_SEE_PLAYER_ALERT:
             EventJump('TeleSniper');
@@ -41,13 +41,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz3')
+        if (P.name == 'spetsnaz3')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz2')
+        if (P.name == 'spetsnaz2')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

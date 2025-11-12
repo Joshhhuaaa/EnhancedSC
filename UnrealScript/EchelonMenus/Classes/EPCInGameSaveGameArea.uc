@@ -20,18 +20,18 @@ var Texture                     m_BGTexture;
 
 function Created()
 {
-    m_TitleLabel = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ITitleXPos, m_ITitleYPos, m_ISaveGameWidth, m_ITextHeight, self));
+    m_TitleLabel = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_ITitleXPos, m_ITitleYPos, m_ISaveGameWidth, m_ITextHeight, self));
     m_TitleLabel.SetLabelText(Localize("HUD","SAVE","Localization\\HUD"),TXT_CENTER);
     m_TitleLabel.Font        = F_Normal;
     m_TitleLabel.TextColor   = m_EditBorderColor;
 		
-    m_SaveGameName       = EPCEditControl(CreateWindow( class'EPCEditControl', m_ITitleXPos, m_ISaveGameYpos, m_ISaveGameWidth, m_ITextHeight, self));
+    m_SaveGameName       = EPCEditControl(CreateWindow(class'EPCEditControl', m_ITitleXPos, m_ISaveGameYpos, m_ISaveGameWidth, m_ITextHeight, self));
     m_SaveGameName.SetBorderColor(m_EditBorderColor);
     m_SaveGameName.SetEditTextColor(m_EditBorderColor);
     m_SaveGameName.SetMaxLength(15);
     
-    m_OKButton          = EPCTextButton(CreateControl( class'EPCTextButton', m_IOKXPos, m_IButtonsYPos, m_IButtonWidth, m_ITextHeight, self));
-    m_CancelButton      = EPCTextButton(CreateControl( class'EPCTextButton', m_ICancelXPos, m_IButtonsYPos, m_IButtonWidth, m_ITextHeight, self));    
+    m_OKButton          = EPCTextButton(CreateControl(class'EPCTextButton', m_IOKXPos, m_IButtonsYPos, m_IButtonWidth, m_ITextHeight, self));
+    m_CancelButton      = EPCTextButton(CreateControl(class'EPCTextButton', m_ICancelXPos, m_IButtonsYPos, m_IButtonWidth, m_ITextHeight, self));    
     m_OKButton.SetButtonText(Caps(Localize("MESSAGEBOX","OK","Localization\\HUD")),TXT_CENTER);
     m_CancelButton.SetButtonText(Caps(Localize("MESSAGEBOX","CANCEL","Localization\\HUD")),TXT_CENTER);
 
@@ -40,9 +40,9 @@ function Created()
 function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) 
 {
 	// Check for Enter KeyUp
-	if(Msg == WM_KeyUp && Key == GetPlayerOwner().Player.Console.EInputKey.IK_Enter)
+	if (Msg == WM_KeyUp && Key == GetPlayerOwner().Player.Console.EInputKey.IK_Enter)
 		EPCInGameSaveLoadArea(OwnerWindow).Notify(m_OKButton, DE_Click);
-	else if(Msg == WM_KeyDown && Key == GetPlayerOwner().Player.Console.EInputKey.IK_Escape)
+	else if (Msg == WM_KeyDown && Key == GetPlayerOwner().Player.Console.EInputKey.IK_Escape)
 	{
 		EPCInGameSaveLoadArea(OwnerWindow).Notify(m_CancelButton, DE_Click);
 		EPCInGameSaveLoadArea(OwnerWindow).m_bSkipOne = true;

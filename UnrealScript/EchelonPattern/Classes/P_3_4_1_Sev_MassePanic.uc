@@ -15,9 +15,9 @@ var int PartBDone;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('SomeoneDOA');
@@ -39,13 +39,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMasse0')
+        if (P.name == 'EMasse0')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz17')
+        if (P.name == 'spetsnaz17')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     PartADone=0;

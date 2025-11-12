@@ -13,9 +13,9 @@ class P_1_2_2DefMin_ThreeSomeNiko extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_HEAR_RICOCHET:
             EventJump('PlayerSeen');
@@ -49,17 +49,17 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianSoldier3')
+        if (P.name == 'EGeorgianSoldier3')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianSoldier4')
+        if (P.name == 'EGeorgianSoldier4')
             Characters[2] = P.controller;
-        if(P.name == 'EGeorgianSoldier5')
+        if (P.name == 'EGeorgianSoldier5')
             Characters[3] = P.controller;
-        if(P.name == 'EGrinko0')
+        if (P.name == 'EGrinko0')
             Characters[4] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

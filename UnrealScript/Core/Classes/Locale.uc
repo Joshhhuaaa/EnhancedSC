@@ -12,7 +12,7 @@ class Locale
 // Information about this locale.
 //
 
-//!!System.GetLocale( language, variant, local )
+//!!System.GetLocale(language, variant, local)
 ///@reference: !!look at java getISO3Language for std 3-char language abbreviations
 var const string ISO3Language;
 var const localized string DisplayLanguage;
@@ -25,23 +25,23 @@ var const localized string DisplayLanguage;
 native function string GetLanguage();
 
 /// Returns the localized, human-readable display name of the ISO 3 language code Language.
-native function string GetDisplayLanguage( string Language );
+native function string GetDisplayLanguage(string Language);
 
 /// Set the current ISO 3 language. Causes all class' and objects' localized variables to be reloaded.
-native function bool SetLanguage( string NewLanguage );
+native function bool SetLanguage(string NewLanguage);
 
 //
 // Locale string processing.
 //
 
 /// Convert to locale-specific uppercase.
-function string ToUpper( string S );
+function string ToUpper(string S);
 
 /// Convert to locale-specific lowercase.
-function string ToLower( string S );
+function string ToLower(string S);
 
 /// Compare two strings using locale-specific sorting.
-function int Compare( string A, string B );
+function int Compare(string A, string B);
 
 //
 // Locale number and currency handling.
@@ -74,13 +74,13 @@ var const localized string Decimal, DecimalCurrency;
 var const localized int DecimalCount;
 
 /// Convert a float number to a string using the locale's formatting instructions.
-function string NumberToString( float Number );
+function string NumberToString(float Number);
 
 /// Convert a float number to a currency string using the locale's formatting instructions.
-function string CurrencyToString( float Currency );
+function string CurrencyToString(float Currency);
 
 /// Convert a fraction from 0.0-1.0 to a percentage string.
-function string PercentToString( float Fraction )
+function string PercentToString(float Fraction)
 {
 	return PrePercent $ int(Fraction * PercentScaler) $ PostPercent;
 }
@@ -116,7 +116,7 @@ var const localized string
 var const localized string DateFormat;
 
 /// Return a map containing time parameters suitable for formatting.
-function map<string,string> DateTimeToMap( long T )
+function map<string,string> DateTimeToMap(long T)
 {
 	local map<string,string> M;
 	M.Set("Year",       Time.GetYear(T));
@@ -125,8 +125,8 @@ function map<string,string> DateTimeToMap( long T )
 	M.Set("Day",        Time.GetDay(T));
 	M.Set("DayName",    DaysOfWeek(Time.GetDay(T)));
 	M.Set("Hour24",     Time.GetHour(T));
-	M.Set("Hour12",     Time.GetHour(T)%12);
-	M.Set("AMPM",       AMPM(Time.GetHour(T)/12);
+	M.Set("Hour12",     Time.GetHour(T) % 12);
+	M.Set("AMPM",       AMPM(Time.GetHour(T) / 12);
 	M.Set("Minute",     Time.GetMinute(T));
 	M.Set("Second",     Time.GetSecond(T));
 	M.Set("MSec",       Time.GetMSec(T));
@@ -136,36 +136,36 @@ function map<string,string> DateTimeToMap( long T )
 }
 
 /// Convert a map of TimeToMap key-values to a time; returns true if successful.
-function bool MapToDateTime( map<string,string> Map, out long T )
+function bool MapToDateTime(map<string,string> Map, out long T)
 {
 	//!!
 }
 
 /// Converts the time to a human-readable string, depending on the current locale.
-function string TimeToString( long T, bool Brief, bool Countdown )
+function string TimeToString(long T, bool Brief, bool Countdown)
 {
 	local string S;
-	if( Brief )
+	if (Brief)
 	{
-		if( ShowAMPM ) S = BriefTimeFormatAMPM;
+		if (ShowAMPM) S = BriefTimeFormatAMPM;
 		else           S = BriefTimeFormat24Hour, 
 	}
-	else if( !Countdown )
+	else if (!Countdown)
 	{
-		if( ShowAMPM ) S = TimeFormatAMPM;
+		if (ShowAMPM) S = TimeFormatAMPM;
 		else           S = TimeFormat24Hour, 
 	}
 	else
 	{
 		S = CountdownTimeFormat;
 	}
-	return string.Format( S, DateTimeToMap(T) );
+	return string.Format(S, DateTimeToMap(T));
 }
 
 // Convert the date to a human-readable string, depending on the current locale.
-function string DateToString( long T )
+function string DateToString(long T)
 {
-	return string.Format( DateFormat, DateTimeToMap(T) );
+	return string.Format(DateFormat, DateTimeToMap(T));
 }
 
 _defaultproperties

@@ -13,9 +13,9 @@ class P_3_2_1_NPP_MeltdownHalfway extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -31,13 +31,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EFalseRussianSoldier26')
+        if (P.name == 'EFalseRussianSoldier26')
             Characters[1] = P.controller;
-        if(P.name == 'EFalseRussianSoldier27')
+        if (P.name == 'EFalseRussianSoldier27')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

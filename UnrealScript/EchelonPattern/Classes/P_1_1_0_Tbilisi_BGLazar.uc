@@ -11,9 +11,9 @@ class P_1_1_0_Tbilisi_BGLazar extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_UNCONSCIOUS:
             EventJump('ManDown');
@@ -32,11 +32,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ERussianCivilian0')
+        if (P.name == 'ERussianCivilian0')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }
@@ -57,7 +57,7 @@ ALazar:
     ResetGroupGoals();
     ChangeGroupState('s_default');
 JRLazLoop:
-    JumpRandom('ARoute', 0.34, 'BRoute', 0.67, 'CRoute', 1.00, , , , ); 
+    JumpRandom('ARoute', 0.34, 'BRoute', 0.67, 'CRoute', 1.00, , , ,); 
 ARoute:
     Log("");
     Teleport(1, 'Start2io');

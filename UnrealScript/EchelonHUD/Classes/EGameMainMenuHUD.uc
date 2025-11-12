@@ -31,16 +31,16 @@ function PostBeginPlay()
 {
     Super.PostBeginPlay();
 
-    if(EGameMenuHUD(Owner) != None)
+    if (EGameMenuHUD(Owner) != None)
     {
         EGameMenuHUDOwner = EGameMenuHUD(Owner);
 
         Epc = EGameMenuHUD(Owner).Epc;
-	    if( Epc == None )
+	    if (Epc == None)
 		    Log("ERROR: Getting PlayerController in EGameMainMenuHUD");
     }
 
-    if(EchelonMainHUD(owner.owner) != None)
+    if (EchelonMainHUD(owner.owner) != None)
         myEchelonMainHUDOwner = EchelonMainHUD(owner.owner);
 }
 
@@ -58,14 +58,14 @@ function Tick(float DeltaTime)
 =============================================================================*/
 state s_LoadGame
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_LoadGame_MainMenu(Key, Action, Delta);}}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_LoadGame_MainMenu(Key, Action, Delta);}}
 
 /*=============================================================================
  State :        s_SettingsMenu
 =============================================================================*/
 state s_SettingsMenu
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_SettingsMenu_MainMenu(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_SettingsMenu_MainMenu(Key, Action, Delta);}
 }
 
 /*=============================================================================
@@ -73,7 +73,7 @@ state s_SettingsMenu
 =============================================================================*/
 state s_PlayerSettings
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_PlayerSettings_MainMenu(Key, Action, Delta);}	
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_PlayerSettings_MainMenu(Key, Action, Delta);}	
 }
 
 /*=============================================================================
@@ -81,7 +81,7 @@ state s_PlayerSettings
 =============================================================================*/
 state s_SavePlayerInfo
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_SavePlayerInfo_MainMenu(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_SavePlayerInfo_MainMenu(Key, Action, Delta);}
 
     function Tick(float DeltaTime)
     {		
@@ -95,7 +95,7 @@ state s_SavePlayerInfo
 =============================================================================*/
 state s_Controller
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_ControllerInGame(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_ControllerInGame(Key, Action, Delta);}
 
     function PostRender(ECanvas Canvas) {PostRender_s_ControllerInGame(Canvas);}
 

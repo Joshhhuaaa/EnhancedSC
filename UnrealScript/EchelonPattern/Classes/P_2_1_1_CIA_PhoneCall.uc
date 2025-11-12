@@ -14,9 +14,9 @@ var int Over;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_GRABBED:
             EventJump('Hello');
@@ -63,17 +63,17 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ECIAAgent1')
+        if (P.name == 'ECIAAgent1')
             Characters[1] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'StaticMeshActor1762')
+        if (A.name == 'StaticMeshActor1762')
             SoundActors[0] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     Over=0;

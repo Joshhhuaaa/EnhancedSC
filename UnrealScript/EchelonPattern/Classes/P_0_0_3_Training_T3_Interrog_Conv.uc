@@ -16,9 +16,9 @@ var int bInterrogate;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('ManDown');
@@ -40,14 +40,14 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ECIARookie1')
+        if (P.name == 'ECIARookie1')
         {
             Characters[1] = P.controller;
             EAIController(Characters[1]).bAllowKnockout = true;
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     bFirstTimeConv=1;

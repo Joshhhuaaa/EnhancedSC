@@ -36,46 +36,46 @@ var BOOL                 m_bSkipOne;
 function Created()
 {
     
-    m_SaveArea = EPCInGameSaveGameArea(CreateWindow( class'EPCInGameSaveGameArea', 0, 0, WinWidth, WinHeight, self));
+    m_SaveArea = EPCInGameSaveGameArea(CreateWindow(class'EPCInGameSaveGameArea', 0, 0, WinWidth, WinHeight, self));
     m_SaveArea.HideWindow();
 
-    m_LoadGameButton = EPCTextButton(CreateControl( class'EPCTextButton', m_IFirstButtonsXPos, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
-    m_LoadLevelButton = EPCTextButton(CreateControl( class'EPCTextButton', m_LoadGameButton.WinLeft + m_IXButtonOffset, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
-    m_SaveGameButton  = EPCTextButton(CreateControl( class'EPCTextButton', m_LoadLevelButton.WinLeft + m_IXButtonOffset, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
-    m_LoadConfirmationButton= EPCTextButton(CreateControl( class'EPCTextButton',m_ILoadXPos, m_ILoadYPos, m_ILoadWidth, m_ILoadHeight, self));
+    m_LoadGameButton = EPCTextButton(CreateControl(class'EPCTextButton', m_IFirstButtonsXPos, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
+    m_LoadLevelButton = EPCTextButton(CreateControl(class'EPCTextButton', m_LoadGameButton.WinLeft + m_IXButtonOffset, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
+    m_SaveGameButton  = EPCTextButton(CreateControl(class'EPCTextButton', m_LoadLevelButton.WinLeft + m_IXButtonOffset, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
+    m_LoadConfirmationButton= EPCTextButton(CreateControl(class'EPCTextButton',m_ILoadXPos, m_ILoadYPos, m_ILoadWidth, m_ILoadHeight, self));
 
-    m_LoadGameButton.SetButtonText( Caps(Localize("HUD","LOADGAME","Localization\\HUD"))    ,TXT_CENTER);    
-    m_LoadLevelButton.SetButtonText( Caps(Localize("HUD","LEVELS_TITLE","Localization\\HUD"))    ,TXT_CENTER);
-    m_SaveGameButton.SetButtonText( Caps(Localize("HUD","SAVE","Localization\\HUD"))    ,TXT_CENTER);
-    m_LoadConfirmationButton.SetButtonText( Caps(Localize("HUD","LOAD","Localization\\HUD"))    ,TXT_CENTER);
+    m_LoadGameButton.SetButtonText(Caps(Localize("HUD","LOADGAME","Localization\\HUD"))    ,TXT_CENTER);    
+    m_LoadLevelButton.SetButtonText(Caps(Localize("HUD","LEVELS_TITLE","Localization\\HUD"))    ,TXT_CENTER);
+    m_SaveGameButton.SetButtonText(Caps(Localize("HUD","SAVE","Localization\\HUD"))    ,TXT_CENTER);
+    m_LoadConfirmationButton.SetButtonText(Caps(Localize("HUD","LOAD","Localization\\HUD"))    ,TXT_CENTER);
 
     m_LoadGameButton.Font       = EPCMainMenuRootWindow(Root).TitleFont;    
     m_LoadLevelButton.Font      = EPCMainMenuRootWindow(Root).TitleFont;    
     m_SaveGameButton.Font       = EPCMainMenuRootWindow(Root).TitleFont;     
     m_LoadConfirmationButton.Font       = F_Normal;     
 
-    m_ListBox           = EPCLevelListBox(CreateControl( class'EPCLevelListBox', m_IListBoxXPos, m_IListBoxYPos, m_IListBoxWidth, m_IListBoxHeight, self));        
+    m_ListBox           = EPCLevelListBox(CreateControl(class'EPCLevelListBox', m_IListBoxXPos, m_IListBoxYPos, m_IListBoxWidth, m_IListBoxHeight, self));        
     m_ListBox.Font      = F_Normal;
     m_ListBox.Align     = TXT_CENTER;   
 
-    m_FileListBox           = EPCFileListBox(CreateControl( class'EPCFileListBox', m_IListBoxXPos, m_ISaveListBoxYPos, m_IListBoxWidth, m_ISaveListBoxHeight, self));        
+    m_FileListBox           = EPCFileListBox(CreateControl(class'EPCFileListBox', m_IListBoxXPos, m_ISaveListBoxYPos, m_IListBoxWidth, m_ISaveListBoxHeight, self));        
     m_FileListBox.Font      = F_Normal; 
     m_FileListBox.NameWidth = m_NameWidth;
     m_FileListBox.DateWidth = m_LDateWidth;
 
-    m_LName       = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_IListBoxXPos, m_IListBoxYPos, m_NameWidth, m_ILabelHeight, self));
+    m_LName       = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_IListBoxXPos, m_IListBoxYPos, m_NameWidth, m_ILabelHeight, self));
     m_LName.SetLabelText(Caps(Localize("HUD","NAME","Localization\\HUD")),TXT_LEFT);
     m_LName.Font       = F_Normal;
     m_LName.TextColor  = m_TextColor;   
     m_LName.m_fLMarge  = 2;
 
-    m_LDate       = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_LName.WinLeft + m_LName.WinWidth, m_IListBoxYPos, m_LDateWidth, m_ILabelHeight, self));
+    m_LDate       = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_LName.WinLeft + m_LName.WinWidth, m_IListBoxYPos, m_LDateWidth, m_ILabelHeight, self));
     m_LDate.SetLabelText(Caps(Localize("HUD","DATE","Localization\\HUD")),TXT_LEFT);
     m_LDate.Font       = F_Normal;
     m_LDate.TextColor  = m_TextColor;    
     m_LDate.m_fLMarge  = 2;
 
-    m_LTime       = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_LDate.WinLeft + m_LDate.WinWidth, m_IListBoxYPos, m_IListBoxWidth - m_LDateWidth - m_NameWidth, m_ILabelHeight, self));
+    m_LTime       = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_LDate.WinLeft + m_LDate.WinWidth, m_IListBoxYPos, m_IListBoxWidth - m_LDateWidth - m_NameWidth, m_ILabelHeight, self));
     m_LTime.SetLabelText(Caps(Localize("HUD","TIME","Localization\\HUD")),TXT_LEFT);
     m_LTime.Font       = F_Normal;
     m_LTime.TextColor  = m_TextColor;    
@@ -118,7 +118,7 @@ function FillListBox()
     Path = "..\\Save\\"$PlayerInfo.PlayerName$"\\*.en2"; // Joshua - Enhanced save games are not compatible, changing extension to avoid confusion
     FileManager.DetailedFindFiles(Path);
 
-    for(i=0; i< FileManager.m_pDetailedFileList.Length ; i++)
+    for (i = 0; i < FileManager.m_pDetailedFileList.Length; i++)
     {        
         L = EPCListBoxItem(m_FileListBox.Items.Append(class'EPCListBoxItem'));
 
@@ -137,7 +137,7 @@ function FillListBox()
     m_ListBox.Clear();
 
     //Filling Unlocked Levels
-    i=0;
+    i = 0;
     if (PlayerInfo.LevelUnlock == LU_AllParts && !EPC.eGame.bEliteMode && !EPC.eGame.bPermadeathMode)
     {
         AllParts.Length = 31;
@@ -182,10 +182,10 @@ function FillListBox()
     }
     else
     {
-        while(PlayerInfo.UnlockedMap[i] != "")
+        while (PlayerInfo.UnlockedMap[i] != "")
         {        
             // Joshua - Unlisting Vselka Submarine as it has been merged into Vselka Infiltration
-            if(i == 12) 
+            if (i == 12) 
             {
                 i++;
                 continue;
@@ -194,7 +194,7 @@ function FillListBox()
             L.Caption = PlayerInfo.UnlockedMap[i];
 
             // Original Maps
-            if (i<10)
+            if (i < 10)
             {
                 if (PlayerInfo.LevelUnlock == LU_Enabled && !EPC.eGame.bEliteMode && !EPC.eGame.bPermadeathMode) // Joshua - Unlocks all levels, bypassing profile progression
                     L.m_bLocked = false;
@@ -233,22 +233,22 @@ function Notify(UWindowDialogControl C, byte E)
 {
     local String Error;    
 
-	if(E == DE_Click)
+	if (E == DE_Click)
 	{
-        switch(C)
+        switch (C)
         {
         case m_LoadGameButton:
         case m_LoadLevelButton:
 			ChangeMenuSection(UWindowButton(C));
 			break;
         case m_SaveGameButton:                     
-			if(GetPlayerOwner().CanSaveGame())
+			if (GetPlayerOwner().CanSaveGame())
 			{
 				ChangeMenuSection(UWindowButton(C));
 			}
             break;
         case m_SaveArea.m_OKButton:
-            if(m_SaveArea.GetSaveName() != "")
+            if (m_SaveArea.GetSaveName() != "")
             {
                 SaveGame();
                 m_SaveArea.HideWindow();                
@@ -263,7 +263,7 @@ function Notify(UWindowDialogControl C, byte E)
             break;
         }
     }
-    if( (E == DE_DoubleClick) && ( (C == m_ListBox) || (C == m_FileListBox) ) )
+    if ((E == DE_DoubleClick) && ((C == m_ListBox) || (C == m_FileListBox)))
     {     
         Load();
     }
@@ -275,14 +275,14 @@ function Load()
 	local bool noLoadMap;
     
 	// Check valid CD in
-	if( !EPCMainMenuRootWindow(Root).CheckCD() )
+	if (!EPCMainMenuRootWindow(Root).CheckCD())
 		return;
 	
-    if(m_LoadGameButton.m_bSelected)
+    if (m_LoadGameButton.m_bSelected)
     {        
-        if(m_FileListBox.SelectedItem != None)
+        if (m_FileListBox.SelectedItem != None)
         {
-			// Added extension (.sav ) (YM)
+			// Added extension (.sav) (YM)
             Error = GetPlayerOwner().ConsoleCommand("LoadGame Filename="$EPCListBoxItem(m_FileListBox.SelectedItem).Caption$".en2"); // Joshua - Enhanced save games are not compatible, changing extension to avoid confusion
 			noLoadMap = true;
         }
@@ -292,7 +292,7 @@ function Load()
     }
     else
     {
-        if((EPCListBoxItem(m_ListBox.SelectedItem) != None) && (!EPCListBoxItem(m_ListBox.SelectedItem).m_bLocked))
+        if ((EPCListBoxItem(m_ListBox.SelectedItem) != None) && (!EPCListBoxItem(m_ListBox.SelectedItem).m_bLocked))
         {
 			Error = GetPlayerOwner().ConsoleCommand("Open "$EPCListBoxItem(m_ListBox.SelectedItem).Caption);
         }
@@ -301,9 +301,9 @@ function Load()
     }
     
     
-    if(Error == "")
+    if (Error == "")
 	{
-		if(noLoadMap)
+		if (noLoadMap)
 			MakeSaveLoadMessageBox(false);
 	}
     else
@@ -312,14 +312,14 @@ function Load()
 
 function GameSaved(bool success)
 {
-	if(m_SavingLoadingMessageBox != None)
+	if (m_SavingLoadingMessageBox != None)
 		m_SavingLoadingMessageBox.RestoreFromSave();
 
-	if(success)
+	if (success)
 	{
 	    FillListBox();
 		// Close de messagebox
-		if(m_SavingLoadingMessageBox != None)
+		if (m_SavingLoadingMessageBox != None)
 		{
 			m_SavingLoadingMessageBox.Notify(m_SavingLoadingMessageBox.m_OKButton, DE_Click);
 			EPCConsole(Root.Console).ReturnToGame();
@@ -328,20 +328,20 @@ function GameSaved(bool success)
 	else
 	{
 		// Show error message
-		if(m_SavingLoadingMessageBox != None)
+		if (m_SavingLoadingMessageBox != None)
 			m_SavingLoadingMessageBox.SetupText(Localize("HUD", "SAVEFAILED", "Localization\\HUD"));
 	}
 }
 
 function GameLoaded(bool success)
 {
-	if(m_SavingLoadingMessageBox != None)
+	if (m_SavingLoadingMessageBox != None)
 		m_SavingLoadingMessageBox.RestoreFromSave();
 
-	if(success)
+	if (success)
 	{
 		// Close de messagebox
-		if(m_SavingLoadingMessageBox != None)
+		if (m_SavingLoadingMessageBox != None)
 		{
 			m_SavingLoadingMessageBox.Notify(m_SavingLoadingMessageBox.m_OKButton, DE_Click);
 			EPCConsole(Root.Console).ReturnToGame();
@@ -350,7 +350,7 @@ function GameLoaded(bool success)
 	else
 	{
 		// Show error message
-		if(m_SavingLoadingMessageBox != None)
+		if (m_SavingLoadingMessageBox != None)
 			m_SavingLoadingMessageBox.SetupText(Localize("HUD", "LOADFAILED", "Localization\\HUD"));
 	}
 }
@@ -359,7 +359,7 @@ function MakeSaveLoadMessageBox(bool saving)
 {
 	m_SavingLoadingMessageBox = EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, "", "", MB_OK, MR_OK, MR_OK);
 
-	if(saving)
+	if (saving)
 		m_SavingLoadingMessageBox.SetupText(Localize("HUD", "SAVING", "Localization\\HUD"));
 	else
 		m_SavingLoadingMessageBox.SetupText(Localize("HUD", "LOADING", "Localization\\HUD"));
@@ -367,10 +367,10 @@ function MakeSaveLoadMessageBox(bool saving)
 	m_SavingLoadingMessageBox.SetupForSave();
 }
 
-function ChangeMenuSection( UWindowButton _SelectMe)
+function ChangeMenuSection(UWindowButton _SelectMe)
 { 
     
-    switch(_SelectMe)
+    switch (_SelectMe)
     {
     case m_LoadGameButton:        
         m_LoadGameButton.m_bSelected    =  true;
@@ -405,20 +405,20 @@ function SaveGame()
 
 	Error = "";
 	saveName = m_SaveArea.GetSaveName();
-	if(saveName!="")
+	if (saveName!="")
 	{
 		Error = GetPlayerOwner().ConsoleCommand("SAVEGAME FILENAME="$saveName);
 	}
    
-    if(Error == "ALREADY_EXIST")
+    if (Error == "ALREADY_EXIST")
     {
         m_MessageBox = EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Caps(Localize("OPTIONS","SAVEGAMEEXISTS","Localization\\HUD")), Caps(Localize("OPTIONS","SAVEGAMEEXISTSMESSAGE","Localization\\HUD")), MB_YesNo, MR_No, MR_No);
     }
-	else if(Error == "INVALID_NAME")
+	else if (Error == "INVALID_NAME")
 	{
 		EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, "Error, invalid file name", "Bad File Name", MB_OK, MR_OK, MR_OK);
 	}
-    else if( (Error != "") )
+    else if ((Error != ""))
     {            
         log("Save File Impossible"@Error);       
     }
@@ -430,11 +430,11 @@ function SaveGame()
 
 function MessageBoxDone(UWindowWindow W, MessageBoxResult Result)
 {
-    if(W == m_MessageBox)
+    if (W == m_MessageBox)
     {        
         m_MessageBox = None;
 
-        if(Result == MR_Yes)
+        if (Result == MR_Yes)
         {
             GetPlayerOwner().ConsoleCommand("SAVEGAME FILENAME="$m_SaveArea.GetSaveName()@"OVERWRITE=TRUE");
 			MakeSaveLoadMessageBox(true);
@@ -453,7 +453,7 @@ function Reset()
     if (EPC.eGame.bPermadeathMode && EPC.bProfileDeletionPending)
     {
         FileManager = EPCMainMenuRootWindow(Root).m_FileManager;
-        if(FileManager != None)
+        if (FileManager != None)
         {
             ProfilePath = "..\\Save\\"$EPC.playerInfo.PlayerName;
             FileManager.DeleteDirectory(ProfilePath, true);
@@ -463,7 +463,7 @@ function Reset()
         }
     }        
 
-	if(m_LoadLevelButton.m_bSelected)
+	if (m_LoadLevelButton.m_bSelected)
 		ChangeMenuSection(m_LoadLevelButton);
 	else
 		ChangeMenuSection(m_LoadGameButton);

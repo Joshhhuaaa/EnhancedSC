@@ -57,7 +57,7 @@ function PostBeginPlay()
     fFilterY = TOP_CAM_Y - FILTER_HEIGHT;    
 
 	Camera = EAirCamera(Owner);
-	if( Camera == None )
+	if (Camera == None)
 		Log(self$" ERROR : ECameraView Owner not a EAirCamera");
 }
 
@@ -71,7 +71,7 @@ state s_Online
 
         Description:    -
     -----------------------------------------------------------------------------*/
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
         // Update Distance Meter
 		UpdateDistanceMeter(DeltaTime);
@@ -102,7 +102,7 @@ state s_Online
             DrawTopAndBottomBars(Canvas);
         }
         
-        if(EPC.bShowCrosshair && EPC.bShowHUD) // Joshua - Show crosshair toggle
+        if (EPC.bShowCrosshair && EPC.bShowHUD) // Joshua - Show crosshair toggle
                 DrawCrosshair(Canvas);        
 
         if (EPC.bShowScope && EPC.bShowHUD)
@@ -119,7 +119,7 @@ function DrawPitchBars(ECanvas Canvas)
 {
     local int offset;
 
-    //offset = (Camera.camera_rotation.pitch + Camera.max_pitch) / (Camera.max_pitch*2) * (SCREEN_END_Y - TOP_CAM_Y - BOTTOM_CAM_Y - 5);
+    //offset = (Camera.camera_rotation.Pitch + Camera.max_pitch) / (Camera.max_pitch * 2) * (SCREEN_END_Y - TOP_CAM_Y - BOTTOM_CAM_Y - 5);
 
     Canvas.DrawLine(CAM_X + 2, TOP_CAM_Y + 2 + offset, SIDEBAR_WIDTH - 4, 1, Green, -1, eLevel.TGAME);
     Canvas.DrawLine(SCREEN_END_X - CAM_X - SIDEBAR_WIDTH + 2, TOP_CAM_Y + 2 + offset, SIDEBAR_WIDTH - 4, 1, Green, -1, eLevel.TGAME);
@@ -206,22 +206,22 @@ function DrawNoiseBars(ECanvas Canvas)
     Canvas.SetPos(SCREEN_HALF_X - rPos, yPos - 16);
     Canvas.DrawText("["$szFirstDir$"]");
 
-    Canvas.SetPos(SCREEN_HALF_X - rPos + p1, yPos-9);
+    Canvas.SetPos(SCREEN_HALF_X - rPos + p1, yPos - 9);
     Canvas.DrawText(".");
-    Canvas.SetPos(SCREEN_HALF_X - rPos + p1, yPos-8);
+    Canvas.SetPos(SCREEN_HALF_X - rPos + p1, yPos - 8);
     Canvas.DrawText(".");
 
     Canvas.SetPos(SCREEN_HALF_X + (630 - rPos), yPos - 16);
     Canvas.DrawText("["$szSecondDir$"]");
 
-    Canvas.SetPos(SCREEN_HALF_X + (630 - rPos) + p2, yPos-9);
+    Canvas.SetPos(SCREEN_HALF_X + (630 - rPos) + p2, yPos - 9);
     Canvas.DrawText(".");
-    Canvas.SetPos(SCREEN_HALF_X + (630 - rPos) + p2, yPos-8);
+    Canvas.SetPos(SCREEN_HALF_X + (630 - rPos) + p2, yPos - 8);
     Canvas.DrawText(".");
 
     // Draw noise bars //
-    DrawNoiseBar(CAM_X + SIDEBAR_WIDTH , yPos - 4, SCREEN_END_X - CAM_X - SIDEBAR_WIDTH, yPos, rPos%126, Canvas);
-    DrawNoiseBar(CAM_X + SIDEBAR_WIDTH , yPos + 2, SCREEN_END_X - CAM_X - SIDEBAR_WIDTH, yPos + 6, -rPos%126, Canvas);
+    DrawNoiseBar(CAM_X + SIDEBAR_WIDTH , yPos - 4, SCREEN_END_X - CAM_X - SIDEBAR_WIDTH, yPos, rPos % 126, Canvas);
+    DrawNoiseBar(CAM_X + SIDEBAR_WIDTH , yPos + 2, SCREEN_END_X - CAM_X - SIDEBAR_WIDTH, yPos + 6, -rPos % 126, Canvas);
 }
 
 /*-----------------------------------------------------------------------------
@@ -245,7 +245,7 @@ function DrawNoiseBar(int AX, int AY, int BX, int BY, int OffsetX, ECanvas Canva
 function DrawFilm(ECanvas Canvas)
 {
     Canvas.DrawColor = White;
-	Canvas.Style=ERenderStyle.STY_Alpha;
+	Canvas.Style = ERenderStyle.STY_Alpha;
 
     Canvas.SetPos(CAM_X + SIDEBAR_WIDTH, fFilterY);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sb_filtre, SCREEN_END_X - CAM_X * 2 - SIDEBAR_WIDTH * 2, 64, 0, 0, 1, 64);	
@@ -263,7 +263,7 @@ function DrawSideBars(ECanvas Canvas)
     Canvas.DrawColor = White;
 
     // Left Fill //
-    for(iCurrPos = TOP_CAM_Y + 2; iCurrPos < SCREEN_END_Y - BOTTOM_CAM_Y; iCurrPos += 6)
+    for (iCurrPos = TOP_CAM_Y + 2; iCurrPos < SCREEN_END_Y - BOTTOM_CAM_Y; iCurrPos += 6)
     {
         Canvas.SetPos(CAM_X + 2, iCurrPos);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_fond_ligne, SIDEBAR_WIDTH - 4, 6, 0, 0, 1, 6);
@@ -408,7 +408,7 @@ function DrawCrosshair(ECanvas Canvas)
 -----------------------------------------------------------------------------*/
 function float Dist(vector a, vector b)
 {
-    return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y) + (b.z - a.z) * (b.z - a.z));
+    return sqrt((b.X - a.X) * (b.X - a.X) + (b.Y - a.Y) * (b.Y - a.Y) + (b.Z - a.Z) * (b.Z - a.Z));
 }
 
 

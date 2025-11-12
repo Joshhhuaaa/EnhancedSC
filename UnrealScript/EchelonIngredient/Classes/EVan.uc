@@ -57,9 +57,9 @@ function PostBeginPlay()
 	AttachToBone(Trailer, 'Back');
 }
 
-function ReceiveMessage( EGameplayObject Sender, EGOMsgEvent Event )
+function ReceiveMessage(EGameplayObject Sender, EGOMsgEvent Event)
 {
-	if( Sender == GazTank && Event == GOEV_Destructed )
+	if (Sender == GazTank && Event == GOEV_Destructed)
 		DestroyObject();
 
 	Super.ReceiveMessage(Sender, Event);
@@ -67,14 +67,14 @@ function ReceiveMessage( EGameplayObject Sender, EGOMsgEvent Event )
 
 function Destructed()
 {
-	if( Van != None )
+	if (Van != None)
 	{
 		Van.SetStaticMesh(StaticMesh'EMeshIngredient.Vehicle.Van_Front');
 		DetachFromBone(Van);
 		Van.bHidden = false;
 	}
 
-	if( Trailer != None )
+	if (Trailer != None)
 	{
 		Trailer.SetStaticMesh(StaticMesh'EMeshIngredient.Vehicle.Van_Back');
 		DetachFromBone(Trailer);

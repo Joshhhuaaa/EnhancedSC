@@ -147,7 +147,7 @@ function AddStat(string StatName, optional int Amount)
     if (Amount == 0)
         Amount = 1;
         
-    switch(StatName)
+    switch (StatName)
     {
         case "PlayerIdentified":
             PlayerIdentified += Amount;

@@ -16,9 +16,9 @@ var int ReachedMidPoint;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('ManDown');
@@ -55,18 +55,18 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ECIASecurity3')
+        if (P.name == 'ECIASecurity3')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz0')
+        if (P.name == 'spetsnaz0')
         {
             Characters[2] = P.controller;
             EAIController(Characters[2]).bAllowKnockout = true;
         }
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     CongratsPlayed=0;
@@ -196,7 +196,7 @@ FinaleTeleport:
     Teleport(1, 'SecurityInTeleport');
     ResetGoals(1);
     ChangeState(1,'s_default');
-    JumpRandom('ASpot', 0.33, 'BSpot', 0.66, 'CSpot', 1.00, , , , ); 
+    JumpRandom('ASpot', 0.33, 'BSpot', 0.66, 'CSpot', 1.00, , , ,); 
     End();
 ASpot:
     Log("Security guard A Spot behaviour");
@@ -206,7 +206,7 @@ ASpot:
     WaitForGoal(1,GOAL_MoveTo,);
     Goal_Set(1,GOAL_Action,8,,'ClipboardFocus',,'ClipboardFocus','PrsoStNmDD0',FALSE,,MOVE_WalkNormal,,MOVE_WalkNormal);
     WaitForGoal(1,GOAL_Action,);
-    JumpRandom('BSpot', 0.50, 'CSpot', 1.00, , , , , , ); 
+    JumpRandom('BSpot', 0.50, 'CSpot', 1.00, , , , , ,); 
     End();
 BSpot:
     Log("Security guard B Spot behaviour");
@@ -218,7 +218,7 @@ BSpot:
     Goal_Set(1,GOAL_Wait,7,,'RackFocus','RackFocus','RackFocus','MineStNmNt0',FALSE,8,MOVE_WalkNormal,,MOVE_WalkNormal);
     Goal_Set(1,GOAL_Action,6,,'RackFocus','RackFocus','RackFocus','MineStNmEd0',FALSE,,MOVE_WalkNormal,,MOVE_WalkNormal);
     WaitForGoal(1,GOAL_Action,);
-    JumpRandom('ASpot', 0.50, 'CSpot', 1.00, , , , , , ); 
+    JumpRandom('ASpot', 0.50, 'CSpot', 1.00, , , , , ,); 
     End();
 CSpot:
     Log("Security guard C Spot behaviour");
@@ -230,7 +230,7 @@ CSpot:
     Goal_Set(1,GOAL_Wait,7,,'CompFocus','CompFocus','CompFocus','KbrdStNmNt0',FALSE,6,MOVE_WalkNormal,,MOVE_WalkNormal);
     Goal_Set(1,GOAL_Action,6,,'CompFocus','CompFocus','CompFocus','KbrdStNmBg0',FALSE,,MOVE_WalkNormal,,MOVE_WalkNormal);
     WaitForGoal(1,GOAL_Action,);
-    JumpRandom('ASpot', 0.50, 'BSpot', 1.00, , , , , , ); 
+    JumpRandom('ASpot', 0.50, 'BSpot', 1.00, , , , , ,); 
     End();
 ManDown:
     Log("");

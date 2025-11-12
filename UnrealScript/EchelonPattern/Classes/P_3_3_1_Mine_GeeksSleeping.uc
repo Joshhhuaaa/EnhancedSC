@@ -11,9 +11,9 @@ class P_3_3_1_Mine_GeeksSleeping extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('KillDone');
@@ -32,15 +32,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMercenaryTechnician5')
+        if (P.name == 'EMercenaryTechnician5')
             Characters[1] = P.controller;
-        if(P.name == 'EMercenaryTechnician1')
+        if (P.name == 'EMercenaryTechnician1')
             Characters[2] = P.controller;
-        if(P.name == 'ELambert1')
+        if (P.name == 'ELambert1')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

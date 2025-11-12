@@ -50,7 +50,7 @@ function GraftLeft(UWindowList NewLeft)
 	assert(Sentinel.bTreeSort);
 
 	BranchLeft = NewLeft;
-	if(NewLeft != None)
+	if (NewLeft != None)
 		NewLeft.ParentNode = Self;
 }
 
@@ -59,7 +59,7 @@ function GraftRight(UWindowList NewRight)
 	assert(Sentinel.bTreeSort);
 
 	BranchRight = NewRight;
-	if(NewRight != None)
+	if (NewRight != None)
 		NewRight.ParentNode = Self;
 }
 
@@ -70,11 +70,11 @@ function UWindowList RightMost()
 
 	assert(Sentinel.bTreeSort);
 
-	if(BranchRight == None)
+	if (BranchRight == None)
 		return None;
 
 	L = Self;
-	while(L.BranchRight != None)
+	while (L.BranchRight != None)
 		L = L.BranchRight;
 
 	return L;
@@ -87,11 +87,11 @@ function UWindowList LeftMost()
 
 	assert(Sentinel.bTreeSort);
 
-	if(BranchLeft == None)
+	if (BranchLeft == None)
 		return None;
 
 	L = Self;
-	while(L.BranchLeft != None)
+	while (L.BranchLeft != None)
 		L = L.BranchLeft;
 
 	return L;
@@ -101,35 +101,35 @@ function Remove()
 {
 	local UWindowList T;
 
-	if(Next != None)
+	if (Next != None)
 		Next.Prev = Prev;
 	
-	if(Prev != None)
+	if (Prev != None)
 		Prev.Next = Next;
 	
-	if(Sentinel != None)
+	if (Sentinel != None)
 	{
-		if(Sentinel.bTreeSort && ParentNode!=None)
+		if (Sentinel.bTreeSort && ParentNode != None)
 		{
-			if(BranchLeft != None)
+			if (BranchLeft != None)
 			{
-				if(ParentNode.BranchLeft == Self)
+				if (ParentNode.BranchLeft == Self)
 					ParentNode.GraftLeft(BranchLeft);
-				if(ParentNode.BranchRight == Self)
+				if (ParentNode.BranchRight == Self)
 					ParentNode.GraftRight(BranchLeft);
 
 				// If we had a right branch we better move it
 				// into the far right of the left branch.
 
 				T = BranchLeft.Rightmost();
-				if(T != None)
+				if (T != None)
 					T.GraftRight(BranchRight);
 			}
 			else
 			{
-				if(ParentNode.BranchLeft == Self)
+				if (ParentNode.BranchLeft == Self)
 					ParentNode.GraftLeft(BranchRight);
-				if(ParentNode.BranchRight == Self)
+				if (ParentNode.BranchRight == Self)
 					ParentNode.GraftRight(BranchRight);
 
 				// no left branch to worry about.
@@ -143,11 +143,11 @@ function Remove()
 		Sentinel.InternalCount--;
 		Sentinel.bItemOrderChanged = True;
 
-		if(Sentinel.Last == Self)
+		if (Sentinel.Last == Self)
 			Sentinel.Last = Prev;
 
-		Prev=None;
-		Next=None;
+		Prev = None;
+		Next = None;
 	
 	/*	Sentinel.Validate();  */
 		Sentinel = None;
@@ -199,7 +199,7 @@ function InsertItemBefore(UWindowList NewElement)
 	Prev = NewElement;
 	NewElement.Next = Self;
 
-	if(Sentinel.Next == Self)
+	if (Sentinel.Next == Self)
 		Sentinel.Next = NewElement;
 
 	Sentinel.InternalCount++;
@@ -211,11 +211,11 @@ function InsertItemAfter(UWindowList NewElement, optional bool bCheckShowItem)
 	local UWindowList N;
 	
 	N = Next;
-	if(bCheckShowItem)
-		while(N != None && !N.ShowThisItem())
+	if (bCheckShowItem)
+		while (N != None && !N.ShowThisItem())
 			N = N.Next; 
 
-	if(N != None)
+	if (N != None)
 		N.InsertItemBefore(NewElement);
 	else
 		Sentinel.DoAppendItem(NewElement);
@@ -229,14 +229,14 @@ function ContinueSort()
 	CompareCount = 0;
 	bSortSuspended = False;
 
-	while(CurrentSortItem != None)
+	while (CurrentSortItem != None)
 	{
 		N = CurrentSortItem.Next;
 		AppendItem(CurrentSortItem);
 		CurrentSortItem = N;
 
 		// split sort over multiple frames, if it's BIG
-		if(CompareCount >= 10000 && bSuspendableSort)
+		if (CompareCount >= 10000 && bSuspendableSort)
 		{
 			bSortSuspended = True;
 			return;
@@ -246,7 +246,7 @@ function ContinueSort()
 
 function Tick(float Delta)
 {
-	if(bSortSuspended)
+	if (bSortSuspended)
 		ContinueSort();
 }
 
@@ -258,9 +258,9 @@ function UWindowList Sort()
 	local UWindowList Best;
 	local UWindowList BestPrev;
 
-	if(bTreeSort)
+	if (bTreeSort)
 	{
-		if(bSortSuspended)
+		if (bSortSuspended)
 		{
 			ContinueSort();
 			return Self;
@@ -274,15 +274,15 @@ function UWindowList Sort()
 
 	CurrentItem = Self;
 
-	while(CurrentItem != None)
+	while (CurrentItem != None)
 	{
 		S = CurrentItem.Next;	Best = CurrentItem.Next;
 		Previous = CurrentItem;	BestPrev = CurrentItem;
 		
 		// Find the best server
-		while(S != None)
+		while (S != None)
 		{
-			if(CurrentItem.Compare(S, Best) <= 0) 
+			if (CurrentItem.Compare(S, Best) <= 0) 
 			{
 				Best = S;
 				BestPrev = Previous;
@@ -293,11 +293,11 @@ function UWindowList Sort()
 		}
 
 		// If we're not already in the right order, move the best one next.
-		if(Best != CurrentItem.Next)
+		if (Best != CurrentItem.Next)
 		{
 			// Delete Best's old position
 			BestPrev.Next = Best.Next;
-			if(BestPrev.Next != None)
+			if (BestPrev.Next != None)
 				BestPrev.Next.Prev = BestPrev;
 
 			// Fix Self and Best
@@ -307,10 +307,10 @@ function UWindowList Sort()
 			CurrentItem.Next = Best;
 			
 			// Fix up Sentinel if Best was also Last 
-			if(Sentinel.Last == Best)
+			if (Sentinel.Last == Best)
 			{
 				Sentinel.Last = BestPrev;
-				if(Sentinel.Last == None)
+				if (Sentinel.Last == None)
 					Sentinel.Last = Sentinel;
 			}
 		}
@@ -324,9 +324,9 @@ function UWindowList Sort()
 
 function DisconnectList() 
 {
-	Next=None;
-	Last=Self;
-	Prev=None;
+	Next = None;
+	Last = Self;
+	Prev = None;
 	BranchLeft = None;
 	BranchRight = None;
 	ParentNode = None;
@@ -340,10 +340,10 @@ function DestroyList()
 	L = Next;
 
 	InternalCount = 0;
-	if(Sentinel != None)
+	if (Sentinel != None)
 		Sentinel.bItemOrderChanged = True;
 
-	while(L != None)
+	while (L != None)
 	{
 		Temp = L.Next;
 		L.DestroyListItem();
@@ -354,13 +354,13 @@ function DestroyList()
 
 function DestroyListItem()
 {
-	Next=None;
-	Last=Self;
-	Sentinel=None;
-	Prev=None;
-	BranchLeft=None;
-	BranchRight=None;
-	ParentNode=None;
+	Next = None;
+	Last = Self;
+	Sentinel = None;
+	Prev = None;
+	BranchLeft = None;
+	BranchRight = None;
+	ParentNode = None;
 }
 
 function int CountShown() 
@@ -368,8 +368,8 @@ function int CountShown()
 	local int C;
 	local UWindowList I;
 
-	for(I = Next;I != None; I = I.Next)
-		if(I.ShowThisItem())
+	for (I = Next;I != None; I = I.Next)
+		if (I.ShowThisItem())
 			C++;
 
 	return C;
@@ -401,20 +401,20 @@ function MoveItemSorted(UWindowList Item)
 {
 	local UWindowList L;
 
-	if(bTreeSort)
+	if (bTreeSort)
 	{
 		Item.Remove();
 		AppendItem(Item);
 	}
 	else
 	{
-		for(L=Next;L != None; L = L.Next)
-			if(Compare(Item, L) <= 0) break;
+		for (L = Next; L != None; L = L.Next)
+			if (Compare(Item, L) <= 0) break;
 
-		if(L != Item)
+		if (L != Item)
 		{
 			Item.Remove();
-			if(L == None)
+			if (L == None)
 				AppendItem(Item);
 			else
 				L.InsertItemBefore(Item);
@@ -441,7 +441,7 @@ function Validate()
 	local UWindowList I, Previous;
 	local int Count;
 
-	if(Sentinel != Self)
+	if (Sentinel != Self)
 	{
 		Log("Calling Sentinel.Validate() from "$Self);
 		Sentinel.Validate();
@@ -453,20 +453,20 @@ function Validate()
 	Count = 0;
 	Previous = Self;
 
-	for(I = Next; I != None; I = I.Next)
+	for (I = Next; I != None; I = I.Next)
 	{
 		Log("Checking item: "$Count);
 
-		if(I.Sentinel != Self)
+		if (I.Sentinel != Self)
 			Log("   I.Sentinel reference is broken");
 	
-		if(I.Prev != Previous)
+		if (I.Prev != Previous)
 			Log("   I.Prev reference is broken");
 
-		if(Last == I && I.Next != None)
+		if (Last == I && I.Next != None)
 			Log("   Item is Sentinel.Last but Item has valid Next");
 
-		if(I.Next == None && Last != I)
+		if (I.Next == None && Last != I)
 			Log("   Item is Item.Next is none, but Item is not Sentinel.Last");
 
 		Previous = I;
@@ -492,12 +492,12 @@ function AppendItem(UWindowList NewElement)
 	local UWindowList Node, OldNode, Temp;
 	local int Test;
 
-	if(bTreeSort)
+	if (bTreeSort)
 	{
 		// Check for worst cases!
-		if(Next != None && Last != Self)
+		if (Next != None && Last != Self)
 		{
-			if(Compare(NewElement, Last) >= 0)
+			if (Compare(NewElement, Last) >= 0)
 			{
 				// put at end of list
 				Node = Last;
@@ -506,7 +506,7 @@ function AppendItem(UWindowList NewElement)
 				return;	
 			}
 
-			if(Compare(NewElement, Next) <= 0)
+			if (Compare(NewElement, Next) <= 0)
 			{
 				// put at front of list
 				Node = Next;
@@ -517,30 +517,30 @@ function AppendItem(UWindowList NewElement)
 		}
 
 		Node = Self;
-		while(True)
+		while (True)
 		{
-			if(Node == Self)
+			if (Node == Self)
 				Test = 1;
 			else
 				Test = Compare(NewElement, Node);
 
 			// special case for equality
-			if(Test == 0)
+			if (Test == 0)
 			{
 				Node.InsertItemAfter(NewElement, False);
 				return;
 			}
 			else
-			if(Test > 0)
+			if (Test > 0)
 			{
 				// Traverse right
 				OldNode = Node;
 				Node = Node.BranchRight;
-				if(Node == None)
+				if (Node == None)
 				{
 					// Move past equal values
 					Temp = OldNode;
-					while(Temp.Next != None && Temp.Next.ParentNode == None)
+					while (Temp.Next != None && Temp.Next.ParentNode == None)
 						Temp = Temp.Next;
 					
 					Temp.InsertItemAfter(NewElement, False);
@@ -553,7 +553,7 @@ function AppendItem(UWindowList NewElement)
 				// Traverse left
 				OldNode = Node;
 				Node = Node.BranchLeft;
-				if(Node == None)
+				if (Node == None)
 				{
 					OldNode.InsertItemBefore(NewElement);
 					OldNode.GraftLeft(NewElement);
@@ -595,10 +595,10 @@ function UWindowList Insert(Class<UWindowList> C)
 function InsertItem(UWindowList NewElement)
 {
 	NewElement.Next = Next;
-	if(Next != None)
+	if (Next != None)
 		Next.Prev = NewElement;
 	Next = NewElement;
-	if(Last == Self)
+	if (Last == Self)
 		Last = Next;
 	NewElement.Prev = Self;
 	NewElement.Sentinel = Self;	
@@ -616,20 +616,20 @@ function UWindowList FindEntry(int Index)
 	local int i;
 
 	l = Next;
-	for(i=0;i<Index;i++) 
+	for (i = 0; i < Index; i++) 
 	{
 		l = l.Next;
-		if(l==None) return None;
+		if (l == None) return None;
 	}
 	return l;
 }
 
 function AppendListCopy(UWindowList L)
 {
-	if(L == None)
+	if (L == None)
 		return;
 
-	for(L = L.Next;L != None; L = L.Next)
+	for (L = L.Next;L != None; L = L.Next)
 		CopyExistingListItem(L.Class, L);
 }
 

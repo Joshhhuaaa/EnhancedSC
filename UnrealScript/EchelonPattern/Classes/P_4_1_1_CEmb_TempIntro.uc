@@ -11,9 +11,9 @@ class P_4_1_1_CEmb_TempIntro extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_TAKE_DAMAGE:
             EventJump('DeadRinger');
@@ -35,11 +35,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EFrances0')
+        if (P.name == 'EFrances0')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

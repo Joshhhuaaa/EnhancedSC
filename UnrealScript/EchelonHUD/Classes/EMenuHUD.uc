@@ -111,10 +111,10 @@ function PostBeginPlay()
     eGame  = EchelonGameInfo(Level.Game);
     eLevel = EchelonLevelInfo(Level);
 
-    if(EPlayerController(Owner.Owner) != None)
+    if (EPlayerController(Owner.Owner) != None)
     {
         Epc = EPlayerController(Owner.Owner);
-	    if( Epc == None )
+	    if (Epc == None)
 		    Log("ERROR: Getting PlayerController in EMenuHUD");
     }
 
@@ -154,7 +154,7 @@ function Tick(float DeltaTime)
 
  Description:   To be able to switch state in c++
 -----------------------------------------------------------------------------*/
-event GotoStateSafe( name State )
+event GotoStateSafe(name State)
 {
 	GotoState(State);
 }

@@ -52,18 +52,18 @@ function SetButtonText(string _Text, ECanvas.ETextAligned _Align)
 function Paint(Canvas C, float X, float Y)
 {    
 
-    Render( C , X, Y);    
+    Render(C , X, Y);    
 
     if (m_bDrawButtonBorders)
 	{
-		DrawSimpleBorder( C);
+		DrawSimpleBorder(C);
 	}
 }
 
 
 function Click(float X, float Y) 
 {
-    if(bDisabled)
+    if (bDisabled)
         return;
 
 	Notify(DE_Click);
@@ -77,19 +77,19 @@ function Click(float X, float Y)
 
 function DoubleClick(float X, float Y) 
 {
-    if(!bDisabled)
+    if (!bDisabled)
 	Notify(DE_DoubleClick);
 }
 
 function RClick(float X, float Y) 
 {
-    if(!bDisabled)
+    if (!bDisabled)
 	Notify(DE_RClick);
 }
 
 function MClick(float X, float Y) 
 {
-    if(!bDisabled)
+    if (!bDisabled)
 	Notify(DE_MClick);
 }
 

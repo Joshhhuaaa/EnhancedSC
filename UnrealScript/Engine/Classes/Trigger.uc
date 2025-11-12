@@ -50,9 +50,9 @@ var bool bSavedInitialActive;
 
 function PostBeginPlay()
 {
-	if ( !bInitiallyActive )
+	if (!bInitiallyActive)
 		FindTriggerActor();
-	if ( TriggerType == TT_Shoot )
+	if (TriggerType == TT_Shoot)
 	{
 		bHidden = false;
 		SetDrawType(DT_None);
@@ -72,7 +72,7 @@ function Reset()
 
 	// collision, bInitiallyactive
 	bInitiallyActive = bSavedInitialActive;
-	SetCollision(bSavedInitialCollision, bBlockActors, bBlockPlayers );
+	SetCollision(bSavedInitialCollision, bBlockActors, bBlockPlayers);
 }	
 
 
@@ -83,9 +83,9 @@ function FindTriggerActor()
 	TriggerActor = None;
 	TriggerActor2 = None;
 	ForEach AllActors(class 'Actor', A)
-		if ( A.Event == Tag)
+		if (A.Event == Tag)
 		{
-			if ( A.IsA('Counter') )
+			if (A.IsA('Counter'))
 				return; //FIXME - handle counters
 			if (TriggerActor == None)
 				TriggerActor = A;
@@ -102,30 +102,30 @@ function Actor SpecialHandling(Pawn Other)
 	local int i;
 	local Actor A;
 
-	if ( bTriggerOnceOnly && !bCollideActors )
+	if (bTriggerOnceOnly && !bCollideActors)
 		return None;
 
-	if ( (TriggerType == TT_PlayerProximity) && !Other.IsPlayerPawn() )
+	if ((TriggerType == TT_PlayerProximity) && !Other.IsPlayerPawn())
 		return None;
 
-	if ( !bInitiallyActive )
+	if (!bInitiallyActive)
 	{
-		if ( TriggerActor == None )
+		if (TriggerActor == None)
 			FindTriggerActor();
-		if ( TriggerActor == None )
+		if (TriggerActor == None)
 			return None;
-		if ( (TriggerActor2 != None) 
-			&& (VSize(TriggerActor2.Location - Other.Location) < VSize(TriggerActor.Location - Other.Location)) )
+		if ((TriggerActor2 != None) 
+			&& (VSize(TriggerActor2.Location - Other.Location) < VSize(TriggerActor.Location - Other.Location)))
 			return TriggerActor2;
 		else
 			return TriggerActor;
 	}
 
 	// can other trigger it right away?
-	if ( IsRelevant(Other) )
+	if (IsRelevant(Other))
 	{
 		ForEach TouchingActors(class'Actor', A)
-			if ( A == Other )
+			if (A == Other)
 				Touch(Other);
 		return self;
 	}
@@ -155,10 +155,10 @@ state() NormalTrigger
 // Other trigger toggles this trigger's activity.
 state() OtherTriggerToggles
 {
-	function Trigger( actor Other, pawn EventInstigator, optional name InTag ) // UBI MODIF - Additional parameter
+	function Trigger(actor Other, pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 	{
 		bInitiallyActive = !bInitiallyActive;
-		if ( bInitiallyActive )
+		if (bInitiallyActive)
 			CheckTouchList();
 	}
 }
@@ -166,13 +166,13 @@ state() OtherTriggerToggles
 // Other trigger turns this on.
 state() OtherTriggerTurnsOn
 {
-	function Trigger( actor Other, pawn EventInstigator, optional name InTag ) // UBI MODIF - Additional parameter
+	function Trigger(actor Other, pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 	{
 		local bool bWasActive;
 
 		bWasActive = bInitiallyActive;
 		bInitiallyActive = true;
-		if ( !bWasActive )
+		if (!bWasActive)
 			CheckTouchList();
 	}
 }
@@ -180,7 +180,7 @@ state() OtherTriggerTurnsOn
 // Other trigger turns this off.
 state() OtherTriggerTurnsOff
 {
-	function Trigger( actor Other, pawn EventInstigator, optional name InTag ) // UBI MODIF - Additional parameter
+	function Trigger(actor Other, pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 	{
 		bInitiallyActive = false;
 	}
@@ -192,11 +192,11 @@ state() OtherTriggerTurnsOff
 //
 // See whether the other actor is relevant to this trigger.
 //
-function bool IsRelevant( actor Other )
+function bool IsRelevant(actor Other)
 {
-	if( !bInitiallyActive )
+	if (!bInitiallyActive)
 		return false;
-	switch( TriggerType )
+	switch (TriggerType)
 	{
 		case TT_PlayerProximity:
 			return (Pawn(Other) != None) && Pawn(Other).IsPlayerPawn();
@@ -211,35 +211,35 @@ function bool IsRelevant( actor Other )
 //
 // Called when something touches the trigger.
 //
-function Touch( actor Other )
+function Touch(actor Other)
 {
 	local int i;
 
-	if( IsRelevant( Other ) )
+	if (IsRelevant(Other))
 	{
-		if ( ReTriggerDelay > 0 )
+		if (ReTriggerDelay > 0)
 		{
-			if ( Level.TimeSeconds - TriggerTime < ReTriggerDelay )
+			if (Level.TimeSeconds - TriggerTime < ReTriggerDelay)
 				return;
 			TriggerTime = Level.TimeSeconds;
 		}
 		// Broadcast the Trigger message to all matching actors.
 		TriggerEvent(Event, Other, Other.Instigator);
 
-		if ( (Pawn(Other) != None) && (Pawn(Other).Controller != None) )
+		if ((Pawn(Other) != None) && (Pawn(Other).Controller != None))
 		{
-			for ( i=0;i<4;i++ )
-				if ( Pawn(Other).Controller.GoalList[i] == self )
+			for (i = 0; i < 4; i++)
+				if (Pawn(Other).Controller.GoalList[i] == self)
 				{
 					Pawn(Other).Controller.GoalList[i] = None;
 					break;
 				}
 		}	
 				
-		if( bTriggerOnceOnly )
+		if (bTriggerOnceOnly)
 			// Ignore future touches.
 			SetCollision(False);
-		else if ( RepeatTriggerTime > 0 )
+		else if (RepeatTriggerTime > 0)
 			SetTimer(RepeatTriggerTime, false);
 	}
 }
@@ -253,31 +253,31 @@ function Timer()
 	bKeepTiming = false;
 
 	ForEach TouchingActors(class'Actor', A)
-		if ( IsRelevant(A) )
+		if (IsRelevant(A))
 		{
 			bKeepTiming = true;
 			Touch(A);
 		}
 
-	if ( bKeepTiming )
+	if (bKeepTiming)
 		SetTimer(RepeatTriggerTime, false);
 }
 
-function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation, vector HitNormal, 
-						Vector momentum, class<DamageType> damageType, optional int PillTag ) // UBI MODIF - Additional parameter
+function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, vector HitNormal, 
+						Vector momentum, class<DamageType> damageType, optional int PillTag) // UBI MODIF - Additional parameter
 {
-	if ( bInitiallyActive && (TriggerType == TT_Shoot) && (Damage >= DamageThreshold) && (instigatedBy != None) )
+	if (bInitiallyActive && (TriggerType == TT_Shoot) && (Damage >= DamageThreshold) && (instigatedBy != None))
 	{
-		if ( ReTriggerDelay > 0 )
+		if (ReTriggerDelay > 0)
 		{
-			if ( Level.TimeSeconds - TriggerTime < ReTriggerDelay )
+			if (Level.TimeSeconds - TriggerTime < ReTriggerDelay)
 				return;
 			TriggerTime = Level.TimeSeconds;
 		}
 		// Broadcast the Trigger message to all matching actors.
 		TriggerEvent(Event, instigatedBy, instigatedBy);
 
-		if( bTriggerOnceOnly )
+		if (bTriggerOnceOnly)
 			// Ignore future touches.
 			SetCollision(False);
 	}
@@ -286,9 +286,9 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation, vector H
 //
 // When something untouches the trigger.
 //
-function UnTouch( actor Other )
+function UnTouch(actor Other)
 {
-	if( IsRelevant( Other ) )
+	if (IsRelevant(Other))
 		UntriggerEvent(event, Other, Other.Instigator);
 }
 

@@ -11,9 +11,9 @@ class P_4_2_1_Abt_Lvl1Room1b extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_SEE_PLAYER_ALERT:
             EventJump('GoOut');
@@ -41,11 +41,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianSoldier0')
+        if (P.name == 'EGeorgianSoldier0')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

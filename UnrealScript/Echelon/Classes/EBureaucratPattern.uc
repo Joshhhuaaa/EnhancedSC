@@ -24,16 +24,16 @@ function CheckAlarms()
     local vector            Pos;
 
     AI = EAIController(Characters[1]);
-	BestPanel = AI.epawn.ForceAlarmPanelRun;
+	BestPanel = AI.ePawn.ForceAlarmPanelRun;
 
-	if( (BestPanel!= None) && (VSize(AI.epawn.Location - BestPanel.Location) < 200) )
+	if ((BestPanel!= None) && (VSize(AI.ePawn.Location - BestPanel.Location) < 200))
 	{
-		if((EGroupAI(Owner).CurrentAlarm == None) && (!EGroupAI(Owner).bGroupRunningForAlarm))
+		if ((EGroupAI(Owner).CurrentAlarm == None) && (!EGroupAI(Owner).bGroupRunningForAlarm))
 		{
-			if(AI.epawn.ForceAlarmPanelRun != None)
+			if (AI.ePawn.ForceAlarmPanelRun != None)
 			{
 				//don't want to trigger the same alarm twice
-				if(BestPanel.Alarm.bAlreadyTriggered)
+				if (BestPanel.Alarm.bAlreadyTriggered)
 					return;
 
 				OffSet = (vect(50,0,0) >> BestPanel.Rotation);
@@ -42,9 +42,9 @@ function CheckAlarms()
 				Pos = BestPanel.Location;
 
 				//set the group to be sure nobody else will try to run for an alarm
-				EGroupAI(Owner).bGroupRunningForAlarm=true;
+				EGroupAI(Owner).bGroupRunningForAlarm = true;
 
-				TriggerEvent.EventLocation = Pos + OffSet ;
+				TriggerEvent.EventLocation = Pos + OffSet;
 				TriggerEvent.EventTarget = BestPanel;
 				GotoPatternLabel('RunToAlarm');
 
@@ -76,7 +76,7 @@ auto state idle
 		EchelonLevelInfo(Level).SendMusicRequest(0,false,self);
 		EchelonLevelInfo(Level).SendMusicRequest(1,false,self);
 
-        if(Characters[1] != None)
+        if (Characters[1] != None)
         {
 		    EAIController(Characters[1]).GotoStateSafe('s_Default');
         }
@@ -103,9 +103,9 @@ auto state idle
 	
 	function ReflexCallBack(EAIEvent Event)
 	{
-		if(!CheckGoalPriority(50) && !bDisableMessages)
+		if (!CheckGoalPriority(50) && !bDisableMessages)
 		{
-		switch ( Event.EventType )
+		switch (Event.EventType)
 		{
 			case AI_SEE_PLAYER_SURPRISED:
 			case AI_SEE_PLAYER_ALERT:
@@ -116,7 +116,7 @@ auto state idle
 
 			case AI_HEAR_SOMETHING :
 				
-				switch ( Event.EventNoiseType )
+				switch (Event.EventNoiseType)
 				{
 					case NOISE_GrenadeWarning : 
 						
@@ -127,7 +127,7 @@ auto state idle
 
 						EAIController(Characters[1]).GotoStateSafe('s_alert');
 
-                        if(fLastReflexTime < (Level.TimeSeconds - 5.0f))
+                        if (fLastReflexTime < (Level.TimeSeconds - 5.0f))
                         {
 						    plog("REFLEX -- Noise Ricochet response.");
 						    Reaction(1, 55, TriggerEvent.EventLocation, REACT_ImmediateThreat);
@@ -164,9 +164,9 @@ auto state idle
 	//------------------------------------------------------------------------
 	function EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
-		if(!bDisableMessages)
+		if (!bDisableMessages)
 		{
-			switch(Event.EventType)
+			switch (Event.EventType)
 			{
 				/*******  EXTERNAL EVENTS  ********************************************/
 
@@ -199,7 +199,7 @@ auto state idle
 
 				case AI_HEAR_SOMETHING:
 					
-					switch ( Event.EventNoiseType )
+					switch (Event.EventNoiseType)
 					{
 						case NOISE_LightFootstep :
 														
@@ -272,7 +272,7 @@ auto state idle
 
 				case AI_SEE_CHANGED_ACTOR:
 
-					switch ( Event.EventTarget.ChangeType )
+					switch (Event.EventTarget.ChangeType)
 					{
 						case CHANGE_Footprints :
 						case CHANGE_DisabledTurret :
@@ -382,7 +382,7 @@ SeePlayerSurprised:
 SeeUnconsciousBody:
 
 	plog("SeeUnconsciousBody -- EventTarget:  " $ TriggerEvent.EventTarget);
-	if ( !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats )
+	if (!EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats)
 	{
 		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BodyFound");
 		EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound = true;
@@ -392,7 +392,7 @@ SeeUnconsciousBody:
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
     Reaction(1, 50, TriggerEvent.EventLocation, REACT_SeeBody);
 	Broadcast(1, BC_INFO_BARK_AWARE);	
-	if ( !ePawn(TriggerEvent.EventTarget).bNoUnconsciousRevival )
+	if (!ePawn(TriggerEvent.EventTarget).bNoUnconsciousRevival)
 		Goal(1, GOAL_InteractWith, 35,,,TriggerEvent.EventTarget,,,,,,MOVE_JogAlert);
 	Jump('Search_Location');
 
@@ -411,13 +411,13 @@ SeeLiveGrenade:
 
 SeeDeadBody:
 	
-	plog("SeeDeadBody" );
-	if ( !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats )
+	plog("SeeDeadBody");
+	if (!EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats)
 	{
 		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BodyFound");
 		EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound = true;
 	}
-	if ( EPawn(TriggerEvent.EventTarget) != none ) 
+	if (EPawn(TriggerEvent.EventTarget) != none) 
 	{
 		plog("   Time Since Death :  " $ Level.TimeSeconds - EPawn(TriggerEvent.EventTarget).TimeOfDeath);
 		if (Level.TimeSeconds - EPawn(TriggerEvent.EventTarget).TimeOfDeath < 10f)
@@ -468,7 +468,7 @@ LightsTurnedOff:
 	ResetGoals(1);
     if ((iSuggestedBehavior & BARK_BIT) == BARK_BIT)
     {
-        if(TriggerEvent.EventTarget.owner.GetStateName() == 's_Off')
+        if (TriggerEvent.EventTarget.owner.GetStateName() == 's_Off')
         {
 	        ePawn(Characters[1].Pawn).Bark_Type = BARK_LightsOut;
         }
@@ -685,10 +685,10 @@ RunToAlarm:
 
 	log("EA1Npc - RunToAlarm"@Characters[1],,LPATTERN);
 	DisableMessages(true);
-	bRunningAlarm=true;
-	Goal(1,GOAL_InteractWith, 45,TriggerEvent.EventLocation,,TriggerEvent.EventTarget,,,,,,MOVE_JogAlert  );
+	bRunningAlarm = true;
+	Goal(1,GOAL_InteractWith, 45,TriggerEvent.EventLocation,,TriggerEvent.EventTarget,,,,,,MOVE_JogAlert);
 	WaitForGoal(1,GOAL_InteractWith, 'RunAndHide_EnableMessages');
-	bRunningAlarm=false;
+	bRunningAlarm = false;
 	DisableMessages(false);
 	Jump('RunAndHide');
 
@@ -707,7 +707,7 @@ AlarmBegin:
 RunAndHide_EnableMessages:
 
 	plog("RunAndHide_EnableMessages");
-	bRunningAlarm=false;
+	bRunningAlarm = false;
 	DisableMessages(false);
 
 RunAndHide:
@@ -799,9 +799,9 @@ state Search
 	//------------------------------------------------------------------------	
 	function ReflexCallBack(EAIEvent Event)
 	{
-		if(!CheckGoalPriority(50) && !bDisableMessages )
+		if (!CheckGoalPriority(50) && !bDisableMessages)
 		{
-		switch ( Event.EventType )
+		switch (Event.EventType)
 		{
 			case AI_SEE_PLAYER_SURPRISED:
 			case AI_SEE_PLAYER_ALERT:
@@ -812,7 +812,7 @@ state Search
 
 			case AI_HEAR_SOMETHING :
 				
-				switch ( Event.EventNoiseType )
+				switch (Event.EventNoiseType)
 				{
 					case NOISE_Ricochet:
 
@@ -846,9 +846,9 @@ state Search
 	
 	function EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
-		if(!bDisableMessages)
+		if (!bDisableMessages)
 		{
-			switch(Event.EventType)
+			switch (Event.EventType)
 			{
 
 				/*******  EXTERNAL EVENTS  ********************************************/
@@ -886,7 +886,7 @@ state Search
 
 				case AI_HEAR_SOMETHING:
 
-                    switch ( Event.EventNoiseType )
+                    switch (Event.EventNoiseType)
 					{
 						case NOISE_LightFootstep :
 						case NOISE_Object_Falling :						
@@ -950,7 +950,7 @@ state Search
                 case AI_SEE_CHANGED_ACTOR:
 
 				    Level.RemoveChange(Event.EventTarget);		// !!! Don't forget to remove changed actor after handling it !!!
-                    					switch ( Event.EventTarget.ChangeType )
+                    					switch (Event.EventTarget.ChangeType)
 					{
 						/*case CHANGE_Bleeding :
 							EventJump('SeeViolence');
@@ -1108,7 +1108,7 @@ LightsTurnedOff:
     UpdateSearchTimer(1, 10.0f);
     if ((iSuggestedBehavior & BARK_BIT) == BARK_BIT)
     {
-        if(TriggerEvent.EventTarget.owner.GetStateName() == 's_Off')
+        if (TriggerEvent.EventTarget.owner.GetStateName() == 's_Off')
         {
 	        ePawn(Characters[1].Pawn).Bark_Type = BARK_LightsOut;
         }
@@ -1141,7 +1141,7 @@ LightsShotOut:
 SeeUnconsciousBody:
 	
 	plog("SeeUnconsciousBody -- EventTarget:  " $ TriggerEvent.EventTarget);
-	if ( !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats )
+	if (!EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats)
 	{
 		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BodyFound");
 		EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound = true;
@@ -1157,12 +1157,12 @@ SeeUnconsciousBody:
 SeeDeadBody:
 	
 	plog("SeeDeadBody");
-	if ( !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats )
+	if (!EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats)
 	{
 		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BodyFound");
 		EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound = true;
 	}
-	if ( EPawn(TriggerEvent.EventTarget) != none ) 
+	if (EPawn(TriggerEvent.EventTarget) != none) 
 	{
 		plog("   Time Since Death :  " $ Level.TimeSeconds - EPawn(TriggerEvent.EventTarget).TimeOfDeath);
 		if (Level.TimeSeconds - EPawn(TriggerEvent.EventTarget).TimeOfDeath < 2.0f)
@@ -1288,10 +1288,10 @@ RunToAlarm:
 	log("EA1Npc - RunToAlarm"@Characters[1],,LPATTERN);
 	ChangeState(1,'s_alert');
 	DisableMessages(true);
-	bRunningAlarm=true;
-	Goal(1,GOAL_InteractWith, 45,TriggerEvent.EventLocation,,TriggerEvent.EventTarget,,,,,,MOVE_JogAlert  );
+	bRunningAlarm = true;
+	Goal(1,GOAL_InteractWith, 45,TriggerEvent.EventLocation,,TriggerEvent.EventTarget,,,,,,MOVE_JogAlert);
 	WaitForGoal(1,GOAL_InteractWith, 'RunAndHide_EnableMessages');
-	bRunningAlarm=false;
+	bRunningAlarm = false;
 	DisableMessages(false);
 	Jump('RunAndHide');
 
@@ -1305,7 +1305,7 @@ Search_Location:
 RunAndHide_EnableMessages:
 
 	plog("RunAndHide_EnableMessages");
-	bRunningAlarm=false;
+	bRunningAlarm = false;
 	DisableMessages(false);
 
 RunAndHide:
@@ -1402,9 +1402,9 @@ state Hide
 	//------------------------------------------------------------------------
 	function EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
-		if(!bDisableMessages)
+		if (!bDisableMessages)
 		{
-			switch(Event.EventType)
+			switch (Event.EventType)
 			{
 
 				/*******  EXTERNAL EVENTS  ********************************************/
@@ -1425,7 +1425,7 @@ state Hide
 
 PlayerVeryClose:
 	plog("PlayerVeryClose");
-    if(BegForLife(1))
+    if (BegForLife(1))
     {   
         ePawn(Characters[1].Pawn).Bark_Type = BARK_BegForLife;
 	    Talk(ePawn(Characters[1].Pawn).Sounds_Barks, 1 , 0, false);
@@ -1530,9 +1530,9 @@ state RunAway
 	
 	function EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
-		if(!bDisableMessages)
+		if (!bDisableMessages)
 		{
-			switch(Event.EventType)
+			switch (Event.EventType)
 			{
 
 				/*******  EXTERNAL EVENTS  ********************************************/
@@ -1581,7 +1581,7 @@ StartRun:
 
 	plog("StartRun");
     ResetGoals(1);
-	if(EAIController(Characters[1]).epawn.bUsePostAttackSetup)
+	if (EAIController(Characters[1]).ePawn.bUsePostAttackSetup)
 	{
 		SetPostAttackBehavior(1);
 		Jump('End');
@@ -1601,10 +1601,10 @@ RunToAlarm:
 	log("EA1Npc - RunToAlarm"@Characters[1],,LPATTERN);
 	ChangeState(1,'s_alert');
 	DisableMessages(true);
-	bRunningAlarm=true;
-	Goal(1,GOAL_InteractWith, 45,TriggerEvent.EventLocation,,TriggerEvent.EventTarget,,,,,,MOVE_JogAlert  );
+	bRunningAlarm = true;
+	Goal(1,GOAL_InteractWith, 45,TriggerEvent.EventLocation,,TriggerEvent.EventTarget,,,,,,MOVE_JogAlert);
 	WaitForGoal(1,GOAL_InteractWith, 'RunAndHide_EnableMessages');
-	bRunningAlarm=false;
+	bRunningAlarm = false;
 	DisableMessages(false);
 	Jump('RunAndHide');
 
@@ -1612,7 +1612,7 @@ RunToAlarm:
 RunFailed:
 
     plog("RunFailed"); // Most probably because Sam was in our way. Choose another Hide Point
-    if(BegForLife(1))
+    if (BegForLife(1))
     {   
         ePawn(Characters[1].Pawn).Bark_Type = BARK_BegForLife;
 	    Talk(ePawn(Characters[1].Pawn).Sounds_Barks, 1 , 0, false);

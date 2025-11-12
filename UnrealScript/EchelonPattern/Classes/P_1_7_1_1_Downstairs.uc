@@ -14,9 +14,9 @@ class P_1_7_1_1_Downstairs extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('KillSoundDownstairs');
@@ -63,21 +63,21 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz6')
+        if (P.name == 'spetsnaz6')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz7')
+        if (P.name == 'spetsnaz7')
             Characters[2] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'spetsnaz6')
+        if (A.name == 'spetsnaz6')
             SoundActors[0] = A;
-        if(A.name == 'spetsnaz7')
+        if (A.name == 'spetsnaz7')
             SoundActors[1] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

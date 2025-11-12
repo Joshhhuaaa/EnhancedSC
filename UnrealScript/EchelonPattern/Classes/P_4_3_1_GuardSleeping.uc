@@ -17,9 +17,9 @@ var int SamCheckFlagC;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('GuardWakeUp');
@@ -45,21 +45,21 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EChineseSoldier6')
+        if (P.name == 'EChineseSoldier6')
             Characters[1] = P.controller;
-        if(P.name == 'EChineseSoldier18')
+        if (P.name == 'EChineseSoldier18')
             Characters[2] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'EChineseSoldier6')
+        if (A.name == 'EChineseSoldier6')
             SoundActors[0] = A;
-        if(A.name == 'EChineseSoldier18')
+        if (A.name == 'EChineseSoldier18')
             SoundActors[1] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     AlreadyHeard=0;

@@ -19,17 +19,17 @@ function PostBeginPlay()
 	Super.postBeginPlay();
 }
 
-function SpawnPart( vector Offset, float Scale )
+function SpawnPart(vector Offset, float Scale)
 {
 	local EChanderlerPart Part;
 	local int i;
 
-	Part = spawn(class'EChanderlerPart', self,, ToWorld(DrawScale*Offset));
+	Part = spawn(class'EChanderlerPart', self,, ToWorld(DrawScale * Offset));
 	Part.SetDrawScale(Scale);
 	Part.bAcceptsProjectors = false;
 
 	// Disitribute lights through all parts
-	for( i=0; i<ObjectLights.Length; i++ )
+	for (i = 0; i < ObjectLights.Length; i++)
 		Part.ObjectLights[Part.ObjectLights.Length] = ObjectLights[i];
 	Part.PreBeginPlay();
 }

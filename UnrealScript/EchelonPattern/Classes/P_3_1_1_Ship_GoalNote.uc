@@ -17,9 +17,9 @@ var int pass2;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -35,15 +35,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ELambert2')
+        if (P.name == 'ELambert2')
             Characters[1] = P.controller;
-        if(P.name == 'EBobrov0')
+        if (P.name == 'EBobrov0')
             Characters[2] = P.controller;
-        if(P.name == 'EAzeriColonel0')
+        if (P.name == 'EAzeriColonel0')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     BobPass1=0;

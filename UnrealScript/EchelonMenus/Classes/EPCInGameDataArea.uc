@@ -15,12 +15,27 @@ var INT                     m_IListBoxXPos, m_IListBoxYPos, m_IListBoxWidth, m_I
 
 function Created()
 {
-    m_ListBox           = EPCReconListBox(CreateControl( class'EPCReconListBox', m_IListBoxXPos, m_IListBoxYPos, m_IListBoxWidth, m_IListBoxHeight, self));        
-    // Joshua - Xbox font support
-    if (EPlayerController(GetPlayerOwner()).eGame.bXboxFont)
-        m_ListBox.Font  = 4;
-    else
-        m_ListBox.Font  = F_Normal;
+    // Joshua - Font support
+    local EPlayerController EPC;
+    EPC = EPlayerController(GetPlayerOwner());
+
+    m_ListBox           = EPCReconListBox(CreateControl(class'EPCReconListBox', m_IListBoxXPos, m_IListBoxYPos, m_IListBoxWidth, m_IListBoxHeight, self));        
+
+    // Joshua - Font support
+    switch (EPlayerController(GetPlayerOwner()).eGame.FontType)
+    {
+        case Font_Xbox:
+            m_ListBox.Font = 4;
+            break;
+        case Font_GameCube:
+            m_ListBox.Font = 5;
+            break;
+        case Font_PC:
+        default:
+            m_ListBox.Font = F_Normal;
+            break;
+    }
+
     m_ListBox.Align     = TXT_LEFT;
     
 }
@@ -38,7 +53,7 @@ function FillListBox()
         
     Node = EPC.ReconList.FirstNode;
 
-    while(Node != None)
+    while (Node != None)
     {
         L = EPCListBoxItem(m_ListBox.Items.Append(class'EPCListBoxItem'));
         L.m_Object = ERecon(Node.Data);
@@ -48,7 +63,7 @@ function FillListBox()
     } 
 
     //Selects first element of the list box
-    if(m_ListBox.Items.Count() > 0)
+    if (m_ListBox.Items.Count() > 0)
     {
         m_ListBox.SetSelectedItem(UWindowListBoxItem(m_ListBox.Items.Next));
         m_ListBox.MakeSelectedVisible(); 
@@ -58,7 +73,7 @@ function FillListBox()
 
 function Notify(UWindowDialogControl C, byte E)
 {
-    if(E == DE_DoubleClick && C == m_ListBox && m_ListBox.SelectedItem != None)
+    if (E == DE_DoubleClick && C == m_ListBox && m_ListBox.SelectedItem != None)
     {
         Root.ChangeCurrentWidget(WidgetID_InGameDataDetails);
         EPCMainMenuRootWindow(Root).m_InGameDataDetailsWidget.SetDataInfo(ERecon(EPCListBoxItem(m_ListBox.SelectedItem).m_Object));

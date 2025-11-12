@@ -18,9 +18,9 @@ var int WindowTriggered;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -37,19 +37,19 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianSoldier12')
+        if (P.name == 'EGeorgianSoldier12')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianSoldier13')
+        if (P.name == 'EGeorgianSoldier13')
             Characters[2] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'ESoundTrigger23')
+        if (A.name == 'ESoundTrigger23')
             SoundActors[0] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     DaKitchen=0;

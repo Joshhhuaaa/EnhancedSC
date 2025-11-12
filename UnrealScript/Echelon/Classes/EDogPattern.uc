@@ -28,7 +28,7 @@ auto state idle
 	
 	function BeginState()
 	{
-		if((Characters[1]!= None) && (Characters[1].GetStateName() == 's_Alert'))
+		if ((Characters[1]!= None) && (Characters[1].GetStateName() == 's_Alert'))
 		{
 			EAIController(Characters[1]).GotoStateSafe('s_Investigate');
 		}
@@ -74,9 +74,9 @@ auto state idle
 
 	function EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
-		if(!bDisableMessages)
+		if (!bDisableMessages)
 		{
-			switch(Event.EventType)
+			switch (Event.EventType)
 			{
 				/*******  EXTERNAL EVENTS  ********************************************/
 
@@ -97,7 +97,7 @@ auto state idle
 
 				case AI_HEAR_SOMETHING:
 					
-					switch ( Event.EventNoiseType )
+					switch (Event.EventNoiseType)
 					{
 						case NOISE_LightFootstep :
 						case NOISE_Object_Falling :						
@@ -122,7 +122,7 @@ auto state idle
 
 			/*	case AI_SEE_CHANGED_ACTOR:
 
-					switch ( Event.EventTarget.ChangeType )
+					switch (Event.EventTarget.ChangeType)
 					{
 						case CHANGE_Unconscious :
 							EventJump('SeeUnconsciousBody');
@@ -181,12 +181,12 @@ SeeUnconsciousBody:
 
 SeeDeadBody:
 	
-	plog("SeeDeadBody" );
+	plog("SeeDeadBody");
 	End();
 
 MasterIncapacitated:
 
-	plog("MasterIncapacitated" );
+	plog("MasterIncapacitated");
     Goal(1, GOAL_Wait, 2, TriggerEvent.EventTarget.Location,,,,'LookStNmUp0',,,,MOVE_JogAlert);
     //Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
     //Broadcast(1, BC_BACKUP_BARK_INVESTIGATE);
@@ -274,9 +274,9 @@ state Search
 	
 	function EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
-		if(!bDisableMessages)
+		if (!bDisableMessages)
 		{
-			switch(Event.EventType)
+			switch (Event.EventType)
 			{
 
 				/*******  EXTERNAL EVENTS  ********************************************/
@@ -302,7 +302,7 @@ state Search
 
 				case AI_HEAR_SOMETHING:
 					
-					switch ( Event.EventNoiseType )
+					switch (Event.EventNoiseType)
 					{
 						case NOISE_LightFootstep :
 						case NOISE_Object_Falling :						
@@ -396,7 +396,7 @@ AttackRequest:
 
 MasterIncapacitated:
 
-	plog("MasterIncapacitated" );
+	plog("MasterIncapacitated");
     Goal(1, GOAL_Wait, 2, TriggerEvent.EventTarget.Location,,,,'LookStNmUp0',,,,MOVE_JogAlert);
     //Broadcast(1, BC_BACKUP_BARK_INVESTIGATE);
 	End();
@@ -424,10 +424,10 @@ state Wait
 
 	function EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
-		if(!bDisableMessages)
+		if (!bDisableMessages)
 		{
 
-			switch(Event.EventType)
+			switch (Event.EventType)
 			{
 				case AI_SEE_PLAYER_SURPRISED:
 				case AI_SEE_PLAYER_ALERT:
@@ -445,7 +445,7 @@ state Wait
 
 				case AI_HEAR_SOMETHING:
 					
-					switch ( Event.EventNoiseType )
+					switch (Event.EventNoiseType)
 					{
 						case NOISE_BackUpBarkAttack:
 							EventJump('AttackRequest');
@@ -474,21 +474,21 @@ state Wait
 
 	function Tick(float delta)
 	{
-		if( (VSize(Characters[0].pawn.Location - Characters[1].pawn.Location) < 100) &&  Characters[1].pawn.Velocity != vect(0,0,0) && (Level.TimeSeconds-LastTimeDamage) > 1.0)
+		if ((VSize(Characters[0].Pawn.Location - Characters[1].Pawn.Location) < 100) &&  Characters[1].Pawn.Velocity != vect(0,0,0) && (Level.TimeSeconds - LastTimeDamage) > 1.0)
 		{
-			if( EPawn(Characters[1].pawn).ICanBark() )
-				Characters[1].pawn.Playsound(Sound'play_random_dogbark',SLOT_Barks);
+			if (EPawn(Characters[1].Pawn).ICanBark())
+				Characters[1].Pawn.Playsound(Sound'play_random_dogbark',SLOT_Barks);
 
-			NumberOfTry=0;
+			NumberOfTry = 0;
 			LastTimeDamage = Level.TimeSeconds;
 			MakeDamage(Characters[0].Pawn,120);
 		}
-		else if( (VSize(Characters[0].pawn.Location - Characters[1].pawn.Location) < 130) &&  Characters[1].pawn.Velocity != vect(0,0,0) && (Level.TimeSeconds-LastTimeDamage) > 1.0)
+		else if ((VSize(Characters[0].Pawn.Location - Characters[1].Pawn.Location) < 130) &&  Characters[1].Pawn.Velocity != vect(0,0,0) && (Level.TimeSeconds - LastTimeDamage) > 1.0)
 		{
-			if( EPawn(Characters[1].pawn).ICanBark() )
-				Characters[1].pawn.Playsound(Sound'play_random_dogbark',SLOT_Barks);
+			if (EPawn(Characters[1].Pawn).ICanBark())
+				Characters[1].Pawn.Playsound(Sound'play_random_dogbark',SLOT_Barks);
 
-			NumberOfTry=0;
+			NumberOfTry = 0;
 			LastTimeDamage = Level.TimeSeconds;
 			MakeDamage(Characters[0].Pawn,60);
 		}
@@ -502,7 +502,7 @@ WaitBark:
 	CheckFlags(bCharge,true,'WaitCharge');
 	WaitForGoal(1,GOAL_Stop);
 	CheckDistanceGreaterThan(1,'PlayerLost', 100);
-	CheckIfDirectLine(1,Characters[0].pawn,'MakeDamage');
+	CheckIfDirectLine(1,Characters[0].Pawn,'MakeDamage');
 	Jump('WaitBark');
 
 
@@ -510,32 +510,32 @@ WaitCharge:
 
 	plog("WaitCharge");
 	WaitForGoal(1,GOAL_Charge,'AfterChargefailure');
-	bCharge=0;
+	bCharge = 0;
 	CheckDistanceGreaterThan(1,'AfterChargeCompleted', 100);
-	CheckIfDirectLine(1,Characters[0].pawn,'MakeDamage');
+	CheckIfDirectLine(1,Characters[0].Pawn,'MakeDamage');
 	Jump('PlayerLost');
 
 AfterChargefailure:
 
 	plog("WaitChargeFailure");
-	bCharge=0;
-	//Goal_Stop(1, 16, 1.0f, Characters[0].pawn, MOVE_JogAlert);
+	bCharge = 0;
+	//Goal_Stop(1, 16, 1.0f, Characters[0].Pawn, MOVE_JogAlert);
 	Jump('AfterChargeFailed');
 
 AfterChargeCompleted:
 
 	plog("AfterChargeCompleted");
 
-	if(EAIController(Characters[1]).bPlayerSeen)
+	if (EAIController(Characters[1]).bPlayerSeen)
 	{
-		if( EPawn(Characters[1].pawn).ICanBark() )
-			Characters[1].pawn.Playsound(Sound'play_random_dogbark',SLOT_Barks);
+		if (EPawn(Characters[1].Pawn).ICanBark())
+			Characters[1].Pawn.Playsound(Sound'play_random_dogbark',SLOT_Barks);
 
 		BroadcastToMaster();
 		Jump('PlayerLost');
 	}
 
-	if( EAIController(EAIController(Characters[1]).Master.Controller).Pattern.GetStateName() == 'attack' )
+	if (EAIController(EAIController(Characters[1]).Master.Controller).Pattern.GetStateName() == 'attack')
 	{
 		Jump('AfterChargeFailed');
 	}
@@ -548,12 +548,12 @@ AfterChargeCompleted:
 AfterChargeFailed:
 
 	plog("AfterChargeFailed");
-	bCharge=0;
+	bCharge = 0;
 
-	if( EAIController(Characters[1]).bPlayerSeen )
+	if (EAIController(Characters[1]).bPlayerSeen)
 		BroadcastToMaster();
 
-	if(NumberOfTry < 32)
+	if (NumberOfTry < 32)
 	{
 		NumberOfTry++;
 		Jump('PlayerLost');
@@ -562,15 +562,15 @@ AfterChargeFailed:
 	{
 		BestDest = GetNearestNavPointLocation();
 
-		if( (VSize(Characters[0].pawn.Location - Characters[1].pawn.Location) > 500)  )
+		if ((VSize(Characters[0].Pawn.Location - Characters[1].Pawn.Location) > 500))
 		{
-			NumberOfTry=0;
-			Goal_Charge(1,15,Characters[0].pawn,MOVE_JogAlert,,BestDest);
+			NumberOfTry = 0;
+			Goal_Charge(1,15,Characters[0].Pawn,MOVE_JogAlert,,BestDest);
 	Jump('WaitCharge');
 		}
 		else
 		{
-			NumberOfTry=0;
+			NumberOfTry = 0;
 			Goal_Stop(1, 15, 0.8f, Characters[0].Pawn, MOVE_Snipe);
 			Jump('WaitBark');
 		}
@@ -580,9 +580,9 @@ MakeDamage:
 
 	plog("MakeDamage");
 	
-	NumberOfTry=0;
+	NumberOfTry = 0;
 
-	if(Characters[0].Pawn.Health <= 0)
+	if (Characters[0].Pawn.Health <= 0)
 	{
 		ResetGoals(1);
 		End();
@@ -602,12 +602,12 @@ SeePlayer:
 	PlayerIdentified();
 	BroadcastToMaster();
 
-	if( EPawn(Characters[1].pawn).ICanBark() )
-		Characters[1].pawn.Playsound(Sound'play_random_dogbark',SLOT_Barks);
+	if (EPawn(Characters[1].Pawn).ICanBark())
+		Characters[1].Pawn.Playsound(Sound'play_random_dogbark',SLOT_Barks);
 
 	Broadcast(1, BC_BACKUP_BARK_ATTACK);
 	CheckDistanceGreaterThan(1,'PlayerLost', 100);
-	CheckIfDirectLine(1,Characters[0].pawn,'MakeDamage');
+	CheckIfDirectLine(1,Characters[0].Pawn,'MakeDamage');
 	Jump('PlayerLost');
 
 
@@ -643,8 +643,8 @@ PlayerLost:
 
 	plog("PlayerLost");
 	ResetGoals(1);
-	bCharge=1;
-	Goal_Charge(1,15,Characters[0].pawn,MOVE_JogAlert,,,,);
+	bCharge = 1;
+	Goal_Charge(1,15,Characters[0].Pawn,MOVE_JogAlert,,,,);
 	Jump('WaitCharge');
 
 	

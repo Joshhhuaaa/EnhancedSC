@@ -15,7 +15,7 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 
 	Window = Mover(Owner);
-	if( Window == None )
+	if (Window == None)
 		Log(self$" ERROR: EWindowInteraction owner is not a mover.");
 
 	// To fit animation
@@ -38,38 +38,38 @@ function bool IsAvailable()
 	local float Distance;
 
 	// Window not closed, so not available to interact with
-	if( !Window.bClosed )
+	if (!Window.bClosed)
 		return false;
 
 	AlignedLocation		= Owner.Location;
 	AlignedLocation.Z	= InteractionPlayerController.Pawn.Location.Z;
 
-	if( InteractionPlayerController.bIsPlayer && InteractionPlayerController.GetStateName() == 's_Rappelling' )
+	if (InteractionPlayerController.bIsPlayer && InteractionPlayerController.GetStateName() == 's_Rappelling')
 		WindowType = EWT_Rappelling;
-	else if( Owner.Location.z-InteractionPlayerController.Pawn.Location.z > 0 )
+	else if (Owner.Location.Z - InteractionPlayerController.Pawn.Location.Z > 0)
 		WindowType = EWT_High;
 	else
 		WindowType = EWT_Low;
 
 	// Find ditance to pawn
-	Distance = VSize(AlignedLocation-InteractionPlayerController.Pawn.Location);
+	Distance = VSize(AlignedLocation - InteractionPlayerController.Pawn.Location);
 
 	// Check availability depending on Type
-	switch( WindowType )
+	switch (WindowType)
 	{
 	case EWT_Low:
-		if( Distance > 45.f )
+		if (Distance > 45.f)
 			return false;
 		break;
 
 	case EWT_High:
-		if( Distance > 70.f ) 
+		if (Distance > 70.f) 
 			return false;
 		break;
 
 	case EWT_Rappelling:
-		Distance = Owner.Location.z-InteractionPlayerController.Pawn.Location.z;
-		if( Distance < -21 || Distance > -18 )
+		Distance = Owner.Location.Z - InteractionPlayerController.Pawn.Location.Z;
+		if (Distance < -21 || Distance > -18)
 			return false;
 		break;
 	}
@@ -89,7 +89,7 @@ function InitInteract(Controller Instigator)
 	Instigator.Interaction = self;
 
 	// Check if it's a high or low animation window
-	switch( WindowType )
+	switch (WindowType)
 	{
 	case EWT_Low:
 		Instigator.GotoState('s_OpenWindow', 'Low');
@@ -105,7 +105,7 @@ function InitInteract(Controller Instigator)
 	}
 }
 
-function SetInteractLocation( Pawn InteractPawn )
+function SetInteractLocation(Pawn InteractPawn)
 {
 	local Rotator MoveRot;
 	local EPawn InteractEPawn;

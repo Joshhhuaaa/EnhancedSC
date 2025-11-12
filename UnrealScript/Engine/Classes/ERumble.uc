@@ -11,7 +11,7 @@ var bool heavySet;
 
 function Shake(float Duration, float Strenth)
 {
-	if(heavySet)
+	if (heavySet)
 	{
 		heavyRumble = FMax(heavyRumble, FClamp(Strenth, 0.0, 1.0));
 	}
@@ -25,7 +25,7 @@ function Shake(float Duration, float Strenth)
 
 function Vibrate(float Duration, float Strenth)
 {
-	if(lightSet)
+	if (lightSet)
 	{
 		lightRumble = FMax(lightRumble, FClamp(Strenth, 0.0, 1.0));
 	}
@@ -52,14 +52,14 @@ event Update(float deltaTime, out float lRumble, out float hRumble)
 	hRumble = heavyRumble;
 
 	lightDuration -= deltaTime;
-	if(lightDuration <= 0.0)
+	if (lightDuration <= 0.0)
 	{
 		lightDuration = 0.0;
 		lightRumble = 0.0;
 	}
 
 	heavyDuration -= deltaTime;
-	if(heavyDuration <= 0.0)
+	if (heavyDuration <= 0.0)
 	{
 		heavyDuration = 0.0;
 		heavyRumble = 0.0;

@@ -19,9 +19,9 @@ var int TimerStarted;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('SAMKilledMasse');
@@ -58,7 +58,7 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMasse0')
+        if (P.name == 'EMasse0')
         {
             Characters[1] = P.controller;
             EAIController(Characters[1]).bAllowKill = true;
@@ -67,7 +67,7 @@ function InitPattern()
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     HeardOnce=0;

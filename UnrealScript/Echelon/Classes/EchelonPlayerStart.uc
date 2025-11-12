@@ -41,17 +41,17 @@ function PostBeginPlay()
 
 auto state s_initial
 {
-	function Tick( float Other )
+	function Tick(float Other)
 	{
 		local INT iSoundNb;
 
 		NbTicks++;
 
-		if ( NbTicks > 1 )
+		if (NbTicks > 1)
 		{
 		if (m_StartSounds.Length != 0)
 		{
-			for(iSoundNb = 0; iSoundNb < m_StartSounds.Length; iSoundNb++)
+			for (iSoundNb = 0; iSoundNb < m_StartSounds.Length; iSoundNb++)
 			{
 				//Play sounds
 				PlaySound(m_StartSounds[iSoundNb], SLOT_Ambient);
@@ -67,9 +67,9 @@ function SendInitialPattern()
 	local EGroupAI Group;
 
 	//send AI event
-	if( (GroupTag != '') && (JumpLabel != '') )
+	if ((GroupTag != '') && (JumpLabel != ''))
 	{
-		foreach DynamicActors( class'EGroupAI', Group, GroupTag)
+		foreach DynamicActors(class'EGroupAI', Group, GroupTag)
 		{
 			Group.SendJumpEvent(JumpLabel,false,false);
 			break; 

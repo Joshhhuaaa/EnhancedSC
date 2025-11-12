@@ -16,9 +16,9 @@ var int Skip;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -35,17 +35,17 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianSoldier11')
+        if (P.name == 'EGeorgianSoldier11')
             Characters[1] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'EAnimatedObject3')
+        if (A.name == 'EAnimatedObject3')
             SoundActors[0] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     Incoming=0;

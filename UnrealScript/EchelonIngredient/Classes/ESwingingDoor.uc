@@ -48,14 +48,14 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 
 	// Validate opening direction
-	if( KeyRot[1].Yaw < 0 && KeyRot[2].Yaw > 0 )
+	if (KeyRot[1].Yaw < 0 && KeyRot[2].Yaw > 0)
 	{
 		FrontRotation	= KeyRot[2];
 		BackRotation	= KeyRot[1];
 		FrontPosition	= KeyPos[2];
 		BackPosition	= KeyPos[1];
 	}
-	else if( KeyRot[1].Yaw > 0 && KeyRot[2].Yaw < 0 )
+	else if (KeyRot[1].Yaw > 0 && KeyRot[2].Yaw < 0)
 	{
 		FrontRotation	= KeyRot[1];
 		BackRotation	= KeyRot[2];
@@ -71,9 +71,9 @@ function PostBeginPlay()
 	GetBoundingBox(min, max);
 	DoorPos  = Location;
 	DoorPos += KnobOffsetX * (Vect(1,0,0)>>Rotation);
-	DoorPos.Z += (min.z+90.f);
+	DoorPos.Z += (min.Z + 90.f);
 
-	if( InitialState != 'BumpOpenTimed' )
+	if (InitialState != 'BumpOpenTimed')
 	{
 	MyKnob = spawn(class'eknob', self,, DoorPos);
 	MyKnob.SetStaticMesh(None);
@@ -81,7 +81,7 @@ function PostBeginPlay()
 	}
 
 	// if linked to an opener object, remove interaction
-	if( FrontOpener != None || BackOpener != None )
+	if (FrontOpener != None || BackOpener != None)
 	{
 		// Assigned to something else, toggle door interaction off
 		MyKnob.ToggleInteraction(false);
@@ -89,10 +89,10 @@ function PostBeginPlay()
 		Locked = true;
 	}
 
-	if( FrontOpener == None )
+	if (FrontOpener == None)
 		FrontOpener = MyKnob;
 
-	if( BackOpener == None )
+	if (BackOpener == None)
 		BackOpener = MyKnob;
 
 	// Setup
@@ -117,11 +117,11 @@ function ResetNpcVars()
 function Unlock()
 {
 	// Unlock me
-	if( Locked )
+	if (Locked)
 		Locked = false;
 
 	// Try to unlock linked door
-	if( LinkedDoor != None && !bSlave && LinkedDoor.IsA('ESwingingDoor') )
+	if (LinkedDoor != None && !bSlave && LinkedDoor.IsA('ESwingingDoor'))
 	{
 		LinkedDoor.bSlave = true;
 		ESwingingDoor(LinkedDoor).UnLock();
@@ -129,13 +129,13 @@ function Unlock()
 	}
 }
 
-function SetInteraction( class<EInteractObject> ClassName )
+function SetInteraction(class<EInteractObject> ClassName)
 {
-	if( MyKnob.InteractionClass != None )
+	if (MyKnob.InteractionClass != None)
 	{
 		//Log("Changing interaction for door knob from "$myknob.interactionclass$" to "$classname);
 
-		if( MyKnob.Interaction == None )
+		if (MyKnob.Interaction == None)
 			Log(self$" Problem with my knob interaction");
 
 		MyKnob.Interaction.Destroy();
@@ -148,9 +148,9 @@ function SetInteraction( class<EInteractObject> ClassName )
 // Description		
 //		Check side of the pawn, set First key before calling the Trigger
 //------------------------------------------------------------------------
-function SetOpeningDirection( EPawn Pawn )
+function SetOpeningDirection(EPawn Pawn)
 {
-	if( GetPawnSide(Pawn) == ESide_Front )
+	if (GetPawnSide(Pawn) == ESide_Front)
 	{
 		//Log("Setting key[1] as Front"@Pawn);
 		KeyRot[1] = FrontRotation;
@@ -177,15 +177,15 @@ function bool HasSpecialOpener()
 // Description		
 //		Movement abortion need to inform Controller
 //------------------------------------------------------------------------
-function MakeGroupReturn( Actor Other )
+function MakeGroupReturn(Actor Other)
 {
-	if( EDoorInteraction(MyKnob.Interaction).ActiveController != None &&
-		EDoorInteraction(MyKnob.Interaction).ActiveController.bIsPlayer )
+	if (EDoorInteraction(MyKnob.Interaction).ActiveController != None &&
+		EDoorInteraction(MyKnob.Interaction).ActiveController.bIsPlayer)
 		EDoorInteraction(MyKnob.Interaction).ActiveController.EndEvent();
 
-	if( EDoorInteraction(MyKnob.Interaction).StealthInteraction != None &&
+	if (EDoorInteraction(MyKnob.Interaction).StealthInteraction != None &&
 		EDoorInteraction(MyKnob.Interaction).StealthInteraction.ActiveController != None &&
-		EDoorInteraction(MyKnob.Interaction).StealthInteraction.ActiveController.bIsPlayer )
+		EDoorInteraction(MyKnob.Interaction).StealthInteraction.ActiveController.bIsPlayer)
 		EDoorInteraction(MyKnob.Interaction).StealthInteraction.ActiveController.EndEvent();
 
 	Super.MakeGroupReturn(Other);
@@ -201,23 +201,23 @@ function DoOpen()
 	local EGroupAI	TmpOpenGroupAi;
 
 	// DoOpen should not set opening direction if it is encrohacing, keep previous
-	if( bClosing )
+	if (bClosing)
 	{
 		Super.DoOpen();
 		return;
 	}
 
 	Pawn = EPawn(SavedTrigger);
-	if( Pawn != None )
+	if (Pawn != None)
 		SetOpeningDirection(Pawn);
 
 	// When Npc finally opens door
-	if( EAIPawn(SavedTrigger) != None )
+	if (EAIPawn(SavedTrigger) != None)
 		ResetNpcVars();
 
 	// Prevent lauching pattern in begin stealth
 	TmpOpenGroupAi = OpenGroupAi;
-	if( GetStateName() == 'TriggerToggle' )
+	if (GetStateName() == 'TriggerToggle')
 		OpenGroupAi = None;
 	
 	Super.DoOpen();
@@ -230,18 +230,18 @@ function DoOpen()
 // Description		
 //		Pass event if door is unlocked
 //------------------------------------------------------------------------
-function Bump( actor Other, optional int Pill )
+function Bump(actor Other, optional int Pill)
 {
 	local EPawn Pawn;
 	
-	if( Locked || !bClosed )
+	if (Locked || !bClosed)
 	{
 		//Log(self$" is locked");
 		return;
 	}
 
 	Pawn = EPawn(Other);
-	if( Pawn == None )
+	if (Pawn == None)
 		return;
 
 		SetOpeningDirection(Pawn);
@@ -252,13 +252,13 @@ function Bump( actor Other, optional int Pill )
 // Description		
 //		Door openers only unlocks door + procesing for both Player and Npcs
 //------------------------------------------------------------------------
-function OpenerTrigger( EDoorOpener Other, Pawn EventInstigator )
+function OpenerTrigger(EDoorOpener Other, Pawn EventInstigator)
 {
-	if( Other == None )
+	if (Other == None)
 		return;
 
 		// Retinal scanner or Keypad should unlock doors only if it's sam using them.
-		if( EventInstigator.Controller.bIsPlayer )
+		if (EventInstigator.Controller.bIsPlayer)
 		{
 			// Once unlock, toggle door interaction on
 			MyKnob.ToggleInteraction(true);
@@ -281,13 +281,13 @@ function OpenerTrigger( EDoorOpener Other, Pawn EventInstigator )
 // Description		
 //		Check if door can be opened
 //------------------------------------------------------------------------
-function bool CanDoTrigger( Actor Other, Pawn EventInstigator )
+function bool CanDoTrigger(Actor Other, Pawn EventInstigator)
 {
 	//Log(self$" get triggered by"@other@EventInstigator@savedtrigger);
 	//Log("Opening["$bOpening$"] Closing["$bClosing$"] Closed["$bClosed$"] InUse["$bInUse$"]");
 
 	// Make sure this is set here too
-	if( EAIPawn(SavedTrigger) != None )
+	if (EAIPawn(SavedTrigger) != None)
 		ResetNpcVars();
 
 	//Log("	Triggered ...");
@@ -295,16 +295,16 @@ function bool CanDoTrigger( Actor Other, Pawn EventInstigator )
 }
 
 // Npc should call this
-function EInteractObject GetInteraction( Pawn InteractPawn )
+function EInteractObject GetInteraction(Pawn InteractPawn)
 {
-	if( InteractPawn.Controller.bIsPlayer )
+	if (InteractPawn.Controller.bIsPlayer)
 		return Super.GetInteraction(InteractPawn);
 	else
 	{
 		// Use Npc hacky vars
-		if( GetPawnSide(InteractPawn) == ESide_Front && AIFrontOpener != None )
+		if (GetPawnSide(InteractPawn) == ESide_Front && AIFrontOpener != None)
 			return AIFrontOpener.GetInteraction(InteractPawn);	// can be None
-		else if( GetPawnSide(InteractPawn) == ESide_Back && AIBackOpener != None )
+		else if (GetPawnSide(InteractPawn) == ESide_Back && AIBackOpener != None)
 			return AIBackOpener.GetInteraction(InteractPawn);	// can be None
 		else
 			return None;
@@ -327,7 +327,7 @@ function RandomizeLockPattern()
     local int i;
     
     // Skip if all combinations are PL_None
-    if(Combinaison[0] == PL_None && 
+    if (Combinaison[0] == PL_None && 
        Combinaison[1] == PL_None &&
        Combinaison[2] == PL_None &&
        Combinaison[3] == PL_None &&
@@ -338,11 +338,11 @@ function RandomizeLockPattern()
     }
 
     // Randomize each non-None position
-    for(i = 0; i < 6; i++)
+    for (i = 0; i < 6; i++)
     {
-        if(Combinaison[i] != PL_None)
+        if (Combinaison[i] != PL_None)
         {
-            switch(Rand(4))
+            switch (Rand(4))
             {
                 case 0: Combinaison[i] = PL_UpLeft; break;
                 case 1: Combinaison[i] = PL_UpRight; break;

@@ -33,8 +33,8 @@ function SetupTextures(INT _TextureId)
     OverRegion.H = EchelonLevelInfo(GetLevel()).TICON.ArrayTexture[_TextureId].Size.Y;
     OverTexture  =  EchelonLevelInfo(GetLevel()).TICON.ArrayTexture[_TextureId].TextureOwner;
 
-    ImageX = ( WinWidth - UpRegion.W ) /2;
-    ImageY = ( WinHeight - UpRegion.H ) /2;
+    ImageX = (WinWidth - UpRegion.W) /2;
+    ImageY = (WinHeight - UpRegion.H) /2;
 }
 
 function Click(float X, float Y) 

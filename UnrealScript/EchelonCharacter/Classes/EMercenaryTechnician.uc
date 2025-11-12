@@ -33,7 +33,7 @@ function PostBeginPlay()
 	ComputerScreen.bBlockNPCVision = false;
 
 	// briefcase
-	if( bHasBriefcase )
+	if (bHasBriefcase)
 	{
 		Briefcase = spawn(class'EBriefcase', self);
 		Briefcase.GroupAI = PickupGroupAi;
@@ -43,10 +43,10 @@ function PostBeginPlay()
 		Briefcase.bBlockProj = false;
 
 		// load briefcase anim package
-		if(Mesh != None)
+		if (Mesh != None)
 		{
 			Anim = MeshAnimation(DynamicLoadObject("ENPC.caseAnims", class'MeshAnimation'));
-			LinkSkelAnim( Anim );
+			LinkSkelAnim(Anim);
 		}
 
 	}
@@ -58,7 +58,7 @@ function SwitchAnims()
 	Super(EAIPawn).SwitchAnims();
 
 	//do extra work for the briefcase
-	if(bHasBriefcase)
+	if (bHasBriefcase)
 	{
 		switch (BaseMoveFlags)
 		{
@@ -78,7 +78,7 @@ function SwitchAnims()
 
 function Destroyed()
 {
-	if( ComputerScreen != None )
+	if (ComputerScreen != None)
 		ComputerScreen.Destroy();
 	Super.Destroyed();
 }
@@ -88,7 +88,7 @@ state s_Unconscious
 	function BeginState()
 	{
 		// Briefcase
-		if( Briefcase != None )
+		if (Briefcase != None)
 			Briefcase.Throw(Controller, vect(0,0,0));
 		Briefcase = None;
 
@@ -101,7 +101,7 @@ state s_Dying
 	function BeginState()
 	{
 		// Briefcase
-		if( Briefcase != None )
+		if (Briefcase != None)
 			Briefcase.Throw(Controller, vect(0,0,0));
 		Briefcase = None;
 

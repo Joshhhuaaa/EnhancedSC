@@ -77,30 +77,30 @@ native function AttachProjector();
 native function DetachProjector(optional bool Force);
 native function AbandonProjector(optional float Lifetime);
 
-native function AttachActor( Actor A );
-native function DetachActor( Actor A );
+native function AttachActor(Actor A);
+native function DetachActor(Actor A);
 
 event PostBeginPlay()
 {
 	AttachProjector();
-	if( bLevelStatic )
+	if (bLevelStatic)
 	{
 		AbandonProjector();
 		Destroy();
 	}
-	if( bProjectActor )
+	if (bProjectActor)
 	{
 		SetCollision(True, False, False);
 		// GotoState('ProjectActors');  //FIXME - state doesn't exist
 	}
 }
 
-event Touch( Actor Other )
+event Touch(Actor Other)
 {
-	//if( Other.bAcceptsProjectors && (ProjectTag=='' || Other.Tag==ProjectTag) )
+	//if (Other.bAcceptsProjectors && (ProjectTag == '' || Other.Tag == ProjectTag))
 		AttachActor(Other);
 }
-event Untouch( Actor Other )
+event Untouch(Actor Other)
 {
 	DetachActor(Other);
 }

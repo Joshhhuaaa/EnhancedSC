@@ -39,7 +39,7 @@ function InitInteract(Controller Instigator)
         if (PickItem != None)
         {
             // Unequip current weapon if any
-			if(EPawn(Instigator.Pawn).WeaponStance > 0)
+			if (EPawn(Instigator.Pawn).WeaponStance > 0)
 	            EPawn(Instigator.Pawn).Transition_WeaponAway();
                 
             PickItem.GotoState('s_Selected', 'AutoUse');

@@ -12,9 +12,9 @@ var int MovingAlready;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('OneKillDone');
@@ -39,15 +39,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMercenaryTechnician3')
+        if (P.name == 'EMercenaryTechnician3')
             Characters[1] = P.controller;
-        if(P.name == 'EMercenaryTechnician4')
+        if (P.name == 'EMercenaryTechnician4')
             Characters[2] = P.controller;
-        if(P.name == 'ELambert1')
+        if (P.name == 'ELambert1')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     MovingAlready=0;

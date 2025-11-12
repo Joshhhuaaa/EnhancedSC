@@ -10,7 +10,7 @@ function SetFrame(UWindowWindow W)
 
 function BeforePaint(Canvas C, float X, float Y)
 {
-	if(Framed != None)
+	if (Framed != None)
 		LookAndFeel.ControlFrame_SetupSizes(Self, C);		
 }
 

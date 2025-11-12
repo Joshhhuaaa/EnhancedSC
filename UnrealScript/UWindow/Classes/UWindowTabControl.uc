@@ -17,12 +17,12 @@ function Created()
 	TabArea = UWindowTabControlTabArea(CreateWindow(class'UWindowTabControlTabArea', 
 					0, 0, WinWidth - LookAndFeel.Size_ScrollbarWidth 
 						- LookAndFeel.Size_ScrollbarWidth - 10,
-					 LookAndFeel.Size_TabAreaHeight+LookAndFeel.Size_TabAreaOverhangHeight));
+					 LookAndFeel.Size_TabAreaHeight + LookAndFeel.Size_TabAreaOverhangHeight));
 
 	TabArea.bAlwaysOnTop = True;
 
-	LeftButton = UWindowTabControlLeftButton(CreateWindow(class'UWindowTabControlLeftButton', WinWidth-20, 0, 10, 12));
-	RightButton = UWindowTabControlRightButton(CreateWindow(class'UWindowTabControlRightButton', WinWidth-10, 0, 10, 12));
+	LeftButton = UWindowTabControlLeftButton(CreateWindow(class'UWindowTabControlLeftButton', WinWidth - 20, 0, 10, 12));
+	RightButton = UWindowTabControlRightButton(CreateWindow(class'UWindowTabControlRightButton', WinWidth - 10, 0, 10, 12));
 }
 
 function BeforePaint(Canvas C, float X, float Y)
@@ -30,7 +30,7 @@ function BeforePaint(Canvas C, float X, float Y)
 	TabArea.WinTop = 0;
 	TabArea.WinLeft = 0;
 
-	if(bMultiLine)
+	if (bMultiLine)
 		TabArea.WinWidth = WinWidth;
 	else
 		TabArea.WinWidth = WinWidth - LookAndFeel.Size_ScrollbarWidth - LookAndFeel.Size_ScrollbarWidth - 10;
@@ -46,7 +46,7 @@ function SetMultiLine(bool InMultiLine)
 {
 	bMultiLine = InMultiLine;
 
-	if(bMultiLine)
+	if (bMultiLine)
 	{	
 		LeftButton.HideWindow();
 		RightButton.HideWindow();
@@ -65,7 +65,7 @@ function Paint(Canvas C, float X, float Y)
 
 	T = GetLookAndFeelTexture();
 	R = LookAndFeel.TabBackground;
-	DrawStretchedTextureSegment( C, 0, 0, WinWidth, LookAndFeel.Size_TabAreaHeight * TabArea.TabRows, R.X, R.Y, R.W, R.H, T );
+	DrawStretchedTextureSegment(C, 0, 0, WinWidth, LookAndFeel.Size_TabAreaHeight * TabArea.TabRows, R.X, R.Y, R.W, R.H, T);
 }
 
 function UWindowTabControlItem AddTab(string Caption)
@@ -77,7 +77,7 @@ function UWindowTabControlItem AddTab(string Caption)
 	I.Owner = Self;
 	I.SetCaption(Caption);
 
-	if(SelectedTab == None) 
+	if (SelectedTab == None) 
 		SelectedTab = I;
 	
 	return I;
@@ -92,32 +92,32 @@ function UWindowTabControlItem InsertTab(UWindowTabControlItem BeforeTab, string
 	I.Owner = Self;
 	I.SetCaption(Caption);
 
-	if(SelectedTab == None) 
+	if (SelectedTab == None) 
 		SelectedTab = I;
 	
 	return I;
 }
 
-function GotoTab( UWindowTabControlItem NewSelected, optional bool bByUser )
+function GotoTab(UWindowTabControlItem NewSelected, optional bool bByUser)
 {
-	if(SelectedTab != NewSelected && bByUser)
+	if (SelectedTab != NewSelected && bByUser)
 		LookAndFeel.PlayMenuSound(Self, MS_ChangeTab);
 	SelectedTab = NewSelected;
 	TabArea.bShowSelected = True;
 }
 
-function UWindowTabControlItem GetTab( string Caption )
+function UWindowTabControlItem GetTab(string Caption)
 {
 	local UWindowTabControlItem I;
-	for(I = UWindowTabControlItem(Items.Next); I != None; I = UWindowTabControlItem(I.Next))
+	for (I = UWindowTabControlItem(Items.Next); I != None; I = UWindowTabControlItem(I.Next))
 	{
-		if(I.Caption == Caption) return I;
+		if (I.Caption == Caption) return I;
 	}
 
 	return None;		
 }
 
-function DeleteTab( UWindowTabControlItem Tab )
+function DeleteTab(UWindowTabControlItem Tab)
 {
 	local UWindowTabControlItem NextTab;
 	local UWindowTabControlItem PrevTab;
@@ -126,12 +126,12 @@ function DeleteTab( UWindowTabControlItem Tab )
 	PrevTab = UWindowTabControlItem(Tab.Prev);
 	Tab.Remove();
 
-	if(SelectedTab == Tab)
+	if (SelectedTab == Tab)
 	{
-		if(bSelectNearestTabOnRemove)
+		if (bSelectNearestTabOnRemove)
 		{
 			Tab = NextTab;
-			if(Tab == None)
+			if (Tab == None)
 				Tab = PrevTab;
 			
 			GotoTab(Tab);

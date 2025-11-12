@@ -6,13 +6,13 @@ var(Damage) float ShutDownPercent;
 // Description		
 //		Treatment upon take damage
 //------------------------------------------------------------------------
-function TakeDamage( int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag )
+function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag)
 {	
 	Super(EGameplayObject).TakeDamage(Damage, EventInstigator, Hitlocation, HitNormal, Momentum, DamageType, PillTag);
 
-	if( bDamageable )
+	if (bDamageable)
 	{					
-        if(DamagePercent>=ShutDownPercent)
+        if (DamagePercent >= ShutDownPercent)
         {                    
           GotoState('s_Destructed');                   
         }

@@ -41,7 +41,7 @@ auto state s_Init
 		local EPawn AttachedPawn;
 		local AttachedActorInfo AttachInfo;
 
-		for ( i = 0; i < AttachList.Length; i++ )
+		for (i = 0; i < AttachList.Length; i++)
 		{
 			AttachInfo = AttachList[i];
 
@@ -54,15 +54,15 @@ auto state s_Init
 			AttachInfo.AttachedActor.SetRelativeRotation(AttachInfo.AttachRelativeRotation);
 
 			AttachedPawn = ePawn(AttachInfo.AttachedActor);
-			if ( AttachedPawn != none )
+			if (AttachedPawn != none)
 			{
 				AttachedPawn.bIsAttachedToAnimObject = true;
 				AttachedPawn.SetPhysics(PHYS_None);
 			}
 		}
 
-		if(bShowAfterFirstTrigger)
-			bHidden=true;
+		if (bShowAfterFirstTrigger)
+			bHidden = true;
 
 		GotoState('s_Idle');
 	}
@@ -75,7 +75,7 @@ state s_Idle
 		SetPhysics(PHYS_None);
 
 		// this should effectively exit the root motion
-		if(bLoopNeutral)
+		if (bLoopNeutral)
 			LoopAnim(NeutralPoseAnim);
 		else
 			PlayAnim(NeutralPoseAnim);
@@ -84,21 +84,21 @@ state s_Idle
 
 	event Trigger(Actor other, Pawn EventInstigator, optional name InTag)
 	{
-		if(bShowAfterFirstTrigger)
-			bHidden=false;
+		if (bShowAfterFirstTrigger)
+			bHidden = false;
 
 		SetPhysics(PHYS_None);
-		PlayAnim( TriggeredAnimations[CurrentAnimIndex] );
+		PlayAnim(TriggeredAnimations[CurrentAnimIndex]);
 		
-		if ( !bNoRootMotionFirstAnim || CurrentAnimIndex > 0 )
+		if (!bNoRootMotionFirstAnim || CurrentAnimIndex > 0)
 		{
 			LockRootMotion(1, true);
 			SetPhysics(PHYS_RootMotion);
 		}
 
-		if(NeutralAnims.Length > CurrentAnimIndex)
+		if (NeutralAnims.Length > CurrentAnimIndex)
 		{
-			if(NeutralAnims[CurrentAnimIndex] != '')
+			if (NeutralAnims[CurrentAnimIndex] != '')
 				NeutralPoseAnim = NeutralAnims[CurrentAnimIndex];
 		}
 
@@ -113,28 +113,28 @@ state s_Animating
 {
 	event AnimEnd(int Channel)
 	{
-		if ( CurrentAnimIndex == TriggeredAnimations.Length )
+		if (CurrentAnimIndex == TriggeredAnimations.Length)
 		{
 			GotoState('s_Finished');
 		}
 		else
 		{
-			if(TriggerBuffer > 0)
+			if (TriggerBuffer > 0)
 			{
 				TriggerBuffer--;
 
 				SetPhysics(PHYS_None);
-				PlayAnim( TriggeredAnimations[CurrentAnimIndex] );
+				PlayAnim(TriggeredAnimations[CurrentAnimIndex]);
 				
-				if ( !bNoRootMotionFirstAnim || CurrentAnimIndex > 0 )
+				if (!bNoRootMotionFirstAnim || CurrentAnimIndex > 0)
 				{
 					LockRootMotion(1, true);
 					SetPhysics(PHYS_RootMotion);
 				}
 
-				if(NeutralAnims.Length > CurrentAnimIndex)
+				if (NeutralAnims.Length > CurrentAnimIndex)
 				{
-					if(NeutralAnims[CurrentAnimIndex] != '')
+					if (NeutralAnims[CurrentAnimIndex] != '')
 						NeutralPoseAnim = NeutralAnims[CurrentAnimIndex];
 				}
 
@@ -162,7 +162,7 @@ state s_Finished
 		SetPhysics(PHYS_None);
 
 		// this should effectively exit the root motion
-		if(bLoopNeutral)
+		if (bLoopNeutral)
 			LoopAnim(NeutralPoseAnim);
 		else
 			PlayAnim(NeutralPoseAnim);

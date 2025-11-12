@@ -1,8 +1,8 @@
 //=============================================================================
 // The moving brush class.
 // This is a built-in Unreal class and it shouldn't be modified.
-// Note that movers by default have bNoDelete==true.  This makes movers and their default properties
-// remain on the client side.  If a mover subclass has bNoDelete=false, then its default properties must
+// Note that movers by default have bNoDelete == true.  This makes movers and their default properties
+// remain on the client side.  If a mover subclass has bNoDelete = false, then its default properties must
 // be replicated
 //=============================================================================
 class Mover extends Actor
@@ -58,7 +58,7 @@ var() name       PlayerBumpEvent;  // Optional event to cause when the player bu
 var() name       BumpEvent;			// Optional event to cause when any valid bumper bumps the mover.
 var   actor      SavedTrigger;      // Who we were triggered by.
 var() float		 DamageThreshold;	// minimum damage to trigger
-var	  int		 numTriggerEvents;	// number of times triggered ( count down to untrigger )
+var	  int		 numTriggerEvents;	// number of times triggered (count down to untrigger)
 var	  Mover		 Leader;			// for having multiple movers return together
 var	  Mover		 Follower;
 var() name		 ReturnGroup;		// if none, same as tag
@@ -78,7 +78,7 @@ var(MoverSounds) sound        ClosedSound;			  // When finish closing.
 var(MoverSounds) Array<Sound> ClosedSoundEvents;      // Events to handle the zone change
 var(MoverSounds) sound        ClosingSound;			  // Useful only for sliding doors
 var(MoverSounds) sound        LockedSound;			  // When the door is locked
-var(MoverSounds) ESoundSlot   SoundType;			  // Type of the sounds played ( for transitions )
+var(MoverSounds) ESoundSlot   SoundType;			  // Type of the sounds played (for transitions)
 var(Door)	     float  	  DoorNoiseRadius;
 var int iSoundNb;
 var() bool       bQuietMover; //when set to true, the mover won't make AI Noise
@@ -133,7 +133,7 @@ function StartInterpolation()
 
 function Timer()
 {
-	if ( Velocity != vect(0,0,0) )
+	if (Velocity != vect(0,0,0))
 	{
 		bClientPause = false;
 		return;		
@@ -147,7 +147,7 @@ function Timer()
 
 event vector GetBasePos()
 {
-	if( Base == None )
+	if (Base == None)
 		return BasePos;
 	else
 		return Base.ToWorld(SavedPos);
@@ -155,10 +155,10 @@ event vector GetBasePos()
 
 
 // Interpolate to keyframe KeyNum in Seconds time.
-final function InterpolateTo( byte NewKeyNum, float Seconds )
+final function InterpolateTo(byte NewKeyNum, float Seconds)
 {
-	NewKeyNum = Clamp( NewKeyNum, 0, ArrayCount(KeyPos)-1 );
-	if( NewKeyNum==PrevKeyNum && KeyNum!=PrevKeyNum )
+	NewKeyNum = Clamp(NewKeyNum, 0, ArrayCount(KeyPos) - 1);
+	if (NewKeyNum == PrevKeyNum && KeyNum != PrevKeyNum)
 	{
 		// Reverse the movement smoothly.
 		PhysAlpha = 1.0 - PhysAlpha;
@@ -191,9 +191,9 @@ final function InterpolateTo( byte NewKeyNum, float Seconds )
 }
 
 // Set the specified keyframe.
-final function SetKeyframe( byte NewKeyNum, vector NewLocation, rotator NewRotation )
+final function SetKeyframe(byte NewKeyNum, vector NewLocation, rotator NewRotation)
 {
-	KeyNum         = Clamp( NewKeyNum, 0, ArrayCount(KeyPos)-1 );
+	KeyNum         = Clamp(NewKeyNum, 0, ArrayCount(KeyPos) - 1);
 	KeyPos[KeyNum] = NewLocation;
 	KeyRot[KeyNum] = NewRotation;
 }
@@ -209,20 +209,20 @@ event KeyFrameReached()
 	ClientUpdate--;
 
 	// If more than two keyframes, chain them.
-	if( KeyNum>0 && KeyNum<OldKeyNum )
+	if (KeyNum > 0 && KeyNum < OldKeyNum)
 	{
 		// Chain to previous.
-		InterpolateTo(KeyNum-1,MoveTime);
+		InterpolateTo(KeyNum - 1,MoveTime);
 	}
-	else if( KeyNum<NumKeys-1 && KeyNum>OldKeyNum )
+	else if (KeyNum < NumKeys - 1 && KeyNum > OldKeyNum)
 	{
 		// Chain to next.
-		InterpolateTo(KeyNum+1,MoveTime);
+		InterpolateTo(KeyNum + 1, MoveTime);
 	}
 	else
 	{
 		// Finished interpolating.
-		if ( ClientUpdate == 0 )
+		if (ClientUpdate == 0)
 		{
 			RealPosition = Location;
 			RealRotation = Rotation;
@@ -238,8 +238,8 @@ function FinishNotify()
 {
 	local Controller C;
 
-	for ( C=Level.ControllerList; C!=None; C=C.nextController )
-		if ( (C.Pawn != None) && (C.PendingMover == self) )
+	for (C = Level.ControllerList; C != None; C = C.nextController)
+		if ((C.Pawn != None) && (C.PendingMover == self))
 			C.MoverFinished();
 }
 
@@ -251,10 +251,10 @@ function FinishedClosing()
 // ***********************************************************************************************
 // * BEGIN UBI MODIF mlaforce
 // ***********************************************************************************************
-	PlaySound( ClosedSound, SLOT_SFX); 
+	PlaySound(ClosedSound, SLOT_SFX); 
 	if (ClosedSoundEvents.Length != 0)
 	{
-        for(iSoundNb = 0; iSoundNb < ClosedSoundEvents.Length; iSoundNb++)
+        for (iSoundNb = 0; iSoundNb < ClosedSoundEvents.Length; iSoundNb++)
         {
             PlaySound(ClosedSoundEvents[iSoundNb], SoundType);
         }
@@ -264,11 +264,11 @@ function FinishedClosing()
 // ***********************************************************************************************
 	
 	// Notify our triggering actor that we have completed.
-	if( SavedTrigger != None )
+	if (SavedTrigger != None)
 		SavedTrigger.EndEvent();
 	SavedTrigger = None;
 	Instigator = None;
-	If ( MyMarker != None )
+	If (MyMarker != None)
 		MyMarker.MoverClosed();
 	bClosing = false;				// UBI MODIF
 	bClosed = true;
@@ -280,12 +280,12 @@ function FinishedOpening()
 {
 	bOpening = false;	// UBI MODIF - if we are finished opening FUCKING TURN THE FLAG OFF
 
-	PlaySound( OpenedSound, SLOT_SFX); 
+	PlaySound(OpenedSound, SLOT_SFX); 
 	
 	// Trigger any chained movers.
 	TriggerEvent(Event, Self, Instigator);
 
-	If ( MyMarker != None )
+	If (MyMarker != None)
 		MyMarker.MoverOpened();
 	FinishNotify();
 }
@@ -297,7 +297,7 @@ function DoOpen()
 	bOpening = true;
 	bDelaying = false;
 	FlushRequests();
-	InterpolateTo( 1, MoveTime );
+	InterpolateTo(1, MoveTime);
 }
 
 // Close the mover.
@@ -306,11 +306,11 @@ function DoClose()
 	bClosing = true;	// UBI MODIF
 	bOpening = false;
 	bDelaying = false;
-	InterpolateTo( Max(0,KeyNum-1), MoveTime );
+	InterpolateTo(Max(0,KeyNum - 1), MoveTime);
 // ***********************************************************************************************
 // * BEGIN UBI MODIF mlaforce
 // ***********************************************************************************************
-	PlaySound( ClosingSound, SLOT_SFX);
+	PlaySound(ClosingSound, SLOT_SFX);
 // ***********************************************************************************************
 // * END UBI MODIF mlaforce
 // ***********************************************************************************************
@@ -330,14 +330,14 @@ function BeginPlay()
 
 	// Init key info.
 	Super.BeginPlay();
-	KeyNum         = Clamp( KeyNum, 0, ArrayCount(KeyPos)-1 );
+	KeyNum         = Clamp(KeyNum, 0, ArrayCount(KeyPos) - 1);
 	PhysAlpha      = 0.0;
 
 	// Set initial location.
-	Move( BasePos + KeyPos[KeyNum] - Location );
+	Move(BasePos + KeyPos[KeyNum] - Location);
 
 	// Initial rotation.
-	SetRotation( BaseRot + KeyRot[KeyNum] );
+	SetRotation(BaseRot + KeyRot[KeyNum]);
 }
 
 // Immediately after mover enters gameplay.
@@ -349,23 +349,23 @@ function PostBeginPlay()
 /*	local mover M;
 
 	// Initialize all slaves.
-	if( !bSlave )
+	if (!bSlave)
 	{
-		foreach DynamicActors( class 'Mover', M, Tag )
+		foreach DynamicActors(class 'Mover', M, Tag)
 		{
-			if( M.bSlave )
+			if (M.bSlave)
 			{
 				M.GotoState('');
-				M.SetBase( Self );
+				M.SetBase(Self);
 			}
 		}
 	}
 
-	if ( Leader == None )
+	if (Leader == None)
 	{	
 		Leader = self;
-		ForEach DynamicActors( class'Mover', M )
-			if ( (M != self) && (M.ReturnGroup == ReturnGroup) )
+		ForEach DynamicActors(class'Mover', M)
+			if ((M != self) && (M.ReturnGroup == ReturnGroup))
 			{
 				M.Leader = self;
 				M.Follower = Follower;
@@ -385,27 +385,27 @@ function MakeGroupStop()
 {
 	// Stop moving immediately.
 	bInterpolating = false;
-	GotoState( , '' );
+	GotoState(, '');
 
-	if ( Follower != None )
+	if (Follower != None)
 		Follower.MakeGroupStop();
 }
 
-function MakeGroupReturn( Actor Other )
+function MakeGroupReturn(Actor Other)
 {
 	// Abort move and reverse course.
 	bInterpolating = false;
-	if( KeyNum<PrevKeyNum )
-		GotoState( , 'Open' );
+	if (KeyNum < PrevKeyNum)
+		GotoState(, 'Open');
 	else
-		GotoState( , 'Close' );
+		GotoState(, 'Close');
 
-	if ( Follower != None )
+	if (Follower != None)
 		Follower.MakeGroupReturn(self);
 }
 		
 // Return true to abort, false to continue.
-function bool EncroachingOn( actor Other )
+function bool EncroachingOn(actor Other)
 {
 	if ((Pawn(Other) != None) && (Pawn(Other).Controller == None))
 	{
@@ -414,33 +414,33 @@ function bool EncroachingOn( actor Other )
 	}
 
 	// Damage the encroached actor.
-	if( EncroachDamage != 0 )
-		Other.TakeDamage( EncroachDamage, Instigator, Other.Location, vect(0,0,0), vect(0,0,0), class'Crushed' );
+	if (EncroachDamage != 0)
+		Other.TakeDamage(EncroachDamage, Instigator, Other.Location, vect(0,0,0), vect(0,0,0), class'Crushed');
 
 	// Stop, return, or whatever.
-	if( Other.bIsGameplayObject && Other.bIsProjectile )
+	if (Other.bIsGameplayObject && Other.bIsProjectile)
 	{
 		// Will get the Bump and ignore the encroachment
 		Other.Bump(self);
 		return false;
 	}
-	else if( MoverEncroachType == ME_StopWhenEncroach )
+	else if (MoverEncroachType == ME_StopWhenEncroach)
 	{
 		Leader.MakeGroupStop();
 		return true;
 	}
-	else if( MoverEncroachType == ME_ReturnWhenEncroach )
+	else if (MoverEncroachType == ME_ReturnWhenEncroach)
 	{
 		Leader.MakeGroupReturn(self);
 		return true;
 	}
-	else if( MoverEncroachType == ME_CrushWhenEncroach )
+	else if (MoverEncroachType == ME_CrushWhenEncroach)
 	{
 		// Kill it.
 		Other.TakeDamage(2000, None, Other.Location, vect(0,0,0), Velocity, None);
 		return false;
 	}
-	else if( MoverEncroachType == ME_IgnoreWhenEncroach )
+	else if (MoverEncroachType == ME_IgnoreWhenEncroach)
 	{
 		// Ignore it.
 		return false;
@@ -448,31 +448,31 @@ function bool EncroachingOn( actor Other )
 }
 
 // When bumped by player.
-function Bump( actor Other, optional int Pill )
+function Bump(actor Other, optional int Pill)
 {
 	local pawn  P;
 
 	P = Pawn(Other);
-	if ( bUseTriggered && (P != None) && !P.IsHumanControlled() && P.IsPlayerPawn() )
+	if (bUseTriggered && (P != None) && !P.IsHumanControlled() && P.IsPlayerPawn())
 	{
 		Trigger(P,P);
 		P.Controller.WaitForMover(self);
 	}	
-	if ( (BumpType != BT_AnyBump) && (P == None) )
+	if ((BumpType != BT_AnyBump) && (P == None))
 		return;
-	if ( (BumpType == BT_PlayerBump) && !P.IsPlayerPawn() )
+	if ((BumpType == BT_PlayerBump) && !P.IsPlayerPawn())
 		return;
 	TriggerEvent(BumpEvent, self, P);
 
-	if ( (P != None) && P.IsPlayerPawn() )
+	if ((P != None) && P.IsPlayerPawn())
 		TriggerEvent(PlayerBumpEvent, self, P);
 }
 
 // When damaged
-function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation, vector HitNormal, 
-						Vector momentum, class<DamageType> damageType, optional int PillTag ) // UBI MODIF - Additional parameter
+function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, vector HitNormal, 
+						Vector momentum, class<DamageType> damageType, optional int PillTag) // UBI MODIF - Additional parameter
 {
-	if ( bDamageTriggered && (Damage >= DamageThreshold) )
+	if (bDamageTriggered && (Damage >= DamageThreshold))
 		self.Trigger(self, instigatedBy);
 }
 
@@ -487,7 +487,7 @@ state OpenTimedMover
 Open:
 	bClosed = false;
 	DisableTrigger();
-	if ( DelayTime > 0 )
+	if (DelayTime > 0)
 	{
 		bDelaying = true;
 		Sleep(DelayTime);
@@ -498,17 +498,17 @@ Open:
 // ***********************************************************************************************
 // * BEGIN UBI MODIF mlaforce
 // ***********************************************************************************************
-	if ( !bSteatlh )
+	if (!bSteatlh)
 	{
-		if ( !bClosing )
+		if (!bClosing)
 		{
-		AddSoundRequest( OpeningSound, SLOT_SFX, 0.2f);
-		if( !bQuietMover && SavedTrigger != None && SavedTrigger.bIsPlayerPawn )
+		AddSoundRequest(OpeningSound, SLOT_SFX, 0.2f);
+		if (!bQuietMover && SavedTrigger != None && SavedTrigger.bIsPlayerPawn)
 			MakeNoise(DoorNoiseRadius, NOISE_DoorOpening);
 			
 			if (OpeningSoundEvents.Length != 0)
 			{
-				for(iSoundNb = 0; iSoundNb < OpeningSoundEvents.Length; iSoundNb++)
+				for (iSoundNb = 0; iSoundNb < OpeningSoundEvents.Length; iSoundNb++)
 				{
 					AddSoundRequest(OpeningSoundEvents[iSoundNb], SoundType, 0.2f);
 				}
@@ -517,11 +517,11 @@ Open:
 	}
 	else
 	{
-		PlaySound( OpeningStealthSound, SLOT_SFX);
+		PlaySound(OpeningStealthSound, SLOT_SFX);
 
 		if (OpeningStealthSoundEvents.Length != 0)
 	{
-			for(iSoundNb = 0; iSoundNb < OpeningStealthSoundEvents.Length; iSoundNb++)
+			for (iSoundNb = 0; iSoundNb < OpeningStealthSoundEvents.Length; iSoundNb++)
         {
 			    PlaySound(OpeningSoundEvents[iSoundNb], SoundType);
 		    }
@@ -534,8 +534,8 @@ Open:
 
 	FinishInterpolation();
 	FinishedOpening();
-	Sleep( StayOpenTime );
-	if( bTriggerOnceOnly )
+	Sleep(StayOpenTime);
+	if (bTriggerOnceOnly)
 		GotoState('');
 Close:
 	DoClose();
@@ -547,24 +547,24 @@ Close:
 // Open when stood on, wait, then close.
 state() StandOpenTimed extends OpenTimedMover
 {
-	function Attach( actor Other )
+	function Attach(actor Other)
 	{
 		local pawn  P;
 
 		P = Pawn(Other);
-		if ( (BumpType != BT_AnyBump) && (P == None) )
+		if ((BumpType != BT_AnyBump) && (P == None))
 			return;
-		if ( (BumpType == BT_PlayerBump) && !P.IsPlayerPawn() )
+		if ((BumpType == BT_PlayerBump) && !P.IsPlayerPawn())
 			return;
-		if ( (BumpType == BT_PawnBump) && (Other.Mass < 10) )
+		if ((BumpType == BT_PawnBump) && (Other.Mass < 10))
 			return;
 		SavedTrigger = None;
-		GotoState( 'StandOpenTimed', 'Open' );
+		GotoState('StandOpenTimed', 'Open');
 	}
 
 	function DisableTrigger()
 	{
-		Disable( 'Attach' );
+		Disable('Attach');
 	}
 
 	function EnableTrigger()
@@ -576,24 +576,24 @@ state() StandOpenTimed extends OpenTimedMover
 // Open when bumped, wait, then close.
 state() BumpOpenTimed extends OpenTimedMover
 {
-	function Bump( actor Other, optional int Pill )
+	function Bump(actor Other, optional int Pill)
 	{
-		if ( (BumpType != BT_AnyBump) && (Pawn(Other) == None) )
+		if ((BumpType != BT_AnyBump) && (Pawn(Other) == None))
 			return;
-		if ( (BumpType == BT_PlayerBump) && !Pawn(Other).IsPlayerPawn() )
+		if ((BumpType == BT_PlayerBump) && !Pawn(Other).IsPlayerPawn())
 			return;
-		if ( (BumpType == BT_PawnBump) && (Other.Mass < 10) )
+		if ((BumpType == BT_PawnBump) && (Other.Mass < 10))
 			return;
-		Global.Bump( Other, Pill );
+		Global.Bump(Other, Pill);
 		SavedTrigger = None;
 		Instigator = Pawn(Other);
 		Instigator.Controller.WaitForMover(self);
-		GotoState( 'BumpOpenTimed', 'Open' );
+		GotoState('BumpOpenTimed', 'Open');
 	}
 
 	function DisableTrigger()
 	{
-		Disable( 'Bump' );
+		Disable('Bump');
 	}
 
 	function EnableTrigger()
@@ -605,18 +605,18 @@ state() BumpOpenTimed extends OpenTimedMover
 // When triggered, open, wait, then close.
 state() TriggerOpenTimed extends OpenTimedMover
 {
-	function Trigger( actor Other, pawn EventInstigator, optional name InTag ) // UBI MODIF - Additional parameter
+	function Trigger(actor Other, pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 	{
 		SavedTrigger = Other;
 		Instigator = EventInstigator;
-		if ( SavedTrigger != None )
+		if (SavedTrigger != None)
 			SavedTrigger.BeginEvent();
-		GotoState( 'TriggerOpenTimed', 'Open' );
+		GotoState('TriggerOpenTimed', 'Open');
 	}
 
 	function DisableTrigger()
 	{
-		Disable( 'Trigger' );
+		Disable('Trigger');
 	}
 
 	function EnableTrigger()
@@ -631,20 +631,20 @@ state() TriggerOpenTimed extends OpenTimedMover
 // Toggle when triggered.
 state() TriggerToggle
 {
-	function Trigger( actor Other, pawn EventInstigator, optional name InTag ) // UBI MODIF - Additional parameter
+	function Trigger(actor Other, pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 	{
 		SavedTrigger = Other;
 		Instigator = EventInstigator;
-		if ( SavedTrigger != None )
+		if (SavedTrigger != None)
 			SavedTrigger.BeginEvent();
-		if( KeyNum==0 || KeyNum<PrevKeyNum )
-			GotoState( 'TriggerToggle', 'Open' );
+		if (KeyNum == 0 || KeyNum < PrevKeyNum)
+			GotoState('TriggerToggle', 'Open');
 		else
-			GotoState( 'TriggerToggle', 'Close' );
+			GotoState('TriggerToggle', 'Close');
 	}
 Open:
 	bClosed = false;
-	if ( DelayTime > 0 )
+	if (DelayTime > 0)
 	{
 		bDelaying = true;
 		Sleep(DelayTime);
@@ -653,7 +653,7 @@ Open:
 
 	FinishInterpolation();
 	FinishedOpening();
-	if ( SavedTrigger != None )
+	if (SavedTrigger != None)
 		SavedTrigger.EndEvent();
 	Stop;
 Close:		
@@ -665,25 +665,25 @@ Close:
 // Open when triggered, close when get untriggered.
 state() TriggerControl
 {
-	function Trigger( actor Other, pawn EventInstigator, optional name InTag ) // UBI MODIF - Additional parameter
+	function Trigger(actor Other, pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 	{
 		numTriggerEvents++;
 		SavedTrigger = Other;
 		Instigator = EventInstigator;
-		if ( SavedTrigger != None )
+		if (SavedTrigger != None)
 			SavedTrigger.BeginEvent();
-		GotoState( 'TriggerControl', 'Open' );
+		GotoState('TriggerControl', 'Open');
 	}
-	function UnTrigger( actor Other, pawn EventInstigator, optional name InTag ) // UBI MODIF - Additional parameter
+	function UnTrigger(actor Other, pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 	{
 		numTriggerEvents--;
-		if ( numTriggerEvents <=0 )
+		if (numTriggerEvents <=0)
 		{
 			numTriggerEvents = 0;
 			SavedTrigger = Other;
 			Instigator = EventInstigator;
 			SavedTrigger.BeginEvent();
-			GotoState( 'TriggerControl', 'Close' );
+			GotoState('TriggerControl', 'Close');
 		}
 	}
 
@@ -694,7 +694,7 @@ state() TriggerControl
 
 Open:
 	bClosed = false;
-	if ( DelayTime > 0 )
+	if (DelayTime > 0)
 	{
 		bDelaying = true;
 		Sleep(DelayTime);
@@ -704,13 +704,13 @@ Open:
 // ***********************************************************************************************
 // * BEGIN UBI MODIF mlaforce
 // ***********************************************************************************************
-	AddSoundRequest( OpeningSound, SLOT_SFX, 0.2f);
+	AddSoundRequest(OpeningSound, SLOT_SFX, 0.2f);
 	if (!bQuietMover)
 		MakeNoise(DoorNoiseRadius, NOISE_DoorOpening);
 
 	if (OpeningSoundEvents.Length != 0)
 	{
-        for(iSoundNb = 0; iSoundNb < OpeningSoundEvents.Length; iSoundNb++)
+        for (iSoundNb = 0; iSoundNb < OpeningSoundEvents.Length; iSoundNb++)
         {
             AddSoundRequest(OpeningSoundEvents[iSoundNb], SoundType, 0.2f);
         }
@@ -722,7 +722,7 @@ Open:
 	FinishInterpolation();
 	FinishedOpening();
 	SavedTrigger.EndEvent();
-	if( bTriggerOnceOnly )
+	if (bTriggerOnceOnly)
 		GotoState('');
 	Stop;
 Close:		
@@ -734,22 +734,22 @@ Close:
 // Start pounding when triggered.
 state() TriggerPound
 {
-	function Trigger( actor Other, pawn EventInstigator, optional name InTag ) // UBI MODIF - Additional parameter
+	function Trigger(actor Other, pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 	{
 		numTriggerEvents++;
 		SavedTrigger = Other;
 		Instigator = EventInstigator;
-		GotoState( 'TriggerPound', 'Open' );
+		GotoState('TriggerPound', 'Open');
 	}
-	function UnTrigger( actor Other, pawn EventInstigator, optional name InTag ) // UBI MODIF - Additional parameter
+	function UnTrigger(actor Other, pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 	{
 		numTriggerEvents--;
-		if ( numTriggerEvents <= 0 )
+		if (numTriggerEvents <= 0)
 		{
 			numTriggerEvents = 0;
 			SavedTrigger = None;
 			Instigator = None;
-			GotoState( 'TriggerPound', 'Close' );
+			GotoState('TriggerPound', 'Close');
 		}
 	}
 	function BeginState()
@@ -759,7 +759,7 @@ state() TriggerPound
 
 Open:
 	bClosed = false;
-	if ( DelayTime > 0 )
+	if (DelayTime > 0)
 	{
 		bDelaying = true;
 		Sleep(DelayTime);
@@ -769,13 +769,13 @@ Open:
 // ***********************************************************************************************
 // * BEGIN UBI MODIF mlaforce
 // ***********************************************************************************************
-	AddSoundRequest( OpeningSound, SLOT_SFX, 0.2f);
+	AddSoundRequest(OpeningSound, SLOT_SFX, 0.2f);
 	if (!bQuietMover)
 		MakeNoise(DoorNoiseRadius, NOISE_DoorOpening);
 
 	if (OpeningSoundEvents.Length != 0)
 	{
-        for(iSoundNb = 0; iSoundNb < OpeningSoundEvents.Length; iSoundNb++)
+        for (iSoundNb = 0; iSoundNb < OpeningSoundEvents.Length; iSoundNb++)
         {
             AddSoundRequest(OpeningSoundEvents[iSoundNb], SoundType, 0.2f);
         }
@@ -790,9 +790,9 @@ Close:
 	DoClose();
 	FinishInterpolation();
 	Sleep(StayOpenTime);
-	if( bTriggerOnceOnly )
+	if (bTriggerOnceOnly)
 		GotoState('');
-	if( SavedTrigger != None )
+	if (SavedTrigger != None)
 		goto 'Open';
 }
 
@@ -803,34 +803,34 @@ Close:
 // Open when bumped, close when reset.
 state() BumpButton
 {
-	function Bump( actor Other, optional int Pill )
+	function Bump(actor Other, optional int Pill)
 	{
-		if ( (BumpType != BT_AnyBump) && (Pawn(Other) == None) )
+		if ((BumpType != BT_AnyBump) && (Pawn(Other) == None))
 			return;
-		if ( (BumpType == BT_PlayerBump) && !Pawn(Other).IsPlayerPawn() )
+		if ((BumpType == BT_PlayerBump) && !Pawn(Other).IsPlayerPawn())
 			return;
-		if ( (BumpType == BT_PawnBump) && (Other.Mass < 10) )
+		if ((BumpType == BT_PawnBump) && (Other.Mass < 10))
 			return;
-		Global.Bump( Other, Pill );
+		Global.Bump(Other, Pill);
 		SavedTrigger = Other;
-		Instigator = Pawn( Other );
+		Instigator = Pawn(Other);
 		Instigator.Controller.WaitForMover(self);
-		GotoState( 'BumpButton', 'Open' );
+		GotoState('BumpButton', 'Open');
 	}
 	function BeginEvent()
 	{
-		bSlave=true;
+		bSlave = true;
 	}
 	function EndEvent()
 	{
 		bSlave     = false;
 		Instigator = None;
-		GotoState( 'BumpButton', 'Close' );
+		GotoState('BumpButton', 'Close');
 	}
 Open:
 	bClosed = false;
-	Disable( 'Bump' );
-	if ( DelayTime > 0 )
+	Disable('Bump');
+	if (DelayTime > 0)
 	{
 		bDelaying = true;
 		Sleep(DelayTime);
@@ -840,13 +840,13 @@ Open:
 // ***********************************************************************************************
 // * BEGIN UBI MODIF mlaforce
 // ***********************************************************************************************
-	AddSoundRequest( OpeningSound, SLOT_SFX, 0.2f);
+	AddSoundRequest(OpeningSound, SLOT_SFX, 0.2f);
 	if (!bQuietMover)
 		MakeNoise(DoorNoiseRadius, NOISE_DoorOpening);
 
 	if (OpeningSoundEvents.Length != 0)
 	{
-        for(iSoundNb = 0; iSoundNb < OpeningSoundEvents.Length; iSoundNb++)
+        for (iSoundNb = 0; iSoundNb < OpeningSoundEvents.Length; iSoundNb++)
         {
             AddSoundRequest(OpeningSoundEvents[iSoundNb], SoundType, 0.2f);
         }
@@ -857,15 +857,15 @@ Open:
 
 	FinishInterpolation();
 	FinishedOpening();
-	if( bTriggerOnceOnly )
+	if (bTriggerOnceOnly)
 		GotoState('');
-	if( bSlave )
+	if (bSlave)
 		Stop;
 Close:
 	DoClose();
 	FinishInterpolation();
 	FinishedClosing();
-	Enable( 'Bump' );
+	Enable('Bump');
 }
 
 defaultproperties

@@ -13,9 +13,9 @@ class P_2_1_2_CIA_Levelpattern extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('Death');
@@ -34,20 +34,20 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ELambert7')
+        if (P.name == 'ELambert7')
             Characters[1] = P.controller;
-        if(P.name == 'EMitch7')
+        if (P.name == 'EMitch7')
         {
             Characters[2] = P.controller;
             EAIController(Characters[2]).bAllowKnockout = true;
         }
-        if(P.name == 'EWilkes0')
+        if (P.name == 'EWilkes0')
             Characters[3] = P.controller;
-        if(P.name == 'EBaxter2')
+        if (P.name == 'EBaxter2')
             Characters[4] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

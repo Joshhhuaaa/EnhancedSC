@@ -22,10 +22,10 @@ function TakeView()
 	Epc.backupRotation = Epc.Rotation;
 	Epc.SetCameraFOV(self, Epc.DesiredFov);
 	Epc.SetBase(self);
-	Epc.SetRelativeLocation(-CameraAdjustment*Vect(1,0,0));
+	Epc.SetRelativeLocation(-CameraAdjustment * Vect(1,0,0));
 	Epc.SetRelativeRotation(Rot(0,32767,0));
 	Epc.m_camera.GoToState('s_Fixed');
-	if( !Epc.bVideoMode )
+	if (!Epc.bVideoMode)
 		Epc.bLockedCamera = true;
 	Epc.SetViewTarget(self);
 
@@ -42,7 +42,7 @@ function TakeView()
 	ObjectHud.GotoState('s_Online');
 }
 
-function GiveView( bool bFromPlayer )
+function GiveView(bool bFromPlayer)
 {
 	//log("* * * GIVE");
 	ObjectHud.GotoState('');
@@ -62,21 +62,21 @@ function GiveView( bool bFromPlayer )
 	Epc.bUsingAirCamera = false; // Joshua - True when the player is using a camera, prevents movement speed changes with mouse wheel
 	Disable('Tick');
 
-	if( !bFromPlayer )
+	if (!bFromPlayer)
 		return;
 	
 	Controller = None;
-	if( !Epc.OnGroundScope() )
+	if (!Epc.OnGroundScope())
 		Log("ERROR: OnGroundScope should never fail here.  Make sure everything's set so that it returns in FirstPersonTargeting");
 }
 
-function HudView( bool bIn )
+function HudView(bool bIn)
 {
 	//Log("HUD VIEW!!!"@bIn@Controller);
 	
-	if( Controller == None )
+	if (Controller == None)
 		return;
-	if( bIn )
+	if (bIn)
 	{
 		TakeView();
 		WallAdjust();
@@ -92,13 +92,13 @@ function WallAdjust()
 	Epc.SetRelativeRotation(Rot(0,0,0));
 }
 
-function Select( EInventory Inv )
+function Select(EInventory Inv)
 {
 	Super.Select(Inv);
 	PlaySound(Sound'Interface.Play_FisherEquipStickyCam', SLOT_Interface);
 }
 
-function rotator GetStillRotation( vector HitNormal )
+function rotator GetStillRotation(vector HitNormal)
 {
 	return FindSlopeRotation(HitNormal, Rotation);
 }
@@ -111,15 +111,15 @@ function Throw(Controller Thrower, vector ThrowVelocity)
 
 function HitFakeBackDrop()
 {
-	if( Controller != None && Epc != None )
+	if (Controller != None && Epc != None)
 		GiveView(true);
 	Super.HitFakeBackDrop();
 }
 
 // In '' state, after camera
-function HitWall( Vector HitNormal, Actor Wall )
+function HitWall(Vector HitNormal, Actor Wall)
 {
-	Velocity = (5 + (FRand()*75)) * (Vector(Rotation) + HitNormal);
+	Velocity = (5 + (FRand() * 75)) * (Vector(Rotation) + HitNormal);
 	TakeHit();
 	SetCollision(false);
 }
@@ -131,31 +131,31 @@ state s_Flying
 	function BeginState()
 	{
 		Epc = EPlayerController(Controller);
-		if( Epc != None )
+		if (Epc != None)
 			EMainHUD(Epc.myHud).Slave(self);
 
 		Super.BeginState();
 	}
 
-	function Bump( Actor Other, optional int Pill )
+	function Bump(Actor Other, optional int Pill)
 	{
-		if( Other.bIsPawn || Other.bIsSoftBody )
+		if (Other.bIsPawn || Other.bIsSoftBody)
 			bDirectShot = false;
 
 		Super.Bump(Other, Pill);
 	}
 
-	function HitWall( Vector HitNormal, Actor Wall )
+	function HitWall(Vector HitNormal, Actor Wall)
 	{
 		local rotator initial_rotation;
 
 		// Don't stick if wall ...
-		if( (Controller == None && !bDirectShot) ||	// was already used
+		if ((Controller == None && !bDirectShot) ||	// was already used
 			Wall.bIsPawn ||							// is a pawn
 			(Wall.bIsGameplayObject && (EInventoryItem(Wall)!=None || EGameplayObject(Wall).DestroyTime == Level.TimeSeconds)) || // is another inventory item
-			(Wall.bIsGameplayObject && Wall.CollisionPrimitive == None && Wall.bStaticMeshCylColl ) ||
-			(!bDirectShot && HitNormal.Z<0.7f) ||	// is a rebound and foor z too abrupt
-			Wall.IsA('EBreakableGlass') )			// is a breakable glass because will shatter
+			(Wall.bIsGameplayObject && Wall.CollisionPrimitive == None && Wall.bStaticMeshCylColl) ||
+			(!bDirectShot && HitNormal.Z < 0.7f) ||	// is a rebound and foor z too abrupt
+			Wall.IsA('EBreakableGlass'))			// is a breakable glass because will shatter
 		{
 			bDirectShot = false;
 			Super.HitWall(HitNormal, Wall);
@@ -163,7 +163,7 @@ state s_Flying
 		}
 
 		// Fix rotation on wall direction if direct shot
-		if( bDirectShot )
+		if (bDirectShot)
 			initial_rotation = Normalize(Rotator(HitNormal));
 		else
 			initial_rotation = FindSlopeRotation(HitNormal, Rotation);
@@ -183,24 +183,24 @@ state s_Flying
 		Interaction = Spawn(InteractionClass, self);
 
 		// Prevent camera from taking control is Player is dead
-		if( Controller == None )
+		if (Controller == None)
 		{
 			GotoState('');
 			return;
 		}
 
 		// Remove possibility to launch another cam while one already in the air
-		if( Controller.GetStateName() != 's_FrozenInput' )
+		if (Controller.GetStateName() != 's_FrozenInput')
 			GotoState('s_Camera');
 	}
 
-	function Tick( float deltaTime )
+	function Tick(float deltaTime)
 	{
-		if( Epc == None )
+		if (Epc == None)
 			return;
 
 		// if player is dead, stop processing
-		if( Epc.bFire != 0 || Epc.Pawn.Health <= 0 )
+		if (Epc.bFire != 0 || Epc.Pawn.Health <= 0)
 			GiveView(true);
 	}
 }
@@ -214,7 +214,7 @@ state s_Camera
 	{
 		Level.AddChange(self, CHANGE_AirCamera);
 
-		if( !Epc.bVideoMode )
+		if (!Epc.bVideoMode)
 			Epc.UsePalm();
 
 		WallAdjust();
@@ -225,25 +225,25 @@ state s_Camera
 	}
 
 	// same as Normalize for a rotator but for an int only
-	function int CenterToZero( int v )
+	function int CenterToZero(int v)
 	{
 		v = v & 65535; 
-		if( v >= 32769 ) 
+		if (v >= 32769) 
 			v -= 65536;
 		return v;
 	}
 
-	function int GetIntInRange( int iStart, int iRange, int iCur )
+	function int GetIntInRange(int iStart, int iRange, int iCur)
 	{
 		local int iDelta;
 		iDelta = CenterToZero(iCur - iStart);
-		if(iDelta < 0)
+		if (iDelta < 0)
 			return CenterToZero(iStart + Max(-iRange, iDelta));
 		else
 			return CenterToZero(iStart + Min(iRange, iDelta));
 	}
 
-	function Tick( float deltaTime )
+	function Tick(float deltaTime)
 	{
 		local Rotator previous_rotation, delta_rotation, clamped_rotation;
 		local float deltaMov;
@@ -253,17 +253,17 @@ state s_Camera
 		// MaxDamping is set in sub-classes depending on camera type
 		clamped_rotation		= camera_rotation;
 		clamped_rotation.Yaw   += Epc.aTurn * MaxDamping;
-		clamped_rotation.pitch -= Epc.aLookUp * MaxDamping;
+		clamped_rotation.Pitch -= Epc.aLookUp * MaxDamping;
 
-		camera_rotation.yaw = GetIntInRange(0, 8191, clamped_rotation.yaw);
-		camera_rotation.pitch = GetIntInRange(0, 8191, clamped_rotation.pitch);
+		camera_rotation.Yaw = GetIntInRange(0, 8191, clamped_rotation.Yaw);
+		camera_rotation.Pitch = GetIntInRange(0, 8191, clamped_rotation.Pitch);
 		
 		// Motor rumble
 		delta_rotation = previous_rotation - camera_rotation;
-		if( delta_rotation != Rot(0,0,0) )
+		if (delta_rotation != Rot(0,0,0))
 		{
-			deltaMov = (FMax(Abs(delta_rotation.pitch), Abs(delta_rotation.yaw))/MaxDamping);
-			if(FRand() > 0.5)
+			deltaMov = (FMax(Abs(delta_rotation.Pitch), Abs(delta_rotation.Yaw)) / MaxDamping);
+			if (FRand() > 0.5)
 				Epc.m_camera.Hit(60 * deltaMov, 20000, true);
 			else
 				Epc.m_camera.Hit(-60 * deltaMov, 20000, true);
@@ -274,7 +274,7 @@ state s_Camera
 		Epc.m_camera.UpdateView(camera_rotation, true);
 
 		// if player is dead, stop processing
-		if( Epc.bFire != 0 || Epc.Pawn.Health <= 0 )
+		if (Epc.bFire != 0 || Epc.Pawn.Health <= 0)
 		{
 			Epc.bFire = 0;
 			GiveView(true);
@@ -288,7 +288,7 @@ state s_Camera
 //------------------------------------------------------------------------
 event VisibilityRating GetActorVisibility()
 {
-	return VisibilityTableLookup( GetVisibilityFactor()/2 );
+	return VisibilityTableLookup(GetVisibilityFactor() / 2);
 }
 
 defaultproperties

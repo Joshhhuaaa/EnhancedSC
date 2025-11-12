@@ -15,6 +15,6 @@ var INT     NameWidth, DateWidth; //To allow fields clipping
 function Created()
 {
     Super.Created();
-    NameWidth = WinWidth /3;
-    DateWidth = WinWidth /3;
+    NameWidth = WinWidth / 3;
+    DateWidth = WinWidth / 3;
 }

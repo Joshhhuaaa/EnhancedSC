@@ -20,7 +20,7 @@ function PlaceOnDoor()
 	local Vector X,Y,Z;
 	GetAxes(Door.MyKnob.Rotation, X, Y, Z);
 	// switch Y angle
-	if( Door.GetPawnSide(Controller.Pawn) != ESide_Front )
+	if (Door.GetPawnSide(Controller.Pawn) != ESide_Front)
 		Y = -Y;
 
 	E = spawn(class'EBreakLockEmitter', self,,Door.MyKnob.Location - 10 * Y);
@@ -42,7 +42,7 @@ state s_Selected
 		local EPlayerController Epc;
 		
 		Epc = EPlayerController(Controller);
-		if( !Epc.IManager.IsPresent(class'EDoorInteraction', InteractObj) )
+		if (!Epc.IManager.IsPresent(class'EDoorInteraction', InteractObj))
 		{
 			//Log("Not touching a door interaction.");
 			return;
@@ -51,17 +51,17 @@ state s_Selected
 		// Set door
         Door = ESwingingDoor(InteractObj.Owner.Owner);
 
-		if( Door == None )
+		if (Door == None)
 		{
 			log("Door interaction does not have a swinging door");
 			return;
 		}
-		else if( !Door.Locked )
+		else if (!Door.Locked)
 		{
 			log("Door already unlocked.");
 			return;
 		}
-		else if( Door.HasSpecialOpener() )
+		else if (Door.HasSpecialOpener())
 		{
 			log("Door linked to keypad/retinal scanner.");
 			return;

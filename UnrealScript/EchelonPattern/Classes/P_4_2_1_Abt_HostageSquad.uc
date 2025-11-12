@@ -13,9 +13,9 @@ class P_4_2_1_Abt_HostageSquad extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('CheckDead');
@@ -34,19 +34,19 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianSoldier20')
+        if (P.name == 'EGeorgianSoldier20')
         {
             Characters[1] = P.controller;
             EAIController(Characters[1]).bAllowKnockout = true;
             EAIController(Characters[1]).bWasFound = true;
         }
-        if(P.name == 'EGeorgianSoldier21')
+        if (P.name == 'EGeorgianSoldier21')
         {
             Characters[2] = P.controller;
             EAIController(Characters[2]).bAllowKnockout = true;
             EAIController(Characters[2]).bWasFound = true;
         }
-        if(P.name == 'EGeorgianSoldier30')
+        if (P.name == 'EGeorgianSoldier30')
         {
             Characters[3] = P.controller;
             EAIController(Characters[3]).bAllowKnockout = true;
@@ -54,7 +54,7 @@ function InitPattern()
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

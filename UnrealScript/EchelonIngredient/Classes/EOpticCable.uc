@@ -29,15 +29,15 @@ function PostBeginPlay()
 }
 
 // same as Normalize for a rotator but for an int only
-function int CenterToZero( int v )
+function int CenterToZero(int v)
 {
 	v = v & 65535; 
-	if( v >= 32769 ) 
+	if (v >= 32769) 
 		v -= 65536;
 	return v;
 }
 
-function bool IsInRange( int iStart, int iRange, int iCur )
+function bool IsInRange(int iStart, int iRange, int iCur)
 {
     local int iDelta;
 	iDelta = CenterToZero(iCur - iStart);
@@ -58,7 +58,7 @@ function UsedOnDoor(ESwingingDoor ESD)
     }
 
 	//send an EventTrigger when the Optic Cable is finished
-	if( ESD.OpticCableGroupAI == None )
+	if (ESD.OpticCableGroupAI == None)
     {
 		return;
     }
@@ -80,7 +80,7 @@ function UsingOnDoor(ESwingingDoor ESD)
     }
 
 	//send an EventTrigger when the Optic Cable is finished
-	if( ESD.OpticCableGroupAIBegin == None )
+	if (ESD.OpticCableGroupAIBegin == None)
     {
 		return;
     }
@@ -97,20 +97,20 @@ function GetOpticStart()
 	GetAxes(Door.Rotation, X,Y,Z);
 
 	// switch Y angle
-	if( Door.GetPawnSide(Controller.Pawn) != ESide_Front )
+	if (Door.GetPawnSide(Controller.Pawn) != ESide_Front)
 		Y = -Y;
 
 	// Door center point
-	start_location = Door.Location + (min >> Door.Rotation) + ((BBox/2.f) >> Door.Rotation);
+	start_location = Door.Location + (min >> Door.Rotation) + ((BBox / 2.f) >> Door.Rotation);
 	// X @ half way in center of door.
 	// Y @ on the side
-	start_location += Y * ((BBox.y/2.f) + 2.f);	// 2 to prevent being in door.
+	start_location += Y * ((BBox.Y / 2.f) + 2.f);	// 2 to prevent being in door.
 	// Z @ at the bottom of the door
-	start_location -= Z * ((BBox.z/2.f) - 5.f); // -5 prevents being in floor
+	start_location -= Z * ((BBox.Z / 2.f) - 5.f); // -5 prevents being in floor
 
 	camera_rotation = Rotator(Y);
 	camera_rotation.Pitch += 4500;
-	start_yaw		= CenterToZero(camera_rotation.yaw);
+	start_yaw		= CenterToZero(camera_rotation.Yaw);
 }
 
 // Joshua - Add optical cable interaction
@@ -120,18 +120,18 @@ function AddedToInventory()
 	Super.AddedToInventory();
 }
 
-function Select( EInventory Inv )
+function Select(EInventory Inv)
 {
 	Super.Select(Inv);
 	PlaySound(Sound'Interface.Play_FisherEquipEspionCam', SLOT_Interface);
 }
 
-function HudView( bool bIn )
+function HudView(bool bIn)
 {
 	local EPlayerController Epc;
 	Epc = EPlayerController(Controller);
 	//Log("HUD VIEW!!!"@bIn@Controller);
-	if( bIn )
+	if (bIn)
 	{
 		// Camera location
 		Epc.SetLocation(start_location);
@@ -206,23 +206,23 @@ state s_Selected
 		local Vector	HitLocation, HitNormal, StartTrace, EndTrace;
 		local Actor		Hit;
 
-		StartTrace = Controller.Pawn.ToWorld(Controller.Pawn.CollisionRadius*Vect(1,0,0));
+		StartTrace = Controller.Pawn.ToWorld(Controller.Pawn.CollisionRadius * Vect(1,0,0));
 		EndTrace = StartTrace + Controller.Pawn.ToWorldDir(Vect(20,0,0));
 		Hit = Trace(HitLocation, HitNormal, EndTrace, StartTrace, true);
 
 		// Look up door
         Door = ESwingingDoor(Hit);
-		if( Door == None )
+		if (Door == None)
 		{
 			//log("Object in front is not a door");
 			return;
 		}
-		else if( Door.bOpening || Door.bClosing )
+		else if (Door.bOpening || Door.bClosing)
 		{
 			//log("Door moving");
 			return;
 		}
-		else if( Door.NoOpticCable )
+		else if (Door.NoOpticCable)
 		{
 			//log("Flagged as No optic cable");
 			return;
@@ -240,7 +240,7 @@ state s_InteractSelected
 {
 	function Use()
 	{
-		if(Door.bOpening || Door.bClosing || !Door.bClosed || Door.NoOpticCable)
+		if (Door.bOpening || Door.bClosing || !Door.bClosed || Door.NoOpticCable)
 		{
 			//log("Door moving");
 			return;
@@ -291,7 +291,7 @@ state s_Sneaking
 		Controller.GotoState('s_OpticCable', 'End');
 	}
 
-	function Tick( float deltaTime )
+	function Tick(float deltaTime)
 	{
 		local Rotator			noised_rotation;
 		local float				delta_damping;
@@ -364,19 +364,19 @@ state s_Sneaking
 
 		// give rotationnary cable movement
 		delta_damping	= Epc.aTurn * Damping;
-		clamped_yaw		= camera_rotation.yaw;
+		clamped_yaw		= camera_rotation.Yaw;
 		clamped_yaw	   += delta_damping;
 		clamped_yaw		= CenterToZero(clamped_yaw);
 		
 		//Log("start["$start_yaw$"] range["$65535/4$"] clamped_yaw["$clamped_yaw$"] IsInRange"@IsInRange(start_yaw, 65535/4, clamped_yaw));
-		if( IsInRange(start_yaw, valid_range, clamped_yaw) )
+		if (IsInRange(start_yaw, valid_range, clamped_yaw))
 		{
-			camera_rotation.yaw	   =  clamped_yaw;
+			camera_rotation.Yaw	   =  clamped_yaw;
 			camera_rotation.Roll   += delta_damping;
 
 			noised_rotation			= camera_Rotation;
-			noised_rotation.Roll   += (FRand()-0.5) * delta_damping/2;
-			noised_rotation.Yaw    += (FRand()-0.5) * delta_damping/2;
+			noised_rotation.Roll   += (FRand() - 0.5) * delta_damping / 2;
+			noised_rotation.Yaw    += (FRand() - 0.5) * delta_damping / 2;
 		}
 		else
 			noised_rotation			= camera_rotation;

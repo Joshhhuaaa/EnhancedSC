@@ -18,9 +18,9 @@ var int TorpedoDoorOpen;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -38,29 +38,29 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EFalseRussianSoldier1')
+        if (P.name == 'EFalseRussianSoldier1')
             Characters[1] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'ESoundTrigger0')
+        if (A.name == 'ESoundTrigger0')
             SoundActors[0] = A;
-        if(A.name == 'ESoundTrigger1')
+        if (A.name == 'ESoundTrigger1')
             SoundActors[1] = A;
     }
 
     // Joshua - Adjusting timer for Elite mode
-    if(IsEliteMode())
+    if (IsEliteMode())
     {
         ForEach AllActors(class'ETimer', Timer)
         {
-            if(Timer.Name == 'ETimer0')
-                Timer.TimerDelay = 100.0; // 150.0
+            if (Timer.Name == 'ETimer0')
+                Timer.TimerDelay = 120.0; // 150.0
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     SubWentDown=0;

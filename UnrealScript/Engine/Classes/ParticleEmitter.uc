@@ -254,7 +254,7 @@ var notextexport int				CurrentCollisionSoundIndex;
 var notextexport float				MaxSizeScale;
 var notextexport int				KillPending;
 
-native function SpawnParticle( int Amount );
+native function SpawnParticle(int Amount);
 
 defaultproperties
 {

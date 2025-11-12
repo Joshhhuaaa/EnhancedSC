@@ -21,15 +21,15 @@ var()  int              LimitClips;
 \*-----------------------------------------------------------*/
 function PostBeginPlay()
 { 
-	bAlreadyVisited=false;
-	if(TargetTag != '')
+	bAlreadyVisited = false;
+	if (TargetTag != '')
 	{
 		Target = GetMatchingActor(TargetTag);
 	}
 }
 
 
-function GiveTeleportInventory( actor Other)
+function GiveTeleportInventory(actor Other)
 {
 	local EInventoryItem spawnedItem;
 	local EPawn PlayerPawn;
@@ -38,17 +38,17 @@ function GiveTeleportInventory( actor Other)
 	
 	// fill up the player's inventory
 	PlayerPawn = EPawn(Other);
-	if( PlayerPawn != None )
+	if (PlayerPawn != None)
 	{
-		log("Giving inventory to " @ PlayerPawn );
+		log("Giving inventory to " @ PlayerPawn);
 
-		for(i=0; i<ArrayCount(TeleportInventory); i++)
+		for (i = 0; i < ArrayCount(TeleportInventory); i++)
 		{
 			if (TeleportInventory[i] != none)
 			{
 				// special case for weapons, just reset the ammo if we hold one already.
-				WeaponItem = EWeapon(PlayerPawn.FullInventory.GetItemByClass( TeleportInventory[i].name ) );
-				if( WeaponItem == None )
+				WeaponItem = EWeapon(PlayerPawn.FullInventory.GetItemByClass(TeleportInventory[i].name));
+				if (WeaponItem == None)
 				{
 					// not a weapon, or not holding one yet
 					spawnedItem = Spawn(TeleportInventory[i], PlayerPawn.Controller);
@@ -65,7 +65,7 @@ function GiveTeleportInventory( actor Other)
                         WeaponItem.Ammo = WeaponItem.MaxAmmo;
                     }
 
-                    if(LimitClips != -1)
+                    if (LimitClips != -1)
                     {
                         WeaponItem.ClipAmmo = LimitClips;
                     }
@@ -78,11 +78,11 @@ function GiveTeleportInventory( actor Other)
 					continue;
 				}
 				
-				if( spawnedItem != none)
+				if (spawnedItem != none)
 				{
 					// validate if the inventory can hold more of the item we spawned.
 					// If it can, then add it. Otherwise, destroy it right away.
-					if( PlayerPawn.FullInventory.CanAddItem(spawnedItem) )
+					if (PlayerPawn.FullInventory.CanAddItem(spawnedItem))
 					{
                         WeaponItem = EWeapon(spawnedItem);
 
@@ -97,7 +97,7 @@ function GiveTeleportInventory( actor Other)
                                 WeaponItem.Ammo = WeaponItem.MaxAmmo;
                             }
 
-                            if(LimitClips != -1)
+                            if (LimitClips != -1)
                             {
                                 WeaponItem.ClipAmmo = LimitClips;
                             }
@@ -116,7 +116,7 @@ function GiveTeleportInventory( actor Other)
 				}
 				else
 				{
-					log("=== ERROR, could not allocate inventory item, spawn failed for " @ PlayerPawn.DynInitialInventory[i] );
+					log("=== ERROR, could not allocate inventory item, spawn failed for " @ PlayerPawn.DynInitialInventory[i]);
 				}
 			}
 		}
@@ -134,25 +134,25 @@ function ProcessZoning()
 	local EAIPawn NPC;
 
 	//try to find the NPCs
-	foreach DynamicActors( class'EAIPawn', NPC)
+	foreach DynamicActors(class'EAIPawn', NPC)
 	{
-		for ( i = 0; i < EnableGroupTags.Length; i++ )
+		for (i = 0; i < EnableGroupTags.Length; i++)
 		{
-			if(NPC.m_GroupTag == EnableGroupTags[i])
+			if (NPC.m_GroupTag == EnableGroupTags[i])
 			{
 				//log("NPC "$NPC$" was reenabled...");
-				NPC.bDisableAI=false;
-				NPC.bDisableAIforSound=false;
+				NPC.bDisableAI = false;
+				NPC.bDisableAIforSound = false;
 			}
 		}
 
-		for ( i = 0; i < DisableGroupTags.Length; i++ )
+		for (i = 0; i < DisableGroupTags.Length; i++)
 		{
-			if(NPC.m_GroupTag == DisableGroupTags[i])
+			if (NPC.m_GroupTag == DisableGroupTags[i])
 			{				
 				//log("NPC "$NPC$" was disabled...");
-				NPC.bDisableAI=true;
-				NPC.bDisableAIforSound=true;
+				NPC.bDisableAI = true;
+				NPC.bDisableAIforSound = true;
 			}
 		}
 	}		
@@ -173,21 +173,21 @@ function Touch(actor Other)
     local EPawn EP;
     local Mover             MoverResetter;
 
-	if( bAlreadyVisited && bTriggerOnlyOnce )
+	if (bAlreadyVisited && bTriggerOnlyOnce)
 		return;
 
-	//log( Other @ " ETeleportTriggering to " @ Target );
+	//log(Other @ " ETeleportTriggering to " @ Target);
 	//cast the actor in Pawn
 	P = Pawn(Other);
-	if(P != None)
+	if (P != None)
 	{
 		//check if the player is colliding
-		if(P.controller.bIsPlayer)
+		if (P.controller.bIsPlayer)
 		{
-			bAlreadyVisited=true;
+			bAlreadyVisited = true;
 
 			//send an EventTrigger when the glass breaks
-			if( GroupTag != '' )
+			if (GroupTag != '')
 			{
 				foreach DynamicActors(class'EGroupAI', Group, GroupTag)
 				{
@@ -200,12 +200,12 @@ function Touch(actor Other)
 			Level.ChangedActorsList = None;
 
 			// Reset all gameplay objects; for use in DemoX for E3, among others
-			foreach DynamicActors( class 'EGameplayObject', EGOResetter )
+			foreach DynamicActors(class 'EGameplayObject', EGOResetter)
 			{
 				EGOResetter.Reset();
 			}
 
-            foreach DynamicActors( class 'Mover', MoverResetter )
+            foreach DynamicActors(class 'Mover', MoverResetter)
 			{
 				MoverResetter.Reset();
 			}
@@ -220,7 +220,7 @@ function Touch(actor Other)
 
 			// for now, just do it in the same frame
 			// teleporting the player
-			if( Target != none )
+			if (Target != none)
 			{
 				P.SetLocation(Target.Location);
 				P.SetRotation(Target.Rotation);

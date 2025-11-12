@@ -11,9 +11,9 @@ class P_1_6_1_1_FlashPath extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,18 +29,18 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz12')
+        if (P.name == 'spetsnaz12')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz11')
+        if (P.name == 'spetsnaz11')
             Characters[2] = P.controller;
-        if(P.name == 'EAleksee0')
+        if (P.name == 'EAleksee0')
         {
             Characters[3] = P.controller;
             EAIController(Characters[3]).bAllowKnockout = true;
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

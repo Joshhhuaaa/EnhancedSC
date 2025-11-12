@@ -14,9 +14,9 @@ var int Icomm2216Triggered;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -32,13 +32,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMafiaMuscle13')
+        if (P.name == 'EMafiaMuscle13')
             Characters[1] = P.controller;
-        if(P.name == 'EMafiaMuscle11')
+        if (P.name == 'EMafiaMuscle11')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     Icomm2216Triggered=0;

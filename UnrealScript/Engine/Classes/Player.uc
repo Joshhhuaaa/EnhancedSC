@@ -29,11 +29,11 @@ var transient InteractionMaster InteractionMaster;	// Callback to the IM
 var transient array<Interaction> LocalInteractions;	// Holds a listing of all local Interactions
 
 
-const IDC_ARROW=0;
-const IDC_SIZEALL=1;
-const IDC_SIZENESW=2;
-const IDC_SIZENS=3;
-const IDC_SIZENWSE=4;
-const IDC_SIZEWE=5;
-const IDC_WAIT=6;
+const IDC_ARROW = 0;
+const IDC_SIZEALL = 1;
+const IDC_SIZENESW = 2;
+const IDC_SIZENS = 3;
+const IDC_SIZENWSE = 4;
+const IDC_SIZEWE = 5;
+const IDC_WAIT = 6;
 

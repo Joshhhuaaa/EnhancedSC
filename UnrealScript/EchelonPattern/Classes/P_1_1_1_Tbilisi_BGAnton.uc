@@ -11,9 +11,9 @@ class P_1_1_1_Tbilisi_BGAnton extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('ManDown');
@@ -32,11 +32,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ERussianCivilian6')
+        if (P.name == 'ERussianCivilian6')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }
@@ -83,7 +83,7 @@ DAnton:
     ChangeGroupState('s_default');
     ResetGroupGoals();
 Randomizer:
-    JumpRandom('Dapart', 0.60, 'Dalley', 1.00, , , , , , ); 
+    JumpRandom('Dapart', 0.60, 'Dalley', 1.00, , , , , ,); 
 Dapart:
     Log("");
     Teleport(1, 'Anton10Apt');

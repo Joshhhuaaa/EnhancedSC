@@ -15,7 +15,7 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 
 	// bottle
-	if( bHasBottleInHand )
+	if (bHasBottleInHand)
 	{
 		Bottle = spawn(class'EKolaVodka', self);
 		Bottle.SetCollision(false);
@@ -24,10 +24,10 @@ function PostBeginPlay()
 	}
 
 	// load generic anim packages
-	if(Mesh != None)
+	if (Mesh != None)
 	{
 		Anim = MeshAnimation(DynamicLoadObject("ENPC.FeirongAnims", class'MeshAnimation'));
-		LinkSkelAnim( Anim );
+		LinkSkelAnim(Anim);
 
 	}
 }
@@ -37,7 +37,7 @@ function InitAnims()
 {
 	Super.InitAnims();
 
-	if(bDrunk)
+	if (bDrunk)
 	{
 		AWait							= 'FeirStNmDk0';
 
@@ -50,13 +50,13 @@ function InitAnims()
 
 function GetReactionAnim(out name Anim, out name AnimB, out float BlendAlpha, optional eReactionAnimGroup ReactionGroup)
 {
-	if(!bDrunk)
+	if (!bDrunk)
 		Super.GetReactionAnim(Anim, AnimB, BlendAlpha,ReactionGroup);
 }
 
 function name GetWeaponSelectAnim()
 {
-	if(!bDrunk)
+	if (!bDrunk)
 		return Super.GetWeaponSelectAnim();
 	else
 		return '';
@@ -67,39 +67,35 @@ function SwitchAnims()
 {
 	local MoveFlags  lmoveflag;
 
-	lmoveflag=BaseMoveFlags;
+	lmoveflag = BaseMoveFlags;
 
 	//special case for grabbed NPCs that were sit
-	if(GetStateName() == 's_Grabbed')
-		lmoveflag= MOVE_WalkNormal;
+	if (GetStateName() == 's_Grabbed')
+		lmoveflag = MOVE_WalkNormal;
 
 
 	Super.SwitchAnims();
 
-	if(bDrunk)
+	if (bDrunk)
 	{
 		ATurnRight	= '';
 
 		switch (WeaponStance)
 		{
 			// one handed weapon :
-			case 1 :
-
+			case 1:
 				switch (lmoveflag)		
 				{
-					case MOVE_WalkRelaxed :
-					case MOVE_WalkNormal : 
-					case MOVE_WalkAlert :
-					case MOVE_Search :
-					case MOVE_Snipe : 
+					case MOVE_WalkRelaxed:
+					case MOVE_WalkNormal: 
+					case MOVE_WalkAlert:
+					case MOVE_Search:
+					case MOVE_Snipe: 
 						bNoBlending = true;
-		
 						AWait							= 'FeirStNmNt0';
 						ABlendMovement.m_forward		= 'FeirStNmFd0';
-
 						break;
 				}
-
 				break;
 		}
 	}
@@ -108,36 +104,36 @@ function SwitchAnims()
 event float GetMoveSpeed(MoveFlags MoveFlags)
 {
 
-	if(bDrunk)
+	if (bDrunk)
 	{
 		// apply speed based on move flag
 		switch (MoveFlags)
 		{
-			case MOVE_WalkRelaxed : 				
-			case MOVE_WalkNormal : 
-			case MOVE_Search : 				
-			case MOVE_Snipe : 				
-			case MOVE_WalkAlert :
+			case MOVE_WalkRelaxed:
+			case MOVE_WalkNormal:
+			case MOVE_Search:
+			case MOVE_Snipe:
+			case MOVE_WalkAlert:
 				return 85.0f;
 				break;
 				
-			case MOVE_JogAlert :
+			case MOVE_JogAlert:
 				return 350.0f;
 				break;
 				
-			case MOVE_JogNoWeapon: 
+			case MOVE_JogNoWeapon:
 				return 350.0f;
 				break;
 				
-			case MOVE_CrouchWalk :
+			case MOVE_CrouchWalk:
 				return 85.0f;
 				break;
 				
-			case MOVE_CrouchJog : 
+			case MOVE_CrouchJog:
 				return 200.0f;
 				break;
 
-			case MOVE_DesignerWalk :
+			case MOVE_DesignerWalk:
 				return DesignerWalkSpeed;
 				break;
 		}
@@ -145,7 +141,6 @@ event float GetMoveSpeed(MoveFlags MoveFlags)
 	else
 	{
 		return 	Super.GetMoveSpeed(MoveFlags);
-
 	}
 }
 

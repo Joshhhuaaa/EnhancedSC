@@ -17,7 +17,7 @@ function Created()
 function LMouseDown(float X, float Y)
 {
 	Super.LMouseDown(X, Y);
-	if(bDisabled)
+	if (bDisabled)
 		return;
 	UWindowHScrollBar(ParentWindow).Scroll(-UWindowHScrollBar(ParentWindow).ScrollAmount);
 	NextClickTime = GetTime() + 0.5;
@@ -25,13 +25,13 @@ function LMouseDown(float X, float Y)
 
 function Tick(float Delta)
 {
-	if(bMouseDown && (NextClickTime > 0) && (NextClickTime < GetTime()))
+	if (bMouseDown && (NextClickTime > 0) && (NextClickTime < GetTime()))
 	{
 		UWindowHScrollBar(ParentWindow).Scroll(-UWindowHScrollBar(ParentWindow).ScrollAmount);
 		NextClickTime = GetTime() + 0.1;
 	}
 
-	if(!bMouseDown)
+	if (!bMouseDown)
 	{
 		NextClickTime = 0;
 	}

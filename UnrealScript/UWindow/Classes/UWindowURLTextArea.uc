@@ -25,10 +25,10 @@ function TextAreaClipText(Canvas C, float DrawX, float DrawY, coerce string S, o
 	Text = S;
 	X = DrawX;
 	Y = DrawY;
-	while(Text != "")
+	while (Text != "")
 	{
 		ProcessText(C, Text, NextBlock, W, H, bLink);
-		if(bLink != 0)
+		if (bLink != 0)
 		{
 			C.SetDrawColor(0,0,255);
 		}
@@ -40,40 +40,40 @@ function TextAreaClipText(Canvas C, float DrawX, float DrawY, coerce string S, o
 		GetMouseXY(ClickX, ClickY);
 		bOverLink = bLink != 0 && DrawX < ClickX && DrawX + W > ClickX && DrawY < ClickY && DrawY + H > ClickY;
 
-		if(bOverLink)
+		if (bOverLink)
 			Cursor = Root.HandCursor;
 
-		if(bOverLink && (bMouseDown || bReleased))
+		if (bOverLink && (bMouseDown || bReleased))
 		{
-			if(bReleased)
+			if (bReleased)
 			{
 				Log("Clicked URL: >>"$NextBlock$"<<");
-				if( Left(NextBlock, 7) ~= "http://" )
+				if (Left(NextBlock, 7) ~= "http://")
 					GetPlayerOwner().ConsoleCommand("start "$NextBlock);
-				if( Left(NextBlock, 6) ~= "ftp://" )
+				if (Left(NextBlock, 6) ~= "ftp://")
 					GetPlayerOwner().ConsoleCommand("start "$NextBlock);
-				if( Left(NextBlock, 9) ~= "telnet://" )
+				if (Left(NextBlock, 9) ~= "telnet://")
 					GetPlayerOwner().ConsoleCommand("start "$NextBlock);
-				if( Left(NextBlock, 9) ~= "gopher://" )
+				if (Left(NextBlock, 9) ~= "gopher://")
 					GetPlayerOwner().ConsoleCommand("start "$NextBlock);
-				if( Left(NextBlock, 4) ~= "www." )
+				if (Left(NextBlock, 4) ~= "www.")
 					GetPlayerOwner().ConsoleCommand("start http://"$NextBlock);
-				if( Left(NextBlock, 4) ~= "ftp." )
+				if (Left(NextBlock, 4) ~= "ftp.")
 					GetPlayerOwner().ConsoleCommand("start ftp://"$NextBlock);
 				else
-				if( Left(NextBlock, 9) ~= "unreal://" )
+				if (Left(NextBlock, 9) ~= "unreal://")
 					LaunchUnrealURL(NextBlock);
 			}
 			else
 			{
 				C.SetDrawColor(255,0,0);
 			}
-			if(bReleased)
+			if (bReleased)
 				bReleased = False;
 		}
 
-		if(bLink != 0)
-			DrawStretchedTexture(C, DrawX, DrawY+H-1, W, 1, Texture'WhiteTexture');
+		if (bLink != 0)
+			DrawStretchedTexture(C, DrawX, DrawY + H - 1, W, 1, Texture'WhiteTexture');
 		ClipText(C, DrawX, DrawY, NextBlock);
 		DrawX += W;
 	}
@@ -98,55 +98,55 @@ function ProcessText(Canvas C, out string Text, out string NextBlock, out float 
 	i = InStr(Text, "http://");
 
 	j = InStr(Text, "www.");
-	if(i == -1 || j == -1)
+	if (i == -1 || j == -1)
 		i = Max(i, j);
 	else
 		i = Min(i, j);
 
 	j = InStr(Text, "unreal://");
-	if(i == -1 || j == -1)
+	if (i == -1 || j == -1)
 		i = Max(i, j);
 	else
 		i = Min(i, j);
 
 	j = InStr(Text, "ftp://");
-	if(i == -1 || j == -1)
+	if (i == -1 || j == -1)
 		i = Max(i, j);
 	else
 		i = Min(i, j);
 
 	j = InStr(Text, "ftp.");
-	if(i == -1 || j == -1)
+	if (i == -1 || j == -1)
 		i = Max(i, j);
 	else
 		i = Min(i, j);
 
 	j = InStr(Text, "telnet://");
-	if(i == -1 || j == -1)
+	if (i == -1 || j == -1)
 		i = Max(i, j);
 	else
 		i = Min(i, j);
 
 	j = InStr(Text, "gopher://");
-	if(i == -1 || j == -1)
+	if (i == -1 || j == -1)
 		i = Max(i, j);
 	else
 		i = Min(i, j);
 
 	bLink = 0;
 
-	if(i == -1)
+	if (i == -1)
 	{
 		NextBlock = Text;
 		Text = "";
 	}
 	else
-	if(i == 0)
+	if (i == 0)
 	{
 		bLink = 1;
 
 		i = InStr(Text, " ");
-		if(i == -1)
+		if (i == -1)
 		{
 			NextBlock = Text;
 			Text = "";

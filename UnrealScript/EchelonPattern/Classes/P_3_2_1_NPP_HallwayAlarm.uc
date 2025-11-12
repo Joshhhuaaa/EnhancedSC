@@ -12,9 +12,9 @@ var int Meltdown;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('Intruder');
@@ -45,17 +45,17 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EFalseRussianSoldier24')
+        if (P.name == 'EFalseRussianSoldier24')
             Characters[1] = P.controller;
-        if(P.name == 'EFalseRussianSoldier25')
+        if (P.name == 'EFalseRussianSoldier25')
             Characters[2] = P.controller;
-        if(P.name == 'EFalseRussianSoldier19')
+        if (P.name == 'EFalseRussianSoldier19')
             Characters[3] = P.controller;
-        if(P.name == 'EFalseRussianSoldier20')
+        if (P.name == 'EFalseRussianSoldier20')
             Characters[4] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     Meltdown=0;

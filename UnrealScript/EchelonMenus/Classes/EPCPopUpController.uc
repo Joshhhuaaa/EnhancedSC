@@ -68,31 +68,31 @@ function AfterCreate()
 
 function LMouseDown(float X, float Y)
 {
-    if(m_CancelMouseFocus)
+    if (m_CancelMouseFocus)
         NotifyWindow.LMouseDown(X, Y);
 }
 
 function MMouseDown(float X, float Y) 
 {
-    if(m_CancelMouseFocus)
+    if (m_CancelMouseFocus)
         NotifyWindow.MMouseDown(X, Y);
 }
 
 function RMouseDown(float X, float Y) 
 {
-	if(m_CancelMouseFocus)
+	if (m_CancelMouseFocus)
         NotifyWindow.RMouseDown(X, Y);
 }
 
 function MouseWheelDown(FLOAT X, FLOAT Y)
 {
-	if(m_CancelMouseFocus)
-        NotifyWindow.MouseWheelDown( X, Y);
+	if (m_CancelMouseFocus)
+        NotifyWindow.MouseWheelDown(X, Y);
 }
 
 function MouseWheelUp(FLOAT X, FLOAT Y)
 {
-	if(m_CancelMouseFocus)
+	if (m_CancelMouseFocus)
         NotifyWindow.MouseWheelUp(X, Y);
 }
 
@@ -104,7 +104,7 @@ function EPCMessageBox CreateMessageBox(UWindowWindow _NotifyWindow, string Titl
     
     Result = ESCResult;
 
-    if( EnterResult == MR_None)
+    if (EnterResult == MR_None)
         CancelAcceptsFocus();
     else
         MessageBox.SetAcceptsFocus();
@@ -122,7 +122,7 @@ function Close(optional bool bByParent)
 {
 	local UWindowWindow tmpNotifyWindow;
 	Super.Close(bByParent);
-	if(NotifyWindow != None)
+	if (NotifyWindow != None)
 	{
 		tmpNotifyWindow = NotifyWindow;
 		NotifyWindow = None;

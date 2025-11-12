@@ -13,9 +13,9 @@ class P_2_2_1_Ktech_WelcomeParty extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -31,17 +31,17 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMercenaryTechnician4')
+        if (P.name == 'EMercenaryTechnician4')
             Characters[1] = P.controller;
-        if(P.name == 'EMercenaryTechnician6')
+        if (P.name == 'EMercenaryTechnician6')
             Characters[2] = P.controller;
-        if(P.name == 'EMafiaMuscle12')
+        if (P.name == 'EMafiaMuscle12')
             Characters[3] = P.controller;
-        if(P.name == 'EMafiaMuscle11')
+        if (P.name == 'EMafiaMuscle11')
             Characters[4] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

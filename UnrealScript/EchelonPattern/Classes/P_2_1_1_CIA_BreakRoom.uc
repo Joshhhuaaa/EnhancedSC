@@ -13,9 +13,9 @@ class P_2_1_1_CIA_BreakRoom extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('DropAllBreaked');
@@ -64,11 +64,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ECIAAgent5')
+        if (P.name == 'ECIAAgent5')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

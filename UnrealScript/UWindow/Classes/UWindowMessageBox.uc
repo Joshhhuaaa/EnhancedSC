@@ -20,7 +20,7 @@ function BeforePaint(Canvas C, float X, float Y)
 {
 	local Region R;
 
-	if(!bSetupSize)
+	if (!bSetupSize)
 	{
 		SetSize(200, WinHeight);		
 		R = LookAndFeel.FW_GetClientArea(Self);
@@ -37,18 +37,18 @@ function AfterPaint(Canvas C, float X, float Y)
 {
 	Super.AfterPaint(C, X, Y);
 
-	if(TimeOut != 0)
+	if (TimeOut != 0)
 	{
 		FrameCount++;
 		
-		if(FrameCount >= 5)
+		if (FrameCount >= 5)
 		{
 			TimeOutTime = GetTime() + TimeOut;
 			TimeOut = 0;
 		}
 	}
 
-	if(TimeOutTime != 0 && GetTime() > TimeOutTime)
+	if (TimeOutTime != 0 && GetTime() > TimeOutTime)
 	{
 		TimeOutTime = 0;
 		Close();

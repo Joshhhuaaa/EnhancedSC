@@ -6,6 +6,6 @@ function Created(){}
 function LMouseDown(float X, float Y)
 {
 	Super.LMouseDown(X, Y);
-	if(!bDisabled)
+	if (!bDisabled)
 		Root.PlayClickSound();
 }

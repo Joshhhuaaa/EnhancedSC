@@ -23,7 +23,7 @@ var INT             m_INbScroll, m_INbLinesDisplayed;
 function Created()
 {
 	SetAcceptsFocus();
-    m_Return  = EPCTextButton(CreateControl( class'EPCTextButton', m_IReturnButtonsXPos, m_IReturnButtonsYPos, m_IReturnButtonsWidth, m_IReturnButtonsHeight, self));
+    m_Return  = EPCTextButton(CreateControl(class'EPCTextButton', m_IReturnButtonsXPos, m_IReturnButtonsYPos, m_IReturnButtonsWidth, m_IReturnButtonsHeight, self));
     m_Return.SetButtonText(Caps(Localize("HUD","BACK","Localization\\HUD")) ,TXT_CENTER);
     m_Return.Font = F_Normal;
 
@@ -35,7 +35,7 @@ function SetDataInfo(ERecon Recon)
 {
     m_Recon = Recon;
 
-    if(m_Recon.ReconType == 4 || m_Recon.ReconType == 5 ) //Text Full screen    
+    if (m_Recon.ReconType == 4 || m_Recon.ReconType == 5) //Text Full screen    
 	{
         m_BInitScrollBar = true;		
 		m_ScrollBar.pos = 0;
@@ -60,11 +60,11 @@ function EscapeMenu()
 
 function Paint(Canvas C, float MouseX, float MouseY)
 {
-    Render( C , MouseX, MouseY);
+    Render(C , MouseX, MouseY);
 
-    if(m_BInitScrollBar)
+    if (m_BInitScrollBar)
     {
-        if(m_INbScroll > m_INbLinesDisplayed )
+        if (m_INbScroll > m_INbLinesDisplayed)
         {
             m_ScrollBar.ShowWindow();
             m_ScrollBar.SetRange(0, m_INbScroll,m_INbLinesDisplayed);
@@ -79,13 +79,13 @@ function Paint(Canvas C, float MouseX, float MouseY)
 
 function MouseWheelDown(FLOAT X, FLOAT Y)
 {
-    if(m_ScrollBar != None)
+    if (m_ScrollBar != None)
 	    m_ScrollBar.MouseWheelDown(X,Y);
 }
 
 function MouseWheelUp(FLOAT X, FLOAT Y)
 {
-    if(m_ScrollBar != None)
+    if (m_ScrollBar != None)
         m_ScrollBar.MouseWheelUp(X,Y);
 	    
 }
@@ -93,9 +93,9 @@ function MouseWheelUp(FLOAT X, FLOAT Y)
 function Notify(UWindowDialogControl C, byte E)
 {
 
-	if(E == DE_Click)
+	if (E == DE_Click)
 	{
-        switch(C)
+        switch (C)
         {
         case m_Return:            
             Root.ChangeCurrentWidget(WidgetID_Previous);    //So reset function is not called on the ingame menu

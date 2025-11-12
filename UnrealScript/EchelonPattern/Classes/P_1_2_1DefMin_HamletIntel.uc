@@ -16,9 +16,9 @@ var int Second;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -34,14 +34,14 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EHamlet0')
+        if (P.name == 'EHamlet0')
         {
             Characters[1] = P.controller;
             EAIController(Characters[1]).bAllowKnockout = true;
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     First=0;
@@ -98,7 +98,7 @@ InterroSecond:
     End();
 InterroLast:
     Log("InterroLast");
-    JumpRandom('RandomBarkFinalOne', 0.50, 'RandomBarkFinalTwo', 1.00, , , , , , ); 
+    JumpRandom('RandomBarkFinalOne', 0.50, 'RandomBarkFinalTwo', 1.00, , , , , ,); 
     End();
 RandomBarkFinalOne:
     Log("RandomOne");

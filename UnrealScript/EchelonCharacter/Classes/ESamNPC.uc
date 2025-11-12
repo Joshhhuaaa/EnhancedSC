@@ -18,7 +18,7 @@ function SetSamMesh(int SamMeshType)
     {
 		case 0:
 			Mesh = EchelonLevelInfo(Level).SamMesh;
-			if( Mesh == none )
+			if (Mesh == none)
 			{
 				// JFP: Temp hack, following the Oct-30-2002 merge some maps didn't have the SamMesh set.
 				// Added this for backward compatibility.
@@ -37,7 +37,7 @@ function SetSamMesh(int SamMeshType)
             break;
         default:
 			Mesh = EchelonLevelInfo(Level).SamMesh;
-			if( Mesh == none )
+			if (Mesh == none)
 			{
 				Mesh=SkeletalMesh'ESam.samAMesh';
 			}
@@ -54,7 +54,7 @@ function PostBeginPlay()
 	RandomizedAnimRate = 0.97f + RandRange(0.0f, 0.06f);
 
 	// Joshua - Check for level specific overrides
-	switch(GetCurrentMapName())
+	switch (GetCurrentMapName())
     {
         case "0_0_2_Training":
         case "0_0_3_Training":
@@ -136,19 +136,19 @@ function PostBeginPlay()
 
 	// load generic anim packages
 	Anim = MeshAnimation(DynamicLoadObject("ESam.samAnims", class'MeshAnimation'));
-	LinkSkelAnim( Anim );
+	LinkSkelAnim(Anim);
 
 	//
 	// Weaponry
 	//
-	for( i=0; i<DynInitialInventory.Length; i++ )
+	for (i = 0; i<DynInitialInventory.Length; i++)
 	{
-		if( DynInitialInventory[i] == class'EF2000' )
+		if (DynInitialInventory[i] == class'EF2000')
 		{
 			Weapon = Spawn(class'EF2000', self);
 			AttachToBone(Weapon, Weapon.AttachAwayTag);
 		}
-		else if( DynInitialInventory[i] == class'EFn7' )
+		else if (DynInitialInventory[i] == class'EFn7')
 		{
 			Weapon = Spawn(class'EFn7', self);
 			AttachToBone(Weapon, Weapon.AttachAwayTag);

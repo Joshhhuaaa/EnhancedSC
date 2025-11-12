@@ -13,9 +13,9 @@ class P_2_1_2_CIA_Conv_Media extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('DropIT');
@@ -67,13 +67,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ECIAAgent10')
+        if (P.name == 'ECIAAgent10')
             Characters[1] = P.controller;
-        if(P.name == 'ECIAAgent11')
+        if (P.name == 'ECIAAgent11')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

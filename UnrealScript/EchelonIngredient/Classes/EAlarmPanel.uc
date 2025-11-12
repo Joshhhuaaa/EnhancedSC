@@ -9,12 +9,12 @@ var		bool			bGlassBroken;
 function PostBeginPlay()
 {
 	Handle				= spawn(class'EGameplayObject', self);
-	if( Handle == None )
+	if (Handle == None)
 		log("Problem with EAlarmPanel"@self@"spawning handle");
 	Handle.SetStaticMesh(StaticMesh'EMeshIngredient.Object.AlarmHandle');
 
 	Glass				= spawn(class'EGameplayObject', self);
-	if( Glass == None )
+	if (Glass == None)
 		log("Problem with EAlarmPanel"@self@"spawning glass");
 	Glass.SetStaticMesh(StaticMesh'EMeshIngredient.Object.AlarmGlass');
 
@@ -24,13 +24,13 @@ function PostBeginPlay()
 state s_Activate
 {
 Begin:
-	if( !bGlassBroken )
+	if (!bGlassBroken)
 	{
 		Glass.Destroy();
 	}
 	bGlassBroken = true;
 
-	if( Alarm != None )
+	if (Alarm != None)
 		Alarm.EnableAlarm(self, EAlarmInteraction(Interaction).InteractionController);
 }
 
@@ -38,7 +38,7 @@ state s_Deactivate
 {
 	function BeginState()
 	{
-		if( Alarm != None )
+		if (Alarm != None)
 			Alarm.DisableAlarm(self);
 	}
 }

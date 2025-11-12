@@ -14,12 +14,12 @@ var Array<UWindowWindow>        m_Controls;
 function SetSelectedItem(UWindowListBoxItem NewSelected)
 {
 
-    if( (EPCOptionsKeyListBoxItem(NewSelected) != None) && 
+    if ((EPCOptionsKeyListBoxItem(NewSelected) != None) && 
         (SelectedItem != NewSelected) && 
         (EPCOptionsKeyListBoxItem(NewSelected).m_bIsNotSelectable == false) //make sure we are allowed selecting this element
-        )
+)
 	{
-        if(SelectedItem != None)
+        if (SelectedItem != None)
 			SelectedItem.bSelected = False;
 
 		SelectedItem = NewSelected;
@@ -41,9 +41,9 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 
     listBoxItem = EPCOptionsKeyListBoxItem(Item);
 
-    if( (listBoxItem != None) && (listBoxItem.m_Control != None) )
+    if ((listBoxItem != None) && (listBoxItem.m_Control != None))
     {
-        if(!listBoxItem.bIsCheckBoxLine)
+        if (!listBoxItem.bIsCheckBoxLine)
         {
             listBoxItem.m_Control.WinTop = Y;
             listBoxItem.m_Control.WinLeft = X + W - m_IHighLightWidth - m_IHighLightRightPadding - m_IRightPadding;
@@ -98,7 +98,7 @@ function HideControls()
 {
     local INT i;
     
-    for(i =0; i < m_Controls.Length ;i++)
+    for (i =0; i < m_Controls.Length ;i++)
     {
         m_Controls[i].HideWindow();
     }

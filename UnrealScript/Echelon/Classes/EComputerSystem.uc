@@ -10,26 +10,26 @@ function PostBeginPlay()
 {
 	Super.PostBeginPlay();
 
-	if( Mouse != None )
+	if (Mouse != None)
 		Mouse.SetOwner(self);
 
-	if( Monitor != None )
+	if (Monitor != None)
 		Monitor.SetOwner(self);
 
-	if( Keyboard != None )
+	if (Keyboard != None)
 		Keyboard.SetOwner(self);
 }
 
 function Destructed()
 {
 	// Remove interaction from keyboard
-	if( Keyboard != None )
+	if (Keyboard != None)
 		Keyboard.ResetInteraction();
 
 	// Remove all skin reference
 	WakeUp();
 	// Turn off monitor
-	if( Monitor != None && Monitor.IsA('EGameplayObjectLight') )
+	if (Monitor != None && Monitor.IsA('EGameplayObjectLight'))
 		EGameplayObjectLight(Monitor).TurnOff(CHANGE_LightTurnedOff);
 
 	// Kill all link
@@ -47,7 +47,7 @@ function WakeUp()
 	//Log("wake up");
 
 	// Remove screen saver
-	if( Monitor != None )
+	if (Monitor != None)
 		Monitor.Skins.Remove(0, Monitor.Skins.Length);
 }
 
@@ -56,20 +56,20 @@ function PowerSave()
 	//Log("power save");
 
 	// Activate screen saver
-	if( Monitor != None )
+	if (Monitor != None)
 		Monitor.Skins[1] = ScreenSaver;
 }
 
-function ReceiveMessage( EGameplayObject Sender, EGOMsgEvent Event )
+function ReceiveMessage(EGameplayObject Sender, EGOMsgEvent Event)
 {
 	// If shooting monitor, wake me up
-	if( Sender == Monitor && Event == GOEV_Destructed )
+	if (Sender == Monitor && Event == GOEV_Destructed)
 	{
 		WakeUp();
 		Monitor = None;
 
 		// Disable interaction from keyboard
-		if( Keyboard != None )
+		if (Keyboard != None)
 			Keyboard.ResetInteraction();
 	}
 
@@ -82,25 +82,25 @@ state() s_Off
 	function BeginState()
 	{
 		// Turn off monitor
-		if( Monitor != None && Monitor.IsA('EGameplayObjectLight') )
+		if (Monitor != None && Monitor.IsA('EGameplayObjectLight'))
 			EGameplayObjectLight(Monitor).TurnOff(CHANGE_LightTurnedOff);
 
 		// Disable interaction from keyboard
-		if( Keyboard != None )
+		if (Keyboard != None)
 			Keyboard.Interaction.SetCollision(false);
 	}
 	function EndState()
 	{
 		// Turn off monitor
-		if( Monitor != None && Monitor.IsA('EGameplayObjectLight') )
+		if (Monitor != None && Monitor.IsA('EGameplayObjectLight'))
 			EGameplayObjectLight(Monitor).TurnOn();
 
 		// Disable interaction from keyboard
-		if( Keyboard != None )
+		if (Keyboard != None)
 			Keyboard.Interaction.SetCollision(true);
 	}
 
-	function Trigger( Actor Other, Pawn EventInstigator, optional name InTag )
+	function Trigger(Actor Other, Pawn EventInstigator, optional name InTag)
 	{
 		GotoState('s_Idle', 'Touch');
 	}
@@ -108,7 +108,7 @@ state() s_Off
 
 state() s_InUse
 {
-	function Trigger( Actor Other, Pawn EventInstigator, optional name InTag )
+	function Trigger(Actor Other, Pawn EventInstigator, optional name InTag)
 	{
 		GotoState('s_Idle', 'Touch');
 	}
@@ -119,19 +119,19 @@ Begin:
 
 auto state s_Idle
 {
-	function Trigger( Actor Other, Pawn EventInstigator, optional name InTag )
+	function Trigger(Actor Other, Pawn EventInstigator, optional name InTag)
 	{
 		GotoState('s_InUse');
 	}
 
-	function ReceiveMessage( EGameplayObject Sender, EGOMsgEvent Event )
+	function ReceiveMessage(EGameplayObject Sender, EGOMsgEvent Event)
 	{
 		// If shooting mouse, wake me up
-		if( Sender == Mouse && (Event == GOEV_TakeDamage || Event == GOEV_Destructed) )
+		if (Sender == Mouse && (Event == GOEV_TakeDamage || Event == GOEV_Destructed))
 			GotoState(,'Touch');
 
 		// If interacting or shooting keyboard, wake me up
-		if( Sender == Keyboard )
+		if (Sender == Keyboard)
 			GotoState(,'Touch');
 
 		// Try to pass msg to owner

@@ -8,9 +8,9 @@ var	EElevatorPanel	ControllerPanel;
 // Description		
 //		Setup form Panel
 //------------------------------------------------------------------------
-function SetController( EElevatorPanel Panel )
+function SetController(EElevatorPanel Panel)
 {
-	if( Panel == None )
+	if (Panel == None)
 		Log(self$" PROBLEM: controller not valid");
 
 	ControllerPanel = Panel;
@@ -20,18 +20,18 @@ function SetController( EElevatorPanel Panel )
 // Description		
 //		Called from Interaction when button is pushed
 //------------------------------------------------------------------------
-function Trigger( Actor Other, Pawn EventInstigator, name InTag )
+function Trigger(Actor Other, Pawn EventInstigator, name InTag)
 {
 	Super.Trigger(Other, EventInstigator, InTag);
 
 	// light up the button
-	if( !ControllerPanel.bPowered && EventInstigator == EchelonGameInfo(Level.game).pPlayer.ePawn )
+	if (!ControllerPanel.bPowered && EventInstigator == EchelonGameInfo(Level.game).pPlayer.ePawn)
 		EchelonGameInfo(Level.game).pPlayer.SendTransmissionMessage(Localize("Transmission", "ElevatorPower", "Localization\\HUD"), TR_CONSOLE);
 
 	// call elevator on this floor
 	ControllerPanel.RequestElevator(self);
 
-	if(EKeyPadInteraction(Interaction).InteractionController.bIsPlayer)
+	if (EKeyPadInteraction(Interaction).InteractionController.bIsPlayer)
 		PlaySound(Sound'Electronic.Play_keyPadButton', SLOT_Interface);
 	else
 		PlaySound(Sound'Electronic.Play_keyPadButton', SLOT_SFX);
@@ -42,7 +42,7 @@ function Trigger( Actor Other, Pawn EventInstigator, name InTag )
 // Description		
 //		Called from Panel when elevator is at current button floor
 //------------------------------------------------------------------------
-function UnTrigger( Actor Other, Pawn EventInstigator, optional name InTag )
+function UnTrigger(Actor Other, Pawn EventInstigator, optional name InTag)
 {
 }
 

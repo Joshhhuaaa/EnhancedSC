@@ -13,9 +13,9 @@ class P_1_6_1_1_RadioFirst extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -31,11 +31,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz2')
+        if (P.name == 'spetsnaz2')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }
@@ -52,7 +52,7 @@ Begin:
 MilestoneRadioFirst:
     Log("MilestoneRadioFirst");
     Sleep(4);
-    JumpRandom('RadioSlow', 0.50, 'RadioFast', 1.00, , , , , , ); 
+    JumpRandom('RadioSlow', 0.50, 'RadioFast', 1.00, , , , , ,); 
     End();
 RadioSlow:
     Log("RadioSlow");
@@ -64,7 +64,7 @@ RadioFast:
     Log("RadioFast");
     Goal_Set(1,GOAL_Wait,9,,,,,'RdioStNmNt0',FALSE,,,,);
     Talk(Sound'S3_4_2Voice.Play_34_20_01', 1, , TRUE, 0);
-    JumpRandom('PostTalkA', 0.30, 'PostTalkB', 0.60, 'PostTalkC', 1.00, , , , ); 
+    JumpRandom('PostTalkA', 0.30, 'PostTalkB', 0.60, 'PostTalkC', 1.00, , , ,); 
     End();
 PostTalkA:
     Log("PostTalkA");

@@ -20,7 +20,7 @@ function Created()
 	SetEditTextColor(LookAndFeel.EditBoxTextColor);
 }
 
-function SetDrawBorders( BOOL _Draw)
+function SetDrawBorders(BOOL _Draw)
 {
     EditBox.m_bDrawEditBorders = _Draw;
 }

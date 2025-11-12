@@ -27,20 +27,20 @@ state s_Flying
 		Super.BeginState();
 
 		// add to changed actor list
-		if ( Controller.bIsPlayer )
+		if (Controller.bIsPlayer)
 			Level.AddChange(self, CHANGE_Grenade);
 	}
 
-	function Bump( Actor Other, optional int Pill )
+	function Bump(Actor Other, optional int Pill)
 	{
 		// don't hit shooter but can do damage on anything else ...
-		if( Other == Controller.Pawn )
+		if (Other == Controller.Pawn)
 			return;
 
 		PlaySound(Sound'FisherEquipement.Play_FN2000AirFoilRing', SLOT_SFX);
 
-		if( Other.bIsPawn )
-			Other.TakeDamage(EPawn(Other).InitialHealth/2, Controller(Owner).pawn, Location, Velocity, Velocity, class'EStunned', Pill);
+		if (Other.bIsPawn)
+			Other.TakeDamage(EPawn(Other).InitialHealth / 2, Controller(Owner).Pawn, Location, Velocity, Velocity, class'EStunned', Pill);
 		else
 			Super.Bump(Other, Pill);
 
@@ -48,7 +48,7 @@ state s_Flying
 	}
 }
 
-function Select( EInventory Inv )
+function Select(EInventory Inv)
 {
 	Super.Select(Inv);
 	PlaySound(Sound'Interface.Play_FisherEquipSpMunition', SLOT_Interface);

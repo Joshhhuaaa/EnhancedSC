@@ -14,9 +14,9 @@ var int oneInert;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('KeypadACheckDead');
@@ -56,13 +56,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EAzeriColonel1')
+        if (P.name == 'EAzeriColonel1')
             Characters[1] = P.controller;
-        if(P.name == 'EChineseSoldier0')
+        if (P.name == 'EChineseSoldier0')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     oneInert=0;

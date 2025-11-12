@@ -14,9 +14,9 @@ var int Triggered;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -32,20 +32,20 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianPalaceGuard9')
+        if (P.name == 'EGeorgianPalaceGuard9')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianPalaceGuard10')
+        if (P.name == 'EGeorgianPalaceGuard10')
             Characters[2] = P.controller;
-        if(P.name == 'EEliteForceCristavi8')
+        if (P.name == 'EEliteForceCristavi8')
         {
             Characters[3] = P.controller;
             EAIController(Characters[3]).bAllowKnockout = true;
         }
-        if(P.name == 'EEliteForceCristavi7')
+        if (P.name == 'EEliteForceCristavi7')
             Characters[4] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     Triggered=0;

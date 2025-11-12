@@ -21,15 +21,15 @@ function Created()
 
 function Paint(Canvas C, float MouseX, float MouseY)
 {
-	if(m_bFirstTime)
+	if (m_bFirstTime)
 	{
 		PlayCanvas = C;
 		PlayCanvas.RequestVideoPlay(m_VideoName);
-		Root.bDisableMouseDisplay=true;
+		Root.bDisableMouseDisplay = true;
 		EPCMainMenuRootWindow(Root).bSkipLaptopOverlay = true;
-		m_bFirstTime=false;
+		m_bFirstTime = false;
 	}
-	else if(C.m_bPlaying)
+	else if (C.m_bPlaying)
 	{
 		C.DisplayFullScreenVideo();
 	}
@@ -57,9 +57,9 @@ function RMouseDown(float X, float Y)
 
 function EndVideo()
 {
-	m_bFirstTime=true;
+	m_bFirstTime = true;
 	PlayCanvas.RequestVideoStop();
-	Root.bDisableMouseDisplay=false;
+	Root.bDisableMouseDisplay = false;
 	GetPlayerOwner().Player.Actor.PlaySound(EPCConsole(Root.Console).MenuMusic, SLOT_Music);
 	Root.ChangeCurrentWidget(WidgetID_Previous);
 }

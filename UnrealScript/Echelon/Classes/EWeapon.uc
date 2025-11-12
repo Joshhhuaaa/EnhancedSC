@@ -79,12 +79,13 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 
 	WeaponReticle = EWeaponReticle(ObjectHud);
-	if( WeaponReticle == None )
+
+	if (WeaponReticle == None)
 		Log(self$" ERROR: Defined ObjectHud not a EWeaponReticle");
 
     ReticuleTex = EchelonLevelInfo(Level).TGAME.tar_pistol;
 
-	if( MagazineMesh != None )
+	if (MagazineMesh != None)
 	{
 		Magazine = spawn(class'EWeaponMagazine', self);
 		Magazine.SetStaticMesh(MagazineMesh);
@@ -94,7 +95,7 @@ function PostBeginPlay()
 
 function Destroyed()
 {
-	if( Magazine != None )
+	if (Magazine != None)
 		Magazine.Destroy();
 	
 	Super.Destroyed();
@@ -112,10 +113,10 @@ function ResetController()
 	local EPawn OwnerPawn;
 	
 	// Reset OwnerPawn's CurrentWeapon property
-	if ( Controller != none )
+	if (Controller != none)
 	{		
 		OwnerPawn = EPawn(Controller.Pawn);
-		if ( OwnerPawn != none )
+		if (OwnerPawn != none)
 		{
 			OwnerPawn.CurrentWeapon = none;
 		}
@@ -124,7 +125,7 @@ function ResetController()
 	Super.ResetController();
 }
 
-function bool NotifyPickup( Controller Instigator )
+function bool NotifyPickup(Controller Instigator)
 {
 	Super.NotifyPickup(Instigator);
 	
@@ -137,11 +138,11 @@ function bool NotifyPickup( Controller Instigator )
 //------------------------------------------------------------------------
 function ResetMagazine()
 {
-	if( Magazine == None )
+	if (Magazine == None)
 		return;
 
 	Magazine.SetBase(self);
-	if( MagazineOffset == Vect(0,0,0) )
+	if (MagazineOffset == Vect(0,0,0))
 		Log(self$" WARNING: MagazineMesh specified without offset");
 	Magazine.SetRelativeLocation(MagazineOffset);
 	Magazine.SetRelativeRotation(rot(0,0,0));
@@ -152,7 +153,7 @@ function ResetMagazine()
 // Description		
 //		Shouldn't add any weapon except for AIController
 //------------------------------------------------------------------------
-function bool CanAddThisItem( EInventoryItem ItemToAdd )
+function bool CanAddThisItem(EInventoryItem ItemToAdd)
 {
 	return Owner != None && !Controller(Owner).bIsPlayer;
 }
@@ -163,18 +164,19 @@ function bool CanAddThisItem( EInventoryItem ItemToAdd )
 //------------------------------------------------------------------------
 event Fire()
 {
-	PlaySound(EmptySound, SLOT_SFX);
-
 	if (ClipAmmo == 0)
 	{
+		// Joshua - Moved the EmptySound playback only if we're out of ammo in the clip
+		PlaySound(EmptySound, SLOT_SFX);
+
 		//unlimited ammo
-		if(( Controller != none ) && (!Controller.bIsPlayer))
+		if ((Controller != none) && (!Controller.bIsPlayer))
 		{
-			ClipAmmo = ClipMaxAmmo-1;
-			Ammo=100;
+			ClipAmmo = ClipMaxAmmo - 1;
+			Ammo = 100;
 		}
 		
-		if( eROFMode == ROF_Single )
+		 if (eROFMode == ROF_Single)
 		{
 			if (Ammo > 0)
 				Reload();
@@ -198,23 +200,24 @@ function AltFire();
 //------------------------------------------------------------------------
 function bool Reload()
 {
-	if( Controller(owner) != None  && Controller(owner).pawn != None && Controller(owner).pawn.health > 0 && Owner.GetStateName() != 's_Unconscious' && Owner.GetStateName() != 's_groggy' )
+	if (Controller(Owner) != None  && Controller(Owner).Pawn != None && Controller(owner).Pawn.Health > 0 && Owner.GetStateName() != 's_Unconscious' && Owner.GetStateName() != 's_Groggy')
 	{
-	//Log("Reload Ammo["$ammo$"] ClipAmmo["$clipammo$"] MaxAmmo["$maxammo$"] ClipMaxAmmo["$clipmaxammo$"]");
-	if( Ammo > ClipAmmo && ClipAmmo != ClipMaxAmmo && Controller.MayReload() )
-	{
-		GotoState('s_Reloading');
-		return true;
-	}
+		//Log("Reload Ammo["$ammo$"] ClipAmmo["$clipammo$"] MaxAmmo["$maxammo$"] ClipMaxAmmo["$clipmaxammo$"]");
+
+		if (Ammo > ClipAmmo && ClipAmmo != ClipMaxAmmo && Controller.MayReload())
+		{
+			GotoState('s_Reloading');
+			return true;
+		}
 	}
 	return false;
 }
 
-function StepReload( int Step );
+function StepReload(int Step);
 
 function OutOfAmmo()
 {
-	if( Controller != none )
+	if (Controller != none)
 		Controller.NotifyOutOfAmmo();
 }
 
@@ -222,10 +225,11 @@ function SpawnShellCase()
 {
 	local Projectile s;
 	local vector localVel;
-	if( EjectedClass != None )
+	
+	if (EjectedClass != None)
 	{
 		s = Spawn(EjectedClass, self, , ToWorld(EjectedOffset));
-		if ( s != None ) 
+		if (s != None)
 	    {
 			localVel = EjectedVel;
 			localVel.X += (FRand() * 10.0) - 5.0;
@@ -263,12 +267,12 @@ final function FireWeapon()
 	//
 	// Spawn the muzzleFlash
 	//
-	if( MuzzleFlashClass != None )
+	if (MuzzleFlashClass != None)
 	{
 		f = Spawn(MuzzleFlashClass, self,, ToWorld(MuzzleOffset));
 		f.SetBase(self);
 		// Make it live for 1 frame
-		f.LifeSpan	= 0.01;
+		f.LifeSpan = 0.01;
 	} 
 
 	//
@@ -276,27 +280,26 @@ final function FireWeapon()
 	//
 	// exit if bDebugWeapon is on
 	AI = EAIController(Controller);
-	if ( AI != none && AI.EPawn != none && AI.EPawn.bDebugWeapon )
+	if (AI != none && AI.EPawn != none && AI.EPawn.bDebugWeapon)
 		return;
 
 	TraceFire();
 
 	// Reduce ammo
-	if(ClipAmmo > 0)
+	if (ClipAmmo > 0)
 	{		
 		ClipAmmo--;
 		Ammo--;
-		if (( Controller != none ) && (Controller.bIsPlayer))
+		if ((Controller != none) && (Controller.bIsPlayer))
 		{
-			if ( EPlayerController(Controller).bFullAmmo )
+			if (EPlayerController(Controller).bFullAmmo)
 			{	
 				++ClipAmmo;
 				++Ammo;
 			}
 		}
 
-		
-		if ( (ClipAmmo == 0) && self.IsA('EFn7'))
+		if ((ClipAmmo == 0) && self.IsA('EFn7'))
 			AddSoundRequest(Sound'FisherEquipement.Play_FNPistolEmpty', SLOT_SFX, 0.05f);
 	}
 
@@ -307,7 +310,7 @@ final function FireWeapon()
 
 event Vector GetFireStart()
 {
-	if(Controller.bIsPlayer)
+	if (Controller.bIsPlayer)
 	{
 		return EPlayerController(Controller).GetFireStart();
 	}
@@ -322,9 +325,9 @@ event Vector GetFireEnd()
 	return Controller.GetTargetPosition();
 }
 
-function Vector GetFireDirection( Vector ShotDirection )
+function Vector GetFireDirection(Vector ShotDirection)
 {
-	return GetVectorFrom(Rotator(ShotDirection),Sqrt(RealAccuracy)*7);
+	return GetVectorFrom(Rotator(ShotDirection), Sqrt(RealAccuracy) * 7);
 }
 
 function SpawnWallHit(Actor HitActor, vector HitLocation, vector HitNormal, Material HitMaterial)
@@ -333,12 +336,12 @@ function SpawnWallHit(Actor HitActor, vector HitLocation, vector HitNormal, Mate
 	local Rotator projRot;
 
 	// Hit world geometry
-	if( HitActor.bWorldGeometry || HitActor.DrawType == DT_StaticMesh )
+	if (HitActor.bWorldGeometry || HitActor.DrawType == DT_StaticMesh)
 	{
 		BulletMaterial		= HitMaterial;
 		projRot				= Rotator(HitNormal);
 		projRot.Roll		= FRand() * 65536;
-		Spark				= Spawn(class'EWallHit', Controller(owner).pawn,, HitLocation+HitNormal, projRot);
+		Spark				= Spawn(class'EWallHit', Controller(owner).Pawn,, HitLocation+HitNormal, projRot);
 		Spark.hitMaterial	= HitMaterial;
         Spark.HitActor		= HitActor;
 		Spark.SndBullet		= BulletSound;
@@ -346,7 +349,6 @@ function SpawnWallHit(Actor HitActor, vector HitLocation, vector HitNormal, Mate
         Spark.Noise();
 	}
 }
-
 
 //------------------------------------------------------------------------
 // Description
@@ -361,7 +363,7 @@ function TraceFire()
 	local EPlayerController EPC;
 	local int InflictedDamage;
 
-	if( Controller == None )
+	if (Controller == None)
 		Log("WEAPON WARNING : TraceFire() has no Controller Owner");
 
 	MakeNoise(FireNoiseRadius, NOISE_Gunfire);
@@ -370,8 +372,8 @@ function TraceFire()
 	StartTrace	= GetFireStart();
 	ShotDirection = GetFireEnd() - StartTrace;
 
-	if(Controller.bIsplayer)
-		EndTrace = StartTrace + (ShootingRange * GetFireDirection(ShotDirection) );
+	if (Controller.bIsPlayer)
+		EndTrace = StartTrace + (ShootingRange * GetFireDirection(ShotDirection));
 	else
 		EndTrace = StartTrace + (ShootingRange * Controller.AdjustTarget(ShotDirection));
 
@@ -380,24 +382,24 @@ function TraceFire()
 
 	InflictedDamage = BaseDamage;
 
-	if( HitActor == None )
+	if (HitActor == None)
 		return;
 
 	// Npc should not shoot each other when walking around
-	if( !Controller.bIsPlayer )
+	if (!Controller.bIsPlayer)
 	{
 		// Make sure that the intention of the NPC is not to shoot another NPC
-		if( HitActor.bIsPawn && !EPawn(HitActor).bIsPlayerPawn && EAIController(Controller).TargetActorToFire != HitActor )
+		if (HitActor.bIsPawn && !EPawn(HitActor).bIsPlayerPawn && EAIController(Controller).TargetActorToFire != HitActor)
 		{
 			// Although Npc will get shot if he's being grabbed
 			// If shooting a grabbed Npc, reduce damage
-			if( EPawn(HitActor).GetStateName() == 's_Grabbed' || EPawn(HitActor).GetStateName() == 's_Carried')
+			if (EPawn(HitActor).GetStateName() == 's_Grabbed' || EPawn(HitActor).GetStateName() == 's_Carried')
 			{
 				InflictedDamage /= 5;
 			}
 			else
 			{
-				//Log("Npc["$Controller.pawn$"] cancel target["$HitActor$" "$HitActor.GetStateName()$"]");
+				//Log("Npc["$Controller.Pawn$"] cancel target["$HitActor$" "$HitActor.GetStateName()$"]");
 				HitActor = None;
 				return;
 			}
@@ -405,23 +407,23 @@ function TraceFire()
 
 		//If the bullet hit the geometry, check if it went trough Sam's cylinder
 		//If yes, play a bullet whistle sound effect
-		if( HitActor != None && HitActor.bWorldGeometry && 
-			DistancePointToLine(EchelonGameInfo(Level.Game).pPlayer.EPawn.GetBoneCoords(EchelonGameInfo(Level.Game).pPlayer.EPawn.EyeBoneName).Origin, StartTrace, EndTrace ) < 22 )
+		if (HitActor != None && HitActor.bWorldGeometry && 
+			DistancePointToLine(EchelonGameInfo(Level.Game).pPlayer.EPawn.GetBoneCoords(EchelonGameInfo(Level.Game).pPlayer.EPawn.EyeBoneName).Origin, StartTrace, EndTrace) < 22)
 		{
 			EchelonGameInfo(Level.Game).pPlayer.EPawn.PlaySound(Sound'GunCommon.Play_Random_BulletWhistle', SLOT_SFX);
 		}
 	}
 
-	if( HitActor == None )
+	if (HitActor == None)
 		return;
 
 	SpawnWallHit(HitActor, HitLocation, HitNormal, HitMaterial);
 
     // If it's Sam firing at NPC, add hit location and time to hit array
-    if( Controller.bIsPlayer )
+    if (Controller.bIsPlayer)
 		EPlayerController(Controller).AddHit(HitLocation, Level.TimeSeconds);
 	
-	if( HitActor != self && HitActor != Controller.Pawn && !HitActor.bWorldGeometry )
+	if (HitActor != self && HitActor != Controller.Pawn && !HitActor.bWorldGeometry)
 	{
 		//Log("["$Controller.Pawn$"] deals damage["$InflictedDamage$"] to ["$HitActor$"]");
 		HitActor.TakeDamage(InflictedDamage, Controller.Pawn, HitLocation, HitNormal, Normal(HitLocation - GetFireStart()) * BaseMomentum, None, PillTag);
@@ -433,11 +435,17 @@ function TraceFire()
 /////////////////////////////////////////////////////////////////////////
 function bool SwitchROF()
 {
-	switch( eROFMode )
+	switch (eROFMode)
 	{
-	case ROF_Single : eROFMode = ROF_Burst; return true;
-	case ROF_Burst : eROFMode = ROF_Auto; return true;
-	case ROF_Auto :	eROFMode = ROF_Single; return true;
+		case ROF_Single: 
+			eROFMode = ROF_Burst; 
+			return true;
+		case ROF_Burst:
+			eROFMode = ROF_Auto;
+			return true;
+		case ROF_Auto:
+			eROFMode = ROF_Single;
+			return true;
 	}
 }
 
@@ -448,14 +456,14 @@ event bool IsROFModeAvailable(ERateOfFireMode rof)
 
 function int GetNbBulletsFromROF()
 {
-	switch( eROFMode )
+	switch (eROFMode)
 	{
-	case ROF_Single : 
-		return 1;
-	case ROF_Burst : 
-		return Min(3, ClipAmmo);
-	case ROF_Auto :	
-		return ClipAmmo;
+		case ROF_Single: 
+			return 1;
+		case ROF_Burst: 
+			return Min(3, ClipAmmo);
+		case ROF_Auto:	
+			return ClipAmmo;
 	}
 }
 
@@ -477,7 +485,7 @@ state s_Flying
 		DesiredRotation		= Rot(0,0,16383); // Should be floor normal
 	}
 
-	function Landed( vector HitNormal )
+	function Landed(vector HitNormal)
 	{
 		StoppedMoving();
 	}
@@ -505,7 +513,7 @@ state s_Inventory
 	{
 		Super.BeginState();
 
-		if( WeaponReticle != None )
+		if (WeaponReticle != None)
 			EWeaponReticle(WeaponReticle).SetEpc();
 	}
 }
@@ -519,21 +527,20 @@ state s_Selected
 	{
 		//Log("Ammo["$Ammo$"] MaxAmmo["$MaxAmmo$"] ClipAmmo["$ClipAmmo$"] ClipMaxAmmo["$ClipMaxAmmo$"] C0["$Ammo/ClipMaxAmmo$"] C1["$(Ammo-ClipAmmo)/ClipMaxAmmo$"] C2["$(Ammo-ClipMaxAmmo)/ClipMaxAmmo$"] C3["$(Ammo-ClipAmmo)/ClipMaxAmmo$"]");
 
-
-		if( WeaponReticle != None )
+		if (WeaponReticle != None)
 			WeaponReticle.GotoState('s_Selected');
 
 		Super.BeginState();
 
 		// if holding trigger when no more bullet, produce empty gun sound
-		if( ClipAmmo == 0 && eROFMode != ROF_Single && Controller.Pawn.PressingFire() )
+		if (ClipAmmo == 0 && eROFMode != ROF_Single && Controller.Pawn.PressingFire())
 			Fire();
 	}
 
 	// Never allow change in Firing mode when pulling trigger. No override of this in sub-class
 	function bool SwitchROF()
 	{
-		if( Controller.Pawn.PressingFire() )
+		if (Controller.Pawn.PressingFire())
 			return false;
 		
 		return Global.SwitchROF();
@@ -545,13 +552,14 @@ state s_Selected
 	}
 
 	// I hate to do this . but need to know when trigger is released
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
         Super.Tick(DeltaTime);
-		if( WeaponReticle != None )
+		
+		if (WeaponReticle != None)
 			WeaponReticle.ObjectHudTick(DeltaTime);
 
-        if( BulletsToFire == 0 && ClipAmmo == 0 && Ammo > 0	&& eROFMode != ROF_Single && !Controller.Pawn.PressingFire() )
+        if (BulletsToFire == 0 && ClipAmmo == 0 && Ammo > 0	&& eROFMode != ROF_Single && !Controller.Pawn.PressingFire())
 		{
 		    Reload();
 		}
@@ -567,17 +575,17 @@ state s_Reloading
 
 	function BeginState()
 	{
-		if( WeaponReticle != None )
+		if (WeaponReticle != None)
 			WeaponReticle.GotoState('s_Reloading');
 
 		// Do not reload if there's no clip left || clip is already full
-		if( Ammo == 0 || ClipAmmo == ClipMaxAmmo )
+		if (Ammo == 0 || ClipAmmo == ClipMaxAmmo)
 			Log(self$" ERROR: Shouldn't be in reload state");
 
 		// Check if Controller can go into states to play animation
 		Controller.NotifyReloading();
 
-		if(IsPlaying(FireAutomaticSound))
+		if (IsPlaying(FireAutomaticSound))
 			PlaySound(FireAutomaticEndSound, SLOT_SFX);
 
 		PlaySound(ReloadSound, SLOT_SFX);
@@ -589,11 +597,11 @@ state s_Reloading
 		GotoState('s_Selected');
 	}
 
-	event AnimEnd( int Channel )
+	event AnimEnd(int Channel)
 	{
-		if( Channel == 69 && MaxAmmo > 0 )
+		if (Channel == 69 && MaxAmmo > 0)
 		{
-			if(Ammo > ClipMaxAmmo)
+			if (Ammo > ClipMaxAmmo)
 				ClipAmmo = ClipMaxAmmo;
 			else
 				ClipAmmo = Ammo;
@@ -602,34 +610,36 @@ state s_Reloading
 		EndEvent();
 	}
 
-	function StepReload( int Step )
+	function StepReload(int Step)
 	{
-		if( Magazine == None )
+		if (Magazine == None)
 			return;
-		switch( Step )
+
+		switch (Step)
 		{
-		case 1 :
-			EPawn(Controller.Pawn).AttachToBone(Magazine, 'LeftHandBone');
-			Magazine.SetRelativeLocation(vect(0,0,0));
-			Magazine.SetRelativeRotation(rot(0,0,0));
-			break;
-		case 2 :
-			Magazine.bHidden = true;
-			break;
-		case 3 :
-			Magazine.bHidden = false;
-			break;
-		case 4 :
-			EPawn(Controller.Pawn).DetachFromBone(Magazine);
-			ResetMagazine();
-			break;
+			case 1:
+				EPawn(Controller.Pawn).AttachToBone(Magazine, 'LeftHandBone');
+				Magazine.SetRelativeLocation(vect(0,0,0));
+				Magazine.SetRelativeRotation(rot(0,0,0));
+				break;
+			case 2:
+				Magazine.bHidden = true;
+				break;
+			case 3:
+				Magazine.bHidden = false;
+				break;
+			case 4:
+				EPawn(Controller.Pawn).DetachFromBone(Magazine);
+				ResetMagazine();
+				break;
 		}
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
 		Super.Tick(DeltaTime);
-		if( WeaponReticle != None )
+
+		if (WeaponReticle != None)
 			WeaponReticle.ObjectHudTick(DeltaTime);
 	}
 }
@@ -643,22 +653,22 @@ state s_Firing
 
 	function BeginState()
 	{
-		if( WeaponReticle != None )
+		if (WeaponReticle != None)
 			WeaponReticle.GotoState('s_Firing');
 
 		BulletsToFire = GetNbBulletsFromROF();
 
-		switch( eROFMode )
+		switch (eROFMode)
 		{
-		case ROF_Single : 
-			PlaySound(FireSingleShotSound, SLOT_SFX);
-			break;
-		case ROF_Burst : 
-			PlaySound(FireAutomaticSound, SLOT_SFX); // Joshua - Originally played no sound, restored for burst fire
-			break;
-		case ROF_Auto :	
-			PlaySound(FireAutomaticSound, SLOT_SFX);
-			break;
+			case ROF_Single: 
+				PlaySound(FireSingleShotSound, SLOT_SFX);
+				break;
+			case ROF_Burst: 
+				PlaySound(FireAutomaticSound, SLOT_SFX); // Joshua - Originally played no sound, restored for burst fire
+				break;
+			case ROF_Auto:	
+				PlaySound(FireAutomaticSound, SLOT_SFX);
+				break;
 		}
 
 		// Shoot a bullet now
@@ -670,9 +680,9 @@ state s_Firing
 	event Timer()
 	{
 		// if no more bullets OR mode auto and released trigger
-		if( BulletsToFire == 0 || ( (eROFMode==ROF_Auto || !Controller.bIsPlayer) && !Controller.Pawn.PressingFire()) )
+		if (BulletsToFire == 0 || ((eROFMode == ROF_Auto || !Controller.bIsPlayer) && !Controller.Pawn.PressingFire()))
 		{
-			if(IsPlaying(FireAutomaticSound))
+			if (IsPlaying(FireAutomaticSound))
 				PlaySound(FireAutomaticEndSound, SLOT_SFX);
 
 			GotoState('s_Selected');
@@ -681,27 +691,23 @@ state s_Firing
 		{
 			SetTimer(RateOfFire,false);
 			FireWeapon();
-	}
+		}
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
 		Super.Tick(DeltaTime);
-		if( WeaponReticle != None )
+
+		if (WeaponReticle != None)
 			WeaponReticle.ObjectHudTick(DeltaTime);
 	}
 }
-
-
-
-
-
 
 state s_Dying
 {
 	function BeginState()
 	{
-		if(IsPlaying(FireAutomaticSound))
+		if (IsPlaying(FireAutomaticSound))
 			PlaySound(FireAutomaticEndSound, SLOT_SFX);
 
 		SetTimer(1.f + FRand(), true);
@@ -710,7 +716,7 @@ state s_Dying
 
 	function Timer()
 	{
-		if ( !PlayerCanSeeMe() ) 
+		if (!PlayerCanSeeMe()) 
 			Destroy();
 	}
 }

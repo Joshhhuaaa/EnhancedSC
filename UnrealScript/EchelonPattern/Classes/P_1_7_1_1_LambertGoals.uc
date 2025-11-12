@@ -16,9 +16,9 @@ var int SurfacedDone;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -38,7 +38,7 @@ function InitPattern()
     // Joshua - Adding the camera that is missing in the PC version
     if (!bInit)
     {
-        XboxCamera = Spawn(class'ECamera', , , vect(7424, -7198.5, 204), rot(0, 49152, 0)); // Y=-7192.5 / DrawScale=1.0
+        XboxCamera = Spawn(class'ECamera', , , vect(7424, -7198.5, 204), rot(0, 49152, 0)); // Y = -7192.5 / DrawScale = 1.0
         XboxCamera.SetDrawScale(1.25f);
         XboxCamera.AmbientPlaySound = Sound'Electronic.Play_CameraScan';
         XboxCamera.AmbientStopSound = Sound'Electronic.Stop_CameraScan';
@@ -107,11 +107,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     SurfacedDone=0;

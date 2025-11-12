@@ -13,9 +13,9 @@ class P_1_6_1_1_BasementAmbush extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_HEAR_RICOCHET:
             EventJump('SeePlayer');
@@ -46,15 +46,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz4')
+        if (P.name == 'spetsnaz4')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz6')
+        if (P.name == 'spetsnaz6')
             Characters[2] = P.controller;
-        if(P.name == 'spetsnaz5')
+        if (P.name == 'spetsnaz5')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }
@@ -92,7 +92,7 @@ BasementCarryB:
     Teleport(2, 'TelFrontGuyOne');
     Teleport(3, 'TelFrontGuyTwo');
     ChangeGroupState('s_alert');
-    JumpRandom('AttackRandomOne', 0.33, 'AttackRandomTwo', 0.67, 'AttackRandomThree', 1.00, , , , ); 
+    JumpRandom('AttackRandomOne', 0.33, 'AttackRandomTwo', 0.67, 'AttackRandomThree', 1.00, , , ,); 
     End();
 AttackRandomOne:
     Log("AttackRandomOne");

@@ -9,10 +9,10 @@ var()	int				RotationSpeed;
 function PostBeginPlay()
 {
 	myWings = spawn(class'EGameplayObject', self,,ToWorld(Vect(0,0,-3)));
-	if( myWings == None )
+	if (myWings == None)
 		Log("Couldn't spawn a Ceilling Fan wings for"@self);
 	myWings.SetStaticMesh(StaticMesh'EMeshIngredient.Object.CeillingFanWings');
-	myWings.SetDrawScale(DrawScale*0.8f);
+	myWings.SetDrawScale(DrawScale * 0.8f);
 	myWings.bDamageable = false;
 
 	myWings.SetPhysics(PHYS_Rotating);
@@ -27,10 +27,10 @@ function PostBeginPlay()
 
 state s_Destructed
 {
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
-		myWings.RotationRate.Yaw = Clamp(myWings.RotationRate.Yaw, 0, myWings.RotationRate.Yaw-10000*DeltaTime);
-		if( myWings.RotationRate.Yaw <= 0 )
+		myWings.RotationRate.Yaw = Clamp(myWings.RotationRate.Yaw, 0, myWings.RotationRate.Yaw - 10000 * DeltaTime);
+		if (myWings.RotationRate.Yaw <= 0)
 		{
 			myWings.SetPhysics(PHYS_None);
 			Disable('Tick');

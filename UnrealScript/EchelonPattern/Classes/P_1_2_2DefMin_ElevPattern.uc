@@ -11,9 +11,9 @@ class P_1_2_2DefMin_ElevPattern extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_HEAR_RICOCHET:
             EventJump('Alerted');
@@ -38,9 +38,9 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianSoldier0')
+        if (P.name == 'EGeorgianSoldier0')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianSoldier8')
+        if (P.name == 'EGeorgianSoldier8')
             Characters[2] = P.controller;
     }
 
@@ -49,7 +49,7 @@ function InitPattern()
     {
         ForEach DynamicActors(class'Pawn', P)
         {
-            if(P.name == 'EGeorgianSoldier8' || P.name == 'EGeorgianSoldier13' || P.name == 'EGeorgianSoldier9'
+            if (P.name == 'EGeorgianSoldier8' || P.name == 'EGeorgianSoldier13' || P.name == 'EGeorgianSoldier9'
             || P.name == 'EGeorgianSoldier3' || P.name == 'EGeorgianSoldier5')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.GESoldier.GESoldierA", class'Texture'));
@@ -60,14 +60,14 @@ function InitPattern()
     // Joshua - Defense Ministry requires 1 bullet to shoot a unavoidable camera for Elite mode
     if (!bInit && EchelonGameInfo(Level.Game).bEliteMode && EPlayerController(Characters[0]) != None && EPlayerController(Characters[0]).HandGun != None)
     {
-        if(EPlayerController(Characters[0]).HandGun.Ammo == 0 && EPlayerController(Characters[0]).HandGun.ClipAmmo == 0 && EPlayerController(Characters[0]).playerStats.BulletFired == 0)
+        if (EPlayerController(Characters[0]).HandGun.Ammo == 0 && EPlayerController(Characters[0]).HandGun.ClipAmmo == 0 && EPlayerController(Characters[0]).playerStats.BulletFired == 0)
         {
             EPlayerController(Characters[0]).HandGun.Ammo = 1;
             EPlayerController(Characters[0]).HandGun.ClipAmmo = 1;
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

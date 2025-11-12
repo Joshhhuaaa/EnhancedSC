@@ -14,9 +14,9 @@ var int WentTrough;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -32,15 +32,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianSoldier2')
+        if (P.name == 'EGeorgianSoldier2')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianSoldier1')
+        if (P.name == 'EGeorgianSoldier1')
             Characters[2] = P.controller;
-        if(P.name == 'EGrinko0')
+        if (P.name == 'EGrinko0')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     WentTrough=0;

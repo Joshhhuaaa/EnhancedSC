@@ -13,9 +13,9 @@ class P_4_2_2_Abt_TheChinTalk3 extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -31,11 +31,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ELongDan0')
+        if (P.name == 'ELongDan0')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }
@@ -51,7 +51,7 @@ state Pattern
 Begin:
 LongDan:
     Log("");
-    JumpRandom('talk1', 0.34, 'talk2', 0.67, 'talk3', 1.00, , , , ); 
+    JumpRandom('talk1', 0.34, 'talk2', 0.67, 'talk3', 1.00, , , ,); 
     End();
 talk1:
     Log("");

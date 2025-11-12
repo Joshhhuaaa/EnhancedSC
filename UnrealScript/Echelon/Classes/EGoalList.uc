@@ -42,7 +42,7 @@ event EGoal GetCurrent()
 //
 //------------------------------------------------------------------------
 
-function Insert( EGoal G )
+function Insert(EGoal G)
 {
 	local EGoal tempGoal;
 
@@ -59,13 +59,13 @@ function Insert( EGoal G )
 
 		///////////////////////////////////////////
 		//adjust the default pattern if there's one
-		if(EAIController(Owner) != None && EAIController(Owner).Pattern != None)
+		if (EAIController(Owner) != None && EAIController(Owner).Pattern != None)
 			EAIController(Owner).Pattern.AdjustDefaultPatternState(pHead.m_GoalType);
 	}
 
 	// call recursive insert if not base case
 	else
-		pHead.Next = PriorityInsert( G, pHead.Next );
+		pHead.Next = PriorityInsert(G, pHead.Next);
 }
 
 
@@ -86,7 +86,7 @@ function Insert( EGoal G )
 // 
 //------------------------------------------------------------------------
 
-function bool Replace( EGoal G )
+function bool Replace(EGoal G)
 {
 	local EGoal tempGoal;
 
@@ -102,7 +102,7 @@ function bool Replace( EGoal G )
 	}
 
 	// recurse through remainder of list
-	return RecursiveReplace( G, pHead );	
+	return RecursiveReplace(G, pHead);	
 }
 
 
@@ -127,7 +127,7 @@ function ReplaceDefaultGoal(EGoal G)
 	if (pHead.Next == None)
 	{
 		pHead.Destroy();
-		pHead=G;
+		pHead = G;
 	}
 	else
 	{
@@ -143,7 +143,7 @@ function ReplaceDefaultGoal(EGoal G)
 		
 		//replace the default goal of the list AND destroy the older
 		PrevGoal.Next = G;
-		G.Next=None;
+		G.Next = None;
 		CurGoal.Destroy();
 	}
 }
@@ -157,14 +157,14 @@ function ReplaceDefaultGoal(EGoal G)
 // 
 //------------------------------------------------------------------------
 
-function bool RecursiveReplace ( EGoal G, EGoal Current )
+function bool RecursiveReplace (EGoal G, EGoal Current)
 {
 	local EGoal tempGoal;
 
-	if ( Current.Next == none )
+	if (Current.Next == none)
 		return false;
 
-	else if ( Current.Next.Priority == G.Priority && Current.Next.m_GoalType == G.m_GoalType )
+	else if (Current.Next.Priority == G.Priority && Current.Next.m_GoalType == G.m_GoalType)
 	{
 		// found a match
 		tempGoal		= Current.Next;
@@ -174,7 +174,7 @@ function bool RecursiveReplace ( EGoal G, EGoal Current )
 		return true;
 	}
 	else
-		return RecursiveReplace( G, Current.Next );
+		return RecursiveReplace(G, Current.Next);
 }
 
 
@@ -196,7 +196,7 @@ function bool RecursiveReplace ( EGoal G, EGoal Current )
 //
 //------------------------------------------------------------------------
 
-function EGoal PriorityInsert( EGoal newGoal, EGoal currentGoal )
+function EGoal PriorityInsert(EGoal newGoal, EGoal currentGoal)
 {
 	if (currentGoal == none)
 		return newGoal;
@@ -207,7 +207,7 @@ function EGoal PriorityInsert( EGoal newGoal, EGoal currentGoal )
 		return newGoal;
 	}
 
-	currentGoal.Next = PriorityInsert( newGoal, currentGoal.Next );
+	currentGoal.Next = PriorityInsert(newGoal, currentGoal.Next);
 	return currentGoal;
 }
 
@@ -225,17 +225,17 @@ function Pop()
 {
 	local EGoal temp;
 
-	if(pHead != None)
+	if (pHead != None)
 	{
 		//be sure to not remove the default goal
-		if(pHead.Next != none)
+		if (pHead.Next != none)
 		{
 
 			temp = pHead;
 			pHead = pHead.Next;
 			temp.Destroy();
 
-			if ( pHead.Next == none )
+			if (pHead.Next == none)
 			{
 				// popped to the default goal
 				pHead.bInitialized = false;
@@ -250,7 +250,7 @@ function Pop()
 
 			///////////////////////////////////////////
 			//adjust the default pattern if there's one
-			//if(EAIController(Owner) != None && EAIController(Owner).Pattern != None)
+			//if (EAIController(Owner) != None && EAIController(Owner).Pattern != None)
 			//	EAIController(Owner).Pattern.AdjustDefaultPatternState(pHead.m_GoalType);
 
 		}
@@ -295,7 +295,7 @@ function Pop()
 //------------------------------------------------------------------------
 function PopDefault()
 {
-	if(pHead.Next == none)
+	if (pHead.Next == none)
 	{
 		pHead.Destroy();
 		pHead = none;
@@ -330,13 +330,13 @@ function ResetBasics()
 
 		while (CurGoal != none)
 		{
-			if((CurGoal.Priority < 30) && (CurGoal.Next != None))
+			if ((CurGoal.Priority < 30) && (CurGoal.Next != None))
 			{
 				tmp = CurGoal;
 				prec.Next = CurGoal.Next;
 				CurGoal = CurGoal.Next;
 
-				if( pHead == tmp)
+				if (pHead == tmp)
 					pHead = CurGoal;
 
 				tmp.Destroy();
@@ -349,7 +349,7 @@ function ResetBasics()
 			}
 		}
 
-		if ( pHead.Next == none )
+		if (pHead.Next == none)
 		{
 			// popped to the default goal
 			pHead.bInitialized = false;
@@ -374,7 +374,7 @@ function bool CheckGoalPriority(byte _priority)
 
 		while (CurGoal != none)
 		{
-			if(CurGoal.Priority == _priority)
+			if (CurGoal.Priority == _priority)
 				return true;
 
 			CurGoal = CurGoal.Next;

@@ -23,17 +23,17 @@ function FindTriggerActor()
 }
 
 // Accept an actor that has teleported in.
-function bool Accept( actor Incoming, Actor Source )
+function bool Accept(actor Incoming, Actor Source)
 {
 	return true;
 }
 
-function Trigger( actor Other, pawn EventInstigator, optional name InTag ) // UBI MODIF - Additional parameter
+function Trigger(actor Other, pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 {
 }
 
 // Teleporter was touched by an actor.
-function Touch( actor Other )
+function Touch(actor Other)
 {
 }
 

@@ -17,17 +17,17 @@ function PostBeginPlay()
 {
 	Super.PostBeginPlay();
 
-	if( SensorType == IRT_Emitter )
+	if (SensorType == IRT_Emitter)
 	{
 		// Validate Receiver
-		if( Receiver == None )
+		if (Receiver == None)
 			Log(self$" ERROR: EIRSensor should have a End");
-		else if( Receiver.SensorType != IRT_Receiver )
+		else if (Receiver.SensorType != IRT_Receiver)
 			Log(self$" ERROR: EIRSensor Receiver's Type is not a IRT_Receiver");
 
 		// Create laser
-		Laser = spawn(class'EGameplayObject', self,,,Rotator(Receiver.Location-Location));
-		if( Laser == None )
+		Laser = spawn(class'EGameplayObject', self,,,Rotator(Receiver.Location - Location));
+		if (Laser == None)
 			Log(self$" ERROR: Can't create Laser for EIRSensor");
 		Laser.SetStaticMesh(StaticMesh'EGO_OBJ.GenObjGO.GO_Laser');
 		Laser.SetCollision(false);
@@ -41,26 +41,26 @@ function PostBeginPlay()
 	}
 }
 /*
-function Touch( Actor Other )
+function Touch(Actor Other)
 {
 	GotoState('s_RayTracing');
 }
 
-function UnTouch( Actor Other )
+function UnTouch(Actor Other)
 {
-	if( Touching.Length <= 1 )
+	if (Touching.Length <= 1)
 		GotoState('');
 }
 */
-function AdjustScale( vector LaserEnd )
+function AdjustScale(vector LaserEnd)
 {    
-	Laser.SetDrawScale3D(((VSize(Location-LaserEnd)+2.f) * Vect(1,0,0))+DrawScale3D);
+	Laser.SetDrawScale3D(((VSize(Location - LaserEnd) + 2.f) * Vect(1,0,0)) + DrawScale3D);
 }
 
 // Should not call base EGameplayObject::Trigger
-function Trigger( actor Other, pawn EventInstigator, optional name InTag )
+function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 {
-	if( Other.IsA('EPattern') )
+	if (Other.IsA('EPattern'))
 		GotoState('');
 	else
 		Super.Trigger(Other, EventInstigator);
@@ -70,7 +70,7 @@ state s_RayTracing
 {
 	function BeginState()
 	{
-		if( Receiver == None )
+		if (Receiver == None)
 			Disable('Tick');
 		
 		// call once to activate on startup
@@ -96,7 +96,7 @@ state s_RayTracing
 
 	function Timer()
 	{
-		if( !Laser.bJustVisibleHeat )
+		if (!Laser.bJustVisibleHeat)
 		{
 			Activate();
 			Enable('Tick');
@@ -108,7 +108,7 @@ state s_RayTracing
 		}
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
 		local vector	HitLocation, HitNormal;
 		local actor		HitActor;
@@ -116,23 +116,23 @@ state s_RayTracing
 		local bool		shouldTrace;
 
 		// trace only if a pawn is around
-		for( i=0; i<Touching.Length; i++ )
+		for (i = 0; i < Touching.Length; i++)
 		{
-			if( Touching[i].bIsPlayerPawn )
+			if (Touching[i].bIsPlayerPawn)
 				shouldTrace = true;
 		}
 
-		if(shouldTrace)
+		if (shouldTrace)
 			HitActor = TraceBone(PillTag, HitLocation, HitNormal, Receiver.Location, Location);
 
-		if( HitActor == None )
+		if (HitActor == None)
 			AdjustScale(Receiver.Location);
 		else
 			AdjustScale(HitLocation);
 
-		if(HitActor != None && HitActor.bIsPlayerPawn )
+		if (HitActor != None && HitActor.bIsPlayerPawn)
 		{
-			if ( !IsPlaying(Sound'Electronic.Play_AlarmeDetecteurLaser') )
+			if (!IsPlaying(Sound'Electronic.Play_AlarmeDetecteurLaser'))
 				PlaySound(Sound'Electronic.Play_AlarmeDetecteurLaser', SLOT_SFX);
 			TriggerPattern();
 		}

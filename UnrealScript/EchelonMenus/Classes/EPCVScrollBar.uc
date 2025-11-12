@@ -13,21 +13,21 @@ class EPCVScrollBar extends UWindowVScrollBar
 function Created()
 {	
 	UpButton = UWindowSBUpButton(CreateWindow(class'EPCSBUpButton', 0, 0, LookAndFeel.Size_ScrollbarWidth, LookAndFeel.Size_ScrollbarButtonHeight));
-	DownButton = UWindowSBDownButton(CreateWindow(class'EPCSBDownButton', 0, WinHeight-LookAndFeel.Size_ScrollbarButtonHeight, LookAndFeel.Size_ScrollbarWidth, LookAndFeel.Size_ScrollbarButtonHeight));
+	DownButton = UWindowSBDownButton(CreateWindow(class'EPCSBDownButton', 0, WinHeight - LookAndFeel.Size_ScrollbarButtonHeight, LookAndFeel.Size_ScrollbarWidth, LookAndFeel.Size_ScrollbarButtonHeight));
 }
 
 function LMouseDown(float X, float Y)
 {
-	if((Y < ThumbStart) || (Y > ThumbStart + ThumbHeight))
+	if ((Y < ThumbStart) || (Y > ThumbStart + ThumbHeight))
 		Root.PlayClickSound();
 	Super.LMouseDown(X, Y);
 }
 
 function Paint(Canvas C, float X, float Y) 
 {
-    if ( isHidden()  )
+    if (isHidden())
         return;
 
-	Render( C , X, Y);    
+	Render(C , X, Y);    
 
 }

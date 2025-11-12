@@ -16,9 +16,9 @@ var int pass1;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -35,19 +35,19 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[1] = P.controller;
-        if(P.name == 'ELongDan0')
+        if (P.name == 'ELongDan0')
             Characters[2] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'EGrinko0')
+        if (A.name == 'EGrinko0')
             SoundActors[0] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     LongDanPass1=0;

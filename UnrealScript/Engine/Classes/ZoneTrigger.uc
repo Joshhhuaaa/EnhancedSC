@@ -6,18 +6,18 @@ class ZoneTrigger extends Trigger;
 //
 // Called when something touches the trigger.
 //
-function Touch( actor Other )
+function Touch(actor Other)
 {
 	local ZoneInfo Z;
-	if( IsRelevant( Other ) )
+	if (IsRelevant(Other))
 	{
 		// Broadcast the Trigger message to all matching actors.
-		if( Event != '' )
-			foreach AllActors( class 'ZoneInfo', Z )
-				if ( Z.ZoneTag == Event )
-					Z.Trigger( Other, Other.Instigator );
+		if (Event != '')
+			foreach AllActors(class 'ZoneInfo', Z)
+				if (Z.ZoneTag == Event)
+					Z.Trigger(Other, Other.Instigator);
 
-		if( bTriggerOnceOnly )
+		if (bTriggerOnceOnly)
 			// Ignore future touches.
 			SetCollision(False);
 	}
@@ -26,16 +26,16 @@ function Touch( actor Other )
 //
 // When something untouches the trigger.
 //
-function UnTouch( actor Other )
+function UnTouch(actor Other)
 {
 	local ZoneInfo Z;
-	if( IsRelevant( Other ) )
+	if (IsRelevant(Other))
 	{
 		// Untrigger all matching actors.
-		if( Event != '' )
-			foreach AllActors( class 'ZoneInfo', Z )
-				if ( Z.ZoneTag == Event )
-					Z.UnTrigger( Other, Other.Instigator );
+		if (Event != '')
+			foreach AllActors(class 'ZoneInfo', Z)
+				if (Z.ZoneTag == Event)
+					Z.UnTrigger(Other, Other.Instigator);
 	}
 }
 

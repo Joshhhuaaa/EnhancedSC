@@ -58,7 +58,7 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 }
 
-function Slave( EGameplayObject NewMaster )
+function Slave(EGameplayObject NewMaster)
 {
 	hud_master = NewMaster;
 	GotoState('s_Slavery');
@@ -76,7 +76,7 @@ function NormalView()
 function FullInventory()
 {
 	// Don't process the START button if we are displaying controller help splash
-	if ( (!bShowCtrl) && (EPlayerController(Owner).EPawn.Health > 0) && (!IsGameOver()) )
+	if ((!bShowCtrl) && (EPlayerController(Owner).EPawn.Health > 0) && (!IsGameOver()))
 	{
 		// Joshua - Blocking Xbox pause menu if on keyboard
 		if (!EPlayerController(Owner).eGame.bUseController)

@@ -11,7 +11,7 @@ class EPCCheckBox extends UWindowButton
 
 function Click(float X, float Y) 
 {
-    if(bDisabled)
+    if (bDisabled)
         return;
 
     m_bSelected = !m_bSelected;

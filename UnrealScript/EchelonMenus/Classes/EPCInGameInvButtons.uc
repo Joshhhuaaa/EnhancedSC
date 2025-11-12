@@ -43,10 +43,10 @@ function SetupTextures(INT _TextureId, ETextureManager _TM)
     DisabledTexture  =  _TM.ArrayTexture[_TextureId].TextureOwner;
 
     
-    ImageX = ( WinWidth - UpRegion.W ) /2;
-    ImageY = ( WinHeight - UpRegion.H ) /2;
+    ImageX = (WinWidth - UpRegion.W) /2;
+    ImageY = (WinHeight - UpRegion.H) /2;
 
-    if(m_bInvertHorizontalCoord)
+    if (m_bInvertHorizontalCoord)
     {
         UpRegion.X   += UpRegion.W;
         DownRegion.X += DownRegion.W;
@@ -66,14 +66,14 @@ function SetupTextures(INT _TextureId, ETextureManager _TM)
 function Paint(Canvas C, float X, float Y)
 {       
 
-    if(m_bHideWhenDisabled && bDisabled)
+    if (m_bHideWhenDisabled && bDisabled)
         return;
     
-    Render( C , X, Y);    
+    Render(C , X, Y);    
 
     if (m_bDrawButtonBorders)
 	{
-		DrawSimpleBorder( C);
+		DrawSimpleBorder(C);
 	}
 }
 

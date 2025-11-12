@@ -13,9 +13,9 @@ class P_2_2_2_Ktech_IvanAndMafioso extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('MafiosoDead');
@@ -58,16 +58,16 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMafiaMuscle17')
+        if (P.name == 'EMafiaMuscle17')
         {
             Characters[1] = P.controller;
             EAIController(Characters[1]).bAllowKnockout = true;
         }
-        if(P.name == 'EIvan0')
+        if (P.name == 'EIvan0')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

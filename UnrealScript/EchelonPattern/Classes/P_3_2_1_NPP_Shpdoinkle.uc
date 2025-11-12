@@ -11,9 +11,9 @@ class P_3_2_1_NPP_Shpdoinkle extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,25 +29,25 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EPowerPlantEmployee6')
+        if (P.name == 'EPowerPlantEmployee6')
             Characters[1] = P.controller;
-        if(P.name == 'EPowerPlantEmployee7')
+        if (P.name == 'EPowerPlantEmployee7')
             Characters[2] = P.controller;
-        if(P.name == 'EPowerPlantEmployee8')
+        if (P.name == 'EPowerPlantEmployee8')
             Characters[3] = P.controller;
-        if(P.name == 'EPowerPlantEmployee9')
+        if (P.name == 'EPowerPlantEmployee9')
             Characters[4] = P.controller;
-        if(P.name == 'EPowerPlantEmployee10')
+        if (P.name == 'EPowerPlantEmployee10')
             Characters[5] = P.controller;
-        if(P.name == 'EPowerPlantEmployee11')
+        if (P.name == 'EPowerPlantEmployee11')
             Characters[6] = P.controller;
-        if(P.name == 'EPowerPlantEmployee2')
+        if (P.name == 'EPowerPlantEmployee2')
             Characters[7] = P.controller;
-        if(P.name == 'EPowerPlantEmployee5')
+        if (P.name == 'EPowerPlantEmployee5')
             Characters[8] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

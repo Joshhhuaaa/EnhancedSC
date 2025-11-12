@@ -86,14 +86,14 @@ function PostBeginPlay()
 	local Rotator	RealNeutralRot;
 
 	// Apply Neutral Rotation modifier
-    if(NeutralRotation.PitchDegreeModifier != 0)
-	    RealNeutralRot.Pitch = 65535/(360/float(NeutralRotation.PitchDegreeModifier));
+    if (NeutralRotation.PitchDegreeModifier != 0)
+	    RealNeutralRot.Pitch = 65535 / (360 / float(NeutralRotation.PitchDegreeModifier));
 
-    if(NeutralRotation.YawDegreeModifier != 0)
-	    RealNeutralRot.Yaw = 65535/(360/float(NeutralRotation.YawDegreeModifier));
+    if (NeutralRotation.YawDegreeModifier != 0)
+	    RealNeutralRot.Yaw = 65535 / (360 / float(NeutralRotation.YawDegreeModifier));
 
-    if(NeutralRotation.RollDegreeModifier != 0)
-	    RealNeutralRot.Roll = 65535/(360/float(NeutralRotation.RollDegreeModifier));
+    if (NeutralRotation.RollDegreeModifier != 0)
+	    RealNeutralRot.Roll = 65535 / (360 / float(NeutralRotation.RollDegreeModifier));
 
 	// Keep Starting rotation
     InitialRotation = Rotation + RealNeutralRot;
@@ -103,9 +103,9 @@ function PostBeginPlay()
 	SetSensorRotation(InitialRotation);
 
     // Rotation from "sec for a turn" into 65535 base
-    if(PatrolSpeed != 0)
+    if (PatrolSpeed != 0)
     {
-        RealRotationSpeed = 65535/PatrolSpeed;
+        RealRotationSpeed = 65535 / PatrolSpeed;
     }
     else
     {
@@ -113,9 +113,9 @@ function PostBeginPlay()
     }
 
     // Angle from degree to 65535 base
-    if(PatrolAngle != 0)
+    if (PatrolAngle != 0)
     {
-        RealPatrolAngle = 65535/(360/float(PatrolAngle));
+        RealPatrolAngle = 65535 / (360 / float(PatrolAngle));
     }
     else
     {
@@ -129,25 +129,25 @@ function PostBeginPlay()
 // Description		
 //		Check if rotation is within defined range
 //------------------------------------------------------------------------
-function bool IsWithinRotationRange( Rotator WantedRotation )
+function bool IsWithinRotationRange(Rotator WantedRotation)
 {
     local rotator Delta, Range;
 	Delta = Normalize(WantedRotation - InitialRotation);
     
-	Range = RealPatrolAngle/2 * Rot(1,1,0);
+	Range = RealPatrolAngle / 2 * Rot(1,1,0);
 
-	//Log("Delta"@Delta@"-- Range"@Range@( Abs(Delta.Yaw) < Range.Yaw && Abs(Delta.Pitch) < Range.Pitch ));
+	//Log("Delta"@Delta@"-- Range"@Range@(Abs(Delta.Yaw) < Range.Yaw && Abs(Delta.Pitch) < Range.Pitch));
 
 	// normalize does that algorithm above, for all parts of the rotator
-    return ( Abs(Delta.Yaw) < Range.Yaw &&
-             Abs(Delta.Pitch) < Range.Pitch );
+    return (Abs(Delta.Yaw) < Range.Yaw &&
+             Abs(Delta.Pitch) < Range.Pitch);
 }
 
 //------------------------------------------------------------------------
 // Description		
 //		Prevent the camera from rotating more than its RotationVelocity per seconds
 //------------------------------------------------------------------------
-function AdjustTrajectory( float DeltaTime, Rotator WantedRotation, bool PlayScan )
+function AdjustTrajectory(float DeltaTime, Rotator WantedRotation, bool PlayScan)
 {
 	local int Delta, y,p;
 	local int Ymin, Ymax, Pmin, Pmax;
@@ -165,23 +165,23 @@ function AdjustTrajectory( float DeltaTime, Rotator WantedRotation, bool PlaySca
 	CurrentRotation = WantedRotation;
 
 	// rotation sound
-	if( CurrentRotation != PrevRotation )
+	if (CurrentRotation != PrevRotation)
 	{
 		distance = VSize(GetSensorPosition() - EchelonGameInfo(Level.Game).pPlayer.ePawn.Location);
-		if ( !IsPlaying(Sound_Rot_Loop) && ( ( m_bPlayIfSameZone || m_ListOfZoneInfo.Length != 0 || distance < AmbientPlayRadius ) && PlayScan ) )
+		if (!IsPlaying(Sound_Rot_Loop) && ((m_bPlayIfSameZone || m_ListOfZoneInfo.Length != 0 || distance < AmbientPlayRadius) && PlayScan))
 		{
 			if (IsPlaying(SoundFire) && !IsPlaying(SoundFire_End))
 				PlaySound(SoundFire_End, SLOT_SFX);
 			PlaySound(Sound_Rot_Loop, SLOT_SFX);
 			bRotationSoundPlaying = true;
 		}
-		else if ( bRotationSoundPlaying && ( !m_bPlayIfSameZone && m_ListOfZoneInfo.Length == 0 && distance > AmbientStopRadius ) )
+		else if (bRotationSoundPlaying && (!m_bPlayIfSameZone && m_ListOfZoneInfo.Length == 0 && distance > AmbientStopRadius))
 		{
 			bRotationSoundPlaying = false;
 			PlaySound(Sound_Rot_End, SLOT_SFX);
 		}
 	}
-	else if ( bRotationSoundPlaying )
+	else if (bRotationSoundPlaying)
 	{
 		bRotationSoundPlaying = false;
 		PlaySound(Sound_Rot_End, SLOT_SFX);
@@ -202,7 +202,7 @@ event Vector GetSensorDirection()
 {
 	return GetBoneCoords(HeadBone, true).XAxis;
 }
-function SetSensorRotation( Rotator NewRotation )
+function SetSensorRotation(Rotator NewRotation)
 {
 	SetBoneDirection(HeadBone, NewRotation);
 }
@@ -211,7 +211,7 @@ function SetSensorRotation( Rotator NewRotation )
 // Description		
 //		Takes a rotation, and makes it within or closer to valid range
 //------------------------------------------------------------------------
-function RotateIntoValidRange( float DeltaTime )
+function RotateIntoValidRange(float DeltaTime)
 {
 	local int		Low, High;
 	local float		Delta, distance;
@@ -219,8 +219,8 @@ function RotateIntoValidRange( float DeltaTime )
 
 	aRotation = CurrentRotation;
 	tmpRot = aRotation;
-    tmpRot.Yaw += DeltaTime*RealRotationSpeed;
-    if( IsWithinRotationRange(tmpRot) )
+    tmpRot.Yaw += DeltaTime * RealRotationSpeed;
+    if (IsWithinRotationRange(tmpRot))
 	{
 		// This simple rotation is valid, get outta there
 		//Log("Inside rotation range"@tmpRot@RealRotationSpeed);
@@ -229,7 +229,7 @@ function RotateIntoValidRange( float DeltaTime )
 	else
     {
 		distance = VSize(GetSensorPosition() - EchelonGameInfo(Level.Game).pPlayer.EPawn.Location);
-		if ( m_bPlayIfSameZone || m_ListOfZoneInfo.Length != 0 || distance < AmbientPlayRadius )
+		if (m_bPlayIfSameZone || m_ListOfZoneInfo.Length != 0 || distance < AmbientPlayRadius)
 			PlaySound(SoundReverse, SLOT_SFX);
 
 		// Reverse rotation direction (left-to-right VS right-to-left)
@@ -242,10 +242,10 @@ function RotateIntoValidRange( float DeltaTime )
 		// We're not within range. Find closer value to valid range
 		/////////////////////////////////////////////////////////////
 		// Get min and max from original rotation
-		Low		= InitialRotation.Yaw-(RealPatrolAngle/2);
-		High	= InitialRotation.Yaw+(RealPatrolAngle/2);
+		Low		= InitialRotation.Yaw - (RealPatrolAngle / 2);
+		High	= InitialRotation.Yaw + (RealPatrolAngle / 2);
 
-		if( Abs(aRotation.Yaw-Low) > Abs(aRotation.Yaw-High) )
+		if (Abs(aRotation.Yaw - Low) > Abs(aRotation.Yaw - High))
 		{
 //			Log("Closer to low"@aRotation.Yaw@Low);
 			//aRotation.Yaw = Delta;
@@ -273,7 +273,7 @@ function SpawnShellCase();
 // Description		
 //
 //------------------------------------------------------------------------
-function CheckLineTrace( float DeltaTime )
+function CheckLineTrace(float DeltaTime)
 {
 	local Vector	HitLocation, HitNormal, vEndTrace, BoneDirection, BonePos;
     local actor		Other, Muzzle;
@@ -285,7 +285,7 @@ function CheckLineTrace( float DeltaTime )
 	local Pawn		Instigator;  // Joshua - Added for PlayerStats
 	
 	// Do nothing if can't pawn bullet
-	if( fBulletElapsedTime < (60.0f/BulletsPerMinute) )
+	if (fBulletElapsedTime < (60.0f / BulletsPerMinute))
 		return;
 
 	// Turret will open fire if in line of sight
@@ -295,7 +295,7 @@ function CheckLineTrace( float DeltaTime )
 	vEndTrace = BonePos + VisibilityMaxDistance * BoneDirection;
 	Other = TraceBone(PillTag, HitLocation, HitNormal, vEndTrace, BonePos, HitMaterial, true); // real fire
 
-	if( Other == Target || (Other != None && FRand() > 0.5) )
+	if (Other == Target || (Other != None && FRand() > 0.5))
 	{
 		vEndTrace = BonePos + VisibilityMaxDistance * GetVectorFrom(Rotator(BoneDirection), 5);
 		Other = TraceBone(PillTag, HitLocation, HitNormal, vEndTrace, BonePos, HitMaterial);
@@ -303,7 +303,7 @@ function CheckLineTrace( float DeltaTime )
 		// Shoot
 		fBulletElapsedTime = 0.0f;
 
-		if( !IsPlaying(SoundFire) )
+		if (!IsPlaying(SoundFire))
 			PlaySound(SoundFire, SLOT_SFX);
 
 		// muzzle flash
@@ -318,12 +318,12 @@ function CheckLineTrace( float DeltaTime )
 
 		MakeNoise(2000.0, NOISE_TurretGunfire);
 
-		if( Other == None )
+		if (Other == None)
 			return;
 
 		SpawnWallHit(Other, HitLocation, HitNormal, HitMaterial);
 
-		if( !Other.bWorldGeometry )
+		if (!Other.bWorldGeometry)
 		{
 			// Joshua - Pass player as instigator if using SCAN_AllPawnsAndChangedActors (IFF disabled)
 			if (SensorDetectionType == SCAN_AllPawnsAndChangedActors)
@@ -347,7 +347,7 @@ function float GetHeightFactor()
 
 function StopFireSound()
 {
-	if( IsPlaying(SoundFire) && !IsPlaying(SoundFire_End) )
+	if (IsPlaying(SoundFire) && !IsPlaying(SoundFire_End))
 		PlaySound(SoundFire_End, SLOT_SFX);
 }
 
@@ -356,12 +356,12 @@ function SpawnWallHit(Actor HitActor, vector HitLocation, vector HitNormal, Mate
 	local EWallHit Spark;
 	local Rotator projRot;
 
-	if( HitActor.bWorldGeometry || HitActor.DrawType == DT_StaticMesh )
+	if (HitActor.bWorldGeometry || HitActor.DrawType == DT_StaticMesh)
 	{
 		BulletMaterial		= HitMaterial;
 		projRot				= Rotator(HitNormal);
 		projRot.Roll		= FRand() * 65536;
-		Spark				= spawn(class'EWallHit', self,, HitLocation+HitNormal, projRot);
+		Spark				= spawn(class'EWallHit', self,, HitLocation + HitNormal, projRot);
 		Spark.HitMaterial	= HitMaterial;
 		Spark.HitActor		= HitActor;
 		Spark.SndBullet		= BulletSound;	
@@ -374,10 +374,10 @@ function SpawnWallHit(Actor HitActor, vector HitLocation, vector HitNormal, Mate
 // Description		
 //		Manage take damage
 //------------------------------------------------------------------------
-function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag )
+function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag)
 {
-	if( Damage >= DamageMinAmount )
-		Super.TakeDamage( Damage, instigatedBy, hitlocation, HitNormal, momentum, damageType, PillTag );
+	if (Damage >= DamageMinAmount)
+		Super.TakeDamage(Damage, instigatedBy, hitlocation, HitNormal, momentum, damageType, PillTag);
 }
 
 //------------------------------------------------------------------------
@@ -387,9 +387,9 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector hitlocation, vector H
 function bool ProcessDetectedPawn()
 {
 	local int i;
-	for( i=0; i<DetectedActors.Length; i++ )
+	for (i = 0; i < DetectedActors.Length; i++)
 	{
-		if( DetectedActors[i].Actor == Target )
+		if (DetectedActors[i].Actor == Target)
 		{
 			DetectedActors[i].ChangeType = Target.ChangeType;
 			Log("Found at"@i);
@@ -399,7 +399,7 @@ function bool ProcessDetectedPawn()
 
 	// Not found
 	Log("Added ["$Target$"] at ["$i$"]");
-	DetectedActors.Length = i+1;
+	DetectedActors.Length = i + 1;
 	DetectedActors[i].Actor = Target;
 	DetectedActors[i].ChangeType = Target.ChangeType;
 
@@ -420,9 +420,9 @@ state() s_Idle
 		//Log("ESensor is s_Idle:"@self.name);
 	}
 
-    function Tick( float DeltaTime )
+    function Tick(float DeltaTime)
     {
-        if( FollowUponDetection && FrustumScanning(Target,SensorType,SensorThreshold,SensorDetectionType) )
+        if (FollowUponDetection && FrustumScanning(Target,SensorType,SensorThreshold,SensorDetectionType))
             GoToState('s_Alert');
     }
 }
@@ -440,7 +440,7 @@ auto state() s_Patrol
 		//Log(self@"************************************ BEGIN s_patrol");
 	}
 
-    function Tick( float DeltaTime )
+    function Tick(float DeltaTime)
     {
         local Rotator	tmpRotation;
 		local float		Delta;
@@ -455,13 +455,13 @@ auto state() s_Patrol
 		RotateIntoValidRange(DeltaTime);
 
 		// find target
-        if( FollowUponDetection && FrustumScanning(Target,SensorType,SensorThreshold,SensorDetectionType) )
+        if (FollowUponDetection && FrustumScanning(Target,SensorType,SensorThreshold,SensorDetectionType))
         {
 			//Log("Actor found"@Target@);
 
 			// Detect if within sensor rotation range (without this check here, it will switch between alert and patrol repeatedly)
 			tmpRotation = Rotator(Target.Location - GetSensorPosition());
-			if( IsWithinRotationRange(tmpRotation) )
+			if (IsWithinRotationRange(tmpRotation))
 			{
 				//log("frustum scanning going to s_alert  ==> target : " $ Target $ "  sensortype : " $ SensorType $ "  sensorthreshold : " $ SensorThreshold);
 				GoToState('s_Alert');
@@ -491,23 +491,23 @@ state s_Alert
 
 		PlaySound(Sound_Rot_End, SLOT_SFX);
 
-		if( !IsPlaying(SoundZoom) )
+		if (!IsPlaying(SoundZoom))
 			PlaySound(SoundZoom,SLOT_SFX);
 
-		if( !IsPlaying(SoundAlert) )
+		if (!IsPlaying(SoundAlert))
 			PlaySound(SoundAlert, SLOT_SFX);
 	}
 
 	function EndState()
 	{
 		StopSound(Sound_Rot_Loop);
-		if( !IsPlaying(SoundZoom) )
+		if (!IsPlaying(SoundZoom))
 			PlaySound(SoundZoom,SLOT_SFX);
 
 		StopSound(SoundAlert);
 	}
 
-    function Tick( float DeltaTime )
+    function Tick(float DeltaTime)
     {
 		local vector hitl, hitn;
         local Vector	SpecificLocation;
@@ -520,22 +520,22 @@ state s_Alert
 		fDetectionElapsedTime += DeltaTime;
 
         // Be sure Target is not None								// Go back in s_Patrol if:
-        if( FollowUponDetection == false						||	// if changed in real time, else, never supposed to be here
-			Target == None )										// No more target
+        if (FollowUponDetection == false						||	// if changed in real time, else, never supposed to be here
+			Target == None)										// No more target
 		{
 			//Log("Full of shit cases say i can't stay alerted");
 			TargetNotVisible();
             return;
 		}
 
-		if( SensorType == 1 && Target.HeatIntensity == 0 )
+		if (SensorType == 1 && Target.HeatIntensity == 0)
 		{
 			//Log(self$" Target emits no more heat if in heat mode");
 			TargetNotVisible();
             return;
 		}
 
-		if( !TargetStillVisible() )
+		if (!TargetStillVisible())
 		{
 			//Log(self$" can't see target anymore");
 			TargetNotVisible();
@@ -543,16 +543,16 @@ state s_Alert
 		}
 
         // Try to move sensor orientation in direction of Target
-		if( Target.bIsPawn )
+		if (Target.bIsPawn)
 			SpecificLocation = Target.GetBoneCoords('B Spine').Origin;
 		else
 			SpecificLocation = Target.Location;
-		SpecificLocation += Target.ToWorldDir(GetHeightFactor()*Target.CollisionHeight*Vect(0,0,1));
+		SpecificLocation += Target.ToWorldDir(GetHeightFactor() * Target.CollisionHeight * Vect(0,0,1));
 
 		// If seeking dir is out of range, do not move turret over to it.
 		// So adjust only after .. else, the result will be the camera will try to move
         rSeekingDir = Rotator(SpecificLocation - GetSensorPosition());
-        if( !IsWithinRotationRange(rSeekingDir) )
+        if (!IsWithinRotationRange(rSeekingDir))
 		{
 			//Log("Not Within rotation dir");
             TargetNotVisible();
@@ -560,24 +560,24 @@ state s_Alert
 		}
         AdjustTrajectory(DeltaTime, rSeekingDir, false);
 
-		if( fDetectionElapsedTime >= AlarmDetectionDelay )
+		if (fDetectionElapsedTime >= AlarmDetectionDelay)
 		{
 			// Alert pattern
 			TriggerPattern();
 
-			if( Alarm != None && !bAlarmMsgSent )
+			if (Alarm != None && !bAlarmMsgSent)
 			{
-				if  ( self.IsA('EBasecam') && !Alarm.IsInState('s_On') )
+				if  (self.IsA('EBasecam') && !Alarm.IsInState('s_On'))
 				{
 					if (Target.bIsPlayerPawn)
 					{
 					AddOneVoice();
-					EchelonGameInfo(Level.Game).pPlayer.EPawn.PlaySound( DetectedSound, SLOT_Voice );
+					EchelonGameInfo(Level.Game).pPlayer.EPawn.PlaySound(DetectedSound, SLOT_Voice);
 				}
-					else if ( !Target.bIsPlayerPawn && SensorDetectionType == SCAN_ChangedPawns )
+					else if (!Target.bIsPlayerPawn && SensorDetectionType == SCAN_ChangedPawns)
 					{
 						AddOneVoice();
-						EchelonGameInfo(Level.Game).pPlayer.EPawn.PlaySound( BodySound, SLOT_Voice );
+						EchelonGameInfo(Level.Game).pPlayer.EPawn.PlaySound(BodySound, SLOT_Voice);
 						
 						// Joshua - Add to the BodyFound stat when a body is detected by a camera
 						if (EPawn(Target) != None && !EAIController(EPawn(Target).Controller).bWasFound && !EAIController(EPawn(Target).Controller).bNotInStats)
@@ -592,9 +592,9 @@ state s_Alert
 				bAlarmMsgSent = true;
 			}
 			
-			if( Target.bIsPawn && !Target.bIsPlayerPawn )
+			if (Target.bIsPawn && !Target.bIsPlayerPawn)
 			{
-				if( ProcessDetectedPawn() )
+				if (ProcessDetectedPawn())
 				{
 					//Log(Target$" pawn detected");
 					TargetNotVisible();
@@ -604,7 +604,7 @@ state s_Alert
 		}
 
 		// Don't do treatment if we're not supposed to shoot
-		if( ShootUponDetection && fDetectionElapsedTime >= ShootDetectionDelay )
+		if (ShootUponDetection && fDetectionElapsedTime >= ShootDetectionDelay)
 			CheckLineTrace(DeltaTime);
 		else
 			StopFireSound();
@@ -627,10 +627,10 @@ state() s_Test
 {
 	function BeginState()
 	{
-		fGrower=0.0f;
+		fGrower = 0.0f;
 	}
 
-    function Tick( float DeltaTime )
+    function Tick(float DeltaTime)
     {
         local Rotator ViewRotation;
         ViewRotation = Rotator(GetSensorDirection());
@@ -640,8 +640,8 @@ state() s_Test
 		fDetectionElapsedTime += DeltaTime;
 
 		fGrower += 0.02f;
-        ViewRotation.Yaw += DeltaTime*RealRotationSpeed;
-        ViewRotation.Pitch = 5000*cos(fGrower);
+        ViewRotation.Yaw += DeltaTime * RealRotationSpeed;
+        ViewRotation.Pitch = 5000 * cos(fGrower);
 		AdjustTrajectory(DeltaTime, ViewRotation, true);
     }
 }
@@ -661,7 +661,7 @@ state s_Deactivated
 
 		// Should always be deactivated from Player for this AddChange to be valid
 		// Will be false from EBaseCam Trigger from Pattern
-		if( ChangeListWhenDamaged )
+		if (ChangeListWhenDamaged)
 			Level.AddChange(self, CHANGE_DisabledTurret);
 		ChangeListWhenDamaged = true;
 	}

@@ -45,20 +45,20 @@ native(1558) final function PropagateSound(Actor oOriginalWallHit);
 function PostBeginPlay()
 {
 	// Inform Alarm I'm an object to trigger
-	if( Alarm != None )
+	if (Alarm != None)
 		Alarm.LinkObject(self);
 
 	// Link openers to self
-	if( FrontOpener != None )
+	if (FrontOpener != None)
 		FrontOpener.LinkActor(self);
-	if( BackOpener != None )
+	if (BackOpener != None)
 		BackOpener.LinkActor(self);
 
     // Support doors specified as usable by designers
         SetUsable(Usable);
 
 	// Make sure LD did not mess up
-	if( InitialState == 'BumpOpenTimed' )
+	if (InitialState == 'BumpOpenTimed')
 		BumpType = BT_PawnBump;
 
 	Super.PostBeginPlay();
@@ -73,7 +73,7 @@ function SetUsable (bool _bUsable)
 {
     Usable = _bUsable;
 
-    if(myMarker != None)
+    if (myMarker != None)
     {
         myMarker.bBlocked = !_bUsable; 
     }
@@ -86,11 +86,11 @@ function SetUsable (bool _bUsable)
 //
 //------------------------------------------------------------------------
 
-function EDoorSide GetPawnSide( Pawn A )
+function EDoorSide GetPawnSide(Pawn A)
 {
 	// NOTE : using BaseRot and BasePos instead of Rotation and Location (because they change during gameplay)
 
-	if( ( (Vect(1,0,0) >> Rotation) Cross (A.Location - Location) ).Z <= 0 )
+	if (((Vect(1,0,0) >> Rotation) Cross (A.Location - Location)).Z <= 0)
 	{
 		//Log("Bump in front"@FrontOpener);
 		return ESide_Front;
@@ -108,11 +108,11 @@ function EDoorSide GetPawnSide( Pawn A )
 //		Returns which side of the door an actor is on given the INITIAL LOCATION / ROTATION of the door.
 //------------------------------------------------------------------------
 
-event EDoorSide GetActorSide( Actor A )
+event EDoorSide GetActorSide(Actor A)
 {
 	// NOTE : using BaseRot and BasePos instead of Rotation and Location (because they change during gameplay)
 	
-	if( ( (Vect(1,0,0) >> BaseRot) Cross (A.Location - BasePos) ).Z <= 0 )
+	if (((Vect(1,0,0) >> BaseRot) Cross (A.Location - BasePos)).Z <= 0)
 	{
 		//Log("Bump in front"@FrontOpener);
 		return ESide_Front;
@@ -134,18 +134,18 @@ event EDoorSide GetActorSide( Actor A )
 
 event EDoorSide GetDoorSide()
 {
-	if ( ( (Vect(1,0,0) >> Rotation) cross (Vect(1,0,0) >> BaseRot) ).Z <= 0 )
+	if (((Vect(1,0,0) >> Rotation) cross (Vect(1,0,0) >> BaseRot)).Z <= 0)
 		return ESide_Back;
 	else
 		return ESide_Front;
 }
 
 
-function EInteractObject GetInteraction( Pawn InteractPawn )
+function EInteractObject GetInteraction(Pawn InteractPawn)
 {
-	if( GetPawnSide(InteractPawn) == ESide_Front && FrontOpener != None )
+	if (GetPawnSide(InteractPawn) == ESide_Front && FrontOpener != None)
 		return FrontOpener.GetInteraction(InteractPawn);	// can be None
-	else if( GetPawnSide(InteractPawn) == ESide_Back && BackOpener != None )
+	else if (GetPawnSide(InteractPawn) == ESide_Back && BackOpener != None)
 		return BackOpener.GetInteraction(InteractPawn);	// can be None
 	else
 		return None;
@@ -173,7 +173,7 @@ function bool CanOpenSpecial()
 // Description		
 //		Allow opener processing on sub-classes independently of Trigger availability
 //------------------------------------------------------------------------
-function OpenerTrigger( EDoorOpener Other, Pawn EventInstigator )
+function OpenerTrigger(EDoorOpener Other, Pawn EventInstigator)
 {
 	Trigger(Other, EventInstigator);
 }
@@ -182,7 +182,7 @@ function OpenerTrigger( EDoorOpener Other, Pawn EventInstigator )
 // Description		
 //		Allow special trigger processing in subclasses
 //------------------------------------------------------------------------
-function bool CanDoTrigger( Actor Other, Pawn EventInstigator )
+function bool CanDoTrigger(Actor Other, Pawn EventInstigator)
 {
 	return Usable;
 }
@@ -194,14 +194,14 @@ function bool CanDoTrigger( Actor Other, Pawn EventInstigator )
 //		Will work in default state (TriggerOpenTimed)
 //		For now, bumpingactor needs to be a pawn
 //------------------------------------------------------------------------
-function Bump( actor Other, optional int Pill )
+function Bump(actor Other, optional int Pill)
 {
 	local EPawn  P;
 	
 	//Log(Other$" Bumps in Door mover "$self);
 
 	// if door locked
-	if( Locked || !bClosed )
+	if (Locked || !bClosed)
 	{
 		//Log(self$" is locked");
 		return;
@@ -209,11 +209,11 @@ function Bump( actor Other, optional int Pill )
 
 	// Needs to be an EPawn
 	P = EPawn(Other);
-	if( P == None )
+	if (P == None)
 		return;
 
 	// If door is opened by door opener AND no special Case of opening
-	if( GetInteraction(P) != None && !CanOpenSpecial() )
+	if (GetInteraction(P) != None && !CanOpenSpecial())
 	{
 		//Log(self@GetInteraction(P) != None@!CanOpenSpecial());
 		return;
@@ -236,33 +236,33 @@ function bool IsOpened()
 //------------------------------------------------------------------------
 function DoOpen()
 {
-	if ( bOpening )
+	if (bOpening)
 		return;
 
 	Super.DoOpen();
 
 	// Turn off interaction(s) on Openers only if it's knob
-	if( !HasSpecialOpener() )
+	if (!HasSpecialOpener())
 	{
-		if( FrontOpener != None )
+		if (FrontOpener != None)
 			FrontOpener.ToggleInteraction(false);
-		if( BackOpener != None )
+		if (BackOpener != None)
 			BackOpener.ToggleInteraction(false);
 
 		// Turn off interaction(s) on LinkedDoor
-		if( LinkedDoor != None )
+		if (LinkedDoor != None)
 		{
-			if( LinkedDoor.FrontOpener != None )
+			if (LinkedDoor.FrontOpener != None)
 				LinkedDoor.FrontOpener.ToggleInteraction(false);
-			if( LinkedDoor.BackOpener != None )
+			if (LinkedDoor.BackOpener != None)
 				LinkedDoor.BackOpener.ToggleInteraction(false);
 		}
 	}
 
 	//send an EventTrigger when the door opens
-	if( OpenGroupAi == None )
+	if (OpenGroupAi == None)
 		return;
-	if( bOpenAlreadyTriggered && bOpenTriggerOnceOnly )
+	if (bOpenAlreadyTriggered && bOpenTriggerOnceOnly)
 		return;
 
 	bOpenAlreadyTriggered = true;
@@ -278,19 +278,19 @@ function FinishedClosing()
 	Level.RemoveChange(self);
 
 	// Turn on interaction(s) on Opener if player
-	if( !HasSpecialOpener() )
+	if (!HasSpecialOpener())
 	{
-		if( FrontOpener != None )
+		if (FrontOpener != None)
 			FrontOpener.ToggleInteraction(true);
-		if( BackOpener != None )
+		if (BackOpener != None)
 			BackOpener.ToggleInteraction(true);
 
 		// Turn on interaction(s) on LinkedDoor
-		if( LinkedDoor != None )
+		if (LinkedDoor != None)
 		{
-			if( LinkedDoor.FrontOpener != None )
+			if (LinkedDoor.FrontOpener != None)
 				LinkedDoor.FrontOpener.ToggleInteraction(true);
-			if( LinkedDoor.BackOpener != None )
+			if (LinkedDoor.BackOpener != None)
 				LinkedDoor.BackOpener.ToggleInteraction(true);
 		}
 	}
@@ -299,9 +299,9 @@ function FinishedClosing()
 	Super.FinishedClosing();
 
 	// NotifyAI
-	if( CloseGroupAi == None )
+	if (CloseGroupAi == None)
 		return;
-	if( bCloseAlreadyTriggered && bCloseTriggerOnceOnly )
+	if (bCloseAlreadyTriggered && bCloseTriggerOnceOnly)
 		return;
 
 	bCloseAlreadyTriggered = true;
@@ -312,23 +312,23 @@ function FinishedClosing()
 // Description		
 //		Leave Global Trigger here .. call from any other states
 //------------------------------------------------------------------------
-function Trigger( Actor Other, Pawn EventInstigator, optional name Intag )
+function Trigger(Actor Other, Pawn EventInstigator, optional name Intag)
 {
 	CanDoTrigger(Other, EventInstigator);
 }
 
-event StayOpen( Actor Other, bool pawnOpen, bool playerOpen )
+event StayOpen(Actor Other, bool pawnOpen, bool playerOpen)
 {
-	if( bClosed )
+	if (bClosed)
 	{
 		//Log(self$" NEVER EVER!!!! Call stay open on a closed door");
 		return;
 	}
-	if((!bNoPlayerStayOpen && playerOpen) || pawnOpen)
+	if ((!bNoPlayerStayOpen && playerOpen) || pawnOpen)
 	{
 		GotoState('s_StayOpen');
 
-		if( LinkedDoor != None && Other != LinkedDoor && !LinkedDoor.bSlave)
+		if (LinkedDoor != None && Other != LinkedDoor && !LinkedDoor.bSlave)
 		{
 			LinkedDoor.bSlave = true;
 			LinkedDoor.StayOpen(self, pawnOpen, playerOpen);
@@ -343,18 +343,18 @@ state s_StayOpen
 
 	function BeginState()
 	{		
-		if( bClosed )
+		if (bClosed)
 			Log(self$" In s_StayOpen but closes PROBLEM!!!!");
 		SetTimer(StayOpenTime, false);
 	}
 
 	function StayOpen(Actor Other, bool pawnOpen, bool playerOpen)
 	{
-		if((!bNoPlayerStayOpen && playerOpen) || pawnOpen)
+		if ((!bNoPlayerStayOpen && playerOpen) || pawnOpen)
 		{
 			BeginState();
 
-			if( LinkedDoor != None && Other != LinkedDoor && !LinkedDoor.bSlave )
+			if (LinkedDoor != None && Other != LinkedDoor && !LinkedDoor.bSlave)
 			{
 				LinkedDoor.bSlave = true;
 				LinkedDoor.StayOpen(self, pawnOpen, playerOpen);
@@ -376,11 +376,11 @@ begin:
 // Must leave it between state call to prevent calling the one from base class Mover
 state TriggerOpenTimed
 {
-	function Trigger( Actor Other, Pawn EventInstigator, optional name Intag )
+	function Trigger(Actor Other, Pawn EventInstigator, optional name Intag)
 	{
 		// Do not move this to global.trigger, since Super.Trigger will call the non-existant mover global.trigger function. 
 		// So wouldn't do anything!
-		if( CanDoTrigger(Other, EventInstigator) )
+		if (CanDoTrigger(Other, EventInstigator))
 			Super.Trigger(Other, EventInstigator, Intag);
 	}
 }

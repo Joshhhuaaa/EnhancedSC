@@ -11,9 +11,9 @@ class P_3_4_4_Sev_Gates extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -27,7 +27,7 @@ function InitPattern()
 
     Super.InitPattern();
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

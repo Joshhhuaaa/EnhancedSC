@@ -4,18 +4,18 @@ var name PreviousItemClass;
 
 function string	GetDescription()
 {
-	if( Owner.IsA('EInventoryItem') )
+	if (Owner.IsA('EInventoryItem'))
 		return Localize("InventoryItem", EInventoryItem(Owner).ItemName, "Localization\\HUD");
 
 
-	else if( Owner.bIsGamePlayObject )
+	else if (Owner.bIsGamePlayObject)
 		return Localize("GameplayObject", string(EGameplayObject(Owner).ObjectName), "Localization\\HUD");
 	else
 		return string(Owner.class.name);
 		
 }
 
-function InitInteract( Controller Instigator )
+function InitInteract(Controller Instigator)
 {	
 	local float				PickupHeight;
 	local EPlayerController Epc;
@@ -24,13 +24,13 @@ function InitInteract( Controller Instigator )
 
 	// If it's a EGameplayObject, just pick it up and leave in hands 
 	// If it's an inventoryItem and enough space in inventory
-	if( Item == None || EPawn(Instigator.Pawn).FullInventory.CanAddItem(Item) )
+	if (Item == None || EPawn(Instigator.Pawn).FullInventory.CanAddItem(Item))
 	{
 		Epc = EPlayerController(Instigator);
 		PickupHeight = Owner.Location.Z - Epc.ePawn.Location.Z;
 		//Log("PickupHeight"@PickupHeight@0.3f * -Epc.ePawn.CollisionHeight);
 
-		if( PickupHeight > 0.3f * -Instigator.Pawn.CollisionHeight )
+		if (PickupHeight > 0.3f * -Instigator.Pawn.CollisionHeight)
 		{
 			//Log("High object");
 			Epc.JumpLabel = 'PickupHigh';
@@ -49,31 +49,31 @@ function InitInteract( Controller Instigator )
 
 		return;
 	}
-	else if( Instigator.bIsPlayer )
+	else if (Instigator.bIsPlayer)
 		EPlayerController(Instigator).SendTransmissionMessage(Localize("Transmission", "NoPickUp", "Localization\\HUD") $ Localize("InventoryItem", Item.ItemName, "Localization\\HUD"), TR_INVENTORY);
 
 
 	EPlayerController(Instigator).ReturnFromInteraction();
 }
 
-function Interact( Controller Instigator )
+function Interact(Controller Instigator)
 {
 	// Trigger object
 	Owner.Trigger(Self, Instigator.Pawn);
 
-	if( !Instigator.bIsPlayer )
+	if (!Instigator.bIsPlayer)
 		return;
 
 	EPlayerController(Instigator).ePawn.PlaySound(Sound'FisherFoley.Play_FisherPickUpObject', SLOT_SFX);
 
 	// backup selected item by class in case we pick up an item of the same class
-	if( EPlayerController(Instigator).ePawn.HandItem != None )
+	if (EPlayerController(Instigator).ePawn.HandItem != None)
 		PreviousItemClass = EPlayerController(Instigator).ePawn.HandItem.class.name;
 	// Change to picked up item
 	EPlayerController(Instigator).ChangeHandObject(EGameplayObject(Owner), !Owner.IsA('EInventoryItem'));
 }
 
-function PostInteract( Controller Instigator )
+function PostInteract(Controller Instigator)
 {
 	local EPlayerController Epc;
 	Epc = EPlayerController(Instigator);
@@ -81,7 +81,7 @@ function PostInteract( Controller Instigator )
 	// reset interaction
 	Instigator.Interaction = None;
 
-	if( Epc.ePawn.HandItem != Owner )
+	if (Epc.ePawn.HandItem != Owner)
 	{
 		Log("ERROR: Owner["$Owner$"] was not picked up in PostInteract by "$Instigator);
 		return;
@@ -91,9 +91,9 @@ function PostInteract( Controller Instigator )
 	Owner.SetCollision(true);
 
 	// if true, owner is in inventory
-	if( EGameplayObject(Owner).NotifyPickup(Instigator) && Instigator.bIsPlayer )
+	if (EGameplayObject(Owner).NotifyPickup(Instigator) && Instigator.bIsPlayer)
 	{
-		if( PreviousItemClass != '' )
+		if (PreviousItemClass != '')
 		{
 			//Log("PreviousItemClass"@PreviousItemClass);
 			Epc.ePawn.FullInventory.SetSelectedItem(Epc.ePawn.FullInventory.GetItemByClass(PreviousItemClass));
@@ -106,14 +106,14 @@ function PostInteract( Controller Instigator )
 }
 }
 
-function SetInteractLocation( Pawn InteractPawn )
+function SetInteractLocation(Pawn InteractPawn)
 {
 	local Vector X, Y, Z, MovePos;
 	local Rotator ItemDir;
 	local EPawn InteractEPawn;
 	InteractEPawn = EPawn(InteractPawn);
 
-	if( InteractEPawn == None )
+	if (InteractEPawn == None)
 		return;
 
 	ItemDir = Rotator(Owner.Location - InteractEPawn.Location);

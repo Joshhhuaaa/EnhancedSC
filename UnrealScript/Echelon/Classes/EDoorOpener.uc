@@ -10,7 +10,7 @@ var bool			bIsKeypad;
 // Description		
 //		Since we may want more than one door for an opener (ex.: 2 sliding doors for a keypad)
 //------------------------------------------------------------------------
-function LinkActor( EDoorMover LinkedActor )
+function LinkActor(EDoorMover LinkedActor)
 {
 	LinkedActors[LinkedActors.Length] = LinkedActor;
 }
@@ -19,10 +19,10 @@ function LinkActor( EDoorMover LinkedActor )
 // Description		
 //		Triggers all actor in the list (from an opener)
 //------------------------------------------------------------------------
-function TriggerLinkedActors( Pawn PawnInstigator )
+function TriggerLinkedActors(Pawn PawnInstigator)
 {
 	local int i;
-	for( i=0; i<LinkedActors.Length; i++ )
+	for (i = 0; i < LinkedActors.Length; i++)
 		LinkedActors[i].OpenerTrigger(self, PawnInstigator);
 }
 
@@ -30,9 +30,9 @@ function TriggerLinkedActors( Pawn PawnInstigator )
 // Description		
 //		Turn on/off interaction(s)
 //------------------------------------------------------------------------
-function ToggleInteraction( bool bOn )
+function ToggleInteraction(bool bOn)
 {
-	if( Interaction != None )
+	if (Interaction != None)
 		Interaction.SetCollision(bOn);
 }
 

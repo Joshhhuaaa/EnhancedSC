@@ -17,7 +17,7 @@ function PostBeginPlay()
 {
 	local int i;
 	
-	if( Glass == None )
+	if (Glass == None)
 		Log("WARNING: No Glass for aquarium");
 	else
 	{
@@ -25,11 +25,11 @@ function PostBeginPlay()
 	}
 		
 	// Set water
-	if( Water == None )
+	if (Water == None)
 		Log("WARNING: No Water for aquarium");
 	else 
 	{
-		if( Water.InitialState != 'TriggerControl' )
+		if (Water.InitialState != 'TriggerControl')
 			Log("WARNING: Water for aquarium is not in TriggerControl state");
 
 		Water.SetCollision(false);
@@ -40,7 +40,7 @@ function PostBeginPlay()
 	}
 	
 	// Volume
-	if( WaterVolume == None )
+	if (WaterVolume == None)
 		Log("WARNING: No WaterVolume for aquarium");
 	else
 	{
@@ -49,14 +49,14 @@ function PostBeginPlay()
 	}
 
 	// Set fish to follow water level
-	for( i=0; i<WaterAnimals.Length; i++ )
+	for (i = 0; i < WaterAnimals.Length; i++)
 	{
 		WaterAnimals[i].SetOwner(self);
 		WaterAnimals[i].SetBase(Water);
 	}
 
 	// Set emitters
-	for( i=0; i<WaterEmitters.Length; i++ )
+	for (i = 0; i < WaterEmitters.Length; i++)
 	{
 		WaterEmitters[i].InitialLifeTimeRange = WaterEmitters[i].WEmitter.Emitters[0].LifeTimeRange;
 	}
@@ -64,30 +64,30 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 }
 
-function ReceiveMessage( EGameplayObject Sender, EGOMsgEvent Event )
+function ReceiveMessage(EGameplayObject Sender, EGOMsgEvent Event)
 {
 	local int i;
 	Super.ReceiveMessage(Sender, Event);
 
-	switch( Sender )
+	switch (Sender)
 	{
 	// Glass
 	case Glass:
 		
-		if( Event == GOEV_TakeDamage )
+		if (Event == GOEV_TakeDamage)
 		{
 			// dont move if not a real hit
-			if( Glass.hit_level == -1 )
+			if (Glass.hit_level == -1)
 				break;
 
 			// dont move water if hit is higher than water level.
-			if( Glass.hit_level*100 > Glass.LiquidLevel )
+			if (Glass.hit_level * 100 > Glass.LiquidLevel)
 				break;
 
 			Water.KeyPos[1] = Water.KeyPos[0];
-			Water.KeyPos[1].z = Glass.Hit_Z - Water.location.z;
-			//Water.MoveTime *= 1-Glass.hit_level;
-			Water.MoveTime = 30 * (1-Glass.hit_level);
+			Water.KeyPos[1].Z = Glass.Hit_Z - Water.Location.Z;
+			//Water.MoveTime *= 1 - Glass.hit_level;
+			Water.MoveTime = 30 * (1 - Glass.hit_level);
 
 			//Log("Water.Location"@Water.Location@"Water.BasePos"@Water.BasePos);
 			//Log("Water.KeyPos[0]"@Water.KeyPos[0]@"Water.KeyPos[1]"@Water.KeyPos[1]);
@@ -97,7 +97,7 @@ function ReceiveMessage( EGameplayObject Sender, EGOMsgEvent Event )
 
 			Water.Trigger(self, None);
 		}
-		else if( Event == GOEV_Destructed )
+		else if (Event == GOEV_Destructed)
 		{
 			Disable('Tick');
 
@@ -105,18 +105,18 @@ function ReceiveMessage( EGameplayObject Sender, EGOMsgEvent Event )
 			Water.SetCollision(false);
 			
 			// Removed water effect
-			if( WaterEffectLight != None )
+			if (WaterEffectLight != None)
 				WaterEffectLight.SpotProjectedMaterial = WaterEffectLight.default.SpotProjectedMaterial;
 
 			// Make fish desperate
-			for( i=0; i<WaterAnimals.Length; i++ )
+			for (i = 0; i < WaterAnimals.Length; i++)
 				WaterAnimals[i].GotoState('s_Flying');
 
-			for( i=0; i<WaterEmitters.Length; i++ )
+			for (i = 0; i < WaterEmitters.Length; i++)
 				WaterEmitters[i].WEmitter.Destroy();
 			WaterEmitters.Remove(0,WaterEmitters.Length);
 
-			if( WaterVolume != None )
+			if (WaterVolume != None)
 				WaterVolume.SetCollision(true);
 		}
 
@@ -126,30 +126,30 @@ function ReceiveMessage( EGameplayObject Sender, EGOMsgEvent Event )
 
 auto state s_Aquarium
 {
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
 		local int i;
 		local float ratio;
 
-		if( Water == None || !Water.bOpening )
+		if (Water == None || !Water.bOpening)
 			return;
 
-		ratio = Glass.LiquidLevel/Glass.default.LiquidLevel;
-		if( ratio >= 1 ) // should not happen .. see the break when hitLevel < hit_level
+		ratio = Glass.LiquidLevel / Glass.default.LiquidLevel;
+		if (ratio >= 1) // should not happen .. see the break when hitLevel < hit_level
 			return;
 
-		for( i=0; i<WaterEmitters.Length; i++ )
+		for (i = 0; i < WaterEmitters.Length; i++)
 		{
 			WaterEmitters[i].WEmitter.Emitters[0].LifeTimeRange.Min = WaterEmitters[i].InitialLifeTimeRange.Min * ratio;
 			WaterEmitters[i].WEmitter.Emitters[0].LifeTimeRange.Max = WaterEmitters[i].InitialLifeTimeRange.Max * ratio;
 		}
 
 		// Remove big water wave if water level is below 35%
-		if( ratio < 0.35f && Glass.SpawnableObjects.Length > 2 )
+		if (ratio < 0.35f && Glass.SpawnableObjects.Length > 2)
 		{
 			Glass.SpawnableObjects.Remove(0,1);
 
-			if( WaterEffectLight != None )
+			if (WaterEffectLight != None)
 				WaterEffectLight.SpotProjectedMaterial = WaterEffectLight.default.SpotProjectedMaterial;
 		}
 	}

@@ -12,9 +12,9 @@ var int OKforFinale;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -30,26 +30,26 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EWilkes0')
+        if (P.name == 'EWilkes0')
             Characters[1] = P.controller;
-        if(P.name == 'ESamNPC1')
+        if (P.name == 'ESamNPC1')
             Characters[2] = P.controller;
-        if(P.name == 'spetsnaz0')
+        if (P.name == 'spetsnaz0')
             Characters[3] = P.controller;
-        if(P.name == 'spetsnaz1')
+        if (P.name == 'spetsnaz1')
             Characters[4] = P.controller;
-        if(P.name == 'spetsnaz2')
+        if (P.name == 'spetsnaz2')
             Characters[5] = P.controller;
         // Joshua - Hack to prevent PlayerIdentified from explosion during cinematic
-        if(P.name == 'spetsnaz4')
+        if (P.name == 'spetsnaz4')
             Characters[6] = P.controller;
-        if(P.name == 'spetsnaz6')
+        if (P.name == 'spetsnaz6')
             Characters[7] = P.controller;
-        if(P.name == 'spetsnaz7')
+        if (P.name == 'spetsnaz7')
             Characters[8] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     OKforFinale=0;

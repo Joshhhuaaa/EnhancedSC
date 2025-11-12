@@ -11,9 +11,9 @@ class P_4_3_2_RebelArmyPanics extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,21 +29,21 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EChineseSoldier1')
+        if (P.name == 'EChineseSoldier1')
             Characters[1] = P.controller;
-        if(P.name == 'EChineseSoldier3')
+        if (P.name == 'EChineseSoldier3')
             Characters[2] = P.controller;
-        if(P.name == 'EChineseSoldier0')
+        if (P.name == 'EChineseSoldier0')
             Characters[3] = P.controller;
-        if(P.name == 'EChineseSoldier4')
+        if (P.name == 'EChineseSoldier4')
             Characters[4] = P.controller;
-        if(P.name == 'EChineseSoldier8')
+        if (P.name == 'EChineseSoldier8')
             Characters[5] = P.controller;
-        if(P.name == 'ERottweiler0')
+        if (P.name == 'ERottweiler0')
             Characters[6] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

@@ -15,13 +15,13 @@ function PostBeginPlay()
 	HowToUseMe  = "ChemFlareHowToUseMe";
 }
 
-function TakeDamage( int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag )
+function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag)
 {
 	EndEvent();
 	Super.TakeDamage(Damage, EventInstigator, HitLocation, HitNormal, Momentum, DamageType);
 }
 
-function bool NotifyPickup( Controller Instigator )
+function bool NotifyPickup(Controller Instigator)
 {
 	// Try destroying Flarelight upon pickup if it exists
 	EndEvent();
@@ -30,7 +30,7 @@ function bool NotifyPickup( Controller Instigator )
 
 function EndEvent()
 {
-	if( !Used )
+	if (!Used)
 		return;
 
 	bGlowDisplay = false;
@@ -39,23 +39,23 @@ function EndEvent()
 	LightType = LT_None;
 }
 
-function Tick( float DeltaTime )
+function Tick(float DeltaTime)
 {
 	Super.Tick(DeltaTime);
 
-	if( !Used || GlowTime <= 0 )
+	if (!Used || GlowTime <= 0)
 		return;
 
 	GlowTime -= DeltaTime;
 
 	// Last second is fading the light/glow
-	if( GlowTime > 1 )
+	if (GlowTime > 1)
 		return;
 
 	ScaleGlow -= DeltaTime;
 	LightBrightness = ScaleGlow * default.LightBrightness;
 
-	if( ScaleGlow <= 0 )
+	if (ScaleGlow <= 0)
 	{
 		EndEvent();
 		GotoState('s_Dying');
@@ -68,13 +68,13 @@ state s_Selected
 	{
 		Super.Use();
 
-		if( Used )
+		if (Used)
 			return;
 
 		Used = true;
 		bGlowDisplay = true;
 		
-		if(Level.Game.PlayerC.ShadowMode == 0 )
+		if (Level.Game.PlayerC.ShadowMode == 0)
 		{
 			LightEffect = LE_None;
 		}

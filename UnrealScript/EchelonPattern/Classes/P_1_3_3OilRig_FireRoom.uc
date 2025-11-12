@@ -21,9 +21,9 @@ var int Shot;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -40,15 +40,15 @@ function InitPattern()
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'ESoundTrigger20')
+        if (A.name == 'ESoundTrigger20')
             SoundActors[0] = A;
-        if(A.name == 'ESoundTrigger21')
+        if (A.name == 'ESoundTrigger21')
             SoundActors[1] = A;
-        if(A.name == 'ESoundTrigger22')
+        if (A.name == 'ESoundTrigger22')
             SoundActors[2] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     Fire1Out=0;
@@ -75,7 +75,7 @@ FlameOn:
     CheckFlags(Ignition,TRUE,'Nada');
     SetFlags(Ignition,TRUE);
     SendPatternEvent('Merctech2AI','FireComplete');
-    JumpRandom('SOne', 0.33, 'STwo', 0.67, 'SThree', 1.00, , , , ); 
+    JumpRandom('SOne', 0.33, 'STwo', 0.67, 'SThree', 1.00, , , ,); 
 SOne:
     Sleep(0.1667);
     Jump('SleepDone');

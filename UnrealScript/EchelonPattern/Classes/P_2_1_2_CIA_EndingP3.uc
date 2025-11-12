@@ -14,9 +14,9 @@ var int RunningToIt;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_GRABBED:
             EventJump('GrabbedBarks');
@@ -59,19 +59,19 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ECIASecurity14')
+        if (P.name == 'ECIASecurity14')
         {
             Characters[1] = P.controller;
             EAIController(Characters[1]).bAllowKnockout = true;
         }
-        if(P.name == 'EMitch7')
+        if (P.name == 'EMitch7')
         {
             Characters[2] = P.controller;
             EAIController(Characters[2]).bAllowKnockout = true;
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     MitchThere=0;

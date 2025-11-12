@@ -23,7 +23,7 @@ function PostBeginPlay()
 
 function CheckShellCase()
 {
-	if(numShellToEject > 0 && (lastEjectTime + EJECT_DELAY < Level.TimeSeconds))
+	if (numShellToEject > 0 && (lastEjectTime + EJECT_DELAY < Level.TimeSeconds))
 	{
 		lastEjectTime = Level.TimeSeconds;
 		numShellToEject--;
@@ -33,7 +33,7 @@ function CheckShellCase()
 
 function SpawnShellCase()
 {
-	if ( numShellIn == MAX_SHELL_IN )
+	if (numShellIn == MAX_SHELL_IN)
 	{
 		numShellToEject = 1;
 	}
@@ -56,9 +56,9 @@ function bool SwitchROF()
     EPC = EPlayerController(Controller);
 
 	// switch ROF
-	if( !bSniperMode )
+	if (!bSniperMode)
 	{
-		switch( eROFMode )
+		switch (eROFMode)
 		{
 			case ROF_Single : 
 				if (EPC.bBurstFire)  // Joshua - Restoring burst fire from early Splinter Cell builds
@@ -80,7 +80,7 @@ function bool IsROFModeAvailable(ERateOfFireMode rof)
     local EPlayerController EPC;
     EPC = EPlayerController(Controller);
 
-    switch( rof )
+    switch (rof)
 	{
         case ROF_Single:
             return true;
@@ -96,7 +96,7 @@ function bool IsROFModeAvailable(ERateOfFireMode rof)
 // Joshua - Validate ROF if burst fire was disabled while in-game
 function ValidateROFMode()
 {
-    if(!EPlayerController(Controller).bBurstFire && eROFMode == ROF_Burst)
+    if (!EPlayerController(Controller).bBurstFire && eROFMode == ROF_Burst)
     {
         eROFMode = ROF_Auto;
     }

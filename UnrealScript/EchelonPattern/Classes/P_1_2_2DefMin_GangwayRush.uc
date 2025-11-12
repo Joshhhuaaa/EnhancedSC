@@ -13,9 +13,9 @@ class P_1_2_2DefMin_GangwayRush extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_HEAR_RICOCHET:
             EventJump('PlayerSeen');
@@ -52,13 +52,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianSoldier6')
+        if (P.name == 'EGeorgianSoldier6')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianSoldier7')
+        if (P.name == 'EGeorgianSoldier7')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

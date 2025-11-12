@@ -8,7 +8,7 @@ class EAnna extends EAIFemale
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
-	if(Mesh != None)
+	if (Mesh != None)
 	{
 		m_VisibilityConeAngle=60.000000;
 		m_VisibilityMaxDistance=800.000000;

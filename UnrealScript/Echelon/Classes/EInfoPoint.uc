@@ -47,7 +47,7 @@ function PostBeginPlay()
 
 	ELevel = EchelonLevelInfo(Level);
 
-	if ( ELevel != none )
+	if (ELevel != none)
 	{
 		NextInfoPoint		 = ELevel.InfoPointList;
 		ELevel.InfoPointList = self;

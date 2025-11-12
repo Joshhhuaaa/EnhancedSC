@@ -15,9 +15,9 @@ var int techdead;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_TAKE_DAMAGE:
             EventJump('TechGotKilled');
@@ -39,11 +39,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMercenaryTechnician7')
+        if (P.name == 'EMercenaryTechnician7')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     killingNPC=0;

@@ -14,9 +14,9 @@ class P_4_1_2_CEmb_FeirongGroup extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('EndGameOver');
@@ -66,23 +66,23 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EFeirong0')
+        if (P.name == 'EFeirong0')
             Characters[1] = P.controller;
-        if(P.name == 'EChineseSoldier12')
+        if (P.name == 'EChineseSoldier12')
             Characters[2] = P.controller;
-        if(P.name == 'EChineseSoldier26')
+        if (P.name == 'EChineseSoldier26')
             Characters[3] = P.controller;
-        if(P.name == 'EChineseSoldier25')
+        if (P.name == 'EChineseSoldier25')
             Characters[4] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'EAnimatedObject0')
+        if (A.name == 'EAnimatedObject0')
             SoundActors[0] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

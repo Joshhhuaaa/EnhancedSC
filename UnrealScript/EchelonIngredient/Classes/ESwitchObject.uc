@@ -13,9 +13,9 @@ function PostBeginPlay()
 	local int i;
 	Super.PostBeginPlay();
 	TriggerTime = Level.TimeSeconds;
-	for ( i=0; i<TriggeredObjects.Length; i++ )
+	for (i = 0; i < TriggeredObjects.Length; i++)
 	{
-		if( TriggeredObjects[i] != None )
+		if (TriggeredObjects[i] != None)
 			TriggeredObjects[i].SetOwner(self);
 		else
 			Log(self$" WARNING: Obsoletes actor refs in TriggeredObjects array at index:"$i);
@@ -26,10 +26,10 @@ function PostBeginPlay()
 // Description		
 //		Treatment upon take damage
 //------------------------------------------------------------------------
-function TakeDamage( int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag )
+function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag)
 {
 	// A chance out of 2 to destroy it upon damage
-	if( FRand() > 0.5 )
+	if (FRand() > 0.5)
 		Super.TakeDamage(Damage, EventInstigator, HitLocation, HitNormal, Momentum, DamageType, PillTag);
 }
 
@@ -41,9 +41,9 @@ function TriggerAll()
 {
 	local int i;
 
-	for( i=0; i<TriggeredObjects.Length; i++ )
+	for (i = 0; i < TriggeredObjects.Length; i++)
 	{
-		if( TriggeredObjects[i] != None )
+		if (TriggeredObjects[i] != None)
 			TriggeredObjects[i].Trigger(self, mEventInstigator);
 	}
 }
@@ -53,18 +53,18 @@ auto state() s_On
 	function BeginState()
 	{
 		// For alarm stuff
-		if( Alarm != None && mEventInstigator != None )
+		if (Alarm != None && mEventInstigator != None)
 			Alarm.EnableAlarm(self, mEventInstigator.Controller);
      
 		TriggerAll();
 	}
 
-	function Trigger( Actor Other, Pawn EventInstigator, optional name InTag )
+	function Trigger(Actor Other, Pawn EventInstigator, optional name InTag)
 	{
 		// retrigger delay validation
-		if ( ReTriggerDelay > 0 )
+		if (ReTriggerDelay > 0)
 		{
-			if ( Level.TimeSeconds - TriggerTime < ReTriggerDelay )
+			if (Level.TimeSeconds - TriggerTime < ReTriggerDelay)
 				return;
 			TriggerTime = Level.TimeSeconds;
 		}
@@ -72,7 +72,7 @@ auto state() s_On
 		Super.Trigger(Other, EventInstigator, InTag);
 
 		// If trigger only once, destroy interaction
-		if( TriggerOnlyOnce )
+		if (TriggerOnlyOnce)
 			ResetInteraction();
 
 		PlaySound(Sound'FisherFoley.Play_LightOnOff', SLOT_SFX);
@@ -87,18 +87,18 @@ state() s_Off
 	function BeginState()
 	{
 		// For alarm stuff
-		if( Alarm != None )
+		if (Alarm != None)
 			Alarm.DisableAlarm(self);
 	
 		TriggerAll();
 	}
 
-	function Trigger( Actor Other, Pawn EventInstigator, optional name InTag )
+	function Trigger(Actor Other, Pawn EventInstigator, optional name InTag)
 	{
 		// retrigger delay validation
-		if ( ReTriggerDelay > 0 )
+		if (ReTriggerDelay > 0)
 		{
-			if ( Level.TimeSeconds - TriggerTime < ReTriggerDelay )
+			if (Level.TimeSeconds - TriggerTime < ReTriggerDelay)
 				return;
 			TriggerTime = Level.TimeSeconds;
 		}

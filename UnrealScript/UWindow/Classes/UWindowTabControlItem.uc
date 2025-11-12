@@ -14,7 +14,7 @@ var bool					bFlash;
 
 function SetCaption(string NewCaption)
 {
-	Caption=NewCaption;
+	Caption = NewCaption;
 }
 
 function RightClickTab()

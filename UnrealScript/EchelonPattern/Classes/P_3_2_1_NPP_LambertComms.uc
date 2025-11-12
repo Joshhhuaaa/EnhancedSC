@@ -15,9 +15,9 @@ var int Molestered;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -38,14 +38,14 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[1] = P.controller;
-        if(P.Name == 'EPowerPlantEmployee14') // Joshua - Killing conflicting NPC
+        if (P.Name == 'EPowerPlantEmployee14') // Joshua - Killing conflicting NPC
         {
             Characters[2] = P.controller;
             EAIController(Characters[2]).bNotInStats = true;
         }
-        if(P.Name == 'ECIABureaucratF0')
+        if (P.Name == 'ECIABureaucratF0')
         {
             Characters[3] = P.controller;
             EAIController(Characters[3]).bNotInStats = true;
@@ -55,7 +55,7 @@ function InitPattern()
     // Joshua - Disposable pick was assigned the incorrect mesh
     ForEach DynamicActors(class'EGameplayObject', EGO)
     {
-        if(EGO.name == 'EDisposablePick0')
+        if (EGO.name == 'EDisposablePick0')
         {
             EGO.SetStaticMesh(StaticMesh'EMeshIngredient.Item.DisposablePick');
             EGO.SetLocation(EGO.Location + vect(0,0,-22));
@@ -65,10 +65,10 @@ function InitPattern()
     // Joshua - Disabling collision on these two vent frames as it was preventing the player from progressing
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'StaticMeshActor706')
+        if (A.name == 'StaticMeshActor706')
             A.SetCollision(False);
 
-        if(A.name == 'StaticMeshActor821')
+        if (A.name == 'StaticMeshActor821')
             A.SetCollision(False);
     }
 
@@ -91,14 +91,14 @@ function InitPattern()
     // Joshua - Destroying the hat from the NPC that we teleport / kill
     ForEach DynamicActors(class'EPawn', EP)
     {
-        if(EP.Name == 'EPowerPlantEmployee14')
+        if (EP.Name == 'EPowerPlantEmployee14')
         {
             EP.Hat = None;
             EP.HatMesh = None;
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     Code=0;

@@ -33,7 +33,7 @@ var(VolumeFog) float DistanceFogEnd;
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
-	if ( bPainCausing )
+	if (bPainCausing)
 		PainTimer = Spawn(class'VolumeTimer', self);
 }
 
@@ -44,13 +44,13 @@ function CheckExplosive(Actor weapon, Pawn Instigator);
 
 event PawnEnteredVolume(Pawn Other)
 {
-	if ( Other.IsPlayerPawn() )
+	if (Other.IsPlayerPawn())
 		TriggerEvent(Event,Other, Other);
 }
 
 event PawnLeavingVolume(Pawn Other)
 {
-	if ( Other.IsPlayerPawn() )
+	if (Other.IsPlayerPawn())
 		UntriggerEvent(Event,Other, Other);
 }
 
@@ -63,9 +63,9 @@ function TimerPop(VolumeTimer T)
 {
 	local actor A;
 
-	if ( T == PainTimer )
+	if (T == PainTimer)
 	{
-		if ( !bPainCausing )
+		if (!bPainCausing)
 			return;
 
 		ForEach TouchingActors(class'Actor', A)
@@ -73,13 +73,13 @@ function TimerPop(VolumeTimer T)
 	}
 }
 
-function Trigger( actor Other, pawn EventInstigator, optional name InTag ) // UBI MODIF - Additional parameter
+function Trigger(actor Other, pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 {
 	// turn zone damage on and off
 	if (DamagePerSec != 0)
 	{
 		bPainCausing = !bPainCausing;
-		if ( bPainCausing && (PainTimer == None) )
+		if (bPainCausing && (PainTimer == None))
 			PainTimer = spawn(class'VolumeTimer', self);
 	}
 }
@@ -87,12 +87,12 @@ function Trigger( actor Other, pawn EventInstigator, optional name InTag ) // UB
 event touch(Actor Other)
 {
 	Super.Touch(Other);
-	if ( bMoveProjectiles && (ZoneVelocity != vect(0,0,0)) )
+	if (bMoveProjectiles && (ZoneVelocity != vect(0,0,0)))
 	{
-		if ( Other.Physics == PHYS_Projectile )
+		if (Other.Physics == PHYS_Projectile)
 			Other.Velocity += ZoneVelocity;
 	}
-	if ( bPainCausing )
+	if (bPainCausing)
 	{
 		CausePainTo(Other);
 	}
@@ -100,7 +100,7 @@ event touch(Actor Other)
 
 event untouch(Actor Other)
 {
-	if ( bWaterVolume )
+	if (bWaterVolume)
 		PlayExitSplash(Other);
 }
 
@@ -109,13 +109,13 @@ function PlayExitSplash(Actor Other)
 	local float SplashSize;
 	local actor splash;
 
-	splashSize = FClamp(0.003 * Other.Mass, 0.1, 1.0 );
-	if( ExitSound != None )
+	splashSize = FClamp(0.003 * Other.Mass, 0.1, 1.0);
+	if (ExitSound != None)
 		PlaySound(ExitSound, SLOT_SFX);
-	if( ExitActor != None )
+	if (ExitActor != None)
 	{
 		splash = Spawn(ExitActor); 
-		if ( splash != None )
+		if (splash != None)
 			splash.SetDrawScale(splashSize);
 	}
 }
@@ -129,15 +129,15 @@ function CausePainTo(Actor Other)
 	depth = 1;
 	P = Pawn(Other);
 
-	if ( DamagePerSec > 0 )
+	if (DamagePerSec > 0)
 	{
 		Other.TakeDamage(int(DamagePerSec * depth), None, Location, vect(0,0,0), vect(0,0,0), DamageType); 
-		if ( (P != None) && (P.Controller != None) )
+		if ((P != None) && (P.Controller != None))
 			P.Controller.PawnIsInPain(self);
 	}	
 	else
 	{
-		if ( (P != None) && (P.Health < P.Default.Health) )
+		if ((P != None) && (P.Health < P.Default.Health))
 		P.Health = Min(P.Default.Health, P.Health - depth * DamagePerSec);
 	}
 }

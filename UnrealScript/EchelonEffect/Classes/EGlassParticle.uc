@@ -19,12 +19,12 @@ function PostBeginPlay()
 
 	// Max particles depending on glass surface
 	box = max - min;
-	Emitters[0].MaxParticles = Clamp(sqrt(((box.x*box.z)/3)), 25, 125);
+	Emitters[0].MaxParticles = Clamp(sqrt(((box.X * box.Z) / 3)), 25, 125);
 
 	Emitters[0].Initialized	= false;
 
 	// Velocity from explosion
-	if( Owner.Velocity != Vect(0,0,0) )
+	if (Owner.Velocity != Vect(0,0,0))
 	{
 		local_velocity = ToLocalDir(Owner.Velocity);// / 10.f;
 		Emitters[0].StartVelocityRange.X.Max = local_velocity.X;

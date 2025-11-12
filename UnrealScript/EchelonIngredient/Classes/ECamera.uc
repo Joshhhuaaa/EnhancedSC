@@ -2,7 +2,7 @@ class ECamera extends EBaseCam;
 
 function PostBeginPlay()
 {
-	if( !bDamageable )
+	if (!bDamageable)
 	{
 		Mesh = SkeletalMesh'camUnBreakMesh';
 		CameraHeadMesh = StaticMesh'EMeshIngredient.object.UnCamCMesh';

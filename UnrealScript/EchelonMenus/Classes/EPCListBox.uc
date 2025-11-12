@@ -12,12 +12,12 @@ class EPCListBox extends UWindowListBox
 
 var INT m_IRightPadding; //To leave some space at the left of the scrollbar
 
-native(4008) final function RenderItem( Canvas C, UWindowListBoxItem Item, float X, float Y, float W, float H);
+native(4008) final function RenderItem(Canvas C, UWindowListBoxItem Item, float X, float Y, float W, float H);
 
 function Created()
 {
 	Super.Created();
-	VertSB = UWindowVScrollbar(CreateWindow(class'EPCVScrollBar', WinWidth-LookAndFeel.Size_ScrollbarWidth, 0, LookAndFeel.Size_ScrollbarWidth, WinHeight));
+	VertSB = UWindowVScrollbar(CreateWindow(class'EPCVScrollBar', WinWidth - LookAndFeel.Size_ScrollbarWidth, 0, LookAndFeel.Size_ScrollbarWidth, WinHeight));
 }
 
 function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H)

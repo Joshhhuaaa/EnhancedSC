@@ -12,9 +12,9 @@ var int pass1;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -30,23 +30,23 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz15')
+        if (P.name == 'spetsnaz15')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz20')
+        if (P.name == 'spetsnaz20')
             Characters[2] = P.controller;
-        if(P.name == 'spetsnaz16')
+        if (P.name == 'spetsnaz16')
             Characters[3] = P.controller;
-        if(P.name == 'spetsnaz17')
+        if (P.name == 'spetsnaz17')
             Characters[4] = P.controller;
-        if(P.name == 'spetsnaz19')
+        if (P.name == 'spetsnaz19')
             Characters[5] = P.controller;
-        if(P.name == 'spetsnaz14')
+        if (P.name == 'spetsnaz14')
             Characters[6] = P.controller;
-        if(P.name == 'spetsnaz18')
+        if (P.name == 'spetsnaz18')
             Characters[7] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     pass1=0;

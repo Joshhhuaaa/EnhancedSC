@@ -12,9 +12,9 @@ var int AlreadyTeleported;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -30,17 +30,17 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMafiaMuscle8')
+        if (P.name == 'EMafiaMuscle8')
             Characters[1] = P.controller;
-        if(P.name == 'EMafiaMuscle14')
+        if (P.name == 'EMafiaMuscle14')
             Characters[2] = P.controller;
-        if(P.name == 'EMafiaMuscle10')
+        if (P.name == 'EMafiaMuscle10')
             Characters[3] = P.controller;
-        if(P.name == 'EMafiaMuscle9')
+        if (P.name == 'EMafiaMuscle9')
             Characters[4] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     AlreadyTeleported=0;

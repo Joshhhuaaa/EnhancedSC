@@ -33,9 +33,9 @@ native function Kill();
 function PostBeginPlay()
 {
 	local int i;
-	for( i=0; i<Emitters.Length; i++ )
+	for (i = 0; i < Emitters.Length; i++)
 	{
-		if( Emitters[i] != None )
+		if (Emitters[i] != None)
 		{
 			Emitters[i].InitialTimeRange.Min = Min(Emitters[i].InitialTimeRange.Min, Emitters[i].LifetimeRange.Min);
 			Emitters[i].InitialTimeRange.Max = Min(Emitters[i].InitialTimeRange.Max, Emitters[i].LifetimeRange.Max);
@@ -45,12 +45,12 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 }
 
-function Trigger( Actor Other, Pawn EventInstigator, optional name InTag ) // UBI MODIF
+function Trigger(Actor Other, Pawn EventInstigator, optional name InTag) // UBI MODIF
 {
 	local int i;
-	for( i=0; i<Emitters.Length; i++ )
+	for (i = 0; i < Emitters.Length; i++)
 	{
-		if( Emitters[i] != None )
+		if (Emitters[i] != None)
 			Emitters[i].Disabled = !Emitters[i].Disabled;
 	}
 }

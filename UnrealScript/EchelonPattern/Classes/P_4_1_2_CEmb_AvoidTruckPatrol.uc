@@ -11,9 +11,9 @@ class P_4_1_2_CEmb_AvoidTruckPatrol extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,13 +29,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EChineseSoldier5')
+        if (P.name == 'EChineseSoldier5')
             Characters[1] = P.controller;
-        if(P.name == 'EChineseSoldier0')
+        if (P.name == 'EChineseSoldier0')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

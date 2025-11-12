@@ -15,7 +15,7 @@ function PostBeginPlay()
 
 function bool SwitchROF()
 {
-	switch( eROFMode )
+	switch (eROFMode)
 	{
 		case ROF_Single : eROFMode = ROF_Single; return false;
 	}
@@ -23,7 +23,7 @@ function bool SwitchROF()
 
 function bool IsROFModeAvailable(ERateOfFireMode rof)
 {
-    switch( rof )
+    switch (rof)
 	{
         case ROF_Single:
             return true;

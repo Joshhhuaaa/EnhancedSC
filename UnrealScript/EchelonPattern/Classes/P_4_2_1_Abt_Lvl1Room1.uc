@@ -13,9 +13,9 @@ class P_4_2_1_Abt_Lvl1Room1 extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('Dead');
@@ -56,19 +56,19 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianSoldier8')
+        if (P.name == 'EGeorgianSoldier8')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz11')
+        if (P.name == 'spetsnaz11')
             Characters[2] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'EGeorgianSoldier8')
+        if (A.name == 'EGeorgianSoldier8')
             SoundActors[0] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

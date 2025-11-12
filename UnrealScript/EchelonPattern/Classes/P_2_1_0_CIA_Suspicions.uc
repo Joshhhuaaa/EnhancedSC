@@ -13,9 +13,9 @@ class P_2_1_0_CIA_Suspicions extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -31,15 +31,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ECIABureaucrat8')
+        if (P.name == 'ECIABureaucrat8')
             Characters[1] = P.controller;
-        if(P.name == 'ECIASecurity2')
+        if (P.name == 'ECIASecurity2')
             Characters[2] = P.controller;
-        if(P.name == 'ECIASecurity8')
+        if (P.name == 'ECIASecurity8')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

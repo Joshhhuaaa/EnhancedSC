@@ -13,9 +13,9 @@ class P_1_6_1_1_IntroCall extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -32,14 +32,14 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMasse0')
+        if (P.name == 'EMasse0')
         {
             Characters[1] = P.controller;
             EAIController(Characters[1]).bAllowKill = true;
             EAIController(Characters[1]).bAllowKnockout = true;
             EAIController(Characters[1]).bWasFound = true;
         }
-        if(P.name == 'EAleksee0')
+        if (P.name == 'EAleksee0')
         {
             Characters[2] = P.controller;
             EAIController(Characters[2]).bAllowKnockout = true;
@@ -49,13 +49,13 @@ function InitPattern()
     // Joshua - Fixing collision on some pipes that were not set correctly
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'StaticMeshActor128')
+        if (A.name == 'StaticMeshActor128')
             A.SetCollisionPrim(StaticMesh(DynamicLoadObject("6_1_1KolaMesh.Collision.pipes_sk2_COL", class'StaticMesh')));
-        if(A.name == 'StaticMeshActor180')
+        if (A.name == 'StaticMeshActor180')
             A.SetCollisionPrim(StaticMesh(DynamicLoadObject("6_1_1KolaMesh.Collision.pipes_sk2_COL", class'StaticMesh')));
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

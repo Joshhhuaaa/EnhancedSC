@@ -9,18 +9,18 @@ var Actor		iniBase;
 var Vector		iniLocation;
 var Rotator		iniRotation;
 
-function InitInteract( Controller Instigator )
+function InitInteract(Controller Instigator)
 {
 	InteractionController	= Instigator;
 
 	// Make pawn interact
 	Instigator.Interaction = self;
 
-	if( Instigator.bIsPlayer )
+	if (Instigator.bIsPlayer)
 	{
 		// backup old values
 		iniBase = Owner.Base;
-		if( iniBase == None )
+		if (iniBase == None)
 		{
 			iniLocation = Owner.Location;
 			iniRotation	= Owner.Rotation;
@@ -38,13 +38,13 @@ function InitInteract( Controller Instigator )
 	}
 }
 
-function PostInteract( Controller Instigator )
+function PostInteract(Controller Instigator)
 {
 	// restore old values
-	if( Instigator.bIsPlayer )
+	if (Instigator.bIsPlayer)
 	{
 		Owner.SetBase(iniBase);
-		if( iniBase != None )
+		if (iniBase != None)
 		{
 			Owner.SetRelativeLocation(iniLocation);
 			Owner.SetRelativeRotation(iniRotation);
@@ -58,7 +58,7 @@ function PostInteract( Controller Instigator )
 
 	Owner.GotoState('s_Idle');
 
-	if( Instigator.bIsPlayer )
+	if (Instigator.bIsPlayer)
 		EPlayerController(Instigator).ReturnFromInteraction();
 
 	Instigator.Interaction	= None;

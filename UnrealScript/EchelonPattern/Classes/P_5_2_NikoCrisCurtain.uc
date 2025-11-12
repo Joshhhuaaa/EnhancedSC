@@ -15,9 +15,9 @@ var int NikoDeadNow;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('DeadBase');
@@ -45,13 +45,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EEliteForceCristavi8')
+        if (P.name == 'EEliteForceCristavi8')
             Characters[1] = P.controller;
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[2] = P.controller;
-        if(P.name == 'EFikrat0')
+        if (P.name == 'EFikrat0')
             Characters[3] = P.controller;
-        if(P.name == 'ENikoladze2')
+        if (P.name == 'ENikoladze2')
         {
             Characters[4] = P.controller;
             EAIController(Characters[4]).bAllowKill = true;
@@ -60,7 +60,7 @@ function InitPattern()
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     CutSceneDone=0;

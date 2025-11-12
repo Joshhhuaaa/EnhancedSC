@@ -8,7 +8,7 @@ var StaticMesh		CameraHeadMesh, CameraBaseMesh;
 function PostBeginPlay()
 {
 	// Head
-	if( CameraHeadMesh != None )
+	if (CameraHeadMesh != None)
 	{
 		CameraHead = spawn(class'EGameplayObject', self);
 		CameraHead.SetStaticMesh(None);
@@ -24,7 +24,7 @@ function PostBeginPlay()
 	}
 
 	// Base
-	if( CameraBaseMesh != None )
+	if (CameraBaseMesh != None)
 	{
 		CameraBase = spawn(class'EGameplayObject', self);
 		CameraBase.SetStaticMesh(None);
@@ -55,11 +55,11 @@ function UnJammed()
 	GotoState('s_Patrol');
 }
 
-function ReceiveMessage( EGameplayObject Sender, EGOMsgEvent Event )
+function ReceiveMessage(EGameplayObject Sender, EGOMsgEvent Event)
 {
 	Super.ReceiveMessage(Sender, Event);
 
-	if( bDamageable && Event == GOEV_Destructed && Sender == CameraHead )
+	if (bDamageable && Event == GOEV_Destructed && Sender == CameraHead)
 		DestroyObject();
 }
 
@@ -67,11 +67,11 @@ function ReceiveMessage( EGameplayObject Sender, EGOMsgEvent Event )
 // Description		
 //		May be called from a Pattern to deactivate camera
 //------------------------------------------------------------------------
-function Trigger( Actor Other, Pawn EventInstigator, optional name InTag )
+function Trigger(Actor Other, Pawn EventInstigator, optional name InTag)
 {
 	Super.Trigger(Other, EventInstigator, InTag);
 
-	if( !Other.IsA('EPattern') )
+	if (!Other.IsA('EPattern'))
 		return;
 	
 	ChangeListWhenDamaged = false;
@@ -111,7 +111,7 @@ state s_Jammed
 
 	function Timer()
 	{
-		Spawn(class'ewallspark', self,,location+(FRand()*Vect(10,8,5)));
+		Spawn(class'ewallspark', self,,location + (FRand() * Vect(10,8,5)));
 	}
 }
 

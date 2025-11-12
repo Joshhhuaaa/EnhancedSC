@@ -42,24 +42,24 @@ function PostBeginPlay()
 	CreateKey(StaticMesh'elevatorpanel_buttonup', "Up");
 
 	// Elevator checks
-	if( Elevator == None )
+	if (Elevator == None)
 		Log("ERROR: problem with owner elevator for "$self);
-	else if( Elevator.InitialState != 'TriggerControl' )
+	else if (Elevator.InitialState != 'TriggerControl')
 		Log("ERROR: problem with elevator .. not in TriggerControl state "$Elevator.InitialState);
 
 	Elevator.InitialState = 'TriggerControl';
 	Elevator.MoverEncroachType = ME_IgnoreWhenEncroach;
 
-	if( AttachTag == '' )
+	if (AttachTag == '')
 	{
 		Log(self$" WARNING: AttachTag is '' for panel .. Will be automatically attached to Elevator["$Elevator$"]");
 		SetBase(Elevator);
 	}
 
 	// Lock linked doors to prevent bump opening
-	for( i=0; i<ElevatorDoors.Length; i++ )
+	for (i = 0; i < ElevatorDoors.Length; i++)
 	{
-		if( ElevatorDoors[i].AttachTag == '' )
+		if (ElevatorDoors[i].AttachTag == '')
 		{
 			Log(self$" WARNING: AttachTag is '' for elevator doors .. Will be automatically attached to Elevator["$Elevator$"]");
 			ElevatorDoors[i].SetBase(Elevator);
@@ -68,16 +68,16 @@ function PostBeginPlay()
 		ElevatorDoors[i].bNoPlayerStayOpen = true;
 	}
 
-	for( i=0; i<Floors.Length; i++ )
+	for (i = 0; i < Floors.Length; i++)
 	{
 		Floors[i].SavedKeyPosition = Elevator.KeyPos[i];
 
 		// Set Panel in the button
-		if( Floors[i].FloorButton != None )
+		if (Floors[i].FloorButton != None)
 			Floors[i].FloorButton.SetController(self);
 
 		// Lock linked floor doors to prevent bump opening
-		for( j=0; j<Floors[i].FloorElevatorDoors.Length; j++ )
+		for (j = 0; j < Floors[i].FloorElevatorDoors.Length; j++)
 		{
 			Floors[i].FloorElevatorDoors[j].Locked = true;
 			Floors[i].FloorElevatorDoors[j].bNoPlayerStayOpen = true;
@@ -96,12 +96,12 @@ function PostBeginPlay()
 	Super.postBeginPlay();
 }
 
-function CreateKey( StaticMesh Mesh, string Val )
+function CreateKey(StaticMesh Mesh, string Val)
 {
 	KeyButtons[KeyButtons.Length] = spawn(class'EKeyButton', self);
-	KeyButtons[KeyButtons.Length-1].SetStaticMesh(Mesh);
-	KeyButtons[KeyButtons.Length-1].SetRelativeOffset(Vect(0,0,0));
-	KeyButtons[KeyButtons.Length-1].value = Val;
+	KeyButtons[KeyButtons.Length - 1].SetStaticMesh(Mesh);
+	KeyButtons[KeyButtons.Length - 1].SetRelativeOffset(Vect(0,0,0));
+	KeyButtons[KeyButtons.Length - 1].value = Val;
 }
 
 function CreateTextMesh()
@@ -109,7 +109,7 @@ function CreateTextMesh()
 	local int i;
 	local vector pos;
 
-	for( i=0; i<2; i++ )
+	for (i = 0; i < 2; i++)
 	{
 		pos = Vect(0.15,-3,8.4);
 		pos.Y += i * 0.6f * 3; // drawscale
@@ -130,21 +130,21 @@ function CreateTextMesh()
 // Description		
 //		When you push an elevator button (floor)
 //------------------------------------------------------------------------
-function RequestElevator( EElevatorButton Button )
+function RequestElevator(EElevatorButton Button)
 {
 	local int i;
 
-	if( !bPowered )
+	if (!bPowered)
 		return;
 
 	//Log("RequestElevator SelectedFloor["$SelectedFloor$"] Locked["$bLocked$"] DoorEnd["$DoorEndEvents$"]");
 
-	if( Button == None )
+	if (Button == None)
 		Log(self$" PROBLEM: button not valid");
 
-	for( i=0; i<Floors.Length; i++ )
+	for (i = 0; i < Floors.Length; i++)
 	{
-		if( Floors[i].FloorButton == Button )
+		if (Floors[i].FloorButton == Button)
 		{
 			SendElevator(i);
 			break;
@@ -159,17 +159,17 @@ function RequestElevator( EElevatorButton Button )
 function GlowSelected()
 {
 	local int i;
-	for( i=0; i<KeyButtons.Length; i++ )
+	for (i = 0; i < KeyButtons.Length; i++)
 	{
 		// set panel setting
 		KeyButtons[i].bRenderAtEndOfFrame = bRenderAtEndOfFrame;
 		KeyButtons[i].bSpecialLit = bSpecialLit;
 		KeyButtons[i].AmbientGlow = AmbientGlow;
 	}
-	if( SelectedButton != -1 )
+	if (SelectedButton != -1)
 		KeyButtons[SelectedButton].AmbientGlow *= 2;
 
-	for( i=0; i<MeshCode.Length; i++ )
+	for (i = 0; i < MeshCode.Length; i++)
 	{
 		MeshCode[i].bRenderAtEndOfFrame = bRenderAtEndOfFrame;
 		MeshCode[i].bSpecialLit = bSpecialLit;
@@ -181,7 +181,7 @@ function GlowSelected()
 //------------------------------------------------------------------------
 function KeyPushed()
 {
-	if( !bPowered )
+	if (!bPowered)
 		return;
 
 	//Log("Key pushed");
@@ -189,16 +189,16 @@ function KeyPushed()
 	KeyButtons[SelectedButton].Push(true);
 	PlaySound(Sound'Electronic.Play_keyPadButton', SLOT_Interface);
 
-	switch( KeyButtons[SelectedButton].Value )
+	switch (KeyButtons[SelectedButton].Value)
 	{
 	case "Up" :
-		if( SelectedFloor < Floors.Length-1 )
-			SendElevator(SelectedFloor+1);
+		if (SelectedFloor < Floors.Length - 1)
+			SendElevator(SelectedFloor + 1);
 		break;
 
 	case "Down" :
-		if( SelectedFloor > 0 )
-			SendElevator(SelectedFloor-1);
+		if (SelectedFloor > 0)
+			SendElevator(SelectedFloor - 1);
 		break;
 
 	case "Open" :
@@ -211,22 +211,22 @@ function KeyPushed()
 // Description		
 //		Send elevator to selected floor
 //------------------------------------------------------------------------
-function SendElevator( int SentFloor, optional bool bAutomatic )
+function SendElevator(int SentFloor, optional bool bAutomatic)
 {
 	//Log("Sending elevator from current["$SelectedFloor$"] to ["$SentFloor$"]");
 	PendingFloor = -1;
 
 	// Try to remove panel when button is pushed
-	if( !bAutomatic && 
+	if (!bAutomatic && 
 		Interaction != None && 
 		EElevatorInteraction(Interaction).InteractionController != None && 
-		EElevatorInteraction(Interaction).InteractionController.bIsPlayer )
+		EElevatorInteraction(Interaction).InteractionController.bIsPlayer)
 	{
 		Interaction.PostInteract(EElevatorInteraction(Interaction).InteractionController);
 	}
 
 	// Do nothing if elevator is already at selected floor but open doors
-	if( SelectedFloor == SentFloor && Elevator.BasePos+Floors[SelectedFloor].SavedKeyPosition == Elevator.Location )
+	if (SelectedFloor == SentFloor && Elevator.BasePos + Floors[SelectedFloor].SavedKeyPosition == Elevator.Location)
 	{
 		//Log("Elevator is at same floor as SelectedFloor");
 
@@ -236,7 +236,7 @@ function SendElevator( int SentFloor, optional bool bAutomatic )
 
 		return;
 	}
-	else if( bLocked )
+	else if (bLocked)
 	{
 		//Log("set pending"@sentfloor);
 		PendingFloor = SentFloor;
@@ -266,7 +266,7 @@ function SendElevator( int SentFloor, optional bool bAutomatic )
 	//Log("Sent to keynum"@Floors[SelectedFloor].ElevatorKeyNum);
 }
 
-function Trigger( Actor Other, Pawn EventInstigator, optional name InTag )
+function Trigger(Actor Other, Pawn EventInstigator, optional name InTag)
 {
 	Super.Trigger(Other, EventInstigator, InTag);
 
@@ -277,7 +277,7 @@ function Trigger( Actor Other, Pawn EventInstigator, optional name InTag )
 
 function CheckDoorEndEvents()
 {
-	if( DoorEndEvents == 0 )
+	if (DoorEndEvents == 0)
 	{
 		//Log(self$" gets unlocked after door endEvents()");
 		DoorEndEvents = -1;
@@ -298,12 +298,12 @@ function EndEvent()
 	//Log(self$" Receives a EndEvent() left["$DoorEndEvents$"]");
 
 	// Check Door EndEvent
-	if( DoorEndEvents != -1 )
+	if (DoorEndEvents != -1)
 	{
 		DoorEndEvents--;
 		CheckDoorEndEvents();
 
-		if( !bLocked && PendingFloor != -1 )
+		if (!bLocked && PendingFloor != -1)
 		{
 			//Log("send elevator to pending"@pendingfloor);
 			SendElevator(PendingFloor, true);
@@ -311,7 +311,7 @@ function EndEvent()
 		return;
 	}
 
-	if ( Elevator.IsPlaying(Sound'Door.Play_ModernLiftRun') )
+	if (Elevator.IsPlaying(Sound'Door.Play_ModernLiftRun'))
 		Elevator.PlaySound(Sound'Door.Stop_ModernLiftRun', SLOT_SFX);
 
 	// Displays
@@ -328,51 +328,51 @@ function EndEvent()
 	CheckDoorEndEvents();
 
 	// Link elevator doors to floor doors
-	for( i=0; i<ElevatorDoors.Length; i++ )
+	for (i = 0; i < ElevatorDoors.Length; i++)
 	{
-		if( i+1 != ElevatorDoors.Length ) // i door linked to i+1
-			ElevatorDoors[i].LinkedDoor = ElevatorDoors[i+1];
-		else if( Floors[SelectedFloor].FloorElevatorDoors.Length > 0 ) // last door linked to first floor door
+		if (i + 1 != ElevatorDoors.Length) // i door linked to i + 1
+			ElevatorDoors[i].LinkedDoor = ElevatorDoors[i + 1];
+		else if (Floors[SelectedFloor].FloorElevatorDoors.Length > 0) // last door linked to first floor door
 			ElevatorDoors[i].LinkedDoor = Floors[SelectedFloor].FloorElevatorDoors[0];
 	}
-	for( i=0; i<Floors[SelectedFloor].FloorElevatorDoors.Length; i++ )
+	for (i = 0; i < Floors[SelectedFloor].FloorElevatorDoors.Length; i++)
 	{
-		if( i+1 != Floors[SelectedFloor].FloorElevatorDoors.Length ) // i floor door linked to i+1
-			Floors[SelectedFloor].FloorElevatorDoors[i].LinkedDoor = Floors[SelectedFloor].FloorElevatorDoors[i+1];
-		else if( ElevatorDoors.Length > 0 ) // last door linked to first floor door
+		if (i + 1 != Floors[SelectedFloor].FloorElevatorDoors.Length) // i floor door linked to i + 1
+			Floors[SelectedFloor].FloorElevatorDoors[i].LinkedDoor = Floors[SelectedFloor].FloorElevatorDoors[i + 1];
+		else if (ElevatorDoors.Length > 0) // last door linked to first floor door
 			Floors[SelectedFloor].FloorElevatorDoors[i].LinkedDoor = ElevatorDoors[0];
 	}
 
 	// Open elevator doors
-	for( i=0; i<ElevatorDoors.Length; i++ )
+	for (i = 0; i < ElevatorDoors.Length; i++)
 	{
 		// do this to assure that triggering the button will always open the doors.
-		if( ElevatorDoors[i].bClosing )
+		if (ElevatorDoors[i].bClosing)
 			ElevatorDoors[i].Enable('Trigger');
 		ElevatorDoors[i].Trigger(self, None);
 	}
 
 	// Open floor linked doors
-	for( i=0; i<Floors[SelectedFloor].FloorElevatorDoors.Length; i++ )
+	for (i = 0; i < Floors[SelectedFloor].FloorElevatorDoors.Length; i++)
 	{
 		// do this to assure that triggering the button will always open the doors.
-		if( Floors[SelectedFloor].FloorElevatorDoors[i].bClosing )
+		if (Floors[SelectedFloor].FloorElevatorDoors[i].bClosing)
 			Floors[SelectedFloor].FloorElevatorDoors[i].Enable('Trigger');
 		Floors[SelectedFloor].FloorElevatorDoors[i].Trigger(self, None);
 	}
 }
 
 // Support to go from Basement 9 to Floor 9
-function UpdateDisplays( int FloorNumber )
+function UpdateDisplays(int FloorNumber)
 {
 	local StaticMesh NewDigit0, NewDigit1;
 	local int i;
 
 	// Set B if under 0 else stay None
-	if( FloorNumber < 0 )
+	if (FloorNumber < 0)
 		NewDigit1 = StaticMesh'keypad_Bdigit';
 
-	switch( Abs(FloorNumber) )
+	switch (Abs(FloorNumber))
 	{
 	case 0 : NewDigit0 = StaticMesh'keypad_Gdigit'; break;
 	case 1 : NewDigit0 = StaticMesh'keypad_1digit'; break;
@@ -388,7 +388,7 @@ function UpdateDisplays( int FloorNumber )
 
 	//Log("Updating displays to floor["$FloorNumber$"] mesh["$NewDigit$"]");
 
-	for( i=0; i<Displays.Length; i++ )
+	for (i = 0; i < Displays.Length; i++)
 		Displays[i].UpdateDisplays(NewDigit0, NewDigit1);
 
 	// Change my mesh
@@ -396,18 +396,18 @@ function UpdateDisplays( int FloorNumber )
 	MeshCode[1].SetStaticMesh(NewDigit1);
 }
 
-function Tick( float DeltaTime )
+function Tick(float DeltaTime)
 {
-	if( Elevator == None || !Elevator.bInterpolating )
+	if (Elevator == None || !Elevator.bInterpolating)
 		return;
 
-	if( Level.TimeSeconds - StartTime >= TimeBetweenEachFloor )
+	if (Level.TimeSeconds - StartTime >= TimeBetweenEachFloor)
 	{
 		// Update start time
 		StartTime += TimeBetweenEachFloor;
 		
 		// fond new floor
-		if( Floors[PreviousFloor].FloorNumber < Floors[SelectedFloor].FloorNumber )
+		if (Floors[PreviousFloor].FloorNumber < Floors[SelectedFloor].FloorNumber)
 			InterpolatingFloor++;
 		else
 			InterpolatingFloor--;
@@ -422,9 +422,9 @@ auto state s_Idle
 	function BeginState()
 	{
 		// No special display if not player
-		if( Interaction != None && 
+		if (Interaction != None && 
 			EElevatorInteraction(Interaction).InteractionController != None && 
-			EElevatorInteraction(Interaction).InteractionController.bIsPlayer )
+			EElevatorInteraction(Interaction).InteractionController.bIsPlayer)
 		{
 		bRenderAtEndOfFrame = false;
 		bSpecialLit = false;
@@ -442,7 +442,7 @@ state s_Use
 		Epc = EPlayerController(EElevatorInteraction(Interaction).InteractionController);
 
 		// No special display if not player
-		if( Epc != None )
+		if (Epc != None)
 		{
 			if (!Epc.eGame.bUseController) // Joshua - Adding controller support for elevators
 				Epc.FakeMouseToggle(true);
@@ -459,11 +459,11 @@ state s_Use
 		Epc = EPlayerController(EElevatorInteraction(Interaction).InteractionController);
 
 		// No special display if not player
-		if( Epc != None )
+		if (Epc != None)
 				Epc.FakeMouseToggle(false);
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
 		local int OldSelectedButton;
 		local EPlayerController Epc;
@@ -475,17 +475,17 @@ state s_Use
 
 			Global.Tick(DeltaTime);
 
-			if( Epc == None )
+			if (Epc == None)
 				return;
 
 			//
 			// Crappy button selection
 			//
-			if( CoordinateWithin(Epc, 178, 174, 55, 55) )
+			if (CoordinateWithin(Epc, 178, 174, 55, 55))
 				SelectedButton = 2;
-			else if( CoordinateWithin(Epc, 182, 240, 55, 55) )
+			else if (CoordinateWithin(Epc, 182, 240, 55, 55))
 				SelectedButton = 1;
-			else if( CoordinateWithin(Epc, 188, 316, 55, 55) )
+			else if (CoordinateWithin(Epc, 188, 316, 55, 55))
 				SelectedButton = 0;
 			else
 				SelectedButton = -1;
@@ -493,22 +493,22 @@ state s_Use
 			//
 			// Manage Mouse click
 			//
-			if( Epc.m_FakeMouseClicked )
+			if (Epc.m_FakeMouseClicked)
 			{
-				if( SelectedButton != -1 )
+				if (SelectedButton != -1)
 					KeyPushed();
-				else if( !CoordinateWithin(Epc, 110, 70, 197, 317) )
+				else if (!CoordinateWithin(Epc, 110, 70, 197, 317))
 					Interaction.PostInteract(EElevatorInteraction(Interaction).InteractionController);
 			}
 			Epc.m_FakeMouseClicked = false;
 
 			// Change selection
-			if( OldSelectedButton != SelectedButton )
+			if (OldSelectedButton != SelectedButton)
 				GlowSelected();
 		}
 	}
 
-	function bool CoordinateWithin( EPlayerController Epc, float x, float y, int w, int h )
+	function bool CoordinateWithin(EPlayerController Epc, float x, float y, int w, int h)
 	{
 		return Epc.m_FakeMouseX > x && Epc.m_FakeMouseX < x + w && 
 			   Epc.m_FakeMouseY > y && Epc.m_FakeMouseY < y + h;

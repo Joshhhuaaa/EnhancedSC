@@ -122,7 +122,7 @@ function BeforePaint(Canvas C, float X, float Y)
 function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H)
 {
 	C.SetDrawColor(255,255,255);	
-	if(UWindowMenuBarItem(Item).bHelp) W = W - 16;
+	if (UWindowMenuBarItem(Item).bHelp) W = W - 16;
 
 	UWindowMenuBarItem(Item).ItemLeft = X;
 	UWindowMenuBarItem(Item).ItemWidth = W;
@@ -146,15 +146,15 @@ function DrawMenuBar(Canvas C)
 
 function LMouseDown(float X, float Y)
 {
-	if(X > WinWidth - 13) GetPlayerOwner().ConsoleCommand("togglefullscreen");
+	if (X > WinWidth - 13) GetPlayerOwner().ConsoleCommand("togglefullscreen");
 	Super.LMouseDown(X, Y);
 }
 function NotifyQuitUnreal()
 {
 	local UWindowMenuBarItem I;
 
-	for(I = UWindowMenuBarItem(Items.Next); I != None; I = UWindowMenuBarItem(I.Next))
-		if(I.Menu != None)
+	for (I = UWindowMenuBarItem(Items.Next); I != None; I = UWindowMenuBarItem(I.Next))
+		if (I.Menu != None)
 			I.Menu.NotifyQuitUnreal();
 }
 
@@ -162,8 +162,8 @@ function NotifyBeforeLevelChange()
 {
 	local UWindowMenuBarItem I;
 
-	for(I = UWindowMenuBarItem(Items.Next); I != None; I = UWindowMenuBarItem(I.Next))
-		if(I.Menu != None)
+	for (I = UWindowMenuBarItem(Items.Next); I != None; I = UWindowMenuBarItem(I.Next))
+		if (I.Menu != None)
 			I.Menu.NotifyBeforeLevelChange();
 }
 
@@ -171,8 +171,8 @@ function NotifyAfterLevelChange()
 {
 	local UWindowMenuBarItem I;
 
-	for(I = UWindowMenuBarItem(Items.Next); I != None; I = UWindowMenuBarItem(I.Next))
-		if(I.Menu != None)
+	for (I = UWindowMenuBarItem(Items.Next); I != None; I = UWindowMenuBarItem(I.Next))
+		if (I.Menu != None)
 			I.Menu.NotifyAfterLevelChange();
 }
 
@@ -183,12 +183,12 @@ function MenuCmd(int Menu, int Item)
 
 function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) 
 {
-	switch(Msg) 
+	switch (Msg) 
 	{
 		case WM_KeyDown:
 		
 		
-			if (Key==27) // GRR
+			if (Key == 27) // GRR
 			{
 				if (Selected == None)
 				{
@@ -211,12 +211,12 @@ function Paint(Canvas C, float MouseX, float MouseY)
 
 	DrawMenuBar(C);
 
-	for( I = UWindowMenuBarItem(Items.Next);I != None; I = UWindowMenuBarItem(I.Next) )
+	for (I = UWindowMenuBarItem(Items.Next);I != None; I = UWindowMenuBarItem(I.Next))
 	{
 		C.Font = Root.Fonts[F_Normal];
-		TextSize( C, RemoveAmpersand(I.Caption), W, H );
+		TextSize(C, RemoveAmpersand(I.Caption), W, H);
 	
-		if(I.bHelp)
+		if (I.bHelp)
 		{
 			DrawItem(C, I, (WinWidth - (W + Spacing)), 1, W + Spacing, 14);
 		}
@@ -236,7 +236,7 @@ function MenuItemSelected(UWindowBase Sender, UWindowBase Item)
 	Menu = UWindowPulldownMenu(Sender);
 	I = UWindowPulldownMenuItem(Item);
 
-	if (Menu!=None)
+	if (Menu != None)
 	{
 		switch (Menu)
 		{
@@ -245,13 +245,13 @@ function MenuItemSelected(UWindowBase Sender, UWindowBase Item)
 				{
 					case 1 :
 						// Open the Map Menu
-						Root.ShowModal(Root.CreateWindow(class'UDebugMapListWindow', (Root.WinWidth/2)-200, (Root.WinHeight/2)-107, 400, 214, self));
+						Root.ShowModal(Root.CreateWindow(class'UDebugMapListWindow', (Root.WinWidth / 2) - 200, (Root.WinHeight / 2) - 107, 400, 214, self));
 						return;						
 						break;
 					
 					case 3 :
 						// Open the Map Menu
-						Root.ShowModal(Root.CreateWindow(class'UDebugOpenWindow', (Root.WinWidth/2)-150,(Root.WinHeight/2)-45, 300,90, self));
+						Root.ShowModal(Root.CreateWindow(class'UDebugOpenWindow', (Root.WinWidth / 2) - 150,(Root.WinHeight / 2) - 45, 300,90, self));
 						return;						
 						break;
 										
@@ -271,7 +271,7 @@ function MenuItemSelected(UWindowBase Sender, UWindowBase Item)
 				if (I.Tag < 9)
 					GetLevel().ConsoleCommand("RMode "$I.Tag);
 				else if (I.Tag >9)
-					GetLevel().ConsoleCommand("RMode "$I.Tag+3);
+					GetLevel().ConsoleCommand("RMode "$I.Tag + 3);
 					
 				break;
 				

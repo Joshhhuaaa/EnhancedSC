@@ -11,9 +11,9 @@ class P_3_3_2_Mine_Quarry extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,13 +29,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz34')
+        if (P.name == 'spetsnaz34')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz38')
+        if (P.name == 'spetsnaz38')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

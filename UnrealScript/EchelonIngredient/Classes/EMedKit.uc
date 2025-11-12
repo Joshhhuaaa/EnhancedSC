@@ -16,13 +16,13 @@ function PostBeginPlay()
 }
 
 // Call use here to know when it comes fmr player selecting it
-function Select( EInventory Inv )
+function Select(EInventory Inv)
 {
 	local int	HealthPoint;
 	local EPlayerController Epc;
 	Epc = EPlayerController(Controller);
 	
-	if( Epc.ePawn.Health == Epc.ePawn.InitialHealth )
+	if (Epc.ePawn.Health == Epc.ePawn.InitialHealth)
 	{
 		Epc.SendTransmissionMessage(Localize("Transmission", "MedKitNotUsed", "Localization\\HUD"), TR_CONSOLE);
 		EPawn(Controller.Pawn).FullInventory.SetPreviousConfig();
@@ -32,7 +32,7 @@ function Select( EInventory Inv )
 	PlaySound(Sound'Interface.Play_FisherUseMedikit', SLOT_Interface);
 
 	HealthPoint = Epc.ePawn.InitialHealth * HealthPointRecover;
-	if( Epc.ePawn.InitialHealth-Epc.Pawn.Health < HealthPoint )
+	if (Epc.ePawn.InitialHealth - Epc.Pawn.Health < HealthPoint)
 	{
 		Epc.SendTransmissionMessage(Localize("Transmission", "MedKitUsed", "Localization\\HUD"), TR_CONSOLE);
 		Epc.Pawn.Health = Epc.ePawn.InitialHealth;			

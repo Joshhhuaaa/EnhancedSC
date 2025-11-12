@@ -9,10 +9,10 @@ function PostBeginPlay()
 	ToggleLight(false);
 }
 
-function ToggleLight( bool bOn )
+function ToggleLight(bool bOn)
 {
 	UsesSpotLightBeam = bOn;
-	if( bOn )
+	if (bOn)
 	{
 		LightType = LT_Steady;
 	}
@@ -21,7 +21,7 @@ function ToggleLight( bool bOn )
 		LightType = LT_None;
 	}
 
-	if(Level.Game.PlayerC.ShadowMode == 0 )
+	if (Level.Game.PlayerC.ShadowMode == 0)
 	{
 		LightEffect=LE_Spotlight;
 	}

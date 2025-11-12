@@ -18,24 +18,24 @@ function InitInteract(Controller Instigator)
 	EPC.m_Elongation = RO.Location.Z - RO.RappellingHeight;
 
 	// Set max Up direction for rappelling, Can't use bsp trace for there's windows in the way
-	if( Instigator.bIsPlayer )
-		EPC.m_HoistStOffset = Owner.ToWorld(Owner.CollisionHeight*Vect(0,0,-1));
+	if (Instigator.bIsPlayer)
+		EPC.m_HoistStOffset = Owner.ToWorld(Owner.CollisionHeight * Vect(0,0,-1));
 
 	// Make pawn interact
 	Instigator.Interaction = self;
 	Instigator.GotoState('s_Rappelling', 'FromTop');
 
 	// Create Rope
-	if(RO.Rope == None)
+	if (RO.Rope == None)
 		RO.Rope = Spawn(class'ERapelRopeActor', RO);
 
-	if(RO.Rope != None)
+	if (RO.Rope != None)
 	{
 		EPC.RapelRope = RO.Rope;
 	}
 }
 
-function PostInteract( Controller Instigator )
+function PostInteract(Controller Instigator)
 {
 	// reset interaction
 	Instigator.Interaction = None;
@@ -43,13 +43,13 @@ function PostInteract( Controller Instigator )
 	Owner.bBlockPlayers = true;
 }
 
-function SetInteractLocation( Pawn InteractPawn )
+function SetInteractLocation(Pawn InteractPawn)
 {
 	local EPawn		ePawn;
 	local Vector	DestPos, DestRot;
 
 	ePawn = EPawn(InteractPawn);
-	if( ePawn == None )
+	if (ePawn == None)
 		return;
 
 	DestRot		= Owner.ToWorldDir(vect(1,0,0));

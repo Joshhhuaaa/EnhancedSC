@@ -4,11 +4,11 @@ function ResolutionChanged(float W, float H)
 {
 	local UWindowPageControlPage I;
 
-	for(I = UWindowPageControlPage(Items.Next); I != None; I = UWindowPageControlPage(I.Next))
-		if(I.Page != None && I != SelectedTab )
+	for (I = UWindowPageControlPage(Items.Next); I != None; I = UWindowPageControlPage(I.Next))
+		if (I.Page != None && I != SelectedTab)
 			I.Page.ResolutionChanged(W, H);
 	
-	if(SelectedTab != None)
+	if (SelectedTab != None)
 		UWindowPageControlPage(SelectedTab).Page.ResolutionChanged(W, H);
 }
 
@@ -16,8 +16,8 @@ function NotifyQuitUnreal()
 {
 	local UWindowPageControlPage I;
 
-	for(I = UWindowPageControlPage(Items.Next); I != None; I = UWindowPageControlPage(I.Next))
-		if(I.Page != None)
+	for (I = UWindowPageControlPage(Items.Next); I != None; I = UWindowPageControlPage(I.Next))
+		if (I.Page != None)
 			I.Page.NotifyQuitUnreal();
 }
 
@@ -25,8 +25,8 @@ function NotifyBeforeLevelChange()
 {
 	local UWindowPageControlPage I;
 
-	for(I = UWindowPageControlPage(Items.Next); I != None; I = UWindowPageControlPage(I.Next))
-		if(I.Page != None)
+	for (I = UWindowPageControlPage(Items.Next); I != None; I = UWindowPageControlPage(I.Next))
+		if (I.Page != None)
 			I.Page.NotifyBeforeLevelChange();
 }
 
@@ -34,8 +34,8 @@ function NotifyAfterLevelChange()
 {
 	local UWindowPageControlPage I;
 
-	for(I = UWindowPageControlPage(Items.Next); I != None; I = UWindowPageControlPage(I.Next))
-		if(I.Page != None)
+	for (I = UWindowPageControlPage(Items.Next); I != None; I = UWindowPageControlPage(I.Next))
+		if (I.Page != None)
 			I.Page.NotifyAfterLevelChange();
 }
 
@@ -47,13 +47,13 @@ function GetDesiredDimensions(out float W, out float H)
 	MaxW = 0;
 	MaxH = 0;
 
-	for(I = UWindowPageControlPage(Items.Next); I != None; I = UWindowPageControlPage(I.Next))
+	for (I = UWindowPageControlPage(Items.Next); I != None; I = UWindowPageControlPage(I.Next))
 	{
-		if(I.Page != None)
+		if (I.Page != None)
 			I.Page.GetDesiredDimensions(TW, TH);
 
-		if(TW > MaxW) MaxW = TW;
-		if(TH > MaxH) MaxH = TH;
+		if (TW > MaxW) MaxW = TW;
+		if (TH > MaxH) MaxH = TH;
 	}
 	W = MaxW;
 	H = MaxH + TabArea.WinHeight;
@@ -69,7 +69,7 @@ function BeforePaint(Canvas C, float X, float Y)
 	Super.BeforePaint(C, X, Y);
 	WinHeight = OldWinHeight;
 
-	for(I = UWindowPageControlPage(Items.Next); I != None; I = UWindowPageControlPage(I.Next))
+	for (I = UWindowPageControlPage(Items.Next); I != None; I = UWindowPageControlPage(I.Next))
 		LookAndFeel.Tab_SetTabPageSize(Self, I.Page);
 }
 
@@ -84,14 +84,14 @@ function UWindowPageControlPage AddPage(string Caption, class<UWindowPageWindow>
 	local UWindowPageControlPage P;
 	P = UWindowPageControlPage(AddTab(Caption));
 	P.Page = UWindowPageWindow(CreateWindow(PageClass, 0, 
-				TabArea.WinHeight-(LookAndFeel.TabSelectedM.H-LookAndFeel.TabUnselectedM.H), 
-				WinWidth, WinHeight-(TabArea.WinHeight-(LookAndFeel.TabSelectedM.H-LookAndFeel.TabUnselectedM.H)),,,ObjectName));
+				TabArea.WinHeight - (LookAndFeel.TabSelectedM.H - LookAndFeel.TabUnselectedM.H), 
+				WinWidth, WinHeight - (TabArea.WinHeight - (LookAndFeel.TabSelectedM.H - LookAndFeel.TabUnselectedM.H)),,,ObjectName));
 	P.Page.OwnerTab = P;
 
-	if(P != SelectedTab) 
+	if (P != SelectedTab) 
 		P.Page.HideWindow();
 	else
-	if(UWindowPageControlPage(SelectedTab) != None && WindowIsVisible())
+	if (UWindowPageControlPage(SelectedTab) != None && WindowIsVisible())
 	{
 		UWindowPageControlPage(SelectedTab).Page.ShowWindow();
 		UWindowPageControlPage(SelectedTab).Page.BringToFront();
@@ -104,19 +104,19 @@ function UWindowPageControlPage InsertPage(UWindowPageControlPage BeforePage, st
 {
 	local UWindowPageControlPage P;
 
-	if(BeforePage == None)
+	if (BeforePage == None)
 		return AddPage(Caption, PageClass);
 
 	P = UWindowPageControlPage(InsertTab(BeforePage, Caption));
 	P.Page = UWindowPageWindow(CreateWindow(PageClass, 0, 
-				TabArea.WinHeight-(LookAndFeel.TabSelectedM.H-LookAndFeel.TabUnselectedM.H), 
-				WinWidth, WinHeight-(TabArea.WinHeight-(LookAndFeel.TabSelectedM.H-LookAndFeel.TabUnselectedM.H)),,,ObjectName));
+				TabArea.WinHeight - (LookAndFeel.TabSelectedM.H - LookAndFeel.TabUnselectedM.H), 
+				WinWidth, WinHeight - (TabArea.WinHeight - (LookAndFeel.TabSelectedM.H - LookAndFeel.TabUnselectedM.H)),,,ObjectName));
 	P.Page.OwnerTab = P;
 
-	if(P != SelectedTab) 
+	if (P != SelectedTab) 
 		P.Page.HideWindow();
 	else
-	if(UWindowPageControlPage(SelectedTab) != None && WindowIsVisible())
+	if (UWindowPageControlPage(SelectedTab) != None && WindowIsVisible())
 	{
 		UWindowPageControlPage(SelectedTab).Page.ShowWindow();
 		UWindowPageControlPage(SelectedTab).Page.BringToFront();
@@ -141,8 +141,8 @@ function Close(optional bool bByParent)
 {
 	local UWindowPageControlPage I;
 
-	for(I = UWindowPageControlPage(Items.Next); I != None; I = UWindowPageControlPage(I.Next))
-		if(I.Page != None)
+	for (I = UWindowPageControlPage(Items.Next); I != None; I = UWindowPageControlPage(I.Next))
+		if (I.Page != None)
 			I.Page.Close(True);
 
 	Super.Close(bByParent);
@@ -154,13 +154,13 @@ function GotoTab(UWindowTabControlItem NewSelected, optional bool bByUser)
 
 	Super.GotoTab(NewSelected, bByUser);
 
-	for(I = UWindowPageControlPage(Items.Next);I != None;I = UWindowPageControlPage(I.Next))
+	for (I = UWindowPageControlPage(Items.Next);I != None;I = UWindowPageControlPage(I.Next))
 	{
-		if(I != NewSelected)
+		if (I != NewSelected)
 			I.Page.HideWindow();			
 	}
 
-	if(UWindowPageControlPage(NewSelected) != None)
+	if (UWindowPageControlPage(NewSelected) != None)
 		UWindowPageControlPage(NewSelected).Page.ShowWindow();
 }
 

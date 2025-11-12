@@ -14,9 +14,9 @@ var int Two;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_GRABBED:
             EventJump('SpillIt');
@@ -33,7 +33,7 @@ function InitPattern()
 
     Super.InitPattern();
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     One=0;

@@ -42,7 +42,7 @@ var()	config	enum EAffect
 	AFFECT_ViewportCamera,
 	AFFECT_Actor,
 } Affect;
-var()	Actor	AffectedActor;			// The name of the actor which will follow the matinee path (if Affect==AFFECT_Actor)
+var()	Actor	AffectedActor;			// The name of the actor which will follow the matinee path (if Affect == AFFECT_Actor)
 var()	bool	bLooping;				// If this is TRUE, the path will looping endlessly
 var()	bool	bCinematicView;			// Should the screen go into letterbox mode when playing this scene?
 
@@ -68,8 +68,8 @@ function BeginPlay()
 {
 	Super.BeginPlay();
 
-	if( Affect == AFFECT_Actor && AffectedActor == None )
-		log( "SceneManager : Affected actor is NULL!" );
+	if (Affect == AFFECT_Actor && AffectedActor == None)
+		log("SceneManager : Affected actor is NULL!");
 
 	//
 	// Misc set up
@@ -80,11 +80,11 @@ function BeginPlay()
 	bIsSceneStarted = false;
 }
 
-function Trigger( actor Other, Pawn EventInstigator, optional name InTag ) // UBI MODIF - Additional parameter
+function Trigger(actor Other, Pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 {
 	bIsRunning = true;
 	bIsSceneStarted = false;
-	Disable( 'Trigger' );
+	Disable('Trigger');
 }
 
 // Events
@@ -94,12 +94,12 @@ event SceneStarted()	// Called from C++ when the scene starts.
 
 	// Figure out who our viewer is.
 	Viewer = None;
-	if( Affect==AFFECT_Actor )
+	if (Affect == AFFECT_Actor)
 		Viewer = AffectedActor;
 	else
 	{
-		for( P = Level.ControllerList ; P != None ; P = P.nextController )
-			if( P.IsA('PlayerController') && (P.Pawn != None) )
+		for (P = Level.ControllerList ; P != None ; P = P.nextController)
+			if (P.IsA('PlayerController') && (P.Pawn != None))
 			{
 				Viewer = P;
 				OldPawn = PlayerController(Viewer).Pawn;
@@ -121,15 +121,15 @@ event SceneEnded()		// Called from C++ when the scene ends.
 {
 	bIsSceneStarted = false;
 
-	if( Affect==AFFECT_ViewportCamera )
+	if (Affect == AFFECT_ViewportCamera)
 	{
 		OldPawn.bPhysicsAnimUpdate = true;
-		PlayerController(Viewer).Possess( OldPawn );
+		PlayerController(Viewer).Possess(OldPawn);
 		PlayerController(Viewer).bInterpolating = false;
 		PlayerController(Viewer).MyHud.bHideHUD = false;
 	}
 
-	Enable( 'Trigger' );
+	Enable('Trigger');
 }
 
 defaultproperties

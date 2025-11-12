@@ -16,35 +16,35 @@ event Destroyed()
 {
 	Super.Destroyed();
 
-	if( DetectionVolume != None )
+	if (DetectionVolume != None)
 		DetectionVolume.Destroy();
 }
 
 auto state s_Normal
 {
-	function Trigger( Actor Other, Pawn EventInstigator, optional name InTag )
+	function Trigger(Actor Other, Pawn EventInstigator, optional name InTag)
 	{
 		local EPawn ePawn;
 
 		Super.Trigger(Other, EventInstigator, InTag);
 
-		if( !Other.IsA('EVolumeTrigger') )
+		if (!Other.IsA('EVolumeTrigger'))
 			return;
 
 		ePawn = EPawn(EventInstigator);
-		if( ePawn == None )
+		if (ePawn == None)
 			Log("ERROR : Pawn passing through detector should be an EPawn.");
-		else if( !ePawn.bIsPlayerPawn )
+		else if (!ePawn.bIsPlayerPawn)
 			return;
 
 		// if ePawn has no weapon, forget the trigger
-		if( ePawn.FullInventory.GetItemByClass('EWeapon') == None )
+		if (ePawn.FullInventory.GetItemByClass('EWeapon') == None)
 			return;
 
 		PlaySound(Sound'Electronic.Play_AlarmeDetecteurLaser', SLOT_SFX);
 
 		Spotted = EventInstigator;
-		if( Alarm != None )
+		if (Alarm != None)
 			Alarm.EnableAlarm(self, EventInstigator.Controller);
 
 		TriggerPattern(EventInstigator);

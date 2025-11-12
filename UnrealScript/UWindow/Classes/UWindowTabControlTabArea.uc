@@ -24,12 +24,12 @@ function SizeTabsSingleLine(Canvas C)
 	local bool bHaveMore;
 
 	ItemX = LookAndFeel.Size_TabXOffset;
-	TabCount=0;
-	for( 
+	TabCount = 0;
+	for (
 			I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
 			I != None; 
 			I = UWindowTabControlItem(I.Next) 
-		)
+)
 	{
 		LookAndFeel.Tab_GetTabSize(Self, C, RemoveAmpersand(I.Caption), W, H);
 		I.TabWidth = W;
@@ -41,41 +41,41 @@ function SizeTabsSingleLine(Canvas C)
 
 	Selected = UWindowTabControl(ParentWindow).SelectedTab;
 	
-	while(True)
+	while (True)
 	{
 		ItemX = LookAndFeel.Size_TabXOffset;
 		Count = 0;
 		LastHidden = None;
 		FirstShown = None;
-		for( 
+		for (
 				I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
 				I != None; 
 				I = UWindowTabControlItem(I.Next) 
-			)
+)
 		{
-			if( Count < TabOffset)
+			if (Count < TabOffset)
 			{
 				I.TabLeft = -1;
 				LastHidden = I;
 			}
 			else
 			{
-				if(FirstShown == None) FirstShown = I;
+				if (FirstShown == None) FirstShown = I;
 				I.TabLeft = ItemX;
-				if(I.TabLeft + I.TabWidth >= WinWidth + 5) bHaveMore = True;
+				if (I.TabLeft + I.TabWidth >= WinWidth + 5) bHaveMore = True;
 				ItemX += I.TabWidth;
 			}
 			Count++;
 
 		}
 
-		if( TabOffset > 0 && LastHidden != None && LastHidden.TabWidth + 5 < WinWidth - ItemX)
+		if (TabOffset > 0 && LastHidden != None && LastHidden.TabWidth + 5 < WinWidth - ItemX)
 			TabOffset--;
 		else 
-		if(	bShowSelected && TabOffset < TabCount - 1 
+		if (bShowSelected && TabOffset < TabCount - 1 
 			&&	Selected != None &&	Selected != FirstShown 
 			&& Selected.TabLeft + Selected.TabWidth > WinWidth - 5
-		  ) 
+) 
 			TabOffset++;
 		else				
 			break;
@@ -103,20 +103,20 @@ function SizeTabsMultiLine(Canvas C)
 	TabRows = 1;
 	bTryAnotherRow = True;
 
-	while(bTryAnotherRow && TabRows <= 10)
+	while (bTryAnotherRow && TabRows <= 10)
 	{	
 		bTryAnotherRow = False;
-		for(j=0;j<TabRows;j++)
+		for (j = 0; j < TabRows; j++)
 		{
 			RowWidths[j] = 0;
 			TabCounts[j] = 0;		
 		}
 
-		for( 
+		for (
 				I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
 				I != None; 
 				I = UWindowTabControlItem(I.Next) 
-			)
+)
 		{
 			LookAndFeel.Tab_GetTabSize(Self, C, RemoveAmpersand(I.Caption), W, H);
 			I.TabWidth = W;
@@ -124,13 +124,13 @@ function SizeTabsMultiLine(Canvas C)
 
 			// find the best row for this tab
 			MinRow = 0;
-			for(j=1;j<TabRows;j++)
-				if(RowWidths[j] < RowWidths[MinRow])
+			for (j = 1; j < TabRows; j++)
+				if (RowWidths[j] < RowWidths[MinRow])
 					MinRow = j;
 
-			if(RowWidths[MinRow] + W > WinWidth)
+			if (RowWidths[MinRow] + W > WinWidth)
 			{
-				TabRows ++;
+				TabRows++;
 				bTryAnotherRow = True;
 				break;
 			}
@@ -145,30 +145,30 @@ function SizeTabsMultiLine(Canvas C)
 
 	Selected = UWindowTabControl(ParentWindow).SelectedTab;
 
-	if(TabRows > 1)
+	if (TabRows > 1)
 	{
-		for( 
+		for (
 				I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
 				I != None; 
 				I = UWindowTabControlItem(I.Next) 
-			)
+)
 		{
 			I.TabWidth += (WinWidth - RowWidths[I.RowNumber]) / TabCounts[I.RowNumber];
 		}
 	}
 
-	for(j=0;j<TabRows;j++)
+	for (j = 0; j < TabRows; j++)
 		RowWidths[j] = 0;
 
-	for( 
+	for (
 			I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
 			I != None; 
 			I = UWindowTabControlItem(I.Next) 
-		)
+)
 	{
 		I.TabLeft = RowWidths[I.RowNumber];
 
-		if(bArrangeRowsLikeTimHates)
+		if (bArrangeRowsLikeTimHates)
 			I.TabTop = ((I.RowNumber + ((TabRows - 1) - Selected.RowNumber)) % TabRows) * I.TabHeight;
 		else
 			I.TabTop = I.RowNumber * I.TabHeight;
@@ -179,7 +179,7 @@ function SizeTabsMultiLine(Canvas C)
 
 function LayoutTabs(Canvas C)
 {
-	if(UWindowTabControl(ParentWindow).bMultiLine)
+	if (UWindowTabControl(ParentWindow).bMultiLine)
 		SizeTabsMultiLine(C);
 	else
 		SizeTabsSingleLine(C);
@@ -194,31 +194,31 @@ function Paint(Canvas C, float X, float Y)
 	
 	T = GetEntryLevel().TimeSeconds;
 
-	if(UnFlashTime < T)
+	if (UnFlashTime < T)
 	{
 		bFlashShown = !bFlashShown;
 
-		if(bFlashShown)
+		if (bFlashShown)
 			UnFlashTime = T + 0.5;
 		else
 			UnFlashTime = T + 0.3;
 	}
 	
-	for(Row=0;Row<TabRows;Row++)
+	for (Row = 0; Row < TabRows; Row++)
 	{
 		Count = 0;
-		for( 
+		for (
 				I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
 				I != None; 
 				I = UWindowTabControlItem(I.Next) 
-			)
+)
 		{
-			if( Count < TabOffset)
+			if (Count < TabOffset)
 			{
 				Count++;
 				continue;
 			}
-			if(I.RowNumber == Row)
+			if (I.RowNumber == Row)
 				DrawItem(C, I, I.TabLeft, I.TabTop, I.TabWidth, I.TabHeight, (!I.bFlash) || bFlashShown);
 		}
 	}
@@ -232,20 +232,20 @@ function LMouseDown(float X, float Y)
 	Super.LMouseDown(X, Y);
 
 	Count = 0;
-	for( 
+	for (
 			I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
 			I != None; 
 			I = UWindowTabControlItem(I.Next) 
-		)
+)
 	{
-		if( Count < TabOffset)
+		if (Count < TabOffset)
 		{
 			Count++;
 			continue;
 		}
-		if( X >= I.TabLeft && X <= I.TabLeft + I.TabWidth && (TabRows==1 || (Y >= I.TabTop && Y <= I.TabTop + I.TabHeight)) )
+		if (X >= I.TabLeft && X <= I.TabLeft + I.TabWidth && (TabRows == 1 || (Y >= I.TabTop && Y <= I.TabTop + I.TabHeight)))
 		{
-			if(!UWindowTabControl(ParentWindow).bMultiLine)
+			if (!UWindowTabControl(ParentWindow).bMultiLine)
 			{
 				bDragging = True;
 				DragTab = I;
@@ -258,12 +258,12 @@ function LMouseDown(float X, float Y)
 
 function MouseMove(float X, float Y)
 {
-	if(bDragging && bMouseDown)
+	if (bDragging && bMouseDown)
 	{
-		if(X < DragTab.TabLeft)
+		if (X < DragTab.TabLeft)
 			TabOffset++;
 
-		if(X > DragTab.TabLeft + DragTab.TabWidth && TabOffset > 0)
+		if (X > DragTab.TabLeft + DragTab.TabWidth && TabOffset > 0)
 			TabOffset--;	
 	}
 	else
@@ -278,18 +278,18 @@ function RMouseDown(float X, float Y)
 	Super.LMouseDown(X, Y);
 
 	Count = 0;
-	for( 
+	for (
 			I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
 			I != None; 
 			I = UWindowTabControlItem(I.Next) 
-		)
+)
 	{
-		if( Count < TabOffset)
+		if (Count < TabOffset)
 		{
 			Count++;
 			continue;
 		}
-		if( X >= I.TabLeft && X <= I.TabLeft + I.TabWidth )
+		if (X >= I.TabLeft && X <= I.TabLeft + I.TabWidth)
 		{
 			I.RightClickTab();
 		}
@@ -298,14 +298,14 @@ function RMouseDown(float X, float Y)
 
 function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H, bool bShowText)
 {
-	if(Item == UWindowTabControl(ParentWindow).SelectedTab)
-		LookAndFeel.Tab_DrawTab(Self, C, True, FirstShown==Item, X, Y, W, H, UWindowTabControlItem(Item).Caption, bShowText);
+	if (Item == UWindowTabControl(ParentWindow).SelectedTab)
+		LookAndFeel.Tab_DrawTab(Self, C, True, FirstShown == Item, X, Y, W, H, UWindowTabControlItem(Item).Caption, bShowText);
 	else
-		LookAndFeel.Tab_DrawTab(Self, C, False, FirstShown==Item, X, Y, W, H, UWindowTabControlItem(Item).Caption, bShowText);
+		LookAndFeel.Tab_DrawTab(Self, C, False, FirstShown == Item, X, Y, W, H, UWindowTabControlItem(Item).Caption, bShowText);
 }
 
 function bool CheckMousePassThrough(float X, float Y)
 {
-	return Y >= LookAndFeel.Size_TabAreaHeight*TabRows;
+	return Y >= LookAndFeel.Size_TabAreaHeight * TabRows;
 }
 

@@ -11,9 +11,9 @@ class P_1_2_1DefMin_CourtPatrols extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,15 +29,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianCop9')
+        if (P.name == 'EGeorgianCop9')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianCop5')
+        if (P.name == 'EGeorgianCop5')
             Characters[2] = P.controller;
-        if(P.name == 'EGeorgianCop10')
+        if (P.name == 'EGeorgianCop10')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

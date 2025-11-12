@@ -15,9 +15,9 @@ var int PatrolAlreadyTriggered;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('IdleComputer');
@@ -39,13 +39,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMafiaMuscle14')
+        if (P.name == 'EMafiaMuscle14')
             Characters[1] = P.controller;
-        if(P.name == 'EMafiaMuscle13')
+        if (P.name == 'EMafiaMuscle13')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     FireDoorsHaveBeenOpened=0;

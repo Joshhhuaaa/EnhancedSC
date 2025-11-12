@@ -49,7 +49,7 @@ function PerformLayout()
 	local float TotalWidth;
 	local float TotalHeight;
 
-	for(R = UWindowLayoutRow(RowList.Next); R != None; R = UWindowLayoutRow(R.Next))
+	for (R = UWindowLayoutRow(RowList.Next); R != None; R = UWindowLayoutRow(R.Next))
 		TotalHeight += R.CalcMinHeight();
 
 	

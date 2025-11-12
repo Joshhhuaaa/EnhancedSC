@@ -16,9 +16,9 @@ var int ChatTwice;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -34,11 +34,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EAnna1')
+        if (P.name == 'EAnna1')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     ChatOnce=0;
@@ -114,7 +114,7 @@ ThirdChat:
     End();
 FinalLoop:
     Log("Sam has drained it, looping the endings.");
-    JumpRandom('ANiceties', 0.50, 'BNiceties', 1.00, , , , , , ); 
+    JumpRandom('ANiceties', 0.50, 'BNiceties', 1.00, , , , , ,); 
     End();
 ANiceties:
     Talk(Sound'S0_0_2Voice.Play_00_18_19', 1, , TRUE, 0);

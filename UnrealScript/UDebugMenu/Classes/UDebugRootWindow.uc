@@ -35,7 +35,7 @@ function Resized()
 function DoQuitGame()
 {
 	MenuBar.SaveConfig();
-	if ( Root.GetLevel().Game != None )
+	if (Root.GetLevel().Game != None)
 	{
 		Root.GetLevel().Game.SaveConfig();
 	}
@@ -43,9 +43,9 @@ function DoQuitGame()
 }
 
 /*
-function bool KeyEvent( out Console.EInputKey Key, out Console.EInputAction Action, FLOAT Delta )
+function bool KeyEvent(out Console.EInputKey Key, out Console.EInputAction Action, FLOAT Delta)
 {
-	if ( (Action == IST_Press) && (Key == IK_Escape) )
+	if ((Action == IST_Press) && (Key == IK_Escape))
 	{
 		bAllowConsole = false;
 		GotoState('UWindows');

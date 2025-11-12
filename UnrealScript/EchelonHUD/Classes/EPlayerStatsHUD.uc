@@ -34,7 +34,7 @@ function PostBeginPlay()
     PlayerStatsAlpha = 200;
 }
 
-function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta );
+function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta);
 
 function PostRender(Canvas C)
 {
@@ -53,7 +53,7 @@ state s_StandardDisplay
 
 	function EndState()
 	{
-        if(!Epc.playerStats.bMissionComplete)
+        if (!Epc.playerStats.bMissionComplete)
             Epc.bStopInput = false;
 	}
 
@@ -134,7 +134,7 @@ state s_FinalMapStats
     {
         if (Action == IST_Press || Action == IST_Hold)
         {
-            switch(Key)
+            switch (Key)
 			{
                 case "FullInventory" :
                 case "PlayerStats" :
@@ -177,8 +177,12 @@ function DrawPlayerStats(ECanvas Canvas)
         return;
         
     playerStats = Epc.playerStats;
-        
-    Canvas.Font = Canvas.ETextFontPC;
+
+    // Xbox font is too large to display here, using either PC or GameCube
+    if (Epc.eGame.FontType == Font_GameCube)
+        Canvas.Font = Canvas.ETextFontGameCube;
+    else
+        Canvas.Font = Canvas.ETextFontPC;
     Canvas.TextSize("T", xLen, yLen);
     
     TitleColor.R = 96;
@@ -293,16 +297,16 @@ function DrawPlayerStats(ECanvas Canvas)
     yPos += spacing;
     
     // Difficulty
-    switch(Epc.playerInfo.Difficulty)
+    switch (Epc.playerInfo.Difficulty)
     {
         case 0:
-            if(Epc.ePawn.InitialHealth <= 200)
+            if (Epc.ePawn.InitialHealth <= 200)
                 DifficultyText = Localize("PlayerStats", "Normal", "Localization\\Enhanced");
             else
                 DifficultyText = Localize("PlayerStats", "NormalXbox", "Localization\\Enhanced");
             break;
         case 1:
-            if(Epc.ePawn.InitialHealth <= 132)
+            if (Epc.ePawn.InitialHealth <= 132)
                 DifficultyText = Localize("PlayerStats", "Hard", "Localization\\Enhanced");
             else
                 DifficultyText = Localize("PlayerStats", "HardXbox", "Localization\\Enhanced");
@@ -311,7 +315,7 @@ function DrawPlayerStats(ECanvas Canvas)
             DifficultyText = Localize("PlayerStats", "Elite", "Localization\\Enhanced");
             break;
         case 3:
-            if(Epc.ePawn.InitialHealth <= 132)
+            if (Epc.ePawn.InitialHealth <= 132)
                 DifficultyText = Localize("PlayerStats", "HardPermadeath", "Localization\\Enhanced");
             else
                 DifficultyText = Localize("PlayerStats", "HardPermadeathXbox", "Localization\\Enhanced");

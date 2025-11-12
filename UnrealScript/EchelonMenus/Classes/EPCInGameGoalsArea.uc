@@ -19,14 +19,14 @@ var   BOOL              m_bCompute;
 
 function Created()
 {
-    m_ScrollBar =  EPCVScrollBar(CreateWindow(class'EPCVScrollBar', WinWidth-LookAndFeel.Size_ScrollbarWidth, 0, LookAndFeel.Size_ScrollbarWidth, WinHeight));
+    m_ScrollBar =  EPCVScrollBar(CreateWindow(class'EPCVScrollBar', WinWidth - LookAndFeel.Size_ScrollbarWidth, 0, LookAndFeel.Size_ScrollbarWidth, WinHeight));
 }
 
 function ShowGoals(Bool _ShoGoals)
 {
     m_bGoals = _ShoGoals;
 
-    if(_ShoGoals)    
+    if (_ShoGoals)    
     {
         m_INoteCurScroll = m_ScrollBar.Pos;       
         m_ScrollBar.SetRange(0, m_IGoalNbScroll,1);
@@ -44,13 +44,13 @@ function ShowGoals(Bool _ShoGoals)
 
 function MouseWheelDown(FLOAT X, FLOAT Y)
 {
-    if(m_ScrollBar != None)
+    if (m_ScrollBar != None)
 	    m_ScrollBar.MouseWheelDown(X,Y);
 }
 
 function MouseWheelUp(FLOAT X, FLOAT Y)
 {
-    if(m_ScrollBar != None)
+    if (m_ScrollBar != None)
         m_ScrollBar.MouseWheelUp(X,Y);
 	    
 }
@@ -66,7 +66,7 @@ function Paint(Canvas C, FLOAT X, FLOAT Y)
 {
     Render(C, X, Y);
     
-    if(m_bCompute)
+    if (m_bCompute)
     {
         ShowGoals(m_bGoals);
         m_bCompute = false;

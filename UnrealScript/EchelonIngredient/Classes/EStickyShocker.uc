@@ -23,7 +23,7 @@ function PostBeginPlay()
 
 state s_Flying
 {
-	function Touch( Actor Other )
+	function Touch(Actor Other)
 	{
 		local EPawn				P;
 		local EVolume			Volume;	
@@ -35,15 +35,15 @@ state s_Flying
 
 		fWaterPlanZ = -1.f;
 
-		if( (VolumeTrigger != None && VolumeTrigger.bLiquid) ||
-			(Volume != None && Volume.bLiquid) )
+		if ((VolumeTrigger != None && VolumeTrigger.bLiquid) ||
+			(Volume != None && Volume.bLiquid))
 		{
 			fWaterPlanZ = Location.Z;
 
 			ForEach Other.TouchingActors(class'EPawn', P)
 			{
 				// Electrocute only within 6 meters
-				if( VSize(P.Location-Location) < 600 )
+				if (VSize(P.Location - Location) < 600)
 				ElectocutePawn(P);
 			}
 
@@ -53,13 +53,13 @@ state s_Flying
 		Super.Touch(Other);
 	}
 
-	function Bump( Actor Other, optional int Pill )
+	function Bump(Actor Other, optional int Pill)
 	{
 		// don't hit shooter but can do damage on anything else ...
-		if( Other == Controller.pawn )
+		if (Other == Controller.Pawn)
 			return;
 
-		if( Other.bIsPawn )
+		if (Other.bIsPawn)
 		{
 			PlaySound(Sound'FisherEquipement.Play_FN2000StickyShocker', SLOT_SFX);
 			ElectocutePawn(Other);
@@ -68,24 +68,24 @@ state s_Flying
 			Super.Bump(Other, Pill);
 	}
 
-	function ElectocutePawn( Actor Other )
+	function ElectocutePawn(Actor Other)
 	{
 		local int		damage;
 		local Vector	Pos;
 
 		StoppedMoving();
 
-		if( EPawn(Other) != None && EPawn(Other).bIsPlayerPawn )
+		if (EPawn(Other) != None && EPawn(Other).bIsPlayerPawn)
 			return;
 
-		if( EPawn(Other) != None )
-			damage = Pawn(Other).health/2;
+		if (EPawn(Other) != None)
+			damage = Pawn(Other).Health / 2;
 		else
 			damage = 4;
 
-		Other.TakeDamage(damage, Controller.pawn, Location, Velocity, Velocity, class'EElectrocuted');
+		Other.TakeDamage(damage, Controller.Pawn, Location, Velocity, Velocity, class'EElectrocuted');
 
-		if( fWaterPlanZ != -1.f )
+		if (fWaterPlanZ != -1.f)
 		{
 			Pos = Other.Location;
 			Pos.Z = fWaterPlanZ;
@@ -99,7 +99,7 @@ state s_Flying
 	}
 }
 
-function Select( EInventory Inv )
+function Select(EInventory Inv)
 {
 	Super.Select(Inv);
 	PlaySound(Sound'Interface.Play_FisherEquipSpMunition', SLOT_Interface);

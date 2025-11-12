@@ -11,9 +11,9 @@ class P_4_2_2_Abt_GrinkoOffC2 extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('DeadAll');
@@ -38,7 +38,7 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EAzeriColonel3')
+        if (P.name == 'EAzeriColonel3')
         {
             Characters[1] = P.controller;
             EAIController(Characters[1]).bAllowKnockout = true;
@@ -47,7 +47,7 @@ function InitPattern()
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

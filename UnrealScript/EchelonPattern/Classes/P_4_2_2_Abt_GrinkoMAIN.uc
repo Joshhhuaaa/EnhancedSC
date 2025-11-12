@@ -13,9 +13,9 @@ var int GrinkoAttackPass2;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -32,19 +32,19 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGrinko1')
+        if (P.name == 'EGrinko1')
             Characters[1] = P.controller;
-        if(P.name == 'EAzeriColonel4')
+        if (P.name == 'EAzeriColonel4')
             Characters[2] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'EGrinko0')
+        if (A.name == 'EGrinko0')
             SoundActors[0] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     GrinkoAttackPass1=0;

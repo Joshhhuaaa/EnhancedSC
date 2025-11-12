@@ -13,9 +13,9 @@ class P_5_2_EmissionThree extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -31,17 +31,17 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianPalaceGuard6')
+        if (P.name == 'EGeorgianPalaceGuard6')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianPalaceGuard2')
+        if (P.name == 'EGeorgianPalaceGuard2')
             Characters[2] = P.controller;
-        if(P.name == 'EGeorgianPalaceGuard4')
+        if (P.name == 'EGeorgianPalaceGuard4')
             Characters[3] = P.controller;
-        if(P.name == 'EGeorgianPalaceGuard1')
+        if (P.name == 'EGeorgianPalaceGuard1')
             Characters[4] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

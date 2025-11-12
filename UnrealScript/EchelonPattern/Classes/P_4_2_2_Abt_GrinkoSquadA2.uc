@@ -11,9 +11,9 @@ class P_4_2_2_Abt_GrinkoSquadA2 extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,7 +29,7 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz4')
+        if (P.name == 'spetsnaz4')
         {
             Characters[1] = P.controller;
             EAIController(Characters[1]).bAllowKnockout = true;
@@ -38,7 +38,7 @@ function InitPattern()
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

@@ -14,9 +14,9 @@ var int ReachedDoor;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('ManDown');
@@ -53,16 +53,16 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ECIARookie4')
+        if (P.name == 'ECIARookie4')
         {
             Characters[1] = P.controller;
             EAIController(Characters[1]).bAllowKnockout = true;
         }
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     ReachedDoor=0;

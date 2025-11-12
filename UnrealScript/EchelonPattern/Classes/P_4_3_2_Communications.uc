@@ -15,9 +15,9 @@ class P_4_3_2_Communications extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -33,24 +33,24 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[1] = P.controller;
-        if(P.name == 'EAnna2')
+        if (P.name == 'EAnna2')
             Characters[2] = P.controller;
     }
 
     // Joshua - Chinese Embassy 2 requires 2 bullets to shoot lights to avoid detection for Elite mode
     if (!bInit && EchelonGameInfo(Level.Game).bEliteMode && EPlayerController(Characters[0]) != None && EPlayerController(Characters[0]).HandGun != None)
     {
-        if(EPlayerController(Characters[0]).HandGun.Ammo == 0 && EPlayerController(Characters[0]).HandGun.ClipAmmo == 0)
+        if (EPlayerController(Characters[0]).HandGun.Ammo == 0 && EPlayerController(Characters[0]).HandGun.ClipAmmo == 0)
         {
-            if(EPlayerController(Characters[0]).playerStats.BulletFired == 0)
+            if (EPlayerController(Characters[0]).playerStats.BulletFired == 0)
             {
                 // No bullets fired, give 2
                 EPlayerController(Characters[0]).HandGun.Ammo = 2;
                 EPlayerController(Characters[0]).HandGun.ClipAmmo = 2;
             }
-            else if(EPlayerController(Characters[0]).playerStats.BulletFired == 1)
+            else if (EPlayerController(Characters[0]).playerStats.BulletFired == 1)
             {
                 // 1 bullet fired, give 1
                 EPlayerController(Characters[0]).HandGun.Ammo = 1;
@@ -59,7 +59,7 @@ function InitPattern()
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

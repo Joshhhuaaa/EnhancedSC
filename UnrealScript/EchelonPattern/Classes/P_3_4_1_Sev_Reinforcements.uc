@@ -11,9 +11,9 @@ class P_3_4_1_Sev_Reinforcements extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,13 +29,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz15')
+        if (P.name == 'spetsnaz15')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz14')
+        if (P.name == 'spetsnaz14')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

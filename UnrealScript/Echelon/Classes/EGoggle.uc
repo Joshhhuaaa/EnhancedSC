@@ -16,7 +16,7 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 
 	Epc = EPlayerController(Owner);
-	if( Epc == None )
+	if (Epc == None)
 		Log(self$" ERROR: Goggle owner is not a PlayerController.");
 
 	SetBase(Epc.ePawn);
@@ -28,55 +28,55 @@ function Activate()
 	//Log("Activating"@CurrentMode);
 	Epc.SetCameraMode(Epc, CurrentMode);
 
-	if( CurrentMode == REN_ThermalVision )
+	if (CurrentMode == REN_ThermalVision)
 	{     
-		Epc.ThermalTexture=Level.pThermalTexture_A;
-        Epc.bBigPixels=false;		
+		Epc.ThermalTexture = Level.pThermalTexture_A;
+        Epc.bBigPixels = false;		
 	}
 }
 
 // Called from PlayerController
-function SwitchMode( float i )
+function SwitchMode(float i)
 {
-	if( i < 0 )
+	if (i < 0)
 		SwitchVisionMode(REN_NightVision);
 	else
 		SwitchVisionMode(REN_ThermalVision);
 }
 
-function SwitchVisionMode( int NewMode )
+function SwitchVisionMode(int NewMode)
 {
 	// Prevent overlapping animation, wait for channel being available
-	if( Epc.ePawn.IsAnimating(Epc.ePawn.PERSONALITYCHANNEL) )
+	if (Epc.ePawn.IsAnimating(Epc.ePawn.PERSONALITYCHANNEL))
 		return;
 
 	// Quick tap the same mode OR mode is not available, fallback to normal
-	if( CurrentMode == NewMode || NewMode == REN_ThermalVision && bNoThermalAvailable )
+	if (CurrentMode == NewMode || NewMode == REN_ThermalVision && bNoThermalAvailable)
 		SwitchGoggle(REN_DynLight);
 	else
 		SwitchGoggle(NewMode);
 }
 
-function SwitchGoggle( int NewRenderingMode );	// Notify from equiping/unequiping goggles
+function SwitchGoggle(int NewRenderingMode);	// Notify from equiping/unequiping goggles
 function Down();								// Animation has hand over the eyes
 function Up();									// Animation has hand over the head
 
 auto state GoggleUp
 {
-	function SwitchGoggle( int NewRenderingMode )
+	function SwitchGoggle(int NewRenderingMode)
 	{
 		//Log("GoggleUp SwitchGoggle to "$NewRenderingMode);
 		// change to new mode
 		CurrentMode = NewRenderingMode;
 
 		// do nothing if no change in rendering needed
-		if( CurrentMode == REN_DynLight ) 
+		if (CurrentMode == REN_DynLight) 
 			return;
 
 		AddSoundRequest(Sound'Interface.Play_FisherEquipGoggle', SLOT_Interface, 0.5f);
 
 		//Log("Play anim goggle down");
-		if( Epc.CanSwitchGoggleManually() )
+		if (Epc.CanSwitchGoggleManually())
 		{
 			Epc.ePawn.BlendAnimOverCurrent('Goglcraldn0',0, 'B L Clavicle',,,Epc.ePawn.PERSONALITYCHANNEL);
 			Epc.ePawn.AnimBlendToAlpha(Epc.ePawn.PERSONALITYCHANNEL, 1, 0.3);
@@ -96,7 +96,7 @@ auto state GoggleUp
 	function Up()
 	{
 		//Log("GoggleUp Up()"@CurrentMode);
-		if( CurrentMode != REN_DynLight )
+		if (CurrentMode != REN_DynLight)
 			GotoState('GoggleDown');
 	}
 }
@@ -106,7 +106,7 @@ state GoggleDown
 	function BeginState()
 	{
 		local int speed;
-		if( Epc.CanSwitchGoggleManually() )
+		if (Epc.CanSwitchGoggleManually())
 			speed = 4;
 		else
 			speed = 10;
@@ -118,7 +118,7 @@ state GoggleDown
 	function EndState()
 	{
 		local int speed;
-		if( Epc.CanSwitchGoggleManually() )
+		if (Epc.CanSwitchGoggleManually())
 			speed = 5;
 		else
 			speed = 30;
@@ -127,7 +127,7 @@ state GoggleDown
 		Epc.ePawn.SetBoneRotation('BGoggles',Rot(0,0,-5400),,,speed,1);
 	}
 
-	function SwitchGoggle( int NewRenderingMode )
+	function SwitchGoggle(int NewRenderingMode)
 	{
 		local int PrevMode;
 		//Log("GoggleDown SwitchGoggle to "$NewRenderingMode);
@@ -137,12 +137,12 @@ state GoggleDown
 		CurrentMode = NewRenderingMode;
 
 		// Pull goggle up
-		if( CurrentMode == REN_DynLight )
+		if (CurrentMode == REN_DynLight)
 		{
 			AddSoundRequest(Sound'Interface.Play_FisherEquipGoggle', SLOT_Interface, 0.5f);
 
 			//Log("Play anim goggle up");
-			if( Epc.CanSwitchGoggleManually() )
+			if (Epc.CanSwitchGoggleManually())
 			{
 				Epc.ePawn.BlendAnimOverCurrent('Goglcraldn0',0, 'B L Clavicle',,,Epc.ePawn.PERSONALITYCHANNEL,true);
 				Epc.ePawn.AnimBlendToAlpha(Epc.ePawn.PERSONALITYCHANNEL, 1, 0.3);
@@ -157,7 +157,7 @@ state GoggleDown
 		else
 		{
 			Activate();
-			if ( PrevMode != CurrentMode )
+			if (PrevMode != CurrentMode)
 				PlaySound(Sound'Interface.Play_FisherSwitchGoggle', SLOT_Interface);
 		}
 	}
@@ -168,7 +168,7 @@ state GoggleDown
 		// switch to new mode, if is coming from Up, will be new rendering, else, will be 0
 		Activate();
 
-		if( CurrentMode == REN_DynLight )
+		if (CurrentMode == REN_DynLight)
 			GotoState('GoggleUp');
 		else
 		{

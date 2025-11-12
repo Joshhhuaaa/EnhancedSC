@@ -6,7 +6,7 @@ var UWindowEditControl	EditControl;
 function Created()
 {
 	TextArea = UWindowConsoleTextAreaControl(CreateWindow(class'UWindowConsoleTextAreaControl', 0, 0, WinWidth, WinHeight));
-	EditControl = UWindowEditControl(CreateControl(class'UWindowEditControl', 0, WinHeight-16, WinWidth, 16));
+	EditControl = UWindowEditControl(CreateControl(class'UWindowEditControl', 0, WinHeight - 16, WinWidth, 16));
 	EditControl.SetFont(F_Normal);	
 	EditControl.SetNumericOnly(False);
 	EditControl.SetMaxLength(400);
@@ -18,25 +18,25 @@ function Notify(UWindowDialogControl C, byte E)
 	local string s;
 	Super.Notify(C, E);
 
-	switch(E)
+	switch (E)
 	{
 	case DE_EnterPressed:
-		switch(C)
+		switch (C)
 		{
 		case EditControl:
-			if(EditControl.GetValue() != "")
+			if (EditControl.GetValue() != "")
 			{
 				s = EditControl.GetValue();
-				Root.Console.Message( "> "$s, 6.0 );
+				Root.Console.Message("> "$s, 6.0);
 				EditControl.Clear();
-				if( !Root.Console.ConsoleCommand( s ) )
-					Root.Console.Message( Localize("Errors","Exec","Core"), 6.0 );
+				if (!Root.Console.ConsoleCommand(s))
+					Root.Console.Message(Localize("Errors","Exec","Core"), 6.0);
 			}
 			break;
 		}
 		break;
 	case DE_WheelUpPressed:
-		switch(C)
+		switch (C)
 		{
 		case EditControl:
 			TextArea.VertSB.Scroll(-1);
@@ -44,7 +44,7 @@ function Notify(UWindowDialogControl C, byte E)
 		}
 		break;
 	case DE_WheelDownPressed:
-		switch(C)
+		switch (C)
 		{
 		case EditControl:
 			TextArea.VertSB.Scroll(1);

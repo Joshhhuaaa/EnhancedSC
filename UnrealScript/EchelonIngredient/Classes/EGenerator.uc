@@ -4,18 +4,18 @@ class EGenerator extends ESwitchObject;
 // Description		
 //		Treatment upon take damage
 //------------------------------------------------------------------------
-function TakeDamage( int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag )
+function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag)
 {
 	local float HPState;
 
-	if( bDamageable )
+	if (bDamageable)
 	{
 		HitPoints -= Damage;
 		// Check the percent of life left ..
-		HPState = HitPoints/default.HitPoints;
+		HPState = HitPoints / default.HitPoints;
 
 		// the more the damage, the more, there's a chance for some objects to shut off
-		if( FRand() > HPState )
+		if (FRand() > HPState)
 		{
 
 		}

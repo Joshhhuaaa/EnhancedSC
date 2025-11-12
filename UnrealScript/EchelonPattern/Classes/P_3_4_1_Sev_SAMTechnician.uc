@@ -14,9 +14,9 @@ var int TheyveTalked;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -32,11 +32,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMercenaryTechnician2')
+        if (P.name == 'EMercenaryTechnician2')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     TheyveTalked=0;
@@ -73,7 +73,7 @@ talk:
     End();
 Already:
     Log("Theyve already talked.");
-    JumpRandom('FirstPoss', 0.50, 'SecondPoss', 1.00, , , , , , ); 
+    JumpRandom('FirstPoss', 0.50, 'SecondPoss', 1.00, , , , , ,); 
 FirstPoss:
     Talk(Sound'S3_4_2Voice.Play_34_33_11', 1, , TRUE, 0);
     Close();

@@ -68,17 +68,17 @@ var(AI)	   array<ZoneInfo> ForcedHearingZones;
 // Iterator functions.
 
 // Iterate through all actors in this zone.
-native(308) final iterator function ZoneActors( class<actor> BaseClass, out actor Actor );
+native(308) final iterator function ZoneActors(class<actor> BaseClass, out actor Actor);
 
 function LinkToSkybox()
 {
 	local skyzoneinfo TempSkyZone;
 
 	// SkyZone.
-	foreach AllActors( class 'SkyZoneInfo', TempSkyZone, '' )
+	foreach AllActors(class 'SkyZoneInfo', TempSkyZone, '')
 		SkyZone = TempSkyZone;
-	foreach AllActors( class 'SkyZoneInfo', TempSkyZone, '' )
-		if( TempSkyZone.bHighDetail == Level.bHighDetailMode )
+	foreach AllActors(class 'SkyZoneInfo', TempSkyZone, '')
+		if (TempSkyZone.bHighDetail == Level.bHighDetailMode)
 			SkyZone = TempSkyZone;
 }
 
@@ -94,11 +94,11 @@ function PreBeginPlay()
 }
 
 // When an actor enters this zone.
-event ActorEntered( actor Other )
+event ActorEntered(actor Other)
 {
     local INT iSoundNb;
 
-	if ( Other.bIsPawn )
+	if (Other.bIsPawn)
 		VerifyOcclusion();
 
 	if (Other.bIsPlayerPawn)
@@ -110,7 +110,7 @@ event ActorEntered( actor Other )
     if ((Other.bIsPlayerPawn) &&
         (m_EnterSounds.Length != 0))
     {
-        for(iSoundNb = 0; iSoundNb < m_EnterSounds.Length; iSoundNb++)
+        for (iSoundNb = 0; iSoundNb < m_EnterSounds.Length; iSoundNb++)
         {
             PlaySound(m_EnterSounds[iSoundNb], Sound_type);
         }
@@ -119,14 +119,14 @@ event ActorEntered( actor Other )
 }
 
 // When an actor leaves this zone.
-event ActorLeaving( actor Other )
+event ActorLeaving(actor Other)
 {
     local INT iSoundNb;
 
     if ((Other.bIsPlayerPawn) &&
         (m_ExitSounds.Length != 0))
     {
-        for(iSoundNb = 0; iSoundNb < m_ExitSounds.Length; iSoundNb++)
+        for (iSoundNb = 0; iSoundNb < m_ExitSounds.Length; iSoundNb++)
         {
             PlaySound(m_ExitSounds[iSoundNb], Sound_type);
         }

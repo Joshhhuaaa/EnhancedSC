@@ -27,7 +27,7 @@ function Created()
 {
 	Super.Created();
 
-	VertSB = UWindowVScrollbar(CreateWindow(class'UWindowVScrollbar', WinWidth-12, 0, 12, WinHeight));
+	VertSB = UWindowVScrollbar(CreateWindow(class'UWindowVScrollbar', WinWidth - 12, 0, 12, WinHeight));
 	VertSB.bAlwaysOnTop = True;
 	Cursor = Root.NormalCursor;
 
@@ -38,9 +38,9 @@ function Clear()
 {
 	bDirty = True;
 
-	if(List != None)
+	if (List != None)
 	{
-		if(List.Next == None)
+		if (List.Next == None)
 			return;
 		List.DestroyList();
 	}
@@ -74,7 +74,7 @@ function TextAreaTextSize(Canvas C, string Text, out float W, out float H)
 	TextSize(C, Text, W, H);
 }
 
-function BeforePaint( Canvas C, float X, float Y )
+function BeforePaint(Canvas C, float X, float Y)
 {
 	Super.BeforePaint(C, X, Y);
 
@@ -84,7 +84,7 @@ function BeforePaint( Canvas C, float X, float Y )
 	VertSB.WinLeft = WinWidth - LookAndFeel.Size_ScrollbarWidth;
 }
 
-function Paint( Canvas C, float MouseX, float MouseY )
+function Paint(Canvas C, float MouseX, float MouseY)
 {
 	local UWindowDynamicTextRow L;
 	local int SkipCount, DrawCount;
@@ -94,12 +94,12 @@ function Paint( Canvas C, float MouseX, float MouseY )
 
 	C.DrawColor = TextColor;
 
-	if(AbsoluteFont != None)
+	if (AbsoluteFont != None)
 		C.Font = AbsoluteFont;
 	else
 		C.Font = Root.Fonts[Font];
 
-	if(OldW != WinWidth || OldH != WinHeight)
+	if (OldW != WinWidth || OldH != WinHeight)
 	{
 		WordWrap(C, True);
 		OldW = WinWidth;
@@ -107,53 +107,53 @@ function Paint( Canvas C, float MouseX, float MouseY )
 		bWrapped = True;
 	}
 	else
-	if(bDirty)
+	if (bDirty)
 	{
 		WordWrap(C, False);
 		bWrapped = True;
 	}
 
-	if(bWrapped)
+	if (bWrapped)
 	{
 		TextAreaTextSize(C, "A", Junk, DefaultTextHeight);
 		VisibleRows = WinHeight / DefaultTextHeight;
 		Count = List.Count();
 		VertSB.SetRange(0, Count, VisibleRows);
 
-		if(bScrollOnResize)
+		if (bScrollOnResize)
 		{
-			if(bTopCentric)
+			if (bTopCentric)
 				VertSB.Pos = 0;
 			else
 				VertSB.Pos = VertSB.MaxPos;
 		}
 
-		if(bAutoScrollbar && !bVariableRowHeight)
+		if (bAutoScrollbar && !bVariableRowHeight)
 		{
-			if(Count <= VisibleRows)
+			if (Count <= VisibleRows)
 				VertSB.HideWindow();
 			else
 				VertSB.ShowWindow();
 		}
 	}
 
-	if(bTopCentric)
+	if (bTopCentric)
 	{
 		SkipCount = VertSB.Pos;
 		L = UWindowDynamicTextRow(List.Next);
-		for(i=0; i < SkipCount && (L != None) ; i++)
+		for (i = 0; i < SkipCount && (L != None) ; i++)
 			L = UWindowDynamicTextRow(L.Next);
 
-		if(bVCenter && Count <= VisibleRows)
+		if (bVCenter && Count <= VisibleRows)
 			Y = int((WinHeight - (Count * DefaultTextHeight)) / 2);
 		else
 			Y = 1;
 
 		DrawCount = 0;
-		while(Y < WinHeight)
+		while (Y < WinHeight)
 		{
 			DrawCount++;
-			if(L != None)
+			if (L != None)
 			{
 				Y += DrawTextLine(C, L, Y);
 				L = UWindowDynamicTextRow(L.Next);
@@ -162,18 +162,18 @@ function Paint( Canvas C, float MouseX, float MouseY )
 				Y += DefaultTextHeight;
 		}
 
-		if(bVariableRowHeight)
+		if (bVariableRowHeight)
 		{
 			VisibleRows = DrawCount - 1;
 
-			while(VertSB.Pos + VisibleRows > Count)
+			while (VertSB.Pos + VisibleRows > Count)
 				VisibleRows--;
 
 			VertSB.SetRange(0, Count, VisibleRows);
 
-			if(bAutoScrollbar)
+			if (bAutoScrollbar)
 			{
-				if(Count <= VisibleRows)
+				if (Count <= VisibleRows)
 					VertSB.HideWindow();
 				else
 					VertSB.ShowWindow();
@@ -184,11 +184,11 @@ function Paint( Canvas C, float MouseX, float MouseY )
 	{
 		SkipCount = Max(0, Count - (VisibleRows + VertSB.Pos));
 		L = UWindowDynamicTextRow(List.Last);
-		for(i=0; i < SkipCount && (L != List) ; i++)
+		for (i = 0; i < SkipCount && (L != List) ; i++)
 			L = UWindowDynamicTextRow(L.Prev);
 
 		Y = WinHeight - DefaultTextHeight;
-		while(L != List && L != None && Y > -DefaultTextHeight)
+		while (L != List && L != None && Y > -DefaultTextHeight)
 		{
 			DrawTextLine(C, L, Y);
 			Y = Y - DefaultTextHeight;
@@ -206,9 +206,9 @@ function UWindowDynamicTextRow AddText(string NewLine)
 	bDirty = True;
 	
 	i = InStr(NewLine, "\\n");
-	if(i != -1)
+	if (i != -1)
 	{
-		Temp = Mid(NewLine, i+2);
+		Temp = Mid(NewLine, i + 2);
 		NewLine = Left(NewLine, i);		
 	}
 	else
@@ -218,7 +218,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 	// reuse a row if possible
 	L = CheckMaxRows();
 
-	if(L != None)
+	if (L != None)
 		List.AppendItem(L);
 	else
 		L = UWindowDynamicTextRow(List.Append(RowClass));
@@ -227,7 +227,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 	L.WrapParent = None;
 	L.bRowDirty = True;
 
-	if(Temp != "")
+	if (Temp != "")
 		AddText(Temp);
 
 	return L;
@@ -237,7 +237,7 @@ function UWindowDynamicTextRow CheckMaxRows()
 {
 	local UWindowDynamicTextRow L;
 	L = None;
-	while(MaxLines > 0 && List.Count() > MaxLines - 1 && List.Next != None)
+	while (MaxLines > 0 && List.Count() > MaxLines - 1 && List.Next != None)
 	{
 		L = UWindowDynamicTextRow(List.Next);
 		RemoveWrap(L);
@@ -250,8 +250,8 @@ function WordWrap(Canvas C, bool bForce)
 {
 	local UWindowDynamicTextRow L;
 
-	for(L = UWindowDynamicTextRow(List.Next); L != None; L = UWindowDynamicTextRow(L.Next))
-		if(L.WrapParent == None && (L.bRowDirty || bForce))
+	for (L = UWindowDynamicTextRow(List.Next); L != None; L = UWindowDynamicTextRow(L.Next))
+		if (L.WrapParent == None && (L.bRowDirty || bForce))
 			WrapRow(C, L);
 
 	bDirty = False;
@@ -263,9 +263,9 @@ function WrapRow(Canvas C, UWindowDynamicTextRow L)
 	local float MaxWidth;
 	local int WrapPos;
 
-	if(WrapWidth == 0)
+	if (WrapWidth == 0)
 	{
-		if(VertSB.bWindowVisible || bAutoScrollbar)
+		if (VertSB.bWindowVisible || bAutoScrollbar)
 			MaxWidth = WinWidth - VertSB.WinWidth;
 		else
 			MaxWidth = WinWidth;
@@ -277,19 +277,19 @@ function WrapRow(Canvas C, UWindowDynamicTextRow L)
 
 	// fast check - single line?
 	N = UWindowDynamicTextRow(L.Next);
-	if(N == None || N.WrapParent != L)
+	if (N == None || N.WrapParent != L)
 	{
-		if(GetWrapPos(C, L, MaxWidth) == -1)
+		if (GetWrapPos(C, L, MaxWidth) == -1)
 			return;
 	}
 
 	RemoveWrap(L);
 	CurrentRow = L;
 
-	while(True)
+	while (True)
 	{
 		WrapPos = GetWrapPos(C, CurrentRow, MaxWidth);
-		if(WrapPos == -1)
+		if (WrapPos == -1)
 			break;
 
 		CurrentRow = SplitRowAt(CurrentRow, WrapPos);
@@ -304,10 +304,10 @@ function float DrawTextLine(Canvas C, UWindowDynamicTextRow L, float Y)
 {
 	local float X, W, H;
 
-	if(bHCenter)
+	if (bHCenter)
 	{
 		TextAreaTextSize(C, L.Text, W, H);
-		if(VertSB.bWindowVisible)
+		if (VertSB.bWindowVisible)
 			X = int(((WinWidth - VertSB.WinWidth) - W) / 2);
 		else
 			X = int((WinWidth - W) / 2);
@@ -329,7 +329,7 @@ function int GetWrapPos(Canvas C, UWindowDynamicTextRow L, float MaxWidth)
 
 	// quick check
 	TextAreaTextSize(C, L.Text, W, H);
-	if(W <= MaxWidth)
+	if (W <= MaxWidth)
 		return -1;
 
 	Input = L.Text;
@@ -338,14 +338,14 @@ function int GetWrapPos(Canvas C, UWindowDynamicTextRow L, float MaxWidth)
 	WrapPos = 0;
 	NextWord = "";
 
-	while(Input != "" || NextWord != "")
+	while (Input != "" || NextWord != "")
 	{
-		if(NextWord == "")
+		if (NextWord == "")
 		{
 			RemoveNextWord(Input, NextWord);
 			TextAreaTextSize(C, NextWord, NextWordWidth, H);
 		}
-		if(WordsThisRow > 0 && LineWidth + NextWordWidth > MaxWidth)
+		if (WordsThisRow > 0 && LineWidth + NextWordWidth > MaxWidth)
 		{
 			return WrapPos;
 		}
@@ -366,7 +366,7 @@ function UWindowDynamicTextRow SplitRowAt(UWindowDynamicTextRow L, int SplitPos)
 
 	N = UWindowDynamicTextRow(L.InsertAfter(RowClass));
 
-	if(L.WrapParent == None)
+	if (L.WrapParent == None)
 		N.WrapParent = L;
 	else
 		N.WrapParent = L.WrapParent;
@@ -382,14 +382,14 @@ function RemoveNextWord(out string Text, out string NextWord)
 	local int i;
 
 	i = InStr(Text, " ");
-	if(i == -1)
+	if (i == -1)
 	{
 		NextWord = Text;
 		Text = "";
 	}
 	else
 	{
-		while(Mid(Text, i, 1) == " ")
+		while (Mid(Text, i, 1) == " ")
 			i++;
 
 		NextWord = Left(Text, i);
@@ -403,7 +403,7 @@ function RemoveWrap(UWindowDynamicTextRow L)
 
 	// Remove previous word-wrapping
 	N = UWindowDynamicTextRow(L.Next);
-	while(N != None && N.WrapParent == L)
+	while (N != None && N.WrapParent == L)
 	{
 		L.Text = L.Text $ N.Text;
 		N.Remove();

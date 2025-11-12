@@ -13,9 +13,9 @@ class P_4_1_1_CEmb_StopBreak extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('AiSeePlayer');
@@ -55,15 +55,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EChineseSoldier5')
+        if (P.name == 'EChineseSoldier5')
             Characters[1] = P.controller;
-        if(P.name == 'EChineseSoldier9')
+        if (P.name == 'EChineseSoldier9')
             Characters[2] = P.controller;
-        if(P.name == 'EChineseSoldier8')
+        if (P.name == 'EChineseSoldier8')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

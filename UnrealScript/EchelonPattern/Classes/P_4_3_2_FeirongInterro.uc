@@ -15,9 +15,9 @@ var int Twice;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -33,11 +33,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EFeirong0')
+        if (P.name == 'EFeirong0')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     Once=0;
@@ -78,7 +78,7 @@ RandomCalisse:
     Log("RandomCalisse");
     Log("These two RED commands should solve PC Bug 377. If it doesn't, talk to Clint");
     EndConversation();
-    JumpRandom('FeirongIntelC', 0.50, 'FeirongIntelD', 1.00, , , , , , ); 
+    JumpRandom('FeirongIntelC', 0.50, 'FeirongIntelD', 1.00, , , , , ,); 
     End();
 FeirongIntelC:
     Log("FeirongIntelC");

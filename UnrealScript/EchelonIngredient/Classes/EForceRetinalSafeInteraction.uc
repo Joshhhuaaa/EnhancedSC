@@ -5,14 +5,14 @@ function bool IsAvailable()
 	return InteractionPlayerController.GetStateName() == 's_grab' && Super.IsAvailable();
 }
 
-function PostInteract( Controller Instigator )
+function PostInteract(Controller Instigator)
 {
 	local EPawn InteractEPawn;
 
 	// Only set everything if granted class is valid on scanner
-	if( Instigator.bIsPlayer && 
+	if (Instigator.bIsPlayer && 
 		EPlayerController(Instigator).m_AttackTarget != None && 
-		Scanner.IsValid(EPlayerController(Instigator).m_AttackTarget) )
+		Scanner.IsValid(EPlayerController(Instigator).m_AttackTarget))
 	{
 		// Set JumpLabel so as soon as the out of scan is finished, he's gonna turn around and release the guy.
 		EPlayerController(Instigator).JumpLabel = 'TurnRelease';

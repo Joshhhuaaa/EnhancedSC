@@ -21,7 +21,7 @@ function ShowWindow()
 {
 	Super.ShowWindow();
 
-	if(ParentWindow.WinWidth != OldParentWidth || ParentWindow.WinHeight != OldParentHeight)
+	if (ParentWindow.WinWidth != OldParentWidth || ParentWindow.WinHeight != OldParentHeight)
 	{
 		SetDimensions();
 		OldParentWidth = ParentWindow.WinWidth;
@@ -42,8 +42,8 @@ function SetDimensions()
 	} else {
 		SetSize(410, 310);
 	}
-	WinLeft = ParentWindow.WinWidth/2 - WinWidth/2;
-	WinTop = ParentWindow.WinHeight/2 - WinHeight/2;
+	WinLeft = ParentWindow.WinWidth / 2 - WinWidth / 2;
+	WinTop = ParentWindow.WinHeight / 2 - WinHeight / 2;
 }
 
 function Close(optional bool bByParent)

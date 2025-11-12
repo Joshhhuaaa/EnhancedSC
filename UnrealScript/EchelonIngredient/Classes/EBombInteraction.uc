@@ -5,7 +5,7 @@ function string	GetDescription()
 	return Localize("Interaction", "Bomb", "Localization\\HUD");
 }
 
-function InitInteract( Controller Instigator )
+function InitInteract(Controller Instigator)
 {
 	Instigator.Interaction = self;
 	EPlayerController(Instigator).JumpLabel = 'DefuseStand';
@@ -13,20 +13,20 @@ function InitInteract( Controller Instigator )
 	Instigator.GotoState('s_DisableWallMine');
 }
 
-function Interact( Controller Instigator )
+function Interact(Controller Instigator)
 {
 	// Trigger object
 	Owner.Trigger(Self, Instigator.Pawn);
 	Instigator.GotoState(,'Aborted');
 }
 
-function PostInteract( Controller Instigator )
+function PostInteract(Controller Instigator)
 {
 	Instigator.Interaction = None;
 	Destroy();
 }
 
-function SetInteractLocation( Pawn InteractPawn )
+function SetInteractLocation(Pawn InteractPawn)
 {
 	local Vector X, Y, Z, MovePos;
 	local EPawn InteractEPawn;
@@ -38,7 +38,7 @@ function SetInteractLocation( Pawn InteractPawn )
 	GetAxes(Owner.Rotation, X, Y, Z);
 	
 	MovePos = Owner.Location;
-	MovePos += 1.1f*InteractEPawn.CollisionRadius * X;
+	MovePos += 1.1f * InteractEPawn.CollisionRadius * X;
 	MovePos.Z = InteractEPawn.Location.Z;
 	
 	InteractEPawn.m_locationStart	= InteractEPawn.Location;

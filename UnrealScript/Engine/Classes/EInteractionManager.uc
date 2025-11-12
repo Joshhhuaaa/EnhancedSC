@@ -29,12 +29,12 @@ function EInteractObject GetCurrentInteraction()
 	return Interactions[SelectedInteractions];
 }
 
-function bool IsPresent( class<EInteractObject> InteractionClass, out EInteractObject InteractObj )
+function bool IsPresent(class<EInteractObject> InteractionClass, out EInteractObject InteractObj)
 {
 	local int i;
-	for( i=0; i<Interactions.Length; i++ )
+	for (i = 0; i < Interactions.Length; i++)
 	{
-		if( Interactions[i].class == InteractionClass )
+		if (Interactions[i].class == InteractionClass)
 		{
 			InteractObj = Interactions[i];
 			return true;
@@ -44,7 +44,7 @@ function bool IsPresent( class<EInteractObject> InteractionClass, out EInteractO
 
 function bool SelectNextItem()
 {
-	if( SelectedInteractions < Interactions.Length-1 )
+	if (SelectedInteractions < Interactions.Length - 1)
 	{
 		SelectedInteractions++;
 		return true;
@@ -59,22 +59,22 @@ function bool SelectNextItem()
 
 function bool SelectPreviousItem()
 {	
-	if( SelectedInteractions > 0 )
+	if (SelectedInteractions > 0)
 	{
 		SelectedInteractions--;
 		return true;
 	}
 	else
 	{
-		SelectedInteractions = Interactions.Length-1;
+		SelectedInteractions = Interactions.Length - 1;
 		return true;
 	}
 	return false;
 }
 
-function ShowExit( EInteractObject ExitInt )
+function ShowExit(EInteractObject ExitInt)
 {
-	if( ExitInt != None )
+	if (ExitInt != None)
 	{
 		Interactions.Insert(0,1);
 		Interactions[0] = ExitInt;
@@ -85,7 +85,7 @@ function ShowExit( EInteractObject ExitInt )
 	}
 }
 
-function Calc( EInteractObject Obj, out float Dot, out float Dist )
+function Calc(EInteractObject Obj, out float Dot, out float Dist)
 {
 	local vector interactionDir, tmpLoc;
 
@@ -105,26 +105,26 @@ function Calc( EInteractObject Obj, out float Dot, out float Dist )
 // Description		
 //		0 - return, 1 - insert, 2 - replace, 3 - do nothing
 //------------------------------------------------------------------------
-function int CheckPriority( EInteractObject CurrentObj, EInteractObject NewObj )
+function int CheckPriority(EInteractObject CurrentObj, EInteractObject NewObj)
 {
 	local float CurrentDot, NewDot, CurrentDist, NewDist;
 
 	// interaction already queued
-	if( NewObj == CurrentObj )
+	if (NewObj == CurrentObj)
 		return 0;
 
 	// different priority, insert new before current
-	if( NewObj.iPriority < CurrentObj.iPriority )
+	if (NewObj.iPriority < CurrentObj.iPriority)
 		return 1;
 
 	// if same class and same priority, look for priority based on distance and direction
 	// else let it be filtered by upper if case.
-	if( NewObj.class == CurrentObj.class && NewObj.iPriority == CurrentObj.iPriority )
+	if (NewObj.class == CurrentObj.class && NewObj.iPriority == CurrentObj.iPriority)
 	{
 		Calc(NewObj, NewDot, NewDist);
 		Calc(CurrentObj, CurrentDot, CurrentDist);
 
-		if( NewDot > CurrentDot )
+		if (NewDot > CurrentDot)
 			return 2;
 		else
 			return 0;
@@ -133,23 +133,23 @@ function int CheckPriority( EInteractObject CurrentObj, EInteractObject NewObj )
 	return 3;
 }
 
-function AddInteractionObj( EInteractObject Object )
+function AddInteractionObj(EInteractObject Object)
 {
 	local int i;
 	local int Res;
 
-	for( i=0; i<Interactions.Length; i++ )
+	for (i = 0; i < Interactions.Length; i++)
 	{
 		// check and compare priority
 		Res = CheckPriority(Interactions[i], Object);
-		switch( Res )
+		switch (Res)
 		{
 		case 0:
 			//Log("Already queued["$Object.Owner$"]["$Object.iPriority$"] at position["$i$"]");
 			return;
 
 		case 1:
-			if( Interactions.Length >= MAXITEM )
+			if (Interactions.Length >= MAXITEM)
 				return;
 
 			//Log("Inserting ["$Object.Owner$"]["$Object.iPriority$"] at position["$i$"]");
@@ -164,21 +164,21 @@ function AddInteractionObj( EInteractObject Object )
 		}
 	}
 
-	if( Interactions.Length >= MAXITEM )
+	if (Interactions.Length >= MAXITEM)
 		return;
 
 	// Enqueue new interaction
 	//Log("Interaction["$Object.Owner$"]["$Object.iPriority$"] enqueued");
 	Interactions.Length = Interactions.Length + 1;
-	Interactions[Interactions.Length-1] = Object;
+	Interactions[Interactions.Length - 1] = Object;
 }
 
-function RemoveInteractionObj( EInteractObject Object )
+function RemoveInteractionObj(EInteractObject Object)
 {
 	local int  i;
-	for( i=0; i<Interactions.Length; i++ )
+	for (i = 0; i < Interactions.Length; i++)
 	{
-		if( Interactions[i] == Object )
+		if (Interactions[i] == Object)
 		{
 			//Log("REmoving interaction"@Object@Object.owner);
 			Interactions.Remove(i,1);
@@ -187,7 +187,7 @@ function RemoveInteractionObj( EInteractObject Object )
 	}
 
 	// If removed interaction is the selected one
-	if( SelectedInteractions == GetNbInteractions() )
+	if (SelectedInteractions == GetNbInteractions())
 		SelectedInteractions = GetNbInteractions() - 1;
 }
 

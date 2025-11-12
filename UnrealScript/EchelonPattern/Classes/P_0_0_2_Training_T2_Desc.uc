@@ -23,9 +23,9 @@ var int ZipLinePlayed;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -39,7 +39,7 @@ function InitPattern()
 
     Super.InitPattern();
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     BackToWallPlayed=0;

@@ -16,9 +16,9 @@ var int PatternAlreadyStarted;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_HEAR_RICOCHET:
             EventJump('Disturbed');
@@ -55,17 +55,17 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ECook0')
+        if (P.name == 'ECook0')
             Characters[1] = P.controller;
-        if(P.name == 'EChineseSoldier12')
+        if (P.name == 'EChineseSoldier12')
             Characters[2] = P.controller;
-        if(P.name == 'EChineseSoldier9')
+        if (P.name == 'EChineseSoldier9')
             Characters[3] = P.controller;
-        if(P.name == 'EChineseSoldier0')
+        if (P.name == 'EChineseSoldier0')
             Characters[4] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     bDisturbed=0;

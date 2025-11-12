@@ -23,7 +23,7 @@ var UWindowDialogControl	    TabPrev;
 
 function Created()
 {
-	if(!bNoKeyboard)
+	if (!bNoKeyboard)
 		SetAcceptsFocus();
 }
 
@@ -75,7 +75,7 @@ function Register(UWindowDialogClientWindow	W)
 
 function Notify(byte E)
 {
-	if(NotifyWindow != None)
+	if (NotifyWindow != None)
 	{
 		NotifyWindow.Notify(Self, E);
 	}
@@ -97,10 +97,10 @@ function UWindowDialogControl CheckExternalDrag(float X, float Y)
 	W = Root.FindWindowUnder(RootX, RootY);
 	C = UWindowDialogControl(W);
 
-	if(W != Self && C != None && C.bAcceptExternalDragDrop)
+	if (W != Self && C != None && C.bAcceptExternalDragDrop)
 	{
 		W.GlobalToWindow(RootX, RootY, ExtX, ExtY);
-		if(C.ExternalDragOver(Self, ExtX, ExtY))
+		if (C.ExternalDragOver(Self, ExtX, ExtY))
 			return C;
 	}
 
@@ -118,10 +118,10 @@ function KeyDown(int Key, float X, float Y)
 	{
 	case P.Player.Console.EInputKey.IK_Tab:
 		
-		if(TabNext != None)
+		if (TabNext != None)
 		{
 			N = TabNext;
-			while(N != Self && !N.bWindowVisible)
+			while (N != Self && !N.bWindowVisible)
 				N = N.TabNext;
 
 			N.ActivateWindow(0, False);

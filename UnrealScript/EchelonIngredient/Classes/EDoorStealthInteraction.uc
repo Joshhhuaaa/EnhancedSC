@@ -65,14 +65,14 @@ function InitInteract(Controller Instigator)
     }
 }
 
-function Interact( Controller Instigator )
+function Interact(Controller Instigator)
 {
-	if( (!MyDoor.Locked || !Instigator.bIsPlayer) && !MyDoor.IsOpened() )
+	if ((!MyDoor.Locked || !Instigator.bIsPlayer) && !MyDoor.IsOpened())
 	{
 		// Joshua - Only apply if door is usable (not jammed)
-		if( Instigator.bIsPlayer && MyDoor.Usable )
+		if (Instigator.bIsPlayer && MyDoor.Usable)
 		{
-			if( LeftSideInteraction )
+			if (LeftSideInteraction)
 			{
 				backupKeyRotation = MyDoor.FrontRotation;
 				MyDoor.FrontRotation = MyDoor.Rotation;
@@ -97,32 +97,32 @@ function Interact( Controller Instigator )
 		MyDoor.Trigger(Instigator.Pawn, Instigator.Pawn);
 	}
 
-	if( MyDoor.Locked )
+	if (MyDoor.Locked)
 		MyDoor.PlaySound(MyDoor.LockedSound, SLOT_SFX);
 }
 
 
-function PostInteract( Controller Instigator )
+function PostInteract(Controller Instigator)
 {
-	if( MyDoor.Locked )
+	if (MyDoor.Locked)
 	{
 		// Send transmission if Player
-		if( Instigator.bIsPlayer && EPlayerController(Instigator) != None)
+		if (Instigator.bIsPlayer && EPlayerController(Instigator) != None)
 			EPlayerController(Instigator).SendTransmissionMessage(Localize("Transmission", "DoorLock", "Localization\\HUD"), TR_CONSOLE);
 	}
-	else if( !MyDoor.Usable )
+	else if (!MyDoor.Usable)
 	{
 		// Send transmission if Player
-		if( Instigator.bIsPlayer && EPlayerController(Instigator) != None)
+		if (Instigator.bIsPlayer && EPlayerController(Instigator) != None)
 			EPlayerController(Instigator).SendTransmissionMessage(Localize("Transmission", "DoorJam", "Localization\\HUD"), TR_CONSOLE);
 	}
 	else
 	{
 		// Only restore stealth values if they were applied (door was usable when interact was called)
-		if( MyDoor.bSteatlh )
+		if (MyDoor.bSteatlh)
 		{
 			// Restore values
-			if( LeftSideInteraction )
+			if (LeftSideInteraction)
 			{
 				MyDoor.FrontRotation = backupKeyRotation;
 			}
@@ -139,9 +139,9 @@ function PostInteract( Controller Instigator )
 		}
 
 		// Wanna open door in stealth mode
-		if( bStealthOpenDoor )
+		if (bStealthOpenDoor)
 		{
-			if( !bInterrupted )
+			if (!bInterrupted)
 			{
 				MyDoor.GotoState('TriggerOpenTimed','Open');
 				Instigator.GotoState(,'OpenDoor');
@@ -152,7 +152,7 @@ function PostInteract( Controller Instigator )
 			}
 		}
 		// Interruption while trying to open door
-		else if( bInterrupted )
+		else if (bInterrupted)
 		{
 			Instigator.GotoState(,'InterruptStealth');
 		}
@@ -165,27 +165,27 @@ function PostInteract( Controller Instigator )
 	}
 }
 
-function KeyEvent( String Key, EInputAction Action, FLOAT Delta, optional bool bAuto )
+function KeyEvent(String Key, EInputAction Action, FLOAT Delta, optional bool bAuto)
 {
 	local bool StillMoving;
 
 	StillMoving = MyDoor.bOpening || MyDoor.bInterpolating; // prevent opening before door finishes its movement
 
-	switch( Key )
+	switch (Key)
 	{
 	case "Neutral" :
-		if( StillMoving ) break;
+		if (StillMoving) break;
 		bStoppedPushing = true;
 		break;
 
 	case "Forward" :
-		if( StillMoving ) break;
+		if (StillMoving) break;
 		bStealthOpenDoor = true;
 		PostInteract(ActiveController);
 		break;
 
 	case "Backward" :
-		if( StillMoving || !bStoppedPushing ) break;
+		if (StillMoving || !bStoppedPushing) break;
 		bStealthOpenDoor = false;
 		PostInteract(ActiveController);
 		break;
@@ -197,24 +197,24 @@ function KeyEvent( String Key, EInputAction Action, FLOAT Delta, optional bool b
 	}
 }
 
-function SetInteractLocation( Pawn InteractPawn )
+function SetInteractLocation(Pawn InteractPawn)
 {
 	local Vector X, Y, Z, MovePos;
 	local EPawn InteractEPawn;
 	local vector HitLocation, HitNormal;
 
 	InteractEPawn = EPawn(InteractPawn);
-	if( InteractEPawn == None )
+	if (InteractEPawn == None)
 		return;
 
 	GetAxes(Owner.Rotation, X, Y, Z);
 
 	// switch Y angle
-	if( !LeftSideInteraction )
+	if (!LeftSideInteraction)
 		Y = -Y;
 	
 	MovePos	= Owner.Location;
-	if( InteractEPawn.bIsPlayerPawn )
+	if (InteractEPawn.bIsPlayerPawn)
 	{
 		MovePos -= 1.2f * InteractEPawn.CollisionRadius * Y;
 	}
@@ -225,13 +225,13 @@ function SetInteractLocation( Pawn InteractPawn )
 	MovePos -= 1.3f * InteractEPawn.CollisionRadius * X;
 
 
-	if(InteractEPawn.bIsPlayerPawn)
+	if (InteractEPawn.bIsPlayerPawn)
 	{
 	    MovePos.Z = InteractEPawn.Location.Z; // keep on same Z
 	}
 	else
 	{
-		if( Trace(HitLocation, HitNormal, MovePos + vect(0,0,-200), MovePos,,,,,true) != None )
+		if (Trace(HitLocation, HitNormal, MovePos + vect(0,0,-200), MovePos,,,,,true) != None)
 		{
 			HitLocation.Z += InteractEPawn.CollisionHeight;
 			MovePos = HitLocation;

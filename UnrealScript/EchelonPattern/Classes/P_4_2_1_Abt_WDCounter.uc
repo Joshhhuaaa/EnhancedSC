@@ -15,9 +15,9 @@ var int U3dead;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -33,15 +33,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianSoldier5')
+        if (P.name == 'EGeorgianSoldier5')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianSoldier6')
+        if (P.name == 'EGeorgianSoldier6')
             Characters[2] = P.controller;
-        if(P.name == 'EGeorgianSoldier7')
+        if (P.name == 'EGeorgianSoldier7')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     DeathCount1=0;

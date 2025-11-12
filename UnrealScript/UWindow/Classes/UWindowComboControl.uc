@@ -21,12 +21,12 @@ function Created()
 {
 	Super.Created();
 	
-	EditBox = UWindowEditBox(CreateWindow(class'UWindowEditBox', 0, 0, WinWidth-LookAndFeel.Size_ComboButtonWidth, WinHeight, self)); 
+	EditBox = UWindowEditBox(CreateWindow(class'UWindowEditBox', 0, 0, WinWidth - LookAndFeel.Size_ComboButtonWidth, WinHeight, self)); 
 	EditBox.NotifyOwner = Self;
 	EditBoxWidth = WinWidth / 2;
 	EditBox.bTransient = True;
 
-	Button = UWindowComboButton(CreateWindow(class'UWindowComboButton', WinWidth-LookAndFeel.Size_ComboButtonWidth, 0, LookAndFeel.Size_ComboButtonWidth, WinHeight, self)); 
+	Button = UWindowComboButton(CreateWindow(class'UWindowComboButton', WinWidth - LookAndFeel.Size_ComboButtonWidth, 0, LookAndFeel.Size_ComboButtonWidth, WinHeight, self)); 
 	Button.Owner = Self;
 	
 	List = UWindowComboList(Root.CreateWindow(ListClass, 0, 0, 100, 100)); 
@@ -45,10 +45,10 @@ function Created()
 function SetButtons(bool bInButtons)
 {
 	bButtons = bInButtons;
-	if(bInButtons)
+	if (bInButtons)
 	{
-		LeftButton = UWindowComboLeftButton(CreateWindow(class'UWindowComboLeftButton', WinWidth-LookAndFeel.Size_ComboButtonWidth, 0, LookAndFeel.Size_ComboButtonWidth, LookAndFeel.Size_ComboButtonHeight, self));
-		RightButton = UWindowComboRightButton(CreateWindow(class'UWindowComboRightButton', WinWidth-LookAndFeel.Size_ComboButtonWidth, 0, LookAndFeel.Size_ComboButtonWidth, LookAndFeel.Size_ComboButtonHeight, self));
+		LeftButton = UWindowComboLeftButton(CreateWindow(class'UWindowComboLeftButton', WinWidth - LookAndFeel.Size_ComboButtonWidth, 0, LookAndFeel.Size_ComboButtonWidth, LookAndFeel.Size_ComboButtonHeight, self));
+		RightButton = UWindowComboRightButton(CreateWindow(class'UWindowComboRightButton', WinWidth - LookAndFeel.Size_ComboButtonWidth, 0, LookAndFeel.Size_ComboButtonWidth, LookAndFeel.Size_ComboButtonHeight, self));
 	}
 	else
 	{
@@ -63,11 +63,11 @@ function Notify(byte E)
 {
 	Super.Notify(E);
 
-	if(E == DE_LMouseDown)
+	if (E == DE_LMouseDown)
 	{
-		if(!bListVisible)
+		if (!bListVisible)
 		{
-			if(!bCanEdit)
+			if (!bCanEdit)
 			{
 				DropDown();
 				Root.CaptureMouse(List);
@@ -95,7 +95,7 @@ function int FindItemIndex2(string V2, optional bool bIgnoreCase)
 
 function Close(optional bool bByParent)
 {
-	if(bByParent && bListVisible)
+	if (bByParent && bListVisible)
 		CloseUp();
 
 	Super.Close(bByParent);
@@ -179,7 +179,7 @@ function BeforePaint(Canvas C, float X, float Y)
 {
 	Super.BeforePaint(C, X, Y);
 
-    if(bSetupSize == true)
+    if (bSetupSize == true)
     {
         LookAndFeel.Combo_SetupSizes(Self, C);
         bSetupSize = false;
@@ -223,7 +223,7 @@ function FocusOtherWindow(UWindowWindow W)
 {
 	Super.FocusOtherWindow(W);
 
-	if(bListVisible && W.ParentWindow != Self && W != List && W.ParentWindow != List)
+	if (bListVisible && W.ParentWindow != Self && W != List && W.ParentWindow != List)
 		CloseUp();
 }
 

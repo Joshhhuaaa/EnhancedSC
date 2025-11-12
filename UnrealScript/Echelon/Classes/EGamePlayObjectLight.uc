@@ -25,17 +25,17 @@ function PostBeginPlay()
 	TurnOn();
 }
 
-function Tick( float DeltaTime )
+function Tick(float DeltaTime)
 {
-	if( HeatIntensity == DesiredHeatIntensity )
+	if (HeatIntensity == DesiredHeatIntensity)
 		return;
 
 	//Log(name$" * * Was["$HeatIntensity$"] to be ["$DesiredHeatIntensity$"]");
 	// Adjust progressively HeatIntensity on lights
-	if( HeatIntensity > DesiredHeatIntensity )
-		HeatIntensity = FMax(DesiredHeatIntensity, HeatIntensity-DeltaTime);
+	if (HeatIntensity > DesiredHeatIntensity)
+		HeatIntensity = FMax(DesiredHeatIntensity, HeatIntensity - DeltaTime);
 	else
-		HeatIntensity = FMin(DesiredHeatIntensity, HeatIntensity+DeltaTime);
+		HeatIntensity = FMin(DesiredHeatIntensity, HeatIntensity + DeltaTime);
 	//Log(name$" Is["$HeatIntensity$"] to be ["$DesiredHeatIntensity$"]");
 }
 
@@ -43,24 +43,24 @@ function Tick( float DeltaTime )
 // Description		
 //		Turns on and off lights
 //------------------------------------------------------------------------
-function Trigger( actor Other, pawn EventInstigator, optional name InTag )
+function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 {    
 	local name OtherStateName;
 
-	if( !Other.IsA('ESwitchObject') )
+	if (!Other.IsA('ESwitchObject'))
 		return;
 
 	OtherStateName = Other.GetStateName();
-	if( OtherStateName == 's_On' || OtherStateName == 's_Off' )
+	if (OtherStateName == 's_On' || OtherStateName == 's_Off')
 	{
-		if( OtherStateName == 's_On' )
+		if (OtherStateName == 's_On')
 			TurnOn(CHANGE_LightTurnedOff, EventInstigator);		
 		else
 			TurnOff(CHANGE_LightTurnedOff, EventInstigator);
 
 		Super.Trigger(Other, EventInstigator, InTag);
 	}
-	else if( OtherStateName == 's_Destructed' )
+	else if (OtherStateName == 's_Destructed')
 	{ 
 	    TurnOff(CHANGE_LightShotOut, EventInstigator);
 	    GotoState('s_Destructed');
@@ -75,7 +75,7 @@ function Trigger( actor Other, pawn EventInstigator, optional name InTag )
 // Description		
 //		Turn off upon pickup
 //------------------------------------------------------------------------
-function bool NotifyPickup( Controller Instigator )
+function bool NotifyPickup(Controller Instigator)
 {
 	TurnOff(CHANGE_LightTurnedOff, Instigator.Pawn);
 	return Super.NotifyPickup(Instigator);
@@ -88,7 +88,7 @@ function bool NotifyPickup( Controller Instigator )
 function TurnOn(optional EChangeType _Type, optional pawn EventInstigator)
 {
 	// Get default maps HeatIntensity
-	if( default.HeatIntensity != 0 )
+	if (default.HeatIntensity != 0)
 		DesiredHeatIntensity = default.HeatIntensity;
 	else
 		DesiredHeatIntensity = 0.8f;
@@ -96,24 +96,24 @@ function TurnOn(optional EChangeType _Type, optional pawn EventInstigator)
 	bGlowdisplay		= true;
 	UsesSpotLightBeam	= InitialUsesBeam;
 	
-	if( OnMesh != None )
+	if (OnMesh != None)
 		SetStaticMesh(OnMesh);
 
-	if( LightType != InitialLightType && DisableIfOppositeShadowMode == false)
+	if (LightType != InitialLightType && DisableIfOppositeShadowMode == false)
 	{       
 		LightType		= InitialLightType;
 		LastTimeChange	= Level.TimeSeconds;
 	}
 
-	RestoreInitialLightType=true;
-	if(Level.Game.PlayerC != None)
+	RestoreInitialLightType = true;
+	if (Level.Game.PlayerC != None)
 		Level.Game.PlayerC.LightmapTextureCache = 1;
 
     // Take me off list
     RemoveChangedActor();
 
     // Then add us again if we were initially off
-	if( (Owner != None) 
+	if ((Owner != None) 
      && (Owner.IsA('ESwitchObject')) 
      && (Owner.InitialState == 's_Off') 
      && (EventInstigator != None) 
@@ -128,17 +128,17 @@ function TurnOn(optional EChangeType _Type, optional pawn EventInstigator)
 // Description		
 //		If we explicitely want to turn lights on/off
 //------------------------------------------------------------------------
-function TurnOff( EChangeType _Type, optional pawn EventInstigator )
+function TurnOff(EChangeType _Type, optional pawn EventInstigator)
 {
 	DesiredHeatIntensity = 0;
 
 	bGlowdisplay		= false;
 	UsesSpotLightBeam	= false;
 
-	if( OffMesh != None && _Type == CHANGE_LightTurnedOff )
+	if (OffMesh != None && _Type == CHANGE_LightTurnedOff)
 		SetStaticMesh(OffMesh);
 
-	if( LightType != LT_None )
+	if (LightType != LT_None)
 	{
 		LightType		= LT_None;				
 		LastTimeChange	= Level.TimeSeconds;
@@ -150,15 +150,15 @@ function TurnOff( EChangeType _Type, optional pawn EventInstigator )
 
 	Instigator = EventInstigator;
 
-	RestoreInitialLightType=false;
+	RestoreInitialLightType = false;
 
-	if(Level.Game.PlayerC != None)
+	if (Level.Game.PlayerC != None)
 		Level.Game.PlayerC.LightmapTextureCache = 1;
 
     // Then add us again if we were initially on
-	if( (Owner != None) 
+	if ((Owner != None) 
      && (Owner.IsA('ESwitchObject')) 
-     && ((Owner.InitialState == 's_On') || (Owner.InitialState == '') || (Owner.InitialState == 's_Off') ) 
+     && ((Owner.InitialState == 's_On') || (Owner.InitialState == '') || (Owner.InitialState == 's_Off')) 
      && (EventInstigator != None) 
      && (EventInstigator.bIsPlayerPawn))
     {    
@@ -167,7 +167,7 @@ function TurnOff( EChangeType _Type, optional pawn EventInstigator )
     }
 
 	//for lights that are not linked to switchobject
-	else if( (Owner == None) && (EventInstigator != None) && EventInstigator.bIsPlayerPawn )
+	else if ((Owner == None) && (EventInstigator != None) && EventInstigator.bIsPlayerPawn)
 	{
 	    Instigator = EventInstigator;
         Level.AddChange(self, _Type);
@@ -186,12 +186,12 @@ state s_Destructed
 	function TurnOn(EChangeType _Type, optional pawn EventInstigator);
 	function TurnOff(EChangeType _Type, optional pawn EventInstigator);
 	
-	function Trigger( actor Other, pawn EventInstigator, optional name InTag )
+	function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 	{
 		Super.Trigger(Other, EventInstigator, InTag);
 	}
 	
-	function ProcessDamage( int Damage, class<DamageType> DamageType, Vector HitLocation, Vector HitNormal )
+	function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocation, Vector HitNormal)
 	{	
 		Super.ProcessDamage(Damage, DamageType, HitLocation, HitNormal);
 	}

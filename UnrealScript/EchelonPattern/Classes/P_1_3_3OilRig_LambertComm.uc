@@ -16,9 +16,9 @@ var int WackyOccasion;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -34,7 +34,7 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[1] = P.controller;
     }
 
@@ -43,7 +43,7 @@ function InitPattern()
     {
         ForEach DynamicActors(class'Pawn', P)
         {
-            if(P.name == 'EGeorgianSoldier0' || P.name == 'EGeorgianSoldier5' || P.name == 'EGeorgianSoldier16'
+            if (P.name == 'EGeorgianSoldier0' || P.name == 'EGeorgianSoldier5' || P.name == 'EGeorgianSoldier16'
             || P.name == 'EGeorgianSoldier10' || P.name == 'EGeorgianSoldier9' || P.name == 'EGeorgianSoldier6')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.GESoldier.GESoldierA", class'Texture'));
@@ -51,7 +51,7 @@ function InitPattern()
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     Over=0;

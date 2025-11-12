@@ -61,7 +61,7 @@ enum eGameWidgetID
     WidgetID_None    
 };
 
-function ChangeCurrentWidget( eGameWidgetID widgetID ); 
+function ChangeCurrentWidget(eGameWidgetID widgetID); 
 function ResetMenus();
 function PlayClickSound();
 
@@ -79,16 +79,16 @@ function UWindowLookAndFeel GetLookAndFeel(String LFClassName)
 
 	LFClass = class<UWindowLookAndFeel>(DynamicLoadObject(LFClassName, class'Class'));
 
-	for(i=0;i<20;i++)
+	for (i = 0; i < 20; i++)
 	{
-		if(LooksAndFeels[i] == None)
+		if (LooksAndFeels[i] == None)
 		{
 			LooksAndFeels[i] = new LFClass;
 			LooksAndFeels[i].Setup();
 			return LooksAndFeels[i];
 		}
 
-		if(LooksAndFeels[i].Class == LFClass)
+		if (LooksAndFeels[i].Class == LFClass)
 			return LooksAndFeels[i];
 	}
 	Log("Out of LookAndFeel array space!!");
@@ -167,19 +167,19 @@ function MoveMouse(float X, float Y)
 	MouseX = X;
 	MouseY = Y;	
 
-	if(!bMouseCapture)
+	if (!bMouseCapture)
 		NewMouseWindow = FindWindowUnder(X, Y);
 	else
 		NewMouseWindow = MouseWindow;
 
-	if(NewMouseWindow != MouseWindow)
+	if (NewMouseWindow != MouseWindow)
 	{
 		MouseWindow.MouseLeave();
 		NewMouseWindow.MouseEnter();
 		MouseWindow = NewMouseWindow;
 	}
 
-	if(MouseX != OldMouseX || MouseY != OldMouseY)
+	if (MouseX != OldMouseX || MouseY != OldMouseY)
 	{
 		OldMouseX = MouseX;
 		OldMouseY = MouseY;
@@ -193,11 +193,11 @@ function DrawMouse(Canvas C)
 {
 	local float X, Y;
 
-	if(bDisableMouseDisplay)
+	if (bDisableMouseDisplay)
 		return;
 	
 
-	if(Console.ViewportOwner.bWindowsMouseAvailable)
+	if (Console.ViewportOwner.bWindowsMouseAvailable)
 	{
 		// Set the windows cursor...
 		Console.ViewportOwner.SelectedCursor = MouseWindow.Cursor.WindowsCursor;
@@ -217,7 +217,7 @@ function bool CheckCaptureMouseUp()
 {
 	local float X, Y;
 
-	if(bMouseCapture) {
+	if (bMouseCapture) {
 		MouseWindow.GetMouseXY(X, Y);
 		MouseWindow.LMouseUp(X, Y);
 		bMouseCapture = False;
@@ -230,7 +230,7 @@ function bool CheckCaptureMouseDown()
 {
 	local float X, Y;
 
-	if(bMouseCapture) {
+	if (bMouseCapture) {
 		MouseWindow.GetMouseXY(X, Y);
 		MouseWindow.LMouseDown(X, Y);
 		bMouseCapture = False;
@@ -249,7 +249,7 @@ function CancelCapture()
 function CaptureMouse(optional UWindowWindow W)
 {
 	bMouseCapture = True;
-	if(W != None)
+	if (W != None)
 		MouseWindow = W;	
 }
 
@@ -278,7 +278,7 @@ function RemoveHotkeyWindow(UWindowWindow W)
 //	Log("Removing hotkeys for "$W);
 
 	L = HotkeyWindows.FindWindow(W);
-	if(L != None)
+	if (L != None)
 		L.Remove();
 }
 
@@ -296,18 +296,18 @@ function BOOL IsAHotKeyWindow(UWindowWindow W)
 
 function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) 
     {
-	switch(Msg) {
+	switch (Msg) {
     case WM_Paint:    
         Paint(C, X, Y);
 		PaintClients(C, X, Y);
         AfterPaint(C, X, Y);
         return;
 	case WM_KeyDown:
-		if(HotKeyDown(Key, X, Y))
+		if (HotKeyDown(Key, X, Y))
 			return;
 		break;
 	case WM_KeyUp:
-		if(HotKeyUp(Key, X, Y))
+		if (HotKeyUp(Key, X, Y))
 			return;
 		break;
     case WM_LMouseDown:
@@ -330,9 +330,9 @@ function bool HotKeyDown(int Key, float X, float Y)
 	local UWindowHotkeyWindowList l;
 
 	l = UWindowHotkeyWindowList(HotkeyWindows.Next);
-	while(l != None) 
+	while (l != None) 
 	{
-		if(l.Window != Self && l.Window.HotKeyDown(Key, X, Y)) return True;
+		if (l.Window != Self && l.Window.HotKeyDown(Key, X, Y)) return True;
 		l = UWindowHotkeyWindowList(l.Next);
 	}
 
@@ -344,9 +344,9 @@ function bool HotKeyUp(int Key, float X, float Y)
 	local UWindowHotkeyWindowList l;
 
 	l = UWindowHotkeyWindowList(HotkeyWindows.Next);
-	while(l != None) 
+	while (l != None) 
 	{
-		if(l.Window != Self && l.Window.HotKeyUp(Key, X, Y)) return True;
+		if (l.Window != Self && l.Window.HotKeyUp(Key, X, Y)) return True;
 		l = UWindowHotkeyWindowList(l.Next);
 	}
 
@@ -358,9 +358,9 @@ function bool MouseUpDown(int Key, float X, float Y)
 	local UWindowHotkeyWindowList l;
 
 	l = UWindowHotkeyWindowList(HotkeyWindows.Next);
-	while(l != None) 
+	while (l != None) 
 	{
-		if(l.Window != Self && l.Window.MouseUpDown(Key, X, Y)) return True;
+		if (l.Window != Self && l.Window.MouseUpDown(Key, X, Y)) return True;
 		l = UWindowHotkeyWindowList(l.Next);
 	}
 
@@ -369,7 +369,7 @@ function bool MouseUpDown(int Key, float X, float Y)
 
 function CloseActiveWindow()
 {
-	if(ActiveWindow != None)
+	if (ActiveWindow != None)
 		ActiveWindow.EscClose();
 	else
 		Console.CloseUWindow();
@@ -399,7 +399,7 @@ function SetScale(float NewScale)
 
 function SetupFonts()
 {
-	if(GUIScale == 2)
+	if (GUIScale == 2)
 	{
 		Fonts[F_Normal] = Font(DynamicLoadObject("UWindowFonts.Tahoma20", class'Font'));
 		Fonts[F_Bold] = Font(DynamicLoadObject("UWindowFonts.TahomaB20", class'Font'));
@@ -455,10 +455,10 @@ function DoQuitGame()
 
 function Tick(float Delta)
 {
-	if(bRequestQuit)
+	if (bRequestQuit)
 	{
 		// Give everything time to close itself down (ie sockets).
-		if(QuitTime > 0.25)
+		if (QuitTime > 0.25)
 			DoQuitGame();
 		QuitTime += Delta;
 	}

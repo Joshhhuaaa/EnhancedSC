@@ -11,9 +11,9 @@ class P_3_3_1_Mine_PowerHouse extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_HEAR_RICOCHET:
             EventJump('DropPattern');
@@ -47,13 +47,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz11')
+        if (P.name == 'spetsnaz11')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz10')
+        if (P.name == 'spetsnaz10')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

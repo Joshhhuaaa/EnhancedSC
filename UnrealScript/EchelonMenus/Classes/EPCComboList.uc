@@ -24,11 +24,11 @@ function Paint(Canvas C, float X, float Y)
 	
 	Count = 0;
 
-	for( I = UWindowComboListItem(Items.Next);I != None; I = UWindowComboListItem(I.Next) )
+	for (I = UWindowComboListItem(Items.Next);I != None; I = UWindowComboListItem(I.Next))
 	{
-		if(VertSB.bWindowVisible)
+		if (VertSB.bWindowVisible)
 		{
-			if(Count >= VertSB.Pos)
+			if (Count >= VertSB.Pos)
 				DrawItem(C, I, HBorder, VBorder + (ItemHeight * (Count - VertSB.Pos)), WinWidth - (2 * HBorder) - VertSB.WinWidth, ItemHeight);
 		}
 		else

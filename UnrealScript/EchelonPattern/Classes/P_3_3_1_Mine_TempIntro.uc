@@ -11,9 +11,9 @@ class P_3_3_1_Mine_TempIntro extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('DeadETC');
@@ -33,7 +33,7 @@ function InitPattern()
 
     Super.InitPattern();
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

@@ -36,11 +36,11 @@ state s_Running
 {
     function BeginState()
     {
-        if(bDisplayInterface)
+        if (bDisplayInterface)
         {
             EMainHUD(eGame.pPlayer.myHUD).TimerView = self;
 
-            if( TimerDelay < 60 )
+            if (TimerDelay < 60)
                 boxWidth = TIMER_WITDH_SMALL;
             else
                 boxWidth = TIMER_WITDH_LARGE;
@@ -54,15 +54,15 @@ state s_Running
 		if (!SoundPlayed)
 		{
 			PlaySound(StartSound, SLOT_Interface);
-			SoundPlayed=true;
+			SoundPlayed = true;
 		}
 
         TimerDelay -= DeltaTime;
-        if( TimerDelay <= 0.0f )
+        if (TimerDelay <= 0.0f)
 		{
-			if( GroupTag != '' )
+			if (GroupTag != '')
 			{
-				foreach DynamicActors( class'EGroupAI', Group, GroupTag)
+				foreach DynamicActors(class'EGroupAI', Group, GroupTag)
 				{
 					Group.SendJumpEvent(JumpLabel, false, false);
 					break;
@@ -75,7 +75,7 @@ state s_Running
 
     function EndState()
     {
-        if(bDisplayInterface)
+        if (bDisplayInterface)
             EMainHUD(eGame.pPlayer.myHUD).TimerView = None;
 
 		PlaySound(EndSound, SLOT_Interface);
@@ -104,7 +104,7 @@ function PostRender(ECanvas Canvas)
 
     Canvas.Font = Canvas.ETitleBoldFont;
 
-    if(TimerDelay > CriticalDelay)
+    if (TimerDelay > CriticalDelay)
         Canvas.SetDrawColor(64,64,64);
     else
         Canvas.SetDrawColor(64,0,0);
@@ -116,32 +116,32 @@ function PostRender(ECanvas Canvas)
 
     // Set output string //
     szTimer = "";
-    if(boxWidth == TIMER_WITDH_LARGE)
+    if (boxWidth == TIMER_WITDH_LARGE)
     {
-        if(min < 10)
+        if (min < 10)
             szTimer = szTimer$"0"$min;
         else
             szTimer = szTimer$min;
     
-        if(sec < 10)
+        if (sec < 10)
             szTimer = szTimer$":0"$sec;
         else
             szTimer = szTimer$":"$sec;
     }
     else
     {
-        if(sec < 10)
+        if (sec < 10)
             szTimer = szTimer$"0"$sec;
         else
             szTimer = szTimer$sec;
     }
-    if(cen < 10)
+    if (cen < 10)
         szTimer = szTimer$":0"$cen;
     else
         szTimer = szTimer$":"$cen;
 
     Canvas.TextSize(szTimer, xLen, yLen);
-    Canvas.SetPos(xPos + (boxWidth - xLen)/2, yPos + (TIMER_HEIGHT - yLen)/2);
+    Canvas.SetPos(xPos + (boxWidth - xLen) / 2, yPos + (TIMER_HEIGHT - yLen) / 2);
     Canvas.DrawText(szTimer);
 }
 

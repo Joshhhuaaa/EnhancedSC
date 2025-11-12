@@ -14,9 +14,9 @@ class P_0_0_2_Training_ScriptedEvents extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('GrimDown');
@@ -44,15 +44,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[1] = P.controller;
-        if(P.name == 'EAnna1')
+        if (P.name == 'EAnna1')
             Characters[2] = P.controller;
-        if(P.name == 'ESamNPC0')
+        if (P.name == 'ESamNPC0')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

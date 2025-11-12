@@ -16,9 +16,9 @@ var int FinogenDone;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('TakingFire');
@@ -40,15 +40,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMafiaMuscle1')
+        if (P.name == 'EMafiaMuscle1')
             Characters[1] = P.controller;
-        if(P.name == 'EMafiaMuscle2')
+        if (P.name == 'EMafiaMuscle2')
             Characters[2] = P.controller;
-        if(P.name == 'EMafiaMuscle3')
+        if (P.name == 'EMafiaMuscle3')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     FadeiDone=0;

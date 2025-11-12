@@ -16,9 +16,9 @@ var int IntTwoPlayed;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -34,11 +34,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMercenaryTechnician0')
+        if (P.name == 'EMercenaryTechnician0')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     GrinkoGravyPlayed=0;
@@ -97,7 +97,7 @@ AfterBlaustein:
     End();
 BeforeRepeat:
     Log("The tech has said all he has to say.");
-    JumpRandom('B4Va', 0.50, 'B4Vb', 1.00, , , , , , ); 
+    JumpRandom('B4Va', 0.50, 'B4Vb', 1.00, , , , , ,); 
 B4Va:
     Log("");
     Talk(Sound'S1_1_2Voice.Play_11_32_33', 1, , TRUE, 0);

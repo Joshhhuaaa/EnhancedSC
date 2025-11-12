@@ -16,7 +16,7 @@ function Created()
 {
 	Super.Created();
 
-	if(FixedAreaClass != None)
+	if (FixedAreaClass != None)
 	{
 		FixedArea = UWindowDialogClientWindow(CreateWindow(FixedAreaClass, 0, 0, 100, 100, OwnerWindow));
 		FixedArea.bAlwaysOnTop = True;
@@ -26,15 +26,15 @@ function Created()
 
 	ClientArea = UWindowDialogClientWindow(CreateWindow(ClientClass, 0, 0, WinWidth, WinHeight, OwnerWindow));
 
-	VertSB = UWindowVScrollbar(CreateWindow(class'UWindowVScrollbar', WinWidth-LookAndFeel.Size_ScrollbarWidth, 0, LookAndFeel.Size_ScrollbarWidth, WinHeight));
+	VertSB = UWindowVScrollbar(CreateWindow(class'UWindowVScrollbar', WinWidth - LookAndFeel.Size_ScrollbarWidth, 0, LookAndFeel.Size_ScrollbarWidth, WinHeight));
 	VertSB.bAlwaysOnTop = True;
 	VertSB.HideWindow();
 
-	HorizSB = UWindowHScrollbar(CreateWindow(class'UWindowHScrollbar', 0, WinHeight-LookAndFeel.Size_ScrollbarWidth, WinWidth, LookAndFeel.Size_ScrollbarWidth));
+	HorizSB = UWindowHScrollbar(CreateWindow(class'UWindowHScrollbar', 0, WinHeight - LookAndFeel.Size_ScrollbarWidth, WinWidth, LookAndFeel.Size_ScrollbarWidth));
 	HorizSB.bAlwaysOnTop = True;
 	HorizSB.HideWindow();
 
-	BRBitmap = UWindowBitmap(CreateWindow(class'UWindowBitmap', WinWidth-LookAndFeel.Size_ScrollbarWidth, WinHeight-LookAndFeel.Size_ScrollbarWidth, LookAndFeel.Size_ScrollbarWidth, LookAndFeel.Size_ScrollbarWidth));
+	BRBitmap = UWindowBitmap(CreateWindow(class'UWindowBitmap', WinWidth - LookAndFeel.Size_ScrollbarWidth, WinHeight - LookAndFeel.Size_ScrollbarWidth, LookAndFeel.Size_ScrollbarWidth, LookAndFeel.Size_ScrollbarWidth));
 	BRBitmap.bAlwaysOnTop = True;
 	BRBitmap.HideWindow();
 	BRBitmap.bStretch = True;
@@ -46,7 +46,7 @@ function BeforePaint(Canvas C, float X, float Y)
 	local float FixedHeight;
 
 
-	if(FixedArea != None)
+	if (FixedArea != None)
 		FixedHeight = FixedArea.WinHeight;
 	else
 		FixedHeight = 0;
@@ -54,10 +54,10 @@ function BeforePaint(Canvas C, float X, float Y)
 	ClientWidth = ClientArea.DesiredWidth;
 	ClientHeight = ClientArea.DesiredHeight;
 
-	if(ClientWidth <= WinWidth)
+	if (ClientWidth <= WinWidth)
 		ClientWidth = WinWidth;
 
-	if(ClientHeight <= WinHeight - FixedHeight)
+	if (ClientHeight <= WinHeight - FixedHeight)
 		ClientHeight = WinHeight - FixedHeight;
 
 	ClientArea.SetSize(ClientWidth, ClientHeight);
@@ -65,25 +65,25 @@ function BeforePaint(Canvas C, float X, float Y)
 	bShowVertSB = (ClientHeight > WinHeight - FixedHeight);
 	bShowHorizSB = (ClientWidth > WinWidth);
 
-	if(bShowHorizSB)
+	if (bShowHorizSB)
 	{
 		// re-examine need for vertical SB now we've got smaller client area.
 
 		ClientHeight = ClientArea.DesiredHeight;
 
-		if(ClientHeight <= WinHeight - LookAndFeel.Size_ScrollbarWidth - FixedHeight)
+		if (ClientHeight <= WinHeight - LookAndFeel.Size_ScrollbarWidth - FixedHeight)
 			ClientHeight = WinHeight - LookAndFeel.Size_ScrollbarWidth - FixedHeight;
 
 		bShowVertSB = (ClientHeight > WinHeight - LookAndFeel.Size_ScrollbarWidth - FixedHeight);
 	}
 
-	if(bShowVertSB)
+	if (bShowVertSB)
 	{
 		VertSB.ShowWindow();
 		VertSB.WinTop = 0;
 		VertSB.WinLeft = WinWidth - LookAndFeel.Size_ScrollbarWidth;
 		VertSB.WinWidth = LookAndFeel.Size_ScrollbarWidth;
-		if(bShowHorizSB) 
+		if (bShowHorizSB) 
 		{
 			BRBitmap.ShowWindow();
 			BRBitmap.WinWidth = LookAndFeel.Size_ScrollbarWidth;
@@ -111,13 +111,13 @@ function BeforePaint(Canvas C, float X, float Y)
 		VertSB.Pos = 0;		
 	}
 
-	if(bShowHorizSB)
+	if (bShowHorizSB)
 	{
 		HorizSB.ShowWindow();
 		HorizSB.WinLeft = 0;
 		HorizSB.WinTop = WinHeight - LookAndFeel.Size_ScrollbarWidth - FixedHeight;
 		HorizSB.WinHeight = LookAndFeel.Size_ScrollbarWidth;
-		if(bShowVertSB)
+		if (bShowVertSB)
 			HorizSB.WinWidth = WinWidth - LookAndFeel.Size_ScrollbarWidth;
 		else
 			HorizSB.WinWidth = WinWidth;
@@ -133,11 +133,11 @@ function BeforePaint(Canvas C, float X, float Y)
 	ClientArea.WinLeft = -HorizSB.Pos;
 	ClientArea.WinTop = -VertSB.Pos;
 
-	if(FixedArea != None)
+	if (FixedArea != None)
 	{
 		FixedArea.WinLeft = 0;
 		FixedArea.WinTop = WinHeight - FixedHeight;
-		if(FixedArea.WinWidth != WinWidth)
+		if (FixedArea.WinWidth != WinWidth)
 			FixedArea.SetSize(WinWidth, FixedArea.WinHeight);
 	}
 

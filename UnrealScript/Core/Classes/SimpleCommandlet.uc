@@ -7,7 +7,7 @@ function int TestFunction()
 	return 666;
 }
 
-function int Main( string Parms )
+function int Main(string Parms)
 {
 	local int temp;
 	local float floattemp;
@@ -28,7 +28,7 @@ function int Main( string Parms )
 	textstring = "wookie";
 	log("3 is a "$Left(textstring, 3));
 	otherstring = "skywalker";
-	otherstring = Mid( otherstring, InStr( otherstring, "a" ) );
+	otherstring = Mid(otherstring, InStr(otherstring, "a"));
 	log("otherstring:" @ otherstring);
 	return 0;
 }

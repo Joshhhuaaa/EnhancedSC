@@ -40,7 +40,7 @@ function PostBeginPlay()
 	}
 
 	// Destroy Interaction if placed on wall by designer
-	if( InitialState != '' )
+	if (InitialState != '')
 	{
 		InteractionClass = None;
 		Interaction.Destroy();
@@ -54,10 +54,10 @@ function PostBeginPlay()
 	HowToUseMe  = "WallMineHowToUseMe";
 }
 
-function Deactivate( bool Success )
+function Deactivate(bool Success)
 {
 	// Only send when defuse is good.
-	if( Success )
+	if (Success)
 	TriggerPattern();
 }
 
@@ -65,11 +65,11 @@ event Destroyed()
 {
 	Super.Destroyed();
 
-	if( DetectionVolume != None )
+	if (DetectionVolume != None)
 		DetectionVolume.Destroy();
 }
 
-function Detonate( Controller Instigator )
+function Detonate(Controller Instigator)
 {
 	GotoState('s_Activated');
 }
@@ -86,7 +86,7 @@ function bool CheckWallInFront()
 	local Vector	HitLocation, HitNormal, StartTrace, EndTrace;
 	local Actor		Hit;
 
-	if ( Controller.bIsPlayer )
+	if (Controller.bIsPlayer)
 	{
 		StartTrace = Controller.Pawn.ToWorld(Controller.Pawn.CollisionRadius * Vect(1,0,0));
 		StartTrace += Controller.Pawn.CollisionHeight * Vect(0,0,0.5);
@@ -95,11 +95,11 @@ function bool CheckWallInFront()
 	else
 	{
 		StartTrace = Controller.Pawn.ToWorld(Controller.Pawn.CollisionRadius * Vect(0,1,0));	// offset to the right
-		EndTrace = Controller.Pawn.ToWorld(Controller.Pawn.CollisionRadius*2.0f * Vect(1,0,0));	// check in front of pawn
+		EndTrace = Controller.Pawn.ToWorld(Controller.Pawn.CollisionRadius * 2.0f * Vect(1,0,0));	// check in front of pawn
 	}
 
 	Hit = Controller.Pawn.Trace(HitLocation, HitNormal, EndTrace, StartTrace);
-	if( Hit == None || Hit.bIsPawn )
+	if (Hit == None || Hit.bIsPawn)
 	{
 		log("No object in front of mine");
 		return false;
@@ -108,7 +108,7 @@ function bool CheckWallInFront()
 	return true;
 }
 
-function Select( EInventory Inv )
+function Select(EInventory Inv)
 {
 	if (GetStateName() != 's_Selected')
 		PlaySound(Sound'Interface.Play_FisherEquipWallMine', SLOT_Interface);
@@ -128,7 +128,7 @@ state s_Selected
 {
 	function Use()
 	{
-		if( !CheckWallInFront() )
+		if (!CheckWallInFront())
 			return;
 
 		// Remove mine interaction
@@ -158,16 +158,16 @@ state s_PawnPlacement
 		GotoState('s_OnWall');
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
-		if( !CheckWallInFront() )
+		if (!CheckWallInFront())
 		{
 			Controller.GotoState(,'Aborted');
 			GotoState('s_Selected');
 		}
 	}
 
-	function bool CalculatePosition( bool bTest )
+	function bool CalculatePosition(bool bTest)
 	{
 		local Vector	X,Y,Z, HitLocation, HitNormal, start, end;
 		local Actor		Hit;
@@ -175,7 +175,7 @@ state s_PawnPlacement
 		// Check if there's a wall near
 		GetAxes(Controller.Pawn.Rotation, X, Y, Z);
 
-		if ( Controller.bIsPlayer ) 
+		if (Controller.bIsPlayer) 
 		{
 			start	= Location - (X * 10.f); // Start will be just behind hand wallmine to prevent sticking it over another wallmine
 			end		= Location + (X * (Controller.Pawn.CollisionRadius * 2.0));
@@ -188,20 +188,20 @@ state s_PawnPlacement
 
 		Hit = Controller.Pawn.Trace(HitLocation, HitNormal, end, start, true);
 		// Abort if no wall in front or already a wallmine
-		if( Hit == None || Hit.class == self.class )
+		if (Hit == None || Hit.class == self.class)
 		{
 			Log(self$" WARNING: Wallmine HitActor moved or not valid.");
 			return false;
 		}
 
 		// If just first check
-		if( bTest )
+		if (bTest)
 			return true;
 
 		// If wall is valid and is actual hand placement
-		if( HitNormal Dot Vector(Controller.Pawn.Rotation) > 0 )
+		if (HitNormal Dot Vector(Controller.Pawn.Rotation) > 0)
 			HitNormal = -HitNormal;
-		SetLocation(HitLocation+CollisionRadius/2.f*HitNormal);
+		SetLocation(HitLocation + CollisionRadius / 2.f * HitNormal);
 		SetRotation(Rotator(HitNormal));
 		SetBase(Hit);
 
@@ -210,7 +210,7 @@ state s_PawnPlacement
 
 QuickCheck:
 	// Quick check for spot before doing loop cycle
-	if( !CalculatePosition(true) )
+	if (!CalculatePosition(true))
 	{
 		Controller.GotoState(,'Aborted');
 		GotoState('s_Selected');
@@ -220,7 +220,7 @@ QuickCheck:
 PlaceOnWall:
 	Disable('Tick');
 	// Find real spot for actual placement
-	if( !CalculatePosition(false) )
+	if (!CalculatePosition(false))
 	{
 		Controller.GotoState(,'Aborted');
 		GotoState('s_Selected');
@@ -272,32 +272,32 @@ state() s_OnWall
 		Emitting = false;
 	}
 
-	event Trigger( Actor Other, Pawn EventInstigator, optional name InTag )
+	event Trigger(Actor Other, Pawn EventInstigator, optional name InTag)
 	{
 		local EPawn P;
-		if( !Other.IsA('EVolumeTrigger') )
+		if (!Other.IsA('EVolumeTrigger'))
 			return;
 
 		P = EPawn(EventInstigator);
 
 		// While interacting with wallmine, Defuser is Instigator and must not be detected while moving towards it
-		if( Defuser != None && P == Defuser.Pawn )
+		if (Defuser != None && P == Defuser.Pawn)
 		{
 			//Log("Movement from defuser");
 			return;
 		}
 
-		if( P.bIsNPCPawn )
+		if (P.bIsNPCPawn)
 			MovementThreshold = P.GetMoveSpeed(MOVE_WalkRelaxed) + 5;
 		else
 			MovementThreshold = default.MovementThreshold;
 
 		//Log("VolumeTriggered Emitting="$Emitting$" Displacement="$VSize(EventInstigator.Velocity)$" MovementThreshold="$MovementThreshold$" Trace="$TraceTarget(EventInstigator.Location, Location, EventInstigator)@VSize(EventInstigator.Velocity) > MovementThreshold);
-		if( Emitting && VSize(EventInstigator.Velocity) > MovementThreshold && TraceTarget(EventInstigator.Location, Location, EventInstigator) )
+		if (Emitting && VSize(EventInstigator.Velocity) > MovementThreshold && TraceTarget(EventInstigator.Location, Location, EventInstigator))
 			GotoState('s_Activated');
 	}
 
-	function Deactivate( bool Success )
+	function Deactivate(bool Success)
 	{
 		// stop light
 		HeatIntensity = 0;
@@ -315,7 +315,7 @@ state() s_OnWall
 	function Timer()
 	{
 		Emitting = !Emitting;
-		if( Emitting )
+		if (Emitting)
 		{
 			PlaySound(Sound'FisherEquipement.Play_WallMineActivated', SLOT_SFX);
 			Skins[1]=Material'ETexIngredient.Object.wallmineredGLW';
@@ -348,7 +348,7 @@ state() s_Activated
 
 	function Timer()
 	{
-		if( Skins[1] == Material'ETexIngredient.Object.wallminegreenGLW' )
+		if (Skins[1] == Material'ETexIngredient.Object.wallminegreenGLW')
 		{
 			Skins[1]=Material'ETexIngredient.Object.wallmineredGLW';
 		}
@@ -358,15 +358,15 @@ state() s_Activated
 		}
 	}
 
-	function Detonate( Controller Instigator )
+	function Detonate(Controller Instigator)
 	{
-		if( Interaction != None && Defuser != None && Defuser.GetStateName() == 's_DisableWallMine' )
+		if (Interaction != None && Defuser != None && Defuser.GetStateName() == 's_DisableWallMine')
 		{
 			Defuser.Interaction = None;
 			Defuser.GotoState(,'Aborted');
 		}
 
-		if( Instigator != None )
+		if (Instigator != None)
 			Super.TakeDamage(HitPoints, Instigator.Pawn, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), None);
 		else
 			Super.TakeDamage(HitPoints, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), None);
@@ -388,19 +388,19 @@ state s_Flying
 	}
 
 	// As soon as wall mine begins falling, explode upon contact
-	function Bump( Actor Other, optional int Pill )
+	function Bump(Actor Other, optional int Pill)
 	{
 		Super.Bump(Other, Pill);
 		bFixedRotationDir = false;
 		Detonate(None);
 	}
-	function Landed( vector HitNormal )
+	function Landed(vector HitNormal)
 	{
 		Super.Landed(HitNormal);
 		bFixedRotationDir = false;
 		Detonate(None);
 	}
-	function HitWall( Vector HitNormal, Actor Wall )
+	function HitWall(Vector HitNormal, Actor Wall)
 	{
 		Super.HitWall(HitNormal, Wall);
 		bFixedRotationDir = false;

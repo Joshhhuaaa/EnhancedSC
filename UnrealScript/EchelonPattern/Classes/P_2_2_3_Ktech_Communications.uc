@@ -11,9 +11,9 @@ class P_2_2_3_Ktech_Communications extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -32,18 +32,18 @@ function InitPattern()
     {
         ForEach DynamicActors(class'Pawn', P)
         {
-            if(P.name == 'EMafiaMuscle2' || P.name == 'EMafiaMuscle5' || P.name =='EMafiaMuscle8' || P.name =='EMafiaMuscle12' || P.name == 'EMafiaMuscle16' || P.name == 'EMafiaMuscle19')
+            if (P.name == 'EMafiaMuscle2' || P.name == 'EMafiaMuscle5' || P.name =='EMafiaMuscle8' || P.name =='EMafiaMuscle12' || P.name == 'EMafiaMuscle16' || P.name == 'EMafiaMuscle19')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.Grunt.GruntA", class'Texture'));
             }
-            if(P.name == 'EMafiaMuscle6' || P.name == 'EMafiaMuscle10' || P.name == 'EMafiaMuscle14' || P.name == 'EMafiaMuscle18')
+            if (P.name == 'EMafiaMuscle6' || P.name == 'EMafiaMuscle10' || P.name == 'EMafiaMuscle14' || P.name == 'EMafiaMuscle18')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.Grunt.GruntB", class'Texture'));
             }
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

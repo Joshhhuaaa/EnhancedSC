@@ -20,9 +20,9 @@ var int FireTrapEAlreadyTriggered;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -39,21 +39,21 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EFeirong0')
+        if (P.name == 'EFeirong0')
             Characters[1] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'Emitter72')
+        if (A.name == 'Emitter72')
             SoundActors[0] = A;
-        if(A.name == 'ESwingingDoor39')
+        if (A.name == 'ESwingingDoor39')
             SoundActors[1] = A;
-        if(A.name == 'ESoundTrigger18')
+        if (A.name == 'ESoundTrigger18')
             SoundActors[2] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     FireTrapAAlreadyTriggered=0;

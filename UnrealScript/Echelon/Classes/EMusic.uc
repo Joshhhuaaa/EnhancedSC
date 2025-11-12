@@ -45,7 +45,7 @@ function PostBeginPlay()
 
 	log("---------------------- Object EMusic was spawned ------------------------------");
 
-	for(i=0; i < MaxMusicRequest; i++)
+	for (i = 0; i < MaxMusicRequest; i++)
 	{
 		MusicR[i].RequestOwner=  None;
 		MusicR[i].RequestType = -1;
@@ -86,7 +86,7 @@ function PlayMusic(Sound _S, bool Stream)
 // true = play
 //
 //------------------------------------------------------------------------
-function SendMusicRequest(int _Type, bool _bPlay, Actor _Instigator, optional bool DontPlayPunch )
+function SendMusicRequest(int _Type, bool _bPlay, Actor _Instigator, optional bool DontPlayPunch)
 {
 	local int i;
 	local int RequestType;
@@ -97,48 +97,48 @@ function SendMusicRequest(int _Type, bool _bPlay, Actor _Instigator, optional bo
 	//log("SendMusicRequest    Type: "$_Type$"  Play: "$_bPlay$" Instigator: "$_Instigator);
 	//log(EPattern(_Instigator).Characters[1].Pawn);
 
-	if ( _Instigator == None )
+	if (_Instigator == None)
 		return;
 
-	if(_bPlay)
+	if (_bPlay)
 	{
 		//look if the instigator is already on a request
-		for(i=0; i < MaxMusicRequest; i++)
+		for (i = 0; i < MaxMusicRequest; i++)
 		{
-			if( MusicR[i].RequestOwner ==  _Instigator )
+			if (MusicR[i].RequestOwner ==  _Instigator)
 			{
-				bInstigatorFound=true;
+				bInstigatorFound = true;
 
-				//if(MusicR[i].RequestType < _Type)
+				//if (MusicR[i].RequestType < _Type)
 				//{
 					MusicR[i].RequestType = _Type;
-					RequestType=_Type;
+					RequestType = _Type;
 				//}
 
 				break;
 			}
 		}
 
-		if(!bInstigatorFound)
+		if (!bInstigatorFound)
 		{
 			//try to find an empty slot
-			for(i=0; i < MaxMusicRequest; i++)
+			for (i = 0; i < MaxMusicRequest; i++)
 			{
-				if( MusicR[i].RequestOwner == None )
+				if (MusicR[i].RequestOwner == None)
 				{
 					MusicR[i].RequestOwner = _Instigator;
 					MusicR[i].RequestType = _Type;
-					RequestType=_Type;
+					RequestType = _Type;
 
 					break;
 				}
 			}
 		}
 
-		if(RequestType > CurrentMusicType)
+		if (RequestType > CurrentMusicType)
 		{
 			CurrentOwner = _Instigator;
-			CurrentMusicType= RequestType;
+			CurrentMusicType = RequestType;
 			PlayPunch = !DontPlayPunch;
 		}
 			
@@ -147,13 +147,13 @@ function SendMusicRequest(int _Type, bool _bPlay, Actor _Instigator, optional bo
 	else
 	{
 		//look if the instigator is in our list
-		for(i=0; i < MaxMusicRequest; i++)
+		for (i = 0; i < MaxMusicRequest; i++)
 		{
-			if( MusicR[i].RequestOwner ==  _Instigator )
+			if (MusicR[i].RequestOwner ==  _Instigator)
 			{
-				if(MusicR[i].RequestType == _Type )
+				if (MusicR[i].RequestType == _Type)
 				{
-					bInstigatorFound=true;
+					bInstigatorFound = true;
 
 					MusicR[i].RequestOwner=  None;
 					MusicR[i].RequestType = -1;
@@ -165,18 +165,18 @@ function SendMusicRequest(int _Type, bool _bPlay, Actor _Instigator, optional bo
 
 		RequestType=-1;
 
-		if(bInstigatorFound)
+		if (bInstigatorFound)
 		{
 			//check 
-			for(i=0; i < MaxMusicRequest; i++)
+			for (i = 0; i < MaxMusicRequest; i++)
 			{
-				if(RequestType < MusicR[i].RequestType )
+				if (RequestType < MusicR[i].RequestType)
 				{
 					RequestType = MusicR[i].RequestType;
 				}
 			}
 
-			CurrentOwner=_Instigator;
+			CurrentOwner = _Instigator;
 			CurrentMusicType= RequestType;
 			PlayPunch = !DontPlayPunch;
 		}
@@ -198,48 +198,48 @@ auto state Idle
 
 	function EvaluateRequest()
 	{
-		switch(CurrentMusicType)
+		switch (CurrentMusicType)
 		{
-		case 0:
-			if ( CanPlayMusic() )
-			{
-				//play stress intro
-				if ( PlayPunch )
-					PlayMusic(Sound'CommonMusic.Play_PunchStress', false);
+			case 0:
+				if (CanPlayMusic())
+				{
+					//play stress intro
+					if (PlayPunch)
+						PlayMusic(Sound'CommonMusic.Play_PunchStress', false);
 
-				if ( EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayStressMusic )
-				{
-					PlayMusic(StressA, true);
-					GotoState('StressIntro');
-				}
-			}
-			break;
-		case 1:
-			if ( CanPlayMusic() )
-			{
-				//play combat intro
-				if ( EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFisherMusic && EGroupAI(CurrentOwner.Owner).PlayFisherMusic )
-				{
-					CombatMusicType = 2;
-					PlayMusic(FisherA, true);
-					GotoState('CombatIntro');
-				}
-				else
-				{
-					if ( PlayPunch )
-						PlayMusic(Sound'CommonMusic.Play_PunchCombat', false);
-					
-					if ( EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFightMusic )
+					if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayStressMusic)
 					{
-						CombatMusicType = 1;
-						PlayMusic(CombatA, true);
-						GotoState('CombatIntro');
+						PlayMusic(StressA, true);
+						GotoState('StressIntro');
 					}
 				}
-			}
-			break;
-		default:
-			break;
+				break;
+			case 1:
+				if (CanPlayMusic())
+				{
+					//play combat intro
+					if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFisherMusic && EGroupAI(CurrentOwner.Owner).PlayFisherMusic)
+					{
+						CombatMusicType = 2;
+						PlayMusic(FisherA, true);
+						GotoState('CombatIntro');
+					}
+					else
+					{
+						if (PlayPunch)
+							PlayMusic(Sound'CommonMusic.Play_PunchCombat', false);
+						
+						if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFightMusic)
+						{
+							CombatMusicType = 1;
+							PlayMusic(CombatA, true);
+							GotoState('CombatIntro');
+						}
+					}
+				}
+				break;
+			default:
+				break;
 		}
 	}
 }
@@ -253,17 +253,17 @@ state StressIntro
 
 	function EvaluateRequest()
 	{
-		switch(CurrentMusicType)
+		switch (CurrentMusicType)
 		{
 		case -1:
 			//play end of stress intro
-			if ( EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayStressMusic )
+			if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayStressMusic)
 				PlayMusic(StressD, true);
 			GotoState('Idle');
 			break;
 		case 1:
 			//play combat loop
-			if ( EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFisherMusic && EGroupAI(CurrentOwner.Owner).PlayFisherMusic )
+			if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFisherMusic && EGroupAI(CurrentOwner.Owner).PlayFisherMusic)
 			{
 				StopSound(StressA);
 				//Start the new one with a delay
@@ -273,10 +273,10 @@ state StressIntro
 			}
 			else
 			{
-				if ( PlayPunch )
+				if (PlayPunch)
 					PlayMusic(Sound'CommonMusic.Play_PunchCombat', false);
 
-				if ( EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFightMusic )
+				if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFightMusic)
 				{		
 					//Stop previous music with a fade
 					StopSound(StressA);
@@ -297,7 +297,7 @@ state StressIntro
 
 	function Tick(float DeltaTime)
 	{
-		if ( ((GetSoundDuration(StressA) - GetSoundPosition(StressA)) < 1.5f) || !IsPlaying(StressA) )
+		if (((GetSoundDuration(StressA) - GetSoundPosition(StressA)) < 1.5f) || !IsPlaying(StressA))
 		{
 			PlayMusic(StressB, true);
 			GotoState('StressLoop');
@@ -316,17 +316,17 @@ state StressLoop
 
 	function EvaluateRequest()
 	{
-		switch(CurrentMusicType)
+		switch (CurrentMusicType)
 		{
 		case -1:
 			//play end of stress loop
-			if ( EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayStressMusic )
+			if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayStressMusic)
 				PlayMusic(StressC, true);
 			GotoState('Idle');
 			break;
 		case 1:
 			//play transition stress-combat
-			if ( EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFisherMusic && EGroupAI(CurrentOwner.Owner).PlayFisherMusic )
+			if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFisherMusic && EGroupAI(CurrentOwner.Owner).PlayFisherMusic)
 			{
 				//Stop previous music with a fade
 				StopSound(StressB);
@@ -337,10 +337,10 @@ state StressLoop
 			}
 			else
 			{
-				if ( PlayPunch )
+				if (PlayPunch)
 					PlayMusic(Sound'CommonMusic. Play_PunchCombat', false);
 
-				if ( EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFightMusic )
+				if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFightMusic)
 				{
 					//Stop previous music with a fade
 					StopSound(StressB);
@@ -370,20 +370,20 @@ state CombatIntro
 
 	function EvaluateRequest()
 	{
-		switch(CurrentMusicType)
+		switch (CurrentMusicType)
 		{
 		case -1:
 			//play end of combat intro
-			if ( CombatMusicType == 2 )
+			if (CombatMusicType == 2)
 				PlayMusic(FisherD, true);
-			else if ( CombatMusicType == 1 )
+			else if (CombatMusicType == 1)
 				PlayMusic(CombatD, true);
 
 			GotoState('Idle');
 			break;
 		case 0:
 			//play stress loop
-			if ( EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayStressMusic )
+			if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayStressMusic)
 			{
 				CombatMusicType = 0;
 				PlaySound(StressB, SLOT_Music);
@@ -398,17 +398,17 @@ state CombatIntro
 
 	function Tick(float DeltaTime)
 	{
-		if ( CombatMusicType == 2 )
+		if (CombatMusicType == 2)
 		{
-			if(((GetSoundDuration(FisherA) - GetSoundPosition(FisherA)) < 1.5f) || !IsPlaying(FisherA) )
+			if (((GetSoundDuration(FisherA) - GetSoundPosition(FisherA)) < 1.5f) || !IsPlaying(FisherA))
 			{
 				PlayMusic(FisherB, true);
 				GotoState('CombatLoop');
 			}
 		}
-		else if ( CombatMusicType == 1 ) 
+		else if (CombatMusicType == 1) 
 		{
-			if( ((GetSoundDuration(CombatA) - GetSoundPosition(CombatA)) < 1.5f) || !IsPlaying(CombatA) )
+			if (((GetSoundDuration(CombatA) - GetSoundPosition(CombatA)) < 1.5f) || !IsPlaying(CombatA))
 			{
 				PlayMusic(CombatB, true);
 				GotoState('CombatLoop');
@@ -427,20 +427,20 @@ state CombatLoop
 
 	function EvaluateRequest()
 	{
-		switch(CurrentMusicType)
+		switch (CurrentMusicType)
 		{
 		case -1:
 			//play end of combat loop
-			if ( CombatMusicType == 2 )
+			if (CombatMusicType == 2)
 				PlayMusic(FisherC, true);
-			else if ( CombatMusicType == 1 )
+			else if (CombatMusicType == 1)
 				PlayMusic(CombatC, true);
 
 			GotoState('Idle');
 			break;
 		case 0:
 			//play stress loop
-			if ( EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayStressMusic )
+			if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayStressMusic)
 			{
 				CombatMusicType = 0;
 				PlaySound(StressB, SLOT_Music);

@@ -57,10 +57,10 @@ function int FindItemIndex(string Value, optional bool bIgnoreCase)
 	I = UWindowComboListItem(Items.Next);
 	Count = 0;
 		
-	while(I != None)
+	while (I != None)
 	{
-		if(bIgnoreCase && I.Value ~= Value) return Count;
-		if(I.Value == Value) return Count;
+		if (bIgnoreCase && I.Value ~= Value) return Count;
+		if (I.Value == Value) return Count;
 
 		Count++;
 		I = UWindowComboListItem(I.Next);
@@ -77,10 +77,10 @@ function int FindItemIndex2(string Value2, optional bool bIgnoreCase)
 	I = UWindowComboListItem(Items.Next);
 	Count = 0;
 		
-	while(I != None)
+	while (I != None)
 	{
-		if(bIgnoreCase && I.Value2 ~= Value2) return Count;
-		if(I.Value2 == Value2) return Count;
+		if (bIgnoreCase && I.Value2 ~= Value2) return Count;
+		if (I.Value2 == Value2) return Count;
 
 		Count++;
 		I = UWindowComboListItem(I.Next);
@@ -97,9 +97,9 @@ function string GetItemValue(int Index)
 	I = UWindowComboListItem(Items.Next);
 	Count = 0;
 		
-	while(I != None)
+	while (I != None)
 	{
-		if(Count == Index) return I.Value;
+		if (Count == Index) return I.Value;
 
 		Count++;
 		I = UWindowComboListItem(I.Next);
@@ -113,15 +113,15 @@ function RemoveItem(int Index)
 	local UWindowComboListItem I;
 	local int Count;
 
-	if(Index == -1)
+	if (Index == -1)
 		return;
 
 	I = UWindowComboListItem(Items.Next);
 	Count = 0;
 		
-	while(I != None)
+	while (I != None)
 	{
-		if(Count == Index)
+		if (Count == Index)
 		{
 			I.Remove();
 			return;
@@ -140,9 +140,9 @@ function string GetItemValue2(int Index)
 	I = UWindowComboListItem(Items.Next);
 	Count = 0;
 		
-	while(I != None)
+	while (I != None)
 	{
-		if(Count == Index) return I.Value2;
+		if (Count == Index) return I.Value2;
 
 		Count++;
 		I = UWindowComboListItem(I.Next);
@@ -175,22 +175,22 @@ function SetSelected(float X, float Y)
 	local int i, Count;
 
 	Count = 0;
-	for( Item = UWindowComboListItem(Items.Next);Item != None; Item = UWindowComboListItem(Item.Next) )
+	for (Item = UWindowComboListItem(Items.Next);Item != None; Item = UWindowComboListItem(Item.Next))
 		Count++;
 
 	i = (Y - VBorder) / ItemHeight + VertSB.Pos;
 
-	if(i < 0)
+	if (i < 0)
 		i = 0;
 
-	if(i >= VertSB.Pos + Min(Count, MaxVisible))
+	if (i >= VertSB.Pos + Min(Count, MaxVisible))
 		i = VertSB.Pos + Min(Count, MaxVisible) - 1;
 
 	NewSelected = UWindowComboListItem(Items.FindEntry(i));
 
-	if(NewSelected != Selected)
+	if (NewSelected != Selected)
 	{
-		if(NewSelected == None) 
+		if (NewSelected == None) 
 			Selected = None;
 		else
 			Selected = NewSelected;
@@ -200,8 +200,8 @@ function SetSelected(float X, float Y)
 function MouseMove(float X, float Y)
 {
 	Super.MouseMove(X, Y);
-	if(Y > WinHeight) VertSB.Scroll(1);
-	if(Y < 0) VertSB.Scroll(-1);
+	if (Y > WinHeight) VertSB.Scroll(1);
+	if (Y < 0) VertSB.Scroll(-1);
 
 	SetSelected(X, Y);
 
@@ -210,7 +210,7 @@ function MouseMove(float X, float Y)
 
 function LMouseUp(float X, float Y)
 {
-	If(Y >= 0 && Y <= WinHeight && Selected != None)
+	If (Y >= 0 && Y <= WinHeight && Selected != None)
 	{
 		ExecuteItem(Selected);
 	}
@@ -237,7 +237,7 @@ function BeforePaint(Canvas C, float X, float Y)
 	ExtraWidth = ((HBorder + TextBorder) * 2);
 
 	Count = Items.Count();
-	if(Count > MaxVisible)
+	if (Count > MaxVisible)
 	{
 		ExtraWidth += LookAndFeel.Size_ScrollbarWidth;
 		WinHeight = (ItemHeight * MaxVisible) + (VBorder * 2);
@@ -248,10 +248,10 @@ function BeforePaint(Canvas C, float X, float Y)
 		WinHeight = (ItemHeight * Count) + (VBorder * 2);
 	}
 
-	for( I = UWindowComboListItem(Items.Next);I != None; I = UWindowComboListItem(I.Next) )
+	for (I = UWindowComboListItem(Items.Next);I != None; I = UWindowComboListItem(I.Next))
 	{
 		TextSize(C, RemoveAmpersand(I.Value), W, H);
-		if(W + ExtraWidth > MaxWidth)
+		if (W + ExtraWidth > MaxWidth)
 			MaxWidth = W + ExtraWidth;
 	}
 
@@ -260,14 +260,14 @@ function BeforePaint(Canvas C, float X, float Y)
 	ListX = Owner.EditAreaDrawX + Owner.EditBoxWidth - WinWidth;    
 	ListY = Owner.Button.WinTop + Owner.Button.WinHeight;
 
-	if(Count > MaxVisible)
+	if (Count > MaxVisible)
 	{
 		VertSB.ShowWindow();
 		VertSB.SetRange(0, Count, MaxVisible);
 		VertSB.WinLeft = WinWidth - LookAndFeel.Size_ScrollbarWidth - HBorder;
 		VertSB.WinTop = HBorder;
 		VertSB.WinWidth = LookAndFeel.Size_ScrollbarWidth;
-		VertSB.WinHeight = WinHeight - 2*VBorder;
+		VertSB.WinHeight = WinHeight - 2 * VBorder;
 	}
 	else
 	{
@@ -286,11 +286,11 @@ function Paint(Canvas C, float X, float Y)
 	
 	Count = 0;
 
-	for( I = UWindowComboListItem(Items.Next);I != None; I = UWindowComboListItem(I.Next) )
+	for (I = UWindowComboListItem(Items.Next);I != None; I = UWindowComboListItem(I.Next))
 	{
-		if(VertSB.bWindowVisible)
+		if (VertSB.bWindowVisible)
 		{
-			if(Count >= VertSB.Pos)
+			if (Count >= VertSB.Pos)
 				DrawItem(C, I, HBorder, VBorder + (ItemHeight * (Count - VertSB.Pos)), WinWidth - (2 * HBorder) - VertSB.WinWidth, ItemHeight);
 		}
 		else
@@ -324,7 +324,7 @@ function FocusOtherWindow(UWindowWindow W)
 {
 	Super.FocusOtherWindow(W);
 
-	if(bWindowVisible && W.ParentWindow.ParentWindow != Self && W.ParentWindow != Self && W.ParentWindow != Owner)
+	if (bWindowVisible && W.ParentWindow.ParentWindow != Self && W.ParentWindow != Self && W.ParentWindow != Owner)
 		CloseUp();
 }
 

@@ -20,9 +20,9 @@ var EPattern			 Pattern;
 \*-----------------------------------------------------------*/
 function PostBeginPlay()
 { 
-	bAlreadyVisited=false;
+	bAlreadyVisited = false;
 
-	if(!bLinkedToAGroup)
+	if (!bLinkedToAGroup)
 	{
 		//spawn and start the pattern
 		Pattern  = Spawn(PatternClass,self);
@@ -47,25 +47,25 @@ function Touch(actor Other)
 
 	//cast the actor in Pawn
 	P = Pawn(Other);
-	if(P != None)
+	if (P != None)
 	{
-		//if ( Level.TimeSeconds - TriggerTime < 0.2 )
+		//if (Level.TimeSeconds - TriggerTime < 0.2)
 		//	return;
 		//TriggerTime = Level.TimeSeconds;
 
 		//check if the player is colliding
-		if(P.controller.bIsPlayer)
+		if (P.controller.bIsPlayer)
 		{
-			if(Pattern != None)
+			if (Pattern != None)
 			{
-				if(!Pattern.PatternIsRunning())
+				if (!Pattern.PatternIsRunning())
 				{
 					// make sure not touching through wall
-					if(Trace(HitNormal, HitLocation, Other.Location, Location, true, vect(0,0,0)) == Other)
+					if (Trace(HitNormal, HitLocation, Other.Location, Location, true, vect(0,0,0)) == Other)
 					{
-						if(!( (bAlreadyVisited) && (bTriggerOnlyOnce) ))
+						if (!((bAlreadyVisited) && (bTriggerOnlyOnce)))
 						{
-							bAlreadyVisited=true;
+							bAlreadyVisited = true;
 							Pattern.StartPattern(JumpLabel);
 						}
 					}
@@ -74,17 +74,17 @@ function Touch(actor Other)
 			else
 			{
 				// make sure not touching through wall
-				if(Trace(HitNormal, HitLocation, Other.Location, Location, true, vect(0,0,0)) == Other)
+				if (Trace(HitNormal, HitLocation, Other.Location, Location, true, vect(0,0,0)) == Other)
 				{
-					if(!( (bAlreadyVisited) && (bTriggerOnlyOnce) ))
+					if (!((bAlreadyVisited) && (bTriggerOnlyOnce)))
 					{
-						bAlreadyVisited=true;
+						bAlreadyVisited = true;
 
-						if(bLinkedToAGroup)
+						if (bLinkedToAGroup)
 						{
 							log("Pattern trigger "$self$" was touched and will try to match group "$GroupTag);
 							//try to find the groupAI
-							foreach DynamicActors( class'EGroupAI', Group, GroupTag)
+							foreach DynamicActors(class'EGroupAI', Group, GroupTag)
 							{
 								log("Group "$Group$" found...");						
 								Group.RequestPatternChange(PatternClass,bEventExclusivity);

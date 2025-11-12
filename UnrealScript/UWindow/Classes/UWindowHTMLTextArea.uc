@@ -82,22 +82,22 @@ function ProcessURL(string URL)
 {
 	Log("Clicked Link: >>"$URL$"<<");
 
-	if( Left(URL, 7) ~= "mailto:" )
+	if (Left(URL, 7) ~= "mailto:")
 		GetPlayerOwner().ConsoleCommand("start "$URL);
-	if( Left(URL, 7) ~= "http://" )
+	if (Left(URL, 7) ~= "http://")
 		GetPlayerOwner().ConsoleCommand("start "$URL);
-	if( Left(URL, 6) ~= "ftp://" )
+	if (Left(URL, 6) ~= "ftp://")
 		GetPlayerOwner().ConsoleCommand("start "$URL);
-	if( Left(URL, 9) ~= "telnet://" )
+	if (Left(URL, 9) ~= "telnet://")
 		GetPlayerOwner().ConsoleCommand("start "$URL);
-	if( Left(URL, 9) ~= "gopher://" )
+	if (Left(URL, 9) ~= "gopher://")
 		GetPlayerOwner().ConsoleCommand("start "$URL);
-	if( Left(URL, 4) ~= "www." )
+	if (Left(URL, 4) ~= "www.")
 		GetPlayerOwner().ConsoleCommand("start http://"$URL);
-	if( Left(URL, 4) ~= "ftp." )
+	if (Left(URL, 4) ~= "ftp.")
 		GetPlayerOwner().ConsoleCommand("start ftp://"$URL);
 	else
-	if( Left(URL, 9) ~= "unreal://" )
+	if (Left(URL, 9) ~= "unreal://")
 		LaunchUnrealURL(URL);
 }
 
@@ -144,7 +144,7 @@ function WrapRow(Canvas C, UWindowDynamicTextRow L)
 
 	// Generate the DisplayString and StyleString lines for each row
 	R = UWindowHTMLTextRow(L);
-	while(R != None && (R == L || R.WrapParent == L))
+	while (R != None && (R == L || R.WrapParent == L))
 	{
 		R.DisplayString = "";
 		R.StyleString = "";
@@ -152,11 +152,11 @@ function WrapRow(Canvas C, UWindowDynamicTextRow L)
 		CurrentStyle = R.StartStyle;
 		
 		Input = R.Text;
-		while(Input != "")
+		while (Input != "")
 		{
 			ParseHTML(Input, LeftText, HTML, RightText);
 
-			if(LeftText != "" || R.DisplayString == "")
+			if (LeftText != "" || R.DisplayString == "")
 			{
 				R.DisplayString = R.DisplayString $ LeftText;
 				R.StyleString = R.StyleString $ WriteStyleText(CurrentStyle, Len(LeftText));
@@ -184,10 +184,10 @@ function float DrawTextLine(Canvas C, UWindowDynamicTextRow L, float Y)
 	RowHeight = 0;
 
 	CurrentStyle = UWindowHTMLTextRow(L).StartStyle;
-	if(CurrentStyle.bCenter)
+	if (CurrentStyle.bCenter)
 	{
 		W = CalcHTMLTextWidth(C, L.Text, CurrentStyle);
-		if(VertSB.bWindowVisible)
+		if (VertSB.bWindowVisible)
 			X = int(((WinWidth - VertSB.WinWidth) - W) / 2);
 		else
 			X = int((WinWidth - W) / 2);
@@ -195,17 +195,17 @@ function float DrawTextLine(Canvas C, UWindowDynamicTextRow L, float Y)
 	else
 		X = 2;
 
-	if(GetTime() > LastBlinkTime + 0.5)
+	if (GetTime() > LastBlinkTime + 0.5)
 	{
 		bShowBlink = !bShowBlink;
 		LastBlinkTime = GetTime();
 	}
 
-	if(UWindowHTMLTextRow(L).DisplayString == "")
+	if (UWindowHTMLTextRow(L).DisplayString == "")
 		SetCanvasStyle(C, CurrentStyle);
 	else
 	{
-		while(DisplayPos < Len(UWindowHTMLTextRow(L).DisplayString))
+		while (DisplayPos < Len(UWindowHTMLTextRow(L).DisplayString))
 		{
 			i = ReadStyleText(UWindowHTMLTextRow(L).StyleString, StylePos, CurrentStyle);
 			S = Mid(UWindowHTMLTextRow(L).DisplayString, DisplayPos, i);
@@ -213,20 +213,20 @@ function float DrawTextLine(Canvas C, UWindowDynamicTextRow L, float Y)
 			SetCanvasStyle(C, CurrentStyle);
 
 			TextAreaTextSize(C, S, W, H);
-			if(H > RowHeight)
+			if (H > RowHeight)
 				RowHeight = H;
 
-			if(CurrentStyle.bLink)
+			if (CurrentStyle.bLink)
 			{
 				GetMouseXY(MouseX, MouseY);
-				if(X < MouseX && X + W > MouseX && Y < MouseY && Y + H > MouseY)
+				if (X < MouseX && X + W > MouseX && Y < MouseY && Y + H > MouseY)
 				{
 					Cursor = Root.HandCursor;
 					OverURL(CurrentStyle.LinkDestination);
 
-					if(bMouseDown || bReleased)
+					if (bMouseDown || bReleased)
 					{
-						if(bReleased)
+						if (bReleased)
 						{
 							ProcessURL(CurrentStyle.LinkDestination);
 							bReleased = False;
@@ -237,22 +237,22 @@ function float DrawTextLine(Canvas C, UWindowDynamicTextRow L, float Y)
 				}
 			}
 
-			if(CurrentStyle.BGColor != BGColor)
+			if (CurrentStyle.BGColor != BGColor)
 			{	
 				OldColor = C.DrawColor;
 				C.DrawColor = CurrentStyle.BGColor;
 				DrawStretchedTexture(C, X, Y, W, H, Texture'WhiteTexture');
 				C.DrawColor = OldColor;
 			}
-			if(!CurrentStyle.bBlink || bShowBlink)
+			if (!CurrentStyle.bBlink || bShowBlink)
 				TextAreaClipText(C, X, Y, S);
-			if(CurrentStyle.bLink || CurrentStyle.bUnderline)
-				DrawStretchedTexture(C, X, Y+H-1, W, 1, Texture'WhiteTexture');
+			if (CurrentStyle.bLink || CurrentStyle.bUnderline)
+				DrawStretchedTexture(C, X, Y + H - 1, W, 1, Texture'WhiteTexture');
 
 			X += W;
 		}
 	}
-	if(RowHeight == 0)
+	if (RowHeight == 0)
 		TextAreaTextSize(C, "A", W, RowHeight);
 
 	return RowHeight;
@@ -281,7 +281,7 @@ function RemoveWrap(UWindowDynamicTextRow L)
 
 	// copy final endstyle to current row
 	N = UWindowDynamicTextRow(L.Next);
-	while(N != None && N.WrapParent == L)
+	while (N != None && N.WrapParent == L)
 	{
 		UWindowHTMLTextRow(L).EndStyle = UWindowHTMLTextRow(N).EndStyle;
 		N = UWindowDynamicTextRow(N.Next);
@@ -300,7 +300,7 @@ function int GetWrapPos(Canvas C, UWindowDynamicTextRow L, float MaxWidth)
 	CurrentStyle = UWindowHTMLTextRow(L).StartStyle;
 
 	// quick check
-	if(CalcHTMLTextWidth(C, L.Text, CurrentStyle) <= MaxWidth)
+	if (CalcHTMLTextWidth(C, L.Text, CurrentStyle) <= MaxWidth)
 		return -1;
 
 	Input = L.Text;
@@ -310,14 +310,14 @@ function int GetWrapPos(Canvas C, UWindowDynamicTextRow L, float MaxWidth)
 	NextWord = "";
 	CurrentStyle = UWindowHTMLTextRow(L).StartStyle;
 
-	while(Input != "" || NextWord != "")
+	while (Input != "" || NextWord != "")
 	{
-		if(NextWord == "")
+		if (NextWord == "")
 		{
 			RemoveNextWord(Input, NextWord);
 			NextWordWidth = CalcHTMLTextWidth(C, NextWord, CurrentStyle);
 		}
-		if(WordsThisRow > 0 && LineWidth + NextWordWidth > MaxWidth)
+		if (WordsThisRow > 0 && LineWidth + NextWordWidth > MaxWidth)
 		{
 			return WrapPos;
 		}
@@ -341,17 +341,17 @@ function RemoveNextWord(out string Text, out string NextWord)
 	
 	bInsideTag = False;
 
-	for(i=0;i<Len(Text);i++)
+	for (i = 0; i < Len(Text); i++)
 	{
 		Ch = Mid(Text, i, 1);
-		if(Ch == ">")
+		if (Ch == ">")
 			bInsideTag = False;
-		if(Ch == "<")
+		if (Ch == "<")
 			bInsideTag = True;
-		if(Ch == " " && !bInsideTag)
+		if (Ch == " " && !bInsideTag)
 			break;
 	}
-	while(Mid(Text, i, 1) == " ")
+	while (Mid(Text, i, 1) == " ")
 		i++;	
 	NextWord = Left(Text, i);
 	Text = Mid(Text, i);
@@ -364,7 +364,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 	local UWindowDynamicTextRow L;
 	local HTMLStyle CurrentStyle, StartStyle;
 
-	if(List.Last == List)
+	if (List.Last == List)
 	{
 		CurrentStyle.BulletLevel = 0;
 		CurrentStyle.LinkDestination = "";
@@ -384,7 +384,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 
 	// convert \\n's -> <br>'s
 	i = InStr(NewLine, "\\n");
-	while(i != -1)
+	while (i != -1)
 	{
 		NewLine = Left(NewLine, i) $ "<br>" $ Mid(NewLine, i + 2);
 		i = InStr(NewLine, "\\n");
@@ -392,15 +392,15 @@ function UWindowDynamicTextRow AddText(string NewLine)
 
 	Input = NewLine;
 	Output = "";
-	while(Input != "")
+	while (Input != "")
 	{
 		ParseHTML(Input, LeftText, HTML, RightText);
 		
-		switch(GetTag(HTML))
+		switch (GetTag(HTML))
 		{
 		// multiline HTML tags
 		case "P":
-			if((Output $ LeftText) != "")
+			if ((Output $ LeftText) != "")
 			{
 				L = Super.AddText(Output $ LeftText);
 				Output = "";
@@ -421,7 +421,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 			break;
 		case "BODY":
 			Temp = GetOption(HTML, "BGCOLOR=");
-			if(Temp != "")
+			if (Temp != "")
 			{
 				BGColor = ParseColor(Temp);
 				CurrentStyle.BGColor = BGColor;
@@ -429,15 +429,15 @@ function UWindowDynamicTextRow AddText(string NewLine)
 			}
 
 			Temp = GetOption(HTML, "LINK=");
-			if(Temp != "")
+			if (Temp != "")
 				LinkColor = ParseColor(Temp);
 
 			Temp = GetOption(HTML, "ALINK=");
-			if(Temp != "")
+			if (Temp != "")
 				ALinkColor = ParseColor(Temp);
 
 			Temp = GetOption(HTML, "TEXT=");
-			if(Temp != "")
+			if (Temp != "")
 			{
 				TextColor = ParseColor(Temp);
 				CurrentStyle.TextColor = TextColor;
@@ -445,7 +445,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 			Output = Output $ LeftText;
 			break;
 		case "CENTER":
-			if((Output $ LeftText) != "")
+			if ((Output $ LeftText) != "")
 			{
 				L = Super.AddText(Output $ LeftText);
 				Output = "";
@@ -465,7 +465,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 			break;			
 		// Inline HTML tags
 		case "H1":
-			if((Output $ LeftText) != "")
+			if ((Output $ LeftText) != "")
 			{
 				L = Super.AddText(Output $ LeftText);
 				Output = "";
@@ -486,10 +486,10 @@ function UWindowDynamicTextRow AddText(string NewLine)
 		case "FONT":
 			Output = Output $ LeftText $ HTML;
 			Temp = GetOption(HTML, "COLOR=");
-			if(Temp != "")
+			if (Temp != "")
 				CurrentStyle.TextColor = ParseColor(Temp);
 			Temp = GetOption(HTML, "BGCOLOR=");
-			if(Temp != "")
+			if (Temp != "")
 				CurrentStyle.BGColor = ParseColor(Temp);
 			break;
 		case "/FONT":
@@ -563,7 +563,7 @@ function ParseHTML(string Input, out string LeftText, out string HTML, out strin
 	local int i;
 	
 	i = InStr(Input, "<");
-	if(i == -1)
+	if (i == -1)
 	{
 		LeftText = Input;
 		HTML = "";
@@ -575,14 +575,14 @@ function ParseHTML(string Input, out string LeftText, out string HTML, out strin
 	HTML = Mid(Input, i);
 
 	i = InStr(HTML, ">");
-	if(i == -1)
+	if (i == -1)
 	{
 		RightText = "";
 		return;
 	}
 
-	RightText = Mid(HTML, i+1);
-	HTML = Left(HTML, i+1);	
+	RightText = Mid(HTML, i + 1);
+	HTML = Left(HTML, i + 1);	
 }
 
 function float CalcHTMLTextWidth(Canvas C, string Text, out HTMLStyle CurrentStyle)
@@ -592,7 +592,7 @@ function float CalcHTMLTextWidth(Canvas C, string Text, out HTMLStyle CurrentSty
 
 	Width = 0;
 	Input = Text;
-	while(Input != "")
+	while (Input != "")
 	{
 		ParseHTML(Input, LeftText, HTML, RightText);
 
@@ -613,10 +613,10 @@ function ProcessInlineHTML(string HTML, out HTMLStyle CurrentStyle)
 {
 	local string Temp;
 
-	if(HTML == "")	
+	if (HTML == "")	
 		return;
 
-	switch(GetTag(HTML))
+	switch (GetTag(HTML))
 	{
 	case "H1":
 		CurrentStyle.bHeading = True;
@@ -626,10 +626,10 @@ function ProcessInlineHTML(string HTML, out HTMLStyle CurrentStyle)
 		break;			
 	case "FONT":
 		Temp = GetOption(HTML, "COLOR=");
-		if(Temp != "")
+		if (Temp != "")
 			CurrentStyle.TextColor = ParseColor(Temp);
 		Temp = GetOption(HTML, "BGCOLOR=");
-		if(Temp != "")
+		if (Temp != "")
 			CurrentStyle.BGColor = ParseColor(Temp);
 		break;
 	case "/FONT":
@@ -676,7 +676,7 @@ function HTMLUpdateStyle(string Input, out HTMLStyle CurrentStyle)
 {
 	local string LeftText, HTML, RightText; 
 
-	while(Input != "")
+	while (Input != "")
 	{
 		ParseHTML(Input, LeftText, HTML, RightText);
 		ProcessInlineHTML(HTML, CurrentStyle);
@@ -691,16 +691,16 @@ function string GetOption(string HTML, string Option)
 	
 	i = InStr(Caps(HTML), Caps(Option));
 
-	if(i == 1 || Mid(HTML, i-1, 1) == " ") 
+	if (i == 1 || Mid(HTML, i - 1, 1) == " ") 
 	{
-		s = Mid(HTML, i+Len(Option));
+		s = Mid(HTML, i + Len(Option));
 		j = FirstMatching(InStr(s, ">"), InStr(s, " "));
 		s = Left(s, j);
 
-		if(Left(s, 1) == "\"")
+		if (Left(s, 1) == "\"")
 			s = Mid(s, 1);
 
-		if(Right(s, 1) == "\"")
+		if (Right(s, 1) == "\"")
 			s = Left(s, Len(s) - 1);
 
 		return s;
@@ -712,13 +712,13 @@ function string GetTag(string HTML)
 {
 	local int i;
 
-	if(HTML == "")
+	if (HTML == "")
 		return "";
 
 	HTML = Mid(HTML, 1); // lose <
 
 	i = FirstMatching(InStr(HTML, ">"), InStr(HTML, " "));
-	if(i == -1)
+	if (i == -1)
 		return Caps(HTML);
 	else
 		return Caps(Left(HTML, i));
@@ -728,7 +728,7 @@ function Color ParseColor(string S)
 {
 	local Color C;
 
-	if(Left(S, 1) == "#")
+	if (Left(S, 1) == "#")
 		S = Mid(S, 1);
 
 	C.R = 16 * GetHexDigit(Mid(S, 0, 1)) + GetHexDigit(Mid(S, 1, 1));
@@ -740,7 +740,7 @@ function Color ParseColor(string S)
 
 function int GetHexDigit(string D)
 {
-	switch(caps(D))
+	switch (caps(D))
 	{
 	case "0": return 0;
 	case "1": return 1;
@@ -765,10 +765,10 @@ function int GetHexDigit(string D)
 
 function int FirstMatching(int i, int j)
 {
-	if(i == -1)
+	if (i == -1)
 		return j;
 
-	if(j == -1)
+	if (j == -1)
 		return i;
 	else
 		return Min(i, j);
@@ -776,15 +776,15 @@ function int FirstMatching(int i, int j)
 
 function SetCanvasStyle(Canvas C, HTMLStyle CurrentStyle)
 {
-	if(CurrentStyle.bLink)
+	if (CurrentStyle.bLink)
 		C.DrawColor = LinkColor;
 	else
 		C.DrawColor = CurrentStyle.TextColor;
 
-	if(CurrentStyle.bHeading)
+	if (CurrentStyle.bHeading)
 		C.Font = Root.Fonts[F_LargeBold];
 	else
-	if(CurrentStyle.bBold)
+	if (CurrentStyle.bBold)
 		C.Font = Root.Fonts[F_Bold];
 	else
 		C.Font = Root.Fonts[F_Normal];
@@ -818,37 +818,37 @@ function string WriteStyleText(HTMLStyle CurrentStyle, int CharCount)
 	Temp = string(CurrentStyle.BGColor.B);
 	Output = Output $ Left(Pad, 3 - Len(Temp)) $ Temp;
 
-	if(CurrentStyle.bCenter)
+	if (CurrentStyle.bCenter)
 		Output = Output $ "T";
 	else
 		Output = Output $ "F";
 
-	if(CurrentStyle.bLink)
+	if (CurrentStyle.bLink)
 		Output = Output $ "T";
 	else
 		Output = Output $ "F";
 
-	if(CurrentStyle.bUnderline)
+	if (CurrentStyle.bUnderline)
 		Output = Output $ "T";
 	else
 		Output = Output $ "F";
 
-	if(CurrentStyle.bNoBR)
+	if (CurrentStyle.bNoBR)
 		Output = Output $ "T";
 	else
 		Output = Output $ "F";
 
-	if(CurrentStyle.bHeading)
+	if (CurrentStyle.bHeading)
 		Output = Output $ "T";
 	else
 		Output = Output $ "F";
 
-	if(CurrentStyle.bBold)
+	if (CurrentStyle.bBold)
 		Output = Output $ "T";
 	else
 		Output = Output $ "F";
 
-	if(CurrentStyle.bBlink)
+	if (CurrentStyle.bBlink)
 		Output = Output $ "T";
 	else
 		Output = Output $ "F";

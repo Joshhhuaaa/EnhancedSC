@@ -26,12 +26,12 @@ function Created()
 {
 	Super.Created();
 	
-	EditBox = UWindowEditBox(CreateWindow(class'UWindowEditBox', 0, 0, WinWidth-LookAndFeel.Size_ComboButtonWidth, WinHeight, self)); 
+	EditBox = UWindowEditBox(CreateWindow(class'UWindowEditBox', 0, 0, WinWidth - LookAndFeel.Size_ComboButtonWidth, WinHeight, self)); 
 	EditBox.NotifyOwner = Self;
 	EditBoxWidth = WinWidth / 2;
 	EditBox.bTransient = True;
 
-	Button = UWindowComboButton(CreateWindow(class'EPCComboButton', WinWidth-LookAndFeel.Size_ComboButtonWidth, 0, LookAndFeel.Size_ComboButtonWidth, WinHeight, self)); 
+	Button = UWindowComboButton(CreateWindow(class'EPCComboButton', WinWidth - LookAndFeel.Size_ComboButtonWidth, 0, LookAndFeel.Size_ComboButtonWidth, WinHeight, self)); 
 	Button.Owner = Self;
 	
 	List = UWindowComboList(Root.CreateWindow(ListClass, 0, 0, 100, 100)); 

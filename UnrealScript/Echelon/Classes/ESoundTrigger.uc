@@ -35,7 +35,7 @@ function Timer()
 	Instigator = PawnInstigator;
 
 
-	switch ( SoundTriggerNoiseType )
+	switch (SoundTriggerNoiseType)
 	{
 		case ST_UseNoiseRadiusOnly : 
 
@@ -55,17 +55,17 @@ function Timer()
 
 	// for UseExistingFootstepInfo and UseNewFootstepInfo -- mirror surface noise usage in DareAudioSubsystem.cpp
 
-	if ( Instigator.bIsCrouched )
+	if (Instigator.bIsCrouched)
 		Radius = FootstepNoise.CrouchWalkRadius + ((FootstepNoise.CrouchJogRadius - FootstepNoise.CrouchWalkRadius) * PawnInstigator.SoundWalkingRatio);
 	else
 		Radius = FootstepNoise.WalkRadius + ((FootstepNoise.JogRadius - FootstepNoise.WalkRadius) * PawnInstigator.SoundWalkingRatio);
 
-	if ( PawnInstigator.SoundWalkingRatio <= 0.65f )
+	if (PawnInstigator.SoundWalkingRatio <= 0.65f)
 		PawnInstigator.MakeNoise(Radius, NOISE_LightFootstep);
 	else
 		PawnInstigator.MakeNoise(Radius, NOISE_HeavyFootstep);
 
-	//log("calculated radius : " $ Radius );
+	//log("calculated radius : " $ Radius);
 }
 
 
@@ -84,26 +84,26 @@ function Touch(actor Other)
 	//cast the actor in Pawn
 	P = Pawn(Other);
 
-	if(P != None)
+	if (P != None)
 	{
-		if( (P.controller.bIsPlayer && !( bQuietWhenCrouched && P.bIsCrouched )) || ( NPCTrigger && P.controller.IsA('EAIController') ) )
+		if ((P.controller.bIsPlayer && !(bQuietWhenCrouched && P.bIsCrouched)) || (NPCTrigger && P.controller.IsA('EAIController')))
 		{
 			// make sure not touching through wall
-			if ( Trace( HitLocation, HitNormal, Other.Location, Location, true) == Other )
+			if (Trace(HitLocation, HitNormal, Other.Location, Location, true) == Other)
 			{
-				if(!(bAlreadyVisited && bTriggerOnlyOnce))
+				if (!(bAlreadyVisited && bTriggerOnlyOnce))
 				{
 					if (!IsPlayingAnyActor(SoundEvent))
 					{
-						bAlreadyVisited=true;
+						bAlreadyVisited = true;
 						PlaySound(SoundEvent, SoundType);
 
 						//send AI sound
-						if(bMakeAINoise)
+						if (bMakeAINoise)
 						{
-							PawnInstigator=P;
+							PawnInstigator = P;
 							SoundDuration = GetSoundDuration(SoundEvent);
-							if ( SoundDuration == -1 )
+							if (SoundDuration == -1)
 								SetTimer(0.1f, false);
 							else
 								SetTimer(SoundDuration, false);

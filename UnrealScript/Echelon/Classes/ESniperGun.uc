@@ -27,12 +27,12 @@ function CheckShellCase();
 
 function UpdateSniperNoise(float DeltaTime)
 {
-	if(bSniperMode)
+	if (bSniperMode)
 	{
 		SniperNoisedRotation = Controller.Rotation;
-		if(Sn.Update(DeltaTime, EPlayerController(Controller)))
+		if (Sn.Update(DeltaTime, EPlayerController(Controller)))
 		{
-			if(!WeaponReticle.IsInState('s_Blinking'))
+			if (!WeaponReticle.IsInState('s_Blinking'))
 				WeaponReticle.GotoState('s_Blinking');
 		}
 		else
@@ -43,22 +43,22 @@ function UpdateSniperNoise(float DeltaTime)
 	else
 	{
 		// 2.0 is safety delay before reseting
-		if(	Sn != None &&
+		if (Sn != None &&
 			(LastSniperModeTime + 2.0) < Level.TimeSeconds)
 		{
 			Sn.ResetFatigue();
 			LastSniperModeTime = 1000000.0;
 		}
-		if(WeaponReticle != None && WeaponReticle.IsInState('s_Blinking'))
+		if (WeaponReticle != None && WeaponReticle.IsInState('s_Blinking'))
 			WeaponReticle.GotoState('s_Selected');
 
-		if(	Sn != None &&
-			LastSniperModeTime < Level.TimeSeconds )
+		if (Sn != None &&
+			LastSniperModeTime < Level.TimeSeconds)
 		{
-			if ( EPlayerController(Controller).Pawn.IsPlaying(Sound'FisherVoice.Play_Sq_FisherHeartBeat') )
+			if (EPlayerController(Controller).Pawn.IsPlaying(Sound'FisherVoice.Play_Sq_FisherHeartBeat'))
 				EPlayerController(Controller).Pawn.PlaySound(Sound'FisherVoice.Stop_Sq_FisherHeartBeat', SLOT_SFX);
 
-			if ( EPlayerController(Controller).m_holdingBreath )
+			if (EPlayerController(Controller).m_holdingBreath)
 				EPlayerController(Controller).m_holdingBreath = false;
 		}
 	}
@@ -74,15 +74,15 @@ state s_Selected
 	function BeginState()
 	{
 		Super.BeginState();
-		if(Sn == None && Controller.bIsPlayer)
+		if (Sn == None && Controller.bIsPlayer)
 		{
 			Sn = spawn(class'ESniperNoise', self);
-			if( Sn == None )
+			if (Sn == None)
 				Log("ERROR: SniperNoise could not be spawned for"@self);
 		}
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
 		Super.Tick(DeltaTime);
 		UpdateSniperNoise(DeltaTime);
@@ -95,11 +95,11 @@ state s_Firing
 	function BeginState()
 	{
 		Super.BeginState();
-		if(bSniperMode)
+		if (bSniperMode)
 			Sn.Recoil(EPlayerController(Controller));
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
 		Super.Tick(DeltaTime);
 		UpdateSniperNoise(DeltaTime);
@@ -109,7 +109,7 @@ state s_Firing
 
 state s_Reloading
 {
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
 		Super.Tick(DeltaTime);
 		CheckShellCase();
@@ -122,7 +122,7 @@ state s_Reloading
 //------------------------------------------------------------------------
 event Vector GetFireEnd()
 {
-	if(bSniperMode)
+	if (bSniperMode)
 	{
 		return GetFireStart() + (vect(1, 0, 0) >> SniperNoisedRotation) * ShootingRange;
 	}
@@ -130,19 +130,19 @@ event Vector GetFireEnd()
 		return Super.GetFireEnd();
 }
 
-function Vector GetFireDirection( Vector ShotDirection )
+function Vector GetFireDirection(Vector ShotDirection)
 {
-	if( bSniperMode )
+	if (bSniperMode)
 		return Vector(SniperNoisedRotation);
 	else
 		return Super.GetFireDirection(ShotDirection);
 }
 
 /* Joshua - Replacing with ZoomIn and ZoomOut functions like SCPT
-function Zoom( optional bool bInit )
+function Zoom(optional bool bInit)
 {
 	// nothing to do if only one zoom
-	if( FOVIndex < FOVs.Length - 1 && !bInit )
+	if (FOVIndex < FOVs.Length - 1 && !bInit)
 	{
 		FOVIndex++;
 	}
@@ -150,7 +150,7 @@ function Zoom( optional bool bInit )
 		FOVIndex = 0;
 
 	// modify vision fov
-	if( Controller != None && Controller.bIsPlayer )
+	if (Controller != None && Controller.bIsPlayer)
 	{
 		// Changing directly zoom might mess up cinematic camera.
 		EPlayerController(Controller).SetCameraFOV(Controller, GetZoom());
@@ -158,7 +158,7 @@ function Zoom( optional bool bInit )
 }
  */
 
-function ZoomIn( optional bool bInit )
+function ZoomIn(optional bool bInit)
 {
     local float factor;
     local EPlayerController EPC;
@@ -167,22 +167,22 @@ function ZoomIn( optional bool bInit )
     EPC = EPlayerController(Controller);
 	oldFOVIndex = FOVIndex;
     
-    if(bInit)
+    if (bInit)
     {
-        if(EPC != None && !EPC.bF2000ZoomLevels)
+        if (EPC != None && !EPC.bF2000ZoomLevels)
             FOVIndex = FOVs.Length - 1;
         else
             FOVIndex = 0;
     }
     else
     {
-        if(EPC != None && !EPC.bF2000ZoomLevels)
+        if (EPC != None && !EPC.bF2000ZoomLevels)
             FOVIndex = FOVs.Length - 1;
-        else if(FOVIndex < FOVs.Length - 1)
+        else if (FOVIndex < FOVs.Length - 1)
             FOVIndex++;
     }
 
-    if(Controller != None && Controller.bIsPlayer)
+    if (Controller != None && Controller.bIsPlayer)
     {
         EPC.SetCameraFOV(Controller, GetZoom());
         
@@ -203,15 +203,15 @@ function ZoomOut()
 	oldFOVIndex = FOVIndex;
     
     // If bF2000ZoomLevels is false, don't allow zooming out
-    if(EPC != None && !EPC.bF2000ZoomLevels)
+    if (EPC != None && !EPC.bF2000ZoomLevels)
         return;
         
-    if(FOVIndex <= 0)
+    if (FOVIndex <= 0)
         return;
 
     FOVIndex--;
 
-    if(Controller != None && Controller.bIsPlayer)
+    if (Controller != None && Controller.bIsPlayer)
     {
         EPC.SetCameraFOV(Controller, GetZoom());
 
@@ -225,7 +225,7 @@ function ZoomOut()
 // Joshua - Validate zoom level if zoom levels were disabled while in-game
 function ValidateZoomLevel()
 {
-    if(!EPlayerController(Controller).bF2000ZoomLevels && FOVIndex != FOVs.Length - 1)
+    if (!EPlayerController(Controller).bF2000ZoomLevels && FOVIndex != FOVs.Length - 1)
     {
         FOVIndex = FOVs.Length - 1;
     }
@@ -236,14 +236,14 @@ function float GetZoom()
 	return FOVs[FOVIndex];
 }
 
-function SetSniperMode( bool bIsSniping )
+function SetSniperMode(bool bIsSniping)
 {
 	bSniperMode = bIsSniping;
 	
 	// if in sniper mode, allow only single fire
-	if( bSniperMode )
+	if (bSniperMode)
 	{
-		if ( IsPlaying(FireAutomaticSound) )
+		if (IsPlaying(FireAutomaticSound))
 			PlaySound(FireAutomaticEndSound, SLOT_SFX);
 
 		GotoState('s_Selected');
@@ -255,13 +255,13 @@ function SetSniperMode( bool bIsSniping )
 		//Zoom(true);
 		ZoomIn(true); // Joshua - Replacing with ZoomIn and ZoomOut functions like SCPT
 
-		if( Controller.bIsPlayer )
+		if (Controller.bIsPlayer)
 			EPlayerController(Controller).iRenderMask = 1;
 	}
-	else if( Controller.bIsPlayer )
+	else if (Controller.bIsPlayer)
 	{
 		// Joshua - Switch back to previous RoF when leaving sniper mode
-		if(	eROFMode_old != eROFMode )
+		if (eROFMode_old != eROFMode)
 		{
 			eROFMode = eROFMode_old;
 		}

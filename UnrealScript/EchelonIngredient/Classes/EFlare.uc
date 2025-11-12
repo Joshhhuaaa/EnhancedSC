@@ -10,9 +10,9 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 
 	// manage quantity
-	if( Quantity == 1 )
+	if (Quantity == 1)
 		SetStaticMesh(StaticMesh'EMeshIngredient.Item.Flare');
-	else if( Quantity <= 5 )
+	else if (Quantity <= 5)
 		SetStaticMesh(StaticMesh'EMeshIngredient.Item.FlarePack_5');
 	else
 		SetStaticMesh(StaticMesh'EMeshIngredient.Item.FlarePack_10');
@@ -27,7 +27,7 @@ function PostBeginPlay()
 	HowToUseMe  = "FlareHowToUseMe";
 }
 
-function bool NotifyPickup( Controller Instigator )
+function bool NotifyPickup(Controller Instigator)
 {
 	// Try destroying Flarelight upon pickup if it exists
 	EndEvent();
@@ -36,7 +36,7 @@ function bool NotifyPickup( Controller Instigator )
 
 function EndEvent()
 {
-	if( FlareLight == None )
+	if (FlareLight == None)
 		return;
 
 	FlareLight.Kill();
@@ -52,7 +52,7 @@ state s_Selected
 	{
 		Super.Use();
 
-		if( BurnedUp )
+		if (BurnedUp)
 			return;
 
 		FlareLight = spawn(class'EFlareParticle', self);

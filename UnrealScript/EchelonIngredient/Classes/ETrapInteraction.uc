@@ -7,7 +7,7 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 
 	Trap = ETrapMover(Owner);
-	if( Trap == None )
+	if (Trap == None)
 		Log(self$" ERROR: ETrapInteraction owner is not a ETrapMover.");
 
 	// Force opening time to fit Key Pitch .. ideal is Key1 pitch = -20934 & Time == 1.66f
@@ -29,7 +29,7 @@ function string	GetDescription()
 function InitInteract(Controller Instigator)
 {
 	Instigator.Interaction = self;
-	if(Instigator.GetStateName() == 's_NarrowLadder')
+	if (Instigator.GetStateName() == 's_NarrowLadder')
 		Instigator.GotoState(, 'OpenTrap');
 	else
 		Instigator.GotoState('s_OpenWindow', 'Trap');
@@ -40,11 +40,11 @@ function Interact(Controller Instigator)
 	Trap.Trigger(Instigator.Pawn, Instigator.Pawn);
 }
 
-function PostInteract( Controller Instigator )
+function PostInteract(Controller Instigator)
 {
 	Instigator.Interaction = None;
 
-	if( Trap.bTriggerOnceOnly )
+	if (Trap.bTriggerOnceOnly)
 		Destroy();
 }
 
@@ -54,7 +54,7 @@ function SetInteractLocation(Pawn InteractPawn)
 	local EPawn InteractEPawn;
 
 	InteractEPawn = EPawn(InteractPawn);
-	if(InteractEPawn != none)
+	if (InteractEPawn != none)
 	{
 		MoveRot.Yaw	= Owner.Rotation.Yaw;
 		

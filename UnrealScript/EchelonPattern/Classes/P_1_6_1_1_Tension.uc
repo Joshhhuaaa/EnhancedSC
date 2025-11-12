@@ -13,9 +13,9 @@ class P_1_6_1_1_Tension extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -32,21 +32,21 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz18')
+        if (P.name == 'spetsnaz18')
             Characters[1] = P.controller;
-        if(P.name == 'EAleksee0')
+        if (P.name == 'EAleksee0')
             Characters[2] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'StaticMeshActor128')
+        if (A.name == 'StaticMeshActor128')
             SoundActors[0] = A;
-        if(A.name == 'StaticMeshActor919')
+        if (A.name == 'StaticMeshActor919')
             SoundActors[1] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }
@@ -67,7 +67,7 @@ MilestoneTension:
 CarryOn:
     Log("CarryOn");
     ToggleGroupAI(TRUE, 'LoneTense', 'UNUSED_GROUP_TAG__', 'UNUSED_GROUP_TAG__', 'UNUSED_GROUP_TAG__', 'UNUSED_GROUP_TAG__', 'UNUSED_GROUP_TAG__');
-    JumpRandom('CarryOnA', 0.50, 'CarryOnB', 1.00, , , , , , ); 
+    JumpRandom('CarryOnA', 0.50, 'CarryOnB', 1.00, , , , , ,); 
     End();
 CarryOnA:
     Log("CarryOnA");

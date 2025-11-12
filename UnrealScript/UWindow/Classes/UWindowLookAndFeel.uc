@@ -92,16 +92,16 @@ var() float		Pulldown_TextBorder;
 
 function Texture GetTexture(UWindowFramedWindow W)
 {
-	if(W.bStatusBar)
+	if (W.bStatusBar)
 	{
-		if(W.IsActive())
+		if (W.IsActive())
 			return ActiveS;
 		else
 			return InactiveS;
 	}
 	else
 	{
-		if(W.IsActive())
+		if (W.IsActive())
 			return Active;
 		else
 			return Inactive;

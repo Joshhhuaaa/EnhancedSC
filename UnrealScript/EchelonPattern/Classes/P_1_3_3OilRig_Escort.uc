@@ -50,9 +50,9 @@ var int WhatWasThat;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('GameOverMan');
@@ -93,23 +93,23 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMercenaryTechnician0')
+        if (P.name == 'EMercenaryTechnician0')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianSoldier0')
+        if (P.name == 'EGeorgianSoldier0')
             Characters[2] = P.controller;
-        if(P.name == 'EGeorgianSoldier1')
+        if (P.name == 'EGeorgianSoldier1')
             Characters[3] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'ESoundTrigger24')
+        if (A.name == 'ESoundTrigger24')
             SoundActors[0] = A;
-        if(A.name == 'ESoundTrigger27')
+        if (A.name == 'ESoundTrigger27')
             SoundActors[1] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     bHubDoor1Opened=0;
@@ -540,7 +540,7 @@ WhatWasThat:
     SendPatternEvent('HOSERS','EscortTimer');
     ePawn(Characters[3].Pawn).Bark_Type = BARK_HeardFoot;
     Talk(ePawn(Characters[3].Pawn).Sounds_Barks, 3, 0, false);
-    JumpRandom('TierOne', 0.50, 'TierTwo', 1.00, , , , , , ); 
+    JumpRandom('TierOne', 0.50, 'TierTwo', 1.00, , , , , ,); 
     End();
 TierOne:
     Log("WhatWasThat Stop Randomizer Tier 1.");

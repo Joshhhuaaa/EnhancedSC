@@ -11,9 +11,9 @@ class P_4_2_2_Abt_InitGoal extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -32,7 +32,7 @@ function InitPattern()
     ForEach AllActors(class'EVolume', V)
     {
         // Joshua - Disabling the volume after it triggers once, as the player could infinitely retrigger it to add the same objective
-        if(V.name == 'EVolume9')
+        if (V.name == 'EVolume9')
             V.bTriggerOnlyOnce = true;
     }
 
@@ -41,11 +41,11 @@ function InitPattern()
     {
         ForEach DynamicActors(class'Pawn', P)
         {
-            if(P.name == 'EGeorgianSoldier23' || P.name == 'EGeorgianSoldier25' || P.name == 'EGeorgianSoldier27')
+            if (P.name == 'EGeorgianSoldier23' || P.name == 'EGeorgianSoldier25' || P.name == 'EGeorgianSoldier27')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.GESoldier.GESoldierA", class'Texture'));
             }
-            if(P.name == 'EGeorgianSoldier29')
+            if (P.name == 'EGeorgianSoldier29')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.GESoldier.GESoldierA", class'Texture'));
                 EPawn(P).Hat = None;
@@ -62,7 +62,7 @@ function InitPattern()
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

@@ -14,9 +14,9 @@ var int InPosition;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('Ditch');
@@ -62,13 +62,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianSoldier17')
+        if (P.name == 'EGeorgianSoldier17')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianSoldier5')
+        if (P.name == 'EGeorgianSoldier5')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     InPosition=1;

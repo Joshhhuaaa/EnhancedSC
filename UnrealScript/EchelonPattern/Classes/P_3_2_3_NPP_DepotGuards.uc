@@ -11,9 +11,9 @@ class P_3_2_3_NPP_DepotGuards extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,17 +29,17 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EFalseRussianSoldier1')
+        if (P.name == 'EFalseRussianSoldier1')
             Characters[1] = P.controller;
-        if(P.name == 'EFalseRussianSoldier2')
+        if (P.name == 'EFalseRussianSoldier2')
             Characters[2] = P.controller;
-        if(P.name == 'EFalseRussianSoldier3')
+        if (P.name == 'EFalseRussianSoldier3')
             Characters[3] = P.controller;
-        if(P.name == 'EFalseRussianSoldier0')
+        if (P.name == 'EFalseRussianSoldier0')
             Characters[4] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

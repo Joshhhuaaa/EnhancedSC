@@ -16,9 +16,9 @@ var int TalkTwice;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -34,11 +34,11 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ECIABureaucrat0')
+        if (P.name == 'ECIABureaucrat0')
             Characters[1] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     TalkOnce=0;
@@ -101,7 +101,7 @@ TalkThree:
     End();
 LastTalk:
     Log("LastTalk");
-    JumpRandom('lasttalkone', 0.50, 'lasttalktwo', 1.00, , , , , , ); 
+    JumpRandom('lasttalkone', 0.50, 'lasttalktwo', 1.00, , , , , ,); 
     End();
 lasttalkone:
     Log("lasttalkone");

@@ -16,9 +16,9 @@ var int SecondPartAlreadyTriggered;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -34,20 +34,20 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMercenaryTechnician10')
+        if (P.name == 'EMercenaryTechnician10')
             Characters[1] = P.controller;
-        if(P.name == 'EMafiaMuscle6')
+        if (P.name == 'EMafiaMuscle6')
             Characters[2] = P.controller;
-        if(P.name == 'EMafiaMuscle7')
+        if (P.name == 'EMafiaMuscle7')
             Characters[3] = P.controller;
-        if(P.name == 'EMafiaMuscle0')
+        if (P.name == 'EMafiaMuscle0')
         {
             Characters[4] = P.controller;
             EAIController(Characters[4]).bAllowKnockout = true;
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     FirstPartAlreadyTriggered=0;

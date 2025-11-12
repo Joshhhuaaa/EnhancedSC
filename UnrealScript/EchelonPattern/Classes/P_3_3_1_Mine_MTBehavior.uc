@@ -11,9 +11,9 @@ class P_3_3_1_Mine_MTBehavior extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('Death');
@@ -50,13 +50,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMercenaryTechnician0')
+        if (P.name == 'EMercenaryTechnician0')
             Characters[1] = P.controller;
-        if(P.name == 'ELambert1')
+        if (P.name == 'ELambert1')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }
@@ -96,7 +96,7 @@ RandomStart:
     ResetGoals(1);
     Goal_Set(1,GOAL_Action,9,,'SnowEvadeAAA','SnowEvadeAAA','TopMine1','CiggStNmEd0',FALSE,,MOVE_WalkNormal,,MOVE_WalkNormal);
     WaitForGoal(1,GOAL_Action,);
-    JumpRandom('RandomStart', 0.50, 'RandomEnd', 1.00, , , , , , ); 
+    JumpRandom('RandomStart', 0.50, 'RandomEnd', 1.00, , , , , ,); 
 RandomEnd:
     Goal_Default(1,GOAL_Patrol,9,,,,'TopMine1',,FALSE,,MOVE_WalkNormal,,MOVE_WalkNormal);
     End();

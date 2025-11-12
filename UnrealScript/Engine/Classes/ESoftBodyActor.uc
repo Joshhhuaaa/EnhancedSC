@@ -37,9 +37,9 @@ native(1137) final function SBBulletHit(vector Momentum);
 native(1138) final function SBExplosionHit(vector Center, vector Momentum);
 native(1164) final function RemoveAttach(actor attach);
 
-event TakeDamage( int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag )
+event TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag)
 {
-	if(DamageType == class'Crushed')
+	if (DamageType == class'Crushed')
 		SBExplosionHit(HitLocation, Momentum);
 	else
 		SBBulletHit(Momentum);

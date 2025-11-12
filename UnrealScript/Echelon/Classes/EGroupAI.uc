@@ -104,7 +104,7 @@ function ResetGrenadeTimer()
 //------------------------------------------------------------------------
 function PostBeginPlay()
 {
-	if(ScriptedPatternClass != None)
+	if (ScriptedPatternClass != None)
 	{	
 		//create the scripted pattern / made by the Pattern Editor
 		ScriptedPattern	= Spawn(ScriptedPatternClass, self);
@@ -135,9 +135,9 @@ function AddAIMember(EAIController _AI)
 
 	Node = AIMembers.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
-		if(EAIController(Node.Data) == _AI )
+		if (EAIController(Node.Data) == _AI)
 		{
 			bFound = true;
 		}
@@ -145,7 +145,7 @@ function AddAIMember(EAIController _AI)
 		Node = Node.NextNode;
 	}
 
-	if ( !bFound )
+	if (!bFound)
 	{
 		//	log("NPC: "$_AI$" added to group: "$self);
 		AIMembers.InsertAtEnd(_AI);
@@ -161,9 +161,9 @@ function AddAIMember(EAIController _AI)
 //------------------------------------------------------------------------
 function RequestPatternChange(class<EPattern> PatternClass, bool EventEx)
 {
-	bDestroyScriptedEventAfterEnd=true;
+	bDestroyScriptedEventAfterEnd = true;
 	
-	if(ScriptedPattern != None)
+	if (ScriptedPattern != None)
 	{
 		ScriptedPattern.StopPattern();
 		ScriptedPattern.Destroy();
@@ -173,7 +173,7 @@ function RequestPatternChange(class<EPattern> PatternClass, bool EventEx)
 	ScriptedPattern	= spawn(PatternClass,self);
 
 	//set the flag
-	ScriptedPattern.bEventExclusivity=EventEx;
+	ScriptedPattern.bEventExclusivity = EventEx;
 
 	ScriptedPattern.Assign(AIMembers,None);
 	ScriptedPattern.StartPattern();
@@ -194,11 +194,11 @@ function bool CheckDefaultPatternState()
 	//Init default patterns
 	Node = AIMembers.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
 		C = EAIController(Node.Data);
 
-		if(C.Pattern.GetStateName() != 'Idle')
+		if (C.Pattern.GetStateName() != 'Idle')
 			return false;
 
 		Node = Node.NextNode;
@@ -221,11 +221,11 @@ function bool IsAMemberInAttack()
 	//Init default patterns
 	Node = AIMembers.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
 		C = EAIController(Node.Data);
 
-		if((C != None) && (C.Pattern != None) && (C.Pattern.GetStateName() == 'Attack'))
+		if ((C != None) && (C.Pattern != None) && (C.Pattern.GetStateName() == 'Attack'))
         {
 			return true;
         }
@@ -250,7 +250,7 @@ function SetDefaultPattern()
 	//Init default patterns
 	Node = AIMembers.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
 		C = EAIController(Node.Data);
 		if (C.Pattern.GetStateName() != 'Idle')
@@ -258,7 +258,7 @@ function SetDefaultPattern()
 			C.Pattern.bDontResetMusic = true;
 		}
 		C.Pattern.GotoState('Idle');
-		C.Pattern.bDisableMessages=false;
+		C.Pattern.bDisableMessages = false;
 		C.Pattern.ResetGoals(1);
 
 		Node = Node.NextNode;
@@ -274,13 +274,13 @@ function SetDefaultPattern()
 //------------------------------------------------------------------------
 event SendJumpEvent(name LabelName,bool bAffectLastZone, bool bForceJump)
 {
-	if(ScriptedPattern == None)
+	if (ScriptedPattern == None)
 	{
 		//check all the patterns of members of the group are in Idle state
-		if(CheckDefaultPatternState())
+		if (CheckDefaultPatternState())
 		{
 			//check if we can spawn the pattern class again
-			if(ScriptedPatternClass != None)
+			if (ScriptedPatternClass != None)
 			{	
 				//create the scripted pattern / made by the Pattern Editor
 				ScriptedPattern	= Spawn(ScriptedPatternClass, self);
@@ -296,9 +296,9 @@ event SendJumpEvent(name LabelName,bool bAffectLastZone, bool bForceJump)
 	}
 
 	// Check if we have a scripted pattern
-	if(ScriptedPattern != None)
+	if (ScriptedPattern != None)
 	{
-		if(bAffectLastZone)
+		if (bAffectLastZone)
 			ScriptedPattern.LastZoneTouched = LabelName;
        
         if ((!ScriptedPattern.bDisableEventTrigger) || (bForceJump))
@@ -345,7 +345,7 @@ function ResetGoals()
 
 	Node = AIMembers.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
 		EAIController(Node.Data).LastGoalStatus = -1;
 		EAIController(Node.Data).LastGoalType = GOAL_TEMP_2;
@@ -368,9 +368,9 @@ event bool PlayerIsVisible()
 
 	Node = AIMembers.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
-		if(EAIController(Node.Data).bPlayerSeen)
+		if (EAIController(Node.Data).bPlayerSeen)
 			return true;
 
 		Node = Node.NextNode;
@@ -391,9 +391,9 @@ function bool CheckLastKnownPlayerTime(float DeltaTime)
 
 	Node = AIMembers.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
-		if( (Level.TimeSeconds-EAIController(Node.Data).LastKnownPlayerTime) <= DeltaTime)
+		if ((Level.TimeSeconds - EAIController(Node.Data).LastKnownPlayerTime) <= DeltaTime)
 		{
 			return true;
 		}
@@ -412,9 +412,9 @@ event GetMostRecentPlayerInfo(out float BestTime, out vector PlayerPos)
 	BestTime  = EAIController(Node.Data).LastKnownPlayerTime;
 	PlayerPos = EAIController(Node.Data).LastKnownPlayerLocation;
 
-	while(Node != None)
+	while (Node != None)
 	{
-		if( EAIController(Node.Data).LastKnownPlayerTime > BestTime )
+		if (EAIController(Node.Data).LastKnownPlayerTime > BestTime)
 		{
 			BestTime = EAIController(Node.Data).LastKnownPlayerTime;
 			PlayerPos = EAIController(Node.Data).LastKnownPlayerLocation;
@@ -436,10 +436,10 @@ function bool PlayerHasBeenSeen()
 
 	Node = AIMembers.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
-		if( (EAIController(Node.Data).TimePlayerFirstSeen != 0) &&
-			(EAIController(Node.Data).TimePlayerFirstSeen < Level.TimeSeconds ) )
+		if ((EAIController(Node.Data).TimePlayerFirstSeen != 0) &&
+			(EAIController(Node.Data).TimePlayerFirstSeen < Level.TimeSeconds))
 		{
 			return true;
 		}
@@ -465,21 +465,21 @@ event EAIController GetClosestMember(vector _location, optional actor IgnoredAct
 
 	Node = AIMembers.FirstNode;
 	AI = EAIController(Node.Data);
-	MinDist = VSize(AI.epawn.location - _location);
+	MinDist = VSize(AI.ePawn.Location - _location);
 
-	while(Node != None)
+	while (Node != None)
 	{
 
-		if(stopfiring)
+		if (stopfiring)
 		{
-			EAIController(Node.Data).bFiring=false;
+			EAIController(Node.Data).bFiring = false;
 		}
 
-		if( VSize(EAIController(Node.Data).epawn.location - _location) < MinDist)
+		if (VSize(EAIController(Node.Data).ePawn.Location - _location) < MinDist)
 		{
-			if(IgnoredActor != Node.Data)
+			if (IgnoredActor != Node.Data)
 			{
-				MinDist=VSize(EAIController(Node.Data).epawn.location - _location);
+				MinDist = VSize(EAIController(Node.Data).ePawn.Location - _location);
 				AI = EAIController(Node.Data);
 			}
 		}
@@ -503,9 +503,9 @@ function bool IsAMember(Actor a)
 
 	Node = AIMembers.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
-		if(Actor(Node.Data) == a)
+		if (Actor(Node.Data) == a)
 			return true;
 
 		Node = Node.NextNode;
@@ -525,12 +525,12 @@ function bool AllGroupLostPlayer(EAIController Instigator)
 	local EListNode Node;
 	local int i;
 
-	i=0;
+	i = 0;
 	Node = AIMembers.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
-		if( (EAIController(Node.Data).bPlayerSeen) && (Instigator != Actor(Node.Data)) )
+		if ((EAIController(Node.Data).bPlayerSeen) && (Instigator != Actor(Node.Data)))
 		{
 			i++;
 		}
@@ -538,7 +538,7 @@ function bool AllGroupLostPlayer(EAIController Instigator)
 		Node = Node.NextNode;
 	}
 
-	if(i == 0)
+	if (i == 0)
 		return true;
 	else
 		return false;
@@ -556,10 +556,10 @@ function SendEnterZone()
 	local EListNode Node;
 	local int i;
 
-	i=0;
+	i = 0;
 	Node = AIMembers.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
 		//EAIController(Node.Data).Pattern.TriggerEvent.set(Event);
 		//EAIController(Node.Data).Pattern.EventCallBack(AI.Pattern.TriggerEvent,AI);
@@ -576,16 +576,16 @@ function ProcessGroupLost()
 	//local EAIEvent Event;
 	local EAIController C,AI;
 
-	i=0;
+	i = 0;
 	Node = AIMembers.FirstNode;
 
 	//log("################################# GROUP LOST ##################################");
 
 	//send the closest member
-	AI = GetClosestMember(EAIController(Node.Data).eGame.pPlayer.EPawn.location);
+	AI = GetClosestMember(EAIController(Node.Data).eGame.pPlayer.EPawn.Location);
 
 	//check if the character has a default pattern
-	if(AI.Pattern == None)
+	if (AI.Pattern == None)
 		return;
 
 	AI.AIEvent.Reset();
@@ -595,14 +595,14 @@ function ProcessGroupLost()
 	AI.Pattern.EventCallBack(AI.Pattern.TriggerEvent,AI);
 
 
-	while(Node != None)
+	while (Node != None)
 	{
 		C =  EAIController(Node.Data);
 
 		C.AIEvent.Reset();
 		C.AIEvent.EventType = AI_LOST_PLAYER_AFTER;
 
-		if( AI != C)
+		if (AI != C)
 		{
 			  C.Pattern.TriggerEvent.set(C.AIEvent);
 			  C.Pattern.EventCallBack(C.Pattern.TriggerEvent,C);
@@ -622,18 +622,18 @@ function Tick(float Delta)
 {
 	///////////////////////////////////////////////////
 	//Initialize default patterns during the first tick
-	if(!bInitPatterns)
+	if (!bInitPatterns)
 	{
 		InitPatterns();
-		bInitPatterns=true;
+		bInitPatterns = true;
 	}
 	//End of Init/////////////////////////////////////
 
-	if(bDestroyScriptedEventAfterEnd)
+	if (bDestroyScriptedEventAfterEnd)
 	{
-		if(ScriptedPattern != None)
+		if (ScriptedPattern != None)
 		{
-			if(!ScriptedPattern.bIsRunning)
+			if (!ScriptedPattern.bIsRunning)
 			{
 				//destroy the scripted pattern
 				ScriptedPattern.Destroy();
@@ -642,7 +642,7 @@ function Tick(float Delta)
 				ScriptedPattern	= None;
 
 				//reset the flag
-				bDestroyScriptedEventAfterEnd=false;
+				bDestroyScriptedEventAfterEnd = false;
 			}
 		}
 	}
@@ -651,9 +651,9 @@ function Tick(float Delta)
     VerifyCheckPoints(Delta);
 
 	//grenade timer
-	if(CurrentGrenadeTimer > 0)
+	if (CurrentGrenadeTimer > 0)
 	{
-		CurrentGrenadeTimer-=Delta;
+		CurrentGrenadeTimer -= Delta;
 	}
 }
 
@@ -666,7 +666,7 @@ function Tick(float Delta)
 function timer()
 {
 	//check to be sure that the group does'nt see the player
-	if((CurrentAlarm == None) && !PlayerIsVisible() && !CheckLastKnownPlayerTime(15.0f))
+	if ((CurrentAlarm == None) && !PlayerIsVisible() && !CheckLastKnownPlayerTime(15.0f))
 	{
 		//change psychological to default for every members
 		ChangeStates('s_default');
@@ -690,14 +690,14 @@ function ChangeStates(name State)
 
 	Node = AIMembers.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
 		AI = EAIController(Node.Data);
-		if ( AI != none && AI.Pawn != none && AI.Pawn.Health > 0 )
+		if (AI != none && AI.Pawn != none && AI.Pawn.Health > 0)
 		{
 			AI.GotoStateSafe(State);
 
-			if(State == 's_default')
+			if (State == 's_default')
 			{
 				AI.Pattern.GotoState('idle');
 				EchelonLevelInfo(Level).SendMusicRequest(0,false,AI.Pattern);
@@ -726,10 +726,10 @@ function ResetDefaultPatternStates()
 
 	Node = AIMembers.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
 		AI = EAIController(Node.Data);
-		if ( AI != none && AI.Pawn != none && AI.Pawn.Health > 0 )
+		if (AI != none && AI.Pawn != none && AI.Pawn.Health > 0)
 			AI.Pattern.GotoState('idle');
 		Node = Node.NextNode;
 	}
@@ -753,19 +753,19 @@ function StartAlarmBehavior(EAIEvent Event,optional bool bForceUpdatePos)
 	Node = AIMembers.FirstNode;
 
 	//set that an extern event was sent
-	bExternEventWasSent=true;
+	bExternEventWasSent = true;
 
-	while(Node != None)
+	while (Node != None)
 	{
-		if( !EAIController(Node.Data).bNotResponsive )
+		if (!EAIController(Node.Data).bNotResponsive)
 		{
-			if(bForceUpdatePos && (EchelonGameInfo(Level.Game).pPlayer.pawn != None))
+			if (bForceUpdatePos && (EchelonGameInfo(Level.Game).pPlayer.Pawn != None))
 			{
-				EAIController(Node.Data).UpdatePlayerLocation( EchelonGameInfo(Level.Game).pPlayer.pawn, false, true );
+				EAIController(Node.Data).UpdatePlayerLocation(EchelonGameInfo(Level.Game).pPlayer.Pawn, false, true);
 			}
 
-			EAIController(Node.Data).Pattern.bDisableMessages=false;
-			EAIController(Node.Data).Pattern.bRunningAlarm=false;
+			EAIController(Node.Data).Pattern.bDisableMessages = false;
+			EAIController(Node.Data).Pattern.bRunningAlarm = false;
 
 			EAIController(Node.Data).Pattern.TriggerEvent.set(Event);
 			//start the alarm behavior for the pattern of that member
@@ -788,15 +788,15 @@ function StopConversations()
 
 	Node = AIMembers.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
 		AI = EAIController(Node.Data);
-		if ( AI != none  && AI.epawn.Interaction != None )
+		if (AI != none  && AI.ePawn.Interaction != None)
 		{
-			if( ENpcZoneInteraction(AI.epawn.Interaction) != None )
+			if (ENpcZoneInteraction(AI.ePawn.Interaction) != None)
 			{
-				if(ENpcZoneInteraction(AI.epawn.Interaction).ConversationPattern != None)
-				   ENpcZoneInteraction(AI.epawn.Interaction).ConversationPattern.StopPattern(true);
+				if (ENpcZoneInteraction(AI.ePawn.Interaction).ConversationPattern != None)
+				   ENpcZoneInteraction(AI.ePawn.Interaction).ConversationPattern.StopPattern(true);
 			}
 		}
 
@@ -820,17 +820,17 @@ function StopConversations()
 // PRIMARY: The group will CHARGE at player position. Member's state = ALERT
 // SECONDARY: Member's state = ALERT
 //------------------------------------------------------------------------
-event AIAlarmCallBack( EAlarm A, EAIEvent Event, optional bool bForceUpdatePos )
+event AIAlarmCallBack(EAlarm A, EAIEvent Event, optional bool bForceUpdatePos)
 {
 
 	//check if a scripted pattern is running
-	if( ScriptedPattern != none )
+	if (ScriptedPattern != none)
 	{
 		//send back the alarm event to the pattern
 		ScriptedPattern.TriggerEvent.set(Event);
 		ScriptedPattern.EventCallBack(ScriptedPattern.TriggerEvent,None);
 
-		if(ScriptedPattern.bEventExclusivity)
+		if (ScriptedPattern.bEventExclusivity)
 			return;
 	}
 
@@ -840,43 +840,43 @@ event AIAlarmCallBack( EAlarm A, EAIEvent Event, optional bool bForceUpdatePos )
 	//be sure to kill the scripted pattern
 	EndScriptedPattern();
 
-	switch(Event.EventType)
+	switch (Event.EventType)
 	{
-	case AI_ALARM_ON_PRIMARY:
-		//start alert Pattern at ALARM label
-		CurrentAlarm=A;
-	    bGroupRunningForAlarm=false;
+		case AI_ALARM_ON_PRIMARY:
+			//start alert Pattern at ALARM label
+			CurrentAlarm = A;
+			bGroupRunningForAlarm = false;
 
-		//check to stop all conversations running
-		StopConversations();
+			//check to stop all conversations running
+			StopConversations();
 
-		//check to be sure that the group is not already attacking the player
-		if(!PlayerIsVisible())
-		{
-			//jump at the alarmBegin in members patterns
-			StartAlarmBehavior(Event,bForceUpdatePos);
-		}
+			//check to be sure that the group is not already attacking the player
+			if (!PlayerIsVisible())
+			{
+				//jump at the alarmBegin in members patterns
+				StartAlarmBehavior(Event,bForceUpdatePos);
+			}
 
-		bExternEventWasSent=true;
-		bIsPrimary=true;
-		break;
-	case AI_ALARM_ON_SECONDARY:
-		//change states to ALERT state for group members only
-		CurrentAlarm=A;
-		ChangeStates('s_Alert');
-		bIsPrimary=false;
-		break;
-	case AI_ALARM_UPDATE_POSITION:
-		break;
-	case AI_ALARM_OFF:
-		//reset the alert state for secondary groups after 30 seconds
-		CurrentAlarm=None;
+			bExternEventWasSent = true;
+			bIsPrimary = true;
+			break;
+		case AI_ALARM_ON_SECONDARY:
+			//change states to ALERT state for group members only
+			CurrentAlarm = A;
+			ChangeStates('s_Alert');
+			bIsPrimary = false;
+			break;
+		case AI_ALARM_UPDATE_POSITION:
+			break;
+		case AI_ALARM_OFF:
+			//reset the alert state for secondary groups after 30 seconds
+			CurrentAlarm = None;
 
-		if(!bIsPrimary)
-			SetTimer(30,false);
-		break;
-	default:
-		break;
+			if (!bIsPrimary)
+				SetTimer(30,false);
+			break;
+		default:
+			break;
 	}
 }
 
@@ -888,17 +888,17 @@ event AIAlarmCallBack( EAlarm A, EAIEvent Event, optional bool bForceUpdatePos )
 //------------------------------------------------------------------------
 function ProcessDead(EAIController Instigator)
 {
-	if(Instigator != None)
+	if (Instigator != None)
 	{
 	//remove that member from the group
 	AIMembers.Remove(Instigator);
 
 	//check if the NPC is dead
-		if( (Instigator.pawn != None) && (Instigator.pawn.Health <= 0) && (!Instigator.epawn.bKeepNPCAlive))
+		if ((Instigator.Pawn != None) && (Instigator.Pawn.Health <= 0) && (!Instigator.ePawn.bKeepNPCAlive))
 	{
 		//AI_DEAD
 		//destroy the default pattern
-		if(Instigator.Pattern != None)
+		if (Instigator.Pattern != None)
 			Instigator.Pattern.Destroy();
 
 	}
@@ -906,7 +906,7 @@ function ProcessDead(EAIController Instigator)
 	{
 		//AI_UNCONSCIOUS - AI_GRABBED
 		//reset the state of the default pattern
-		if(Instigator.Pattern != None)
+		if (Instigator.Pattern != None)
 			Instigator.Pattern.GotoState('idle');
 
 	}
@@ -929,7 +929,7 @@ function InitPatterns()
 	local EAIController	C;
 
 	//Check if the group is controlled by a scripted pattern
-	if(ScriptedPattern != none)
+	if (ScriptedPattern != none)
 	{
 		//ScriptedPattern.Assign(None,C);
 		ScriptedPattern.InitPattern();
@@ -938,14 +938,14 @@ function InitPatterns()
 	//Init default patterns
 	Node = AIMembers.FirstNode;
 
-	while(Node != None)
+	while (Node != None)
 	{
 		C = EAIController(Node.Data);
 
 		//spawn the default pattern - FBlais
-		C.Pattern = spawn(C.epawn.BasicPatternClass,self);
+		C.Pattern = spawn(C.ePawn.BasicPatternClass,self);
 
-		if(C.Pattern != None)
+		if (C.Pattern != None)
 		{
 			C.Pattern.Assign(None,C);
 			C.Pattern.InitPattern();
@@ -979,11 +979,11 @@ function VerifyCheckPoints(float Delta)
         {
             // We need to find a non-dead/non-unconscious co-group member to send AI_PATROL_TIMEOUT msg
             // TODO: when heartbeat code is code, leader or dispatcher should the one sending msg
-            for(oNode = AIMembers.FirstNode; oNode != None; oNode = oNode.NextNode)
+            for (oNode = AIMembers.FirstNode; oNode != None; oNode = oNode.NextNode)
             {
                 oController = EAIController(oNode.Data);
 
-                if(oController != None)
+                if (oController != None)
                 {
                     if (IsAMember(oController))
                     {
@@ -1030,7 +1030,7 @@ event AddOrUpdateCheckPoint(EAIController oController,  float fPatrolCheckPointT
     // Verify if we are updating the timer
     for (iCounter = 0; iCounter < arCheckPointTimers.Length; iCounter++)
     {
-        if(arCheckPointTimers[iCounter].oController == oController) 
+        if (arCheckPointTimers[iCounter].oController == oController) 
         {
             // Update timer
             arCheckPointTimers[iCounter].fPatrolCheckPointTimeOut = fPatrolCheckPointTimeOut;
@@ -1054,11 +1054,11 @@ event AddOrUpdateCheckPoint(EAIController oController,  float fPatrolCheckPointT
 //------------------------------------------------------------------------
 event EndScriptedPattern()
 {
-	if(ScriptedPattern != None)
+	if (ScriptedPattern != None)
 	{
         /*// MClarke : July 30th 2002
         // Reset Goals given by scripted pattern
-        if(ScriptedPattern.bIsRunning)
+        if (ScriptedPattern.bIsRunning)
         {
             ScriptedPattern.ResetGroupGoals();
         }*/
@@ -1067,15 +1067,15 @@ event EndScriptedPattern()
         ScriptedPattern.Close();
 		ScriptedPattern.End();
 
-		if(!bAlwaysKeepScriptedPattern)
+		if (!bAlwaysKeepScriptedPattern)
 		{
 
 			ScriptedPattern.Destroy();
-			ScriptedPattern=None;
+			ScriptedPattern = None;
 		}
 
 		// Reset the flag
-		bDestroyScriptedEventAfterEnd=false;
+		bDestroyScriptedEventAfterEnd = false;
 	}
 }
 
@@ -1087,14 +1087,14 @@ event EndScriptedPattern()
 //------------------------------------------------------------------------
 function checkInterrogation(EAIController Instigator, EAIEvent Event)
 {
-	switch(Event.EventType)
+	switch (Event.EventType)
 	{
 	case AI_SEE_PLAYER_SURPRISED:
 	case AI_SEE_PLAYER_ALERT:
     case AI_SEE_PLAYER_AGAIN:
 
 		//check if the player is grabbing a NPC		
-		if(((Instigator.eGame.pPlayer.GetStateName() == 'S_Grab') || (Instigator.eGame.pPlayer.GetStateName() == 'S_GrabTargeting'))
+		if (((Instigator.eGame.pPlayer.GetStateName() == 'S_Grab') || (Instigator.eGame.pPlayer.GetStateName() == 'S_GrabTargeting'))
             && (fSeeInterrogationTimer < (Level.TimeSeconds - 7.0f)))
 		{
             fSeeInterrogationTimer = Level.TimeSeconds;
@@ -1127,21 +1127,21 @@ event AIEventCallBack(EAIController Instigator, EAIEvent Event)
 	local EchelonLevelInfo LInfo;
 
 	//check for disabled AI
-	/*if(Instigator.epawn.bDisableAI && (Instigator.epawn.LastRenderTime < Level.TimeSeconds - 1.0f))
+	/*if (Instigator.ePawn.bDisableAI && (Instigator.ePawn.LastRenderTime < Level.TimeSeconds - 1.0f))
 	{
 		return;
 	}*/
 
 	//init the flag
-	SendToCallBack=false;
-	bForceInternEvent=false;
+	SendToCallBack = false;
+	bForceInternEvent = false;
 
 	//ignored changed actors added by one member of the group
-	if(Event.EventType == AI_SEE_CHANGED_ACTOR)
+	if (Event.EventType == AI_SEE_CHANGED_ACTOR)
 	{
 		//log("Event.EventTarget: "$Event.EventTarget$" Instigator: "$Event.EventTarget.Instigator$" Controller: "$Event.EventTarget.Instigator.controller);
 
-		if( IsAMember(Event.EventTarget.Instigator.controller) )
+		if (IsAMember(Event.EventTarget.Instigator.controller))
 		{
 			//log("ignored changed actors added by one member of the group");
 			return;
@@ -1152,7 +1152,7 @@ event AIEventCallBack(EAIController Instigator, EAIEvent Event)
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	// comment out to turn off ...
-	switch(Event.EventType)
+	switch (Event.EventType)
 	{
         case AI_NONE                        : S = "AI_NONE"; break;
         case AI_INVESTIGATE                 : S = "AI_INVESTIGATE"; break;
@@ -1214,23 +1214,23 @@ event AIEventCallBack(EAIController Instigator, EAIEvent Event)
         case AI_MASTER_DEAD                 : S = "AI_MASTER_DEAD"; break;              
 	}
 
-	if ( S == "" )
-		log("GROUPAI RECEIVING Callback:  " $ Event.EventType @ " from AICONTROLLER(Pawn) : " $ Instigator.pawn,,LPATTERN);
+	if (S == "")
+		log("GROUPAI RECEIVING Callback:  " $ Event.EventType @ " from AICONTROLLER(Pawn) : " $ Instigator.Pawn,,LPATTERN);
 	else
-		log("GROUPAI RECEIVING Callback:  " $ S @ " from AICONTROLLER(Pawn) : " $ Instigator.pawn,,LPATTERN);
+		log("GROUPAI RECEIVING Callback:  " $ S @ " from AICONTROLLER(Pawn) : " $ Instigator.Pawn,,LPATTERN);
 
 	//avoid greetings to break the scripted pattern
-	if( (Event.EventType == AI_SEE_NPC) && (ScriptedPattern != none) )
+	if ((Event.EventType == AI_SEE_NPC) && (ScriptedPattern != none))
 	{
 		return;
 	}
 
-	LInfo=EchelonLevelInfo(Level);
+	LInfo = EchelonLevelInfo(Level);
 
 	//send all events to the level pattern if there is one
-	if((LInfo!=None) && (LInfo.Pattern != None))
+	if ((LInfo != None) && (LInfo.Pattern != None))
 	{
-		if(!LInfo.Pattern.bInit)
+		if (!LInfo.Pattern.bInit)
 			LInfo.Pattern.InitPattern();
 
 		//Set the trigger character of the event
@@ -1245,17 +1245,17 @@ event AIEventCallBack(EAIController Instigator, EAIEvent Event)
 	checkInterrogation(Instigator,Event);
 
 	//check if we have to put back the member
-	if((Event.EventType == AI_REVIVED) || (Event.EventType == AI_RELEASED))
+	if ((Event.EventType == AI_REVIVED) || (Event.EventType == AI_RELEASED))
 	{
-		Instigator.Pattern.bDisableMessages=false;
+		Instigator.Pattern.bDisableMessages = false;
 		AddAIMember(Instigator);		
 	}
 
 	//check to be sure that the Instigator is a member of the group
-	if(!IsAMember(Instigator))
+	if (!IsAMember(Instigator))
 	{
 		//check if the Message is AI_DEAD and the NPC is already unconscious
-		if(Event.EventType != AI_DEAD)
+		if (Event.EventType != AI_DEAD)
 		{
 			log("Stimuli received from an Non-Member - Maybe Dead or Unconscious NPC");
 			return;
@@ -1266,7 +1266,7 @@ event AIEventCallBack(EAIController Instigator, EAIEvent Event)
 
 	////////////////////////////////////////////////////////////////////////////////
 	//check some specific cases
-	switch(Event.EventType)
+	switch (Event.EventType)
 	{
 		case AI_GOAL_COMPLETE:
 			UpdateGoalState(Instigator,1);
@@ -1279,26 +1279,26 @@ event AIEventCallBack(EAIController Instigator, EAIEvent Event)
 		case AI_DEAD:
 		case AI_UNCONSCIOUS:
 		case AI_GRABBED:
-			SendToCallBack=true;
+			SendToCallBack = true;
 			ProcessDead(Instigator);
 			break;
 		default:
-			SendToCallBack=true;
+			SendToCallBack = true;
 			break;
 	}
 
 	//some controller can be disconnected
-	if(!Instigator.Epawn.bSendAIEvents)
+	if (!Instigator.Epawn.bSendAIEvents)
 		return;
 
 	// call default pattern's reflex handling routine
-	if(Instigator.Pattern != None)
+	if (Instigator.Pattern != None)
 		Instigator.Pattern.ReflexCallback(Event);
 
 	///////////////////////////////////////////////////////////////////////////////////////
 	//Check if the instigator has a conversation associated
 	C = ENpcZoneInteraction(Instigator.Epawn.Interaction);
-	if( C != None && C.ConversationPattern != None && SendToCallBack )
+	if (C != None && C.ConversationPattern != None && SendToCallBack)
 	{
 		//send back the stimuli to the conversation pattern
 		C.ConversationPattern.EventCallBack(Event,Instigator);
@@ -1306,16 +1306,16 @@ event AIEventCallBack(EAIController Instigator, EAIEvent Event)
 
 	///////////////////////////////////////////////////////////////////////////////////////
 	//scripted event case
-	if(ScriptedPattern != none)
+	if (ScriptedPattern != none)
 	{
-		if(SendToCallBack)
+		if (SendToCallBack)
 		{
 			//Set the trigger character of the event
 			ScriptedPattern.TriggerCharacter = Instigator;
 
-			if(Event.EventType == AI_HEAR_SOMETHING)
+			if (Event.EventType == AI_HEAR_SOMETHING)
 			{
-				if(Event.EventNoiseType == NOISE_Ricochet)
+				if (Event.EventNoiseType == NOISE_Ricochet)
 				{
 					Event.EventType = AI_HEAR_RICOCHET;
 					ScriptedPattern.TriggerEvent.set(Event);
@@ -1330,66 +1330,66 @@ event AIEventCallBack(EAIController Instigator, EAIEvent Event)
 		}
 
 		//check if the pattern wants exclusivity
-		if( ScriptedPattern.bEventExclusivity )
+		if (ScriptedPattern.bEventExclusivity)
 		{
 			return;
 		}
 	}
 
 	//reset the flag if the player is seen
-	if(Instigator.bPlayerSeen)
+	if (Instigator.bPlayerSeen)
 	{
 		bLostPlayerSent = false;
 	}
 
 	//consider some barks as intern events
-	if(Event.EventType == AI_HEAR_SOMETHING)
+	if (Event.EventType == AI_HEAR_SOMETHING)
 	{
-		if((Event.EventNoiseType == NOISE_InfoBarkAware) || (Event.EventNoiseType == NOISE_InfoBarkAlert) ||
+		if ((Event.EventNoiseType == NOISE_InfoBarkAware) || (Event.EventNoiseType == NOISE_InfoBarkAlert) ||
 			(Event.EventNoiseType == NOISE_BackupBarkInvestigate) || (Event.EventNoiseType == NOISE_BackUpBarkAttack) 
 			|| (Event.EventNoiseType == NOISE_TakeCover))
 		{
-			bForceInternEvent=true;
+			bForceInternEvent = true;
 		}		
 	}
 
 	//check if we just received an INTERN event
-	if((Event.EventType > AI_INTERN_EVENTS) || bForceInternEvent)
+	if ((Event.EventType > AI_INTERN_EVENTS) || bForceInternEvent)
 	{
-		/*if(!bExternEventWasSent)
+		/*if (!bExternEventWasSent)
 			return;*/
 
-		if(SendToCallBack)
+		if (SendToCallBack)
 		{
-			if(Event.EventType == AI_PLAYER_DEAD)
+			if (Event.EventType == AI_PLAYER_DEAD)
 			{
-				if(bPlayerDeadSent)
+				if (bPlayerDeadSent)
 					return;
 
 				//be sure to send that message only one time for the group
 				bPlayerDeadSent = true;
 
 				//who's the nearest member from the player
-				AI = GetClosestMember(Instigator.eGame.pPlayer.EPawn.location,,true);
+				AI = GetClosestMember(Instigator.eGame.pPlayer.EPawn.Location,,true);
 
-				if(AI.Pattern != None)
+				if (AI.Pattern != None)
 				{
 					AI.Pattern.TriggerEvent.set(Event);
 					AI.Pattern.EventCallBack(AI.Pattern.TriggerEvent,AI);
 				}
 
 			}
-			else if(Event.EventType == AI_LOST_PLAYER)
+			else if (Event.EventType == AI_LOST_PLAYER)
 			{
 				//player lost choose attack point
 
-				if(!PlayerIsVisible())
+				if (!PlayerIsVisible())
 				{
 					ProcessGroupLost();
 				}
 				else
 				{
-					if(Instigator.Pattern != None)
+					if (Instigator.Pattern != None)
 					{
 						Instigator.Pattern.TriggerEvent.set(Event);
 						Instigator.Pattern.EventCallBack(Instigator.Pattern.TriggerEvent,Instigator);
@@ -1400,7 +1400,7 @@ event AIEventCallBack(EAIController Instigator, EAIEvent Event)
 			else
 			{
 				//just send back the event to the member pattern
-				if(Instigator.Pattern != None)
+				if (Instigator.Pattern != None)
 				{
 					Instigator.Pattern.TriggerEvent.set(Event);
 					Instigator.Pattern.EventCallBack(Instigator.Pattern.TriggerEvent,Instigator);
@@ -1411,26 +1411,26 @@ event AIEventCallBack(EAIController Instigator, EAIEvent Event)
 	else
 	{
 		//reset default pattern if it's the first
-		if(!bExternEventWasSent)
+		if (!bExternEventWasSent)
 		{
-			if((Instigator.Pattern != None) && (ScriptedPattern!=None))
+			if ((Instigator.Pattern != None) && (ScriptedPattern != None))
 			{
-				if(Instigator.Pattern.GetStateName() != 'Attack')
+				if (Instigator.Pattern.GetStateName() != 'Attack')
 					SetDefaultPattern();
 				else
 				{
-					if(Event.EventType >= AI_TAKE_DAMAGE)
+					if (Event.EventType >= AI_TAKE_DAMAGE)
 						SetDefaultPattern();
 					else
 					{
-						if((Event.EventType == AI_HEAR_SOMETHING) && (Event.EventNoiseType == NOISE_Ricochet))
+						if ((Event.EventType == AI_HEAR_SOMETHING) && (Event.EventNoiseType == NOISE_Ricochet))
 							SetDefaultPattern();
 					}
 				}
 			}
 		}
 
-		bExternEventWasSent=true;
+		bExternEventWasSent = true;
 
 		//the event is an EXTERN stimuli
 		E.EventType      = Event.EventType;

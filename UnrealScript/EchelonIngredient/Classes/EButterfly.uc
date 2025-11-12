@@ -11,12 +11,12 @@ auto state s_Butterlfying
 		AnimEnd(0);
 	}
 
-	function AnimEnd( int Channel )
+	function AnimEnd(int Channel)
 	{
-		if( bFly360 )
-			PlayAnim('360', 0.5f+FRand());
+		if (bFly360)
+			PlayAnim('360', 0.5f + FRand());
 		else
-			PlayAnim('180', 0.5f+FRand());
+			PlayAnim('180', 0.5f + FRand());
 	}
 }
 

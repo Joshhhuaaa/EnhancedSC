@@ -14,9 +14,9 @@ var int AlreadyCheckedHim;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('SomeoneDead');
@@ -44,13 +44,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ERussianCivilian19')
+        if (P.name == 'ERussianCivilian19')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianCop9')
+        if (P.name == 'EGeorgianCop9')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     AlreadyCheckedHim=0;

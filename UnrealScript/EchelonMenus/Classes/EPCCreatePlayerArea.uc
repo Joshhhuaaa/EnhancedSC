@@ -40,10 +40,10 @@ var Color                   m_TextColor;
 
 function Created()
 {
-    m_LPlayerName       = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_IXLabelPos, m_IPlayerNameYPos, m_ILabelWidth, m_ILabelHeight, self));
-    m_LDifficulty       = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_IXLabelPos, m_IDifficultyYPos, m_ILabelWidth, m_ILabelHeight, self));
+    m_LPlayerName       = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_IXLabelPos, m_IPlayerNameYPos, m_ILabelWidth, m_ILabelHeight, self));
+    m_LDifficulty       = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_IXLabelPos, m_IDifficultyYPos, m_ILabelWidth, m_ILabelHeight, self));
         
-    m_EPlayerName       = EPCEditControl(CreateWindow( class'EPCEditControl', m_LPlayerName.WinLeft + m_LPlayerName.WinWidth + m_IPlayerNameOffset, m_IPlayerNameYPos, m_IPlayerNameWidth, m_ILabelHeight, self));	
+    m_EPlayerName       = EPCEditControl(CreateWindow(class'EPCEditControl', m_LPlayerName.WinLeft + m_LPlayerName.WinWidth + m_IPlayerNameOffset, m_IPlayerNameYPos, m_IPlayerNameWidth, m_ILabelHeight, self));	
 
     m_EPlayerName.SetBorderColor(m_EditBorderColor);
     m_EPlayerName.SetEditTextColor(m_EditBorderColor);
@@ -51,15 +51,15 @@ function Created()
 	// Set Profile name lenght to a maximum of 17 character
     m_EPlayerName.SetMaxLength(17);
 
-    m_LDifficultyNormal = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_EPlayerName.WinLeft + m_IDifficultyXOffset, m_IDifficultyRadioYPos, m_ILabelWidth, m_ILabelHeight, self));
-    m_LDifficultyHard   = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_EPlayerName.WinLeft + m_IDifficultyXOffset, m_IDifficultyRadioYPos + m_IDifficultyYOffset, m_ILabelWidth, m_ILabelHeight, self));
-    m_LDifficultyElite   = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_EPlayerName.WinLeft + m_IDifficultyXOffset, m_IDifficultyRadioYPos + m_IDifficultyYOffset * 2, m_ILabelWidth, m_ILabelHeight, self));
+    m_LDifficultyNormal = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_EPlayerName.WinLeft + m_IDifficultyXOffset, m_IDifficultyRadioYPos, m_ILabelWidth, m_ILabelHeight, self));
+    m_LDifficultyHard   = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_EPlayerName.WinLeft + m_IDifficultyXOffset, m_IDifficultyRadioYPos + m_IDifficultyYOffset, m_ILabelWidth, m_ILabelHeight, self));
+    m_LDifficultyElite   = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_EPlayerName.WinLeft + m_IDifficultyXOffset, m_IDifficultyRadioYPos + m_IDifficultyYOffset * 2, m_ILabelWidth, m_ILabelHeight, self));
 
-    m_ResetAllButton  = EPCTextButton(CreateControl( class'EPCTextButton', m_IResetAllXPos, m_IResetAllButtonsYPos, m_IResetAllButtonsWidth, m_IResetAllButtonsHeight, self));
+    m_ResetAllButton  = EPCTextButton(CreateControl(class'EPCTextButton', m_IResetAllXPos, m_IResetAllButtonsYPos, m_IResetAllButtonsWidth, m_IResetAllButtonsHeight, self));
 
-    m_DifficultyNormal  = EPCCheckBox(CreateControl( class'EPCCheckBox', m_EPlayerName.WinLeft, m_LDifficultyNormal.WinTop, m_IRadioWidth, m_ILabelHeight, self));
-    m_DifficultyHard    = EPCCheckBox(CreateControl( class'EPCCheckBox', m_EPlayerName.WinLeft, m_LDifficultyHard.WinTop, m_IRadioWidth, m_ILabelHeight, self));
-    m_DifficultyElite    = EPCCheckBox(CreateControl( class'EPCCheckBox', m_EPlayerName.WinLeft, m_LDifficultyElite.WinTop, m_IRadioWidth, m_ILabelHeight, self));
+    m_DifficultyNormal  = EPCCheckBox(CreateControl(class'EPCCheckBox', m_EPlayerName.WinLeft, m_LDifficultyNormal.WinTop, m_IRadioWidth, m_ILabelHeight, self));
+    m_DifficultyHard    = EPCCheckBox(CreateControl(class'EPCCheckBox', m_EPlayerName.WinLeft, m_LDifficultyHard.WinTop, m_IRadioWidth, m_ILabelHeight, self));
+    m_DifficultyElite    = EPCCheckBox(CreateControl(class'EPCCheckBox', m_EPlayerName.WinLeft, m_LDifficultyElite.WinTop, m_IRadioWidth, m_ILabelHeight, self));
     m_DifficultyNormal.m_bSelected  = true;
     m_DifficultyNormal.ImageX       = 5;
     m_DifficultyNormal.ImageY       = 5;
@@ -113,10 +113,10 @@ function Created()
 // Joshua - Permadeath warning
 function MessageBoxDone(UWindowWindow W, MessageBoxResult Result)
 {
-    if(W == m_PermadeathWarningBox)
+    if (W == m_PermadeathWarningBox)
     {
         m_PermadeathWarningBox = None;
-        if(Result == MR_Yes)
+        if (Result == MR_Yes)
         {
             m_PermadeathMode.m_bSelected = true;
         }
@@ -139,15 +139,15 @@ function INT GetDifficulty()
     local int baseDifficulty;
     EPC = EPlayerController(GetPlayerOwner());
 
-    if(m_DifficultyNormal.m_bSelected)
+    if (m_DifficultyNormal.m_bSelected)
         baseDifficulty = 0;
-    else if(m_DifficultyHard.m_bSelected)
+    else if (m_DifficultyHard.m_bSelected)
         baseDifficulty = 1;
-    else if(m_DifficultyElite.m_bSelected)
+    else if (m_DifficultyElite.m_bSelected)
         baseDifficulty = 2;
 
     // Add permadeath offset (2) if enabled and not Normal difficulty
-    if(m_PermadeathMode.m_bSelected && !m_DifficultyNormal.m_bSelected)
+    if (m_PermadeathMode.m_bSelected && !m_DifficultyNormal.m_bSelected)
         return baseDifficulty + 2;
     else 
         return baseDifficulty;
@@ -164,9 +164,9 @@ function Reset()
 
 function Notify(UWindowDialogControl C, byte E)
 {
-	if(E == DE_Click)
+	if (E == DE_Click)
 	{
-        switch(C)
+        switch (C)
         {
         case m_DifficultyNormal:
             m_DifficultyNormal.m_bSelected = true;
@@ -188,7 +188,7 @@ function Notify(UWindowDialogControl C, byte E)
             m_PermadeathMode.bDisabled = false; // Enable permadeath option
             break;
         case m_PermadeathMode:
-                if(m_PermadeathMode.m_bSelected)
+                if (m_PermadeathMode.m_bSelected)
                 {
                     bPermadeathPending = true;
                     m_PermadeathMode.m_bSelected = true;

@@ -7,25 +7,25 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 
 	Pick = EDisposablePick(Owner);
-	if( Pick == None )
+	if (Pick == None)
 		Log("WARNING : EBreakLockInteraction does not have a valid owner");
 }
 
-function InitInteract( Controller Instigator )
+function InitInteract(Controller Instigator)
 {
 	// set controller's interaction
 	Instigator.Interaction = self;
 	Instigator.GotoState('s_BreakLock');
 }
 
-function Interact( Controller Instigator )
+function Interact(Controller Instigator)
 {
 	local EInventory Inv;
 
 	// Joshua - Prevent switching to the Disposable Pick after using one with new door interaction system
 	if (EchelonGameInfo(Level.Game).bNewDoorInteraction)
 	{
-		if( Pick.Controller != None )
+		if (Pick.Controller != None)
 		{
 			Inv = EPawn(Pick.Controller.Pawn).FullInventory;
 			Inv.RemoveItem(Pick, 1);
@@ -41,27 +41,27 @@ function Interact( Controller Instigator )
 	Pick.PlaceOnDoor();
 }
 
-function PostInteract( Controller Instigator )
+function PostInteract(Controller Instigator)
 {
 	// reset interaction
 	Instigator.Interaction	= None;
 	Destroy();
 }
 
-function SetInteractLocation( Pawn InteractPawn )
+function SetInteractLocation(Pawn InteractPawn)
 {
 	local Vector X, Y, Z, MovePos;
 	local EPawn InteractEPawn;
 	local int YawAligner;
 	
 	InteractEPawn = EPawn(InteractPawn);
-	if( InteractEPawn == None )
+	if (InteractEPawn == None)
 		return;
 
 	GetAxes(Pick.Door.MyKnob.Rotation, X, Y, Z);
 	YawAligner = -4000;
 	// Get door opening direction
-	if( Pick.Door.GetPawnSide(InteractPawn) != ESide_Front )
+	if (Pick.Door.GetPawnSide(InteractPawn) != ESide_Front)
 	{
 		Y = -Y;
 		YawAligner = -YawAligner;

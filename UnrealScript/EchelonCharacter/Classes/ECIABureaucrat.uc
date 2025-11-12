@@ -14,7 +14,7 @@ function PostBeginPlay()
 {
 	Super.PostBeginPlay();
 
-	if( bCupDude )
+	if (bCupDude)
 	{
 		Cup = spawn(class'EGameplayObject', self);
 		Cup.SetStaticMesh(StaticMesh'FoamCup01_CIA');

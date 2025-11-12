@@ -13,9 +13,9 @@ class P_2_2_3_Ktech_GuardPatrolA extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('AISeePlayer');
@@ -46,13 +46,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMafiaMuscle3')
+        if (P.name == 'EMafiaMuscle3')
             Characters[1] = P.controller;
-        if(P.name == 'EMafiaMuscle4')
+        if (P.name == 'EMafiaMuscle4')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

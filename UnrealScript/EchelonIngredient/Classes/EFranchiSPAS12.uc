@@ -15,7 +15,7 @@ function TraceFire()
 	local EWallHit Spark;
 	local Rotator projRot;
 
-	if( Controller == None )
+	if (Controller == None)
 		Log("WEAPON WARNING : TraceFire() has no Controller Owner");
 
 	MakeNoise(FireNoiseRadius, NOISE_Gunfire);
@@ -25,7 +25,7 @@ function TraceFire()
 	EndTrace = StartTrace + Controller.AdjustTarget(GetFireEnd() - StartTrace);	
 	ShotDirection = Normal(EndTrace - StartTrace);
 
-	for( i=0; i<NbFrags; i++ )
+	for (i = 0; i < NbFrags; i++)
 	{
 		EndTrace = StartTrace + ShootingRange * GetVectorFrom(Rotator(ShotDirection), SpreadDegree);
 
@@ -33,22 +33,22 @@ function TraceFire()
 		//Log("Hitting"@HitActor@"on bone"@PillTag);
 
 		// Be sure that the intention of the NPC is not to shoot another NPC
-		if( !Controller.bIsPlayer && EAIController(Controller).TargetActorToFire != HitActor )
+		if (!Controller.bIsPlayer && EAIController(Controller).TargetActorToFire != HitActor)
 			HitActor = None;
 		
-		if( HitActor == none )
+		if (HitActor == none)
 			continue;
 
 		SpawnWallHit(HitActor, HitLocation, HitNormal, HitMaterial);
 		
-		if( HitActor != self && HitActor != Controller.pawn && !HitActor.bWorldGeometry) 
+		if (HitActor != self && HitActor != Controller.Pawn && !HitActor.bWorldGeometry) 
 			HitActor.TakeDamage(BaseDamage, Controller.Pawn, HitLocation, HitNormal, Normal(HitLocation - GetFireStart()) * BaseMomentum, None, PillTag);
 	}
 }
 
 event bool IsROFModeAvailable(ERateOfFireMode rof)
 {
-	switch( rof )
+	switch (rof)
 	{
 	case ROF_Single : 
 		return true;

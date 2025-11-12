@@ -61,7 +61,7 @@ event PostBeginPlay()
 
 	if (bTreatAsStatic == false)
 	{
-  		bIsEchelonLight=false;
+  		bIsEchelonLight = false;
 	}
 }
 
@@ -75,7 +75,7 @@ function UpdateShadow()
 
     DetachProjector(true);
     
-    //if(bProjectActor)
+    //if (bProjectActor)
     //{
     //    SetCollision(false, false, false);
     //}
@@ -86,7 +86,7 @@ function UpdateShadow()
 
     AttachProjector();
 
-    //if(bProjectActor)
+    //if (bProjectActor)
     //{
     //    SetCollision(true, false, false);
     //}
@@ -102,7 +102,7 @@ function Tick(float DeltaTime)
 
 	// JFP: Do NOT call the UpdateShadow function when in shadow buffer mode, only for the projector mode.
 	// 0 == shadow projector mode, 1 == shadow buffer mode
-	if(Level.Game.PlayerC != None && Level.Game.PlayerC.ShadowMode == 0 )
+	if (Level.Game.PlayerC != None && Level.Game.PlayerC.ShadowMode == 0)
 	{
 	    UpdateShadow();
 	}
@@ -114,7 +114,7 @@ function Tick(float DeltaTime)
 //
 event Touch(Actor Other)
 {
-   if(Pawn(Other) == None)
+   if (Pawn(Other) == None)
    {
 		AttachActor(Other);
    }
@@ -126,16 +126,16 @@ event Touch(Actor Other)
 // Description		
 //		If we explicitely want to turn lights on/off
 //------------------------------------------------------------------------
-function TurnOff(EChangeType _Type, optional Pawn EventInstigator  )
+function TurnOff(EChangeType _Type, optional Pawn EventInstigator)
 {
 	//Log(self@LightBrightness@InitialLightBrightness@InitialLightBrightness/NbControllers@LightBrightness-InitialLightBrightness/NbControllers);
 	/*
-	if( NbControllers > 1 && LightBrightness-InitialLightBrightness/NbControllers > 0 )
+	if (NbControllers > 1 && LightBrightness-InitialLightBrightness/NbControllers > 0)
 	{
 		LightBrightness		= LightBrightness-InitialLightBrightness/NbControllers;
 		LastTimeChange		= Level.TimeSeconds;
 	}
-	else if( LightType != LT_None )
+	else if (LightType != LT_None)
 	{
 		LightType = LT_None;
 		LastTimeChange	= Level.TimeSeconds;
@@ -144,24 +144,24 @@ function TurnOff(EChangeType _Type, optional Pawn EventInstigator  )
 	UsesSpotLightBeam	= false;
 
 	Instigator = EventInstigator;
-	if( Owner.IsA('ESwitchObject') )
+	if (Owner.IsA('ESwitchObject'))
  		Level.AddChange(self, _Type);
 
-	if( _Type == CHANGE_LightShotOut && Nbcontrollers <= 1 )	
+	if (_Type == CHANGE_LightShotOut && Nbcontrollers <= 1)	
 		GotoState('s_Destrocuted');
 	*/
-	Log("Shadow projector: " $ self $" Turned OFF, owner is " $ owner $ ", nbControllers==" $ Nbcontrollers );
+	Log("Shadow projector: " $ self $" Turned OFF, owner is " $ owner $ ", nbControllers==" $ Nbcontrollers);
 
 	InitialLightType = LightType;
 	LightType = LT_None;
 	LastTimeChange	= Level.TimeSeconds;
-	RestoreInitialLightType=false;
+	RestoreInitialLightType = false;
 
-	bProjectorEnable=false;
-	if(Level.Game.PlayerC != None)
+	bProjectorEnable = false;
+	if (Level.Game.PlayerC != None)
 		Level.Game.PlayerC.LightmapTextureCache = 1;
 
-	if( _Type == CHANGE_LightShotOut )
+	if (_Type == CHANGE_LightShotOut)
 		GotoState('s_Destrocuted');
 }
 
@@ -172,33 +172,33 @@ function TurnOff(EChangeType _Type, optional Pawn EventInstigator  )
 function TurnOn(optional EChangeType _Type, optional Pawn EventInstigator)
 { 
 	/*
-	if( LightBrightness != InitialLightBrightness && NbControllers > 1 )
+	if (LightBrightness != InitialLightBrightness && NbControllers > 1)
 	{
 		LightBrightness		= Min(LightBrightness+InitialLightBrightness/NbControllers, InitialLightBrightness);
 		UsesSpotLightBeam	= InitialUsesBeam;
 		LastTimeChange		= Level.TimeSeconds;
 	}
-	if( LightType != InitialLightType )
+	if (LightType != InitialLightType)
 	{
 		LightType = InitialLightType;
 		LastTimeChange	= Level.TimeSeconds;
 	}
 
     // Then add us again if we were initially off
-	if((Owner.IsA('ESwitchObject')) && (Owner.InitialState == 's_Off') && (EventInstigator.bIsPlayerPawn))
+	if ((Owner.IsA('ESwitchObject')) && (Owner.InitialState == 's_Off') && (EventInstigator.bIsPlayerPawn))
     {
 		Level.AddChange(self, _Type);
     }
 	*/
-    Log("Shadow projector: " $ self $" Turned ON, owner is " $ owner $ ", nbControllers==" $ Nbcontrollers $ ", going back to initial light type " $ InitialLightType );
+    Log("Shadow projector: " $ self $" Turned ON, owner is " $ owner $ ", nbControllers==" $ Nbcontrollers $ ", going back to initial light type " $ InitialLightType);
 	if (DisableIfOppositeShadowMode == false)
 	{
 		LightType = InitialLightType;
 		LastTimeChange	= Level.TimeSeconds;
-		bProjectorEnable=true;
+		bProjectorEnable = true;
 	}
-	RestoreInitialLightType=true;
-	if(Level.Game.PlayerC != None)
+	RestoreInitialLightType = true;
+	if (Level.Game.PlayerC != None)
 		Level.Game.PlayerC.LightmapTextureCache = 1;
 }
 
@@ -206,10 +206,10 @@ function TurnOn(optional EChangeType _Type, optional Pawn EventInstigator)
 // Description		
 //		Turns on and off lights
 //------------------------------------------------------------------------
-function Trigger( actor Other, pawn EventInstigator, optional name InTag )
+function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 {
 	//log(self$" gets triggered by "@Other);
-	switch( Other.GetStateName() )
+	switch (Other.GetStateName())
 	{
 	case 's_On' :
 		TurnOn(CHANGE_LightTurnedOff, EventInstigator);

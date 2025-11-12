@@ -25,7 +25,7 @@ function UWindowPulldownMenu CreateSubMenu(class<UWindowPulldownMenu> MenuClass,
 
 function Select()
 {
-	if(SubMenu != None) 
+	if (SubMenu != None) 
 	{
 		SubMenu.WinLeft = Owner.WinLeft + Owner.WinWidth - Owner.HBORDER;
 		SubMenu.WinTop = ItemTop - Owner.VBORDER;
@@ -44,7 +44,7 @@ function SetCaption(string C)
 
 function DeSelect()
 {
-	if(SubMenu != None)
+	if (SubMenu != None)
 	{
 		SubMenu.DeSelect();
 		SubMenu.HideWindow();

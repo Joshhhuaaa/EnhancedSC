@@ -11,9 +11,9 @@ class P_3_4_1_Sev_UPSandGenny extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('AlarmCheck');
@@ -30,7 +30,7 @@ function InitPattern()
 
     Super.InitPattern();
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

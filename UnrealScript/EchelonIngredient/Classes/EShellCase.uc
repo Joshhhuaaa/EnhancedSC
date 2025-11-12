@@ -9,26 +9,26 @@ var sound ShellSound;
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
-	if ( Level.bDropDetail )
+	if (Level.bDropDetail)
 	{
 		bCollideWorld = false;
 		LifeSpan = 1.5;
 	}
 }
 
-function HitWall( vector HitNormal, actor Wall )
+function HitWall(vector HitNormal, actor Wall)
 {
 	local vector RealHitNormal;
 
-	if ( Level.bDropDetail )
+	if (Level.bDropDetail)
 	{
 		Destroy();
 		return;
 	}
-	if ( bHasBounced && ((numBounces > 3) || (FRand() < 0.85) || (Velocity.Z > -50)) )
+	if (bHasBounced && ((numBounces > 3) || (FRand() < 0.85) || (Velocity.Z > -50)))
 		bBounce = false;
 	numBounces++;
-	if ( numBounces > 3 )
+	if (numBounces > 3)
 	{
 		Destroy();
 		return;
@@ -38,24 +38,24 @@ function HitWall( vector HitNormal, actor Wall )
 
 	RealHitNormal = HitNormal;
 	HitNormal = Normal(HitNormal + 0.4 * VRand());
-	if ( (HitNormal Dot RealHitNormal) < 0 )
+	if ((HitNormal Dot RealHitNormal) < 0)
 		HitNormal *= -0.5; 
 	Velocity = 0.5 * (Velocity - 2 * HitNormal * (Velocity Dot HitNormal));
 	RandSpin(100000);
 	bHasBounced = True;
 }
 
-function Landed( vector HitNormal )
+function Landed(vector HitNormal)
 {
 	local rotator RandRot;
 
-	if ( Level.bDropDetail )
+	if (Level.bDropDetail)
 	{
 		Destroy();
 		return;
 	}
 
-	if ( numBounces > 3 )
+	if (numBounces > 3)
 	{
 		Destroy();
 		return;

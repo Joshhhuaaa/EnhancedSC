@@ -6,13 +6,13 @@ function PostBeginPlay()
 {
 	Super.PostBeginPlay();
 
-	if( GoalObject == None )
+	if (GoalObject == None)
 		Log("ERROR: GoalObject is None for GoalVolume"@self);
 
-	if( GoalObject.GroupAI == None )
+	if (GoalObject.GroupAI == None)
 		Log("ERROR: GoalObject's GroupAI is None for GoalVolume"@self@GoalObject);
 
-	if( GoalObject.JumpLabel == '' )
+	if (GoalObject.JumpLabel == '')
 		Log("ERROR: GoalObject's JumpLabel is '' for GoalVolume"@self@GoalObject);
 }
 

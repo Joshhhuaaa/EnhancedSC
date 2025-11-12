@@ -22,10 +22,10 @@ function PostBeginPlay()
 	local Actor A;
 	local int	i;
 
-	i=0;
-	CurrentIndex=0;
+	i = 0;
+	CurrentIndex = 0;
 
-	foreach AllActors(class'Actor', A, ObjectsTag )
+	foreach AllActors(class'Actor', A, ObjectsTag)
 	{
 		ItemsToDestroy[i] = A;
 		i++;
@@ -53,13 +53,13 @@ event Actor GetNextTarget()
 {
 	CurrentIndex++;
 
-	if(CurrentIndex < ItemsToDestroy.Length)
+	if (CurrentIndex < ItemsToDestroy.Length)
 	{
 		return ItemsToDestroy[CurrentIndex];
 	}
 	else
 	{
-		bIsDead=true;
+		bIsDead = true;
 		return None;
 	}
 }

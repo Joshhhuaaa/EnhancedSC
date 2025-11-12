@@ -33,7 +33,7 @@ var		bool					GoalFlag;
 var		bool					GoalFlagB;
 var     bool					GoalUpdatePlayerPos;
 
-var		byte					Priority;				// goal priority (0=lowest, 10=highest, can change if we need it to ..)
+var		byte					Priority;				// goal priority (0 = lowest, 10 = highest, can change if we need it to ..)
 
 
 
@@ -56,7 +56,7 @@ function Clear()
 	GoalValue		= 0.0f;
 	GoalMoveFlags	= MOVE_WalkNormal;		// most common movement (methinks)
 	GoalWaitFlags   = MOVE_NotSpecified;
-	GoalUpdatePlayerPos=false;
+	GoalUpdatePlayerPos = false;
 
 	bInitialized = false;
 }

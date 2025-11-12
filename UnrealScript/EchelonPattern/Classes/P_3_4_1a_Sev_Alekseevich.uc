@@ -13,9 +13,9 @@ class P_3_4_1a_Sev_Alekseevich extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('AlexCheck');
@@ -37,15 +37,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EAzeriColonel0')
+        if (P.name == 'EAzeriColonel0')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz22')
+        if (P.name == 'spetsnaz22')
             Characters[2] = P.controller;
-        if(P.name == 'spetsnaz23')
+        if (P.name == 'spetsnaz23')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

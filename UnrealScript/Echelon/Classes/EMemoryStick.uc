@@ -31,7 +31,7 @@ var	    EchelonLevelInfo	    Bank;			// Pointer on bank information
 function PostBeginPlay()
 {
 	// If memorystick is to be found on something, hide it and remove interaction
-	if( AccessActors.Length > 0 )
+	if (AccessActors.Length > 0)
 	{
 		bHidden			= true;
 		bPickable		= false;
@@ -41,7 +41,7 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 }
 
-function bool NotifyPickup( Controller Instigator )
+function bool NotifyPickup(Controller Instigator)
 {	
 	EPlayerController(Instigator).AddReconText(string(ObjectName), MemoryTextSection, From, To, SentStringID, SubjectStringID, MemoryTextID, false);
 	UploadDataToPDA();
@@ -56,30 +56,30 @@ function UploadDataToPDA()
 
 	Epc = EchelonGameInfo(Level.Game).pPlayer;
 
-    if(Epc == None)
+    if (Epc == None)
         return;
 
 	PlaySound(Sound'Interface.Play_DataTransfer', SLOT_Interface);
 
 	// Add Goals
-	if(Goals.Length > 0)
+	if (Goals.Length > 0)
 	{
-		for(i = 0; i < Goals.Length; i++)
+		for (i = 0; i < Goals.Length; i++)
 			Epc.AddGoal(Goals[i].GoalID, "", MemoryTextSection, Goals[i].GoalStringID, "Localization\\MemoryStick",, "", MemoryTextSection, Goals[i].GoalStringID, "Localization\\MemoryStick");
 
-        if(Goals.Length > 1)
+        if (Goals.Length > 1)
 		    Epc.SendTransmissionMessage(Goals.Length $ " " $ Localize("HUD", "Goals", "Localization\\HUD") $ " " $ Localize("HUD", "Added", "Localization\\HUD"), TR_INVENTORY);
         else
             Epc.SendTransmissionMessage(Goals.Length $ " " $ Localize("HUD", "Goal", "Localization\\HUD")  $ " " $ Localize("HUD", "Added", "Localization\\HUD"), TR_INVENTORY);
 	}
 
 	// Add Notes
-	if(NotesStringID.Length > 0)
+	if (NotesStringID.Length > 0)
 	{
-		for(i = 0; i < NotesStringID.Length; i++)
+		for (i = 0; i < NotesStringID.Length; i++)
 			Epc.AddNote("", MemoryTextSection, NotesStringID[i], "Localization\\MemoryStick", false);
 
-        if(NotesStringID.Length > 1)
+        if (NotesStringID.Length > 1)
 		    Epc.SendTransmissionMessage(NotesStringID.Length $ " " $ Localize("HUD", "Notes", "Localization\\HUD") $ " " $ Localize("HUD", "Added", "Localization\\HUD"), TR_INVENTORY);
         else
             Epc.SendTransmissionMessage(NotesStringID.Length $ " " $ Localize("HUD", "Note", "Localization\\HUD")  $ " " $ Localize("HUD", "Added", "Localization\\HUD"), TR_INVENTORY);
@@ -89,7 +89,7 @@ function UploadDataToPDA()
 	TriggerPattern();
 
     // Destroy after Read //
-	if(DestroyUponRead)
+	if (DestroyUponRead)
 	{
 		Bank.RemoveMemoryStick(self);
 		Destroy();

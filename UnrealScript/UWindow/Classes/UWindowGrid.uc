@@ -18,15 +18,15 @@ var bool				bNoKeyboard;
 function Created()
 {
 	ClientArea = UWindowGridClient(CreateWindow(class'UWindowGridClient', 0, 0, WinWidth - 12, WinHeight));
-	VertSB = UWindowVScrollbar(CreateWindow(class'UWindowVScrollbar', WinWidth-12, 0, 12, WinHeight));
+	VertSB = UWindowVScrollbar(CreateWindow(class'UWindowVScrollbar', WinWidth - 12, 0, 12, WinHeight));
 	VertSB.bAlwaysOnTop = True;
 
-	HorizSB = UWindowHScrollbar(CreateWindow(class'UWindowHScrollbar', 0, WinHeight-12, WinWidth, 12));
+	HorizSB = UWindowHScrollbar(CreateWindow(class'UWindowHScrollbar', 0, WinHeight - 12, WinWidth, 12));
 	HorizSB.bAlwaysOnTop = True;
 	HorizSB.HideWindow();
 	bShowHorizSB = False;
 
-	if(!bNoKeyboard)
+	if (!bNoKeyboard)
 		SetAcceptsFocus();
 
 	Super.Created();
@@ -48,16 +48,16 @@ function Resized()
 
 	TotalWidth = 0;
 	colColumn = FirstColumn;
-	while(colColumn != None)
+	while (colColumn != None)
 	{
 		TotalWidth = TotalWidth + colColumn.WinWidth;
 		colColumn = colColumn.NextColumn;
 	}
 
-	if(!bSizingColumn)
+	if (!bSizingColumn)
 		HorizSB.SetRange(0, TotalWidth, WinWidth - LookAndFeel.Size_ScrollbarWidth, 10);
 
-	if(!HorizSB.bDisabled)
+	if (!HorizSB.bDisabled)
 	{
 		// Need a horizontal scrollbar
 		HorizSB.ShowWindow();
@@ -74,36 +74,36 @@ function Resized()
 	ClientArea.WinTop = 0;
 	ClientArea.WinLeft = 0;
 	ClientArea.WinWidth = WinWidth - LookAndFeel.Size_ScrollbarWidth;
-	if(bShowHorizSB)
+	if (bShowHorizSB)
 		ClientArea.WinHeight = WinHeight - LookAndFeel.Size_ScrollbarWidth;
 	else
 		ClientArea.WinHeight = WinHeight;
 
 
-	if(bShowHorizSB)
+	if (bShowHorizSB)
 	{
-		HorizSB.WinTop = WinHeight-LookAndFeel.Size_ScrollbarWidth;
+		HorizSB.WinTop = WinHeight - LookAndFeel.Size_ScrollbarWidth;
 		HorizSB.WinLeft = 0;
 		HorizSB.WinWidth = WinWidth - LookAndFeel.Size_ScrollbarWidth;
 		HorizSB.WinHeight = LookAndFeel.Size_ScrollbarWidth;
 	}
 
 	VertSB.WinTop = 0;
-	VertSB.WinLeft = WinWidth-LookAndFeel.Size_ScrollbarWidth;
+	VertSB.WinLeft = WinWidth - LookAndFeel.Size_ScrollbarWidth;
 	VertSB.WinWidth = LookAndFeel.Size_ScrollbarWidth;
-	if(bShowHorizSB)
+	if (bShowHorizSB)
 		VertSB.WinHeight = WinHeight - LookAndFeel.Size_ScrollbarWidth;
 	else
 		VertSB.WinHeight = WinHeight;
 
 	
-	if(bShowHorizSB)
+	if (bShowHorizSB)
 		Offset = 1 - HorizSB.Pos;
 	else
 		Offset = 1;
 
 	colColumn = FirstColumn;
-	while(colColumn != None)
+	while (colColumn != None)
 	{
 		colColumn.WinLeft = Offset ;
 		colColumn.WinTop = 0;
@@ -121,7 +121,7 @@ function UWindowGridColumn AddColumn(string ColumnHeading, float DefaultWidth)
 
 	OldLastColumn = LastColumn;
 
-	if(LastColumn == None)
+	if (LastColumn == None)
 	{
 		NewColumn = UWindowGridColumn(ClientArea.CreateWindow(class'UWindowGridColumn', 0, 0, DefaultWidth, WinHeight));
 		FirstColumn = NewColumn;
@@ -151,13 +151,13 @@ function Paint(Canvas C, float MouseX, float MouseY)
 	X = LastColumn.WinWidth + LastColumn.WinLeft;
 
 	T = GetLookAndFeelTexture();
-	DrawUpBevel( C, X, 0, WinWidth-X, LookAndFeel.ColumnHeadingHeight, T);
+	DrawUpBevel(C, X, 0, WinWidth - X, LookAndFeel.ColumnHeadingHeight, T);
 
-	if(bShowHorizSB)
+	if (bShowHorizSB)
 	{
 		// R = LookAndFeel.SBBackground;
-		DrawStretchedTextureSegment( C, WinWidth-LookAndFeel.Size_ScrollbarWidth,
-										WinHeight-LookAndFeel.Size_ScrollbarWidth,
+		DrawStretchedTextureSegment(C, WinWidth - LookAndFeel.Size_ScrollbarWidth,
+										WinHeight - LookAndFeel.Size_ScrollbarWidth,
 										LookAndFeel.Size_ScrollbarWidth,
 										LookAndFeel.Size_ScrollbarWidth,
 										R.X, R.Y, R.W, R.H, T);
@@ -202,7 +202,7 @@ function MouseLeaveColumn(UWindowGridColumn Column)
 
 function KeyDown(int Key, float X, float Y)
 {
-	switch(Key) {
+	switch (Key) {
 	case 0x26: // IK_Up
 	case 0xEC: // IK_MouseWheelUp
 		VertSB.Scroll(-1);
@@ -212,10 +212,10 @@ function KeyDown(int Key, float X, float Y)
 		VertSB.Scroll(1);
 		break;
 	case 0x21: // IK_PageUp
-		VertSB.Scroll(-(VertSB.MaxVisible-1));
+		VertSB.Scroll(-(VertSB.MaxVisible - 1));
 		break;
 	case 0x22: // IK_PageDown
-		VertSB.Scroll(VertSB.MaxVisible-1);
+		VertSB.Scroll(VertSB.MaxVisible - 1);
 		break;
 	}
 }

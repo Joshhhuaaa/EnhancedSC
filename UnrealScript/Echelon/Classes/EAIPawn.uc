@@ -34,45 +34,45 @@ function PostBeginPlay()
 
 	// load generic anim packages
 
-	if(Mesh != None)
+	if (Mesh != None)
 	{
 		Anim = MeshAnimation(DynamicLoadObject("ENPC.BedAnims", class'MeshAnimation'));
-		LinkSkelAnim( Anim );
+		LinkSkelAnim(Anim);
 
 		Anim = MeshAnimation(DynamicLoadObject("ENPC.ChairAnims", class'MeshAnimation'));
-		LinkSkelAnim( Anim );
+		LinkSkelAnim(Anim);
 		
 		Anim = MeshAnimation(DynamicLoadObject("ENPC.TableAnims", class'MeshAnimation'));
-		LinkSkelAnim( Anim );
+		LinkSkelAnim(Anim);
 		
 		Anim = MeshAnimation(DynamicLoadObject("ENPC.LadderAnims", class'MeshAnimation'));
-		LinkSkelAnim( Anim );
+		LinkSkelAnim(Anim);
 
 		Anim = MeshAnimation(DynamicLoadObject("ENPC.PistolAnims", class'MeshAnimation'));
-		LinkSkelAnim( Anim );
+		LinkSkelAnim(Anim);
 		
 		Anim = MeshAnimation(DynamicLoadObject("ENPC.MaleAnims", class'MeshAnimation'));
-		LinkSkelAnim( Anim );
+		LinkSkelAnim(Anim);
 
 		Anim = MeshAnimation(DynamicLoadObject("ENPC.ProAnims", class'MeshAnimation'));
-		LinkSkelAnim( Anim );
+		LinkSkelAnim(Anim);
 	}
 
-	if(bSniper)
-		AccuracyDeviation=0;
+	if (bSniper)
+		AccuracyDeviation = 0;
 
 	Super.PostBeginPlay();
 }
 
 // HACK FOR KALINATEK, May be called from pattern to start a conversation
-function Trigger( actor Other, pawn EventInstigator, optional name InTag )
+function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 {
 	Super.Trigger(Other, EventInstigator, InTag);
 	
 	//other hack for kalinatek
-	DefendActor=None;
+	DefendActor = None;
 
-	if( Interaction != None )
+	if (Interaction != None)
 		Interaction.Trigger(Other, EventInstigator);
 }
 
@@ -97,9 +97,9 @@ function PossessedBy(Controller C)
 	
 	// load all special sequence anims specified by 
 
-	for ( i = 0; i < ELevel.SpecialEventAnims.Length; i++ )
+	for (i = 0; i < ELevel.SpecialEventAnims.Length; i++)
 	{
-		LinkSkelAnim( ELevel.SpecialEventAnims[i] );
+		LinkSkelAnim(ELevel.SpecialEventAnims[i]);
 	}
 }
 
@@ -227,7 +227,7 @@ function InitAnims()
 	APitchBlackL				= 'walkStInLt0';
 	APitchBlackR				= 'walkStInRt0';
 
-	if(bSleeping)
+	if (bSleeping)
 	{
 		AStandUpR						= 'LaidBdNmUpR';
 		AStandUpL						= 'LaidBdNmUpL';
@@ -248,7 +248,7 @@ function InitAnims()
 		AWaitSitS						= 'WaitChNmFdA';
 	}
 
-	switch(WeaponHandedness)
+	switch (WeaponHandedness)
 	{
 	case 1:
 		APitchBlackF				= 'walkStInFd1';
@@ -281,14 +281,14 @@ function SwitchAnims()
 {
 	local MoveFlags  lmoveflag;
 
-	lmoveflag=BaseMoveFlags;
+	lmoveflag = BaseMoveFlags;
 
 	//special case for grabbed NPCs that were sit
-	if(GetStateName() == 's_Grabbed')
-		lmoveflag= MOVE_WalkNormal;
+	if (GetStateName() == 's_Grabbed')
+		lmoveflag = MOVE_WalkNormal;
 
 	// update AI's focus switching properties
-	if ( AI != none )
+	if (AI != none)
 	{
 		AI.UpdateFocusSwitching(lmoveflag);
 	}
@@ -310,7 +310,7 @@ function SwitchAnims()
 
 			bWantsToCrouch = false;
 
-			if(AI != None && bSleeping)
+			if (AI != None && bSleeping)
 			{
 				ADeathDown				= 'XxxxBdNmDn0';
 				ADeathBack					= 'XxxxBdNmDn0';
@@ -321,7 +321,7 @@ function SwitchAnims()
 			}
 			else
 			{
-				if(AI != None && AI.bTableChair)
+				if (AI != None && AI.bTableChair)
 					ADeathForward			= 'XxxxAsNmFd0';
 				else
 					ADeathForward			= 'XxxxChAlFd0';
@@ -359,7 +359,7 @@ function SwitchAnims()
 			AFragRight					= 'FragStAlRt0';
 			
 			// anims switched on weapon stance, crouch vs uncrouch
-			switch ( WeaponStance )
+			switch (WeaponStance)
 			{
 				case 0 : 
 
@@ -448,7 +448,7 @@ function SwitchAnims()
 			AFragRight					= 'FragStAlRt0';
 						
 			// damage anims switched on weapon stance
-			switch ( WeaponStance )
+			switch (WeaponStance)
 			{
 				case 0 : 
 
@@ -581,7 +581,7 @@ function SwitchAnims()
 		{
 			case MOVE_WalkRelaxed : 
 	
-			if(bSleeping)
+			if (bSleeping)
 			{
 				AStandUpR						= 'LaidBdNmUpR';
 				AStandUpL						= 'LaidBdNmUpL';
@@ -604,7 +604,7 @@ function SwitchAnims()
 			case MOVE_CrouchJog : 
 
 
-			if(bSleeping)
+			if (bSleeping)
 			{
 				AStandUpR						= 'LaidBdAlUpR';
 				AStandUpL						= 'LaidBdAlUpL';
@@ -1008,7 +1008,7 @@ function SwitchAnims()
 
 					ATurnRight						= 'TurnStAlNt2';
 
-					if(bSniper)
+					if (bSniper)
 					{
 						ABlendMovement.m_forward		= 'WalkStNmFd2';
 						ABlendMovement.m_forwardLeft	= 'walkStNmLt2';
@@ -1101,7 +1101,7 @@ function SwitchAnims()
 
 function PlayReload(optional bool upperOnly, optional bool bigTween)
 {
-	if( !bIsCrouched )
+	if (!bIsCrouched)
 		BlendAnimOverCurrent(AReload, 1, UpperBodyBoneName,1.0,0.2);
 	else
 		BlendAnimOverCurrent(AReloadCrouch, 1, UpperBodyBoneName,1.0,0.2);
@@ -1118,13 +1118,13 @@ function PlayReload(optional bool upperOnly, optional bool bigTween)
 
 function GetReactionAnim(out name Anim, out name AnimB, out float BlendAlpha, optional eReactionAnimGroup ReactionGroup)
 {
-	if ( ReactionGroup == REACT_None )
+	if (ReactionGroup == REACT_None)
 		return;
 
-	switch ( WeaponStance )
+	switch (WeaponStance)
 	{
 		case 0 :
-			switch ( ReactionGroup ) 
+			switch (ReactionGroup) 
 			{
 
 				// STRAIGHT UP REACTION ANIMS
@@ -1224,7 +1224,7 @@ function GetReactionAnim(out name Anim, out name AnimB, out float BlendAlpha, op
 
 		case 1 :
 
-			switch ( ReactionGroup ) 
+			switch (ReactionGroup) 
 			{
 
 				// STRAIGHT UP REACTION ANIMS
@@ -1323,7 +1323,7 @@ function GetReactionAnim(out name Anim, out name AnimB, out float BlendAlpha, op
 
 		case 2 : 
 
-			switch ( ReactionGroup ) 
+			switch (ReactionGroup) 
 			{
 
 				// STRAIGHT UP REACTION ANIMS
@@ -1433,12 +1433,12 @@ function GetReactionAnim(out name Anim, out name AnimB, out float BlendAlpha, op
 // 
 //------------------------------------------------------------------------
 
-event CheckForTransition( MoveFlags NewMoveFlags )
+event CheckForTransition(MoveFlags NewMoveFlags)
 {
 
 	// CHECK FOR CROUCH / UNCROUCH
 
-	switch ( BaseMoveFlags )
+	switch (BaseMoveFlags)
 	{
 		case MOVE_WalkRelaxed :
 		case MOVE_WalkNormal :
@@ -1448,13 +1448,13 @@ event CheckForTransition( MoveFlags NewMoveFlags )
 		case MOVE_JogNoWeapon :
 			
 			// are we crouching?
-			if ( !bIsCrouched )
+			if (!bIsCrouched)
 			{
-				switch ( NewMoveFlags )
+				switch (NewMoveFlags)
 				{
 					case MOVE_CrouchJog:
 					case MOVE_CrouchWalk:
-						switch ( WeaponStance )
+						switch (WeaponStance)
 						{
 							case 0 : 
 								Transition_Standard('WaitCrAlBg0', 0.3f, true);
@@ -1477,9 +1477,9 @@ event CheckForTransition( MoveFlags NewMoveFlags )
 
 			// are we uncrouching?
 
-			if ( bIsCrouched )
+			if (bIsCrouched)
 			{
-				switch ( NewMoveFlags ) 
+				switch (NewMoveFlags) 
 				{
 					case MOVE_WalkRelaxed:
 					case MOVE_WalkNormal:
@@ -1488,7 +1488,7 @@ event CheckForTransition( MoveFlags NewMoveFlags )
 					case MOVE_JogAlert:
 					case MOVE_JogNoWeapon:
 
-						switch ( WeaponStance )
+						switch (WeaponStance)
 						{
 							// uncrouch anims are crouch begin animations played backwards
 							case 0 : 
@@ -1513,14 +1513,14 @@ event CheckForTransition( MoveFlags NewMoveFlags )
 
 	// don't draw weapon if going to MOVE_JogNoWeapon
 
-	switch ( BaseMoveFlags ) 
+	switch (BaseMoveFlags) 
 	{
 		case MOVE_WalkRelaxed :
 		case MOVE_Sit :
 		case MOVE_JogNoWeapon :
 			
 			// draw weapon
-			switch ( NewMoveFlags )
+			switch (NewMoveFlags)
 			{				
 				case MOVE_WalkNormal : 
 				case MOVE_WalkAlert : 
@@ -1529,7 +1529,7 @@ event CheckForTransition( MoveFlags NewMoveFlags )
 				case MOVE_CrouchJog :
 				case MOVE_CrouchWalk : 
 
-					if ( WeaponHandedness > 0 && WeaponStance == 0 )
+					if (WeaponHandedness > 0 && WeaponStance == 0)
 					{
 						plog("Transition_WeaponSelect");
 						Transition_WeaponSelect();
@@ -1549,9 +1549,9 @@ event CheckForTransition( MoveFlags NewMoveFlags )
 		case MOVE_CrouchWalk : 
 
 			// put away weapon
-			if(WeaponStance > 0)
+			if (WeaponStance > 0)
 			{
-				if ( NewMoveFlags == MOVE_WalkRelaxed || NewMoveFlags == MOVE_Sit )
+				if (NewMoveFlags == MOVE_WalkRelaxed || NewMoveFlags == MOVE_Sit)
 				{
 					Transition_WeaponAway();
 				}
@@ -1578,7 +1578,7 @@ event GetRandomWaitAnim(out name ReturnName)
 	local int choice;
 
 
-	if ( IsPawnTalking() )
+	if (IsPawnTalking())
 	{
 		//
 		//
@@ -1588,7 +1588,7 @@ event GetRandomWaitAnim(out name ReturnName)
 
 		choice = rand(4);
 
-		switch(choice)
+		switch (choice)
 		{
 			case 0 : ReturnName = 'TalkStNmAA0'; break;
 			case 1 : ReturnName = 'TalkStNmBB0'; break;
@@ -1608,46 +1608,46 @@ event GetRandomWaitAnim(out name ReturnName)
 
 		choice = rand(50);
 
-		switch ( WeaponStance )
+		switch (WeaponStance)
 		{				
 			case 0 : 
-				if(choice < 5)  { ReturnName = 'PrsoStNmAA0'; return; }
-				if(choice < 8)  { ReturnName = 'PrsoStNmBB0'; return; }
-				if(choice < 12) { ReturnName = 'PrsoStNmCC0'; return; }
-				if(choice < 17) { ReturnName = 'PrsoStNmDD0'; return; }
-				if(choice < 24) { ReturnName = 'PrsoStNmEE0'; return; }
-				if(choice < 27) { ReturnName = 'LookStNmBk0'; return; }
-				if(choice < 32) { ReturnName = 'LookStNmLt0'; return; }
-				if(choice < 37) { ReturnName = 'LookStNmRt0'; return; }
-				if(choice < 40) { ReturnName = 'LookStNmUp0'; return; }
-				if(choice < 50) { ReturnName = 'ReacStNmFd0'; return; }
+				if (choice < 5)  { ReturnName = 'PrsoStNmAA0'; return; }
+				if (choice < 8)  { ReturnName = 'PrsoStNmBB0'; return; }
+				if (choice < 12) { ReturnName = 'PrsoStNmCC0'; return; }
+				if (choice < 17) { ReturnName = 'PrsoStNmDD0'; return; }
+				if (choice < 24) { ReturnName = 'PrsoStNmEE0'; return; }
+				if (choice < 27) { ReturnName = 'LookStNmBk0'; return; }
+				if (choice < 32) { ReturnName = 'LookStNmLt0'; return; }
+				if (choice < 37) { ReturnName = 'LookStNmRt0'; return; }
+				if (choice < 40) { ReturnName = 'LookStNmUp0'; return; }
+				if (choice < 50) { ReturnName = 'ReacStNmFd0'; return; }
 
 
 				return;
 
 			case 1 : 
-				if(choice < 5)  { ReturnName = 'PrsoStNmAA1'; return; }
-				if(choice < 8)  { ReturnName = 'PrsoStNmBB1'; return; }
-				if(choice < 15) { ReturnName = 'PrsoStNmCC1'; return; }
-				if(choice < 20) { ReturnName = 'PrsoStNmDD1'; return; }
-				if(choice < 23) { ReturnName = 'LookStNmBk1'; return; }
-				if(choice < 28) { ReturnName = 'LookStNmLt1'; return; }
-				if(choice < 33) { ReturnName = 'LookStNmRt1'; return; }
-				if(choice < 35) { ReturnName = 'LookStNmUp1'; return; }
-				if(choice < 50) { ReturnName = 'ReacStNmFd1'; return; }
+				if (choice < 5)  { ReturnName = 'PrsoStNmAA1'; return; }
+				if (choice < 8)  { ReturnName = 'PrsoStNmBB1'; return; }
+				if (choice < 15) { ReturnName = 'PrsoStNmCC1'; return; }
+				if (choice < 20) { ReturnName = 'PrsoStNmDD1'; return; }
+				if (choice < 23) { ReturnName = 'LookStNmBk1'; return; }
+				if (choice < 28) { ReturnName = 'LookStNmLt1'; return; }
+				if (choice < 33) { ReturnName = 'LookStNmRt1'; return; }
+				if (choice < 35) { ReturnName = 'LookStNmUp1'; return; }
+				if (choice < 50) { ReturnName = 'ReacStNmFd1'; return; }
 
 				return;
 
 			case 2 : 
-				if(choice < 5)  { ReturnName = 'PrsoStNmAA2'; return; }
-				if(choice < 12) { ReturnName = 'PrsoStNmBB2'; return; }
-				if(choice < 20) { ReturnName = 'PrsoStNmCC2'; return; }
-				if(choice < 25) { ReturnName = 'PrsoStNmDD2'; return; }
-				if(choice < 28) { ReturnName = 'LookStNmBk2'; return; }
-				if(choice < 33) { ReturnName = 'LookStNmLt2'; return; }
-				if(choice < 38) { ReturnName = 'LookStNmRt2'; return; }
-				if(choice < 40) { ReturnName = 'LookStNmUp2'; return; }
-				if(choice < 50) { ReturnName = 'ReacStNmFd2'; return; }
+				if (choice < 5)  { ReturnName = 'PrsoStNmAA2'; return; }
+				if (choice < 12) { ReturnName = 'PrsoStNmBB2'; return; }
+				if (choice < 20) { ReturnName = 'PrsoStNmCC2'; return; }
+				if (choice < 25) { ReturnName = 'PrsoStNmDD2'; return; }
+				if (choice < 28) { ReturnName = 'LookStNmBk2'; return; }
+				if (choice < 33) { ReturnName = 'LookStNmLt2'; return; }
+				if (choice < 38) { ReturnName = 'LookStNmRt2'; return; }
+				if (choice < 40) { ReturnName = 'LookStNmUp2'; return; }
+				if (choice < 50) { ReturnName = 'ReacStNmFd2'; return; }
 
 				return;
 		}
@@ -1664,13 +1664,13 @@ event GetRandomWaitAnim(out name ReturnName)
 // 
 //------------------------------------------------------------------------
 
-function bool IsExtraWaiting( optional int f )
+function bool IsExtraWaiting(optional int f)
 {
 	local name CurrentAnimSeq;
 	local float CurrentFrame, CurrentRate;
 	GetAnimParams(0, CurrentAnimSeq, CurrentFrame, CurrentRate);
 	
-	switch ( WeaponStance )
+	switch (WeaponStance)
 	{				
 		case 0 : 	
 
@@ -1723,7 +1723,7 @@ function bool IsExtraWaiting( optional int f )
 event float GetMoveSpeed(MoveFlags MoveFlags)
 {
 	//force slow walk in pitch black
-	if(bPitchBlack)
+	if (bPitchBlack)
 		return 85.0f;
 
 	// apply speed based on move flag
@@ -1787,9 +1787,9 @@ event float GetMoveSpeed(MoveFlags MoveFlags)
 //
 //------------------------------------------------------------------------
 
-event MoveFlags UpdateMoveFlagState( MoveFlags NewMoveFlags, optional bool _bForceAware )
+event MoveFlags UpdateMoveFlagState(MoveFlags NewMoveFlags, optional bool _bForceAware)
 {
-	switch ( NewMoveFlags )
+	switch (NewMoveFlags)
 	{
 		// regardless of MOVE_Walk -- always return the MOVE_Walk<X> based on state
 		case MOVE_WalkNormal :	
@@ -1797,30 +1797,30 @@ event MoveFlags UpdateMoveFlagState( MoveFlags NewMoveFlags, optional bool _bFor
 		case MOVE_WalkAlert :
 		case MOVE_Search:
 
-			if ( AI.GetStateName() == 's_Default')
+			if (AI.GetStateName() == 's_Default')
 				return MOVE_WalkRelaxed;
 			
-			if ( AI.GetStateName() == 's_Investigate')
+			if (AI.GetStateName() == 's_Investigate')
 				return MOVE_WalkNormal;
 			
-			if ( AI.GetStateName() == 's_Alert' )
+			if (AI.GetStateName() == 's_Alert')
             {
-                if(_bForceAware)
+                if (_bForceAware)
     				return MOVE_WalkNormal;
                 else
 				    return MOVE_WalkAlert;
             }
 			else
 			{
-				if ( AI.m_LastStateName == 's_Default')
+				if (AI.m_LastStateName == 's_Default')
 					return MOVE_WalkRelaxed;
 				
-				if ( AI.m_LastStateName == 's_Investigate')
+				if (AI.m_LastStateName == 's_Investigate')
 					return MOVE_WalkNormal;
 				
-				if (AI.m_LastStateName == 's_Alert' )
+				if (AI.m_LastStateName == 's_Alert')
 				{
-					if(_bForceAware)
+					if (_bForceAware)
     					return MOVE_WalkNormal;
 					else
 						return MOVE_WalkAlert;
@@ -1853,11 +1853,11 @@ function NotifyShotJustMissed(Pawn Instigator)
 //		Check for entering flashlight zone.
 // 
 //------------------------------------------------------------------------
-function SetVolumeZone( bool bEntering, EVolume Volume )
+function SetVolumeZone(bool bEntering, EVolume Volume)
 {
-	if ( Volume.bFlashlightVolume )
+	if (Volume.bFlashlightVolume)
 	{
-		if ( bEntering )
+		if (bEntering)
 			AI.bInFlashlightVolume = true;
 		else
 			AI.bInFlashLightVolume = false;
@@ -1879,7 +1879,7 @@ function PlayNarrowLadderOutBottom()
 	// rotational root motion anim
 	LockRootMotion(1, true);
 
-	if( m_climbingUpperHand == CHLEFT )
+	if (m_climbingUpperHand == CHLEFT)
 		PlayAnimOnly(ANLOutBottomRight);
 	else
 		PlayAnimOnly(ANLOutBottomLeft);
@@ -1896,10 +1896,10 @@ function PlayNarrowLadderOutBottom()
 
 function name GetWeaponSelectAnim()
 {
-	if ( bIsCrouched )
+	if (bIsCrouched)
 	{
 		// weapon selection depends on the handedness of the weapon this AI owns
-		switch ( WeaponHandedness ) 
+		switch (WeaponHandedness) 
 		{ 
 			case 0 : 
 				return '';
@@ -1914,7 +1914,7 @@ function name GetWeaponSelectAnim()
 	else
 	{
 		// weapon selection depends on the handedness of the weapon this AI owns
-		switch ( WeaponHandedness ) 
+		switch (WeaponHandedness) 
 		{ 
 			case 0 : 
 				return '';
@@ -1938,9 +1938,9 @@ function name GetWeaponSelectAnim()
 
 function name GetItemSelectAnim()
 {
-	if( !PendingItem.bIsProjectile )
+	if (!PendingItem.bIsProjectile)
 		return '';
-	if( bIsCrouched )
+	if (bIsCrouched)
 		return 'ThroCrAlBgH';
 	else
 		return 'ThroStAlBgH';
@@ -1953,7 +1953,7 @@ function name GetItemSelectAnim()
 //		Play damage animation.  
 // 
 //------------------------------------------------------------------------
-function PlayHitE( int PillTag, Vector HitLocation, Vector Momentum )
+function PlayHitE(int PillTag, Vector HitLocation, Vector Momentum)
 {
 	if ((AI.bIsOnLadder) || (bDontPlayDamageAnim))
 		return;

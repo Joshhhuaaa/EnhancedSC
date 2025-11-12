@@ -48,14 +48,14 @@ function SetHistory(bool bInHistory)
 {
 	bHistory = bInHistory;
 
-	if(bHistory && HistoryList==None)
+	if (bHistory && HistoryList == None)
 	{
 		HistoryList = new(None) class'UWindowEditBoxHistory';
 		HistoryList.SetupSentinel();
 		CurrentHistory = None;
 	}
 	else
-	if(!bHistory && HistoryList!=None)
+	if (!bHistory && HistoryList != None)
 	{
 		HistoryList = None;
 		CurrentHistory = None;
@@ -74,20 +74,20 @@ function SetValue(string NewValue, optional string NewValue2, optional bool noUp
 	Value = NewValue;
 	Value2 = NewValue2;
 
-	if(CaretOffset > Len(Value))
+	if (CaretOffset > Len(Value))
 		CaretOffset = Len(Value);		
 
-    if(!bHistory)
+    if (!bHistory)
     {
         OldValue = Value;
     }    
-    else  if(!noUpdateHistory)
+    else  if (!noUpdateHistory)
 	{
-		if(Value != "")
+		if (Value != "")
 		{
 			CurrentHistory = UWindowEditBoxHistory(HistoryList.Insert(class'UWindowEditBoxHistory'));
 			CurrentHistory.HistoryText = Value;
-            if(bShowLog)log("Set value CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
+            if (bShowLog)log("Set value CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
 
 		}
 		CurrentHistory = HistoryList;
@@ -101,7 +101,7 @@ function Clear()
 	Value="";
 	Value2="";
 	bAllSelected = False;
-	if(bDelayedNotify)
+	if (bDelayedNotify)
 		bChangePending = True;
 	else
 		Notify(DE_Change);
@@ -110,14 +110,14 @@ function Clear()
 //This is the default function for enabling editing
 function SelectAll()
 {
-    if(bShowLog)log("SelectAll");
+    if (bShowLog)log("SelectAll");
 	
-    if(bCanEdit)
+    if (bCanEdit)
     {
         m_CurrentlyEditing = true;
     }
 
-    if(Value != "")
+    if (Value != "")
 	{
 		CaretOffset = Len(Value);
 		bAllSelected = !bAllSelected;
@@ -136,7 +136,7 @@ function string GetValue2()
 
 function Notify(byte E)
 {
-	if(NotifyOwner != None)
+	if (NotifyOwner != None)
 	{
 		NotifyOwner.Notify(E);
 	} else {
@@ -148,7 +148,7 @@ function InsertText(string Text)
 {
 	local int i;
 
-	for(i=0;i<Len(Text);i++)
+	for (i = 0; i < Len(Text); i++)
 		Insert(Asc(Mid(Text,i,1)));
 }
 
@@ -159,13 +159,13 @@ function bool Insert(byte C)
 
 	NewValue = Left(Value, CaretOffset) $ Chr(C) $ Mid(Value, CaretOffset);
 
-	if(Len(NewValue) > MaxLength) 
+	if (Len(NewValue) > MaxLength) 
 		return False;
 
 	CaretOffset++;
 
 	Value = NewValue;
-	if(bDelayedNotify)
+	if (bDelayedNotify)
 		bChangePending = True;
 	else
 		Notify(DE_Change);
@@ -176,13 +176,13 @@ function bool Backspace()
 {
 	local string	NewValue;
 
-	if(CaretOffset == 0) return False;
+	if (CaretOffset == 0) return False;
 
 	NewValue = Left(Value, CaretOffset - 1) $ Mid(Value, CaretOffset);
 	CaretOffset--;
 
 	Value = NewValue;
-	if(bDelayedNotify)
+	if (bDelayedNotify)
 		bChangePending = True;
 	else
 		Notify(DE_Change);
@@ -193,7 +193,7 @@ function bool Delete()
 {
 	local string	NewValue;
 
-	if(CaretOffset == Len(Value)) return False;
+	if (CaretOffset == Len(Value)) return False;
 
 	NewValue = Left(Value, CaretOffset) $ Mid(Value, CaretOffset + 1);
 
@@ -204,9 +204,9 @@ function bool Delete()
 
 function bool WordLeft()
 {
-	while(CaretOffset > 0 && Mid(Value, CaretOffset - 1, 1) == " ")
+	while (CaretOffset > 0 && Mid(Value, CaretOffset - 1, 1) == " ")
 		CaretOffset--;
-	while(CaretOffset > 0 && Mid(Value, CaretOffset - 1, 1) != " ")
+	while (CaretOffset > 0 && Mid(Value, CaretOffset - 1, 1) != " ")
 		CaretOffset--;
 
 	LastDrawTime = GetTime();
@@ -217,7 +217,7 @@ function bool WordLeft()
 
 function bool MoveLeft()
 {
-	if(CaretOffset == 0) return False;
+	if (CaretOffset == 0) return False;
 	CaretOffset--;
 
 	LastDrawTime = GetTime();
@@ -228,7 +228,7 @@ function bool MoveLeft()
 
 function bool MoveRight()
 {
-	if(CaretOffset == Len(Value)) return False;
+	if (CaretOffset == Len(Value)) return False;
 	CaretOffset++;
 
 	LastDrawTime = GetTime();
@@ -239,9 +239,9 @@ function bool MoveRight()
 
 function bool WordRight()
 {
-	while(CaretOffset < Len(Value) && Mid(Value, CaretOffset, 1) != " ")
+	while (CaretOffset < Len(Value) && Mid(Value, CaretOffset, 1) != " ")
 		CaretOffset++;
-	while(CaretOffset < Len(Value) && Mid(Value, CaretOffset, 1) == " ")
+	while (CaretOffset < Len(Value) && Mid(Value, CaretOffset, 1) == " ")
 		CaretOffset++;
 
 	LastDrawTime = GetTime();
@@ -272,15 +272,15 @@ function bool MoveEnd()
 
 function EditCopy()
 {
-	if((bAllSelected || !bCanEdit) && m_CurrentlyEditing)
+	if ((bAllSelected || !bCanEdit) && m_CurrentlyEditing)
 		GetPlayerOwner().CopyToClipboard(Value);
 }
 
 function EditPaste()
 {
-	if(bCanEdit && m_CurrentlyEditing)
+	if (bCanEdit && m_CurrentlyEditing)
 	{
-		if(bAllSelected)
+		if (bAllSelected)
 			Clear();
 		InsertText(GetPlayerOwner().PasteFromClipboard());
 	}
@@ -288,9 +288,9 @@ function EditPaste()
 
 function EditCut()
 {
-	if(bCanEdit && m_CurrentlyEditing)
+	if (bCanEdit && m_CurrentlyEditing)
 	{
-		if(bAllSelected)
+		if (bAllSelected)
 		{
 			GetPlayerOwner().CopyToClipboard(Value);
 			bAllSelected = False;
@@ -301,26 +301,26 @@ function EditCut()
 		EditCopy();
 }
 
-function KeyType( int Key, float MouseX, float MouseY )
+function KeyType(int Key, float MouseX, float MouseY)
 {
 	local string result;
 	result = "";
 
-    if(bShowLog)log("UWindowEditBox::KeyType bCanEdit"@bCanEdit@"bKeyDown"@bKeyDown@"m_CurrentlyEditing"@m_CurrentlyEditing);
+    if (bShowLog)log("UWindowEditBox::KeyType bCanEdit"@bCanEdit@"bKeyDown"@bKeyDown@"m_CurrentlyEditing"@m_CurrentlyEditing);
 
         
-    if(bCanEdit && bKeyDown && m_CurrentlyEditing)
+    if (bCanEdit && bKeyDown && m_CurrentlyEditing)
 	{
-		if( !bControlDown )
+		if (!bControlDown)
 		{
-			if(bAllSelected)
+			if (bAllSelected)
 				Clear();
 
 			bAllSelected = False;
 
-			if(bNumericOnly)
+			if (bNumericOnly)
 			{
-				if( Key>=0x30 && Key<=0x39 )  
+				if (Key >= 0x30 && Key <= 0x39)  
 				{
 					Insert(Key);
 				}
@@ -330,7 +330,7 @@ function KeyType( int Key, float MouseX, float MouseY )
 				//clauzon 11/29/2002, validate aditional characters
 				result = GetPlayerOwner().ConsoleCommand("VALIDATECHAR CHAR=" $ Key);
 					
-				if( Key>=0x20 && Key<0x80 && result=="TRUE" )
+				if (Key >= 0x20 && Key < 0x80 && result=="TRUE")
 				{
 					Insert(Key);
 				}
@@ -369,18 +369,18 @@ function KeyDown(int Key, float X, float Y)
 		bShiftDown = True;
 		break;
 	case Root.Console.EInputKey.IK_Escape:
-        if(bCanEdit && m_CurrentlyEditing)
+        if (bCanEdit && m_CurrentlyEditing)
 		{			
-            if(bShowLog)log("Escape pressed");
+            if (bShowLog)log("Escape pressed");
 
-            if(!bHistory)
+            if (!bHistory)
             {
                 SetValue(OldValue, "",true);	                                
             }
-			else if(CurrentHistory != None && CurrentHistory.Next != None)
+			else if (CurrentHistory != None && CurrentHistory.Next != None)
 			{
-                if(bShowLog)log("CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
-                if(bShowLog)log("CurrentHistory.Next.HistoryText"@UWindowEditBoxHistory(CurrentHistory.Next).HistoryText);
+                if (bShowLog)log("CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
+                if (bShowLog)log("CurrentHistory.Next.HistoryText"@UWindowEditBoxHistory(CurrentHistory.Next).HistoryText);
 
 				SetValue(UWindowEditBoxHistory(CurrentHistory.Next).HistoryText, "",true);	                
 			}            
@@ -389,19 +389,19 @@ function KeyDown(int Key, float X, float Y)
 		}         
 		break;
 	case Root.Console.EInputKey.IK_Enter:
-		if(bCanEdit && m_CurrentlyEditing)
+		if (bCanEdit && m_CurrentlyEditing)
 		{
-            if(!bHistory)
+            if (!bHistory)
 		{
                OldValue = Value;
             }
 			else
 			{
-				if(Value != "")
+				if (Value != "")
 				{
 					CurrentHistory = UWindowEditBoxHistory(HistoryList.Insert(class'UWindowEditBoxHistory'));
 					CurrentHistory.HistoryText = Value;
-                    if(bShowLog)log("Set value CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
+                    if (bShowLog)log("Set value CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
 				}
 				CurrentHistory = HistoryList;
 			}
@@ -411,18 +411,18 @@ function KeyDown(int Key, float X, float Y)
 		}
 		break;
 	case Root.Console.EInputKey.IK_MouseWheelUp:
-		if(bCanEdit)
+		if (bCanEdit)
 			Notify(DE_WheelUpPressed);
 		break;
 	case Root.Console.EInputKey.IK_MouseWheelDown:
-		if(bCanEdit)
+		if (bCanEdit)
 			Notify(DE_WheelDownPressed);
 		break;
 
 	case Root.Console.EInputKey.IK_Right:
-		if(bCanEdit && m_CurrentlyEditing) 
+		if (bCanEdit && m_CurrentlyEditing) 
 		{
-			if(bControlDown)
+			if (bControlDown)
 				WordRight();
 			else
 				MoveRight();
@@ -433,9 +433,9 @@ function KeyDown(int Key, float X, float Y)
 		
 		break;
 	case Root.Console.EInputKey.IK_Left:
-		if(bCanEdit && m_CurrentlyEditing)
+		if (bCanEdit && m_CurrentlyEditing)
 		{
-			if(bControlDown)
+			if (bControlDown)
 				WordLeft();
 			else
 				MoveLeft();
@@ -446,10 +446,10 @@ function KeyDown(int Key, float X, float Y)
 
 		break;
 	case Root.Console.EInputKey.IK_Up:
-		if(bCanEdit && bHistory && m_CurrentlyEditing)
+		if (bCanEdit && bHistory && m_CurrentlyEditing)
 		{
 			bAllSelected = False;
-			if(CurrentHistory != None && CurrentHistory.Next != None)
+			if (CurrentHistory != None && CurrentHistory.Next != None)
 			{
 				CurrentHistory = UWindowEditBoxHistory(CurrentHistory.Next);
 				SetValue(CurrentHistory.HistoryText,"",true);	                
@@ -458,10 +458,10 @@ function KeyDown(int Key, float X, float Y)
 		}
 		break;
 	case Root.Console.EInputKey.IK_Down:
-		if(bCanEdit && bHistory && m_CurrentlyEditing)
+		if (bCanEdit && bHistory && m_CurrentlyEditing)
 		{
 			bAllSelected = False;
-			if(CurrentHistory != None && CurrentHistory.Prev != None)
+			if (CurrentHistory != None && CurrentHistory.Prev != None)
 			{
 				CurrentHistory = UWindowEditBoxHistory(CurrentHistory.Prev);
 				SetValue(CurrentHistory.HistoryText,"",true);	                
@@ -470,23 +470,23 @@ function KeyDown(int Key, float X, float Y)
 		}
 		break;
 	case Root.Console.EInputKey.IK_Home:
-		if(bCanEdit && m_CurrentlyEditing)
+		if (bCanEdit && m_CurrentlyEditing)
         {
 			MoveHome();
 		bAllSelected = False;
         }			
 		break;
 	case Root.Console.EInputKey.IK_End:
-		if(bCanEdit && m_CurrentlyEditing)
+		if (bCanEdit && m_CurrentlyEditing)
         {
 			MoveEnd();
 		bAllSelected = False;
         }			
 		break;
 	case Root.Console.EInputKey.IK_Backspace:
-		if(bCanEdit && m_CurrentlyEditing)
+		if (bCanEdit && m_CurrentlyEditing)
 		{
-			if(bAllSelected)
+			if (bAllSelected)
 				Clear();
 			else
 				Backspace();
@@ -496,9 +496,9 @@ function KeyDown(int Key, float X, float Y)
 
 		break;
 	case Root.Console.EInputKey.IK_Delete:
-		if(bCanEdit && m_CurrentlyEditing)
+		if (bCanEdit && m_CurrentlyEditing)
 		{
-			if(bAllSelected)
+			if (bAllSelected)
 				Clear();
 			else
 				Delete();
@@ -514,20 +514,20 @@ function KeyDown(int Key, float X, float Y)
 			Insert(Asc("."));
 		break;
 	default:
-		if( bControlDown )
+		if (bControlDown)
 		{
-			if( Key == Asc("c") || Key == Asc("C"))
+			if (Key == Asc("c") || Key == Asc("C"))
 				EditCopy();
 
-			if( Key == Asc("v") || Key == Asc("V"))
+			if (Key == Asc("v") || Key == Asc("V"))
 				EditPaste();
 
-			if( Key == Asc("x") || Key == Asc("X"))
+			if (Key == Asc("x") || Key == Asc("X"))
 				EditCut();
 		}
 		else
 		{
-			if(NotifyOwner != None)
+			if (NotifyOwner != None)
 				NotifyOwner.KeyDown(Key, X, Y);
 			else
 				Super.KeyDown(Key, X, Y);
@@ -540,7 +540,7 @@ function KeyDown(int Key, float X, float Y)
 function Click(float X, float Y)
 {
 	Notify(DE_Click);
-    if(bShowLog)log("UWindowEditBox::Click");
+    if (bShowLog)log("UWindowEditBox::Click");
 }
 
 function LMouseDown(float X, float Y)
@@ -548,7 +548,7 @@ function LMouseDown(float X, float Y)
 	Super.LMouseDown(X, Y);
     SelectAll();
 	Notify(DE_LMouseDown);
-    if(bShowLog)log("UWindowEditBox::LMouseDown");
+    if (bShowLog)log("UWindowEditBox::LMouseDown");
 }
 
 function Paint(Canvas C, float X, float Y)
@@ -564,7 +564,7 @@ function Paint(Canvas C, float X, float Y)
 		TextSize(C, Value, W, H);
 		TextY = (WinHeight - H) / 2;
 
-		switch(Align)
+		switch (Align)
 		{
 	//		case TA_Left:
 	//			Offset = Offset + 1;
@@ -582,7 +582,7 @@ function Paint(Canvas C, float X, float Y)
 
 		C.SetDrawColor(TextColor.R,TextColor.G,TextColor.B);
 
-		if(m_CurrentlyEditing && bAllSelected)
+		if (m_CurrentlyEditing && bAllSelected)
 		{
 			DrawStretchedTexture(C, Offset, TextY, W, H, Texture'UWindow.WhiteTexture');
 
@@ -600,18 +600,18 @@ function Paint(Canvas C, float X, float Y)
 
 	    TextSize(C, Left(Value, CaretOffset), W, H);
 	    
-	    if(W + Offset < 0)
+	    if (W + Offset < 0)
 		    Offset = -W;
 
-	    if(W + Offset > (WinWidth - 2))
+	    if (W + Offset > (WinWidth - 2))
 	    {
 		    Offset = (WinWidth - 2) - W;
-		    if(Offset > 0) Offset = 0;
+		    if (Offset > 0) Offset = 0;
 	    }
 
 	    C.SetDrawColor(TextColor.R,TextColor.G,TextColor.B);
 
-	    if(m_CurrentlyEditing && bAllSelected)
+	    if (m_CurrentlyEditing && bAllSelected)
 	    {
 		    DrawStretchedTexture(C, Offset + 1, TextY, W, H, Texture'UWindow.WhiteTexture');
 
@@ -625,20 +625,20 @@ function Paint(Canvas C, float X, float Y)
 
     fCurrentTime = GetTime();
 	// show the caret
-	if( (!m_CurrentlyEditing) || (!bHasKeyboardFocus) || (!bCanEdit) )
+	if ((!m_CurrentlyEditing) || (!bHasKeyboardFocus) || (!bCanEdit))
     {        
         bShowCaret = False;
     }		
 	else
 	{       
-		if((fCurrentTime > LastDrawTime + 0.3) || (fCurrentTime < LastDrawTime))
+		if ((fCurrentTime > LastDrawTime + 0.3) || (fCurrentTime < LastDrawTime))
 		{
         	LastDrawTime = fCurrentTime;
 			bShowCaret = !bShowCaret;
 		}
 	}
 
-	if(bShowCaret)
+	if (bShowCaret)
     {        
         ClipText(C, m_ILeftBorderOffset + Offset + W - 1, TextY, "|");
     }       
@@ -657,10 +657,10 @@ function Close(optional bool bByParent)
 
 function FocusOtherWindow(UWindowWindow W)
 {
-    if(bShowLog)log("FocusOtherWindow");
+    if (bShowLog)log("FocusOtherWindow");
 	DropSelection();
 
-	if(NotifyOwner != None)
+	if (NotifyOwner != None)
 		NotifyOwner.FocusOtherWindow(W);
 	else
 		Super.FocusOtherWindow(W);
@@ -675,9 +675,9 @@ function DoubleClick(float X, float Y)
 
 function KeyFocusEnter()
 {
-   if(bShowLog)log("UWindowEditBox::KeyFocusEnter");
+   if (bShowLog)log("UWindowEditBox::KeyFocusEnter");
     
-	if(bSelectOnFocus && !bHasKeyboardFocus)
+	if (bSelectOnFocus && !bHasKeyboardFocus)
 		SelectAll();
 
 	Super.KeyFocusEnter();
@@ -685,20 +685,20 @@ function KeyFocusEnter()
 
 function KeyFocusExit()
 {
-    if(bShowLog)log("KeyFocusExit");
-    if(bCanEdit && m_CurrentlyEditing)
+    if (bShowLog)log("KeyFocusExit");
+    if (bCanEdit && m_CurrentlyEditing)
 	{        
-        if(!bHistory)
+        if (!bHistory)
         {            
             OldValue = Value;
         }    
         else
 		{
-			if(Value != "")
+			if (Value != "")
 {
 				CurrentHistory = UWindowEditBoxHistory(HistoryList.Insert(class'UWindowEditBoxHistory'));
 				CurrentHistory.HistoryText = Value;
-                if(bShowLog)log("Set value CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
+                if (bShowLog)log("Set value CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
 			}
 			CurrentHistory = HistoryList;
 		}
@@ -709,9 +709,9 @@ function KeyFocusExit()
 
 function DropSelection()
 {    
-    if(m_CurrentlyEditing)
+    if (m_CurrentlyEditing)
     {
-        if(bChangePending)
+        if (bChangePending)
 {
 		    bChangePending = False;
 		    Notify(DE_Change);

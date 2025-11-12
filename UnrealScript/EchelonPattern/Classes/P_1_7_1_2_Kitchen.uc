@@ -11,9 +11,9 @@ class P_1_7_1_2_Kitchen extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,13 +29,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz8')
+        if (P.name == 'spetsnaz8')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz2')
+        if (P.name == 'spetsnaz2')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

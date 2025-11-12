@@ -32,7 +32,7 @@ var InteractionMaster Master;	// Pointer to the Interaction Master
 // natives.
 
 native function Initialize();							// setup the state system and stack frame
-native function bool ConsoleCommand( coerce string S );	// Executes a console command
+native function bool ConsoleCommand(coerce string S);	// Executes a console command
 
 // ***********************************************************************************************
 // * BEGIN UBI MODIF Adionne (21 Nov 2002)
@@ -96,7 +96,7 @@ event Initialized();
 // Message - This event allows interactions to receive messages
 // ====================================================================
 
-function Message( coerce string Msg, float MsgLife)
+function Message(coerce string Msg, float MsgLife)
 {
 } // Message
 
@@ -109,12 +109,12 @@ function Message( coerce string Msg, float MsgLife)
 // ====================================================================
 // ====================================================================
 
-function bool KeyType( out EInputKey Key )
+function bool KeyType(out EInputKey Key)
 {
 	return false;	
 }
 
-function bool KeyEvent( out EInputKey Key, out EInputAction Action, FLOAT Delta )
+function bool KeyEvent(out EInputKey Key, out EInputAction Action, FLOAT Delta)
 {
 	return false;
 }
@@ -129,8 +129,8 @@ function bool KeyEvent( out EInputKey Key, out EInputAction Action, FLOAT Delta 
 // ====================================================================
 
 
-function PreRender( canvas Canvas );
-function PostRender( canvas Canvas );
+function PreRender(Canvas Canvas);
+function PostRender(Canvas Canvas);
 
 // ====================================================================
 // SetFocus - This function cases the Interaction to gain "focus" in the interaction

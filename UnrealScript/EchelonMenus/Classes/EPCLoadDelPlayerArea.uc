@@ -25,8 +25,8 @@ var EPCMessageBox        m_MessageBox;
 
 function Created()
 {
-    m_LDifficulty       = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_IDifficultyXPos, m_IDifficultyYPos, m_IDifficultyWidth, m_IDifficultyHeight, self));    
-    m_LDifficultyValue  = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_IDifficultyXPos, m_IDifficultyYPos + m_IDifficultyYOffset, m_IDifficultyWidth, m_IDifficultyHeight, self));    
+    m_LDifficulty       = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_IDifficultyXPos, m_IDifficultyYPos, m_IDifficultyWidth, m_IDifficultyHeight, self));    
+    m_LDifficultyValue  = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_IDifficultyXPos, m_IDifficultyYPos + m_IDifficultyYOffset, m_IDifficultyWidth, m_IDifficultyHeight, self));    
     
     m_LDifficulty.SetLabelText(Caps(Localize("HUD","DIFFICULTY","Localization\\HUD")),TXT_CENTER);    
     m_LDifficultyValue.Text = "";
@@ -37,11 +37,11 @@ function Created()
     m_LDifficulty.TextColor         = m_TextColor;    
     m_LDifficultyValue.TextColor    = m_TextColor;    
 
-    m_ListBox           = EPCListBox(CreateControl( class'EPCListBox', m_IListBoxXPos, m_IListBoxYPos, m_IListBoxWidth, m_IListBoxHeight, self));        
+    m_ListBox           = EPCListBox(CreateControl(class'EPCListBox', m_IListBoxXPos, m_IListBoxYPos, m_IListBoxWidth, m_IListBoxHeight, self));        
     m_ListBox.Font      = F_Normal;
     m_ListBox.Align     = TXT_CENTER;   
 
-    m_DeleteButton  = EPCTextButton(CreateControl( class'EPCTextButton', m_IDeleteXPos, m_IDeleteButtonYPos, m_IDeleteButtonWidth, m_IDeleteButtonHeight, self));
+    m_DeleteButton  = EPCTextButton(CreateControl(class'EPCTextButton', m_IDeleteXPos, m_IDeleteButtonYPos, m_IDeleteButtonWidth, m_IDeleteButtonHeight, self));
     m_DeleteButton.SetButtonText(Caps(Localize("HUD","DELETEPROFILE","Localization\\HUD")) ,TXT_CENTER);    
     m_DeleteButton.Font             = F_Normal;    
 }
@@ -67,13 +67,13 @@ function FillListBox()
    
     FileManager.FindFiles("..\\Save\\*.*", false, true);    
     
-    for(i=0; i< FileManager.m_pFileList.Length ; i++)
+    for (i = 0; i < FileManager.m_pFileList.Length; i++)
     {   
-        if( GetPlayerOwner().ConsoleCommand("LOADPROFILE Name="$FileManager.m_pFileList[i]) != "INVALID_PROFILE")
+        if (GetPlayerOwner().ConsoleCommand("LOADPROFILE Name="$FileManager.m_pFileList[i]) != "INVALID_PROFILE")
         {            
             L = EPCListBoxItem(m_ListBox.Items.Append(class'EPCListBoxItem'));
             L.Caption = FileManager.m_pFileList[i];
-            if( GetPlayerOwner().playerInfo.Difficulty == 0)
+            if (GetPlayerOwner().playerInfo.Difficulty == 0)
                 L.HelpText = Localize("HUD","Normal","Localization\\HUD");
             else if (GetPlayerOwner().playerInfo.Difficulty == 1)
                 L.HelpText = Localize("HUD","Hard","Localization\\HUD");
@@ -91,7 +91,7 @@ function FillListBox()
     }
 
     //Selects first element of the list box
-    if(m_ListBox.Items.Count() > 0)
+    if (m_ListBox.Items.Count() > 0)
     {
         m_ListBox.SetSelectedItem(UWindowListBoxItem(m_ListBox.Items.Next));
         m_ListBox.MakeSelectedVisible(); 
@@ -109,21 +109,21 @@ function EmptyListBox()
 function Notify(UWindowDialogControl C, byte E)
 {    
 
-	if( (E == DE_DoubleClick) && (C == m_ListBox))
+	if ((E == DE_DoubleClick) && (C == m_ListBox))
 	{        
-        if( (m_ListBox.SelectedItem != None) && (EPCPlayerMenu(OwnerWindow) != None) )
+        if ((m_ListBox.SelectedItem != None) && (EPCPlayerMenu(OwnerWindow) != None))
             EPCPlayerMenu(OwnerWindow).ConfirmButtonPressed();        
         
     }
     
-    if( (E == DE_Click) && (m_ListBox.SelectedItem != None))
+    if ((E == DE_Click) && (m_ListBox.SelectedItem != None))
     {
         //log("m_ListBox.SelectedItem "@m_ListBox.SelectedItem);
 
-        switch(C)
+        switch (C)
         {
         case m_ListBox:
-            m_LDifficultyValue.SetLabelText( EPCListBoxItem(m_ListBox.SelectedItem).HelpText, TXT_CENTER);    
+            m_LDifficultyValue.SetLabelText(EPCListBoxItem(m_ListBox.SelectedItem).HelpText, TXT_CENTER);    
             break;
         case m_DeleteButton:
             m_MessageBox = EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("OPTIONS","DELETEPROFILE","Localization\\HUD"), Localize("OPTIONS","DELETEPROFILEMESSAGE","Localization\\HUD"), MB_YesNo, MR_No, MR_No);
@@ -142,11 +142,11 @@ function MessageBoxDone(UWindowWindow W, MessageBoxResult Result)
     local EPCFileManager FileManager;
     local String Path;
 
-    if(m_MessageBox == W)
+    if (m_MessageBox == W)
     {
         m_MessageBox = None;
 
-        if(Result == MR_Yes)
+        if (Result == MR_Yes)
         {
              ///////////////////////////////////////////////////////////////////////////////////
             //                  DELETE A PROFILE

@@ -18,18 +18,18 @@ var BOOL   m_bReverseSort;
 
 function int Compare(UWindowList T, UWindowList B)
 {
-	if(EPCListBoxItem(T).m_bReverseSort || EPCListBoxItem(B).m_bReverseSort)
+	if (EPCListBoxItem(T).m_bReverseSort || EPCListBoxItem(B).m_bReverseSort)
 	{
-		if(Caps(EPCListBoxItem(T).szSortByToken) > Caps(EPCListBoxItem(B).szSortByToken))
+		if (Caps(EPCListBoxItem(T).szSortByToken) > Caps(EPCListBoxItem(B).szSortByToken))
 			return -1;
-		else if(Caps(EPCListBoxItem(T).szSortByToken) == Caps(EPCListBoxItem(B).szSortByToken))
+		else if (Caps(EPCListBoxItem(T).szSortByToken) == Caps(EPCListBoxItem(B).szSortByToken))
 			return 0;
 	}
 	else
 	{
-		if(Caps(EPCListBoxItem(T).szSortByToken) < Caps(EPCListBoxItem(B).szSortByToken))
+		if (Caps(EPCListBoxItem(T).szSortByToken) < Caps(EPCListBoxItem(B).szSortByToken))
 			return -1;
-		else if(Caps(EPCListBoxItem(T).szSortByToken) == Caps(EPCListBoxItem(B).szSortByToken))
+		else if (Caps(EPCListBoxItem(T).szSortByToken) == Caps(EPCListBoxItem(B).szSortByToken))
 			return 0;
 	}
 

@@ -78,7 +78,7 @@ function bool IsBTW()
 
 function Hit(int strenght, int fadeOut, optional bool noRumble)
 {
-	if(!noRumble)
+	if (!noRumble)
 		Level.RumbleShake(0.1, 1.0);
 	m_hitRoll = strenght;
 	m_hitFadeOut = fadeOut;
@@ -87,7 +87,7 @@ function Hit(int strenght, int fadeOut, optional bool noRumble)
 
 function Tilt(int strenght, int speed, int fadeOut, optional bool noRumble)
 {
-	if(!noRumble)
+	if (!noRumble)
 		Level.RumbleShake(0.3, 0.75);
 	m_tiltPitch = strenght;
 	m_tiltTargetPitch = strenght;
@@ -97,7 +97,7 @@ function Tilt(int strenght, int speed, int fadeOut, optional bool noRumble)
 
 function Shake(int strenght, int speed, int fadeOut, optional bool noRumble)
 {
-	if(!noRumble)
+	if (!noRumble)
 		Level.RumbleShake(0.3, 0.75);
 	m_shakeRoll = strenght;
 	m_shakeTargetRoll = strenght;
@@ -149,7 +149,7 @@ auto state s_Following
 		local vector currentDir, wantedDir;
 		currentDir = Vector(m_EPC.Rotation);
 		wantedDir = Vector(resetRot);
-		if((currentDir dot wantedDir) < 0.92)
+		if ((currentDir dot wantedDir) < 0.92)
 		{
 			m_resettingRotation = resetRot;
 			m_resetPitchSpeed = default.m_resetPitchSpeed * rate;
@@ -163,10 +163,10 @@ auto state s_Following
 	{
 		local rotator tmp;
 
-		if(m_EPC.bResetCamera != 0)
+		if (m_EPC.bResetCamera != 0)
 		{
 			tmp = m_EPC.Pawn.Rotation;
-			if(!m_EPC.CanResetCameraYaw())
+			if (!m_EPC.CanResetCameraYaw())
 				tmp.Yaw = m_EPC.Rotation.Yaw;
 			tmp = Normalize(tmp);
 			ResetRotation(tmp, 0.8);
@@ -184,7 +184,7 @@ state s_Reseting extends s_Following
 {
 	function UpdateRotation(actor ViewActor)
 	{
-		if(ResettingRotation())
+		if (ResettingRotation())
 		{
 			m_EPC.ePawn.YawTurnSpeed = m_EPC.ePawn.default.YawTurnSpeed;
 			GoToState('s_Following');

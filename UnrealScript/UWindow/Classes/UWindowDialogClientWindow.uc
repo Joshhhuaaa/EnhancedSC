@@ -27,7 +27,7 @@ function UWindowDialogControl CreateControl(class<UWindowDialogControl> ControlC
 	C.Register(Self);
 	C.Notify(C.DE_Created);
 
-	if(TabLast == None)
+	if (TabLast == None)
 	{
 		TabLast = C;
 		C.TabNext = C;

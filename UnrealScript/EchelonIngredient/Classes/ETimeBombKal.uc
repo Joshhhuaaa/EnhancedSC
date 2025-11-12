@@ -8,13 +8,13 @@ function PostBeginPlay()
 {
 	Super.PostBeginPlay();
 
-	SpawnNeedle(NeedleSec, -65535/60*5 * Rot(0,0,1));
-	SpawnNeedle(NeedleMin, -65535/60 * Rot(0,0,1));
+	SpawnNeedle(NeedleSec, -65535 / 60 * 5 * Rot(0,0,1));
+	SpawnNeedle(NeedleMin, -65535 / 60 * Rot(0,0,1));
 }
 
-function SpawnNeedle( out EGameplayObject Needle, Rotator Rate )
+function SpawnNeedle(out EGameplayObject Needle, Rotator Rate)
 {
-	if( Needle != None ) 
+	if (Needle != None) 
 		return;
 	Needle = spawn(class'EGameplayObject', self,, ToWorld(Vect(3.887,-4.63,0.373)));
 	Needle.SetStaticMesh(StaticMesh'EMeshIngredient.Object.BombNeedle_kal');
@@ -25,14 +25,14 @@ function SpawnNeedle( out EGameplayObject Needle, Rotator Rate )
 
 function Destroyed()
 {
-	if( NeedleSec != None )
+	if (NeedleSec != None)
 		NeedleSec.Destroy();
-	if( NeedleMin != None )
+	if (NeedleMin != None)
 		NeedleMin.Destroy();
 	Super.Destroyed();
 }
 
-function Trigger( actor Other, pawn EventInstigator, optional name InTag )
+function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 {
 	// From pattern to start Timer
 	PlaySound(Sound'Electronic.Play_AlarmAlgorithm', SLOT_SFX);
@@ -63,7 +63,7 @@ state s_Timing
 		DestroyObject();
 	}
 
-	function Trigger( actor Other, pawn EventInstigator, optional name InTag )
+	function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 	{
 		// // From interaction to handle defusing
 		Super.Trigger(Other, EventInstigator);

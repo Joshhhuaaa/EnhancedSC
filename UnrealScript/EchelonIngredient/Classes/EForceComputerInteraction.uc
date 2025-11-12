@@ -6,7 +6,7 @@ function bool IsAvailable()
 }
 
 // Should this override EComputerInteraction::Interact?
-function Interact( Controller Instigator )
+function Interact(Controller Instigator)
 {
 	// Trigger object
 	Owner.Trigger(Self, Instigator.Pawn);

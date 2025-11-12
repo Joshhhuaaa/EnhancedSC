@@ -80,7 +80,7 @@ function PostBeginPlay()
 	Super.postBeginPlay();
 }
 
-function EKeyButton CreateButton( StaticMesh MeshName, Vector offset, string Val, optional StaticMesh TMesh )
+function EKeyButton CreateButton(StaticMesh MeshName, Vector offset, string Val, optional StaticMesh TMesh)
 {
 	local EKeyButton B;
 	B = spawn(class'EKeyButton', self);
@@ -96,7 +96,7 @@ function CreateTextMesh()
 	local int i;
 	local vector pos;
 
-	for( i=0; i<ArrayCount(MeshCode); i++ )
+	for (i = 0; i < ArrayCount(MeshCode); i++)
 	{
 		pos = CONST_TextStart;
 		pos.Y -= i * 0.6f;
@@ -120,9 +120,9 @@ function CreateTextMesh()
 function bool ProcessAccessCode()
 {
 	// If both code have same length, make validation
-	if( Len(InputedCode) == Len(AccessCode) )
+	if (Len(InputedCode) == Len(AccessCode))
 	{
-		if( InputedCode == AccessCode )
+		if (InputedCode == AccessCode)
 			GotoState('s_AccessGranted');
 		else
 			GotoState('s_AccessDenied');
@@ -140,7 +140,7 @@ function GlowSelected()
 {
 	local int i;
 
-	for( i=0; i<ArrayCount(KeyButtons); i++ )
+	for (i = 0; i < ArrayCount(KeyButtons); i++)
 	{
 		// set keypad setting
 		KeyButtons[i].bRenderAtEndOfFrame = bRenderAtEndOfFrame;
@@ -148,11 +148,11 @@ function GlowSelected()
 		KeyButtons[i].AmbientGlow = AmbientGlow;
 	}
 
-	if( SelectedButton != -1 )
+	if (SelectedButton != -1)
 		//return;
 		KeyButtons[SelectedButton].AmbientGlow *= 2;
 
-	for( i=0; i<ArrayCount(MeshCode); i++ )
+	for (i = 0; i < ArrayCount(MeshCode); i++)
 		MeshCode[i].bRenderAtEndOfFrame = bRenderAtEndOfFrame;
 
 	RedLight.bRenderAtEndOfFrame = bRenderAtEndOfFrame;
@@ -170,13 +170,13 @@ function KeyPushed()
 	GotoState('s_Use');
 	KeyButtons[SelectedButton].Push(EKeyPadInteraction(Interaction).InteractionController.bIsPlayer);
 
-	if( !EKeyPadInteraction(Interaction).InteractionController.bIsPlayer )
+	if (!EKeyPadInteraction(Interaction).InteractionController.bIsPlayer)
 	{
 		// Overwrites keyButton intensity code
 		KeyButtons[SelectedButton].HeatIntensity = CodeIntensity[Len(InputedCode)];
 
 		// Start thermal signature fadeout on first button
-		if( Len(InputedCode) == 0 && !bNoTimer )
+		if (Len(InputedCode) == 0 && !bNoTimer)
 		{
 			//Log(self$" BegIN FADE"@Interaction@EKeyPadInteraction(Interaction).InteractionController);
 			FadeElapsedTime = 0;
@@ -185,14 +185,14 @@ function KeyPushed()
 		}
 	}
 
-	if(EKeyPadInteraction(Interaction).InteractionController.bIsPlayer)
+	if (EKeyPadInteraction(Interaction).InteractionController.bIsPlayer)
 		PlaySound(Sound'Electronic.Play_keyPadButton', SLOT_Interface);
 	else
 		PlaySound(Sound'Electronic.Play_keyPadButton', SLOT_SFX);
 
 
 	// RESET button
-	if( SelectedButton == 9 )
+	if (SelectedButton == 9)
 	{
 		Reset();
 		return;
@@ -202,7 +202,7 @@ function KeyPushed()
 	InputedCode = InputedCode $ KeyButtons[SelectedButton].Value;
 
 	// Show letter mesh
-	if( !ProcessAccessCode() )
+	if (!ProcessAccessCode())
 		SetLetterMesh();
 }
 
@@ -216,7 +216,7 @@ function SetLetterMesh()
 function ClearLetterMesh()
 {
 	local int i;
-	for( i=0; i<ArrayCount(MeshCode); i++ )
+	for (i = 0; i < ArrayCount(MeshCode); i++)
 		MeshCode[i].bHidden = true;
 }
 
@@ -226,33 +226,33 @@ function Reset()
 	ClearLetterMesh();
 }
 
-function Tick( float DeltaTime )
+function Tick(float DeltaTime)
 {
 	local int i;
 
-	if( !bRunTimer || bNoTimer )
+	if (!bRunTimer || bNoTimer)
 		return;
 
 	// Fade out timer
 	FadeElapsedTime += DeltaTime;
 
 	//Log(self$" tick"@FadeElapsedTime@FadeOutTimer);
-	if( FadeElapsedTime < FadeOutTimer-5) // 5 = button fading time
+	if (FadeElapsedTime < FadeOutTimer - 5) // 5 = button fading time
 		return;
 
-	if( !bButtonFaded )
+	if (!bButtonFaded)
 	{
 		//Log(self$" Fading buttons");
 		bButtonFaded = true;
-		for( i=0; i<ArrayCount(KeyButtons); i++ )
+		for (i = 0; i < ArrayCount(KeyButtons); i++)
 			KeyButtons[i].bFading = true;
 	}
 
-	if( FadeElapsedTime < FadeOutTimer) // 5 = button fading time
+	if (FadeElapsedTime < FadeOutTimer) // 5 = button fading time
 		return;
 
 	//Log(self$" Sending fadeout timer");
-	if( GroupAI != None && FadeOutJumpLabel != '' )
+	if (GroupAI != None && FadeOutJumpLabel != '')
 		GroupAI.SendJumpEvent(FadeOutJumpLabel, false, false);
 	bRunTimer = false;
 }
@@ -263,9 +263,9 @@ auto state s_Idle
 	function BeginState()
 	{
 		// No special display if not player
-		if( Interaction != None && 
+		if (Interaction != None && 
 			EKeyPadInteraction(Interaction).InteractionController != None && 
-			EKeyPadInteraction(Interaction).InteractionController.bIsPlayer )
+			EKeyPadInteraction(Interaction).InteractionController.bIsPlayer)
 		{
 			bRenderAtEndOfFrame = false;
 			bSpecialLit = false;
@@ -285,7 +285,7 @@ state s_Use
 		Epc = EPlayerController(EKeyPadInteraction(Interaction).InteractionController);
 
 		// No special display if not player
-		if( Epc != None )
+		if (Epc != None)
 		{
 			if (!Epc.eGame.bUseController)
 				Epc.FakeMouseToggle(true);
@@ -306,11 +306,11 @@ state s_Use
 		Epc = EPlayerController(EKeyPadInteraction(Interaction).InteractionController);
 
 		// No special display if not player
-		if( Epc != None )
+		if (Epc != None)
 			Epc.FakeMouseToggle(false);
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
 		local int OldSelectedButton;
 		local EPlayerController Epc;
@@ -320,7 +320,7 @@ state s_Use
 		
 		OldSelectedButton = SelectedButton;
 
-		if( Epc == None )
+		if (Epc == None)
 			return;
 
 		if (!Epc.eGame.bUseController)
@@ -328,29 +328,29 @@ state s_Use
 			//
 			// Crappy button selection
 			//
-			if( CoordinateWithin(Epc, 96, 224, 65, 30) )
+			if (CoordinateWithin(Epc, 96, 224, 65, 30))
 				SelectedButton = 0;
-			else if( CoordinateWithin(Epc, 184, 224, 65, 30) )
+			else if (CoordinateWithin(Epc, 184, 224, 65, 30))
 				SelectedButton = 1;
-			else if( CoordinateWithin(Epc, 266, 224, 65, 30) )
+			else if (CoordinateWithin(Epc, 266, 224, 65, 30))
 				SelectedButton = 2;
-			else if( CoordinateWithin(Epc, 100, 262, 65, 30) )
+			else if (CoordinateWithin(Epc, 100, 262, 65, 30))
 				SelectedButton = 3;
-			else if( CoordinateWithin(Epc, 187, 262, 65, 30) )
+			else if (CoordinateWithin(Epc, 187, 262, 65, 30))
 				SelectedButton = 4;
-			else if( CoordinateWithin(Epc, 268, 262, 65, 30) )
+			else if (CoordinateWithin(Epc, 268, 262, 65, 30))
 				SelectedButton = 5;
-			else if( CoordinateWithin(Epc, 104, 300, 65, 30) )
+			else if (CoordinateWithin(Epc, 104, 300, 65, 30))
 				SelectedButton = 6;
-			else if( CoordinateWithin(Epc, 188, 300, 65, 30) )
+			else if (CoordinateWithin(Epc, 188, 300, 65, 30))
 				SelectedButton = 7;
-			else if( CoordinateWithin(Epc, 269, 300, 65, 30) )
+			else if (CoordinateWithin(Epc, 269, 300, 65, 30))
 				SelectedButton = 8;
-			else if( CoordinateWithin(Epc, 107, 340, 65, 30) )
+			else if (CoordinateWithin(Epc, 107, 340, 65, 30))
 				SelectedButton = 9;
-			else if( CoordinateWithin(Epc, 192, 340, 65, 30) )
+			else if (CoordinateWithin(Epc, 192, 340, 65, 30))
 				SelectedButton = 10;
-			else if( CoordinateWithin(Epc, 269, 340, 65, 30) )
+			else if (CoordinateWithin(Epc, 269, 340, 65, 30))
 				SelectedButton = 11;
 			else
 				SelectedButton = -1;
@@ -358,17 +358,17 @@ state s_Use
 			//
 			// Manage Mouse click
 			//
-			if( Epc.m_FakeMouseClicked )
+			if (Epc.m_FakeMouseClicked)
 			{
-				if( SelectedButton != -1 )
+				if (SelectedButton != -1)
 					KeyPushed();
-				else if( !CoordinateWithin(Epc, 80, 75, 277, 307) )
+				else if (!CoordinateWithin(Epc, 80, 75, 277, 307))
 					Interaction.PostInteract(EKeyPadInteraction(Interaction).InteractionController);
 			}
 			Epc.m_FakeMouseClicked = false;
 
 			// Change selection
-			if( OldSelectedButton != SelectedButton )
+			if (OldSelectedButton != SelectedButton)
 				GlowSelected();
 		}
 			// Joshua - Keypad hint
@@ -376,14 +376,14 @@ state s_Use
 
 			KeyPadInteraction = EKeyPadInteraction(Interaction);
 
-			if(KeyPadInteraction != None && KeyPadInteraction.CheckKeyCode(KeyPadInteraction.InteractionController, AccessCode))
+			if (KeyPadInteraction != None && KeyPadInteraction.CheckKeyCode(KeyPadInteraction.InteractionController, AccessCode))
 			{
 				EPlayerController(KeyPadInteraction.InteractionController).CurrentGoal = Localize("HUD", "Keypad_Goal", "Localization\\Enhanced")@AccessCode;
 				EPlayerController(KeyPadInteraction.InteractionController).bShowKeyNum = true;
 			}
 	}
 
-	function bool CoordinateWithin( EPlayerController Epc, float x, float y, int w, int h )
+	function bool CoordinateWithin(EPlayerController Epc, float x, float y, int w, int h)
 	{
 		return Epc.m_FakeMouseX > x && Epc.m_FakeMouseX < x + w && 
 			   Epc.m_FakeMouseY > y && Epc.m_FakeMouseY < y + h;
@@ -395,7 +395,7 @@ state s_Access
 	function BeginState()
 	{
 		ClearLetterMesh();
-		if( EKeyPadInteraction(Interaction).InteractionController.bIsPlayer )
+		if (EKeyPadInteraction(Interaction).InteractionController.bIsPlayer)
 			SetTimer(1.5f, false);
 		else
 			Timer();
@@ -419,20 +419,20 @@ state s_AccessGranted extends s_Access
 
 	function BeginState()
 	{
-		if(EKeyPadInteraction(Interaction).InteractionController.bIsPlayer)
+		if (EKeyPadInteraction(Interaction).InteractionController.bIsPlayer)
 			PlaySound(Sound'Electronic.Play_KeypadOk', SLOT_Interface);
 		else
 			PlaySound(Sound'Electronic.Play_KeypadOk', SLOT_SFX);
 
 		// If player enters code before button fading
-		if( EKeyPadInteraction(Interaction).InteractionController.bIsPlayer )
+		if (EKeyPadInteraction(Interaction).InteractionController.bIsPlayer)
 		{
 			bRunTimer = false;
 			bNoTimer = true;
 		}
 
 		// Trigger pattern upon access granted
-		TriggerPattern(EKeyPadInteraction(Interaction).InteractionController.pawn);
+		TriggerPattern(EKeyPadInteraction(Interaction).InteractionController.Pawn);
 
 		dGranted.bHidden = false;
 		GreenLight.bHidden = false;
@@ -448,11 +448,11 @@ state s_AccessGranted extends s_Access
 		bShouldDestroy = EKeyPadInteraction(Interaction).InteractionController.bIsPlayer;
 		
 		// destroy keypad interaction once successfully used by player only
-		if( bShouldDestroy )
+		if (bShouldDestroy)
 			Interaction.SetCollision(false);
 
 		EPC = EPlayerController(EKeyPadInteraction(Interaction).InteractionController);
-		if(EPC != None)
+		if (EPC != None)
 		{
 			EPC.RefreshGoals();
 			EPC.bShowKeyNum = false;
@@ -475,7 +475,7 @@ state s_AccessDenied extends s_Access
 
 	function BeginState()
 	{
-		if(EKeyPadInteraction(Interaction).InteractionController.bIsPlayer)
+		if (EKeyPadInteraction(Interaction).InteractionController.bIsPlayer)
 			PlaySound(Sound'Electronic.Play_KeyPadNOk', SLOT_Interface);
 		else
 			PlaySound(Sound'Electronic.Play_KeyPadNOk', SLOT_SFX);

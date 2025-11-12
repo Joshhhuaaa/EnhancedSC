@@ -23,7 +23,7 @@ function PreBeginPlay()
 // Description		
 //		If go gets to be a controller, he will shut down light percent 
 //------------------------------------------------------------------------
-function SetController( EGameplayObject obj )
+function SetController(EGameplayObject obj)
 {
 	SetOwner(obj);
 	NbControllers++;
@@ -34,10 +34,10 @@ function SetController( EGameplayObject obj )
 // Description		
 //		Turns on and off lights
 //------------------------------------------------------------------------
-function Trigger( actor Other, pawn EventInstigator, optional name InTag )
+function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 {
 	//log(self$" gets triggered by "@Other);
-	switch( Other.GetStateName() )
+	switch (Other.GetStateName())
 	{
 	case 's_On' :
 		TurnOn(CHANGE_LightTurnedOff, EventInstigator);
@@ -55,27 +55,27 @@ function Trigger( actor Other, pawn EventInstigator, optional name InTag )
 //------------------------------------------------------------------------
 function TurnOn(optional EChangeType _Type, optional Pawn EventInstigator)
 { 
-	if( LightBrightness != InitialLightBrightness && NbControllers > 1 )
+	if (LightBrightness != InitialLightBrightness && NbControllers > 1)
 	{
-		LightBrightness		= Min(LightBrightness+InitialLightBrightness/NbControllers, InitialLightBrightness);
+		LightBrightness		= Min(LightBrightness + InitialLightBrightness / NbControllers, InitialLightBrightness);
 		UsesSpotLightBeam	= InitialUsesBeam;
 		LastTimeChange		= Level.TimeSeconds;
 	}
-	if( LightType != InitialLightType && DisableIfOppositeShadowMode == false)
+	if (LightType != InitialLightType && DisableIfOppositeShadowMode == false)
 	{
 		LightType = InitialLightType;
 		LastTimeChange	= Level.TimeSeconds;
 	}
 
     // Then add us again if we were initially off
-	if((Owner.IsA('ESwitchObject')) && (Owner.InitialState == 's_Off') && (EventInstigator.bIsPlayerPawn))
+	if ((Owner.IsA('ESwitchObject')) && (Owner.InitialState == 's_Off') && (EventInstigator.bIsPlayerPawn))
     {
 		Level.AddChange(self, _Type);
     }
 
     //log("Turning on"@self@lightbrightness@LightType);
-	RestoreInitialLightType=true;
-	if(Level.Game.PlayerC != None)
+	RestoreInitialLightType = true;
+	if (Level.Game.PlayerC != None)
 		Level.Game.PlayerC.LightmapTextureCache = 1;
 }
 
@@ -83,15 +83,15 @@ function TurnOn(optional EChangeType _Type, optional Pawn EventInstigator)
 // Description		
 //		If we explicitely want to turn lights on/off
 //------------------------------------------------------------------------
-function TurnOff(EChangeType _Type, optional Pawn EventInstigator  )
+function TurnOff(EChangeType _Type, optional Pawn EventInstigator)
 {
 	//Log(self@LightBrightness@InitialLightBrightness@InitialLightBrightness/NbControllers@LightBrightness-InitialLightBrightness/NbControllers);
-	if( NbControllers > 1 && LightBrightness-InitialLightBrightness/NbControllers > 0 )
+	if (NbControllers > 1 && LightBrightness - InitialLightBrightness / NbControllers > 0)
 	{
-		LightBrightness		= LightBrightness-InitialLightBrightness/NbControllers;
+		LightBrightness		= LightBrightness - InitialLightBrightness / NbControllers;
 		LastTimeChange		= Level.TimeSeconds;
 	}
-	else if( LightType != LT_None )
+	else if (LightType != LT_None)
 	{
 		LightType = LT_None;
 		LastTimeChange	= Level.TimeSeconds;
@@ -102,14 +102,14 @@ function TurnOff(EChangeType _Type, optional Pawn EventInstigator  )
 	//Log(self$" Turned off"@LightBrightness@LightType);
 
 	Instigator = EventInstigator;
-	if( Owner.IsA('ESwitchObject') )
+	if (Owner.IsA('ESwitchObject'))
  		Level.AddChange(self, _Type);
 
-	if( _Type == CHANGE_LightShotOut && Nbcontrollers <= 1 )
+	if (_Type == CHANGE_LightShotOut && Nbcontrollers <= 1)
 		GotoState('s_Destrocuted');
 
-	RestoreInitialLightType=false;
-	if(Level.Game.PlayerC != None)
+	RestoreInitialLightType = false;
+	if (Level.Game.PlayerC != None)
 		Level.Game.PlayerC.LightmapTextureCache = 1;
 }
 

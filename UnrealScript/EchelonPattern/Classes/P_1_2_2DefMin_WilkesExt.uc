@@ -13,9 +13,9 @@ class P_1_2_2DefMin_WilkesExt extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('KilledWilkes');
@@ -40,13 +40,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EWilkes0')
+        if (P.name == 'EWilkes0')
             Characters[1] = P.controller;
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

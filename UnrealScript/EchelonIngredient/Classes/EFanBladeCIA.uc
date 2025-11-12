@@ -4,22 +4,22 @@ var() bool	bTurning;
 var() int	DeltaSpeed;
 var() int	MaxSpeed;
 
-function Trigger( actor Other, pawn EventInstigator, optional name InTag )
+function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 {
 	bTurning = !bTurning;
 
 	Super.Trigger(Other, EventInstigator, InTag);
 }
 
-function Bump( Actor Other, optional int Pill )
+function Bump(Actor Other, optional int Pill)
 {
-	if( bTurning && Other.bIsPawn )
+	if (bTurning && Other.bIsPawn)
 		Other.TakeDamage(EPawn(Other).Health, None, Other.Location, Vect(0,0,0), Vect(0,0,0), class'Crushed');
 }
 
-function Tick( float DeltaTime )
+function Tick(float DeltaTime)
 {
-	if( bTurning && RotationRate.Pitch < MaxSpeed )
+	if (bTurning && RotationRate.Pitch < MaxSpeed)
 	{
 		RotationRate += DeltaSpeed * Rot(1,0,0) * DeltaTime;
 		
@@ -27,7 +27,7 @@ function Tick( float DeltaTime )
 		Clamp(RotationRate.Yaw, 0, MaxSpeed);
 		Clamp(RotationRate.Roll, 0, MaxSpeed);
 	}
-	else if( !bTurning && RotationRate.Pitch > 0 )
+	else if (!bTurning && RotationRate.Pitch > 0)
 	{
 		RotationRate -= DeltaSpeed * Rot(1,0,0) * DeltaTime;
 	

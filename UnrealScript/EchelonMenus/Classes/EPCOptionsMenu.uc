@@ -85,7 +85,7 @@ function Created()
  
 }
 
-function ChangeTopButtonSelection( EPCTextButton _SelectMe)
+function ChangeTopButtonSelection(EPCTextButton _SelectMe)
 {
     m_Controls.m_bSelected      =  false;
     m_Graphics.m_bSelected      =  false;
@@ -97,7 +97,7 @@ function ChangeTopButtonSelection( EPCTextButton _SelectMe)
     m_ControlsArea.HideWindow();
     m_EnhancedArea.HideWindow();  // Joshua - Enhanced settings
     
-    switch(_SelectMe)
+    switch (_SelectMe)
     {
     case m_Controls:
         m_Controls.m_bSelected      =  true;
@@ -121,20 +121,20 @@ function ChangeTopButtonSelection( EPCTextButton _SelectMe)
 
 function Paint(Canvas C, float MouseX, float MouseY)
 {
-    Render( C , MouseX, MouseY);
+    Render(C , MouseX, MouseY);
 }
 
 function ShowWindow()
 {
     Super.ShowWindow();
 
-	if(m_ControlsArea.m_bFirstRefresh)
+	if (m_ControlsArea.m_bFirstRefresh)
 		m_ControlsArea.Refresh();
-	if(m_SoundsArea.m_bFirstRefresh)
+	if (m_SoundsArea.m_bFirstRefresh)
 		m_SoundsArea.Refresh();
-    if(m_GraphicArea.m_bFirstRefresh)
+    if (m_GraphicArea.m_bFirstRefresh)
 		m_GraphicArea.Refresh();    
-    if(m_EnhancedArea.m_bFirstRefresh)  // Joshua - Enhanced settings
+    if (m_EnhancedArea.m_bFirstRefresh)  // Joshua - Enhanced settings
 		m_EnhancedArea.Refresh();    
 }
 
@@ -142,12 +142,12 @@ function ShowWindow()
 function Notify(UWindowDialogControl C, byte E)
 {    
     
-    if(E == DE_Click)
+    if (E == DE_Click)
     {
-        switch(C)
+        switch (C)
         {
         case m_MainMenu:
-            if(m_SoundsArea.m_bModified || m_GraphicArea.m_bModified || m_ControlsArea.m_bModified || m_EnhancedArea.m_bModified)
+            if (m_SoundsArea.m_bModified || m_GraphicArea.m_bModified || m_ControlsArea.m_bModified || m_EnhancedArea.m_bModified)
                 m_MessageBox = EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("OPTIONS","SETTINGSCHANGE","Localization\\HUD"), Localize("OPTIONS","SETTINGSCHANGEMESSAGE","Localization\\HUD"), MB_YesNo, MR_No, MR_No);
             else
                 Root.ChangeCurrentWidget(WidgetID_MainMenu);
@@ -157,22 +157,22 @@ function Notify(UWindowDialogControl C, byte E)
         case m_Graphics:
         case m_Sounds:
         case m_Enhanced:  // Joshua - Enhanced settings
-            ChangeTopButtonSelection( EPCTextButton(C));
+            ChangeTopButtonSelection(EPCTextButton(C));
             break;
         case m_ResetToDefault:               
-            if(m_Controls.m_bSelected)
+            if (m_Controls.m_bSelected)
             {
                 m_ControlsArea.ResetToDefault();
             }              
-            else if(m_Graphics.m_bSelected)
+            else if (m_Graphics.m_bSelected)
             {                
                 m_GraphicArea.ResetToDefault();
             }
-            else if(m_Sounds.m_bSelected)
+            else if (m_Sounds.m_bSelected)
             {                
                 m_SoundsArea.ResetToDefault();
             }
-            else if(m_Enhanced.m_bSelected)
+            else if (m_Enhanced.m_bSelected)
             {
                 m_EnhancedArea.ResetToDefault();
             }
@@ -184,7 +184,7 @@ function Notify(UWindowDialogControl C, byte E)
 //Go Back to main menu with escape:
 function EscapeMenu()
 {
-	if(!EPCConsole(Root.Console).bInGameMenuActive &&
+	if (!EPCConsole(Root.Console).bInGameMenuActive &&
 	   m_ControlsArea.m_MessageBox == none)
 	{
 		Root.PlayClickSound();
@@ -196,11 +196,11 @@ function MessageBoxDone(UWindowWindow W, MessageBoxResult Result)
 {  
     local EPCGameOptions GO;
 
-    if(m_MessageBox == W)
+    if (m_MessageBox == W)
     {
         m_MessageBox = None;
 
-        if(Result == MR_Yes)
+        if (Result == MR_Yes)
         {
 			GO = class'Actor'.static.GetGameOptions();
 			GO.oldResolution = GO.Resolution;

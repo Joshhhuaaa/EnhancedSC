@@ -15,17 +15,17 @@ function PostBeginPlay()
 	SetBase(AssociatedActor);
 }
 
-function Touch( actor Other )
+function Touch(actor Other)
 {
-	if( IsRelevant(Other) )
+	if (IsRelevant(Other))
 	{
 		// notify associated actor
-		if( AssociatedActor != None )
+		if (AssociatedActor != None)
 			AssociatedActor.Trigger(self, EPawn(Other));
 
-		if( bTriggerOnceOnly )
+		if (bTriggerOnceOnly)
 			SetCollision(False);
-		else if ( RepeatTriggerTime > 0 )
+		else if (RepeatTriggerTime > 0)
 			SetTimer(RepeatTriggerTime, false);
 	}
 }
@@ -34,9 +34,9 @@ function Touch( actor Other )
 // Description		
 //		for shootable volume (oil barrel,etc...)
 //------------------------------------------------------------------------
-function TakeDamage( int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag )
+function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag)
 {
-	if( TriggerType == TT_Shoot && AssociatedActor != None )
+	if (TriggerType == TT_Shoot && AssociatedActor != None)
 		AssociatedActor.Trigger(self, EventInstigator);
 }
 

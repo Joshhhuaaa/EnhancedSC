@@ -16,9 +16,9 @@ var int TruckBExploded;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -35,21 +35,21 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EChineseSoldier21')
+        if (P.name == 'EChineseSoldier21')
             Characters[1] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'EVan0')
+        if (A.name == 'EVan0')
             SoundActors[0] = A;
-        if(A.name == 'EVan1')
+        if (A.name == 'EVan1')
             SoundActors[1] = A;
-        if(A.name == 'ESoundTrigger19')
+        if (A.name == 'ESoundTrigger19')
             SoundActors[2] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     TruckAExploded=0;

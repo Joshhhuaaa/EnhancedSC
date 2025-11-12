@@ -21,7 +21,7 @@ function CreateTextMesh()
 	local int i;
 	local vector pos;
 
-	for( i=0; i<2; i++ )
+	for (i = 0; i < 2; i++)
 	{
 		pos = Vect(0.65,-3,0);
 		pos.Y += i * 0.6f * 8; // drawscale
@@ -38,7 +38,7 @@ function CreateTextMesh()
 	}
 }
 
-function UpdateDisplays( StaticMesh NewDigit0, StaticMesh NewDigit1 )
+function UpdateDisplays(StaticMesh NewDigit0, StaticMesh NewDigit1)
 {
 	MeshCode[0].SetStaticMesh(NewDigit0);
 	MeshCode[1].SetStaticMesh(NewDigit1);

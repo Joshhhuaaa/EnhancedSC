@@ -16,7 +16,7 @@ var bool BackupCollideActors,
 
 function Touch(actor Other)
 {
-	if ( Other.bIsPlayerPawn )
+	if (Other.bIsPlayerPawn)
 		return;
 	
 	Super.UnTouch(Other);
@@ -24,7 +24,7 @@ function Touch(actor Other)
 
 function UnTouch(actor Other)
 {
-	if ( Other.bIsPlayerPawn )
+	if (Other.bIsPlayerPawn)
 		return;
 
 	Super.UnTouch(Other);
@@ -49,14 +49,14 @@ function UnTouch(actor Other)
 // 
 //------------------------------------------------------------------------
 
-function SetInteractLocation( Pawn InteractPawn )
+function SetInteractLocation(Pawn InteractPawn)
 {
 	local vector MovePos;
 	local EPawn InteractEPawn;
 	local vector HitLocation, HitNormal;
 
 	Chair = EChair(Owner);
-	if( Chair == None )
+	if (Chair == None)
 		Log("EChairInteraction problem with Owner");
 	
 	InteractEPawn = EPawn(InteractPawn);
@@ -67,7 +67,7 @@ function SetInteractLocation( Pawn InteractPawn )
 
 		// TODO : MovePos calculated based on side of InteractPawn relative to chair's forward x axis
 
-		if(Chair.bBed)
+		if (Chair.bBed)
 		{
 				MovePos	   += (InteractEPawn.CollisionRadius + Chair.default.CollisionRadius + 20) * (vect(0, 1, 0) >> Chair.Rotation);
 				InteractEPawn.m_orientationEnd		= Chair.Rotation;
@@ -76,7 +76,7 @@ function SetInteractLocation( Pawn InteractPawn )
 		}
 		else
 		{
-			if(Chair.bTableChair)
+			if (Chair.bTableChair)
 			{
 				MovePos	   += (-15) * (vect(1, 0, 0) >> Chair.Rotation);
 				MovePos	   += (InteractEPawn.CollisionRadius + Chair.CollisionRadius) * (vect(0, 1, 0) >> Chair.Rotation);
@@ -93,13 +93,13 @@ function SetInteractLocation( Pawn InteractPawn )
 			}
 		}
 
-		if(InteractEPawn.bIsPlayerPawn)
+		if (InteractEPawn.bIsPlayerPawn)
 		{
 		MovePos.Z	= InteractEPawn.Location.Z;									// keep on same Z
 		}
 		else
 		{
-			if( Trace(HitLocation, HitNormal, MovePos + vect(0,0,-200), MovePos,,,,,true) != None )
+			if (Trace(HitLocation, HitNormal, MovePos + vect(0,0,-200), MovePos,,,,,true) != None)
 			{
 				HitLocation.Z += InteractEPawn.CollisionHeight;
 				MovePos = HitLocation;
@@ -120,11 +120,11 @@ function SetInteractLocation( Pawn InteractPawn )
 //------------------------------------------------------------------------
 
 
-function InitInteract( Controller Instigator )
+function InitInteract(Controller Instigator)
 {
 	InteractionController = Instigator;
 	Chair = EChair(Owner);
-	if( Chair == None )
+	if (Chair == None)
 		Log("EChairInteraction problem with Owner");
 
 	// disable chair physics / lock it in position
@@ -139,9 +139,9 @@ function InitInteract( Controller Instigator )
 	SetRotation(Chair.Rotation);
 
 	// chair interaction not for player
-	if( !Instigator.bIsPlayer )
+	if (!Instigator.bIsPlayer)
 	{
-		if(Chair.bTableChair)
+		if (Chair.bTableChair)
 			Instigator.GotoState('s_SitDown', 'RightSide');
 		else
 			Instigator.GotoState('s_SitDown', 'FrontSide');
@@ -155,10 +155,10 @@ function InitInteract( Controller Instigator )
 // 
 //------------------------------------------------------------------------
 
-function PostInteract( Controller Instigator )
+function PostInteract(Controller Instigator)
 {
 	Chair = EChair(Owner);
-	if( Chair == None )
+	if (Chair == None)
 		Log("EChairInteraction problem with Owner");
 
 	// Restore chair collision

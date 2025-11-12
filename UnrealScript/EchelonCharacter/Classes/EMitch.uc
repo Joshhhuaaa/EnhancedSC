@@ -13,10 +13,10 @@ function PostBeginPlay()
 	
 	// load mitch anim package
 
-	if(Mesh != None)
+	if (Mesh != None)
 	{
 		Anim = MeshAnimation(DynamicLoadObject("ENPC.MitchAnims", class'MeshAnimation'));
-		LinkSkelAnim( Anim );
+		LinkSkelAnim(Anim);
 	}
 }
 
@@ -77,7 +77,7 @@ function SwitchAnims()
 {
 	local MoveFlags  lmoveflag;
 
-	lmoveflag=BaseMoveFlags;
+	lmoveflag = BaseMoveFlags;
 
 	ATurnBRight					= 'TurnStNmBr0';
 	ATurnBLeft					= 'TurnStNmBl0';
@@ -85,32 +85,32 @@ function SwitchAnims()
 	ATurnRt						= 'TurnStNmRt0';
 
 	//special case for grabbed NPCs that were sit
-	if(GetStateName() == 's_Grabbed')
+	if (GetStateName() == 's_Grabbed')
 		lmoveflag= MOVE_WalkNormal;
 
 	switch (lmoveflag)
 	{
-		case MOVE_WalkRelaxed : 
-		case MOVE_WalkNormal : 
-		case MOVE_WalkAlert :
+		case MOVE_WalkRelaxed:
+		case MOVE_WalkNormal: 
+		case MOVE_WalkAlert:
 			bNoBlending = true;
 
 			AWait					 = 'MitcStNmNt0';
 			ABlendMovement.m_forward = 'MitcStNmFd0';
 			break;
 
-		case MOVE_JogAlert :
-		case MOVE_JogNoWeapon :
+		case MOVE_JogAlert:
+		case MOVE_JogNoWeapon:
 			
 			AWait					 = 'WaitStAlFd0';
 			ABlendMovement.m_forward = 'JoggStAlFd0';
 			SoundWalkingRatio = 1.0;
 			break;
 
-		case MOVE_CrouchWalk :  
+		case MOVE_CrouchWalk: 
 			break;
 
-		case MOVE_CrouchJog : 
+		case MOVE_CrouchJog:
 			break;
 
 		case MOVE_Search:
@@ -119,13 +119,13 @@ function SwitchAnims()
 		case MOVE_Snipe:
 			break;
 
-		case MOVE_DesignerWalk :
+		case MOVE_DesignerWalk:
 			bNoBlending = true;
 
 			AWait							= 'MitcStNmNt0';
 			ABlendMovement.m_forward		= 'MitcStNmFd0';	
 			
-			return;	
+			return;
 	}
 }
 
@@ -133,46 +133,46 @@ function SwitchAnims()
 event float GetMoveSpeed(MoveFlags MoveFlags)
 {
 	//force slow walk in pitch black
-	if(bPitchBlack)
+	if (bPitchBlack)
 		return 85.0f;
 
 	// apply speed based on move flag
 	switch (MoveFlags)
 	{
-		case MOVE_WalkRelaxed : 
-		case MOVE_DesignerWalk :
+		case MOVE_WalkRelaxed:
+		case MOVE_DesignerWalk:
 			return 85.0f;
 			break;
 			
-		case MOVE_WalkNormal : 
+		case MOVE_WalkNormal:
 			return 85.0f;
 			break;
 			
-		case MOVE_Search : 
+		case MOVE_Search:
 			return 85.0f;
 			break;
 			
-		case MOVE_Snipe : 
+		case MOVE_Snipe:
 			return 85.0f;
 			break;
 			
-		case MOVE_WalkAlert :
+		case MOVE_WalkAlert:
 			return 85.0f;
 			break;
 			
-		case MOVE_JogAlert :
+		case MOVE_JogAlert:
 			return 350.0f;
 			break;
 			
-		case MOVE_JogNoWeapon: 
+		case MOVE_JogNoWeapon:
 			return 350.0f;
 			break;
 			
-		case MOVE_CrouchWalk :
+		case MOVE_CrouchWalk:
 			return 85.0f;
 			break;
 			
-		case MOVE_CrouchJog : 
+		case MOVE_CrouchJog:
 			return 200.0f;
 			break;
 

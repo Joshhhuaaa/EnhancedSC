@@ -31,9 +31,9 @@ var   float		ExploWallOut;	// distance to move explosions out from wall
 
 //==============
 // Encroachment
-function bool EncroachingOn( actor Other )
+function bool EncroachingOn(actor Other)
 {
-	if ( (Other.Brush != None) || (Brush(Other) != None) )
+	if ((Other.Brush != None) || (Brush(Other) != None))
 		return true;
 		
 	return false;
@@ -48,20 +48,20 @@ singular function Touch(Actor Other)
 	local bool bBeyondOther;
 	local float BackDist, DirZ;
 
-	if ( (Other.bBlockActors && Other.bBlockPlayers) )
+	if ((Other.bBlockActors && Other.bBlockPlayers))
 	{
-		if ( Velocity == vect(0,0,0) )
+		if (Velocity == vect(0,0,0))
 		{
 			ProcessTouch(Other,Location);
 			return;
 		}
 		
 		//get exact hitlocation - trace back along velocity vector
-		bBeyondOther = ( (Velocity Dot (Location - Other.Location)) > 0 );
+		bBeyondOther = ((Velocity Dot (Location - Other.Location)) > 0);
 		VelDir = Normal(Velocity);
 		DirZ = sqrt(VelDir.Z);
 		BackDist = Other.CollisionRadius * (1 - DirZ) + Other.CollisionHeight * DirZ;
-		if ( bBeyondOther )
+		if (bBeyondOther)
 			BackDist += VSize(Location - Other.Location);
 		else
 			BackDist -= VSize(Location - Other.Location);
@@ -69,7 +69,7 @@ singular function Touch(Actor Other)
 	 	HitActor = Trace(HitLocation, HitNormal, Location, Location - 1.1 * BackDist * VelDir, true);
 		if (HitActor == Other)
 			ProcessTouch(Other, HitLocation); 
-		else if ( bBeyondOther )
+		else if (bBeyondOther)
 			ProcessTouch(Other, Other.Location - Other.CollisionRadius * VelDir);
 		else
 			ProcessTouch(Other, Location);
@@ -78,25 +78,25 @@ singular function Touch(Actor Other)
 
 function ProcessTouch(Actor Other, Vector HitLocation)
 {
-	if ( Other != Instigator )
-		Explode(HitLocation,Normal(HitLocation-Other.Location));
+	if (Other != Instigator)
+		Explode(HitLocation,Normal(HitLocation - Other.Location));
 }
 
 function HitWall (vector HitNormal, actor Wall)
 {
-	if ( Mover(Wall) != None )
-		Wall.TakeDamage( Damage, instigator, Location, HitNormal, MomentumTransfer * Normal(Velocity), MyDamageType);
+	if (Mover(Wall) != None)
+		Wall.TakeDamage(Damage, instigator, Location, HitNormal, MomentumTransfer * Normal(Velocity), MyDamageType);
 
 	//MakeNoise(1.0);   UBI MODIF DAK ECHELON - removing obsolete calls
 
 	Explode(Location + ExploWallOut * HitNormal, HitNormal);
-	if ( (ExplosionDecal != None) )
+	if ((ExplosionDecal != None))
 		Spawn(ExplosionDecal,self,,Location, rotator(-HitNormal));
 }
 
 function BlowUp(vector HitLocation)
 {
-	HurtRadius(Damage,DamageRadius, MyDamageType, MomentumTransfer, HitLocation );
+	HurtRadius(Damage,DamageRadius, MyDamageType, MomentumTransfer, HitLocation);
 	MakeNoise(1.0);
 }
 
@@ -118,7 +118,7 @@ static function vector GetTossVelocity(Pawn P, Rotator R)
 	local vector V;
 
 	V = Vector(R);
-	V *= ((P.Velocity Dot V)*0.4 + Default.Speed);
+	V *= ((P.Velocity Dot V) * 0.4 + Default.Speed);
 	V.Z += Default.TossZ;
 	return V;
 }

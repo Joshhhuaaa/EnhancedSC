@@ -10,18 +10,18 @@ var() name GroupName;
 var() bool Hollow;
 var() bool Tessellated;
 
-function BuildCube( int Direction, float dx, float dy, float dz, bool _tessellated )
+function BuildCube(int Direction, float dx, float dy, float dz, bool _tessellated)
 {
 	local int n,i,j,k;
 	n = GetVertexCount();
 
-	for( i=-1; i<2; i+=2 )
-		for( j=-1; j<2; j+=2 )
-			for( k=-1; k<2; k+=2 )
-				Vertex3f( i*dx/2, j*dy/2, k*dz/2 );
+	for (i=-1; i<2; i+=2)
+		for (j=-1; j<2; j+=2)
+			for (k=-1; k<2; k+=2)
+				Vertex3f(i*dx/2, j*dy/2, k*dz/2);
 
 	// If the user wants a Tessellated cube, create the sides out of tris instead of quads.
-	if( _tessellated )
+	if( _tessellated)
 	{
 		Poly3i(Direction,n+0,n+1,n+3);
 		Poly3i(Direction,n+0,n+3,n+2);
@@ -49,17 +49,17 @@ function BuildCube( int Direction, float dx, float dy, float dz, bool _tessellat
 
 event bool Build()
 {
-	if( Height<=0 || Width<=0 || Breadth<=0 )
+	if (Height<=0 || Width<=0 || Breadth<=0)
 		return BadParameters();
-	if( Hollow && (Height<=WallThickness || Width<=WallThickness || Breadth<=WallThickness) )
+	if (Hollow && (Height<=WallThickness || Width<=WallThickness || Breadth<=WallThickness))
 		return BadParameters();
-	if( Hollow && Tessellated )
+	if (Hollow && Tessellated)
 		return BadParameters("The 'Tessellated' option can't be specified with the 'Hollow' option.");
 
-	BeginBrush( false, GroupName );
-	BuildCube( +1, Breadth, Width, Height, Tessellated );
-	if( Hollow )
-		BuildCube( -1, Breadth-WallThickness, Width-WallThickness, Height-WallThickness, Tessellated );
+	BeginBrush(false, GroupName);
+	BuildCube(+1, Breadth, Width, Height, Tessellated);
+	if (Hollow)
+		BuildCube(-1, Breadth-WallThickness, Width-WallThickness, Height-WallThickness, Tessellated);
 	return EndBrush();
 }
 

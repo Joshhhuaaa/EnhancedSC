@@ -14,9 +14,9 @@ var int UPSPlanPlayed;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -33,34 +33,34 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[1] = P.controller;
-        if(P.name == 'EAnna0')
+        if (P.name == 'EAnna0')
             Characters[2] = P.controller;
     }
 
     // Joshua - Adding textures to staticmeshes without any assigned
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'StaticMeshActor69')
+        if (A.name == 'StaticMeshActor69')
             A.Skins[0] = Texture(DynamicLoadObject("EGO_Tex.GO_doorexplode", class'Texture'));
-        if(A.name == 'StaticMeshActor306')
+        if (A.name == 'StaticMeshActor306')
             A.Skins[0] = Texture(DynamicLoadObject("3_4_Severo_tex.Bathroom.Cabinet02_sev", class'Texture'));
-        if(A.name == 'StaticMeshActor322')
+        if (A.name == 'StaticMeshActor322')
             A.Skins[0] = Texture(DynamicLoadObject("3_4_Severo_tex.Bathroom.toilette_sev", class'Texture'));
     }
 
     // Joshua - Hiding staticmeshes that are clipping through the floor
         ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'StaticMeshActor590' || A.name == 'StaticMeshActor591')
+        if (A.name == 'StaticMeshActor590' || A.name == 'StaticMeshActor591')
         {
             A.bHidden = true;
             A.SetCollision(false);
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     UPSPlanPlayed=0;

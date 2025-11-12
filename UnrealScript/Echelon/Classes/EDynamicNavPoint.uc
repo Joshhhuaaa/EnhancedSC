@@ -21,13 +21,13 @@ function PostBeginPlay()
 {
 	/*local EchelonGameInfo gameinfo;
 		
-	if ( Level != none && Level.Game != none ) 
+	if (Level != none && Level.Game != none) 
 	{
 		gameinfo = EchelonGameInfo(Level.Game);
 
 		if (gameinfo != none)
 		{
-			if ( gameinfo.pPlayer != none )
+			if (gameinfo.pPlayer != none)
 			{
 				bHidden = !(gameinfo.pPlayer.bDebugNavPoints);
 			}

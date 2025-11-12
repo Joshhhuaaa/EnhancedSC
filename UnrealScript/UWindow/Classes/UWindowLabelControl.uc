@@ -25,11 +25,11 @@ function SetLabelText(string _Text, ECanvas.ETextAligned _Align)
 function Paint(Canvas C, float X, float Y)
 {
     
-    Render( C , X, Y);        
+    Render(C , X, Y);        
 
     if (m_bDrawButtonBorders)
 	{
-		DrawSimpleBorder( C);
+		DrawSimpleBorder(C);
 	}
 }
 

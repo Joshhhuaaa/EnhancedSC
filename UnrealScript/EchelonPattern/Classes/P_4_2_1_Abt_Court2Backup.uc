@@ -14,9 +14,9 @@ var int SpetzOnOff;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('Start');
@@ -35,17 +35,17 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianSoldier10')
+        if (P.name == 'EGeorgianSoldier10')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianSoldier13')
+        if (P.name == 'EGeorgianSoldier13')
             Characters[2] = P.controller;
-        if(P.name == 'spetsnaz5')
+        if (P.name == 'spetsnaz5')
             Characters[3] = P.controller;
-        if(P.name == 'EGeorgianSoldier11')
+        if (P.name == 'EGeorgianSoldier11')
             Characters[4] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     pass1=0;

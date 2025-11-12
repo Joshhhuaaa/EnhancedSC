@@ -9,7 +9,7 @@ function PostBeginPlay()
 {
 	bIsInRainVolume = IsLocationInRainVolume(Camera.Location);
 
-	if( bIsInRainVolume == 0 )
+	if (bIsInRainVolume == 0)
 	{
 		bHidden = true; 
 		// we should also shut down the emitter from processing, 
@@ -32,7 +32,7 @@ state s_Rain
 	{
 		bIsInRainVolume = IsLocationInRainVolume(Camera.Location);
 
-		if( bIsInRainVolume == 0 )
+		if (bIsInRainVolume == 0)
 		{
 			bHidden = true;
 			// we should also shut down the emitter from processing, 
@@ -40,7 +40,7 @@ state s_Rain
 			GotoState('s_Dry');
 		}
 
-		SetLocation( Camera.Location );
+		SetLocation(Camera.Location);
 	}
 }
 
@@ -50,7 +50,7 @@ state s_Dry
 	{
 		bIsInRainVolume = IsLocationInRainVolume(Camera.Location);
 
-		if( bIsInRainVolume == 1 )
+		if (bIsInRainVolume == 1)
 		{
 			bHidden = false;
 			GotoState('s_Rain');

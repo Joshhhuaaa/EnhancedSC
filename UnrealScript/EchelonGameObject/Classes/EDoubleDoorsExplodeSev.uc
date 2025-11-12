@@ -1,6 +1,6 @@
 class EDoubleDoorsExplodeSev extends EGameplayObjectPattern;
 
-function Trigger( actor Other, pawn EventInstigator, optional name InTag )
+function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 {
 	Super.Trigger(Other, EventInstigator, InTag);
 	SetCollision(false);

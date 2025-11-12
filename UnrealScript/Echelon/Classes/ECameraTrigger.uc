@@ -20,39 +20,39 @@ function Touch(actor Other)
 	local EPlayerController P;
     local Actor  aPos, aTarget;
 
-	if(!( (bAlreadyVisited) && (bTriggerOnlyOnce) ))
+	if (!((bAlreadyVisited) && (bTriggerOnlyOnce)))
 	{
-		if(Other.bIsPawn && Pawn(Other).IsPlayerPawn())
+		if (Other.bIsPawn && Pawn(Other).IsPlayerPawn())
 		{
-			//if ( Level.TimeSeconds - TriggerTime < 0.2 )
+			//if (Level.TimeSeconds - TriggerTime < 0.2)
 			//	return;
 			//TriggerTime = Level.TimeSeconds;
 
 			//set visited flag
-			bAlreadyVisited=true;
+			bAlreadyVisited = true;
 
 			P = EPlayerController(Pawn(Other).controller);
 
-			if(bStartFix)
+			if (bStartFix)
 			{
 				EMainHUD(P.myHUD).GoToState('');
     			P.m_camera.GoToState('s_Fixed');
 
 				// Move the camera //
-				if(CamLocation != '')
+				if (CamLocation != '')
 				{
 					aPos = GetMatchingActor(CamLocation);
-					if(aPos != None)
+					if (aPos != None)
 						P.SetLocation(aPos.Location);
 				}
 
 				// Rotate the camera //
-				if(CamTarget != '')
+				if (CamTarget != '')
 				{
 					aTarget = GetMatchingActor(CamTarget);
-					if(aTarget != None)
+					if (aTarget != None)
 					{
-						if(aPos != None)
+						if (aPos != None)
 						{
 							P.SetRotation(Rotator(aTarget.Location - aPos.Location));
 						}

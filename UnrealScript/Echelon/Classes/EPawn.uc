@@ -588,7 +588,7 @@ var int		currentDirtynessFactor;
 
 event bool IsTransitionQueueEmpty()
 {
-	if(TransitionQueue.Length == 0)
+	if (TransitionQueue.Length == 0)
 		return true;
 
 	return false;
@@ -597,40 +597,40 @@ event bool IsTransitionQueueEmpty()
 ///////////////////////////////////////////////////////////
 // FIRE FUNCTIONS /////////////////////////////////////////
 ///////////////////////////////////////////////////////////
-function name GetFireBone( int i )
+function name GetFireBone(int i)
 {
-	switch( i )
+	switch (i)
 	{
 	case 0: 
-		if( FRand() > 0.5 )
+		if (FRand() > 0.5)
 			return 'B Spine1';
 		else
 			return 'B Neck';
 		break;
 
 	case 1:
-		if( FRand() > 0.5 )
+		if (FRand() > 0.5)
 			return 'B R Midarm';
 		else
 			return 'B R Forearm';
 		break;
 
 	case 2:
-		if( FRand() > 0.5 )
+		if (FRand() > 0.5)
 			return 'B L Midarm';
 		else
 			return 'B L Forearm';
 		break;
 
 	case 3:
-		if( FRand() > 0.5 )
+		if (FRand() > 0.5)
 			return 'B L Calf';
 		else
 			return 'B L Foot';
 		break;
 
 	case 4:
-		if( FRand() > 0.5 )
+		if (FRand() > 0.5)
 			return 'B R Calf';
 		else
 			return 'B R Foot';
@@ -641,7 +641,7 @@ function name GetFireBone( int i )
 function CatchOnFire()
 {
 	local int i;
-	for( i=BodyFlames.Length; i<5; i++ )
+	for (i = BodyFlames.Length; i < 5; i++)
 	{
 		BodyFlames[i] = spawn(class'EPawnFire', self);
 		AttachToBone(BodyFlames[i], GetFireBone(i));
@@ -656,15 +656,15 @@ function CatchOnFire()
 //		AttenuationChances	1 is 100% chances of killing all flames
 //		FlameToDelete		Number of flames that are killed .. no chance factor
 //------------------------------------------------------------------------
-function AttenuateFire( float AttenuationChances, optional int FlameToDelete )
+function AttenuateFire(float AttenuationChances, optional int FlameToDelete)
 {
 	local int i;
 
 	//log("AttenuateFire Len"@BodyFlames.Length@AttenuationChances@FlameToDelete);
 
-	for ( i=0; i<BodyFlames.Length; i=i )
+	for (i = 0; i < BodyFlames.Length; i = i)
 	{
-		if( FRand() <= AttenuationChances || FlameToDelete > 0 )
+		if (FRand() <= AttenuationChances || FlameToDelete > 0)
 		{
 			//Log("Killing Flame["$i$"]"); 
 			BodyFlames[i].Kill();
@@ -684,13 +684,13 @@ function AttenuateFire( float AttenuationChances, optional int FlameToDelete )
 // Description		
 //		Turn on/off head light if Pawn can use it
 //------------------------------------------------------------------------
-event ToggleHeadLight( bool bTurnOn )
+event ToggleHeadLight(bool bTurnOn)
 {
-	if( !MayUseGunLight)
+	if (!MayUseGunLight)
 		return;
 
 	// Only spawn it when wanted on
-	if( FlashLight == None && bTurnOn )
+	if (FlashLight == None && bTurnOn)
 	{
 		FlashLight = spawn(class'EFlashLight', self);
 		AttachToBone(FlashLight, 'LightBone');
@@ -699,7 +699,7 @@ event ToggleHeadLight( bool bTurnOn )
 		DontAffectEchelonLighting[DontAffectEchelonLighting.Length] = FlashLight;
 	}
 
-	if( FlashLight != None )
+	if (FlashLight != None)
 		FlashLight.ToggleLight(bTurnOn);
 }
 
@@ -714,8 +714,8 @@ event ToggleHeadLight( bool bTurnOn )
 
 // NATIVE FUNCTIONS 
 
-native(1503) final function bool ReachedDestination( vector Direction, Actor GoalActor );
-native(1537) final function ExitRootMotion( name TargetAnim );
+native(1503) final function bool ReachedDestination(vector Direction, Actor GoalActor);
+native(1537) final function ExitRootMotion(name TargetAnim);
 native(1534) final function ForceAnimParams(int Channel, name AnimSequence, float AnimFrame, float AnimRate);						// TODO : Move to Actor?
 native(1540) final function bool IsSequenceInCurrentAnim(name AnimSequence);														// TODO : Move to Actor?
 native(1541) final function BlendAnims(int SourceChannel, name SourceAnim, float SourceTweenTime, 
@@ -734,7 +734,7 @@ native(1108) final function AimAt(eAimAtType type, vector viewDir, vector origin
 native(1113) final function Recoil(vector aimDir, float RecoilStrength, float RecoilAngle, float alpha, float FadeIn, float FadeOut);
 
 native(1126) final function RollPawn(int targetRoll);
-native(1128) final function StartLipSynch( Sound _hSound );
+native(1128) final function StartLipSynch(Sound _hSound);
 native(1143) final function EyeBlink();
 
 
@@ -745,7 +745,7 @@ native(1145) final function RotateAroundZ(int YawAdd);
 // Pawn functions we don't want to use - override here...
 // Will probably want to remove from base Pawn class entirely in the future ..
 
-event SpecialTick( float DeltaTime )
+event SpecialTick(float DeltaTime)
 {
 	local int DamageThisTick;
 	local float CumulativeDamage;
@@ -753,17 +753,17 @@ event SpecialTick( float DeltaTime )
 	local Pawn	Instigator;
 	
 	// If Npc is dead .. reduce HeatIntensity
-	if( Health <= 0 )
+	if (Health <= 0)
 	{
 		// Reduce body heat to 0
-		if( HeatIntensity > 0 )
+		if (HeatIntensity > 0)
 			HeatIntensity -= deltaTime / 45.f/*seconds*/;
 		else
 			HeatIntensity = 0.f;
 	}
 
 	CumulativeDamage = AmbientDamagePerSeconds + AmbientDamageFromFire;
-	if( AmbientDamageFromFire > 0 )
+	if (AmbientDamageFromFire > 0)
 	{
 		Type = class'EBurned';
 		Instigator = self;
@@ -772,7 +772,7 @@ event SpecialTick( float DeltaTime )
 		Type = class'EAmbientPain';
 
 	// If no more ambient pain, reset and return
-	if( CumulativeDamage == 0 )
+	if (CumulativeDamage == 0)
 	{
 		ResidualAmbientDamage = 0;
 		return;
@@ -783,14 +783,14 @@ event SpecialTick( float DeltaTime )
 	
 	//Log(self$" SpecialTick ambientDam["$AmbientDamagePerSeconds$"] AmbientFire["$AmbientDamageFromFire$"] ResidualAmbientDamage["$ResidualAmbientDamage$"] DamageThisTick["$DamageThisTick$"]");
 
-	if( DamageThisTick > 0 )
+	if (DamageThisTick > 0)
 	{
 		ResidualAmbientDamage -= DamageThisTick;
 		TakeDamage(DamageThisTick, Instigator, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), Type);
 	}
 }
 
-function AddAmbientDamage( optional int Ambient, optional int Fire )
+function AddAmbientDamage(optional int Ambient, optional int Fire)
 {
 	AmbientDamagePerSeconds = Max(0, AmbientDamagePerSeconds + Ambient);
 	AmbientDamageFromFire = Max(0, AmbientDamageFromFire + Fire);
@@ -813,7 +813,7 @@ event EndCrouch(float HeightAdjust)
 	// Reset timer
 	IdleTime = 0;
 
-	if( Controller != None && Controller.bIsPlayer )
+	if (Controller != None && Controller.bIsPlayer)
 		EPlayerController(Controller).NotifyEndCrouch();
 }
 
@@ -826,7 +826,7 @@ event StartCrouch(float HeightAdjust)
 	// Reset timer
 	IdleTime = 0;
 
-	if( Controller != None && Controller.bIsPlayer )
+	if (Controller != None && Controller.bIsPlayer)
 		EPlayerController(Controller).NotifyStartCrouch();
 }
 
@@ -835,10 +835,10 @@ singular event BaseChange()
 	local EPawn npc;
 	npc = EPawn(Base);
 
-	if( npc == None )
+	if (npc == None)
 		return;
 
-	if( !npc.bIsPlayerPawn)
+	if (!npc.bIsPlayerPawn)
 	{
 		npc.TakeDamage(npc.Health / 2, self, npc.Location, vect(0,0,1), vect(0,0,-1), class'EKnocked', P_Head);
 		SetPhysics(PHYS_Falling);
@@ -846,7 +846,7 @@ singular event BaseChange()
 	else
 	{
 		// New Base is Sam
-		if( npc.Controller.GetStateName() == 's_NarrowLadder' ||
+		if (npc.Controller.GetStateName() == 's_NarrowLadder' ||
 			npc.Controller.GetStateName() == 's_NarrowLadderSlideDown')
 		{
 			// Make Sam fall from ladder
@@ -855,7 +855,7 @@ singular event BaseChange()
 			EPlayerController(npc.Controller).JumpRelease();
 			SetBase(None);
 		}
-		if( npc.Controller.GetStateName() != 's_Grab' &&
+		if (npc.Controller.GetStateName() != 's_Grab' &&
 			npc.Controller.GetStateName() != 's_GrabTargeting' &&
 			npc.Controller.GetStateName() != 's_Carry')
 		{
@@ -895,7 +895,7 @@ function PostBeginPlay()
 	InitAnims();
 
 	BaseMoveFlags = InitialGoalMoveFlags;
-	if ( BaseMoveFlags == MOVE_NotSpecified )
+	if (BaseMoveFlags == MOVE_NotSpecified)
 		BaseMoveFlags = MOVE_WalkRelaxed;
 
 	SwitchAnims();			
@@ -912,7 +912,7 @@ function PostBeginPlay()
 	//
 
 	// Hat
-	if( HatMesh != None )
+	if (HatMesh != None)
 	{
 		Hat = spawn(class'EHat', self);
 		Hat.SetStaticMesh(HatMesh);
@@ -920,7 +920,7 @@ function PostBeginPlay()
 		AttachToBone(Hat, 'HatBone');
 	}
 	// Cigaret
-	if( bSmokingDude )
+	if (bSmokingDude)
 	{
 		Cigaret = spawn(class'EGameplayObject', self);
 		Cigaret.SetStaticMesh(StaticMesh'EMeshCharacter.Cook.Cig');
@@ -930,7 +930,7 @@ function PostBeginPlay()
 		AttachToBone(Cigaret, 'CigBone');
 	}
 	// Cellular
-	if( bCellDude )
+	if (bCellDude)
 	{
 		Cellular = spawn(class'EGameplayObject', self);
 		Cellular.SetStaticMesh(StaticMesh'EMeshCharacter.Ivan.Cell');
@@ -943,7 +943,7 @@ function PostBeginPlay()
 	// Satchel
 	LookUpSatchel();
 
-	for(i=0; i<10; i++)
+	for (i = 0; i < 10; i++)
 	{
 		VisAverageArray[i] = 100;
 	}
@@ -955,7 +955,7 @@ function LookUpSatchel()
 {
 	local array<EMemoryStick>	FoundMems;
 
-	if( SatchelItems.Length > 0 || EchelonLevelInfo(Level).GetMemoryStick(FoundMems, self, true) )
+	if (SatchelItems.Length > 0 || EchelonLevelInfo(Level).GetMemoryStick(FoundMems, self, true))
 		Satchel = spawn(class'ESatchel', self);
 }
 
@@ -967,49 +967,49 @@ function LookUpSatchel()
 //------------------------------------------------------------------------
 event VisibilityRating GetActorVisibility()
 {
-	return VisibilityTableLookup( GetVisibilityFactor() );
+	return VisibilityTableLookup(GetVisibilityFactor());
 }
 
 //------------------------------------------------------------------------
 // Description		
 //		Show actor stealth and lighting info
 //------------------------------------------------------------------------
-function show_lighting_debug_info(canvas Canvas)
+function show_lighting_debug_info(Canvas Canvas)
 {
     local int i,offset_x,offset_y,inc_y;
 
-	offset_x=20;
-	offset_y=20;
-	inc_y=10;
+	offset_x = 20;
+	offset_y = 20;
+	inc_y = 10;
 	
 	Canvas.Font = Canvas.ETextFont;
-	Canvas.SetPos(offset_x,offset_y);			       
-	Canvas.DrawText("Actor Visibility : " $ VisibilityTableLookup(VisibilityFactor),false);
-	offset_y=offset_y+inc_y;
+	Canvas.SetPos(offset_x, offset_y);			       
+	Canvas.DrawText("Actor Visibility: " $ VisibilityTableLookup(VisibilityFactor),false);
+	offset_y = offset_y + inc_y;
 		
-	Canvas.SetPos(offset_x,offset_y);
-	Canvas.DrawText("Base Visibility : " $ VisibilityFactor,false);
-	offset_y=offset_y+inc_y;
+	Canvas.SetPos(offset_x, offset_y);
+	Canvas.DrawText("Base Visibility: " $ VisibilityFactor,false);
+	offset_y = offset_y + inc_y;
 		    
-	Canvas.SetPos(offset_x,offset_y);	
-	Canvas.DrawText("number of light : " $ RelevantLights.Length,false);
-	offset_y=offset_y+inc_y;
+	Canvas.SetPos(offset_x, offset_y);	
+	Canvas.DrawText("Number of Light: " $ RelevantLights.Length,false);
+	offset_y = offset_y + inc_y;
 	
-	Canvas.SetPos(offset_x,offset_y);	
-	Canvas.DrawText("ambient light Color: R="$RelevantAmbientColor.R$" G="$RelevantAmbientColor.G$" B="$RelevantAmbientColor.B$" A=" $ RelevantAmbientColor.A,false);
-	offset_y=offset_y+inc_y;
+	Canvas.SetPos(offset_x, offset_y);	
+	Canvas.DrawText("Ambient Light Color: R="$RelevantAmbientColor.R$" G="$RelevantAmbientColor.G$" B="$RelevantAmbientColor.B$" A=" $ RelevantAmbientColor.A,false);
+	offset_y = offset_y + inc_y;
 
-	for(i=0;i<RelevantLights.Length;i++)
+	for (i = 0;i < RelevantLights.Length;i++)
 	{		  	    
-	    Canvas.SetPos(offset_x,offset_y);
-		Canvas.DrawText("light name : " $ RelevantLights[i].Name,false);
-		offset_y=offset_y+inc_y;
+	    Canvas.SetPos(offset_x, offset_y);
+		Canvas.DrawText("Light Name: " $ RelevantLights[i].Name,false);
+		offset_y = offset_y + inc_y;
 	}
 
-	offset_y=offset_y+inc_y;
-	Canvas.SetPos(offset_x,offset_y);	
-	Canvas.DrawText("LAST NOISE RADIUS:  " $ LastNoiseRadius, false);
-	offset_y=offset_y+inc_y;
+	offset_y = offset_y + inc_y;
+	Canvas.SetPos(offset_x, offset_y);	
+	Canvas.DrawText("Last Noise Radius: " $ LastNoiseRadius, false);
+	offset_y = offset_y + inc_y;
 }
 
 
@@ -1026,15 +1026,15 @@ event GetRandomWaitAnim(out name ReturnName)
 	ReturnName = AWait;
 }
 
-function SetVolumeZone( bool bEntering, EVolume Volume )
+function SetVolumeZone(bool bEntering, EVolume Volume)
 {
 	// Entering volume
-	if( bEntering )
+	if (bEntering)
 	{
 		// Cold
-		if( Volume.bColdZone && Health > 0 )
+		if (Volume.bColdZone && Health > 0)
 		{
-			if( BreathEmitter == None )
+			if (BreathEmitter == None)
 			{
 				BreathEmitter = spawn(class'ESmokeBreath', self);
 				AttachToBone(BreathEmitter, 'mouthbone');
@@ -1046,34 +1046,34 @@ function SetVolumeZone( bool bEntering, EVolume Volume )
 		}
 
 		// Water
-		if( Volume.bLiquid )
+		if (Volume.bLiquid)
 		{
 			// If liquid zone .. kill fire emitter
 			AttenuateFire(1.0);
 
 			// When entering ocean
-			if( Volume.bDyingZone )
+			if (Volume.bDyingZone)
 			{
 				StopAllVoicesActor();
-				if ( !IsPlaying(Sound'FisherFoley.Play_FisherFallSea'))
+				if (!IsPlaying(Sound'FisherFoley.Play_FisherFallSea'))
 					PlaySound(Sound'FisherFoley.Play_FisherFallSea', SLOT_SFX);
 
 				// Ugly patch to choose the right water effect
-				if (InStr(eGame.ELevel.GetLocalURL(), "VselkaInfiltration")>0)
-					Spawn(class'EWaterSplashInfiltration', self,,Location+CollisionHeight*Vect(0,0,1));
+				if (InStr(eGame.ELevel.GetLocalURL(), "VselkaInfiltration") > 0 )
+					Spawn(class'EWaterSplashInfiltration', self,,Location + CollisionHeight * Vect(0,0,1));
 				else
-					Spawn(class'EWaterSplash', self,,Location+CollisionHeight*Vect(0,0,1));
+					Spawn(class'EWaterSplash', self,,Location + CollisionHeight * Vect(0,0,1));
 			}
 
-			if ( IsPlaying(Sound'FisherVoice.Play_SamFallDeath') )
-				StopSound( Sound'FisherVoice.Play_SamFallDeath' );
+			if (IsPlaying(Sound'FisherVoice.Play_SamFallDeath'))
+				StopSound(Sound'FisherVoice.Play_SamFallDeath');
 		}
 	}
 	// Exiting volumeh
 	else
 	{
 		// Cold
-		if( Volume.bColdZone && BreathEmitter != None )
+		if (Volume.bColdZone && BreathEmitter != None)
 		{
 			BreathEmitter.Kill();
 
@@ -1103,11 +1103,11 @@ function SetVolumeZone( bool bEntering, EVolume Volume )
 // 
 //------------------------------------------------------------------------
 
-function SurfaceNoiseInfo GetFootstepNoiseInfo( SurfaceNoiseType ntype )
+function SurfaceNoiseInfo GetFootstepNoiseInfo(SurfaceNoiseType ntype)
 {
-	if ( eGame != none )
+	if (eGame != none)
 	{
-		switch ( ntype )
+		switch (ntype)
 		{
 			case SN_VeryQuiet:		return eGame.VeryQuietSurface;
 			case SN_Quiet:			return eGame.QuietSurface;
@@ -1118,7 +1118,7 @@ function SurfaceNoiseInfo GetFootstepNoiseInfo( SurfaceNoiseType ntype )
 	}
 }
 
-function SpawnDust( name Bone )
+function SpawnDust(name Bone)
 {
 	spawn(class'ELedgeDust', self,,GetBoneCoords(Bone).Origin + (Vect(4,0,4)>>Rotation));
 }
@@ -1143,18 +1143,18 @@ function Touch(Actor Other)
 	volumeTrigger	= EVolumeTrigger(Other);
 	Touched         = ePawn(Other);
 
-	if(volumeTrigger!=None && volumeTrigger.iDirtynessFactor!=0)
+	if (volumeTrigger != None && volumeTrigger.iDirtynessFactor != 0)
 	{
-		currentDirtynessFactor=volumeTrigger.iDirtynessFactor;
+		currentDirtynessFactor = volumeTrigger.iDirtynessFactor;
 	}
-	else if (volume!=None && volume.iDirtynessFactor!=0)
+	else if (volume != None && volume.iDirtynessFactor != 0)
 	{
-		currentDirtynessFactor=volume.iDirtynessFactor;
+		currentDirtynessFactor = volume.iDirtynessFactor;
 	}
 
 	if (Touched != None)
 	{
-		if ( Touched.BodyFlames.Length > 0  && bIsPlayerPawn && !bDyingDude)
+		if (Touched.BodyFlames.Length > 0  && bIsPlayerPawn && !bDyingDude)
 		{
 			AddAmbientDamage(,4);
 		}
@@ -1174,15 +1174,15 @@ function UnTouch(Actor Other)
 	volumeTrigger	= EVolumeTrigger(Other);
 	Touched         = ePawn(Other);	
 
-	if((volumeTrigger != None && volumeTrigger.iDirtynessFactor!=0) ||
-	   (volume != None && volume.iDirtynessFactor!=0))
+	if ((volumeTrigger != None && volumeTrigger.iDirtynessFactor != 0) ||
+	   (volume != None && volume.iDirtynessFactor != 0))
 	{		
-		currentDirtynessFactor=0;
+		currentDirtynessFactor = 0;
 	}
 
 	if (Touched != None)
 	{
-		if ( Touched.BodyFlames.Length > 0  && !bDyingDude)
+		if (Touched.BodyFlames.Length > 0  && !bDyingDude)
 		{
 			AddAmbientDamage(,-4);
 		}
@@ -1201,14 +1201,14 @@ function ProcessFootPrint(bool rightFoot, out int footDirtyness, coords footCoor
 	local int			slice;
 	local int			i;
 	
-	footStepRotator=OrthoRotation(footCoord.XAxis, footCoord.YAxis, footCoord.ZAxis);
+	footStepRotator = OrthoRotation(footCoord.XAxis, footCoord.YAxis, footCoord.ZAxis);
 
-	if (currentDirtynessFactor!=0)
+	if (currentDirtynessFactor != 0)
 	{
-		footDirtyness=currentDirtynessFactor;
+		footDirtyness = currentDirtynessFactor;
 	}
 
-	hitActor=TraceBone(pill,
+	hitActor = TraceBone(pill,
 					   HitLocation, 
 					   HitNormal, 
 					   footCoord.Origin + vect(0, 0, -100), 
@@ -1216,27 +1216,27 @@ function ProcessFootPrint(bool rightFoot, out int footDirtyness, coords footCoor
 					   HitMaterial,
 					   false);
 	
-	while(Modifier(HitMaterial) != none)
+	while (Modifier(HitMaterial) != none)
 	{
-		HitMaterial=Modifier(HitMaterial).Material;
+		HitMaterial = Modifier(HitMaterial).Material;
 	}
 
-	if (hitActor != none && HitMaterial!=none && (HitMaterial.bLeaveFootStep==true || footDirtyness!=0) && Level.pProjTexture != none)
+	if (hitActor != none && HitMaterial != none && (HitMaterial.bLeaveFootStep == true || footDirtyness != 0) && Level.pProjTexture != none)
 	{
-		if( hitActor.bWorldGeometry || (hitActor.DrawType == DT_StaticMesh && !hitActor.bIsGamePlayObject))
+		if (hitActor.bWorldGeometry || (hitActor.DrawType == DT_StaticMesh && !hitActor.bIsGamePlayObject))
 		{
-			footStepRotator.Pitch=-16384;
-			footStepRotator.Roll=0;
+			footStepRotator.Pitch =- 16384;
+			footStepRotator.Roll = 0;
 
-			for(i=0; i<Level.FootStepSurfaceToSubTexLink.Length; i++)
+			for (i = 0; i < Level.FootStepSurfaceToSubTexLink.Length; i++)
 			{
-				if ( hitMaterial.SurfaceType == Level.FootStepSurfaceToSubTexLink[i].surfType )
+				if (hitMaterial.SurfaceType == Level.FootStepSurfaceToSubTexLink[i].surfType)
 				{
 					break;
 				}
 			}
 			
-			if (i!=Level.FootStepSurfaceToSubTexLink.Length)
+			if (i != Level.FootStepSurfaceToSubTexLink.Length)
 			{
 				if (!rightFoot)
 					Level.AddImpact(HitLocation + Vect(0.0f, 0.0f, 1.0f), footStepRotator, true, true, i);
@@ -1246,7 +1246,7 @@ function ProcessFootPrint(bool rightFoot, out int footDirtyness, coords footCoor
 		}
 	}
 
-	if (footDirtyness!=0)
+	if (footDirtyness != 0)
 		footDirtyness--;
 }
 
@@ -1284,11 +1284,11 @@ function PlayLeftHand()
 
 function PlayGenericFootStep()
 {
-	if ( EPlayerController(Controller) != None )
+	if (EPlayerController(Controller) != None)
 	{
-		if ( EPlayerController(Controller).CurrentVolume != None )
+		if (EPlayerController(Controller).CurrentVolume != None)
 		{
-			if ( !(EPlayerController(Controller).CurrentVolume.bLiquid  && EPlayerController(Controller).CurrentVolume.bDyingZone) )
+			if (!(EPlayerController(Controller).CurrentVolume.bLiquid  && EPlayerController(Controller).CurrentVolume.bDyingZone))
 				PlaySound(Sounds_Move, SLOT_SFX);
 		}
 		else
@@ -1325,26 +1325,26 @@ function PlayHorizontalPipeHand()
 
 function PlayFenceVibration()
 {
-	if ( EPlayerController(Controller).LastFenceType == SURFACE_FenceMetal )
+	if (EPlayerController(Controller).LastFenceType == SURFACE_FenceMetal)
 		PlaySound(Sound'FisherFoley.Play_Random_FisherFenceVib', SLOT_SFX);
-	else if ( EPlayerController(Controller).LastFenceType == SURFACE_FenceVine )
+	else if (EPlayerController(Controller).LastFenceType == SURFACE_FenceVine)
 		PlaySound(Sound'FisherFoley.Play_Random_VineVibration', SLOT_SFX);
 }		
 
 function PlayGearRun()
 {
-	if ( SoundWalkingRatio > 0.65f )
+	if (SoundWalkingRatio > 0.65f)
 		PlaySound(Sound'FisherFoley.Play_Random_FisherRunGear', SLOT_SFX);
 }
 
 function PlayGearRoll()
 {
-	if ( EPlayerController(Controller).CurrentVolume != None && EPlayerController(Controller).CurrentVolume.bLiquid == true )
+	if (EPlayerController(Controller).CurrentVolume != None && EPlayerController(Controller).CurrentVolume.bLiquid == true)
 		PlaySound(Sound'FisherFoley.Play_FisherRollWater', SLOT_SFX);
 	else
 		PlaySound(Sound'FisherFoley.Play_FisherRollGear', SLOT_SFX);
 
-	MakeNoise( 200.0f, NOISE_HeavyFootstep );
+	MakeNoise(200.0f, NOISE_HeavyFootstep);
 }
 
 function PlayGearSplitJump()
@@ -1359,9 +1359,9 @@ function PlayGearThrow()
 
 function PlayCloseAttack()
 {
-	if( Controller != None && Controller.bIsPlayer )
+	if (Controller != None && Controller.bIsPlayer)
 	{
-		if ( EPlayerController(Controller).m_targetObject != None && EPlayerController(Controller).m_targetObject.IsA('EPawn') )
+		if (EPlayerController(Controller).m_targetObject != None && EPlayerController(Controller).m_targetObject.IsA('EPawn'))
 			PlaySound(Sound'FisherFoley.Play_FisherCloseAttack', SLOT_SFX);
 	}
 }
@@ -1405,12 +1405,12 @@ function PlayAttackStop()
 
 function PlayNPCKeyboard()
 {
-	PlaySound( Sound'Electronic.Play_Sq_ComputerKeyBoard', SLOT_SFX );
+	PlaySound(Sound'Electronic.Play_Sq_ComputerKeyBoard', SLOT_SFX);
 }
 
 function StopNPCKeyboard()
 {
-	PlaySound( Sound'Electronic.Stop_Sq_ComputerKeyBoard', SLOT_SFX );
+	PlaySound(Sound'Electronic.Stop_Sq_ComputerKeyBoard', SLOT_SFX);
 }
 
 function PlaySneeze()
@@ -1426,7 +1426,7 @@ function PlaySneeze()
 event bool ICanBark()
 {
     // Not same bark within 1 second
-    if((EchelonLevelInfo(Level).afLastBarked[Bark_Type]) < (Level.Timeseconds - 1))
+    if ((EchelonLevelInfo(Level).afLastBarked[Bark_Type]) < (Level.Timeseconds - 1))
     {
         EchelonLevelInfo(Level).afLastBarked[Bark_Type] = Level.Timeseconds;
         return true;
@@ -1474,22 +1474,22 @@ event UpdateAnimationSet(MoveFlags NewMoveFlags, optional bool bForceUpdate)
 	local int i;
 
 	// disallow MOVE_NotSpecified to be used
-	if ( NewMoveFlags == MOVE_NotSpecified )
+	if (NewMoveFlags == MOVE_NotSpecified)
 	{
 		plog("WARNING : UpdateAnimationSet being called w/ MOVE_NotSpecified  --  defaulting to MOVE_WalkNormal");
 		NewMoveFlags = MOVE_WalkNormal;
 	}
 
-	NewMoveFlags = UpdateMoveFlagState( NewMoveFlags, EAIController(Controller).bRequestAwareState );
+	NewMoveFlags = UpdateMoveFlagState(NewMoveFlags, EAIController(Controller).bRequestAwareState);
 
-	if ( BaseMoveFlags != NewMoveFlags || bForceUpdate )
+	if (BaseMoveFlags != NewMoveFlags || bForceUpdate)
 	{		
 
 		// will add ETransitionInfo's to the TransitionQueue if necessary
 		//log("Dans UpdateAnimationSet checkfortransition NewMoveFlag: "$NewMoveFlags$" BaseMoveFlags: "$BaseMoveFlags);
-		CheckForTransition( NewMoveFlags );
+		CheckForTransition(NewMoveFlags);
 
-		for ( i = 0; i < TransitionQueue.Length ; i++ )
+		for (i = 0; i < TransitionQueue.Length ; i++)
 			plog("		UpdateAnimationSet -- Base "  $ BaseMoveFlags $ " -->  New " $ NewMoveFlags $ " bForceUpdate " $ bForceUpdate $ " -----> Transition : " $ TransitionQueue[i].ATransition);
 
 		BaseMoveFlags = NewMoveFlags;
@@ -1497,11 +1497,11 @@ event UpdateAnimationSet(MoveFlags NewMoveFlags, optional bool bForceUpdate)
 	}
 	
     //reset anim flag
-    if(!Controller.bIsPlayer)
-        EAIController(Controller).bRequestAwareState=false;
+    if (!Controller.bIsPlayer)
+        EAIController(Controller).bRequestAwareState = false;
 
 	// process any transitions on the queue ..
-	if ( TransitionQueue.Length > 0 )
+	if (TransitionQueue.Length > 0)
 		GotoState('s_Transition');
 }
 
@@ -1529,12 +1529,12 @@ function SelectWeapon(optional bool bWeaponInit)
 	// Parse Extras Category and if find a weapon, select it
 
 	NewItem = FullInventory.GetItemByClass('EWeapon');
-	if ( NewItem != none ) 
+	if (NewItem != none) 
 	{
 		HandItem		= NewItem;
 		CurrentWeapon	= EWeapon(NewItem);
 		
-		if ( NewItem.IsA('EOneHandedWeapon') )
+		if (NewItem.IsA('EOneHandedWeapon'))
 			WeaponHandedness = 1;
 		else
 			WeaponHandedness = 2;
@@ -1549,7 +1549,7 @@ function SelectWeapon(optional bool bWeaponInit)
 	}
 
 	// place weapon in hand immediately if initializing
-	if ( bWeaponInit )
+	if (bWeaponInit)
 		InitWeaponAttach();
 	
 	// update anim set after getting weapon
@@ -1570,7 +1570,7 @@ function SelectWeapon(optional bool bWeaponInit)
 //
 //------------------------------------------------------------------------
 
-event MoveFlags UpdateMoveFlagState( MoveFlags NewMoveFlags , optional bool _bForceAware )
+event MoveFlags UpdateMoveFlagState(MoveFlags NewMoveFlags , optional bool _bForceAware)
 {
 	
 	return NewMoveFlags;
@@ -1594,7 +1594,7 @@ function GetReactionAnim(out name Anim, out name AnimB, out float BlendAlpha, op
 // 
 //------------------------------------------------------------------------
 
-event CheckForTransition( MoveFlags NewMoveFlags );
+event CheckForTransition(MoveFlags NewMoveFlags);
 
 
 
@@ -1607,7 +1607,7 @@ event CheckForTransition( MoveFlags NewMoveFlags );
 //************************************************************************
 //************************************************************************
 
-function PlayAnimOnly( name Sequence, optional float Rate, optional float TweenTime, optional bool bBackward, optional bool bContinueAtFrame, optional bool bNoResetAction)
+function PlayAnimOnly(name Sequence, optional float Rate, optional float TweenTime, optional bool bBackward, optional bool bContinueAtFrame, optional bool bNoResetAction)
 {
 	if (Rate == 0.0)
 		Rate = 1.0;
@@ -1619,7 +1619,7 @@ function PlayAnimOnly( name Sequence, optional float Rate, optional float TweenT
 	ForceAnimParams(BLENDMOVEMENTCHANNEL, AnimSequence, 0.f, 0.f);
 	AnimBlendParams(REFPOSECHANNEL,0,0,0);
 	ForceAnimParams(REFPOSECHANNEL, AnimSequence, 0.f, 0.f);
-	if( !bNoResetAction )
+	if (!bNoResetAction)
 		AnimBlendToAlpha(ACTIONCHANNEL,0,0.10);
 
 	PlayAnim(Sequence, Rate, TweenTime, BASEMOVEMENTCHANNEL, bBackward, bContinueAtFrame);
@@ -1648,7 +1648,7 @@ event StopTurning()
 	AnimBlendParams(TURNRIGHTCHANNEL,0,0,0);
 }
 
-event PlayBlend(	SAnimBlend	anims,
+event PlayBlend(SAnimBlend	anims,
 					Rotator		lookDir,
 					vector		moveDir,
 					float		minForwardRatio,
@@ -1659,9 +1659,9 @@ event PlayBlend(	SAnimBlend	anims,
 	local vector vLookDir, vCross;
 
 	// if we can't blend, just play forward animation
-	if ( bNoBlending )
+	if (bNoBlending)
 	{
-		if ( noloop )
+		if (noloop)
 			PlayAnimOnly(anims.m_forward,,tweenTime);
 		else
 			LoopAnimOnly(anims.m_forward,,tweenTime);
@@ -1674,7 +1674,7 @@ event PlayBlend(	SAnimBlend	anims,
 	moveDir.Z = 0.0;
 	moveDir	= Normal(moveDir);
 
-	if(VSize(moveDir) == 0.0)
+	if (VSize(moveDir) == 0.0)
 	{
 		Log("Invalide moveDir in PlayBlend", , LPAWN | LLEVEL1);
 		return;
@@ -1682,15 +1682,15 @@ event PlayBlend(	SAnimBlend	anims,
 
 	fDot = vLookDir Dot moveDir;
 
-	if(fDot >= minForwardRatio)
+	if (fDot >= minForwardRatio)
 	{
-		if(noloop)
+		if (noloop)
 		{
 			PlayAnim(anims.m_forward,,tweenTime);
 		}
 		else
 		{
-			if(bPitchBlack)
+			if (bPitchBlack)
 				LoopAnim(APitchBlackF,,tweenTime);
 			else
 				LoopAnim(anims.m_forward,,tweenTime);
@@ -1698,9 +1698,9 @@ event PlayBlend(	SAnimBlend	anims,
 	}
 	else
 	{
-		if ( anims.m_backward != '' )
+		if (anims.m_backward != '')
 		{
-			if(noloop)
+			if (noloop)
 			{
 				PlayAnim(anims.m_backward,,tweenTime);
 			}
@@ -1711,16 +1711,16 @@ event PlayBlend(	SAnimBlend	anims,
 		}
 	}
 
-	if(Abs(fDot) < 0.999)
+	if (Abs(fDot) < 0.999)
 	{
 		fRatio = Acos(Abs(fDot)) * TWOOVERPI;
 		vCross = vLookDir Cross moveDir;
 
-		if(vCross.Z < 0.0)
+		if (vCross.Z < 0.0)
 		{
-			if(anims.m_backwardLeft != '' && anims.m_backwardRight != '')
+			if (anims.m_backwardLeft != '' && anims.m_backwardRight != '')
 			{
-				if(fDot >= minForwardRatio)
+				if (fDot >= minForwardRatio)
 				{
 					SynchAnim(anims.m_forwardLeft, BLENDMOVEMENTCHANNEL, tweenTime, fRatio);
 				}
@@ -1731,7 +1731,7 @@ event PlayBlend(	SAnimBlend	anims,
 			}
 			else
 			{
-				if(bPitchBlack)
+				if (bPitchBlack)
 					SynchAnim(APitchBlackL, BLENDMOVEMENTCHANNEL, tweenTime, fRatio);
 				else
 					SynchAnim(anims.m_forwardLeft, BLENDMOVEMENTCHANNEL, tweenTime, fRatio);
@@ -1740,9 +1740,9 @@ event PlayBlend(	SAnimBlend	anims,
 		}
 		else
 		{
-			if(anims.m_backwardLeft != '' && anims.m_backwardRight != '')
+			if (anims.m_backwardLeft != '' && anims.m_backwardRight != '')
 			{
-				if(fDot >= minForwardRatio)
+				if (fDot >= minForwardRatio)
 				{
 					SynchAnim(anims.m_forwardRight, BLENDMOVEMENTCHANNEL, tweenTime, fRatio);
 				}
@@ -1753,7 +1753,7 @@ event PlayBlend(	SAnimBlend	anims,
 			}
 			else
 			{
-				if(bPitchBlack)
+				if (bPitchBlack)
 					SynchAnim(APitchBlackR, BLENDMOVEMENTCHANNEL, tweenTime, fRatio);
 				else
 					SynchAnim(anims.m_forwardRight, BLENDMOVEMENTCHANNEL, tweenTime, fRatio);
@@ -1770,7 +1770,7 @@ event PlayBlend(	SAnimBlend	anims,
 	}
 }
 
-function PlayMove( SAnimBlend anims, Rotator lookDir, vector moveDir, float tweenTime, optional bool FBNeg , optional bool LRNeg )
+function PlayMove(SAnimBlend anims, Rotator lookDir, vector moveDir, float tweenTime, optional bool FBNeg , optional bool LRNeg)
 {
 	local float fDot, fRatio;
 	local vector vLookDir, vCross;
@@ -1780,7 +1780,7 @@ function PlayMove( SAnimBlend anims, Rotator lookDir, vector moveDir, float twee
 	moveDir.Z = 0.0;
 	moveDir	= Normal(moveDir);
 
-	if(VSize(moveDir) == 0.0)
+	if (VSize(moveDir) == 0.0)
 	{
 		return;
 	}
@@ -1788,27 +1788,27 @@ function PlayMove( SAnimBlend anims, Rotator lookDir, vector moveDir, float twee
 	WalkingRatio = FClamp(WalkingRatio, 0.3, 1.0);
 
 	fDot = vLookDir Dot moveDir;
-	if( fDot > -0.1 )
+	if (fDot > -0.1)
 		LoopAnim(anims.m_forward,WalkingRatio,tweenTime);
 	else
 	{
-		if(FBNeg)
+		if (FBNeg)
 			LoopAnim(anims.m_forward,WalkingRatio,tweenTime, , true);
 		else
 			LoopAnim(anims.m_backward,WalkingRatio,tweenTime);
 	}
 
 	fDot = vLookDir Dot moveDir;
-	if(Abs(fDot) < 0.999)
+	if (Abs(fDot) < 0.999)
 	{
 		fRatio = Acos(Abs(fDot)) * TWOOVERPI;
 		vCross = vLookDir Cross moveDir;
 
-		if( vCross.z > 0 )
+		if (vCross.Z > 0)
 			SynchAnim(anims.m_forwardRight, BLENDMOVEMENTCHANNEL, tweenTime, fRatio);
 		else
 		{
-			if(LRNeg)
+			if (LRNeg)
 				SynchAnim(anims.m_forwardRight, BLENDMOVEMENTCHANNEL, tweenTime, fRatio,,, true);
 			else
 				SynchAnim(anims.m_forwardLeft, BLENDMOVEMENTCHANNEL, tweenTime, fRatio);
@@ -1825,23 +1825,23 @@ function PlayFenceBlend()
 
 	SetPhysics(PHYS_Fence);
 
-	if(VSize(Velocity) == 0.0)
+	if (VSize(Velocity) == 0.0)
 	{
 		return;
 	}
 
 	vMoveDir = Normal(Velocity);
 
-	if( vMoveDir.Z > -0.1 )
+	if (vMoveDir.Z > -0.1)
 		LoopAnim(ABlendFence.m_forward,,0.1);
 	else
 		LoopAnim(ABlendFence.m_forward,,0.1, , true);
 
-	if(Abs(vMoveDir.Z) < 0.999)
+	if (Abs(vMoveDir.Z) < 0.999)
 	{
 		fRatio = Acos(Abs(vMoveDir.Z)) * TWOOVERPI;
 
-		if((ToWorldDir(vect(0,1,0)) dot vMoveDir) > 0)
+		if ((ToWorldDir(vect(0,1,0)) dot vMoveDir) > 0)
 			SynchAnim(ABlendFence.m_forwardRight, BLENDMOVEMENTCHANNEL, 0.1, fRatio);
 		else
 			SynchAnim(ABlendFence.m_forwardRight, BLENDMOVEMENTCHANNEL, 0.1, fRatio,,, true);
@@ -1858,7 +1858,7 @@ function PlayFenceBlend()
 // 
 //------------------------------------------------------------------------
 
-event bool PlayAnimNoMovement( name Sequence, optional float Rate, optional float TweenTime, optional bool bBackward )
+event bool PlayAnimNoMovement(name Sequence, optional float Rate, optional float TweenTime, optional bool bBackward)
 {
 	Acceleration = vect(0,0,0);       // stop moving dammit
 	GroundSpeed  = 0;
@@ -1884,13 +1884,13 @@ event bool PlayAnimNoMovement( name Sequence, optional float Rate, optional floa
 // 
 //------------------------------------------------------------------------
 
-event BlendAnimOverCurrent( name Sequence, optional float BlendStrength, optional name BoneName, 
-						    optional float Rate, optional float TweenTime, optional int Channel, optional bool bBackward )
+event BlendAnimOverCurrent(name Sequence, optional float BlendStrength, optional name BoneName, 
+						    optional float Rate, optional float TweenTime, optional int Channel, optional bool bBackward)
 {
 	// default values for optional vars
-	if( BlendStrength == 0.0 )	BlendStrength	= 0.5;
-	if( Rate == 0.0 )			Rate			= 1.0;
-	if( Channel == 0 )			Channel			= ACTIONCHANNEL;
+	if (BlendStrength == 0.0)	BlendStrength	= 0.5;
+	if (Rate == 0.0)			Rate			= 1.0;
+	if (Channel == 0)			Channel			= ACTIONCHANNEL;
 
 	//Log("BlendAnimOverCurrent"@Sequence@BlendStrength@BoneName@Rate@TweenTime@Channel@bBackward);
 
@@ -1940,18 +1940,18 @@ function PossessedBy(Controller C)
 	if (C != none)
 	{
 		// spawn & add inventory items to our controller
-		for(i=0; i<DynInitialInventory.Length; i++)
+		for (i = 0; i < DynInitialInventory.Length; i++)
 		{
 			if (DynInitialInventory[i] != none)
 			{
 				item = Spawn(DynInitialInventory[i], C);
-				if( item == None )
+				if (item == None)
 				{
 					Log(self$" ERROR: Bad inventory item in DynInitialInventory at index"@i);
 					continue;
 				}
 
-				if( FullInventory.CanAddItem(item) )
+				if (FullInventory.CanAddItem(item))
 					item.Add(C, C, FullInventory);
 				else
 				{
@@ -1962,7 +1962,7 @@ function PossessedBy(Controller C)
 		}
 	}
 	else
-		Log("Warning!  EPAWN JustPossessed - no Controller yet, can't add inventory.");
+		Log("Warning!  EPawn JustPossessed - no Controller yet, can't add inventory.");
 
 }
 
@@ -1990,7 +1990,7 @@ event bool RotateTowardsRotator(rotator Target, optional int TurnSpeed, optional
 	NewRotation = Target;
 	NewRotation.Yaw = InterpolateRotatorValue(TurnSpeed * Level.m_dt, Rotation.Yaw, Target.Yaw);
 	
-	if(Damping > 0.0)
+	if (Damping > 0.0)
 	{
 		NewRotation = InterpolateRotator(Damping, NewRotation, Rotation);
 	}
@@ -2000,7 +2000,7 @@ event bool RotateTowardsRotator(rotator Target, optional int TurnSpeed, optional
 	SetRotation(NewRotation);
 	
 	// are we sufficiently close?	TODO : should this maybe be based on prevRotation?
-	if ( (Rotation.Yaw & 65535) == (Target.Yaw & 65535) ) 
+	if ((Rotation.Yaw & 65535) == (Target.Yaw & 65535)) 
 		return true;
 	
 	return false;	// haven't finished rotating
@@ -2041,7 +2041,7 @@ event bool RotateTowardsPosition(vector Target, optional int TurnSpeed)
 // Description		
 //		Quick wrapper around old AnimSequence
 //------------------------------------------------------------------------
-function name GetAnimName( optional int Channel )
+function name GetAnimName(optional int Channel)
 {
 	local name CurrentAnimSeq;
 	local float CurrentFrame, CurrentRate;
@@ -2070,11 +2070,11 @@ function PlayWait(float turnSpeed, optional float waitTween)
 	// reset second channel
 	AnimBlendToAlpha(BLENDMOVEMENTCHANNEL, 0.0, 0.10);
 
-	if( bIsCrouched )
+	if (bIsCrouched)
 	{
-		if( CurrentAnimSeq == AWait || bEWs )
+		if (CurrentAnimSeq == AWait || bEWs)
 		{
-			if( bEWs )
+			if (bEWs)
 				waitTween = 0.3;
 			else 
 				waitTween = 0;
@@ -2082,10 +2082,10 @@ function PlayWait(float turnSpeed, optional float waitTween)
 		}
 		else
 		{
-			if( Abs(turnSpeed) > 10000.0 && 
-				((IsWaiting() && CurrentAnimSeq!=AWaitCrouchIn && !IsTweening(0)) || CurrentAnimSeq == ATurnRightCrouch) )
+			if (Abs(turnSpeed) > 10000.0 && 
+				((IsWaiting() && CurrentAnimSeq != AWaitCrouchIn && !IsTweening(0)) || CurrentAnimSeq == ATurnRightCrouch))
 			{
-				if(turnSpeed > 0)
+				if (turnSpeed > 0)
 				{
 					LoopAnimOnly(ATurnRightCrouch, 1.0, 0.05);
 				}
@@ -2095,18 +2095,18 @@ function PlayWait(float turnSpeed, optional float waitTween)
 				}
 			}
 			// check whether we should switch anim
-			else if( ShouldPlaySpecialWait() )
+			else if (ShouldPlaySpecialWait())
 			{
 				GetRandomWaitAnim(ExtraName);
 				PlayAnimOnly(ExtraName,1.0,0.2);
 			}
 			// If he's not already waiting
 			// Or finished his wait animation
-			else if( !IsWaiting() || !IsAnimating() )
+			else if (!IsWaiting() || !IsAnimating())
 			{
 				// If a special anim has just ended, means the player didn't touch anything 
 				// so loop to next special anim faster
-				if( bEW )
+				if (bEW)
 				{
 					IdleTime = Level.TimeSeconds - 30;
 					LoopAnimOnly(AWaitCrouch);
@@ -2115,13 +2115,13 @@ function PlayWait(float turnSpeed, optional float waitTween)
 					LoopAnimOnly(AWaitCrouch,1.0, waitTween);
 			}
 			// Or has a gun in hand and was extra waiting
-			else if( WeaponStance != 0 && IsExtraWaiting() )
+			else if (WeaponStance != 0 && IsExtraWaiting())
 			{
 				IdleTime = 0;
 				LoopAnimOnly(AWaitCrouch,,0.2);
 			}
 			// Reverse progressively animation
-			else if( CurrentAnimSeq == AWaitCrouchIn && IsAnimBackward() )
+			else if (CurrentAnimSeq == AWaitCrouchIn && IsAnimBackward())
 			{
 				PlayAnim(AWaitCrouchIn,1.2,,,false,true);
 			}
@@ -2130,7 +2130,7 @@ function PlayWait(float turnSpeed, optional float waitTween)
 	else
 	{
 		// Try to catch special anim set
-		if( WeaponStance == 0 && EPlayerController(Controller).SpecialWaitAnim != '' )
+		if (WeaponStance == 0 && EPlayerController(Controller).SpecialWaitAnim != '')
 		{
 			WaitAnim = EPlayerController(Controller).SpecialWaitAnim;
 			waitTween = 0.5;
@@ -2138,9 +2138,9 @@ function PlayWait(float turnSpeed, optional float waitTween)
 		else
 			WaitAnim = AWait;
 
-		if( CurrentAnimSeq == AWaitCrouch || bEWc )
+		if (CurrentAnimSeq == AWaitCrouch || bEWc)
 		{
-			if( bEWc )
+			if (bEWc)
 				waitTween = 0.3;
 			else 
 				waitTween = 0;
@@ -2148,9 +2148,9 @@ function PlayWait(float turnSpeed, optional float waitTween)
 		}
 		else
 		{
-			if(Abs(turnSpeed) > 10000.0 && ((IsWaiting() && (CurrentAnimSeq != AWaitCrouchIn) && !IsTweening(0)) || CurrentAnimSeq == ATurnRight))
+			if (Abs(turnSpeed) > 10000.0 && ((IsWaiting() && (CurrentAnimSeq != AWaitCrouchIn) && !IsTweening(0)) || CurrentAnimSeq == ATurnRight))
 			{
-				if(turnSpeed > 0)
+				if (turnSpeed > 0)
 				{
 					LoopAnimOnly(ATurnRight, 1.0, 0.05);
 				}
@@ -2161,18 +2161,18 @@ function PlayWait(float turnSpeed, optional float waitTween)
 
 			}
 			// check whether we should switch anim
-			else if( ShouldPlaySpecialWait() )
+			else if (ShouldPlaySpecialWait())
 			{
 				GetRandomWaitAnim(ExtraName);
 				PlayAnimOnly(ExtraName,1.0,0.2);
 			}
 			// If he's not already waiting
 			// Or finished his wait animation
-			else if( !IsWaiting() || !IsAnimating() )
+			else if (!IsWaiting() || !IsAnimating())
 			{
 				// If a special anim has just ended, means the player didn't touch anything 
 				// so loop to next special anim faster
-				if( bEW )
+				if (bEW)
 				{
 					IdleTime = Level.TimeSeconds - 30;
 					LoopAnimOnly(WaitAnim);
@@ -2183,13 +2183,13 @@ function PlayWait(float turnSpeed, optional float waitTween)
 				}
 			}
 			// Or has a gun in hand and was extra waiting
-			else if( WeaponStance != 0 && IsExtraWaiting() )
+			else if (WeaponStance != 0 && IsExtraWaiting())
 			{
 				IdleTime = 0;
 				LoopAnimOnly(AWait,,0.2);
 			}
 			// Reverse progressively animation
-			else if( CurrentAnimSeq == AWaitCrouchIn && !IsAnimBackward() )
+			else if (CurrentAnimSeq == AWaitCrouchIn && !IsAnimBackward())
 			{
 				PlayAnim(AWaitCrouchIn,1.2,,,true,true);
 			}
@@ -2214,9 +2214,9 @@ function bool ShouldPlaySpecialWait()
 //------------------------------------------------------------------------
 // Description		
 //		Is playing specific waiting anims
-//		f=0 stand or crouch, f=1 stand only, f=2 crouch only
+//		f = 0 stand or crouch, f = 1 stand only, f = 2 crouch only
 //------------------------------------------------------------------------
-function bool IsExtraWaiting( optional int f );
+function bool IsExtraWaiting(optional int f);
 
 //------------------------------------------------------------------------
 // Description		
@@ -2243,7 +2243,7 @@ function bool IsWaiting()
 // 
 //------------------------------------------------------------------------
 
-event PlayWaitingBlend( vector ForwardDirection, vector FocusDirection, float YawDiff, float TweenTime )
+event PlayWaitingBlend(vector ForwardDirection, vector FocusDirection, float YawDiff, float TweenTime)
 {
 	local name CurrentAnimSeq;
 	local float CurrentFrame, CurrentRate;
@@ -2252,7 +2252,7 @@ event PlayWaitingBlend( vector ForwardDirection, vector FocusDirection, float Ya
 
 	plog("PlayWaitingBlend in default state... AWaitIn: "$AWaitIn$" AWait: "$AWait);
 
-	if ( AWaitIn != '' )
+	if (AWaitIn != '')
 	{
 		// special stop transition anim
 		AddTransition('s_Waiting', AWaitIn,, 0.45f, 0.3f,,true);
@@ -2263,14 +2263,14 @@ event PlayWaitingBlend( vector ForwardDirection, vector FocusDirection, float Ya
 		AddTransition('s_Waiting', AWait,, 0.275f, 0.3f,,true);
 	}
 		
-	if ( TransitionQueue.Length > 0 ) 
+	if (TransitionQueue.Length > 0) 
 		GotoState('s_Transition');
 	
 }
 
 function PlayMoveTo(Rotator ViewRotation, optional Actor ViewTarget)
 {
-	if( !bIsCrouched )
+	if (!bIsCrouched)
 		LoopAnimOnly(AWalk,,0.2);
 //	else
 //		LoopAnim(AWalkCrouch,,0.2);
@@ -2282,7 +2282,7 @@ function DoJumping()
 	bWantsToCrouch = false;
 
     // if we are on a platform
-	if ( Base != None && Base.bIsMover )
+	if (Base != None && Base.bIsMover)
 		Velocity.Z += Base.Velocity.Z; 
 }
 
@@ -2304,9 +2304,9 @@ function bool PlayJumpStart()
 
 	horiSpeed = Velocity;
 	horiSpeed.Z = 0;
-	if(VSize(horiSpeed) <= 10.0 )
+	if (VSize(horiSpeed) <= 10.0)
 	{
-		if( bWantsToCrouch )
+		if (bWantsToCrouch)
 			return false;
 
 		Velocity = vect(0,0,0);
@@ -2318,11 +2318,11 @@ function bool PlayJumpStart()
 	else
 	{
 		PlaySound(Sound'FisherFoley.Play_FisherJumpDynGear', SLOT_SFX);
-		if(bIsCrouched)
+		if (bIsCrouched)
 			tweenTime = 0.1;
 		else
 			tweenTime = 0.03;
-		if( CurrentFrame < 0.10 || CurrentFrame > 0.70  )
+		if (CurrentFrame < 0.10 || CurrentFrame > 0.70)
 			PlayAnimOnly(AJumpForwardR,,tweenTime);
 		else
 			PlayAnimOnly(AJumpForwardL,,tweenTime);
@@ -2337,12 +2337,12 @@ function PlayInAir()
 	local name AnimName;
 	local EPawn victime;
 
-	if ( !Controller.bIsPlayer )
+	if (!Controller.bIsPlayer)
 		return;
 
 	AnimName = GetAnimName();
 
-	if(AnimName == ALandAttack)
+	if (AnimName == ALandAttack)
 		return;
 
 	TraceStart = Location;
@@ -2353,10 +2353,10 @@ function PlayInAir()
 	Extent.Y = CollisionRadius;
 	Extent.Z = 15.0;
 	victime = EPawn(Trace(HitLocation, HitNormal, TraceEnd, TraceStart, true, Extent, , true));
-	if(victime != None && !victime.bOrientOnSlope)
+	if (victime != None && !victime.bOrientOnSlope)
 	{
 		// Joshua - Set bBlockJumpDetection to prevent head jump from counting as PlayerIdentified
-		if(victime.Controller != None && EAIController(victime.Controller) != None)
+		if (victime.Controller != None && EAIController(victime.Controller) != None)
 		{
 			EAIController(victime.Controller).bBlockJumpDetection = true;
 		}
@@ -2364,19 +2364,19 @@ function PlayInAir()
 		return;
 	}
 
-	switch( AnimName )
+	switch (AnimName)
 	{
 	case AJumpStart :
-		if( !IsAnimating() )
+		if (!IsAnimating())
 			LoopAnimOnly(AFall,,0.75);
 		break;
 
 	case AJumpForwardR :
 	case AJumpForwardL :
-		if( IsAnimating() )
+		if (IsAnimating())
 			return;
 
-		if( bWantsToCrouch )
+		if (bWantsToCrouch)
 			LoopAnimOnly(AFallQuiet,,0.2);
 		else
 			LoopAnimOnly(AFall,,0.2);
@@ -2386,10 +2386,10 @@ function PlayInAir()
 	case AFallQuiet :
 	case AFallFree :
 		// Play fall to death animation if velocity is exceeding defined value
-		if( Abs(Velocity.Z) >= eGame.MaxBeforeDeath )
+		if (Abs(Velocity.Z) >= eGame.MaxBeforeDeath)
 		{
-			if ( !IsPlaying(Sound'FisherVoice.Play_SamFallDeath') && (!EPlayerController(Controller).bInvincible) &&
-				(EPlayerController(Controller).CurrentVolume == None || !EPlayerController(Controller).CurrentVolume.bLiquid) )
+			if (!IsPlaying(Sound'FisherVoice.Play_SamFallDeath') && (!EPlayerController(Controller).bInvincible) &&
+				(EPlayerController(Controller).CurrentVolume == None || !EPlayerController(Controller).CurrentVolume.bLiquid))
 			{
 				PlaySound(Sound'FisherVoice.Play_SamFallDeath', SLOT_SFX);
 			}
@@ -2397,7 +2397,7 @@ function PlayInAir()
 			return;
 		}
 	default :
-		if( !bWantsToCrouch )
+		if (!bWantsToCrouch)
 			LoopAnimOnly(AFall,,0.2);
 		else
 			LoopAnimOnly(AFallQuiet,,0.3);
@@ -2416,28 +2416,28 @@ function bool PlayLanding()
 	horiSpeed = Velocity;
 	horiSpeed.Z = 0;
 
-	if(CurrentAnimSeq == ALandAttack)
+	if (CurrentAnimSeq == ALandAttack)
 		return true;
 
-	if( bWantsToCrouch )						// Jump on place crouched
+	if (bWantsToCrouch)						// Jump on place crouched
 	{
-		if(Velocity.Z <= -400.0f)
+		if (Velocity.Z <= -400.0f)
 			AnimName = ALandQuiet;
 	}
-	else if( Velocity.Z <= -750.0f )			// Jump from very high
+	else if (Velocity.Z <= -750.0f)			// Jump from very high
 		AnimName = ALandHi;
-	else if( VSize(Acceleration) == 0 )
+	else if (VSize(Acceleration) == 0)
 	{
-		if( IsJumpingForward() )
+		if (IsJumpingForward())
 			TweenTime = 0.1;
 		AnimName = ALandLow;
 	}
 
-	if(CurrentAnimSeq == ALandQuiet || CurrentAnimSeq == ALandHi || CurrentAnimSeq == ALandLow)
+	if (CurrentAnimSeq == ALandQuiet || CurrentAnimSeq == ALandHi || CurrentAnimSeq == ALandLow)
 		TweenTime = 0.2;
 
 	SetPhysics(PHYS_Walking);
-	if( AnimName != '' )
+	if (AnimName != '')
 	{
 		Velocity = vect(0,0,0);
 		Acceleration = vect(0,0,0);
@@ -2449,18 +2449,18 @@ function bool PlayLanding()
 		return false;
 }
 
-function PlayDoorOpen( optional bool RightSide )
+function PlayDoorOpen(optional bool RightSide)
 {		
-	if( RightSide )
+	if (RightSide)
 	{
-		if( !bIsCrouched )
+		if (!bIsCrouched)
 			PlayAnimOnly(ADoorOpenRt,,0.20);
 		else
 			BlendAnimOverCurrent(ADoorOpenRt, 1, UpperBodyBoneName,,0.2);
 	}
 	else
 	{
-		if( !bIsCrouched )
+		if (!bIsCrouched)
 			PlayAnimOnly(ADoorOpenLt,,0.20);
 		else
 			BlendAnimOverCurrent(ADoorOpenLt, 1, UpperBodyBoneName,,0.2);
@@ -2471,14 +2471,14 @@ function PlayReload(optional bool upperOnly, optional bool bigTween)
 {
 	local name BoneName;
 	local float tweenTime;
-	if(bigTween)
+	if (bigTween)
 		tweenTime = 0.3;
 	else
 		tweenTime = 0.2;
-	if( VSize(Velocity) > 0 || upperOnly)
+	if (VSize(Velocity) > 0 || upperOnly)
 		BoneName = UpperBodyBoneName;
 
-	if( !bIsCrouched )
+	if (!bIsCrouched)
 		BlendAnimOverCurrent(AReload, 1, BoneName,,tweenTime);
 	else
 		BlendAnimOverCurrent(AReloadCrouch, 1, BoneName,,tweenTime);
@@ -2489,13 +2489,13 @@ event bool IsReloading()
 	local name CurrentAnimSeq;
 	CurrentAnimSeq = GetAnimName(ACTIONCHANNEL);
 	
-	return ( (CurrentAnimSeq == AReload || CurrentAnimSeq == AReloadCrouch) && IsAnimating(ACTIONCHANNEL));
+	return ((CurrentAnimSeq == AReload || CurrentAnimSeq == AReloadCrouch) && IsAnimating(ACTIONCHANNEL));
 }
 
 function PlayLedgeHoistingEnd()
 {
 	SetPhysics(PHYS_Linear);
-	if(bIsCrouched)
+	if (bIsCrouched)
 	{
 		PlayAnimOnly(AWaitCrouch);
 	}
@@ -2527,7 +2527,7 @@ function PlayNarrowLadderInTop()
 
 function PlayNarrowLadderOutBottom()
 {
-	if(m_climbingUpperHand == CHLEFT)
+	if (m_climbingUpperHand == CHLEFT)
 		PlayAnimOnly(ANLOutBottomLeft, , 0.15, true);
 	else
 		PlayAnimOnly(ANLOutBottomRight, , 0.15, true);
@@ -2536,7 +2536,7 @@ function PlayNarrowLadderOutBottom()
 function PlayNarrowLadderUp()
 {
 	SetPhysics(PHYS_Linear);
-	switch(m_climbingUpperHand)
+	switch (m_climbingUpperHand)
 	{
 	case CHNONE:
 		PlayAnimOnly('LaddStAlBgR');
@@ -2556,7 +2556,7 @@ function PlayNarrowLadderUp()
 function bool PlayNarrowLadderDown()
 {
 	SetPhysics(PHYS_Linear);
-	switch(m_climbingUpperHand)
+	switch (m_climbingUpperHand)
 	{
 	case CHNONE:
 		PlayAnimOnly(ANLTopUpRight, , , true);
@@ -2583,7 +2583,7 @@ function PlayNarrowLadderSlideDown(float tweenTime)
 function PlayNarrowLadderWait(float tweenTime)
 {
 	SetPhysics(PHYS_Linear);
-	switch(m_climbingUpperHand)
+	switch (m_climbingUpperHand)
 	{
 	case CHNONE:
 		LoopAnimOnly(ANLWaitTop, , tweenTime);
@@ -2600,7 +2600,7 @@ function PlayNarrowLadderWait(float tweenTime)
 function PlayNarrowLadderTopUp()
 {
 	SetPhysics(PHYS_Linear);
-	switch(m_climbingUpperHand)
+	switch (m_climbingUpperHand)
 	{
 		case CHLEFT:
 			PlayAnimOnly(ANLTopUpLeft);
@@ -2623,13 +2623,13 @@ function PlayNarrowLadderTopDown()
 function bool PlayNLPLand(bool crouch, float zSpeed)
 {
 	local name AnimName;
-	if(crouch)
+	if (crouch)
 		AnimName = ALandQuiet;
-	else if(zSpeed < -400.0f)
+	else if (zSpeed < -400.0f)
 		AnimName = ALandLow;
 	SetPhysics(PHYS_Walking);
 
-	if(AnimName != '')
+	if (AnimName != '')
 	{
 		PlayAnimOnly(AnimName, , 0.1);
 		return true;
@@ -2653,11 +2653,11 @@ function PlayZipLineWait(bool crouched)
 	local name CurrentAnimSeq;
 	CurrentAnimSeq = GetAnimName();
 
-	if((CurrentAnimSeq == 'ZippStAlBg0' || CurrentAnimSeq == 'ZippCrAlEd0' || CurrentAnimSeq == 'ZippCrAlBg0') &&
+	if ((CurrentAnimSeq == 'ZippStAlBg0' || CurrentAnimSeq == 'ZippCrAlEd0' || CurrentAnimSeq == 'ZippCrAlBg0') &&
 		IsAnimating())
 		return;
 
-	if(crouched)
+	if (crouched)
 		LoopAnimOnly('ZippCrAlDn0');
 	else
 		LoopAnimOnly('ZippStAlDn0');
@@ -2668,9 +2668,9 @@ function PlayZipLineTransition(bool crouched)
 	local name CurrentAnimSeq;
 	CurrentAnimSeq = GetAnimName();
 	
-	if( crouched && CurrentAnimSeq != 'ZippCrAlBg0' )
+	if (crouched && CurrentAnimSeq != 'ZippCrAlBg0')
 		PlayAnimOnly('ZippCrAlBg0');
-	else if( !crouched && CurrentAnimSeq != 'ZippCrAlEd0' )
+	else if (!crouched && CurrentAnimSeq != 'ZippCrAlEd0')
 		PlayAnimOnly('ZippCrAlEd0');
 }
 
@@ -2683,23 +2683,23 @@ function PlayZipLineTransition(bool crouched)
 //************************************************************************
 function PlayPipe(name lAnim, name rAnim, optional float tween, optional bool reverse, optional bool noFlip)
 {
-	if(m_climbingUpperHand == CHLEFT)
+	if (m_climbingUpperHand == CHLEFT)
 	{
 		LoopAnimOnly(lAnim, , tween, reverse);
-		if(!noFlip)
+		if (!noFlip)
 			m_climbingUpperHand = CHRIGHT;
 	}
 	else
 	{
 		LoopAnimOnly(rAnim, , tween, reverse);
-		if(!noFlip)
+		if (!noFlip)
 			m_climbingUpperHand = CHLEFT;
 	}
 }
 
 function PlayPipeOutBottom()
 {
-	if(m_climbingUpperHand == CHLEFT)
+	if (m_climbingUpperHand == CHLEFT)
 		LoopAnimOnly('pipvstaliol', , 0.15, true);
 	else
 		LoopAnimOnly('pipvstalior', , 0.15, true);
@@ -2715,16 +2715,16 @@ function PlayPipeOutBottom()
 
 function PlayPole(Name rightAnim, Name leftAnim, float tweenTime, bool flip, optional bool reverse)
 {
-	if(m_climbingUpperHand == CHLEFT)
+	if (m_climbingUpperHand == CHLEFT)
 	{
 		LoopAnimOnly(leftAnim, , tweenTime, reverse);
-		if(flip)
+		if (flip)
 			m_climbingUpperHand = CHRIGHT;
 	}
 	else
 	{
 		LoopAnimOnly(rightAnim, , tweenTime, reverse);
-		if(flip)
+		if (flip)
 			m_climbingUpperHand = CHLEFT;
 	}
 }
@@ -2736,7 +2736,7 @@ function PlayRoll()
 	
 	GetAnimParams(0, CurrentAnimSeq, CurrentFrame, CurrentRate);
 
-	if(CurrentFrame > 0.25 && CurrentFrame < 0.75)
+	if (CurrentFrame > 0.25 && CurrentFrame < 0.75)
 		PlayAnimOnly('RollStAlFdL', , 0.1);
 	else
 		PlayAnimOnly('RollStAlFdR', , 0.1);
@@ -2744,16 +2744,16 @@ function PlayRoll()
 
 function PlayBTW(Name crouchAnimL, Name crouchAnimR, Name standAnimL, Name standAnimR, bool goingRight, float rate, float tweenTime, optional bool bCrouchBackward, optional bool bStandBackward)
 {
-	if(bIsCrouched)
+	if (bIsCrouched)
 	{
-		if(goingRight)
+		if (goingRight)
 			LoopAnimOnly(crouchAnimR, rate, tweenTime, bStandBackward);
 		else
 			LoopAnimOnly(crouchAnimL, rate, tweenTime, bStandBackward);
 	}
 	else
 	{
-		if(goingRight)
+		if (goingRight)
 			LoopAnimOnly(standAnimR, rate, tweenTime, bCrouchBackward);
 		else
 			LoopAnimOnly(standAnimL, rate, tweenTime, bCrouchBackward);
@@ -2767,7 +2767,7 @@ function PlayBTW(Name crouchAnimL, Name crouchAnimR, Name standAnimL, Name stand
 //*********														   *******
 //************************************************************************
 //************************************************************************
-function int GetApproxPillFromHit( Vector HitLocation )
+function int GetApproxPillFromHit(Vector HitLocation)
 {
 	local Vector	Y, HitDir;
 	local float		DotY, Percent;
@@ -2778,17 +2778,17 @@ function int GetApproxPillFromHit( Vector HitLocation )
 	HitDir.Z = 0;
 	HitDir	= Normal(HitDir);
 	DotY	= HitDir Dot Y;
-	Percent = (HitLocation.Z - Location.Z)/CollisionHeight;
+	Percent = (HitLocation.Z - Location.Z) / CollisionHeight;
 
 	// Head zone
-	if( Percent > 0.68 )
+	if (Percent > 0.68)
 		PillTag = P_Head;
 	
 	// Middle zone .. Check for chest(front) or arms(left/right)
-	else if( Percent >= 0 )
+	else if (Percent >= 0)
 	{
 		// Chest
-		if( DotY < 0 ) 
+		if (DotY < 0) 
 			PillTag = P_LBody;
 		else
 			PillTag = P_RBody;
@@ -2797,13 +2797,13 @@ function int GetApproxPillFromHit( Vector HitLocation )
 	// legs
 	else
 	{
-		if( DotY < 0 )
+		if (DotY < 0)
 			PillTag = P_LThigh;
 		else
 			PillTag = P_RThigh;
 	}
 
-	if( PillTag == 0 )
+	if (PillTag == 0)
 		Log("ERROR in GetApproxBoneFromHit to calculate pill from cylinder");
 	
 	return PillTag;
@@ -2812,7 +2812,7 @@ function int GetApproxPillFromHit( Vector HitLocation )
 function SpawnWallHit(Actor HitActor, vector HitLocation, vector HitNormal, Material HitMaterial)
 {
 	local EWeapon weapon;
-	if( bIsPlayerPawn )
+	if (bIsPlayerPawn)
 		weapon = EPlayerController(Controller).ActiveGun;
 	else
 		weapon = CurrentWeapon;
@@ -2824,47 +2824,47 @@ function SpawnWallHit(Actor HitActor, vector HitLocation, vector HitNormal, Mate
 //		This version of TakeDamage uses the PillTag for its basic damage
 //		treatment.  
 //------------------------------------------------------------------------
-function TakeDamage( int Damage, Pawn instigatedBy, Vector Hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag )
+function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag)
 {
 	local Controller Killer;
 	local vector flatMomentum;
 	local bool bAlreadyDead;
 	local class<DamageType> backUpdamageType;
 
-	bAlreadyDead	= (Health <= 0);
+	bAlreadyDead = (Health <= 0);
 	flatMomentum = momentum;
 
-	backUpdamageType=damageType;
+	backUpdamageType = damageType;
 
 	//log("GLOBAL TAKE DAMAGE ["$name$"]: damage["$damage$"] by["$instigatedBy$"] type["$damagetype$"] pill["$pilltag$"] health["$health$"] ex["$AmbientDamagePerSeconds$"/"$AmbientDamageFromFire$"] ["$GetStateName()$"]");
 
 	// calculate and apply force of damage
-	if(Physics == PHYS_Walking)
+	if (Physics == PHYS_Walking)
 		flatMomentum.Z = FMax(flatMomentum.Z, 0.7 * VSize(momentum));
 
 	// Blood effect
-	if(( damageType == None ) && (!bNoBlood))
+	if ((damageType == None) && (!bNoBlood))
     {
 		Spawn(class'EBloodSplat', self,, HitLocation, Rotator(Normal(momentum)));
     }
 
-	if ( instigatedBy == self ) 
+	if (instigatedBy == self) 
 		flatMomentum *= 0.6;
-	flatMomentum = flatMomentum/Mass;
+	flatMomentum = flatMomentum / Mass;
 
-	AddVelocity( flatMomentum );
+	AddVelocity(flatMomentum);
 
 	// Check to be sure there is a pill .. else, use body pill
-	if( PillTag == 0 )
+	if (PillTag == 0)
 		PillTag = GetApproxPillFromHit(HitLocation);
 
 	// Gives real damage depending on the hit zone
 	ResolveDamage(damage, PillTag, damageType);
 	
 	//Play HitSound depending on the pill
-	if ( damageType == None )
+	if (damageType == None)
 	{
-		if ( VSize(Hitlocation) != 0 )
+		if (VSize(Hitlocation) != 0)
 		{
 		if (PillTag == 1) //head
 			PlaySound(Sound'GunCommon.Play_BulletHitHead', SLOT_SFX);
@@ -2876,7 +2876,7 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector Hitlocation, vector H
 			PlaySound(EDog(self).DogHit, SLOT_SFX);
 	}
 	// If knocked but not on head
-	else if( damageType.name == 'EKnocked' && PillTag != P_Head )
+	else if (damageType.name == 'EKnocked' && PillTag != P_Head)
 	{
 		damageType = None;
 	}
@@ -2884,19 +2884,19 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector Hitlocation, vector H
 	//Log(self@damage@damagetype@health);
 
 	// Spawn flames on burned actor if fire comes from another source
-	if( damageType != None && damageType.name == 'EBurned' && instigatedBy != self )
+	if (damageType != None && damageType.name == 'EBurned' && instigatedBy != self)
 		CatchOnFire();
 
-	if( Controller == None )
+	if (Controller == None)
 		return;
 
 	// play damage animations
 	if (Health > 0)
 	{
 		// animation
-		if(( Level.TimeSeconds - EAIController(Controller).DamageTimer > 1.5f )  && 
-           ( Controller.GetStateName() != 's_alarmswitch') && ( Controller.GetStateName() != 's_Groggy') &&
-		   damageType == None )
+		if ((Level.TimeSeconds - EAIController(Controller).DamageTimer > 1.5f)  && 
+           (Controller.GetStateName() != 's_alarmswitch') && (Controller.GetStateName() != 's_Groggy') &&
+		   damageType == None)
 			PlayHitE(PillTag, HitLocation, momentum);
 
 		MakeNoise(500.0, NOISE_Scream, CollisionHeight * 2.0f); 
@@ -2904,13 +2904,13 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector Hitlocation, vector H
 		// resolve other damage types
 		ResolveDamageType(PillTag, momentum, damageType);
 			
-		if(instigatedBy != Self && Controller != None && ( Controller.GetStateName() != 's_alarmswitch'))
+		if (instigatedBy != Self && Controller != None && (Controller.GetStateName() != 's_alarmswitch'))
 		{
 			//plog("passing damage to controller.");
 			Controller.damageAttitudeTo(instigatedBy, Damage, backUpdamageType,PillTag);
 		}
 
-		if(instigatedBy != Self && Controller != None && !bIsPlayerPawn && instigatedBy != None && instigatedBy.bIsPlayerPawn && !EAIController(Controller).bWasInjured && !EAIController(Controller).bNotInStats)
+		if (instigatedBy != Self && Controller != None && !bIsPlayerPawn && instigatedBy != None && instigatedBy.bIsPlayerPawn && !EAIController(Controller).bWasInjured && !EAIController(Controller).bNotInStats)
 		{
 			if (!EAIController(Controller).bWasKnockedOut)
 			{
@@ -2932,20 +2932,20 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector Hitlocation, vector H
 			}
 		}
 	}
-	else if ( !bAlreadyDead )
+	else if (!bAlreadyDead)
 	{
-		if( damageType != None )
+		if (damageType != None)
 		{
 			bDontPlayDeathAnim = false;
 			DesignerDeathAnim = '';
 		}
 
-		if( Controller != None )
+		if (Controller != None)
 		{
 			Controller.NextState = '';
 			Controller.Enemy = instigatedBy;
 		}
-		if ( instigatedBy != None )
+		if (instigatedBy != None)
 			Killer = instigatedBy.Controller;
 
 		LastDamageType = damageType;
@@ -2957,17 +2957,17 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector Hitlocation, vector H
 // Description		
 //		Resolves damage depending on damagetype and hitlocation
 //------------------------------------------------------------------------
-function ResolveDamage( out int Damage, out int PillTag, out class<DamageType> damageType )
+function ResolveDamage(out int Damage, out int PillTag, out class<DamageType> damageType)
 {
 	//Log("Hit damage="$Damage$" of type="$damagetype$" on pill="$PillTag$" health="$health$" w/ modifier="$DamageLookupTable[PillTag-1]);
-	if( damageType == None )
+	if (damageType == None)
 	{
-		Health -= Damage * DamageLookupTable[PillTag-1] / 100/*%*/;
+		Health -= Damage * DamageLookupTable[PillTag - 1] / 100/*%*/;
 	}
 	// Check to lose consciousness
-	else if( (damageType == class'EKnocked' && Health-Damage <= 0)							||	// Knocked and no more health
-			 (damageType == class'EStunned' && (Health-Damage <= 0 || PillTag == P_Head))	||	// Stunned and no more health OR directly on the head
-			 (damageType == class'ESleepingGas' && Health-Damage < 20) )						// Smoke and mim health reached
+	else if ((damageType == class'EKnocked' && Health - Damage <= 0)							||	// Knocked and no more health
+			 (damageType == class'EStunned' && (Health - Damage <= 0 || PillTag == P_Head))	||	// Stunned and no more health OR directly on the head
+			 (damageType == class'ESleepingGas' && Health - Damage < 20))						// Smoke and mim health reached
 	{
 		Damage		= 0;
 		PillTag		= P_Head;
@@ -2976,7 +2976,7 @@ function ResolveDamage( out int Damage, out int PillTag, out class<DamageType> d
 	else
 	{
 		Health -= Damage;
-		if(damageType == class'EKnocked' && Health > 0 && GetStateName() != 's_Grabbed' ) //1st time knocked
+		if (damageType == class'EKnocked' && Health > 0 && GetStateName() != 's_Grabbed') //1st time knocked
 		{
 			Bark_Type = BARK_KnockedOut;
 			PlaySound(Sounds_Barks,SLOT_SFX);
@@ -2988,16 +2988,16 @@ function ResolveDamage( out int Damage, out int PillTag, out class<DamageType> d
 // Description		
 //		Sends Pawn & controller in different state
 //------------------------------------------------------------------------
-function ResolveDamageType( int PillTag, vector Momentum, class<DamageType> DamageType )
+function ResolveDamageType(int PillTag, vector Momentum, class<DamageType> DamageType)
 {
 	local int Speed;
 	//Log("Global ResolveDamageType"@PillTag@Momentum@DamageType);
 
-	if( DamageType == None )
+	if (DamageType == None)
 		return;
 
 	Speed = VSize(Velocity);
-	switch( DamageType.name )
+	switch (DamageType.name)
 	{
 		case 'EKnocked':
 			Knocked(PillTag, Momentum); 
@@ -3008,12 +3008,12 @@ function ResolveDamageType( int PillTag, vector Momentum, class<DamageType> Dama
 			break;
 		
 		case 'ESleepingGas':
-			if( Speed < 0.7f*GetMoveSpeed(MOVE_JogAlert) || Health <= 50 )
+			if (Speed < 0.7f * GetMoveSpeed(MOVE_JogAlert) || Health <= 50)
 				Stunned('Gassed');
 			break;
 		
 		case 'EBurned':
-			if( Speed < 0.7f*GetMoveSpeed(MOVE_JogAlert) || Health <= 70 )
+			if (Speed < 0.7f * GetMoveSpeed(MOVE_JogAlert) || Health <= 70)
 				Stunned('Burned');
 			break;
 		
@@ -3028,21 +3028,21 @@ function ResolveDamageType( int PillTag, vector Momentum, class<DamageType> Dama
 //		Play Damage depending on hit bone
 //		Redefined in EAIPawn for special NPC handling.
 //------------------------------------------------------------------------
-function PlayHitE( int PillTag, Vector HitLocation, Vector Momentum )
+function PlayHitE(int PillTag, Vector HitLocation, Vector Momentum)
 {
 	local Name		AnimName;
 	local Vector	PawnXAxis, HitDir;
 	local bool		bFront;
 
 	// we're in root motion -- don't play animation
-	if ( !bCollideWorld )
+	if (!bCollideWorld)
 	{
 		//plog("PlayHitE returning -- bCollideWorld is false");
 		return;
 	}
 
 	// if we're peeking around a corner, instead of tweening a damage animation, just undo the peek
-	if ( bCoverPeeking )
+	if (bCoverPeeking)
 	{
 		CoverPeekEnd();
 		return;
@@ -3050,10 +3050,10 @@ function PlayHitE( int PillTag, Vector HitLocation, Vector Momentum )
 
 
 	//Log("hit on bone"@PillTag);
-	Switch( PillTag )
+	Switch (PillTag)
 	{
 		case P_Head :
-			if( bFront )
+			if (bFront)
 			{
 				//log("front head");
 				AnimName = ADamageHeadShotForward;
@@ -3117,7 +3117,7 @@ function PlayHitE( int PillTag, Vector HitLocation, Vector Momentum )
 	}
 	
 	//Log(self$" Playhit animation "$AnimName);
-	if ( bInTransition )
+	if (bInTransition)
 		PlayAnimOnly(AnimName,,0.30);
 	else
 		PlayAnimOnly(AnimName,,0.10);
@@ -3129,27 +3129,27 @@ function PlayHitE( int PillTag, Vector HitLocation, Vector Momentum )
 //		Should only and maybe not even depend on Bone hit to properly play
 //		Velocity falling
 //------------------------------------------------------------------------
-function PlayDyingE( int PillTag, vector momentum )
+function PlayDyingE(int PillTag, vector momentum)
 {
 	local Name Anim;
 
-	if( bDontPlayDeathAnim && DesignerDeathAnim == '' )
+	if (bDontPlayDeathAnim && DesignerDeathAnim == '')
 		return;
-	else if( DesignerDeathAnim != '' )
+	else if (DesignerDeathAnim != '')
 		Anim = DesignerDeathAnim;
 
 	// native function will decide what animation to play based on input PillTag and any current momentum
-	if( Anim == '' )
+	if (Anim == '')
 	Anim = ChooseDeathAnimation(PillTag, momentum);
 
 	// in case anim is not set (bad pilltag, etc.)
-	if ( Anim == '' )
+	if (Anim == '')
 		Anim = ADeathDown;
 	
-	else if ( Anim == ADeathLadder )
+	else if (Anim == ADeathLadder)
 		bFallToDeath = true;
 
-	if( GetAnimName() != Anim )
+	if (GetAnimName() != Anim)
 	PlayAnimOnly(Anim, 1.0, 0.2);
 }
 
@@ -3157,7 +3157,7 @@ function PlayDyingE( int PillTag, vector momentum )
 // Description		
 //		Same as Died, but for unconscious
 //------------------------------------------------------------------------
-function Knocked( int PillTag, vector momentum )
+function Knocked(int PillTag, vector momentum)
 {
 	// Play Anims & Sound
 	PlayDyingE(PillTag, momentum);
@@ -3167,9 +3167,9 @@ function Knocked( int PillTag, vector momentum )
 	Bark_Type = BARK_KnockedOut;
 	PlaySound(Sounds_Barks,SLOT_SFX);
 
-	MakeNoise( KnockedGaspRadius, NOISE_DyingGasp );
+	MakeNoise(KnockedGaspRadius, NOISE_DyingGasp);
 
-	if( Controller != None )
+	if (Controller != None)
 		Controller.GotoState('s_Unconscious');
 	GotoState('s_Unconscious');
 }
@@ -3178,7 +3178,7 @@ function FallDeadLadder()
 {
 	PlayAnimOnly(ChooseDeathAnimation(0, vect(0,0,0)), 2.0 ,0.2);
 	bFallToDeath = true;
-	if( Controller != None )
+	if (Controller != None)
 		Controller.GotoState('s_Unconscious');
 	GotoState('s_FallToDeath');
 }
@@ -3189,18 +3189,18 @@ function FallDeadLadder()
 function Electrocuted()
 {
 	// must check before Controller.GotoState('s_Unconscious');
-	if( EAIController(Controller) != None && EAIController(Controller).bIsOnLadder )
+	if (EAIController(Controller) != None && EAIController(Controller).bIsOnLadder)
 	{
 		FallDeadLadder();
 		return;
 	}
 
-	if ( !Controller.bIsPlayer )
+	if (!Controller.bIsPlayer)
 	{
-		MakeNoise( ElectrocutedGaspRadius, NOISE_DyingGasp );
+		MakeNoise(ElectrocutedGaspRadius, NOISE_DyingGasp);
 	}
 
-	if( Controller != None )
+	if (Controller != None)
 		Controller.GotoState('s_Unconscious');
 	GotoState('s_Electrocuted');
 }
@@ -3212,7 +3212,7 @@ function Electrocuted()
 function Stunned(name Label)
 {
 	// must check before Controller.GotoState('s_Unconscious');
-	if( EAIController(Controller) != None && EAIController(Controller).bIsOnLadder )
+	if (EAIController(Controller) != None && EAIController(Controller).bIsOnLadder)
 	{
 		FallDeadLadder();
 		return;
@@ -3226,7 +3226,7 @@ function Stunned(name Label)
 // 
 // Description		Shortcut to controller change state
 //------------------------------------------------------------------------
-function DiedE( Controller Killer, int PillTag, vector momentum )
+function DiedE(Controller Killer, int PillTag, vector momentum)
 {
 	// used to check bDeleteMe flag, but we're not destroying pawns right now
 	// used to make sure health was below 0
@@ -3235,7 +3235,7 @@ function DiedE( Controller Killer, int PillTag, vector momentum )
 	// used to drop inventory
 
 	// Change mesh for dude on fire before death anim
-	//if( !Controller.bIsPlayer && BodyFlames.Length > 0 )
+	//if (!Controller.bIsPlayer && BodyFlames.Length > 0)
 	//	Do change SKINS
 
 	// Play Anims & Sound
@@ -3245,14 +3245,14 @@ function DiedE( Controller Killer, int PillTag, vector momentum )
 	
 	if (!Controller.bIsPlayer)
 	{
-		if ( bIsDog )
+		if (bIsDog)
 		{
 			PlaySound(EDog(self).StopBreath, SLOT_SFX);
 			PlaySound(EDog(self).DogHit, SLOT_SFX);
 		}
 		else
 		{
-			if( LastDamageType != None && LastDamageType.name == 'EBurned' )
+			if (LastDamageType != None && LastDamageType.name == 'EBurned')
 				Bark_Type = BARK_InFire;
 			else
 				Bark_Type = BARK_Dying;
@@ -3262,16 +3262,16 @@ function DiedE( Controller Killer, int PillTag, vector momentum )
 	}
 
 	// send trigger event on death ..
-	if( Killer != None )
+	if (Killer != None)
 	{
 		// add body to ChangedActorsList
-		if( Killer.bIsPlayer )
+		if (Killer.bIsPlayer)
 		{
 			bKilledByPlayer = true;
-			MakeNoise( DyingGaspRadius, NOISE_DyingGasp );
+			MakeNoise(DyingGaspRadius, NOISE_DyingGasp);
 		}
 		// If Npc killed the player
-		else if( Controller.bIsPlayer )
+		else if (Controller.bIsPlayer)
             EAIController(Killer).NotifyKilledPlayer(self);
 
 
@@ -3281,19 +3281,19 @@ function DiedE( Controller Killer, int PillTag, vector momentum )
 		TriggerEvent(Event, self, None);
 
 	// Don't call this on Controller cause he already calls it on himself in PawnDied
-	if( Controller != None && !Controller.bIsPlayer )
+	if (Controller != None && !Controller.bIsPlayer)
 	{
 		//Log("EPawn Died -- Controller.GotoState('s_Dead');"@self@Controller);
 
-		if(bKeepNPCAlive)
+		if (bKeepNPCAlive)
 			Controller.GotoState('s_Unconscious');
 		else
 		    Controller.GotoState('s_Dead');
 	}
 
-	if ( bFallToDeath )
+	if (bFallToDeath)
 		GotoState('s_FallToDeath');
-	else if( bKeepNPCAlive )
+	else if (bKeepNPCAlive)
 		GotoState('s_Unconscious');
 	else
 	    GotoState('s_Dying');
@@ -3321,7 +3321,7 @@ function SitDown(bool RightSide, optional bool bUsingTable)
 	
 	LockRootMotion(1, true);					// lock the root with root rotation enabled
 
-	if(!bUsingTable)
+	if (!bUsingTable)
 	{
 		Transition_RootMotion('s_Sitting', ASitDownF, AWaitSitS);
 	}
@@ -3343,12 +3343,12 @@ function StandUp(bool RightSide, optional bool bUsingTable)
 	log("StandUp pawn: "$self);
 
 	// make sure we have a valid transition target
-	if ( AWait == '' )
+	if (AWait == '')
 		SwitchAnims();
 
 	LockRootMotion(1, true);					// lock the root with root rotation enabled
 	
-	if(!bUsingTable)
+	if (!bUsingTable)
 	{
 		Transition_RootMotion('DefaultState', AStandUpF, AWait);
 	}
@@ -3388,7 +3388,7 @@ event float GetMoveSpeed(MoveFlags MoveFlags)
 // 
 //------------------------------------------------------------------------
 
-function PlayThrowGrenade( vector ThrowVelocity )
+function PlayThrowGrenade(vector ThrowVelocity)
 {
 	// TODO : choose animation based on ThrowVelocity -- for now just using overhand toss
 
@@ -3438,17 +3438,17 @@ function CoverPeekRight()
 
 function CoverPeekUp()
 {
-	if ( !bCoverPeeking )
+	if (!bCoverPeeking)
 	{
 		bCoverPeeking = true;
 
 		AWait			= 'waitStAlFd2';
 
-		CheckForTransition( MOVE_WalkAlert );		// set transition for standing
+		CheckForTransition(MOVE_WalkAlert);		// set transition for standing
 				
 		SwitchAnims();
 		
-		if ( TransitionQueue.Length > 0 )
+		if (TransitionQueue.Length > 0)
 			GotoState('s_Transition');
 	}
 }
@@ -3458,19 +3458,19 @@ function CoverPeekEnd()
 	local name CurrentAnimSeq;
 	CurrentAnimSeq = GetAnimName();
 	
-	if ( bCoverPeeking )
+	if (bCoverPeeking)
 	{
 		bCoverPeeking = false;
 			
 		SwitchAnims();		// will reset to AWait appropriate for current MoveFlag
 		
-		if ( CurrentAnimSeq == APeekLeft )
+		if (CurrentAnimSeq == APeekLeft)
 			Transition_Standard(APeekLeftBegin, 0.3f, false, true);
 
-		else if ( CurrentAnimSeq == APeekRight )
+		else if (CurrentAnimSeq == APeekRight)
 			Transition_Standard(APeekRightBegin, 0.3f, false, true);
 
-		if ( TransitionQueue.Length > 0 )			
+		if (TransitionQueue.Length > 0)			
 			GotoState('s_Transition');
 	}
 }
@@ -3498,7 +3498,7 @@ function NotifyShotJustMissed(Pawn Instigator) {}
 
 function ResetZones()
 {
-	if(bIsCrouched)
+	if (bIsCrouched)
 	{
 		m_CurrentArmsZone = m_CrouchedArmsZone;
 		m_CurrentArmsRadius = m_CrouchedArmsRadius;
@@ -3600,7 +3600,7 @@ event Transition_WeaponSelect()
 	// set WeaponStance so any subsequent animations chosen are from the appropriate set ..
 	WeaponStance = WeaponHandedness;
 
-	if(WeaponStance > 0)
+	if (WeaponStance > 0)
 	{
 	AddTransition('s_Waiting',,,,0.2f,,true,TRANN_WeaponSelect);
 	plog("			Transition_WeaponSelect.");
@@ -3617,12 +3617,12 @@ event Transition_WeaponSelect()
 event Transition_WeaponAway()
 {
 	// if a weapon is in our hands, add the corresponding transition
-	if ( WeaponStance > 0 ) 
+	if (WeaponStance > 0) 
 	{
 		plog("			Transition_WeaponAway.");
 
 		//be sure the loop sound is not playing
-		if ( HandItem != none && HandItem == CurrentWeapon )
+		if (HandItem != none && HandItem == CurrentWeapon)
 		{
 			CurrentWeapon.StopLoopSound();
 		}
@@ -3658,7 +3658,7 @@ event Transition_ItemSelect(EInventoryItem NewItem)
 
 function InitWeaponAttach()
 {
-	switch ( InitialAIState )
+	switch (InitialAIState)
 	{
 		case EAIS_Default : 
 
@@ -3684,7 +3684,7 @@ function InitWeaponAttach()
 
 event AI_AttachNotify()
 {
-	if ( TransitionQueue.Length == 0 )
+	if (TransitionQueue.Length == 0)
 	{
 		log("WARNING : AI_AttachNotify called outside s_Transition?");
 		AttachWeaponToHand();
@@ -3692,7 +3692,7 @@ event AI_AttachNotify()
 	else
 	{
 		// if we're playing the animation backwards, call AttachWeaponAway
-		switch ( TransitionQueue[0].NotifyType ) 
+		switch (TransitionQueue[0].NotifyType) 
 		{
 			case TRANN_WeaponSelect : 
 				AttachWeaponToHand();
@@ -3725,17 +3725,17 @@ event AI_AttachNotify()
 function AttachWeaponAway()	
 {
 	// Equip whatever we have in hand -- we are only looking for weapons in this function
-	if( CurrentWeapon != None )
+	if (CurrentWeapon != None)
 	{	
 		plog("		Pre AttachWeaponAway -- CurrentWeapon  " $ CurrentWeapon $ "  HandItem  " $ HandItem $ "  PendingItem  " $ PendingItem $  "  WeaponStance " $ WeaponStance);
 
-		if ( WeaponHandedness == 1 ) 
+		if (WeaponHandedness == 1) 
 		{
 			FullInventory.UnEquipItem(FullInventory.GetSelectedItem());
 			AttachToBone(CurrentWeapon, 'OneHandAwayBone');
 			CurrentWeapon.SetRelativeRotation(rot(0,0,0));
 		}
-		else if ( WeaponHandedness == 2 )
+		else if (WeaponHandedness == 2)
 		{
 			FullInventory.UnEquipItem(FullInventory.GetSelectedItem());
 			AttachToBone(CurrentWeapon, 'TwoHandAwayBone');
@@ -3759,7 +3759,7 @@ function AttachWeaponAway()
 function AttachWeaponToHand()
 {
 	// Equip Current Weapon by placing it in hand
-	if( CurrentWeapon != None )
+	if (CurrentWeapon != None)
 	{		
 		plog("		AttachWeaponToHand -- CurrentWeapon  " $ CurrentWeapon $ "  HandItem  " $ HandItem $ "  PendingItem  " $ PendingItem $  "  WeaponStance " $ WeaponStance);
 
@@ -3792,7 +3792,7 @@ function AttachWeaponToHand()
 function AttachItemToHand()
 {
 	// select item if PendingItem not null.
-	if ( PendingItem != none )
+	if (PendingItem != none)
 	{
 		plog("		Pre AttachItemToHand -- CurrentWeapon  " $ CurrentWeapon $ "  HandItem  " $ HandItem $ "  PendingItem  " $ PendingItem $  "  WeaponStance " $ WeaponStance);
 
@@ -3845,7 +3845,7 @@ function name GetItemSelectAnim();
 
 function float GetPlayerFarDistance()
 {
-	if ( CurrentWeapon != none )	
+	if (CurrentWeapon != none)	
 		return CurrentWeapon.NPCPreferredDistance;
 	else
 		return PlayerFarDistance;
@@ -3853,7 +3853,7 @@ function float GetPlayerFarDistance()
 
 function float GetPlayerCloseDistance()
 {
-	if ( CurrentWeapon != none )
+	if (CurrentWeapon != none)
 		return (CurrentWeapon.NPCPreferredDistance - 100.0);
 	else
 		return PlayerCloseDistance;
@@ -3889,13 +3889,13 @@ function Fall()
 
 function FindFallSpot()
 {
-	if(FastPointCheck(ToWorld(vect(0, 72, 0)), GetExtent(), true, true))
+	if (FastPointCheck(ToWorld(vect(0, 72, 0)), GetExtent(), true, true))
 		Move(ToWorldDir(vect(0, 72, 0)));
-	else if(FastPointCheck(ToWorld(vect(0, -72, 0)), GetExtent(), true, true))
+	else if (FastPointCheck(ToWorld(vect(0, -72, 0)), GetExtent(), true, true))
 		Move(ToWorldDir(vect(0, -72, 0)));
-	else if(FastPointCheck(ToWorld(vect(-72, 0, 0)), GetExtent(), true, true))
+	else if (FastPointCheck(ToWorld(vect(-72, 0, 0)), GetExtent(), true, true))
 		Move(ToWorldDir(vect(-72, 0, 0)));
-	else if(FastPointCheck(ToWorld(vect(72, 0, 0)), GetExtent(), true, true))
+	else if (FastPointCheck(ToWorld(vect(72, 0, 0)), GetExtent(), true, true))
 		Move(ToWorldDir(vect(72, 0, 0)));
 }
 
@@ -3927,10 +3927,10 @@ state s_Falling
 state s_Waiting
 {
 	// this means it's time to exit ...
-	function PlayBlend( SAnimBlend anims, Rotator lookDir, vector moveDir, float minForwardRatio, float TweenTim, optional bool noloop )
+	function PlayBlend(SAnimBlend anims, Rotator lookDir, vector moveDir, float minForwardRatio, float TweenTim, optional bool noloop)
 	{
 		// play Wait to Move transition if it exists ..
-		if ( AWaitOut != '' )
+		if (AWaitOut != '')
 		{
 			AddTransition('DefaultState', AWaitOut,, 0.45f, 0.3f,,true);
 			GotoState('s_Transition');
@@ -3956,23 +3956,23 @@ state s_Waiting
 	//
 	//------------------------------------------------------------------------
 
-	event PlayWaitingBlend( vector ForwardDirection, vector FocusDirection, float YawDiff, float TweenTime )
+	event PlayWaitingBlend(vector ForwardDirection, vector FocusDirection, float YawDiff, float TweenTime)
 	{
 		local vector moveDir, vLookDir, vCross;
 		local float fDot, fRatio;
 
 
-		if ( Abs(YawDiff) > 0 ) 
+		if (Abs(YawDiff) > 0) 
 		{
-			if(!IsTweening(0))
+			if (!IsTweening(0))
 				RotateTowardsRotator(Rotator(ForwardDirection), Controller.GetTurnSpeed());
 		}
 
-		if(Abs(CurrentYawDiff) < 8192)
+		if (Abs(CurrentYawDiff) < 8192)
 		{
-			LoopAnim( AWait,,TweenTime );
+			LoopAnim(AWait,,TweenTime);
 
-			if ( AWaitLeft != '' && AWaitRight != '' && !bCoverPeeking)
+			if (AWaitLeft != '' && AWaitRight != '' && !bCoverPeeking)
 			{
 				FocusDirection.Z	= 0.0f;
 				FocusDirection		= Normal(FocusDirection);
@@ -3984,14 +3984,14 @@ state s_Waiting
 
 				//log("  FocusDirection:   " $ FocusDirection $ "  ForwardDirection : "$ ForwardDirection $ "    dotproduct : " $ fDot);
 
-				if(Abs(fDot) < 0.999)
+				if (Abs(fDot) < 0.999)
 				{
 					fRatio	= Acos(Abs(fDot)) * TWOOVERPI;
 					vCross = FocusDirection Cross ForwardDirection;
 
 					//log("	fRatio: " $ fRatio @ "   vCross : " $ vCross.Z);
 					
-					if(vCross.Z < 0.0)
+					if (vCross.Z < 0.0)
 						SynchAnim(AWaitRight, BLENDMOVEMENTCHANNEL, TweenTime, fRatio);
 					else
 						SynchAnim(AWaitLeft, BLENDMOVEMENTCHANNEL, TweenTime, fRatio);
@@ -4014,7 +4014,7 @@ state s_Waiting
 
 function ClimbLadder(bool bClimbingUp)
 {
-	if ( bClimbingUp )
+	if (bClimbingUp)
 	{
 		// set up root motion transition -- no rotation
 
@@ -4036,7 +4036,7 @@ state s_LadderClimbing
 
 	function ClimbLadder(bool bClimbingUp)
 	{
-		if ( bClimbingUp )
+		if (bClimbingUp)
 		{
 			
 		}
@@ -4055,23 +4055,23 @@ state s_LadderClimbing
 //		Make sure you ignore any necessary incoming event calls!!!!!!
 // ----------------------------------------------------------------------
 
-function AddTransition(name TargetState, optional name TransitionAnim, optional name TargetAnimation, optional float Time, optional float TweenTime, optional bool bRootMotion, optional bool bAllowRotation, optional ETransitionNotifyType NotifyType, optional bool bBackwards )
+function AddTransition(name TargetState, optional name TransitionAnim, optional name TargetAnimation, optional float Time, optional float TweenTime, optional bool bRootMotion, optional bool bAllowRotation, optional ETransitionNotifyType NotifyType, optional bool bBackwards)
 {	
 	local int i;
 
 	TransitionQueue.Length = TransitionQueue.Length + 1;
 
-	TransitionQueue[TransitionQueue.Length-1].TransitionState				= TargetState;
-	TransitionQueue[TransitionQueue.Length-1].ATransition					= TransitionAnim;
-	TransitionQueue[TransitionQueue.Length-1].ATransitionTarget				= TargetAnimation;
-	TransitionQueue[TransitionQueue.Length-1].TransitionTime				= Time;		
-	TransitionQueue[TransitionQueue.Length-1].TransitionTween				= TweenTime;		
-	TransitionQueue[TransitionQueue.Length-1].bRootMotionTransition			= bRootMotion;		
-	TransitionQueue[TransitionQueue.Length-1].bTransitionWithRotation		= bAllowRotation;	
-	TransitionQueue[TransitionQueue.Length-1].NotifyType					= NotifyType;
-	TransitionQueue[TransitionQueue.Length-1].bBackwards					= bBackwards;
+	TransitionQueue[TransitionQueue.Length - 1].TransitionState				= TargetState;
+	TransitionQueue[TransitionQueue.Length - 1].ATransition					= TransitionAnim;
+	TransitionQueue[TransitionQueue.Length - 1].ATransitionTarget				= TargetAnimation;
+	TransitionQueue[TransitionQueue.Length - 1].TransitionTime				= Time;		
+	TransitionQueue[TransitionQueue.Length - 1].TransitionTween				= TweenTime;		
+	TransitionQueue[TransitionQueue.Length - 1].bRootMotionTransition			= bRootMotion;		
+	TransitionQueue[TransitionQueue.Length - 1].bTransitionWithRotation		= bAllowRotation;	
+	TransitionQueue[TransitionQueue.Length - 1].NotifyType					= NotifyType;
+	TransitionQueue[TransitionQueue.Length - 1].bBackwards					= bBackwards;
 
-	for ( i=0; i<TransitionQueue.Length; i++ ) 
+	for (i = 0; i < TransitionQueue.Length; i++)
 		plog("TransitionQueue[ " $ i $ "] ==> " 
 			@ TransitionQueue[i].TransitionState 
 			@ TransitionQueue[i].ATransition 
@@ -4082,7 +4082,7 @@ function AddTransition(name TargetState, optional name TransitionAnim, optional 
 			@ TransitionQueue[i].bTransitionWithRotation
 			@ TransitionQueue[i].NotifyType
 			@ TransitionQueue[i].bBackwards
-			);
+);
 
 }
 
@@ -4129,9 +4129,9 @@ state s_Transition
 	{
 		local float AnimTime;
 
-		TmpDamage=0;
+		TmpDamage = 0;
 
-		if ( TransitionQueue.Length == 0 )
+		if (TransitionQueue.Length == 0)
 		{
 			log("WARNING:  s_Transition : transition queue is empty.");
 			GotoState('DefaultState');
@@ -4140,12 +4140,12 @@ state s_Transition
 		
 		// if TransitionNotify type specified, use that to get animation 
 
-		switch ( TransitionQueue[0].NotifyType )
+		switch (TransitionQueue[0].NotifyType)
 		{
 			case TRANN_WeaponSelect : 
 			case TRANN_WeaponAway : 
 				TransitionQueue[0].ATransition = GetWeaponSelectAnim();		
-				if ( CurrentWeapon.IsA('EOneHandedWeapon') )
+				if (CurrentWeapon.IsA('EOneHandedWeapon'))
 					PlaySound(Sound'FisherEquipement.Play_FisherPistolAim', SLOT_SFX);
 				else
 					PlaySound(Sound'FisherEquipement.Play_FN2000Aim', SLOT_SFX);
@@ -4160,7 +4160,7 @@ state s_Transition
 
 		AnimTime = GetAnimTime(TransitionQueue[0].ATransition);
 
-		if ( TransitionQueue[0].ATransition == '' || AnimTime==0.0f )
+		if (TransitionQueue[0].ATransition == '' || AnimTime == 0.0f)
 		{
 			log("WARNING:  s_Transition : invalid transition anim specified.");
 			GotoState(TransitionQueue[0].TransitionState);
@@ -4173,19 +4173,19 @@ state s_Transition
 
 		plog("-------- BEGIN STATE ATransition : " $ TransitionQueue[0].ATransition $ "   ATransitionTarget : " $ TransitionQueue[0].ATransitionTarget);
 				
-		if ( TransitionQueue[0].TransitionTime > 0.0f )
-			SetTimer( TransitionQueue[0].TransitionTime, false);
+		if (TransitionQueue[0].TransitionTime > 0.0f)
+			SetTimer(TransitionQueue[0].TransitionTime, false);
 		else
 		{
 			//keep it safe
-			if(AnimTime!=0.0f)
-				SetTimer(AnimTime+0.05f, false);
+			if (AnimTime != 0.0f)
+				SetTimer(AnimTime + 0.05f, false);
 		}
 		
 		bInTransition = true;
 		
 		// root motion -- play anim before setting physics
-		if ( TransitionQueue[0].bRootMotionTransition )
+		if (TransitionQueue[0].bRootMotionTransition)
 		{	
 			// don't PlayAnimOnly as we might want to blend over the root motion
 			bCollideWorld = false;
@@ -4200,7 +4200,7 @@ state s_Transition
 			Acceleration = vect(0,0,0);				
 			
 			// Weapon Away Transitions are weapon select animations played backwards
-			if ( TransitionQueue[0].NotifyType == TRANN_WeaponAway || TransitionQueue[0].bBackwards )
+			if (TransitionQueue[0].NotifyType == TRANN_WeaponAway || TransitionQueue[0].bBackwards)
 				PlayAnimOnly(TransitionQueue[0].ATransition,,TransitionQueue[0].TransitionTween,true);
 			else
 				PlayAnimOnly(TransitionQueue[0].ATransition,,TransitionQueue[0].TransitionTween);
@@ -4220,10 +4220,10 @@ state s_Transition
 		bInTransition = false;
 
 
-		if ( TransitionQueue.Length > 0 )
+		if (TransitionQueue.Length > 0)
 		{
 			// call AttachNotify if event has not completed the attachment
-			if ( TransitionQueue[0].NotifyType > TRANN_None )
+			if (TransitionQueue[0].NotifyType > TRANN_None)
 			{
 				plog("Forcing AttachNotify call...");
 				AI_AttachNotify();
@@ -4237,11 +4237,11 @@ state s_Transition
 	{	
 		SetTimer(0, false);
 
-		if ( TransitionQueue[0].bRootMotionTransition )
+		if (TransitionQueue[0].bRootMotionTransition)
 		{	
 			// teleport based on difference between initial root offset and current root offset
 			
-			if ( TransitionQueue[0].ATransitionTarget != '' )
+			if (TransitionQueue[0].ATransitionTarget != '')
 			{
 				// get the offset between current anim and anim we're switching to
 				ExitRootMotion(TransitionQueue[0].ATransitionTarget);
@@ -4252,9 +4252,9 @@ state s_Transition
 		// inform controller 
 		Controller.TransitionEnd();
 
-		if(Health-TmpDamage <= 0)
+		if (Health - TmpDamage <= 0)
 		{
-			if( Controller != None )
+			if (Controller != None)
 			{
 				Controller.NextState = '';
 				DiedE(none, 1,vect(0,0,0));
@@ -4265,12 +4265,12 @@ state s_Transition
 		}
 
 		//check the stack
-		if(TransitionQueue.Length > 1)
+		if (TransitionQueue.Length > 1)
 		{
-			if ( TransitionQueue.Length > 0 )
+			if (TransitionQueue.Length > 0)
 			{
 				// call AttachNotify if event has not completed the attachment
-				if ( TransitionQueue[0].NotifyType > TRANN_None )
+				if (TransitionQueue[0].NotifyType > TRANN_None)
 				{
 					plog("Forcing AttachNotify call...");
 					AI_AttachNotify();
@@ -4286,17 +4286,17 @@ state s_Transition
 		}
 	}
 
-	function bool PlayAnimNoMovement( name Sequence, optional float Rate, optional float TweenTime, optional bool bBackward )
+	function bool PlayAnimNoMovement(name Sequence, optional float Rate, optional float TweenTime, optional bool bBackward)
 	{
 		return false;		// can not play another anim while in transition
 	}
 
 	// allow turning only in specified transitions
-	event PlayWaitingBlend( vector ForwardDirection, vector FocusDirection, float YawDiff, float TweenTime )
+	event PlayWaitingBlend(vector ForwardDirection, vector FocusDirection, float YawDiff, float TweenTime)
 	{
-		if ( TransitionQueue[0].bTransitionWithRotation && Abs(YawDiff) > MinTurnThreshold )
+		if (TransitionQueue[0].bTransitionWithRotation && Abs(YawDiff) > MinTurnThreshold)
 		{
-			if(Physics != PHYS_RootMotion)
+			if (Physics != PHYS_RootMotion)
 				RotateTowardsRotator(Rotator(ForwardDirection), Controller.GetTurnSpeed());
 		}
 	}
@@ -4304,12 +4304,12 @@ state s_Transition
 	// s_Transition must end when Transition Anim finishes.  AIController must send us the AnimEnd event
 	event AnimEnd(int Channel) 
 	{
-		if ( Channel == 0 )
+		if (Channel == 0)
 		{
 			//log("ANIMEND -- comparing CurrentAnimSeq : " $ CurrentAnimSeq $ "   with ATransition : " $ ATransition);
 			plog("ANIMEND called before TransitionEnd --------- Pawn: "$Self);
 
-			if ( GetAnimName() == TransitionQueue[0].ATransition )
+			if (GetAnimName() == TransitionQueue[0].ATransition)
 				TransitionEnd();
 		}
 	}
@@ -4328,25 +4328,25 @@ state s_Transition
 		// don't play animations or go back to default state if in root motion animation
         if (TransitionQueue.Length > 0)
         {
-		    if ( TransitionQueue[0].bRootMotionTransition )
+		    if (TransitionQueue[0].bRootMotionTransition)
             {
 				damageType = None ;
-				if ( VSize(Hitlocation) != 0 )
+				if (VSize(Hitlocation) != 0)
 				{
 				PlaySound(Sound'GunCommon.Play_Random_BulletHitBody', SLOT_SFX);
 				}
 
 				// Blood effect
-				if(( damageType == None ) && (!bNoBlood))
+				if ((damageType == None) && (!bNoBlood))
 				{
 					Spawn(class'EBloodSplat', self,, HitLocation, Rotator(Normal(momentum)));
 				}
 
 				// Check to be sure there is a pill .. else, use body pill
-				if( PillTag == 0 )
+				if (PillTag == 0)
 					PillTag = GetApproxPillFromHit(HitLocation);
 
-				TmpDamage += Damage * DamageLookupTable[PillTag-1] / 100;
+				TmpDamage += Damage * DamageLookupTable[PillTag - 1] / 100;
 
 			    return;
             }
@@ -4359,7 +4359,7 @@ state s_Transition
 
 
 		// only change states if we're still alive and the TakeDamage call did not change states for us.
-		if ( Health > 0 && GetStateName() == 's_Transition' )
+		if (Health > 0 && GetStateName() == 's_Transition')
 			GotoState('DefaultState');
 	}
 
@@ -4388,7 +4388,7 @@ state s_Sitting
 	}
 
 	// special TakeDamage for seated Pawns
-	function TakeDamage( int Damage, Pawn instigatedBy, Vector Hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag )
+	function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag)
 	{
 		local Controller Killer;
 		local bool bAlreadyDead;
@@ -4397,14 +4397,14 @@ state s_Sitting
 		//log("SIT TAKE DAMAGE : " $ Damage @ instigatedBy @ Hitlocation @ "**MOMENTUM** : " @ momentum @ " type: " @ damageType @ " pilltag: " @ PillTag);
 
 		// Blood effect
-		if(( damageType == None ) && (!bNoBlood))
+		if ((damageType == None) && (!bNoBlood))
 		{
 				Spawn(class'EBloodSplat', self,, HitLocation, Rotator(Normal(momentum)));
 		}
 		
 
 		// Check to be sure there is a pill .. else, use body pill
-		if( PillTag == 0 )
+		if (PillTag == 0)
 			PillTag = GetApproxPillFromHit(HitLocation);
 		
 		// Gives real damage depending on the hit zone
@@ -4412,9 +4412,9 @@ state s_Sitting
 
 
 		//Play HitSound depending on the pill
-		if ( damageType == None )
+		if (damageType == None)
 		{
-			if ( VSize(Hitlocation) != 0 )
+			if (VSize(Hitlocation) != 0)
 			{
 			if (PillTag == 1) //head
 				PlaySound(Sound'GunCommon.Play_BulletHitHead', SLOT_SFX);
@@ -4423,11 +4423,11 @@ state s_Sitting
 		}
 		}
 		// If knocked but not on head
-		else if( damageType.name == 'EKnocked' && PillTag != P_Head )
+		else if (damageType.name == 'EKnocked' && PillTag != P_Head)
 			damageType = None;
 
 		// In all case, spawn flames on burned actor
-		if( damageType != None && damageType.name == 'EBurned' )
+		if (damageType != None && damageType.name == 'EBurned')
 			CatchOnFire();
 
 		// play damage animations
@@ -4439,13 +4439,13 @@ state s_Sitting
 			// resolve other damage types
 			ResolveDamageType(PillTag, momentum, damageType);
 
-			if( instigatedBy != None && instigatedBy != Self && Controller != None )
+			if (instigatedBy != None && instigatedBy != Self && Controller != None)
 			{
 				//plog("passing damage to controller.");
 				Controller.damageAttitudeTo(instigatedBy, Damage, damageType);
 			}
 			
-			if(instigatedBy != Self && Controller != None && !bIsPlayerPawn && instigatedBy != None && instigatedBy.bIsPlayerPawn && !EAIController(Controller).bWasInjured && !EAIController(Controller).bNotInStats)
+			if (instigatedBy != Self && Controller != None && !bIsPlayerPawn && instigatedBy != None && instigatedBy.bIsPlayerPawn && !EAIController(Controller).bWasInjured && !EAIController(Controller).bNotInStats)
 			{
 				if (!EAIController(Controller).bWasKnockedOut)
 				{
@@ -4467,14 +4467,14 @@ state s_Sitting
 				}
 			}
 		}
-		else if ( !bAlreadyDead )
+		else if (!bAlreadyDead)
 		{
-			if( Controller != None )
+			if (Controller != None)
 			{
 				Controller.NextState = '';
 				Controller.Enemy = instigatedBy;
 			}
-			if ( instigatedBy != None )
+			if (instigatedBy != None)
 				Killer = instigatedBy.Controller;
 			
 			LastDamageType = damageType;
@@ -4482,14 +4482,14 @@ state s_Sitting
 		}
 	}
 		
-	function ResolveDamageType( int PillTag, vector Momentum, class<DamageType> DamageType )
+	function ResolveDamageType(int PillTag, vector Momentum, class<DamageType> DamageType)
 	{
 		//Log("s_Sitting ResolveDamageType"@PillTag@Momentum@DamageType);
 
-		if( DamageType == None )
+		if (DamageType == None)
 			return;
 
-		switch( DamageType.name )
+		switch (DamageType.name)
 		{
 			case 'EKnocked' :		Knocked(PillTag, Momentum); break;
 			default :				FallBackInert(); break;
@@ -4500,7 +4500,7 @@ state s_Sitting
 	{
 		StopAllSoundsActor(true);
 		PlayAnimOnly(ADeathBack);
-		if( Controller != None )
+		if (Controller != None)
 			Controller.GotoState('s_Unconscious');
 		GotoState('s_Unconscious');
 	}
@@ -4510,30 +4510,30 @@ state s_Sitting
 	//		Dying while seated slightly different from standard.
 	//------------------------------------------------------------------------
 
-	function PlayDyingE( int PillTag, vector momentum )
+	function PlayDyingE(int PillTag, vector momentum)
 	{
 		local Name		Anim;
 
-		if(bSleeping)
+		if (bSleeping)
 		{
 			PlayAnimOnly(ADeathDown);
 			return;
 		}
 
-		if( !bDontPlayDeathSitAnim )
+		if (!bDontPlayDeathSitAnim)
 			Anim = ChooseChairDeathAnimation(PillTag, momentum);
 		else
 			Anim = ADeathForward;
 
-		if( GetAnimName() != Anim )
+		if (GetAnimName() != Anim)
 			PlayAnimOnly(Anim,, 0.1);
 	}
 	
-	function bool PlayAnimNoMovement( name Sequence, optional float Rate, optional float TweenTime, optional bool bBackward )
+	function bool PlayAnimNoMovement(name Sequence, optional float Rate, optional float TweenTime, optional bool bBackward)
 	{
 		// should return true if Sequence is in current (Table.PSA) MeshAnimation 
 
-		if ( IsSequenceInCurrentAnim(Sequence) )
+		if (IsSequenceInCurrentAnim(Sequence))
 		{	
 			Global.PlayAnimNoMovement(Sequence, Rate, TweenTime);
 			return true;
@@ -4559,7 +4559,7 @@ state s_Stunned
 		// Make sure Timer is 0
 		SetTimer(0, false);
 
-		if( Controller != None )
+		if (Controller != None)
 			Controller.GotoState('s_Stunned');
 	}
 
@@ -4589,7 +4589,7 @@ state s_Stunned
 	// Prevent the fire from respawning on _wanna stop fire fire Npc_.
 	function CatchOnFire()
 	{
-		if( !IsOnFire() )
+		if (!IsOnFire())
 			Global.CatchOnFire();
 	}
 
@@ -4598,20 +4598,20 @@ state s_Stunned
 		return AStunned == 'FireStAlNt0';
 	}
 
-	function ResolveDamageType( int PillTag, vector Momentum, class<DamageType> DamageType )
+	function ResolveDamageType(int PillTag, vector Momentum, class<DamageType> DamageType)
 	{
-		if( DamageType == None )
+		if (DamageType == None)
 			return;
 
-		switch( DamageType.name )
+		switch (DamageType.name)
 		{
 			case 'EKnocked' :		Knocked(PillTag, Momentum); break;
 			case 'EElectrocuted' :	Electrocuted(); break;
 			
 			case 'ESleepingGas' :
-				if( IsOnFire() )	
+				if (IsOnFire())	
 					return;
-				if( bInTransition )	
+				if (bInTransition)	
 					SetTimer(3, false);
 				else
 					GotoState(,'Gassed');
@@ -4619,14 +4619,14 @@ state s_Stunned
 			
 			case 'EBurned' :
 				// Stay until all flames are gone. Anim time.
-				/*if( bInTransition )	
+				/*if (bInTransition)	
 					SetTimer(3, false);
 				else
 					GotoState(,'Burned');*/
 				break;
 			
 			case 'EStunned' :
-				if( bInTransition )	
+				if (bInTransition)	
 					SetTimer(3, false);
 				else
 					GotoState(,'Stunned');
@@ -4638,7 +4638,7 @@ Gassed:
 	//log("label gassed"@AStunned);
 	bInTransition = true;
 	Bark_Type = BARK_Cough;
-	if( AStunned == ACough )
+	if (AStunned == ACough)
 		Goto('RefreshTimer');
 	AStunBegin	= 'SmokStAlBg0';
 	AStunned	= ACough;
@@ -4649,7 +4649,7 @@ Burned:
 	//log("label Burned"@AStunned);
 	bInTransition = true;
 	Bark_Type = BARK_InFire;
-	if( IsOnFire() )
+	if (IsOnFire())
 		Goto('RefreshTimer');
 	AStunned	= 'FireStAlNt0';
 	Goto('Begin');
@@ -4658,12 +4658,12 @@ Stunned:
 	//log("label Stunned"@AStunned);
 	bInTransition = true;
 	Bark_Type = BARK_KnockedOut;
-	if( AStunned == 'stunstalnt0' )
+	if (AStunned == 'stunstalnt0')
 		Goto('RefreshTimer');
 
 	AStunBegin	= '';
 
-	if(!bIsCrouched)
+	if (!bIsCrouched)
 	{
 	AStunned	= 'stunstalnt0';
 		AStunEnd	= 'stunstaled0';
@@ -4681,15 +4681,15 @@ Begin:
 	Acceleration = vect(0,0,0);
 
 	// Bark set in label above
-	if( !IsPlaying(Sounds_Barks) )
+	if (!IsPlaying(Sounds_Barks))
 		PlaySound(Sounds_Barks,SLOT_SFX);
 	else
 		Bark_Type = BARK_Generic;
 
 	// Play begin
-	if( AStunBegin != '' )
+	if (AStunBegin != '')
 	{
-		PlayAnimOnly(AStunBegin,,0.1, AStunEnd==AStunBegin);
+		PlayAnimOnly(AStunBegin,,0.1, AStunEnd == AStunBegin);
 		FinishAnim();
 	}
 
@@ -4705,14 +4705,14 @@ RefreshTimer:
 End:
 	//log("label End");
 	// Play End if not dying
-	if( AStunEnd != '' )
+	if (AStunEnd != '')
 	{
 		PlayAnimOnly(AStunEnd,,0.1);
 		FinishAnim();
 	}
 
 	// Get out normally
-	if( Controller != none )
+	if (Controller != none)
 		Controller.GotoState(EAIController(Controller).m_LastStateName);
 
 	GotoState('DefaultState');
@@ -4720,10 +4720,10 @@ End:
 
 function PlaySpasm()
 {
-	if(eGame.bNoGore || bDontPlayDeathAnim)
+	if (eGame.bNoGore || bDontPlayDeathAnim)
 		return;
 
-	switch(GetAnimName())
+	switch (GetAnimName())
 	{
 	case ADeathForwardNtrl:
 	case ASpasm1:
@@ -4760,11 +4760,11 @@ function RandInertStance()
 	GetAnimParams(BASEMOVEMENTCHANNEL, CurrentAnimSeq, CurrentFrame, CurrentRate);
 
 	randValue = FRand();
-	if(randValue < 0.25)
+	if (randValue < 0.25)
 		PlayAnimOnly(ADeathForwardNtrl);
-	else if(randValue < 0.5)
+	else if (randValue < 0.5)
 		PlayAnimOnly(ADeathBackNtrl);
-	else if(randValue < 0.75)
+	else if (randValue < 0.75)
 		PlayAnimOnly(ADeathLeftNtrl);
 	else
 		PlayAnimOnly(ADeathRightNtrl);
@@ -4787,7 +4787,7 @@ state s_Inert
 	{
 		bDontBlink = true;
 		bCanFallWalk = false;
-		if(BaseMoveFlags == MOVE_Sit)
+		if (BaseMoveFlags == MOVE_Sit)
 			bOrientOnSlope = false;
 		else
 			bOrientOnSlope = true;
@@ -4802,31 +4802,31 @@ state s_Inert
 
 		// turn off the NPCZone interaction temporarily (can not grab while falling)
 		//plog("EPawn Interaction : " $ Interaction);
-		if( Interaction != None && IsAnimating() )
+		if (Interaction != None && IsAnimating())
 			Interaction.GotoState('s_Disabled');
-		else if( Interaction != None ) // Not animating, don't wait for AnimEnd to change state
+		else if (Interaction != None) // Not animating, don't wait for AnimEnd to change state
 			ENpcZoneInteraction(Interaction).ResetInert();
 
 		// FlashLight
 		ToggleHeadLight(false);
 
 		// Satchel
-		if( Satchel != None )
+		if (Satchel != None)
 			Satchel.Throw(Controller, vect(0,0,0));
 		Satchel = None;
 		
 		// Cigaret
-		if( Cigaret != None )
+		if (Cigaret != None)
 			Cigaret.Throw(Controller, vect(0,0,0));
 		Cigaret = None;
 		
 		// Cellular
-		if( Cellular != None )
+		if (Cellular != None)
 			Cellular.Throw(Controller, vect(0,0,0));
 		Cellular = None;
 		
 		// Remove hat
-		if( Hat != None )
+		if (Hat != None)
 			Hat.TakeDamage(0, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), class'Crushed');
 		Hat = None;
 
@@ -4841,7 +4841,7 @@ state s_Inert
 		bBlockProj = true;
 		bCollideSB = true;
 
-		if( Interaction != None && Health > 0)
+		if (Interaction != None && Health > 0)
 			ENpcZoneInteraction(Interaction).Release();
 	}
 
@@ -4849,36 +4849,36 @@ state s_Inert
 	{
 		local rotator finalRot;
 
-		if( Velocity.Z < -500 )
-			TakeDamage( (1-Velocity.Z/30), Instigator, Location, HitNormal, Vect(0,0,0), class'Crushed');
+		if (Velocity.Z < -500)
+			TakeDamage((1 - Velocity.Z / 30), Instigator, Location, HitNormal, Vect(0,0,0), class'Crushed');
 
 		Velocity = vect(0,0,0);
 		Acceleration = vect(0,0,0);
 		SetPhysics(PHYS_Walking);
-		if(BaseMoveFlags != MOVE_Sit)
+		if (BaseMoveFlags != MOVE_Sit)
 			m_inertRot = FindSlopeRotation(Floor, Rotation);
 	}
 
-	event AnimEnd( int Channel )
+	event AnimEnd(int Channel)
 	{
-		if( Channel != 0 )
+		if (Channel != 0)
 			return;
 
-		if( Interaction != None )
+		if (Interaction != None)
 			GoToState(, 'ResetInter');
 
-		if(ADeathNeutral != '')
+		if (ADeathNeutral != '')
 		{
 			PlayAnimOnly(ADeathNeutral);
 
-			if(bWasCarried)
+			if (bWasCarried)
 			{
 				RandInertStance();
 				bWasCarried = false;
 			}
 
 			SetCollision(false);
-			if(BaseMoveFlags == MOVE_Sit)
+			if (BaseMoveFlags == MOVE_Sit)
 			{
 				SetLocation(Location + (m_locationEnd >> m_inertRot));
 				BaseMoveFlags = MOVE_WalkNormal;
@@ -4898,12 +4898,12 @@ state s_Inert
 	}
 
 	// redefinition -- light always goes off in s_Inert and inherited states
-	event ToggleHeadLight( bool bTurnOn )
+	event ToggleHeadLight(bool bTurnOn)
 	{
-		if( !MayUseGunLight)
+		if (!MayUseGunLight)
 			return;
 
-		if( FlashLight != None )
+		if (FlashLight != None)
 			FlashLight.ToggleLight(false);
 	}
 
@@ -4912,9 +4912,9 @@ ResetInter:
 	Stop;
 
 FallFromChair:
-	if(Interaction != None)
+	if (Interaction != None)
 		Interaction.GotoState('s_Disabled');
-	if(SetupChairDeath(m_slipeRight))
+	if (SetupChairDeath(m_slipeRight))
 		PlayAnimOnly('XxxxChAlRt0', , 0.25);
 	else
 		PlayAnimOnly('XxxxChAlLt0', , 0.25);
@@ -4934,13 +4934,13 @@ state s_Unconscious extends s_Inert
 
 		plog("* BEGIN STATE **************************** Health: "$Health);
 
-		ForceFlashLight=false;
+		ForceFlashLight = false;
 
 		// add body to ChangedActorsList
 		Disable('Tick');
         //log("bNeverMarkAsChanged"@bNeverMarkAsChanged@"bKnockedByPlayer"@bKnockedByPlayer);
 
-        if((!bNeverMarkAsChanged) && (bKnockedByPlayer))
+        if ((!bNeverMarkAsChanged) && (bKnockedByPlayer))
         {
 		    Level.AddChange(self, CHANGE_Unconscious);
         }
@@ -4955,7 +4955,7 @@ state s_Unconscious extends s_Inert
 	function EndState()
 	{
 		// remove body from ChangedActorsList
-		if( ChangeType == CHANGE_Unconscious )
+		if (ChangeType == CHANGE_Unconscious)
 			Level.RemoveChange(self);
 
 		plog("s_Unconscious: EndState -> Collision are put back...");
@@ -4970,21 +4970,21 @@ state s_Unconscious extends s_Inert
 		SetTimer(0.0, false);
 	}
 	
-	function PlayHitE( int PillTag, Vector HitLocation, Vector Momentum )
+	function PlayHitE(int PillTag, Vector HitLocation, Vector Momentum)
 	{
-		if(!IsAnimating())
+		if (!IsAnimating())
 			PlaySpasm();
 	}
 
-	function PlayDyingE( int PillTag, vector momentum )
+	function PlayDyingE(int PillTag, vector momentum)
 	{
-		if(!IsAnimating())
+		if (!IsAnimating())
 			PlaySpasm();
 	}
 
 	function Timer()
 	{
-		if(!IsAnimating())
+		if (!IsAnimating())
 			PlaySpasm();
 		SetTimer(10.0 + 10.0 * Frand(), false);
 	}
@@ -5017,7 +5017,7 @@ state s_Dying extends s_Inert
 		Super.BeginState();
 
 		// Only for sam being the killer?
-		if(( bKilledByPlayer ) &&(!bNeverMarkAsChanged))
+		if ((bKilledByPlayer) &&(!bNeverMarkAsChanged))
         {
 			Level.AddChange(self, CHANGE_Dead);
         }
@@ -5025,23 +5025,23 @@ state s_Dying extends s_Inert
 		TimeOfDeath = Level.TimeSeconds;			// keep time of death so we can CHECK the FRESHNESS
 
 		// Remove weapon
-		if( CurrentWeapon != None )
+		if (CurrentWeapon != None)
 		{
 			FullInventory.UnEquipItem(CurrentWeapon);
 			CurrentWeapon.GotoState('s_Dying');
 		}
 
 		// get him out of zone
-		if( EVolume(PhysicsVolume) != None )
+		if (EVolume(PhysicsVolume) != None)
 			SetVolumeZone(false, EVolume(PhysicsVolume));
 
 		// Attenuate fire
-		SetTimer(10.f+10*Frand(), true);
+		SetTimer(10.f + 10 * Frand(), true);
 
-		if( Controller == None )
+		if (Controller == None)
 			return;
 
-		if ( Controller.bIsPlayer )
+		if (Controller.bIsPlayer)
 			Controller.PawnDied();
 		else
 		{
@@ -5059,15 +5059,15 @@ state s_Dying extends s_Inert
 		SetTimer(0.f, false);
 	}
 
-	function TakeDamage( int Damage, Pawn instigatedBy, Vector Hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag )
+	function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag)
 	{
-		if( PillTag == 0 )
+		if (PillTag == 0)
 			PillTag = GetApproxPillFromHit(HitLocation);
 
 		//Play HitSound depending on the pill
-		if ( damageType == none )
+		if (damageType == none)
 		{
-			if ( VSize(Hitlocation) != 0 )
+			if (VSize(Hitlocation) != 0)
 			{
 			if (PillTag == 1) //head
 				PlaySound(Sound'GunCommon.Play_BulletHitHead', SLOT_SFX);
@@ -5075,7 +5075,7 @@ state s_Dying extends s_Inert
 				PlaySound(Sound'GunCommon.Play_Random_BulletHitBody', SLOT_SFX);
 		}
 		}
-		else if( damageType == class'EBurned' )
+		else if (damageType == class'EBurned')
 			CatchOnFire();
 	}
 
@@ -5124,7 +5124,7 @@ state s_FallToDeath
 
 	event AnimEnd(int Channel)
 	{
-		if ( GetAnimName() == ADeathLadder )
+		if (GetAnimName() == ADeathLadder)
 			LoopAnimOnly('FallStNmBk0',,0.1f);
 	}
 }
@@ -5140,34 +5140,34 @@ function FinishGrabbing(EPawn p)
 	PlayAnimOnly(AGrabWait);
 	TrailerOffset = vect(0,0,0);
 	SetCollision(true);
-	if( Interaction != None )
+	if (Interaction != None)
 		ENpcZoneInteraction(Interaction).NpcGrabbed();
 }
 
 state s_Grabbed
 {
-	function TakeDamage( int Damage, Pawn instigatedBy, Vector Hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag )
+	function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag)
 	{
 		local Controller Killer;
 		local EPlayerController EPC;
 		local bool bAlreadyDead;
 		bAlreadyDead	= (Health <= 0);
 
-		if(( damageType == None ) && (!bNoBlood))
+		if ((damageType == None) && (!bNoBlood))
 		{
 				Spawn(class'EBloodSplat', self,, HitLocation, Rotator(Normal(momentum)));
 		}
 
-		if( PillTag == 0 )
+		if (PillTag == 0)
 			PillTag = GetApproxPillFromHit(HitLocation);
 
 		// Gives real damage depending on the hit zone
 		ResolveDamage(damage, PillTag, damageType);
 
 		//Play HitSound depending on the pill
-		if ( damageType == none )
+		if (damageType == none)
 		{
-			if ( VSize(Hitlocation) != 0 )
+			if (VSize(Hitlocation) != 0)
 			{
 			if (PillTag == 1) //head
 				PlaySound(Sound'GunCommon.Play_BulletHitHead', SLOT_SFX);
@@ -5176,25 +5176,25 @@ state s_Grabbed
 		}
 		}
 		// If knocked but not on head
-		else if( damageType.name == 'EKnocked' && PillTag != P_Head )
+		else if (damageType.name == 'EKnocked' && PillTag != P_Head)
 			damageType = None;
 		
-		if( damageType != None && damageType.name == 'EBurned' )
+		if (damageType != None && damageType.name == 'EBurned')
 			CatchOnFire();
 
-		if( Controller == None )
+		if (Controller == None)
 			return;
 
 		// play damage animations
-		if(Health > 0)
+		if (Health > 0)
 		{
 			MakeNoise(500.0, NOISE_Scream, CollisionHeight * 2.0f); 
 
 			// other damage types
-			if( damageType != none && damageType.Name == 'EKnocked' )
+			if (damageType != none && damageType.Name == 'EKnocked')
 				Knocked(PillTag, momentum);
 		}
-		else if ( !bAlreadyDead )
+		else if (!bAlreadyDead)
 		{
 			LastDamageType = damageType;
 			DiedE(Killer, PillTag, momentum);
@@ -5294,18 +5294,18 @@ state s_Carried
 		SetPhysics(PHYS_Falling);
 		bCollideWorld = true;
 
-		if(bDisableAI)
+		if (bDisableAI)
 		{
-			if(!bNeverMarkAsChanged)
+			if (!bNeverMarkAsChanged)
 				Level.AddChange(self, CHANGE_Dead);
 		}
 
 
-		if ( Interaction != none  )
+		if (Interaction != none)
 			ENpcZoneInteraction(Interaction).ResetInert();
 	}
 
-	function TakeDamage( int Damage, Pawn instigatedBy, Vector Hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag )
+	function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag)
 	{
 		local Controller Killer;
 		local bool bAlreadyDead;
@@ -5313,20 +5313,20 @@ state s_Carried
 		bAlreadyDead	= (Health <= 0);
 
 		// Blood effect
-		if(( damageType == None ) && (!bNoBlood))
+		if ((damageType == None) && (!bNoBlood))
 			Spawn(class'EBloodSplat', self,, HitLocation, Rotator(Normal(momentum)));
 
 		// Check to be sure there is a pill .. else, use body pill
-		if( PillTag == 0 )
+		if (PillTag == 0)
 			PillTag = GetApproxPillFromHit(HitLocation);
 
 		// Gives real damage depending on the hit zone
 		ResolveDamage(damage, PillTag, damageType);
 		
 		//Play HitSound depending on the pill
-		if ( damageType == None )
+		if (damageType == None)
 		{
-			if ( VSize(Hitlocation) != 0 )
+			if (VSize(Hitlocation) != 0)
 			{
 				if (PillTag == 1) //head
 					PlaySound(Sound'GunCommon.Play_BulletHitHead', SLOT_SFX);
@@ -5336,23 +5336,23 @@ state s_Carried
 		}
 
 		// Spawn flames on burned actor if fire comes from another source
-		if( damageType != None && damageType.name == 'EBurned' && instigatedBy != self )
+		if (damageType != None && damageType.name == 'EBurned' && instigatedBy != self)
 			CatchOnFire();
 
-		if( Controller == None )
+		if (Controller == None)
 			return;
 
-		if (Health <= 0 && !bAlreadyDead )
+		if (Health <= 0 && !bAlreadyDead)
 		{
 			// Other NPC wont try to shoot tru this guy anymore
 			bBlockNPCShot = true;
 
-			if( Controller != None )
+			if (Controller != None)
 			{
 				Controller.NextState = '';
 				Controller.Enemy = instigatedBy;
 			}
-			if ( instigatedBy != None )
+			if (instigatedBy != None)
 				Killer = instigatedBy.Controller;
 
 			LastDamageType = damageType;
@@ -5360,20 +5360,20 @@ state s_Carried
 		}
 	}
 
-	function DiedE( Controller Killer, int PillTag, vector momentum )
+	function DiedE(Controller Killer, int PillTag, vector momentum)
 	{
 		StopAllSoundsActor(true);
 		
-		if( Killer != None )
+		if (Killer != None)
 		{
-			if( Killer.bIsPlayer )
+			if (Killer.bIsPlayer)
 				bKilledByPlayer = true;
 			TriggerEvent(Event, self, Killer.Pawn);			
 		}
 		else
 			TriggerEvent(Event, self, None);
 
-		if( Controller != None && !Controller.bIsPlayer )
+		if (Controller != None && !Controller.bIsPlayer)
 			Controller.GotoState('s_Dead');
 	}
 }
@@ -5383,12 +5383,12 @@ state s_Carried
 // ----------------------------------------------------------------------
 state s_Electrocuted extends s_Inert
 {
-	event AnimEnd( int Channel )
+	event AnimEnd(int Channel)
 	{
-		if( Channel != 0 )
+		if (Channel != 0)
 			return;
 
-		if( Interaction != None )
+		if (Interaction != None)
 			ENpcZoneInteraction(Interaction).ResetInert(); 
 	}
 
@@ -5409,7 +5409,7 @@ Begin:
 	PlayDyingE(0, Vect(0,0,0));
 
 	// reset interaction now
-	if( Interaction != None )
+	if (Interaction != None)
 		ENpcZoneInteraction(Interaction).ResetInert();
 
 	GotoState('s_Unconscious');

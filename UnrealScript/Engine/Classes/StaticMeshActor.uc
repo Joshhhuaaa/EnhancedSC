@@ -34,27 +34,27 @@ function Touch(actor Other)
 	//cast the actor in Pawn
 	P = Pawn(Other);
 
-	if ( SoundEvent == None )
+	if (SoundEvent == None)
 		return;
 
-	if(P != None)
+	if (P != None)
 	{
-		if( (P.controller.bIsPlayer && !( bQuietWhenCrouched && P.bIsCrouched )) || ( NPCTrigger && P.controller.IsA('EAIController') ) )
+		if ((P.controller.bIsPlayer && !(bQuietWhenCrouched && P.bIsCrouched)) || (NPCTrigger && P.controller.IsA('EAIController')))
 		{
-			TracedActor = Trace( HitLocation, HitNormal, Other.Location, Location, true);
+			TracedActor = Trace(HitLocation, HitNormal, Other.Location, Location, true);
 
 			// make sure not touching through wall
-			if ( !TracedActor.bWorldGeometry )
+			if (!TracedActor.bWorldGeometry)
 			{
-				if(!(bAlreadyVisited && bTriggerOnlyOnce))
+				if (!(bAlreadyVisited && bTriggerOnlyOnce))
 				{
 					if (!IsPlayingAnyActor(SoundEvent))
 					{
-						bAlreadyVisited=true;
+						bAlreadyVisited = true;
 						PlaySound(SoundEvent, SoundType);
 
 						//send AI sound
-						if(bMakeAINoise)
+						if (bMakeAINoise)
 						{
 							Instigator = P;
 							MakeNoise(Radius, NOISE_Object_Falling);
@@ -68,11 +68,11 @@ function Touch(actor Other)
 
 event BulletWentTru(Actor Instigator, vector HitLocation, vector HitNormal, vector Momentum, Material HitMaterial)
 {
-	if ( bClimbable )
+	if (bClimbable)
 	{
-		if ( SurfaceType == SURFACE_FenceMetal )
+		if (SurfaceType == SURFACE_FenceMetal)
 			PlaySound(BulletHitMetal, SLOT_SFX);
-		else if ( SurfaceType == SURFACE_FenceVine )
+		else if (SurfaceType == SURFACE_FenceVine)
 			PlaySound(BulletHitVine, SLOT_SFX);
 	}
 	else

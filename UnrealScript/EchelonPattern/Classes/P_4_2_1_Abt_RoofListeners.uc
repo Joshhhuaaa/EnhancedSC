@@ -11,9 +11,9 @@ class P_4_2_1_Abt_RoofListeners extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_HEAR_SOMETHING:
             EventJump('HeardPlayer');
@@ -32,15 +32,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EAIPawn0')
+        if (P.name == 'EAIPawn0')
             Characters[1] = P.controller;
-        if(P.name == 'EAIPawn1')
+        if (P.name == 'EAIPawn1')
             Characters[2] = P.controller;
-        if(P.name == 'EAIPawn2')
+        if (P.name == 'EAIPawn2')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

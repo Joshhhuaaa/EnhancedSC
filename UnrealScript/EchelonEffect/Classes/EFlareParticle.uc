@@ -8,10 +8,10 @@ function PostBeginPlay()
 	Disable('Tick');
 }
 
-function SetLifeTime( float l )
+function SetLifeTime(float l)
 {
 	SetTimer(l,false);
-	if(Level.Game.PlayerC.ShadowMode == 0 )
+	if (Level.Game.PlayerC.ShadowMode == 0)
 	{
 		LightEffect = LE_None;
 	}
@@ -23,10 +23,10 @@ function Timer()
 	Enable('Tick');
 }
 
-function Tick( float DeltaTime )
+function Tick(float DeltaTime)
 {
 	Super.Tick(DeltaTime);
-	LightBrightness = 255 * Emitters[0].LivingParticles/Emitters[0].MaxParticles;
+	LightBrightness = 255 * Emitters[0].LivingParticles / Emitters[0].MaxParticles;
 }
 
 defaultproperties

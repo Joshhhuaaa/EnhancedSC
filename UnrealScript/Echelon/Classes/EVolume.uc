@@ -73,7 +73,7 @@ function CheckExplosive(Actor weapon, Pawn Instigator)
 {
 	local Actor A;
 	local vector mom;
-	if(bExplosiveVolume)
+	if (bExplosiveVolume)
 	{
 		ForEach TouchingActors(class'Actor',A)
 		{
@@ -87,25 +87,25 @@ function CheckExplosive(Actor weapon, Pawn Instigator)
 }
 
 // override damage stuff from PhysicsVolume
-function Trigger( actor Other, pawn EventInstigator, optional name InTag ) // UBI MODIF - Additional parameter
+function Trigger(actor Other, pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 {
 	SetCollision(!bCollideActors);
 }
 
-function bool IsRelevant( actor Other )
+function bool IsRelevant(actor Other)
 {
-	switch( ProximityType )
+	switch (ProximityType)
 	{
 		case PlayerProximity:
 			return Other.bIsPawn && Pawn(Other).IsPlayerPawn();
 		case NPCProximity:
-			return Other.bIsPawn && ( EAIController(Pawn(Other).controller) != None) && ( Other.GetStateName() != 's_Carried' || bDetectCarriedPawn );
+			return Other.bIsPawn && (EAIController(Pawn(Other).controller) != None) && (Other.GetStateName() != 's_Carried' || bDetectCarriedPawn);
 		case PawnProximity:
-				if(Other.GetStateName() != 's_Carried' || bDetectCarriedPawn )
+				if (Other.GetStateName() != 's_Carried' || bDetectCarriedPawn)
 				{
-				if(PawnTrigger != None)
+				if (PawnTrigger != None)
 				{
-					if( PawnTrigger == Other )
+					if (PawnTrigger == Other)
 						return true;
 					else
 						return false;
@@ -130,7 +130,7 @@ function Touch(actor Other)
 
 	Super.Touch(Other);
 
-	if((bSavegame) 
+	if ((bSavegame) 
      && (Other.bIsPlayerPawn) 
      && (EPawn(Other).Controller != None) 
 	 && ((!EchelonGameInfo(Level.Game).bEliteMode && EchelonLevelInfo(Level).AlarmStage < 4)
@@ -138,30 +138,30 @@ function Touch(actor Other)
 	 && !IsGameOver()) // Do not save if the player is about to be put GameOver because of the alarm stage
 	{
 		// Joshua - New method to add PC checkpoints
-		if(EchelonGameInfo(level.Game).bEnableCheckpoints)
+		if (EchelonGameInfo(level.Game).bEnableCheckpoints)
 		{
-			EPlayerController(EPawn(Other).Controller).bAutoSaveLoad=true;
-			EPlayerController(EPawn(Other).Controller).bSavingTraining=true;
-			EPlayerController(EPawn(Other).Controller).bCheckpoint=true;
-			EPlayerController(EPawn(Other).Controller).CheckpointLevel=GetCurrentMapName();
+			EPlayerController(EPawn(Other).Controller).bAutoSaveLoad = true;
+			EPlayerController(EPawn(Other).Controller).bSavingTraining = true;
+			EPlayerController(EPawn(Other).Controller).bCheckpoint = true;
+			EPlayerController(EPawn(Other).Controller).CheckpointLevel = GetCurrentMapName();
 			ConsoleCommand("SAVEGAME FILENAME=" $ Localize("Common", "CheckpointName", "Localization\\Enhanced") $ " OVERWRITE=TRUE");
 		}
 		bSavegame = false;
 	}
-	else if(bIsAnEventtrigger)
+	else if (bIsAnEventtrigger)
 	{
-		if(!( (bAlreadyVisited) && (bTriggerOnlyOnce) ))
+		if (!((bAlreadyVisited) && (bTriggerOnlyOnce)))
 		{
-			if(IsRelevant(Other))
+			if (IsRelevant(Other))
 			{
-				//if ( Level.TimeSeconds - TriggerTime < 0.2 )
+				//if (Level.TimeSeconds - TriggerTime < 0.2)
 				//	return;
 				//TriggerTime = Level.TimeSeconds;
 
 				//set visited flag
-				bAlreadyVisited=true;
+				bAlreadyVisited = true;
 
-				foreach DynamicActors( class'EGroupAI', Group, GroupTag)
+				foreach DynamicActors(class'EGroupAI', Group, GroupTag)
 				{
 					Group.SendJumpEvent(JumpLabel,bAffectLastZone,bForceJump);
 					break; 
@@ -171,14 +171,14 @@ function Touch(actor Other)
 		}
 
 	}
-	else if( !bFlashlightVolume )
+	else if (!bFlashlightVolume)
 	{
 		// make sure not touching through wall
 		Player = Pawn(Other);
-		if( Player != None && Player.Controller != None )
+		if (Player != None && Player.Controller != None)
 		{
 			//be sure it's only the player
-			if( Player.controller.bIsPlayer  )
+			if (Player.controller.bIsPlayer)
 			{
 				//set the current zone in the player controller
 				EPlayerController(Player.controller).CurrentVolume = self;
@@ -188,7 +188,7 @@ function Touch(actor Other)
 
 	// As soon as cylinder touches, let go of camera and pop message
 	// Perhaps player is dead, always use a valid EPlayerController pointer
-	if( bDyingZone && Other.bIsPlayerPawn )
+	if (bDyingZone && Other.bIsPlayerPawn)
 	{
 		EchelonGameInfo(Level.Game).pPlayer.bInvincible = true;
 		EchelonGameInfo(Level.Game).pPlayer.m_camera.GotoState('s_Fixed');
@@ -196,9 +196,9 @@ function Touch(actor Other)
 	}
 
 	EGO = EGameplayObject(Other);
-	if ( EGO != None && bLiquid )
+	if (EGO != None && bLiquid)
 	{
-		if ( EGO.bIsProjectile )
+		if (EGO.bIsProjectile)
 			EGO.PlaySound(Sound'ThrowObject.Play_WaterImpact', SLOT_SFX);
 	}
 
@@ -210,54 +210,54 @@ function UnTouch(actor Other)
 
 	Super.UnTouch(Other);
 
-	if( !bIsAnEventtrigger && !bFlashlightVolume )
+	if (!bIsAnEventtrigger && !bFlashlightVolume)
 	{
 		Player = Pawn(Other);
-		if( Player != None && Player.Controller != None )
+		if (Player != None && Player.Controller != None)
 		{
-			if( Player.controller.bIsPlayer  )
+			if (Player.controller.bIsPlayer)
 			{
 				//set the current zone in the player controller
-				if(EPlayerController(Player.controller).CurrentVolume == self)
+				if (EPlayerController(Player.controller).CurrentVolume == self)
 					EPlayerController(Player.controller).CurrentVolume = none;
 			}
 		}
 	}
 }
 
-function PawnEnteredVolume( Pawn P )
+function PawnEnteredVolume(Pawn P)
 {
 	local EPawn ePawn;
 	ePawn = EPawn(P);
 
 	Super.PawnEnteredVolume(P);
 
-	if( ePawn == None )
+	if (ePawn == None)
 		Log(self$" ERROR: Pawn entering volume is not a Pawn!"@P);
 
 	ePawn.SetVolumeZone(true, self);
 
-	if((LightSwitch != None) && (EAIController(ePawn.controller) != None) && (PawnTrigger!=None))
+	if ((LightSwitch != None) && (EAIController(ePawn.controller) != None) && (PawnTrigger != None))
 	{
-		if(PawnTrigger == ePawn)
+		if (PawnTrigger == ePawn)
 		{
-			if(EAIController(ePawn.controller).pattern != None)
+			if (EAIController(ePawn.controller).pattern != None)
 			{
-				if(EAIController(ePawn.controller).pattern.GetStateName() == 'search')
+				if (EAIController(ePawn.controller).pattern.GetStateName() == 'search')
 					EAIController(ePawn.controller).pattern.CheckSwitchAlreadyLocked(1,LightSwitch);
 			}
 		}
 	}
 }
 
-function PawnLeavingVolume( Pawn P )
+function PawnLeavingVolume(Pawn P)
 {
 	local EPawn ePawn;
 	ePawn = EPawn(P);
 
 	Super.PawnLeavingVolume(P);
 
-	if( ePawn == None )
+	if (ePawn == None)
 		Log(self$" ERROR: Pawn leaving volume is not a Pawn!"@P);
 
 	ePawn.SetVolumeZone(false, self);

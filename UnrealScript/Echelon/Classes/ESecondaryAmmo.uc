@@ -10,11 +10,11 @@ var int         HUDTexSD;
 // Description		
 //		Do own treatment when equipped as current item
 //------------------------------------------------------------------------
-function Select( EInventory Inv )
+function Select(EInventory Inv)
 {
 	Super.Select(Inv);
 
-	if( EMainGun(Inv.BackPackPrimSelectedItem) != None )
+	if (EMainGun(Inv.BackPackPrimSelectedItem) != None)
 	{
 		OwnerGun = EMainGun(Inv.BackPackPrimSelectedItem);
 		OwnerGun.Link(self);
@@ -31,11 +31,11 @@ function Select( EInventory Inv )
 // Description		
 //		Weapon has been put away / deselected
 //------------------------------------------------------------------------
-function UnSelect( EInventory Inv )
+function UnSelect(EInventory Inv)
 {
 	Super.UnSelect(Inv);
 
-	if( OwnerGun != None )
+	if (OwnerGun != None)
 		OwnerGun.Link(None);
 }
 
@@ -61,7 +61,7 @@ state s_Selected
 		// play sound
 		PlaySound(UseSound, SLOT_Interface);
 
-		if(Controller.bIsPlayer)
+		if (Controller.bIsPlayer)
 			SetLocation(EPlayerController(Controller).GetFireStart());
 		else
 			SetLocation(OwnerGun.Location);
@@ -79,10 +79,10 @@ state s_Flying
 		SetRotation(Rotator(Velocity));
 	}
 
-	function Bump( Actor Other, optional int Pill )
+	function Bump(Actor Other, optional int Pill)
 	{
 		// if not a pawn or if hit firing pawn
-		if( Controller != None && Other == Controller.pawn )
+		if (Controller != None && Other == Controller.Pawn)
 			return;
 
 		Super.Bump(Other, Pill);

@@ -18,20 +18,20 @@ function bool IsAvailable()
 	return MyKeyPad.GetStateName() == 's_Idle' && Super.IsAvailable();
 }
 
-function LockOwner( bool bLocked )
+function LockOwner(bool bLocked)
 {
-	if( MyKeyPad == None )
+	if (MyKeyPad == None)
 		return;
 
-	if( bLocked )
+	if (bLocked)
 		MyKeyPad.GotoState('s_Use');
 	else
 		MyKeyPad.GotoState('s_Idle');
 }
 
-function InitInteract( Controller Instigator )
+function InitInteract(Controller Instigator)
 {
-	if( MyKeyPad == None || MyKeyPad.LinkedActors.Length == 0 )
+	if (MyKeyPad == None || MyKeyPad.LinkedActors.Length == 0)
 	{
 		Log("Something wrong in EKeyPadInteraction"@Owner@MyKeyPad.LinkedActors.Length);
 		return;
@@ -40,7 +40,7 @@ function InitInteract( Controller Instigator )
 	Super.InitInteract(Instigator);
 
 	// Lock as soon as used.  Npc lock it upon reaching the keypad
-	if( Instigator.bIsPlayer )
+	if (Instigator.bIsPlayer)
 		LockOwner(true);
 	Instigator.GotoState('s_KeyPadInteract');
 }
@@ -48,11 +48,11 @@ function InitInteract( Controller Instigator )
 function GetKeyPad()
 {
 	MyKeyPad = EKeyPad(Owner);
-	if ( MyKeyPad == None )
+	if (MyKeyPad == None)
 		Log("ERROR: problem with EKeyPadInteraction owner "$Owner);
 }
 
-function SetInteractLocation( Pawn InteractPawn )
+function SetInteractLocation(Pawn InteractPawn)
 {
 	local Vector X, Y, Z, MovePos;
 	local EPawn InteractEPawn;
@@ -66,15 +66,15 @@ function SetInteractLocation( Pawn InteractPawn )
 		GetAxes(MyKeyPad.Rotation, X, Y, Z);
 		MovePos = MyKeyPad.Location;
 
-		MovePos += (1.3f*InteractEPawn.CollisionRadius) * X;
+		MovePos += (1.3f * InteractEPawn.CollisionRadius) * X;
 
-		if(InteractEPawn.bIsPlayerPawn)
+		if (InteractEPawn.bIsPlayerPawn)
 		{
 			MovePos.Z	= InteractEPawn.Location.Z;									// keep on same Z
 		}
 		else
 		{
-			if( Trace(HitLocation, HitNormal, MovePos + vect(0,0,-200), MovePos,,,,,true) != None )
+			if (Trace(HitLocation, HitNormal, MovePos + vect(0,0,-200), MovePos,,,,,true) != None)
 			{
 				HitLocation.Z += InteractEPawn.CollisionHeight;
 				MovePos = HitLocation;
@@ -88,7 +88,7 @@ function SetInteractLocation( Pawn InteractPawn )
 	}
 }
 
-function KeyEvent( String Key, EInputAction Action, float Delta, optional bool bAuto )
+function KeyEvent(String Key, EInputAction Action, float Delta, optional bool bAuto)
 {
 	
 	local EPlayerController EPC; // Joshua - Adding controller support for keypads
@@ -96,23 +96,23 @@ function KeyEvent( String Key, EInputAction Action, float Delta, optional bool b
 	EPC = EPlayerController(EKeyPadInteraction(Interaction).InteractionController);
 	
 	// Process Npc interaction
-	if( bAuto )
+	if (bAuto)
 	{
 		Action		= IST_Press;
 		Key			= "Interaction";
 		MyKeyPad.SelectedButton	= GetValidkey();
-		if( MyKeyPad.SelectedButton == -1 )
+		if (MyKeyPad.SelectedButton == -1)
 			return;
 	}
 
-	if( MyKeyPad.GetStateName() != 's_Use' )
+	if (MyKeyPad.GetStateName() != 's_Use')
 		return;
 
-	if(Action == IST_Press)
+	if (Action == IST_Press)
 	{
 		// Joshua - Start of NumPad support
 		OldSelectedButton = MyKeyPad.SelectedButton;
-        switch( Key )
+        switch (Key)
 		{
 		case "Keypad_NumPad0":
 		    MyKeyPad.SelectedButton = 10;
@@ -165,29 +165,29 @@ function KeyEvent( String Key, EInputAction Action, float Delta, optional bool b
 			break;
 		}
 		// Joshua - End of NumPad support
-		switch( Key )
+		switch (Key)
 		{
 		case "AnalogUp" :
 		case "MoveForward" :
-			if( MyKeyPad.SelectedButton > 2 )
+			if (MyKeyPad.SelectedButton > 2)
 				MyKeyPad.SelectedButton -= 3;
 			break;
 
 		case "AnalogDown" :
 		case "MoveBackward" :
-			if( MyKeyPad.SelectedButton < 9 )
+			if (MyKeyPad.SelectedButton < 9)
 				MyKeyPad.SelectedButton += 3;
 			break;
 		
 		case "AnalogLeft" :
 		case "StrafeLeft" :
-			if( MyKeyPad.SelectedButton > 0 && MyKeyPad.SelectedButton % 3 != 0 )
+			if (MyKeyPad.SelectedButton > 0 && MyKeyPad.SelectedButton % 3 != 0)
 				MyKeyPad.SelectedButton -= 1;
 			break;
 		
 		case "AnalogRight" :
 		case "StrafeRight" :
-			if( MyKeyPad.SelectedButton < 11 && (MyKeyPad.SelectedButton+1) % 3 != 0 )
+			if (MyKeyPad.SelectedButton < 11 && (MyKeyPad.SelectedButton + 1) % 3 != 0)
 				MyKeyPad.SelectedButton += 1;
 			break;
 		
@@ -197,7 +197,7 @@ function KeyEvent( String Key, EInputAction Action, float Delta, optional bool b
 
 		case "Interaction" :
 			if (!EPC.eGame.bUseController) // Joshua - Adding controller support for keypads
-				if(bAuto)
+				if (bAuto)
 					MyKeyPad.KeyPushed();
 			else
 				MyKeyPad.KeyPushed();
@@ -205,7 +205,7 @@ function KeyEvent( String Key, EInputAction Action, float Delta, optional bool b
 		}
 		
 		// Joshua - Adding NumPad support for keypads
-		if( OldSelectedButton != MyKeyPad.SelectedButton )
+		if (OldSelectedButton != MyKeyPad.SelectedButton)
 		   MyKeyPad.GlowSelected();
 	}
 }
@@ -218,9 +218,9 @@ function int GetValidkey()
 	local int i, Index;
 
 	Index = Len(MyKeyPad.Inputedcode);
-	for( i=0; i<ArrayCount(MyKeyPad.KeyButtons); i++ )
+	for (i = 0; i < ArrayCount(MyKeyPad.KeyButtons); i++)
 	{
-		if( MyKeyPad.KeyButtons[i].Value == Mid(MyKeyPad.AccessCode, Index, 1) )
+		if (MyKeyPad.KeyButtons[i].Value == Mid(MyKeyPad.AccessCode, Index, 1))
 			return i;
 	}
 
@@ -236,14 +236,14 @@ function bool CheckKeyCode(Controller Instigator, string Key)
 
 	Epc = EPlayerController(Instigator);
 
-	if(Epc == None)
+	if (Epc == None)
 		return false;
 
 	Node = Epc.NoteBook.FirstNode;
-	While(Node != None)
+	While (Node != None)
 	{
 		Note = ENote(Node.Data);
-		if( (Note !=None) && (InStr(Note.Note, Key)>-1) )
+		if ((Note !=None) && (InStr(Note.Note, Key)>-1))
 		{
 			return true;
 		}
@@ -261,12 +261,12 @@ function Touch(actor Other)
 	Super.Touch(Other);
 
 	P = Pawn(Other);
-	if( P == None || !P.bIsPlayerPawn || P.Controller == None )
+	if (P == None || !P.bIsPlayerPawn || P.Controller == None)
 		return;
 
 	EPC = EPlayerController(P.Controller);
 
-	if( EPC != None && EPC.CanAddInteract(self) && IsAvailable() && CheckKeyCode(EPC, MyKeyPad.AccessCode))
+	if (EPC != None && EPC.CanAddInteract(self) && IsAvailable() && CheckKeyCode(EPC, MyKeyPad.AccessCode))
 	{
 		EPC.CurrentGoal = Localize("HUD", "Keypad_Goal", "Localization\\Enhanced")@MyKeyPad.AccessCode;
 		EPC.bShowKeyNum = true;
@@ -282,7 +282,7 @@ function UnTouch(actor Other)
 
 	Super.UnTouch(Other);
 
-	if(EPC != None && InteractionController == None)
+	if (EPC != None && InteractionController == None)
 	{
 		EPC.RefreshGoals();
 		EPC.bShowKeyNum = false;

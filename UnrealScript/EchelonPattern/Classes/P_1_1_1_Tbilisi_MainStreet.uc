@@ -12,9 +12,9 @@ var int PatLoop;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('MainStreetLaw');
@@ -33,13 +33,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianCop2')
+        if (P.name == 'EGeorgianCop2')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianCop3')
+        if (P.name == 'EGeorgianCop3')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     PatLoop=0;

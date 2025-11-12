@@ -8,14 +8,14 @@ var() float Radius;
 var() int SphereExtrapolation;
 var() name GroupName;
 
-function Extrapolate( int a, int b, int c, int Count, float Radius )
+function Extrapolate(int a, int b, int c, int Count, float Radius)
 {
 	local int ab,bc,ca;
-	if( Count>1 )
+	if (Count>1)
 	{
-		ab=Vertexv( Radius*Normal(GetVertex(a)+GetVertex(b)) );
-		bc=Vertexv( Radius*Normal(GetVertex(b)+GetVertex(c)) );
-		ca=Vertexv( Radius*Normal(GetVertex(c)+GetVertex(a)) );
+		ab=Vertexv(Radius*Normal(GetVertex(a)+GetVertex(b)));
+		bc=Vertexv(Radius*Normal(GetVertex(b)+GetVertex(c)));
+		ca=Vertexv(Radius*Normal(GetVertex(c)+GetVertex(a)));
 		Extrapolate(a,ab,ca,Count-1,Radius);
 		Extrapolate(b,bc,ab,Count-1,Radius);
 		Extrapolate(c,ca,bc,Count-1,Radius);
@@ -25,9 +25,9 @@ function Extrapolate( int a, int b, int c, int Count, float Radius )
 	else Poly3i(+1,a,b,c);
 }
 
-function BuildTetrahedron( float R, int SphereExtrapolation )
+function BuildTetrahedron(float R, int SphereExtrapolation)
 {
-	vertex3f( R,0,0);
+	vertex3f(R,0,0);
 	vertex3f(-R,0,0);
 	vertex3f(0, R,0);
 	vertex3f(0,-R,0);
@@ -46,11 +46,11 @@ function BuildTetrahedron( float R, int SphereExtrapolation )
 
 event bool Build()
 {
-	if( Radius<=0 || SphereExtrapolation<=0 )
+	if (Radius<=0 || SphereExtrapolation<=0)
 		return BadParameters();
 
-	BeginBrush( false, GroupName );
-	BuildTetrahedron( Radius, SphereExtrapolation );
+	BeginBrush(false, GroupName);
+	BuildTetrahedron(Radius, SphereExtrapolation);
 	return EndBrush();
 }
 

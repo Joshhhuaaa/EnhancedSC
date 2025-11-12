@@ -18,18 +18,18 @@ function PostBeginPlay()
 
 function Destroyed()
 {
-	if( Slider != None )
+	if (Slider != None)
 		Slider.Destroy();
 	Super.Destroyed();
 }
 
-function Select( EInventory Inv )
+function Select(EInventory Inv)
 {
 	Super.Select(Inv);
 	PlaySound(Sound'Interface.Play_FisherEquipPistol', SLOT_Interface);
 }
 
-function bool CanAddThisItem( EInventoryItem ItemToAdd )
+function bool CanAddThisItem(EInventoryItem ItemToAdd)
 {
 	return ItemToAdd == self;
 }
@@ -40,7 +40,7 @@ function AddedToInventory()
 	Super.AddedToInventory();
 }
 
-function bool NotifyPickup( Controller Instigator )
+function bool NotifyPickup(Controller Instigator)
 {
 	local EPlayerController Epc;
 	
@@ -61,14 +61,14 @@ state s_Firing
 		Super.BeginState();
 
 		// move slider
-		Slider.SetRelativeLocation(SliderOffset-vect(5,0,0));
+		Slider.SetRelativeLocation(SliderOffset - vect(5,0,0));
 	}
 
 	function EndState()
 	{
 		Super.EndState();
 		
-		if( ClipAmmo > 0 )
+		if (ClipAmmo > 0)
 			Slider.SetRelativeLocation(SliderOffset);
 	}
 }
@@ -79,7 +79,7 @@ state s_Reloading
 	{
 		Super.EndState();
 		
-		if( Slider.RelativeLocation != SliderOffset )
+		if (Slider.RelativeLocation != SliderOffset)
 			Slider.SetRelativeLocation(SliderOffset);
 	}
 }

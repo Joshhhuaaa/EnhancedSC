@@ -55,29 +55,47 @@ var FLOAT                           fTimer;
 var FLOAT                           fDuration;
 var bool                            bWithVoice;
 
-native(1401) final function AddTransmission( Actor Owner, EchelonEnums.eTransmissionType eType, String TextData, Sound SoundData, optional byte eEvent,optional String SpecialString); //Fblais
+native(1401) final function AddTransmission(Actor Owner, EchelonEnums.eTransmissionType eType, String TextData, Sound SoundData, optional byte eEvent,optional String SpecialString); //Fblais
 native(1402) final function GetCurrentSize(out float YL); //Fblais
 
 /*-----------------------------------------------------------------------------
     Conversation
 -----------------------------------------------------------------------------*/
 
-function Lock(){bLock=true;}
+function Lock()
+{
+    bLock = true;
+}
+
 function Unlock()
 {
-	bLock=false;
+	bLock = false;
 	bWithVoice = false;
 	CurrentTransmission = TR_NONE;
 	CurrentOwner = None;
 }
 
+function bool bIsFree()
+{
+    return bFree;
+}
 
-function bool bIsFree(){return bFree;}
+function Draw(ECanvas Canvas)
+{
+    GCanvas = Canvas;
+}
+function Tick(float Delta)
+{
+    fTimer += Delta;
+}
 
-function Draw(ECanvas Canvas){GCanvas=canvas;}
-function Tick(float Delta){fTimer += Delta;}
-function ResetContent(){}
-function DrawMenuSpeech(ECanvas Canvas){}
+function ResetContent()
+{
+}
+
+function DrawMenuSpeech(ECanvas Canvas)
+{
+}
 
 /*-----------------------------------------------------------------------------
  Function:      PostBeginPlay
@@ -86,12 +104,12 @@ function DrawMenuSpeech(ECanvas Canvas){}
 -----------------------------------------------------------------------------*/
 function PostBeginPlay()
 {
-	TimeElapsed=0;
-	NPCNb=0;
-	ConsoleNb=0;
+	TimeElapsed = 0;
+	NPCNb = 0;
+	ConsoleNb = 0;
 
-	bLock=false;
-	bFree=true;
+	bLock = false;
+	bFree = true;
 
 	SetTimer(0.5,false);
 
@@ -106,7 +124,7 @@ function PostBeginPlay()
 -----------------------------------------------------------------------------*/
 event  EListNode GetCurrentNode()
 {
-	switch(CurrentTransmission)
+	switch (CurrentTransmission)
 	{
     case TR_HINT:
 	case TR_CONSOLE:
@@ -184,7 +202,7 @@ function DrawBox(ECanvas Canvas, int xPos, int yPos, int width, int height, bool
     // INSIDE BORDERS //
     Canvas.DrawRectangle(xPos + 5, yPos + 6, width - 10, height - 12, 1, Canvas.black, 77/*INSIDE_BORDER_ALPHA*/, eLevel.TGAME);
 
-    if(bExpand)
+    if (bExpand)
     {
         Canvas.SetDrawColor(64,64,64);
         Canvas.Style = ERenderStyle.STY_Modulated;
@@ -229,29 +247,29 @@ function DrawIcon(ECanvas Canvas, int iconIndex, int xBoxPos, int yBoxPos, int b
     Canvas.SetDrawColor(64,64,64);
     Canvas.Style = ERenderStyle.STY_Modulated;
 
-    Canvas.SetPos(xBoxPos + boxWidth - 6 - ICON_WIDTH + (ICON_WIDTH - iconWidth)/2, yBoxPos + (boxHeight - iconHeight)/2);
+    Canvas.SetPos(xBoxPos + boxWidth - 6 - ICON_WIDTH + (ICON_WIDTH - iconWidth) / 2, yBoxPos + (boxHeight - iconHeight) / 2);
     eLevel.TICON.DrawTileFromManager(Canvas, iconIndex, iconWidth, iconHeight, 0, 0, iconWidth, iconHeight);
 
     // FILL BACKGROUND //
 
     // TOP //
     Canvas.SetPos(xBoxPos + boxWidth - 6 - ICON_WIDTH, yBoxPos + 7);
-    eLevel.TICON.DrawTileFromManager(Canvas, eLevel.TICON.com_ic_console, ICON_WIDTH, (boxHeight - 14 - iconHeight)/2, 0, 0, 1, 1);
+    eLevel.TICON.DrawTileFromManager(Canvas, eLevel.TICON.com_ic_console, ICON_WIDTH, (boxHeight - 14 - iconHeight) / 2, 0, 0, 1, 1);
 
     // BOTTOM //
-    Canvas.SetPos(xBoxPos + boxWidth - 6 - ICON_WIDTH, yBoxPos + 7 + (boxHeight - 14 - iconHeight)/2 + iconHeight);
-    fillHeight = (boxHeight - 14 - iconHeight)/2;
-    if(fillHeight > int(fillHeight))
+    Canvas.SetPos(xBoxPos + boxWidth - 6 - ICON_WIDTH, yBoxPos + 7 + (boxHeight - 14 - iconHeight) / 2 + iconHeight);
+    fillHeight = (boxHeight - 14 - iconHeight) / 2;
+    if (fillHeight > int(fillHeight))
         fillHeight = int(fillHeight) + 1;
     eLevel.TICON.DrawTileFromManager(Canvas, eLevel.TICON.com_ic_console, ICON_WIDTH, fillHeight, 0, 0, 1, 1);
 
     // LEFT //
-    Canvas.SetPos(xBoxPos + boxWidth - 6 - ICON_WIDTH, yBoxPos + 7 + (boxHeight - 14 - iconHeight)/2);
-    eLevel.TICON.DrawTileFromManager(Canvas, eLevel.TICON.com_ic_console, (ICON_WIDTH - iconWidth)/2, iconHeight, 0, 0, 1, 1);
+    Canvas.SetPos(xBoxPos + boxWidth - 6 - ICON_WIDTH, yBoxPos + 7 + (boxHeight - 14 - iconHeight) / 2);
+    eLevel.TICON.DrawTileFromManager(Canvas, eLevel.TICON.com_ic_console, (ICON_WIDTH - iconWidth) / 2, iconHeight, 0, 0, 1, 1);
 
     // RIGHT //
-    Canvas.SetPos(xBoxPos + boxWidth - 6 - (ICON_WIDTH - iconWidth)/2, yBoxPos + 7 + (boxHeight - 14 - iconHeight)/2);
-    eLevel.TICON.DrawTileFromManager(Canvas, eLevel.TICON.com_ic_console, (ICON_WIDTH - iconWidth)/2, iconHeight, 0, 0, 1, 1);
+    Canvas.SetPos(xBoxPos + boxWidth - 6 - (ICON_WIDTH - iconWidth) / 2, yBoxPos + 7 + (boxHeight - 14 - iconHeight) / 2);
+    eLevel.TICON.DrawTileFromManager(Canvas, eLevel.TICON.com_ic_console, (ICON_WIDTH - iconWidth) / 2, iconHeight, 0, 0, 1, 1);
 
     Canvas.Style = ERenderStyle.STY_Normal;
 }
@@ -263,9 +281,9 @@ function ScrollText(ECanvas Canvas, float _yLen, int iNbrOfBoxLine, int iNbrOfLi
 	local String sTempMsg;
 
 	// Text is shorter than the height of box, so display everything
-	if ( iNbrOfLine <= iNbrOfBoxLine )
+	if (iNbrOfLine <= iNbrOfBoxLine)
 	{
-		Canvas.DrawText(_MyText,false);
+		Canvas.DrawText(_MyText, false);
 	}
 	else
 	{		
@@ -273,19 +291,19 @@ function ScrollText(ECanvas Canvas, float _yLen, int iNbrOfBoxLine, int iNbrOfLi
 		fTimePerLine = fDuration / iNbrOfLine;	
 		
 		// Find first and last line to display based on time elapsed since first line displayed.		
-		iStartLine = iNbrOfLine - int( (fDuration - fTimer + (iNbrOfBoxLine*fTimePerLine) - fTimePerLine) / fTimePerLine ) ;		
-		if ( iStartLine < 1 ) iStartLine = 1;
+		iStartLine = iNbrOfLine - int((fDuration - fTimer + (iNbrOfBoxLine * fTimePerLine) - fTimePerLine) / fTimePerLine) ;		
+		if (iStartLine < 1) iStartLine = 1;
 
 		iEndLine = iStartLine + iNbrOfBoxLine - 1;		
 				
 		// Append all the line we want to display on the screen
-		for( i = iStartLine; i <= iEndLine; i++ )
+		for (i = iStartLine; i <= iEndLine; i++)
 		{
 			sTempMsg = sTempMsg $ Canvas.GetStringAtPos(_MyText, i, 1.0f) $ " ";
 		}
 		
 		// Display the appended lines
-		Canvas.DrawText( sTempMsg, false);
+		Canvas.DrawText(sTempMsg, false);
 	}	
 }
 
@@ -310,7 +328,7 @@ event SetClipZone(ECanvas C)
 event ResetClipZone(ECanvas C)
 {
 	C.SetOrigin(0,0);
-    C.SetPos(0,0);
+    C.SetPos(0,0);	
 	C.SetClip(640,480);
 }
 
@@ -319,7 +337,7 @@ event ResetClipZone(ECanvas C)
 
  Description:   Draw Communication when set position of hud items in main menu
 -----------------------------------------------------------------------------*/
-function DrawConfig(ECanvas canvas)
+function DrawConfig(ECanvas Canvas)
 {
     // DRAW BOX //
     DrawBox(Canvas, eGame.HUD_OFFSET_X, eGame.HUD_OFFSET_Y, COMBOX_WIDTH, MIN_COMBOX_HEIGHT + 16, false);
@@ -334,16 +352,16 @@ auto state() Idle
 	function Tick(float Delta)
 	{
 		//Get current transmission Node
-		if(GetCurrentNode() != None)
+		if (GetCurrentNode() != None)
 		{
 			GotoState('BeginDisplay');
 		}
 	}
 
-	function Draw(ECanvas canvas)
+	function Draw(ECanvas Canvas)
 	{
 		//assign canvas
-		GCanvas=canvas;
+		GCanvas = Canvas;
 	}
 
 }
@@ -362,7 +380,7 @@ state() StandardDisplay
 		local bool bIsAGoal;
 		local String MyLine;
 
-		GCanvas=canvas;
+		GCanvas = Canvas;
 
         Canvas.Font = Canvas.ETextFont;
 		Canvas.TextSize("T", xLen, yLen);
@@ -370,7 +388,7 @@ state() StandardDisplay
         // Get Current Transmission Node //
         Node = GetCurrentNode();
 
-		if ( bWithVoice )
+		if (bWithVoice)
 		{
 			// Set Communication Box height	
 			height = REAL_BOX_HEIGHT;
@@ -380,7 +398,7 @@ state() StandardDisplay
 			GetCurrentSize(height); 
 			height += 30; //Hack to fit the word OBJECTIVE on first line
 			
-			if(height < MIN_COMBOX_HEIGHT)
+			if (height < MIN_COMBOX_HEIGHT)
 			    height = MIN_COMBOX_HEIGHT;
 		}
         
@@ -391,9 +409,9 @@ state() StandardDisplay
 
 		bIsAGoal = false;
         // SET ICON //
-        if(Node != None)
+        if (Node != None)
         {
-            switch(CurrentSpecialEvent)
+            switch (CurrentSpecialEvent)
 			{
 			    case ST_NOTEBOOK:
                     iconIndex = eLevel.TICON.com_ic_notes;						
@@ -406,7 +424,7 @@ state() StandardDisplay
                     iconIndex = eLevel.TICON.com_ic_recon;										
                     break;
     			default:
-	    			switch(CurrentTransmission)
+	    			switch (CurrentTransmission)
 				    {
 				        case TR_CONSOLE:
                             iconIndex = eLevel.TICON.com_ic_console;														
@@ -435,12 +453,12 @@ state() StandardDisplay
 			}
 
 			// Find nbr of line in the box, based on box height
-			if ( bWithVoice )
+			if (bWithVoice)
 			{
-				if ( bIsAGoal )			
-					iNbrOfBoxLine = (height - yLen)/yLen;			
+				if (bIsAGoal)			
+					iNbrOfBoxLine = (height - yLen) / yLen;			
 				else
-					iNbrOfBoxLine = height/yLen;						
+					iNbrOfBoxLine = height / yLen;						
 			}
 			
 
@@ -453,17 +471,17 @@ state() StandardDisplay
 
             SetClipZone(Canvas);
 
-            while(Node != None)
+            while (Node != None)
 			{		
 				T = ETransmissionObj(Node.Data);
 								
-				if ( bWithVoice )
+				if (bWithVoice)
 					iNbrOfLine = Canvas.GetNbStringLines(T.Data, 1.0f);								
 												
-                if((CurrentTransmission != TR_CONVERSATION) && (CurrentTransmission != TR_HEADQUARTER) && (CurrentTransmission != TR_MENUSPEECH))
+                if ((CurrentTransmission != TR_CONVERSATION) && (CurrentTransmission != TR_HEADQUARTER) && (CurrentTransmission != TR_MENUSPEECH))
                 {
-                    tmpVal = (TimeElapsed - T.InsertionTime)/TimerRate;
-                    if(tmpVal > 1.0f)
+                    tmpVal = (TimeElapsed - T.InsertionTime) / TimerRate;
+                    if (tmpVal > 1.0f)
 						tmpVal = 1.0f;
 
                     color = Canvas.TextBlack.R + (50 - (tmpVal * 50.0f));
@@ -473,7 +491,7 @@ state() StandardDisplay
                     Canvas.DrawColor = Canvas.TextBlack;
 
                 // Display a blinking OBJECTIVE when it`s a goal 
-				if ( bIsAGoal )
+				if (bIsAGoal)
 				{
 					// DRAW TEXT				
 					Canvas.SetDrawColor(128,128,128, 153);
@@ -485,7 +503,7 @@ state() StandardDisplay
 					Canvas.SetPos(xTextPos,yTextPos);
 				
 					// Display the word OBJECTIVE in a blinking way
-					if ( !bBlink )
+					if (!bBlink)
 					{
 						Canvas.DrawText(Localize("HUD", "OBJECTIVE", "Localization\\HUD"),false);						
 					}
@@ -496,7 +514,7 @@ state() StandardDisplay
 				else
 					Canvas.SetPos(xTextPos,yTextPos);
 				
-				if ( bWithVoice )
+				if (bWithVoice)
 					ScrollText(Canvas, yLen, iNbrOfBoxLine, iNbrOfLine, T.Data);
 				else
 					Canvas.DrawText(T.Data,false);
@@ -529,9 +547,9 @@ state() BeginDisplay
 
 	function Tick(float Delta)
 	{
-		openHeight += MIN_COMBOX_HEIGHT/OPEN_SPEED_FACTOR;
+		openHeight += MIN_COMBOX_HEIGHT / OPEN_SPEED_FACTOR;
 
-		if(openHeight >= MIN_COMBOX_HEIGHT)
+		if (openHeight >= MIN_COMBOX_HEIGHT)
 		{
 			openHeight = MIN_COMBOX_HEIGHT;
 			
@@ -541,7 +559,7 @@ state() BeginDisplay
 
 	function Draw(ECanvas Canvas)
     {
-		GCanvas=canvas;
+		GCanvas = Canvas;
 		DrawBox(Canvas, eGame.HUD_OFFSET_X, eGame.HUD_OFFSET_Y, COMBOX_WIDTH, openHeight + 16, true);
         DrawBoxBackground(Canvas, eGame.HUD_OFFSET_X, eGame.HUD_OFFSET_Y, COMBOX_WIDTH, openHeight + 16);
 	}
@@ -560,9 +578,9 @@ state() EndDisplay
 
     function Tick(float Delta)
 	{
-		openHeight -= MIN_COMBOX_HEIGHT/OPEN_SPEED_FACTOR;
+		openHeight -= MIN_COMBOX_HEIGHT / OPEN_SPEED_FACTOR;
 
-		if(openHeight <= 0)
+		if (openHeight <= 0)
 		{
 			openHeight = 0;
 			GotoState('Idle');
@@ -571,7 +589,7 @@ state() EndDisplay
 
     function Draw(ECanvas Canvas)
 	{
-		GCanvas=canvas;
+		GCanvas = Canvas;
 		DrawBox(Canvas, eGame.HUD_OFFSET_X, eGame.HUD_OFFSET_Y, COMBOX_WIDTH, openHeight + 16, true);
         DrawBoxBackground(Canvas, eGame.HUD_OFFSET_X, eGame.HUD_OFFSET_Y, COMBOX_WIDTH, openHeight + 16);
 	}
@@ -590,7 +608,7 @@ state s_Cinematic
         local ETransmissionObj T;
         local float xLen, yLen;
 
-		GCanvas=canvas;
+		GCanvas = Canvas;
         Canvas.Font = Canvas.ETextFont;
         Canvas.DrawColor = Canvas.white;
         Canvas.SetClip(600, 480);
@@ -600,11 +618,11 @@ state s_Cinematic
         Node = GetCurrentNode();
         yTextPos = 430;
 
-        while(Node != None)
+        while (Node != None)
 		{		
 			T = ETransmissionObj(Node.Data);
 
-            //if((CurrentTransmission != TR_CONVERSATION) && (CurrentTransmission != TR_HEADQUARTER))
+            //if ((CurrentTransmission != TR_CONVERSATION) && (CurrentTransmission != TR_HEADQUARTER))
 
             // DRAW TEXT//
             Canvas.SetPos(320,yTextPos);
@@ -640,12 +658,12 @@ state s_Menu
 
         // Set Communication Box height //
         GetCurrentSize(height);
-        if(height < MIN_COMBOX_HEIGHT)
+        if (height < MIN_COMBOX_HEIGHT)
             height = MIN_COMBOX_HEIGHT;
         
-        if(Node != None)
+        if (Node != None)
         {
-            if(CurrentTransmission != TR_MENUSPEECH)
+            if (CurrentTransmission != TR_MENUSPEECH)
                 return;
 
             // DRAW BOX //
@@ -663,7 +681,7 @@ state s_Menu
             Canvas.SetPos(0,0);
 	        Canvas.SetClip(COMBOX_WIDTH - 16 - ICON_WIDTH,480);
 
-            while(Node != None)
+            while (Node != None)
 		    {		
 			    T = ETransmissionObj(Node.Data);
                 Canvas.DrawColor = Canvas.TextBlack;

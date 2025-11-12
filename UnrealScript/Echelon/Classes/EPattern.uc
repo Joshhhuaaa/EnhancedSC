@@ -111,7 +111,7 @@ var bool					WaitingForBeep;
 /////////////////////////////////////////////////////////////////////////////////////////////
 native(1408) final latent function Talk(sound SoundData,int CharacterIndex, optional float delay,optional bool blatent, optional float progression);
 native(1409) final latent function WaitForCommBox();
-native(1407) final latent function Speech(string Text, sound SoundData,int CharacterIndex,optional byte Event,optional EchelonEnums.eTransmissionType Type, optional float progression, optional bool bGameOver );
+native(1407) final latent function Speech(string Text, sound SoundData,int CharacterIndex,optional byte Event,optional EchelonEnums.eTransmissionType Type, optional float progression, optional bool bGameOver);
 native(1410) final latent function WaitForGoal(int CharacterIndex,EchelonEnums.GoalType Type, optional name Label);
 native(1416) final function ProcessAI();
 native(1420) final function CheckAttackPoint(int _CharacterIndex, name JumpLabel);
@@ -139,11 +139,11 @@ function Timer()
 
     EPC = EPlayerController(Characters[0]);	
 
-	if(EPC != None && EPC.bSavingTraining)
+	if (EPC != None && EPC.bSavingTraining)
 	{		
 		ConsoleCommand("SAVEGAME FILENAME=TEMP OVERWRITE=TRUE");
 	}
-	else if(EPC != None && EPC.bLoadingTraining)
+	else if (EPC != None && EPC.bLoadingTraining)
 	{	
 		ConsoleCommand("LOADGAME FILENAME=TEMP");  
 	}
@@ -166,7 +166,7 @@ function SendCommunication(AIEventType eType, Actor Target, float time)
 	CommTarget = EAIController(Target);
 	eCommType = eType;
 
-	if(CommTarget != None)
+	if (CommTarget != None)
 		SetTimer(time, false);
 }
 
@@ -245,7 +245,7 @@ function elog()
 
 function String GetTriggerEventString()
 {
-	switch(TriggerEvent.EventType)
+	switch (TriggerEvent.EventType)
 	{
         case AI_NONE                        : return "AI_NONE"; break;
         case AI_INVESTIGATE                 : return "AI_INVESTIGATE"; break;
@@ -328,21 +328,21 @@ function Assign(ESlist Members,EAIController TriggerMember)
 	Characters[1] = TriggerMember;
 
 	//check if the list is empty
-	if(Members == None)
+	if (Members == None)
 		return;
 
 	Node = Members.FirstNode;
-	i=2;
+	i = 2;
 
-	while(Node != None)
+	while (Node != None)
 	{
 		C = EAIController(Node.Data);
 
-		switch(C.type)
+		switch (C.type)
 		{
 		case 0:
 			//spetsnaz
-			if(C == TriggerMember)
+			if (C == TriggerMember)
             {
 				Characters[1] = C;
             }
@@ -403,7 +403,7 @@ function StartPattern(optional name Label)
 	bIsRunning = true;
 	bConversationRunning = true;
 
-	if(Label == '')
+	if (Label == '')
 	{
 		GotoPatternLabel('begin');
 	}
@@ -423,7 +423,7 @@ function StartPattern(optional name Label)
 // Description: End the processing of the pattern
 //
 //------------------------------------------------------------------------
-function StopPattern( optional bool bInterrupted )
+function StopPattern(optional bool bInterrupted)
 {
 	// Stop all sounds
 	StopSpeech();
@@ -468,38 +468,38 @@ function Goal_Set(int							_CharacterIndex,
 				  optional MoveFlags			_MoveFlags,
 				  optional vector				_Direction,
 				  optional MoveFlags			_WaitFlags
-			  )
+)
 {
 	local Actor  Target, NavTarget;
 	local Vector Focus;
 	local EAIController AI;
 	local bool _UpdatePlayerPos;
 
-	//CurrentVolume=None;
-	_UpdatePlayerPos=false;
+	//CurrentVolume = None;
+	_UpdatePlayerPos = false;
 	GrenadeLocation= vect(0.0f,0.0f,0.0f);
  
 	AI =  EAIController(Characters[_CharacterIndex]);
 
 	AI.TargetLocation = vect(0.0f,0.0f,0.0f);
 
-	if(AI == None)
+	if (AI == None)
 		return;
 
-	if(AI.bNotResponsive && AI.GetStateName() != 's_stunned')
+	if (AI.bNotResponsive && AI.GetStateName() != 's_stunned')
 		return;
 
 	//change the Focus tag to a vector
-	if(_FocusTag == 'PLAYER')
+	if (_FocusTag == 'PLAYER')
 	{
 		//set the player location
-		Focus = Characters[0].pawn.Location;
+		Focus = Characters[0].Pawn.Location;
 	}
 	else
 	{
-		if(_FocusTag != '')
+		if (_FocusTag != '')
 		{
-			Target = AI.GetMatchingActor( _FocusTag );
+			Target = AI.GetMatchingActor(_FocusTag);
 
             if (Target != None)
             {
@@ -516,51 +516,51 @@ function Goal_Set(int							_CharacterIndex,
 	}
 
 	//change the target tag to an actor reference
-	if(_TargetTag == 'PLAYER' )
+	if (_TargetTag == 'PLAYER')
 	{
 		//set the player reference
-		Target= Characters[0].pawn;
+		Target= Characters[0].Pawn;
 	}
 	else
 	{
-		if(_TargetTag != '')
-			Target = AI.GetMatchingActor( _TargetTag );
+		if (_TargetTag != '')
+			Target = AI.GetMatchingActor(_TargetTag);
 		else
 			Target = None;
 	}
 
 
-	if(_Type == GOAL_Charge)
-		bCharge=1;
+	if (_Type == GOAL_Charge)
+		bCharge = 1;
 
 
 	//check if we are going to attack from a cover point
-	if(_Type == GOAL_Attack)
+	if (_Type == GOAL_Attack)
 	{
-		NavTarget = AI.GetMatchingActor( _Tag );
+		NavTarget = AI.GetMatchingActor(_Tag);
 
-		if( PathNode(NavTarget) !=  None )
+		if (PathNode(NavTarget) !=  None)
 		{
-			if(PathNode(NavTarget).bCoverPoint)
-				AI.LockNavPoint( PathNode(NavTarget) );
+			if (PathNode(NavTarget).bCoverPoint)
+				AI.LockNavPoint(PathNode(NavTarget));
 		}
 	}
 
-	if((_Type == GOAL_Attack) || (_Type == GOAL_MoveAndAttack))
+	if ((_Type == GOAL_Attack) || (_Type == GOAL_MoveAndAttack))
 	{
-		bCharge=0;
+		bCharge = 0;
 
-		if(!AI.epawn.bDrunk)
+		if (!AI.ePawn.bDrunk)
 		{
-			if(Characters[0].pawn == Target)
+			if (Characters[0].Pawn == Target)
 			{
 				ForceUpdatePlayerLocation(_CharacterIndex);
-				_UpdatePlayerPos=true;
+				_UpdatePlayerPos = true;
 			}
 
 			ChangeState(1,'s_alert');
 
-			if(AI.Pattern != None)
+			if (AI.Pattern != None)
 				AI.Pattern.GotoState('Attack');
 		}
 	}
@@ -577,7 +577,7 @@ function Goal_Set(int							_CharacterIndex,
 // Description: Replace the default goal of a member
 //
 //------------------------------------------------------------------------
-function Goal_Default(	 int					_CharacterIndex,
+function Goal_Default(int					_CharacterIndex,
 				  EchelonEnums.GoalType			_Type, 
 				  byte							_Priority,
 				  optional Vector				_Location,
@@ -590,30 +590,30 @@ function Goal_Default(	 int					_CharacterIndex,
 				  optional MoveFlags			_MoveFlags,
 				  optional vector				_Direction,
 				  optional MoveFlags			_WaitFlags
-			  )
+)
 {
 	local Actor  Target;
 	local Vector Focus;
 	local EAIController AI;
 
-	//CurrentVolume=None;
+	//CurrentVolume = None;
 
 	AI =  EAIController(Characters[_CharacterIndex]);
 
-	if(AI == None)
+	if (AI == None)
 		return;
 
 	//change the Focus tag to a vector
-	if(_FocusTag == 'PLAYER')
+	if (_FocusTag == 'PLAYER')
 	{
 		//set the player location
-		Focus = Characters[0].pawn.Location;
+		Focus = Characters[0].Pawn.Location;
 	}
 	else
 	{
-		if(_FocusTag != '')
+		if (_FocusTag != '')
 		{
-			Target = AI.GetMatchingActor( _FocusTag );
+			Target = AI.GetMatchingActor(_FocusTag);
 			Focus = Target.Location;
 		}
 		else
@@ -621,24 +621,24 @@ function Goal_Default(	 int					_CharacterIndex,
 	}
 
 	//change the target tag to an actor reference
-	if(_TargetTag == 'PLAYER' )
+	if (_TargetTag == 'PLAYER')
 	{
 		//set the player reference
-		Target= Characters[0].pawn;
+		Target= Characters[0].Pawn;
 	}
 	else
 	{
-		if(_TargetTag != '')
-			Target = AI.GetMatchingActor( _TargetTag );
+		if (_TargetTag != '')
+			Target = AI.GetMatchingActor(_TargetTag);
 		else
 			Target = None;
 	}
 
-	if(_Type == GOAL_Charge)
-		bCharge=1;
+	if (_Type == GOAL_Charge)
+		bCharge = 1;
 
-	if(_Type == GOAL_Attack)
-		bCharge=0;
+	if (_Type == GOAL_Attack)
+		bCharge = 0;
 
 	AI.ReplaceDefaultGoal(_Type,_Priority,_Location,Focus,Target,_Tag,_Anim,,_Flag,_value,_MoveFlags,_Direction,_WaitFlags);
 }
@@ -651,7 +651,7 @@ function Goal_Default(	 int					_CharacterIndex,
 //              Usually called by default patterns
 //
 //------------------------------------------------------------------------
-function Goal(	 int							_CharacterIndex,
+function Goal(int							_CharacterIndex,
 				 EchelonEnums.GoalType			_Type, 
 				 byte							_Priority,
 				 optional Vector				_Location,
@@ -667,39 +667,39 @@ function Goal(	 int							_CharacterIndex,
 				 optional Sound					_Sound,
 				 optional vector				_Direction,
 				 optional MoveFlags				_WaitFlags
-			  )
+)
 {
 	local NavigationPoint   Nav;
     local bool              bUpdatePlayerLoc;
 
-	//CurrentVolume=None;
+	//CurrentVolume = None;
 
-	if(_Type == GOAL_Charge)
-		bCharge=1;
+	if (_Type == GOAL_Charge)
+		bCharge = 1;
 
-	if(_Type == GOAL_Attack)
+	if (_Type == GOAL_Attack)
 	{
-		if( Characters[_CharacterIndex].pawn.bIsCrouched )
+		if (Characters[_CharacterIndex].Pawn.bIsCrouched)
 		{
 			_WaitFlags =  MOVE_CrouchJog;
 		}
 
-		bCharge=0;
+		bCharge = 0;
 	}
 
     // Fail on stuck for goals assigned by default patterns
-    if(_Type == GOAL_MoveTo)
+    if (_Type == GOAL_MoveTo)
     {
         //log("Fail on stuck for goals assigned by default patterns");
         bUpdatePlayerLoc = true;
     }
 
-	if(Characters[_CharacterIndex] != None)
+	if (Characters[_CharacterIndex] != None)
 	{
 
-		if(_bAltLocation)
+		if (_bAltLocation)
 		{
-			Nav = EAIController(Characters[_CharacterIndex]).ChooseSearchPoint( _Location );
+			Nav = EAIController(Characters[_CharacterIndex]).ChooseSearchPoint(_Location);
 			EAIController(Characters[_CharacterIndex]).AddGoal(_Type,_Priority,Nav.Location,_Focus,_Target,_Tag,_Anim,_Sounds,_Flag,_value,_MoveFlags,_Direction,_WaitFlags, bUpdatePlayerLoc);
 		}
 		else
@@ -725,10 +725,10 @@ function Goal(	 int							_CharacterIndex,
 //		Wrapper function for adding action Goal.
 // 
 //------------------------------------------------------------------------
-function Goal_Action( int CharIndex, int Priority, optional vector Focus, optional Name Anim, optional Sound Sounds, OPTIONAL float FrameRate, optional MoveFlags _MoveFlags)
+function Goal_Action(int CharIndex, int Priority, optional vector Focus, optional Name Anim, optional Sound Sounds, OPTIONAL float FrameRate, optional MoveFlags _MoveFlags)
 {
-	bCharge=0;
-	//CurrentVolume=None;
+	bCharge = 0;
+	//CurrentVolume = None;
 	Goal(CharIndex, GOAL_Action, Priority,, Focus,,, Anim, Sounds,,,_MoveFlags,,,,_MoveFlags);
 }
 
@@ -740,14 +740,14 @@ function Goal_Action( int CharIndex, int Priority, optional vector Focus, option
 // 
 //------------------------------------------------------------------------
 
-function Reaction( int CharIndex, int Priority, optional vector Focus, optional eReactionAnimGroup ReactionType, optional actor Target)
+function Reaction(int CharIndex, int Priority, optional vector Focus, optional eReactionAnimGroup ReactionType, optional actor Target)
 {
 	local name Anim, AnimB;
 	local float BlendAlpha;
 
-	bCharge=0;
+	bCharge = 0;
 
-	if(Characters[CharIndex].GetStateName() == 's_SitDown')
+	if (Characters[CharIndex].GetStateName() == 's_SitDown')
 		return;
 
 	// if AnimB is specified, Goal Action will use it for blending
@@ -764,7 +764,7 @@ function Reaction( int CharIndex, int Priority, optional vector Focus, optional 
 //		If Search goal already running, just update.
 // 
 //------------------------------------------------------------------------
-function Goal_Search( int CharIndex, 
+function Goal_Search(int CharIndex, 
 					  int Priority, 
 					  optional vector SearchLocation,  
 					  optional vector SearchDirection, 
@@ -778,25 +778,25 @@ function Goal_Search( int CharIndex,
 	local EAIController TargetAI;
 	local EGoal G;
 
-	//CurrentVolume=None;
+	//CurrentVolume = None;
 	TargetAI = EAIController(Characters[CharIndex]);
 
-	if ( TargetAI != none )
+	if (TargetAI != none)
 	{
 		G = TargetAI.m_pGoalList.GetCurrent();
 
-		if ( G != none )
+		if (G != none)
 		{
 			// if already executing search goal, UPDATE LOCATION AND RESET TIMER
 			// TODO : Replace with more complete goal replacement functionality (reinitialize based on new parameters)
-			if ( G.m_GoalType == GOAL_Search )
+			if (G.m_GoalType == GOAL_Search)
 			{
 				G.GoalLocation = SearchLocation;
 				G.GoalValue    = EPawn(TargetAI.Pawn).MinSearchTime;
 			}
 			else
 			{
-				bCharge=0;
+				bCharge = 0;
 				Goal(CharIndex, GOAL_Search, Priority, SearchLocation,,SearchTarget,,,,bFocusSwitching, SearchTime, _MoveFlags,,,SearchDirection);
 			}
 		}
@@ -811,39 +811,39 @@ function Goal_Search( int CharIndex,
 // 
 //------------------------------------------------------------------------
 
-//function Goal_Attack( int CharIndex, int Priority, vector AttackLocation, Actor AttackTarget, optional MoveFlags _MoveFlags, optional MoveFlags WaitFlags)
+//function Goal_Attack(int CharIndex, int Priority, vector AttackLocation, Actor AttackTarget, optional MoveFlags _MoveFlags, optional MoveFlags WaitFlags)
 function Goal_Attack(int CharIndex, int Priority, float TimeToStop , Actor AttackTarget, optional MoveFlags WaitFlags, optional bool flag,optional Name Anim, optional vector _Location, optional bool _bForceFocusTag)
 {
 	local actor AFocus;
 
-	if(_Location != vect(0,0,0))
+	if (_Location != vect(0,0,0))
 	{
-		if(VSize(Characters[CharIndex].pawn.Location - _Location) < 800)
+		if (VSize(Characters[CharIndex].Pawn.Location - _Location) < 800)
 		{
-			if( Characters[CharIndex].pawn.bIsCrouched )
+			if (Characters[CharIndex].Pawn.bIsCrouched)
 			{
 				WaitFlags = MOVE_CrouchJog;
 			}
 		}
 	}
 
-	ForceFocusVect=vect(0,0,0);
+	ForceFocusVect = vect(0,0,0);
 
-	if(_bForceFocusTag)
+	if (_bForceFocusTag)
 	{
 
-		if(CurrentVolume.ForceFocusTag != '')
+		if (CurrentVolume.ForceFocusTag != '')
 		{
 			AFocus = GetMatchingActor(CurrentVolume.ForceFocusTag);
 
-			if(AFocus != None)
+			if (AFocus != None)
 			{
 				ForceFocusVect = AFocus.Location;
 			}
 		}
 	}
 
-	bCharge=0;
+	bCharge = 0;
 	//Goal(CharIndex, GOAL_Attack, Priority, AttackLocation,, AttackTarget,,,,,,_MoveFlags,,,,WaitFlags);
 	Goal(CharIndex, GOAL_Attack, Priority,_Location,,AttackTarget,,Anim,,flag,TimeToStop,WaitFlags,,,,WaitFlags);
 }
@@ -855,7 +855,7 @@ function Goal_Attack(int CharIndex, int Priority, float TimeToStop , Actor Attac
 //------------------------------------------------------------------------
 function Goal_SprayFire(int CharIndex, int Priority, float TimeToStop , Actor AttackTarget, optional MoveFlags WaitFlags, optional bool flag)
 {
-	bCharge=0;
+	bCharge = 0;
 	//Goal(CharIndex, GOAL_Attack, Priority, AttackLocation,, AttackTarget,,,,,,_MoveFlags,,,,WaitFlags);
 	Goal(CharIndex, Goal_SprayFire, Priority,,,AttackTarget,,,,flag,TimeToStop,WaitFlags,,,,WaitFlags);
 }
@@ -865,9 +865,9 @@ function Goal_SprayFire(int CharIndex, int Priority, float TimeToStop , Actor At
 // Description
 //		Wrapper function
 //------------------------------------------------------------------------
-function Goal_Stop(  int CharIndex, int Priority, float TimeToStop, optional Actor FocusActor, optional MoveFlags WaitFlags, optional bool flag, optional Vector FocusLocation )
+function Goal_Stop(int CharIndex, int Priority, float TimeToStop, optional Actor FocusActor, optional MoveFlags WaitFlags, optional bool flag, optional Vector FocusLocation)
 {
-	bCharge=0;
+	bCharge = 0;
 	Goal(CharIndex, GOAL_Stop, Priority,,FocusLocation,FocusActor,,,,flag,TimeToStop,WaitFlags,,,,WaitFlags);
 }
 
@@ -876,14 +876,14 @@ function Goal_Stop(  int CharIndex, int Priority, float TimeToStop, optional Act
 // Description
 //		Wrapper function
 //------------------------------------------------------------------------
-function Goal_MoveTo( int CharIndex, int Priority, vector Location, MoveFlags _MoveFlags, optional vector Focus, optional MoveFlags WaitFlags, optional bool _attack)
+function Goal_MoveTo(int CharIndex, int Priority, vector Location, MoveFlags _MoveFlags, optional vector Focus, optional MoveFlags WaitFlags, optional bool _attack)
 {
 
-	bCharge=0;
-	//CurrentVolume=None;
+	bCharge = 0;
+	//CurrentVolume = None;
 
 	//try to keep coherence in moveflags
-	if( Characters[CharIndex].pawn.bIsCrouched )
+	if (Characters[CharIndex].Pawn.bIsCrouched)
 	{
 		_MoveFlags = MOVE_CrouchJog;
 		WaitFlags = MOVE_CrouchJog;
@@ -891,12 +891,12 @@ function Goal_MoveTo( int CharIndex, int Priority, vector Location, MoveFlags _M
 	
 
 	// DONE MOVING?
-	//if ( VSize(Location - EAIController(Characters[CharIndex]).ePawn.Location) > 100.0f )
+	//if (VSize(Location - EAIController(Characters[CharIndex]).ePawn.Location) > 100.0f)
 
-	if(_attack)
-		Goal(CharIndex, GOAL_MoveAndAttack, Priority, Location, Focus,characters[0].pawn,,,,true,,_MoveFlags,,,,WaitFlags);
+	if (_attack)
+		Goal(CharIndex, GOAL_MoveAndAttack, Priority, Location, Focus,characters[0].Pawn,,,,true,,_MoveFlags,,,,WaitFlags);
 	else
-		Goal(CharIndex, GOAL_MoveTo, Priority, Location, Focus,characters[0].pawn,,,,true,,_MoveFlags,,,,WaitFlags);
+		Goal(CharIndex, GOAL_MoveTo, Priority, Location, Focus,characters[0].Pawn,,,,true,,_MoveFlags,,,,WaitFlags);
 
 }
 
@@ -913,49 +913,49 @@ function  bool ChooseStrategicPoint(EPlayerController P)
 	local actor BestPoint;
 	local NavigationPoint CurNav;
 
-	BestDistance=0.0f;
-	BestPoint=None;
+	BestDistance = 0.0f;
+	BestPoint = None;
 
 	//pick up one strategic point 
-	for(i=0; i < P.CurrentVolume.StrategicPoints.Length; i++)
+	for (i = 0; i < P.CurrentVolume.StrategicPoints.Length; i++)
 	{
-		if( (P.CurrentVolume.StrategicPoints[i] != None) && 
-			((!P.CurrentVolume.StrategicPoints[i].taken) || ( EAIController(Characters[1]).TakenPoint == P.CurrentVolume.StrategicPoints[i] )) )
+		if ((P.CurrentVolume.StrategicPoints[i] != None) && 
+			((!P.CurrentVolume.StrategicPoints[i].taken) || (EAIController(Characters[1]).TakenPoint == P.CurrentVolume.StrategicPoints[i])))
 		{
 
-			if( EPawn(Characters[1].pawn).DefendActor != None )
+			if (EPawn(Characters[1].Pawn).DefendActor != None)
 			{
-				CurDist = VSize(P.CurrentVolume.StrategicPoints[i].Location - EPawn(Characters[1].pawn).DefendActor.Location);
+				CurDist = VSize(P.CurrentVolume.StrategicPoints[i].Location - EPawn(Characters[1].Pawn).DefendActor.Location);
 
-				if( CurDist >  EPawn(Characters[1].pawn).DefendDistance )
+				if (CurDist >  EPawn(Characters[1].Pawn).DefendDistance)
 					continue;
 			}
 			
-			CurDist = VSize(P.CurrentVolume.StrategicPoints[i].Location - Characters[1].pawn.Location);
+			CurDist = VSize(P.CurrentVolume.StrategicPoints[i].Location - Characters[1].Pawn.Location);
 
 			CurNav  = P.CurrentVolume.StrategicPoints[i];
 
-			if(CurNav != None)
+			if (CurNav != None)
 			{
-				if(CurNav.bCoverPoint)
+				if (CurNav.bCoverPoint)
 				{
-					if(EAIController(Characters[1]).EvaluateCorner(CurNav,Characters[0].pawn.Location) == CA_OFF)
+					if (EAIController(Characters[1]).EvaluateCorner(CurNav,Characters[0].Pawn.Location) == CA_OFF)
 						continue;
 				}
 
-				if(BestDistance < 0.1f)
+				if (BestDistance < 0.1f)
 				{
 					BestDistance = CurDist;
 					BestPoint = P.CurrentVolume.StrategicPoints[i];
-					Index=i;
+					Index = i;
 				}
 				else
 				{
-					if(BestDistance > CurDist)
+					if (BestDistance > CurDist)
 					{
 						BestDistance = CurDist;
 						BestPoint = P.CurrentVolume.StrategicPoints[i];
-						Index=i;
+						Index = i;
 					}
 				}
 			}
@@ -963,17 +963,17 @@ function  bool ChooseStrategicPoint(EPlayerController P)
 
 	}
 
-	if(BestPoint != None)
+	if (BestPoint != None)
 	{
-		if(P.CurrentVolume.bDontUseIfPlayerSeen)
+		if (P.CurrentVolume.bDontUseIfPlayerSeen)
 		{
-			if(EAICOntroller(Characters[1]).bPlayerSeen)
+			if (EAICOntroller(Characters[1]).bPlayerSeen)
 				return false;
 		}
 		else
 		{
 			//lock the nav point
-			EAIController(Characters[1]).LockNavPoint( P.CurrentVolume.StrategicPoints[Index] );
+			EAIController(Characters[1]).LockNavPoint(P.CurrentVolume.StrategicPoints[Index]);
 
 			//set the new target location of the NPC
 			EAIController(Characters[1]).TargetLocation = P.CurrentVolume.StrategicPoints[Index].Location;
@@ -981,18 +981,18 @@ function  bool ChooseStrategicPoint(EPlayerController P)
 			//set the current zone
 			CurrentVolume = P.CurrentVolume;
 
-			GrenadeTime=0.0f;
+			GrenadeTime = 0.0f;
 
-			if(CurrentVolume.bUseGrenadePoints && (CurrentVolume.GrenadePoints[Index] != None))
+			if (CurrentVolume.bUseGrenadePoints && (CurrentVolume.GrenadePoints[Index] != None))
 			{
 
 				GrenadeLocation = CurrentVolume.GrenadePoints[Index].Location;
 
 				plog("--------------------------------- Setting grenade location ------------------------------ "$GrenadeLocation);
 
-				if(EFocusPoint(CurrentVolume.GrenadePoints[Index]) != None)
+				if (EFocusPoint(CurrentVolume.GrenadePoints[Index]) != None)
 				{
-					GrenadeTime		= EFocusPoint(CurrentVolume.GrenadePoints[Index]).GrenadeTime;
+					GrenadeTime = EFocusPoint(CurrentVolume.GrenadePoints[Index]).GrenadeTime;
 				}	
 			}
 
@@ -1010,27 +1010,27 @@ function  bool ChooseStrategicPoint(EPlayerController P)
 // Description
 //		Wrapper function
 //------------------------------------------------------------------------
-function Goal_Charge( int _CharIndex, int _Priority, Actor _Target, MoveFlags _MoveFlags, optional bool _flag, optional vector Loc, optional bool _DontUseVolume, optional float _value) 
+function Goal_Charge(int _CharIndex, int _Priority, Actor _Target, MoveFlags _MoveFlags, optional bool _flag, optional vector Loc, optional bool _DontUseVolume, optional float _value) 
 {
 	//local bool bPointFound;
 	local EPlayerController P;
 	local vector SideStepLoc;
 
-	bCharge=0;
+	bCharge = 0;
 
 	P = EPlayerController(Characters[0]);
 
 	//check if the player is in a special zone
-	if(!_DontUseVolume)
+	if (!_DontUseVolume)
 	{
-		if(P.CurrentVolume != None)
+		if (P.CurrentVolume != None)
 		{
-			if(ChooseStrategicPoint(P))
+			if (ChooseStrategicPoint(P))
 				GotoPatternLabel('PlayerInZone');
 		}
 	}
 
-	bCharge=1;
+	bCharge = 1;
 
 	Goal(_CharIndex,GOAL_Charge,_Priority,Loc,,_Target,,,,_flag,_value,_MoveFlags);
 
@@ -1048,9 +1048,9 @@ function CheckIfPlayerStillInZone(name JumpLabel)
 
 	P = EPlayerController(Characters[0]);
 
-	if(P.CurrentVolume != None)
+	if (P.CurrentVolume != None)
 	{
-		if(CurrentVolume == P.CurrentVolume)
+		if (CurrentVolume == P.CurrentVolume)
 		{
 			plog("Still in zone");
 			GotoPatternLabel(JumpLabel);
@@ -1068,12 +1068,12 @@ function CheckIfInZone(name JumpLabel)
 
 	P = EPlayerController(Characters[0]);
 
-	plog("CheckIfInZone - Characters[0]: "$EPlayerController(Characters[0])$" Currentvol: "$P.CurrentVolume$" PAwn: "$Characters[1].pawn);
-	if(P.CurrentVolume != None)
+	plog("CheckIfInZone - Characters[0]: "$EPlayerController(Characters[0])$" Currentvol: "$P.CurrentVolume$" PAwn: "$Characters[1].Pawn);
+	if (P.CurrentVolume != None)
 	{
-		if(ChooseStrategicPoint(P))
+		if (ChooseStrategicPoint(P))
 		{
-			//log("Choosing Strategic point "$characters[1].pawn);
+			//log("Choosing Strategic point "$characters[1].Pawn);
 			GotoPatternLabel(JumpLabel);
 		}
 	
@@ -1082,7 +1082,7 @@ function CheckIfInZone(name JumpLabel)
 	}
 	else
 	{
-		CurrentVolume=None;
+		CurrentVolume = None;
 	}
 
 }
@@ -1098,7 +1098,7 @@ function CheckIfInZone(name JumpLabel)
 function CheckIfGrabbed(int CharIndex, name JumpLabel)
 {
 	//check the name of the state
-	if(EAIController(Characters[CharIndex]).GetStateName() == 's_Grabbed')
+	if (EAIController(Characters[CharIndex]).GetStateName() == 's_Grabbed')
 	{
 		GotoPatternLabel(JumpLabel);
 	}
@@ -1116,8 +1116,8 @@ function CheckIfGrabbed(int CharIndex, name JumpLabel)
 function CheckIfIsUnconscious(int CharIndex, name JumpLabel)
 {
 	//check the name of the state
-	if((EAIController(Characters[CharIndex]).GetStateName() == 's_Unconscious')
-        || ((EAIController(Characters[CharIndex]).GetStateName() == 's_Carried') && (EAIController(Characters[CharIndex]).pawn.health > 0)))
+	if ((EAIController(Characters[CharIndex]).GetStateName() == 's_Unconscious')
+        || ((EAIController(Characters[CharIndex]).GetStateName() == 's_Carried') && (EAIController(Characters[CharIndex]).Pawn.Health > 0)))
 
 	{
 		GotoPatternLabel(JumpLabel);
@@ -1135,10 +1135,10 @@ function CheckIfIsUnconscious(int CharIndex, name JumpLabel)
 function CheckIfIsDead(int CharIndex, name JumpLabel)
 {
 	//check the health of the member
-    if( (EAIController(Characters[CharIndex]) == None) 
-     || (EAIController(Characters[CharIndex]).epawn == None) 
-     || (EAIController(Characters[CharIndex]).epawn.health <= 0)
-     || (EAIController(Characters[CharIndex]).epawn.Controller == None))
+    if ((EAIController(Characters[CharIndex]) == None) 
+     || (EAIController(Characters[CharIndex]).ePawn == None) 
+     || (EAIController(Characters[CharIndex]).ePawn.Health <= 0)
+     || (EAIController(Characters[CharIndex]).ePawn.Controller == None))
 	{
 		GotoPatternLabel(JumpLabel);
 	}
@@ -1148,10 +1148,10 @@ function CheckIfIsDead(int CharIndex, name JumpLabel)
 // 
 // Description
 //------------------------------------------------------------------------
-function CheckIfPlayerDead( name JumpLabel)
+function CheckIfPlayerDead(name JumpLabel)
 {
 	//check the health of the member
-	if(EPlayerController(Characters[0]).epawn.health <= 0)
+	if (EPlayerController(Characters[0]).ePawn.Health <= 0)
 	{
 		GotoPatternLabel(JumpLabel);
 	}
@@ -1165,10 +1165,10 @@ function CheckIfAllMembersDead(name JumpLabel)
 {
 	local int i;
 
-	for(i=0; i< 10; i++)
+	for (i = 0; i < 10; i++)
 	{
-		if(!( (EAIController(Characters[i]) == None) || (EAIController(Characters[i]).epawn == None) ||
-		    (EAIController(Characters[i]).epawn.health <= 0)))
+		if (!((EAIController(Characters[i]) == None) || (EAIController(Characters[i]).ePawn == None) ||
+		    (EAIController(Characters[i]).ePawn.Health <= 0)))
 		{
 			return;
 		}
@@ -1193,7 +1193,7 @@ function CheckIfThreatNearby(int CharIndex, name JumpLabel)
 
 	// if event is within x meters, jump
 
-	if ( VSize(TriggerEvent.EventLocation - Characters[CharIndex].Pawn.Location) < 500.0f )
+	if (VSize(TriggerEvent.EventLocation - Characters[CharIndex].Pawn.Location) < 500.0f)
 		GotoPatternLabel(JumpLabel);
 
 	// otherwise, check if LOS to event location is clear
@@ -1202,7 +1202,7 @@ function CheckIfThreatNearby(int CharIndex, name JumpLabel)
 	
 	plog("CheckThreatNearby -- Dist to Event : " $ VSize(TriggerEvent.EventLocation - Characters[CharIndex].Pawn.Location) $ "    Trace HitLocation : " $ HitLocation $ " TRACE ACTOR : " $ TraceActor);
 
-	if ( TraceActor == none || TraceActor == TriggerEvent.EventTarget )
+	if (TraceActor == none || TraceActor == TriggerEvent.EventTarget)
 		GotoPatternLabel(JumpLabel);			
 }
 
@@ -1224,16 +1224,16 @@ function CheckIfChargeShouldContinue(int CharIndex, name JumpLabel)
 
 	TargetAI = EAIController(Characters[CharIndex]);
 
-	if ( TargetAI != none )
+	if (TargetAI != none)
 	{
 		G = TargetAI.m_pGoalList.GetCurrent();
 
-		if ( G != none && G.m_GoalType == GOAL_Charge )
+		if (G != none && G.m_GoalType == GOAL_Charge)
 		{
-			if ( TargetAI.bPlayerSeen ) 
+			if (TargetAI.bPlayerSeen) 
 			{
 				// only continue checking timer if distance to player is greater than 150.0f
-				if ( (VSize(Characters[0].Pawn.Location - TargetAI.Pawn.Location) > 150.0f) )
+				if ((VSize(Characters[0].Pawn.Location - TargetAI.Pawn.Location) > 150.0f))
 				{
 					GotoPatternLabel(JumpLabel);	
 				}
@@ -1262,11 +1262,11 @@ function CheckIfExecutingGoal(int CharIndex, EchelonEnums.GoalType CheckGoalType
 
 	TargetAI = EAIController(Characters[CharIndex]);
 
-	if ( TargetAI != none )
+	if (TargetAI != none)
 	{
 		G = TargetAI.m_pGoalList.GetCurrent();
 
-		if ( G != none && G.m_GoalType == CheckGoalType )
+		if (G != none && G.m_GoalType == CheckGoalType)
 			GotoPatternLabel(JumpLabel);
 	}
 }
@@ -1288,16 +1288,16 @@ function SetExclusivity(bool bEnable)
 	bEventExclusivity = bEnable;
 
 	//reset some parameters in the controller when going back to exclusivity FALSE for the default patterns
-	/*if(!bEnable)
+	/*if (!bEnable)
 	{
-		for(i=0; i < 10; i++)
+		for (i = 0; i < 10; i++)
 		{
 			AI = EAIController(Characters[1]);
 
-			if(AI != None)
+			if (AI != None)
 			{
-				AI.group.bExternEventWasSent=false;
-				//AI.bPlayerSeen=false;
+				AI.group.bExternEventWasSent = false;
+				//AI.bPlayerSeen = false;
 			}
 		}
 	}*/
@@ -1313,7 +1313,7 @@ function SetExclusivity(bool bEnable)
 //------------------------------------------------------------------------
 function JumpToLastZoneTouched()
 {
-	if(LastZoneTouched != '')
+	if (LastZoneTouched != '')
 	{
 		Jump(LastZoneTouched);
 	}
@@ -1334,9 +1334,9 @@ function ChangeState(int	_CharacterIndex, name StateLabel)
 
 	AI = EAIController(Characters[_CharacterIndex]);
 
-	if ( AI != none && AI.Pawn != none && AI.Pawn.Health > 0 )
+	if (AI != none && AI.Pawn != none && AI.Pawn.Health > 0)
 	{
-		if(StateLabel == 's_default')
+		if (StateLabel == 's_default')
 			AI.Pattern.GotoState('idle');
 
 		AI.GotoStateSafe(StateLabel);
@@ -1350,7 +1350,7 @@ function ChangeState(int	_CharacterIndex, name StateLabel)
 function ChangeGroupState(name StateLabel)
 {
 
-	if(EGroupAI(Owner) !=  None)
+	if (EGroupAI(Owner) !=  None)
 	{
 		EGroupAI(Owner).ChangeStates(StateLabel);
 	}
@@ -1371,7 +1371,7 @@ function Broadcast(int	_CharacterIndex, BroadCastType _BCType)
 
 	plog("BROADCASTING TYPE : " $ _BCType);
 	
-	if((EGroupAI(Owner) != None) && (!AI.EPawn.bDoesntBroadcast))
+	if ((EGroupAI(Owner) != None) && (!AI.EPawn.bDoesntBroadcast))
 	{
 		EGroupAI(Owner).Broadcast(EAIController(Characters[_CharacterIndex]),_BCType,TriggerEvent.EventLocation);
 	}
@@ -1401,22 +1401,22 @@ function AskGroupForPlayerPosition(name JumpLabel)
 {
 	local bool bSomeoneKnowsPlayerLocation;
 
-	bSomeoneKnowsPlayerLocation=false;
+	bSomeoneKnowsPlayerLocation = false;
 
-	if(EGroupAI(Owner) != None)
+	if (EGroupAI(Owner) != None)
 	{
 		//check basicaly if the playerseen is TRUE one member
-		if( EGroupAI(Owner).PlayerIsVisible() )
+		if (EGroupAI(Owner).PlayerIsVisible())
 		{
-			bSomeoneKnowsPlayerLocation=true;
+			bSomeoneKnowsPlayerLocation = true;
 		}
 
-		if(bSomeoneKnowsPlayerLocation)
+		if (bSomeoneKnowsPlayerLocation)
 		{
 
-			if(Characters[0].pawn.health > 0)
+			if (Characters[0].Pawn.Health > 0)
 			{
-				//EAIController(Characters[1]).TargetLocation = Characters[0].pawn.Location;
+				//EAIController(Characters[1]).TargetLocation = Characters[0].Pawn.Location;
 				GotoPatternLabel(JumpLabel);
 			}
 			else
@@ -1440,29 +1440,29 @@ function UpdateGoal(int							_CharacterIndex,
 				 optional name					_ActorTag,
 				 optional bool					_Flag,
 				 optional MoveFlags				_WaitFlag
-			  )
+)
 {
 	local EGoal Goal;
 	local Actor A;
 
-	if(Characters[_CharacterIndex] != None)
+	if (Characters[_CharacterIndex] != None)
 	{
 		//check if we are waiting for that goal
 		Goal = EAIController(Characters[_CharacterIndex]).m_pGoalList.GetCurrent();
 
-		if(_ActorTag != '')
+		if (_ActorTag != '')
 		{
-			A = EAIController(Characters[_CharacterIndex]).GetMatchingActor( _ActorTag );
+			A = EAIController(Characters[_CharacterIndex]).GetMatchingActor(_ActorTag);
 
-			if(A != None)
+			if (A != None)
 				Goal.GoalLocation	= A.Location;					// set its location
 		
 			//check if we are going to attack from a cover point
-			if(Goal.m_GoalType == GOAL_Attack)
+			if (Goal.m_GoalType == GOAL_Attack)
 			{
-				if( PathNode(A) !=  None )
+				if (PathNode(A) !=  None)
 				{
-					if(PathNode(A).bCoverPoint)
+					if (PathNode(A).bCoverPoint)
 						EAIController(Characters[_CharacterIndex]).LockNavPoint(PathNode(A));
 				}
 			}
@@ -1470,7 +1470,7 @@ function UpdateGoal(int							_CharacterIndex,
 
 		Goal.GoalFlag       = _Flag;
 		
-		if ( _WaitFlag != MOVE_NotSpecified )
+		if (_WaitFlag != MOVE_NotSpecified)
 			Goal.GoalWaitFlags  = _WaitFlag;
 	}
 }
@@ -1486,11 +1486,11 @@ function UpdateGoalMoveFlag(int	_CharacterIndex,  MoveFlags	_MoveFlag)
 {
 	local EGoal Goal;
 
-	if(Characters[_CharacterIndex] != None)
+	if (Characters[_CharacterIndex] != None)
 	{
 		Goal = EAIController(Characters[_CharacterIndex]).m_pGoalList.GetCurrent();
 
-		if ( _MoveFlag != MOVE_NotSpecified )
+		if (_MoveFlag != MOVE_NotSpecified)
 		{
 			Goal.GoalMoveFlags  = _MoveFlag;
 			Goal.GoalWaitFlags  = _MoveFlag;
@@ -1537,7 +1537,7 @@ function UpdateSearchGoal(int _CharIndex, vector GoalLocation, bool GoalFlag, bo
 	//check if we are waiting for that goal
 	AI = EAIController(Characters[_CharIndex]);
 	
-	if ( AI != none )
+	if (AI != none)
 		AI.UpdateSearchGoal(GoalLocation, GoalFlag, bResetTimer);
 }
 
@@ -1561,9 +1561,9 @@ function UpdateSearchTimer(int _CharIndex, optional float ExtraSeconds)
 	AI = EAIController(Characters[_CharIndex]);
 	Goal = AI.m_pGoalList.GetCurrent();
 
-	if ( Goal.m_GoalType == GOAL_Search )
+	if (Goal.m_GoalType == GOAL_Search)
 	{
-		if ( ExtraSeconds > 0 )
+		if (ExtraSeconds > 0)
         {
 			Goal.GoalValue += ExtraSeconds;
         }
@@ -1599,27 +1599,27 @@ function PossiblyTakeCover(int _CharIndex, float distance, name Label, optional 
 	// reset first
 	CoverLocation = vect(0,0,0);
 
-	if ( AI != none )
+	if (AI != none)
 	{
-		if( TargetLocation != vect(0,0,0) )
+		if (TargetLocation != vect(0,0,0))
 			CoverActor = AI.ChooseCoverPoint(distance,,TargetLocation);			
 		else
 		{
 			CoverActor = AI.ChooseCoverPoint(distance);
 
-			if (( CoverActor != none ) && AI.bPlayerSeen)
+			if ((CoverActor != none) && AI.bPlayerSeen)
 			{
 				//do a basic test to avoid the NPC face back the player
-				dotproduct = Normal(CoverActor.Location - Characters[1].pawn.Location) dot Normal(Characters[0].pawn.Location - Characters[1].pawn.Location);
+				dotproduct = Normal(CoverActor.Location - Characters[1].Pawn.Location) dot Normal(Characters[0].Pawn.Location - Characters[1].Pawn.Location);
 
-				if(dotproduct < -0.6f)
-					CoverActor=None; 
+				if (dotproduct < -0.6f)
+					CoverActor = None; 
 				
 			}
 
 		}
 		
-		if ( CoverActor != none )
+		if (CoverActor != none)
 		{
 			
 			CoverLocation = CoverActor.Location;
@@ -1641,8 +1641,8 @@ function PossiblyTakeCover(int _CharIndex, float distance, name Label, optional 
 function CheckPlayerSeenOnce(int _CharIndex, name Label)
 {
 	// is this the same frame as when we first saw the player?
-	if( (EAIController(Characters[_CharIndex]).TimePlayerFirstSeen != 0) &&
-	    (EAIController(Characters[_CharIndex]).TimePlayerFirstSeen < Level.TimeSeconds ) )
+	if ((EAIController(Characters[_CharIndex]).TimePlayerFirstSeen != 0) &&
+	    (EAIController(Characters[_CharIndex]).TimePlayerFirstSeen < Level.TimeSeconds))
 	{
 		GotoPatternLabel(Label);
 	}
@@ -1655,9 +1655,9 @@ function CheckPlayerSeenOnce(int _CharIndex, name Label)
 //------------------------------------------------------------------------
 function CheckIfPlayerHasBeenSeenByGroup(name Label)
 {
-	if(EGroupAI(Owner) != None)
+	if (EGroupAI(Owner) != None)
 	{
-		if(EGroupAI(Owner).PlayerHasBeenSeen())
+		if (EGroupAI(Owner).PlayerHasBeenSeen())
 		{
 			GotoPatternLabel(Label);
 		}
@@ -1677,9 +1677,9 @@ function CheckIfLastTimeSeenExpired(int _CharIndex, float DeltaTime, name Label)
 
 	AI = EAIController(Characters[_CharIndex]);
 
-	if(AI.epawn.ExpiredTime > 0)
+	if (AI.ePawn.ExpiredTime > 0)
 	{
-		if( (Level.TimeSeconds - AI.LastKnownPlayerTime) > AI.epawn.ExpiredTime )
+		if ((Level.TimeSeconds - AI.LastKnownPlayerTime) > AI.ePawn.ExpiredTime)
 		{
 			GotoPatternLabel(Label);
 		}
@@ -1702,12 +1702,12 @@ function SetPostAttackBehavior(int _CharIndex)
 	AI = EAIController(Characters[_CharIndex]);
 
 
-	if( (AI != None) && (AI.epawn.PostAttackPointTag != '') )
+	if ((AI != None) && (AI.ePawn.PostAttackPointTag != ''))
 	{
-		plog("SetPostAttackBehavior : "$AI.epawn.PostAttackPointTag);
+		plog("SetPostAttackBehavior : "$AI.ePawn.PostAttackPointTag);
 
 		//change the default behavior
-		Goal_Default(1,AI.epawn.PostAttackGoalType,0,,AI.epawn.PostAttackFocusTag,,AI.epawn.PostAttackPointTag,AI.ePawn.PostAttackAnim,,,,,);
+		Goal_Default(1,AI.ePawn.PostAttackGoalType,0,,AI.ePawn.PostAttackFocusTag,,AI.ePawn.PostAttackPointTag,AI.ePawn.PostAttackAnim,,,,,);
 	}
 	
 }
@@ -1722,7 +1722,7 @@ function Name GetPostAttackPoint(int _CharIndex)
 
 	AI = EAIController(Characters[_CharIndex]);
 
-	return AI.epawn.PostAttackPointTag;
+	return AI.ePawn.PostAttackPointTag;
 }
 
 
@@ -1749,9 +1749,9 @@ function SetHidePointMoveTo(int _CharIndex, int Priority, MoveFlags HideMoveFlag
 	HideTag = GetPostAttackPoint(_CharIndex);
 
 	AI = EAIController(Characters[_CharIndex]);
-	if ( AI != none )
+	if (AI != none)
 	{			
-		if ( HideTag != '' )
+		if (HideTag != '')
         {
 			HidePoint = NavigationPoint(GetMatchingActor(HideTag));		// if hide point pre-specified, use it
         
@@ -1770,7 +1770,7 @@ function SetHidePointMoveTo(int _CharIndex, int Priority, MoveFlags HideMoveFlag
         }
 
 
-		if ( HidePoint != none )
+		if (HidePoint != none)
 		{
 			plog("Choosing Hide Point -- " $ HidePoint);
 
@@ -1826,7 +1826,7 @@ function SetHidePointMoveTo(int _CharIndex, int Priority, MoveFlags HideMoveFlag
 //------------------------------------------------------------------------
 function CheckIsAlive(int i, name JumpLabel)
 {
-	if(EAIController(Characters[i]).pawn.health <= 0)
+	if (EAIController(Characters[i]).Pawn.Health <= 0)
 		GotoPatternLabel(JumpLabel);
 
 }
@@ -1867,7 +1867,7 @@ function SetFlags(out int Variable, bool bIsTrue)
 //------------------------------------------------------------------------
 function CheckFlags(int Variable, bool bCheck, name JumpLabel)
 {
-	if(Variable == int(bCheck))
+	if (Variable == int(bCheck))
 	{
 		GotoPatternLabel(JumpLabel);
 	}
@@ -1881,7 +1881,7 @@ function CheckFlags(int Variable, bool bCheck, name JumpLabel)
 // Description: Jump to a specific label in the pattern.
 //
 //----------------------------------------------------------------------
-function Jump( name JumpLabel)
+function Jump(name JumpLabel)
 {
 	GotoPatternLabel(JumpLabel);
 }
@@ -1898,10 +1898,10 @@ function Jump( name JumpLabel)
 function EventJump(name JumpLabel)
 {
 	//if the pattern was not running is now running
-	if(!bIsRunning)
+	if (!bIsRunning)
 	{
 		InitPattern();
-		bIsRunning=true;
+		bIsRunning = true;
 	}
 
 		GotoPatternLabel(JumpLabel);
@@ -1932,38 +1932,38 @@ function JumpRandom(name JumpLabel1, float Limit1,
 					optional name JumpLabel2, optional float Limit2,
 					optional name JumpLabel3, optional float Limit3,
 					optional name JumpLabel4, optional float Limit4,
-					optional name JumpLabel5, optional float Limit5 )
+					optional name JumpLabel5, optional float Limit5)
 {
 	local float Nb;
 
 	//pick up a number between 0-1
 	Nb = FRand();
 
-	if( (Limit1 != 0) && (Nb < Limit1) )
+	if ((Limit1 != 0) && (Nb < Limit1))
 	{
 		GotoPatternLabel(JumpLabel1);
 		return;
 	}
 
-	if( (Limit2 != 0) && (Nb < Limit2) )
+	if ((Limit2 != 0) && (Nb < Limit2))
 	{
 		GotoPatternLabel(JumpLabel2);
 		return;
 	}
 
-	if( (Limit3 != 0) && (Nb < Limit3) )
+	if ((Limit3 != 0) && (Nb < Limit3))
 	{
 		GotoPatternLabel(JumpLabel3);
 		return;
 	}
 
-	if( (Limit4 != 0) && (Nb < Limit4) )
+	if ((Limit4 != 0) && (Nb < Limit4))
 	{
 		GotoPatternLabel(JumpLabel4);
 		return;
 	}
 
-	if( (Limit5 != 0) && (Nb <= Limit5) )
+	if ((Limit5 != 0) && (Nb <= Limit5))
 	{
 		GotoPatternLabel(JumpLabel5);
 		return;
@@ -1992,7 +1992,7 @@ function AddGoal(name ID,
 				 optional string ShortKey,
 				 optional string ShortPackage)
 {
-	if(EPlayerController(Characters[0]) != None)
+	if (EPlayerController(Characters[0]) != None)
 	{
 		EPlayerController(Characters[0]).AddGoal(ID, Text, TextSection, TextKey, TextPackage, iGoalPriority, SubText, ShortSection, ShortKey, ShortPackage);
 	}
@@ -2008,7 +2008,7 @@ function AddGoal(name ID,
 //------------------------------------------------------------------------
 function GoalCompleted(name ID)
 {
-	if(EPlayerController(Characters[0]) != None)
+	if (EPlayerController(Characters[0]) != None)
 	{
 		EPlayerController(Characters[0]).SetGoalStatus(ID, true);
 	}
@@ -2026,21 +2026,21 @@ function RemovePlayerGoalsAndNotes(bool bClearGoals, name goalID, bool bClearNot
     local EListNode Node;
 	local ENote		Note;
 
-	if(EPlayerController(Characters[0]) == None)
+	if (EPlayerController(Characters[0]) == None)
         return;
 
-    if(bClearGoals)
+    if (bClearGoals)
     {
         EPlayerController(Characters[0]).GoalList.Clear();
     }
-    else if(goalID != '')
+    else if (goalID != '')
     {
         Node = EPlayerController(Characters[0]).GoalList.FirstNode;
 
-        while(Node != None)
+        while (Node != None)
         {
 	        Note = ENote(Node.Data);
-	        if(Note != None && Note.ID == goalID)
+	        if (Note != None && Note.ID == goalID)
 	        {
 		        EPlayerController(Characters[0]).GoalList.Remove(Note);
 		        break;
@@ -2049,7 +2049,7 @@ function RemovePlayerGoalsAndNotes(bool bClearGoals, name goalID, bool bClearNot
         }
     }
 
-    if(bClearNotes)
+    if (bClearNotes)
     {
         EPlayerController(Characters[0]).NoteBook.Clear();
     }
@@ -2065,7 +2065,7 @@ function RemovePlayerGoalsAndNotes(bool bClearGoals, name goalID, bool bClearNot
 // string Text is only kept for backward compatibility
 function AddNote(string Text, optional string Section, optional string Key, optional string Package)
 {
-	if(EPlayerController(Characters[0]) != None)
+	if (EPlayerController(Characters[0]) != None)
 		EPlayerController(Characters[0]).AddNote(Text, Section, Key, Package, false);
 }
 
@@ -2083,61 +2083,61 @@ function AddTrainingData(string Text, int gpMask, optional bool bHideController)
 	local EPlayerController Epc;
 
 	Epc = EPlayerController(Characters[0]);
-	if( Epc == None)
+	if (Epc == None)
 		return;
 
-	if((gpMask & KEY_MOVE_UP_MASK) == KEY_MOVE_UP_MASK)
+	if ((gpMask & KEY_MOVE_UP_MASK) == KEY_MOVE_UP_MASK)
         Keys[i++] = KEY_MOVE_UP;
 
-    if((gpMask & KEY_MOVE_DOWN_MASK) == KEY_MOVE_DOWN_MASK)
+    if ((gpMask & KEY_MOVE_DOWN_MASK) == KEY_MOVE_DOWN_MASK)
         Keys[i++] = KEY_MOVE_DOWN;
 
-    if((gpMask & KEY_MOVE_LEFT_MASK) == KEY_MOVE_LEFT_MASK)
+    if ((gpMask & KEY_MOVE_LEFT_MASK) == KEY_MOVE_LEFT_MASK)
         Keys[i++] = KEY_MOVE_LEFT;
 
-    if((gpMask & KEY_MOVE_RIGHT_MASK) == KEY_MOVE_RIGHT_MASK)
+    if ((gpMask & KEY_MOVE_RIGHT_MASK) == KEY_MOVE_RIGHT_MASK)
         Keys[i++] = KEY_MOVE_RIGHT;
 
-    if((gpMask & KEY_LOOK_UP_MASK) == KEY_LOOK_UP_MASK)
+    if ((gpMask & KEY_LOOK_UP_MASK) == KEY_LOOK_UP_MASK)
         Keys[i++] = KEY_LOOK_UP;
 
-    if((gpMask & KEY_LOOK_DOWN_MASK) == KEY_LOOK_DOWN_MASK)
+    if ((gpMask & KEY_LOOK_DOWN_MASK) == KEY_LOOK_DOWN_MASK)
         Keys[i++] = KEY_LOOK_DOWN;
 
-    if((gpMask & KEY_LOOK_LEFT_MASK) == KEY_LOOK_LEFT_MASK)
+    if ((gpMask & KEY_LOOK_LEFT_MASK) == KEY_LOOK_LEFT_MASK)
         Keys[i++] = KEY_LOOK_LEFT;
 
-    if((gpMask & KEY_LOOK_RIGHT_MASK) == KEY_LOOK_RIGHT_MASK)
+    if ((gpMask & KEY_LOOK_RIGHT_MASK) == KEY_LOOK_RIGHT_MASK)
         Keys[i++] = KEY_LOOK_RIGHT;
     
-    if((gpMask & KEY_INTERACTION_MASK) == KEY_INTERACTION_MASK)
+    if ((gpMask & KEY_INTERACTION_MASK) == KEY_INTERACTION_MASK)
         Keys[i++] = KEY_INTERACTION;
 
-    if((gpMask & KEY_SCOPE_MASK) == KEY_SCOPE_MASK)
+    if ((gpMask & KEY_SCOPE_MASK) == KEY_SCOPE_MASK)
         Keys[i++] = KEY_SCOPE;
 
-    if((gpMask & KEY_JUMP_MASK) == KEY_JUMP_MASK)
+    if ((gpMask & KEY_JUMP_MASK) == KEY_JUMP_MASK)
         Keys[i++] = KEY_JUMP;
 
-    if((gpMask & KEY_DUCK_MASK) == KEY_DUCK_MASK)
+    if ((gpMask & KEY_DUCK_MASK) == KEY_DUCK_MASK)
         Keys[i++] = KEY_DUCK;
 
-    if((gpMask & KEY_FIRE_MASK) == KEY_FIRE_MASK)
+    if ((gpMask & KEY_FIRE_MASK) == KEY_FIRE_MASK)
         Keys[i++] = KEY_FIRE;
 
-    if((gpMask & KEY_ALT_FIRE_MASK) == KEY_ALT_FIRE_MASK)
+    if ((gpMask & KEY_ALT_FIRE_MASK) == KEY_ALT_FIRE_MASK)
         Keys[i++] = KEY_ALT_FIRE;
 
-    if((gpMask & KEY_CHANGE_ROF_MASK) == KEY_CHANGE_ROF_MASK)
+    if ((gpMask & KEY_CHANGE_ROF_MASK) == KEY_CHANGE_ROF_MASK)
         Keys[i++] = KEY_CHANGE_ROF;
 
-    if((gpMask & KEY_QUICK_MASK) == KEY_QUICK_MASK)
+    if ((gpMask & KEY_QUICK_MASK) == KEY_QUICK_MASK)
         Keys[i++] = KEY_QUICK;
 
-    if((gpMask & KEY_MENU_MASK) == KEY_MENU_MASK)
+    if ((gpMask & KEY_MENU_MASK) == KEY_MENU_MASK)
         Keys[i++] = KEY_MENU;
 
-    if((gpMask & KEY_RESETCAMERA_MASK) == KEY_RESETCAMERA_MASK)
+    if ((gpMask & KEY_RESETCAMERA_MASK) == KEY_RESETCAMERA_MASK)
         Keys[i++] = KEY_RESETCAMERA;
 
 	Epc.AddTrainingData(self, Text, Keys, bHideController);
@@ -2169,11 +2169,11 @@ function InventoryManager(int index, bool bAdd, Name Tag, int Qty, optional bool
     local EInventoryItem	Item;
     local int               i;
 
-    if(index == 0)
+    if (index == 0)
     {
         EPC = EPlayerController(Characters[0]);
         TagActor = GetMatchingActor(Tag);
-        if(TagActor != None)
+        if (TagActor != None)
     	    Item = EInventoryItem(TagActor);
 
         // Verify if we can add the item
@@ -2184,10 +2184,10 @@ function InventoryManager(int index, bool bAdd, Name Tag, int Qty, optional bool
         }
 
 
-        if(bAdd)
+        if (bAdd)
         {
 
-            if(bBullets)
+            if (bBullets)
             {
                 if (EPC.MainGun != None)
                 {
@@ -2208,11 +2208,11 @@ function InventoryManager(int index, bool bAdd, Name Tag, int Qty, optional bool
                     
                     if (Item != None)
                     {
-                        if(EPawn(EPC.Pawn).FullInventory.CanAddItem(Item))
+                        if (EPawn(EPC.Pawn).FullInventory.CanAddItem(Item))
                         {
                             Item.Add(EPC, EPC, EPawn(EPC.Pawn).FullInventory);
 
-							if ( EWeapon(Item) != None )
+							if (EWeapon(Item) != None)
 							{
 								EWeapon(Item).BulletSound = EchelonLevelInfo(Level).AmbientPlaySound;
 							}
@@ -2242,7 +2242,7 @@ function InventoryManager(int index, bool bAdd, Name Tag, int Qty, optional bool
         }
         else // Remove
         {
-            if(bBullets)
+            if (bBullets)
             {
                 if (EPC.MainGun != None)
                 {
@@ -2267,7 +2267,7 @@ function InventoryManager(int index, bool bAdd, Name Tag, int Qty, optional bool
                     return;
                 }
 
-                if(Qty > 0) // Remove quantity Qty
+                if (Qty > 0) // Remove quantity Qty
                 {
                     while (((EPawn(EPC.Pawn).FullInventory.GetItemByClass(AddRemoveClass.Name) != None)) && (Qty > 0))
                     {
@@ -2315,13 +2315,13 @@ function ReloadWeapon(int _index, float ratio)
 
 	AI = EAIController(Characters[_index]);
 
-	if(AI != None && AI.GetStateName() != 's_Unconscious' && AI.ePawn.Health > 0)
+	if (AI != None && AI.GetStateName() != 's_Unconscious' && AI.ePawn.Health > 0)
 	{
 		currentWeapon = EWeapon(AI.ePawn.HandItem);
 
-		if(currentWeapon != None)
+		if (currentWeapon != None)
 		{
-			if( ( currentWeapon.ClipAmmo / currentWeapon.ClipMaxAmmo ) < ratio )
+			if ((currentWeapon.ClipAmmo / currentWeapon.ClipMaxAmmo) < ratio)
 			{
 				currentWeapon.Reload();
 				currentWeapon.ClipAmmo = currentWeapon.ClipMaxAmmo;
@@ -2342,22 +2342,22 @@ function ResolveBlocked(int _index, name JumpLabel)
 	AI = EAIController(Characters[_index]);
 	
 	//left
-	if( AI.ePawn.Trace(HitLocation,HitNormal,Characters[0].pawn.Location,AI.ePawn.ToWorld(vect(0,-60,0)),true)  == Characters[0].pawn)
+	if (AI.ePawn.Trace(HitLocation,HitNormal,Characters[0].Pawn.Location,AI.ePawn.ToWorld(vect(0,-60,0)),true)  == Characters[0].Pawn)
 	{
-		if( AI.ePawn.FastPointCheck(AI.ePawn.ToWorld(vect(0,-60,0)), AI.ePawn.GetExtent(), true, true) )
+		if (AI.ePawn.FastPointCheck(AI.ePawn.ToWorld(vect(0,-60,0)), AI.ePawn.GetExtent(), true, true))
 		{
-			EAIController(Characters[1]).TargetLocation=AI.ePawn.ToWorld(vect(0,-60,0));
+			EAIController(Characters[1]).TargetLocation = AI.ePawn.ToWorld(vect(0,-60,0));
 			GotoPatternLabel(JumpLabel);
 			return;
 		}
 	}
 
-	if( AI.ePawn.Trace(HitLocation,HitNormal,Characters[0].pawn.Location,AI.ePawn.ToWorld(vect(0,60,0)),true) == Characters[0].pawn)
+	if (AI.ePawn.Trace(HitLocation,HitNormal,Characters[0].Pawn.Location,AI.ePawn.ToWorld(vect(0,60,0)),true) == Characters[0].Pawn)
 	{
 		//right
-		if( AI.ePawn.FastPointCheck(AI.ePawn.ToWorld(vect(0,60,0)), AI.ePawn.GetExtent(), true, true) )
+		if (AI.ePawn.FastPointCheck(AI.ePawn.ToWorld(vect(0,60,0)), AI.ePawn.GetExtent(), true, true))
 		{
-			EAIController(Characters[1]).TargetLocation=AI.ePawn.ToWorld(vect(0,60,0));
+			EAIController(Characters[1]).TargetLocation = AI.ePawn.ToWorld(vect(0,60,0));
 			GotoPatternLabel(JumpLabel);
 			return;
 		}
@@ -2371,16 +2371,16 @@ function ResolveBlocked(int _index, name JumpLabel)
 // Description:  Close the speech set.
 //
 //------------------------------------------------------------------------
-function Close( optional bool bInterrupted )
+function Close(optional bool bInterrupted)
 {
-	if ( CommBox.CurrentOwner == self )
+	if (CommBox.CurrentOwner == self)
 		CommBox.UnLock();
 	
 	// Close conversation segment
 	bConversationRunning = false;
 
 	// Notify Npc interaction conversation segment is over
-	if( !bInterrupted && ENpcZoneInteraction(Owner) != None )
+	if (!bInterrupted && ENpcZoneInteraction(Owner) != None)
 		ENpcZoneInteraction(Owner).PostInteract(Characters[0]);
 }
 
@@ -2393,8 +2393,8 @@ function Close( optional bool bInterrupted )
 //------------------------------------------------------------------------
 function Console(String Text, byte Event)
 {
-	if(CommBox!= None)
-		CommBox.AddTransmission( self, TR_CONSOLE, Text,None,Event);
+	if (CommBox!= None)
+		CommBox.AddTransmission(self, TR_CONSOLE, Text,None,Event);
 }
 
 //------------------------------------------------------------------------
@@ -2403,7 +2403,7 @@ function Console(String Text, byte Event)
 //------------------------------------------------------------------------
 function EndConversation()
 {
-	if( ENpcZoneInteraction(Owner) == None )
+	if (ENpcZoneInteraction(Owner) == None)
 		Log(self$" ERROR : EndConversation() called on a non-conversation pattern.");
 	else
 		ENpcZoneInteraction(Owner).EndEvent();
@@ -2419,7 +2419,7 @@ function EndConversation()
 function End()
 {
 	// ERROR check
-	if( ENpcZoneInteraction(Owner) != None && bConversationRunning )
+	if (ENpcZoneInteraction(Owner) != None && bConversationRunning)
 	{
 		Log(self$" ERROR : Conversation Pattern End() called wihout a Close()");
 		Close();
@@ -2477,7 +2477,7 @@ function ShakeCamera(int iShakeValue1, int iShakeValue2, int iShakeValue3)
 //------------------------------------------------------------------------
 function ResetGroup()
 {
-	if(EGroupAI(Owner) != None)
+	if (EGroupAI(Owner) != None)
 	{
 		EGroupAI(Owner).ResetGoals();
 		EGroupAI(Owner).ChangeStates('s_default');
@@ -2501,7 +2501,7 @@ function ResetAllNPCs(int iCharIndex)
     {
         AI = EAIController(C);
 
-        if((AI != None) && (AI.EPawn != None) && (!AI.EPawn.bDisableAI))  
+        if ((AI != None) && (AI.EPawn != None) && (!AI.EPawn.bDisableAI))  
         {
             //log("resetting"@AI.EPawn);
             // Reset Goals for this guy/gal
@@ -2511,7 +2511,7 @@ function ResetAllNPCs(int iCharIndex)
             AI.LockedSwitches.Remove(0, AI.LockedSwitches.Length);
 
             // Reset his/her default pattern
-            if ( (AI.Pawn != None) 
+            if ((AI.Pawn != None) 
               && (AI.Pawn.Health > 0)  
               && (AI != Characters[iCharIndex]))    // Do not reset our on pattern yet, we will do do that later)
             {
@@ -2520,13 +2520,13 @@ function ResetAllNPCs(int iCharIndex)
             }
 
             // Setup post attack if available
-            if( (AI != None) && (AI.epawn.PostAttackPointTag != '') )
+            if ((AI != None) && (AI.ePawn.PostAttackPointTag != ''))
 	        {
                 //log("setting post attack for"@AI.EPawn);
 		        AI.Pattern.Goal_Default(iCharIndex, 
-                             AI.epawn.PostAttackGoalType,
-                             0,,AI.epawn.PostAttackFocusTag,,
-                             AI.epawn.PostAttackPointTag,
+                             AI.ePawn.PostAttackGoalType,
+                             0,,AI.ePawn.PostAttackFocusTag,,
+                             AI.ePawn.PostAttackPointTag,
                              AI.ePawn.PostAttackAnim,,,,,);
 	        }
 
@@ -2542,7 +2542,7 @@ function ResetAllNPCs(int iCharIndex)
 -----------------------------------------------------------------------------*/
 function ResetDefaultPatterns()
 {
-	if(EGroupAI(Owner) != None)
+	if (EGroupAI(Owner) != None)
 		EGroupAI(Owner).ResetDefaultPatternStates();
 }
 
@@ -2555,7 +2555,7 @@ function ResetDefaultPatterns()
 //------------------------------------------------------------------------
 function ResetGroupGoals()
 {
-	if(EGroupAI(Owner) != None)
+	if (EGroupAI(Owner) != None)
 		EGroupAI(Owner).ResetGoals();
 }
 
@@ -2568,7 +2568,7 @@ function ResetGroupGoals()
 //------------------------------------------------------------------------
 function PlayerIsVisible(int CharacterIndex, name JumpLabel)
 {
-	if(!EAIController(Characters[CharacterIndex]).bPlayerSeen)
+	if (!EAIController(Characters[CharacterIndex]).bPlayerSeen)
 		GotoPatternLabel(JumpLabel);
 }
 
@@ -2586,14 +2586,14 @@ function AllGroupLostPlayer(name JumpLabel, optional actor triggerActor, optiona
 	local EListNode Node;
 	local int i;
 
-	if(EGroupAI(Owner) != None)
+	if (EGroupAI(Owner) != None)
 	{
-		i=0;
+		i = 0;
 		Node = EGroupAI(Owner).AIMembers.FirstNode;
 
-		while(Node != None)
+		while (Node != None)
 		{
-			if( (EAIController(Node.Data).bPlayerSeen) && (TriggerActor != Actor(Node.Data)) )
+			if ((EAIController(Node.Data).bPlayerSeen) && (TriggerActor != Actor(Node.Data)))
 			{
 				i++;
 			}
@@ -2601,16 +2601,16 @@ function AllGroupLostPlayer(name JumpLabel, optional actor triggerActor, optiona
 			Node = Node.NextNode;
 		}
 
-		if(i == 0)
+		if (i == 0)
 		{
-			if(triggerActor != None)
+			if (triggerActor != None)
 				TriggerCharacter  = EAIController(triggerActor);
 
 			GotoPatternLabel(JumpLabel);
 		}
 		else
 		{
-			if(Label != '')
+			if (Label != '')
 				GotoPatternLabel(Label);
 		}
 	}
@@ -2628,9 +2628,9 @@ function Radio()
 
 	MyEpawn = ePawn(Characters[1].Pawn);
 	
-	Goal(1,GOAL_Action, 32,,,characters[0].pawn,, MyEpawn.ARadioBegin,,,,MOVE_WalkNormal);
-	Goal(1,GOAL_Action, 31,,,characters[0].pawn,, MyEpawn.ARadio,EPawn(Characters[1].pawn).Sounds_Barks,,,MOVE_WalkNormal);
-	Goal(1,GOAL_Action, 30,,,characters[0].pawn,, MyEpawn.ARadioEnd,,,,MOVE_WalkNormal);
+	Goal(1,GOAL_Action, 32,,,characters[0].Pawn,, MyEpawn.ARadioBegin,,,,MOVE_WalkNormal);
+	Goal(1,GOAL_Action, 31,,,characters[0].Pawn,, MyEpawn.ARadio,EPawn(Characters[1].Pawn).Sounds_Barks,,,MOVE_WalkNormal);
+	Goal(1,GOAL_Action, 30,,,characters[0].Pawn,, MyEpawn.ARadioEnd,,,,MOVE_WalkNormal);
 }
 
 //-------------------------------------------------[Frederic Blais]-----
@@ -2647,9 +2647,9 @@ function SetPlayerDeadAction(int	_Index)
 
 	MyEpawn = ePawn(Characters[_Index].Pawn);
 
-	Tmp = Characters[0].pawn.Location + Vector(MyEpawn.Rotation) * 90;
-	Tmp2= Tmp + Normal(Characters[_Index].pawn.Location - Tmp) * 150;
-	//Tmp2= Tmp + ( Normal(Vect(0,0,-1) cross Vector(EPawn(Characters[0].pawn).Rotation)) * 15 );
+	Tmp = Characters[0].Pawn.Location + Vector(MyEpawn.Rotation) * 90;
+	Tmp2= Tmp + Normal(Characters[_Index].Pawn.Location - Tmp) * 150;
+	//Tmp2= Tmp + (Normal(Vect(0,0,-1) cross Vector(EPawn(Characters[0].Pawn).Rotation)) * 15);
 
 	//ePawn(Characters[_Index].Pawn).Bark_Type = BARK_PlayerKilled;
     //Talk(ePawn(Characters[1].Pawn).Sounds_Barks, 1, 0, false);
@@ -2689,8 +2689,8 @@ function ResetGoals(int	_CharacterIndex)
 //------------------------------------------------------------------------
 function ResetSector()
 {
-	if(EGroupAI(Owner) != None)
-		EGroupAI(Owner).LastZoneUsed=None;
+	if (EGroupAI(Owner) != None)
+		EGroupAI(Owner).LastZoneUsed = None;
 }
 
 
@@ -2703,7 +2703,7 @@ function ResetSector()
 //------------------------------------------------------------------------
 function PlayerIsInASector(name JumpLabel, optional bool bCheckPlayer)
 {
-	if( EZoneInfo(Characters[0].pawn.region.zone) != none )
+	if (EZoneInfo(Characters[0].Pawn.Region.Zone) != none)
 		GotoPatternLabel(JumpLabel);
 }
 
@@ -2718,18 +2718,18 @@ function PlayerIsInASector(name JumpLabel, optional bool bCheckPlayer)
 function CheckIfCanThrowGrenade(name JumpLabel)
 {
 
-	if(CurrentVolume != None)
+	if (CurrentVolume != None)
 	{
-		if(EGroupAI(Owner) != None)
+		if (EGroupAI(Owner) != None)
 		{
 
-			if(EGroupAI(Owner).CurrentGrenadeTimer <= 0)
+			if (EGroupAI(Owner).CurrentGrenadeTimer <= 0)
 			{
 
-				if(CurrentVolume.bGrenadeAllowed)
+				if (CurrentVolume.bGrenadeAllowed)
 				{
 
-					if(GrenadeLocation != Vect(0,0,0))
+					if (GrenadeLocation != Vect(0,0,0))
 					{
 
 						EGroupAI(Owner).ResetGrenadeTimer();
@@ -2753,13 +2753,13 @@ function PlayerIsInAZone(name JumpLabel, optional bool bCheckPlayer)
 	local EPlayerController P;
 
 	P = EPlayerController(Characters[0]);
-	if( P.CurrentVolume != none)
+	if (P.CurrentVolume != none)
 	{
-		if(bCheckPlayer)
+		if (bCheckPlayer)
 		{
 			//check the player acceleration
-			if( (P.aForward > P.eGame.m_forwardGentle) || (P.aForward < P.eGame.m_backwardGentle) ||
-				(P.aStrafe  > P.eGame.m_rightGentle)   || (P.aStrafe < P.eGame.m_leftGentle) )
+			if ((P.aForward > P.eGame.m_forwardGentle) || (P.aForward < P.eGame.m_backwardGentle) ||
+				(P.aStrafe  > P.eGame.m_rightGentle)   || (P.aStrafe < P.eGame.m_leftGentle))
 			{
 				return;
 			}
@@ -2779,9 +2779,9 @@ function PlayerIsInAZone(name JumpLabel, optional bool bCheckPlayer)
 //------------------------------------------------------------------------
 function PlayZoneLocation(int _CharacterIndex)
 {
-	if( EAIController(Characters[_CharacterIndex]) != None)
+	if (EAIController(Characters[_CharacterIndex]) != None)
 	{
-		//EAIController(Characters[_CharacterIndex]).EPawn.playsound(Sound'ZONE_1', SLOT_SFX);
+		//EAIController(Characters[_CharacterIndex]).EPawn.PlaySound(Sound'ZONE_1', SLOT_SFX);
 
 	}
 	//reset the zone
@@ -2797,9 +2797,9 @@ function PlayZoneLocation(int _CharacterIndex)
 //------------------------------------------------------------------------
 function CheckIfCornerPeeking(int _CharacterIndex,name JumpLabel)
 {
-	if( EAIController(Characters[_CharacterIndex]) != None)
+	if (EAIController(Characters[_CharacterIndex]) != None)
 	{
-		if(EAIController(Characters[_CharacterIndex]).EPawn.bCoverPeeking)
+		if (EAIController(Characters[_CharacterIndex]).EPawn.bCoverPeeking)
 		{
 			GotoPatternLabel(JumpLabel);
 		}
@@ -2822,38 +2822,38 @@ function CheckLightSwitchProximity(int _CharacterIndex, name JumpLabel, optional
 	local float BestDistance;
 	local bool SwitchFound;
 
-	if(MaxDist == 0)
-		MaxDist=1000.0f;
+	if (MaxDist == 0)
+		MaxDist = 1000.0f;
 
 
-	foreach RadiusActors ( class'EGamePlayObject', GObject, MaxDist, Characters[_CharacterIndex].pawn.Location ) 
+	foreach RadiusActors (class'EGamePlayObject', GObject, MaxDist, Characters[_CharacterIndex].Pawn.Location) 
 	{
-		if( GObject.IsA('ELightSwitch') )
+		if (GObject.IsA('ELightSwitch'))
 		{
 
-			if( GObject.GetStateName() != 's_On')
+			if (GObject.GetStateName() != 's_On')
 			{
 
-				if(!SwitchFound)
+				if (!SwitchFound)
 				{
-					if(Characters[_CharacterIndex].pawn.Region.ZoneNumber == GObject.Region.ZoneNumber)
+					if (Characters[_CharacterIndex].Pawn.Region.ZoneNumber == GObject.Region.ZoneNumber)
 					{
-						BestDistance = VSize(GObject.Location - Characters[_CharacterIndex].pawn.Location);
-						BestSwitch=GObject;
+						BestDistance = VSize(GObject.Location - Characters[_CharacterIndex].Pawn.Location);
+						BestSwitch = GObject;
 
-						SwitchFound=true;
+						SwitchFound = true;
 
 					}
 				}
 				else
 				{
 
-					if(Characters[_CharacterIndex].pawn.Region.ZoneNumber == GObject.Region.ZoneNumber)
+					if (Characters[_CharacterIndex].Pawn.Region.ZoneNumber == GObject.Region.ZoneNumber)
 					{
-						if(BestDistance > VSize(GObject.Location - Characters[_CharacterIndex].pawn.Location))
+						if (BestDistance > VSize(GObject.Location - Characters[_CharacterIndex].Pawn.Location))
 						{
-							BestDistance = VSize(GObject.Location - Characters[_CharacterIndex].pawn.Location);
-							BestSwitch=GObject;
+							BestDistance = VSize(GObject.Location - Characters[_CharacterIndex].Pawn.Location);
+							BestSwitch = GObject;
 						}
 					}
 
@@ -2864,7 +2864,7 @@ function CheckLightSwitchProximity(int _CharacterIndex, name JumpLabel, optional
 	}
 
 
-	if(SwitchFound)
+	if (SwitchFound)
 	{
 		TriggerEvent.EventTarget = BestSwitch;
 		GotoPatternLabel(JumpLabel);
@@ -2884,11 +2884,11 @@ function CheckLightSwitchVolumeAndAdd(int _CharacterIndex, Vector _Location)
 
     foreach DynamicActors(class'EVolume', itVol)
     {
-        if((itVol.EncompLoc(_Location)) && (itVol.LightSwitch != None))
+        if ((itVol.EncompLoc(_Location)) && (itVol.LightSwitch != None))
         {
             //plog(itVol $ " Encompasses the Event");
 
-        	if(((itVol.LightSwitch.IsA('ELightSwitch') 
+        	if (((itVol.LightSwitch.IsA('ELightSwitch') 
                    || (itVol.LightSwitch.IsA('ELightSwitchKal')))) 
              && (itVol.LightSwitch.GetStateName() != 's_On'))
 	        {
@@ -2914,46 +2914,46 @@ function vector GetNearestNavPointLocation()
 	NavStart = EPlayerController(Characters[0]).EPawn.GetAnchorForLocation(Characters[0].Pawn.Location);
 
 
-	if((NavStart != None) && (Level.TimeSeconds - NavStart.LastTimeUsed < 30))
-		NavStart=None;
+	if ((NavStart != None) && (Level.TimeSeconds - NavStart.LastTimeUsed < 30))
+		NavStart = None;
 
 
-	if(NavStart != None)
+	if (NavStart != None)
 	{
 		NavStart.LastTimeUsed = Level.TimeSeconds;
 		return NavStart.Location;
 	}
 	else
 	{
-		NavStart=None;
+		NavStart = None;
 
 		//find the nearest nav point
-		foreach RadiusActors ( class'NavigationPoint', tmpNav, 1000, Characters[0].Pawn.Location ) 
+		foreach RadiusActors (class'NavigationPoint', tmpNav, 1000, Characters[0].Pawn.Location) 
 		{
-			if(NavStart != None)
+			if (NavStart != None)
 			{
 
-				if( VSize(Characters[0].pawn.Location - tmpNav.Location) < BestDistance )
+				if (VSize(Characters[0].Pawn.Location - tmpNav.Location) < BestDistance)
 				{
-					if(Level.TimeSeconds - NavStart.LastTimeUsed > 30)
+					if (Level.TimeSeconds - NavStart.LastTimeUsed > 30)
 					{
-						NavStart=tmpNav;
-						BestDistance = VSize(Characters[0].pawn.Location - tmpNav.Location);
+						NavStart = tmpNav;
+						BestDistance = VSize(Characters[0].Pawn.Location - tmpNav.Location);
 					}
 				}
 
 			}
 			else
 			{
-				if(Level.TimeSeconds - tmpNav.LastTimeUsed > 30)
+				if (Level.TimeSeconds - tmpNav.LastTimeUsed > 30)
 				{
-					NavStart=tmpNav;
-					BestDistance = VSize(Characters[0].pawn.Location - tmpNav.Location);
+					NavStart = tmpNav;
+					BestDistance = VSize(Characters[0].Pawn.Location - tmpNav.Location);
 				}
 			}
 		}
 
-		if(NavStart != None)
+		if (NavStart != None)
 		{
 			NavStart.LastTimeUsed = Level.TimeSeconds;
 			return NavStart.Location;
@@ -2961,7 +2961,7 @@ function vector GetNearestNavPointLocation()
 		else
 		{
 			log("WARNING: No point was found for SEARCH_CHEAT after charging the player: Player location was selected.");
-			//return Characters[0].pawn.Location;
+			//return Characters[0].Pawn.Location;
 			return vect(0,0,0);
 		}
 
@@ -2996,34 +2996,34 @@ function CheckAlarmProximity(int _CharacterIndex, name JumpLabel, optional float
 
     AI = EAIController(Characters[_CharacterIndex]);
 
-	PanelFound=false;    
+	PanelFound = false;    
 
-	if(MaxDist == 0)
+	if (MaxDist == 0)
     {
 		MaxDist = 1500.0f;
     }
 
 	//check to be sure that we are not already responding to an alarm
-	if(EGroupAI(Owner) != None)
+	if (EGroupAI(Owner) != None)
 	{
-		if((EGroupAI(Owner).CurrentAlarm == None) && (!EGroupAI(Owner).bGroupRunningForAlarm))
+		if ((EGroupAI(Owner).CurrentAlarm == None) && (!EGroupAI(Owner).bGroupRunningForAlarm))
 		{
-			if(AI.epawn.ForceAlarmPanelRun != None)
+			if (AI.ePawn.ForceAlarmPanelRun != None)
 			{
-				BestPanel = AI.epawn.ForceAlarmPanelRun;
+				BestPanel = AI.ePawn.ForceAlarmPanelRun;
 
 				//don't want to trigger the same alarm twice
-				if(BestPanel.Alarm.bAlreadyTriggered)
+				if (BestPanel.Alarm.bAlreadyTriggered)
 					return;
 
 				OffSet = (vect(50,0,0) >> BestPanel.Rotation);
 				OffSet.Z = 0;
 
 				Pos = BestPanel.Location;
-				Pos.Z = Characters[_CharacterIndex].pawn.Location.Z;
+				Pos.Z = Characters[_CharacterIndex].Pawn.Location.Z;
 
 				//set the group to be sure nobody else will try to run for an alarm
-				EGroupAI(Owner).bGroupRunningForAlarm=true;
+				EGroupAI(Owner).bGroupRunningForAlarm = true;
 
 				TriggerEvent.EventLocation = Pos + OffSet ;
 				TriggerEvent.EventTarget = BestPanel;
@@ -3034,13 +3034,13 @@ function CheckAlarmProximity(int _CharacterIndex, name JumpLabel, optional float
 		
 
 
-			foreach RadiusActors ( class'EAlarmPanelObject', Panel, MaxDist, Characters[_CharacterIndex].pawn.Location ) 
+			foreach RadiusActors (class'EAlarmPanelObject', Panel, MaxDist, Characters[_CharacterIndex].Pawn.Location) 
 			{
 				//check if the Z is acceptable
-				if( Abs(Panel.Location.Z - Characters[_CharacterIndex].pawn.Location.Z) <  Characters[_CharacterIndex].pawn.CollisionHeight)
+				if (Abs(Panel.Location.Z - Characters[_CharacterIndex].Pawn.Location.Z) <  Characters[_CharacterIndex].Pawn.CollisionHeight)
 				{	
 					//check if it's the first panel
-					if( !PanelFound && !Panel.Alarm.bAlreadyTriggered )
+					if (!PanelFound && !Panel.Alarm.bAlreadyTriggered)
 					{
 						NavStart = AI.EPawn.GetAnchor();
 						NavEnd = AI.EPawn.GetAnchorForLocation(Panel.Location + (vect(50,0,0) >> Panel.Rotation));
@@ -3057,7 +3057,7 @@ function CheckAlarmProximity(int _CharacterIndex, name JumpLabel, optional float
 					}
 					else
 					{
-						if(!Panel.Alarm.bAlreadyTriggered)
+						if (!Panel.Alarm.bAlreadyTriggered)
 						{
 							NavStart = AI.EPawn.GetAnchor();
 							NavEnd = AI.EPawn.GetAnchorForLocation(Panel.Location + (vect(50,0,0) >> Panel.Rotation));
@@ -3066,12 +3066,12 @@ function CheckAlarmProximity(int _CharacterIndex, name JumpLabel, optional float
 
 							plog("TempDist"@TempDist);
 
-							if((TempDist != 0) || (NavStart == NavEnd))
+							if ((TempDist != 0) || (NavStart == NavEnd))
 							{
-								if(BestDistance > TempDist)
+								if (BestDistance > TempDist)
 								{
 									BestDistance = TempDist;
-									BestPanel=Panel;
+									BestPanel = Panel;
 								}
 							}
 						}
@@ -3080,27 +3080,27 @@ function CheckAlarmProximity(int _CharacterIndex, name JumpLabel, optional float
 			}
             
 
-			if(PanelFound)
+			if (PanelFound)
 			{
                 // Ignore Panel if Sam is closer to the panel than we are.
 
-                NavStart = AI.EPawn.GetAnchorForLocation(Characters[0].pawn.Location);
+                NavStart = AI.EPawn.GetAnchorForLocation(Characters[0].Pawn.Location);
                 NavEnd = AI.EPawn.GetAnchorForLocation(BestPanel.Location + (vect(50,0,0) >> BestPanel.Rotation));
                 TempDist = AI.EPawn.ArePointsConnected(NavStart, NavEnd);
 
-                if(((BestDistance > TempDist) && (TempDist != 0)) || (NavStart == NavEnd))
+                if (((BestDistance > TempDist) && (TempDist != 0)) || (NavStart == NavEnd))
                 {
                     plog("Ignoring Panel because Sam is closer to the panel than we are");
                     plog("my dist : " $ BestDistance@"sams dist : "$ TempDist);
                     return;
                 }      
 
-                EZIPanel = EZoneInfo(BestPanel.region.zone);
+                EZIPanel = EZoneInfo(BestPanel.Region.Zone);
 
                 // Check if EZoneInfo doesn't want us to go for alarm if player and I are in same zone.
-                if((EZIPanel != None) && !EZIPanel.bUseAlarmIfPlayerIsInZone)
+                if ((EZIPanel != None) && !EZIPanel.bUseAlarmIfPlayerIsInZone)
                 {
-                    if(EZIPanel == Characters[0].pawn.region.zone)
+                    if (EZIPanel == Characters[0].Pawn.Region.Zone)
                     {
                         return;
                     }
@@ -3108,17 +3108,17 @@ function CheckAlarmProximity(int _CharacterIndex, name JumpLabel, optional float
                 }
 
 				//don't want to trigger the same alarm twice
-				if(BestPanel.Alarm.bAlreadyTriggered)
+				if (BestPanel.Alarm.bAlreadyTriggered)
 					return;
 
 				OffSet = (vect(50,0,0) >> BestPanel.Rotation);
 				OffSet.Z = 0;
 
 				Pos = BestPanel.Location;
-				Pos.Z = Characters[_CharacterIndex].pawn.Location.Z;
+				Pos.Z = Characters[_CharacterIndex].Pawn.Location.Z;
 
 				//set the group to be sure nobody else will try to run for an alarm
-				EGroupAI(Owner).bGroupRunningForAlarm=true;
+				EGroupAI(Owner).bGroupRunningForAlarm = true;
 
 				TriggerEvent.EventLocation = Pos + OffSet ;
 				TriggerEvent.EventTarget = BestPanel;
@@ -3141,7 +3141,7 @@ function SendMasterOutOfRadius(actor MasterPawn, vector SlaveLocation)
 
     // One AI_MASTER_OUT_OF_RADIUS to Master every 5 seconds, max
     // It calls EFindPath everytime so it's sorta FPS-taxing
-	if((AI != None) && ((Level.TimeSeconds - fLastMasterOutOfRad) > 5.0f))
+	if ((AI != None) && ((Level.TimeSeconds - fLastMasterOutOfRad) > 5.0f))
 	{
 		plog("SendMasterOutOfRadius - AI_MASTER_OUT_OF_RADIUS send to master");
 
@@ -3164,11 +3164,11 @@ function BroadcastToMaster()
 {
 	local EAIController AI;
 
-	if( EAIController(Characters[1]).Master != None)
+	if (EAIController(Characters[1]).Master != None)
 	{
 	AI = EAIController(EAIController(Characters[1]).Master.controller);
 	
-		if( AI != None && AI.group != None )
+		if (AI != None && AI.group != None)
 	{
 		AI.group.Broadcast(EAIController(Characters[1]),BC_BACKUP_RADIO_ATTACK,Characters[0].Pawn.Location,true);
 	}
@@ -3186,10 +3186,10 @@ function CheckIfPeeking(int _CharacterIndex,name JumpLabel)
 
 	AI = EAIController(Characters[_CharacterIndex]);
 
-	if(AI.TakenPoint != None)
+	if (AI.TakenPoint != None)
 	{
-		//if( VSize(AI.TakenPoint.Location - AI.EPawn.Location) <=  (AI.EPawn.CollisionRadius*2) )
-		if( NavigationPoint(AI.TakenPoint).bCoverPoint)
+		//if (VSize(AI.TakenPoint.Location - AI.EPawn.Location) <=  (AI.EPawn.CollisionRadius * 2))
+		if (NavigationPoint(AI.TakenPoint).bCoverPoint)
 			GotoPatternLabel(JumpLabel);
 	}
 }
@@ -3208,18 +3208,18 @@ function CheckTouchingCoverPoints(int _CharacterIndex,name JumpLabel)
 
 	ForEach AI.EPawn.TouchingActors(class'NavigationPoint', CoverPoint)
 	{
-		if((CoverPoint.bCoverPoint) && (AI.TakenPoint != CoverPoint))
+		if ((CoverPoint.bCoverPoint) && (AI.TakenPoint != CoverPoint))
 		{
 			if (CoverPoint.taken)
 				continue;
 
-			if( VSize(CoverPoint.Location - AI.EPawn.Location) <  (AI.EPawn.CollisionRadius*2) )
+			if (VSize(CoverPoint.Location - AI.EPawn.Location) <  (AI.EPawn.CollisionRadius * 2))
 				continue;
 
-			if(AI.EvaluateCorner(CoverPoint,Characters[0].pawn.Location) > CA_OFF)
+			if (AI.EvaluateCorner(CoverPoint,Characters[0].Pawn.Location) > CA_OFF)
 			{
-				AI.LockNavPoint(CoverPoint );
-				CoverLocation=CoverPoint.Location;
+				AI.LockNavPoint(CoverPoint);
+				CoverLocation = CoverPoint.Location;
 				GotoPatternLabel(JumpLabel);
 				return;
 			}
@@ -3235,7 +3235,7 @@ function CheckTouchingCoverPoints(int _CharacterIndex,name JumpLabel)
 -----------------------------------------------------------------------------*/
 function CheckDistanceGreaterThan(int iIndex, name JumpLabel, float Distance)
 {
-	if( VSize(Characters[0].pawn.Location - Characters[iIndex].pawn.Location) > Distance )
+	if (VSize(Characters[0].Pawn.Location - Characters[iIndex].Pawn.Location) > Distance)
 		GotoPatternLabel(JumpLabel);
 }
 
@@ -3247,11 +3247,11 @@ function CheckDistanceGreaterThan(int iIndex, name JumpLabel, float Distance)
 function SetFlashLight(int iIndex, bool TurnOn)
 {
 	local EPawn ePawn;
-	ePawn = EPawn(Characters[iIndex].pawn);
+	ePawn = EPawn(Characters[iIndex].Pawn);
 	
-	if( ePawn == None )
+	if (ePawn == None)
 		Log(self$" ERROR: Invalid Pawn in SetFlashLight");
-	if( !ePawn.MayUseGunLight )
+	if (!ePawn.MayUseGunLight)
 		Log("WARNING: Pattern Pawn is set to toggle flashLight with MayUseGunLight set to false"@self@ePawn);
 	
 	ePawn.ToggleHeadLight(TurnOn);
@@ -3268,23 +3268,23 @@ function KillNPC(int iIndex, optional bool bJustKnockOut, optional bool bDontAdd
 
     //log("KillNPC"@iIndex@bJustKnockOut@bDontAddToChgActLst);
 
-	EP = EPawn(Characters[iIndex].pawn);
+	EP = EPawn(Characters[iIndex].Pawn);
 	// Joshua - NPCs killed or knocked with the KillNPC will not affect the Stealth Rating
 	EAIController(EP.Controller).bNotInStats = true;
 
     if (EP != None)
     {
-        if(!bJustKnockOut)
+        if (!bJustKnockOut)
         {
             // Kill him
-			EP.bKeepNPCAlive=false;
-            EP.TakeDamage( 20000, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), None);
+			EP.bKeepNPCAlive = false;
+            EP.TakeDamage(20000, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), None);
         }
         else
         {
             // Just knock out so the dude is unconscious
             EP.bKnockedByPlayer = !bDontAddToChgActLst;
-            EP.TakeDamage(EP.health/2, None, EP.Location, Vect(0,0,0), Vect(0,0,0), class'EKnocked', EP.P_Head);        
+            EP.TakeDamage(EP.Health / 2, None, EP.Location, Vect(0,0,0), Vect(0,0,0), class'EKnocked', EP.P_Head);
         }
     }
 }
@@ -3304,12 +3304,12 @@ function Teleport(int iIndex, Name Tag)
 	local vector HitLocation, HitNormal, endTrace;
 	
 
-	if(Tag != '')
+	if (Tag != '')
 	{
 		Target = GetMatchingActor(Tag);
 	}
 
-	if(iIndex > 0)
+	if (iIndex > 0)
 	{
 		//teleport one NPC
 		EAI = EAIController(Characters[iIndex]);
@@ -3320,16 +3320,16 @@ function Teleport(int iIndex, Name Tag)
 			endTrace.Z -= 150;
 
 			//be sure the location is OK
-			if( EAI.ePawn.Trace(HitLocation, HitNormal, endTrace, Target.Location, false, EAI.ePawn.GetExtent()) != None)
+			if (EAI.ePawn.Trace(HitLocation, HitNormal, endTrace, Target.Location, false, EAI.ePawn.GetExtent()) != None)
 			{
-				for(i=0; i<10; i++)
+				for (i = 0; i < 10; i++)
 				{
 					 EAI.ePawn.VisAverageArray[i] = 50;
 				}
 
 				EAI.ePawn.SetLocation(HitLocation);
 
-                if(Target.bDirectional)
+                if (Target.bDirectional)
                 {
                     EAI.ePawn.SetRotation(Target.Rotation);
                 }
@@ -3344,12 +3344,12 @@ function Teleport(int iIndex, Name Tag)
 	else
 	{
 		//teleport the player
-		if(Target != None)
+		if (Target != None)
 		{
 			plog("Teleporting the player...");
 
-			Characters[0].pawn.SetLocation(Target.Location);
-			Characters[0].pawn.SetRotation(Target.Rotation);
+			Characters[0].Pawn.SetLocation(Target.Location);
+			Characters[0].Pawn.SetRotation(Target.Rotation);
 			Characters[0].SetRotation(Target.Rotation);
 		}
 	}
@@ -3364,10 +3364,10 @@ function Teleport(int iIndex, Name Tag)
 function LevelChange(string URL)
 {
 	//don't travel if SAM is dead
-	if(Characters[0].pawn.health > 0)
+	if (Characters[0].Pawn.Health > 0)
 	{
 		// Joshua - Bug fix: Don't travel if the player has reached alarm limit
-		if(EchelonLevelInfo(Level).bIgnoreAlarmStage || EchelonLevelInfo(Level).AlarmStage != 4 ||
+		if (EchelonLevelInfo(Level).bIgnoreAlarmStage || EchelonLevelInfo(Level).AlarmStage != 4 ||
 		  (EchelonGameInfo(Level.Game).bEliteMode && EchelonLevelInfo(Level).AlarmStage != 3))
 		{
 			ConsoleCommand("TRAVEL MAPNAME="$URL@"ITEMS=TRUE");
@@ -3405,11 +3405,11 @@ function AddToInventory(Name Tag, name JumpLabel)
 	Item = EInventoryItem(TagActor);
 
     // Add to inventory
-	if(Item != None)
+	if (Item != None)
 	{
 		// If it's a EGameplayObject, just pick it up and leave in hands 
 		// else, if it's an inventoryItem and enough space in inventory
-		if( ! EPawn(EPC.Pawn).FullInventory.CanAddItem(Item) )
+		if (! EPawn(EPC.Pawn).FullInventory.CanAddItem(Item))
 		{
 			EPC.SendTransmissionMessage(Localize("Transmission", "NoPickUp", "Localization\\HUD") $ Localize("InventoryItem", Item.ItemName, "Localization\\HUD"), TR_INVENTORY);
 			GotoPatternLabel(JumpLabel);
@@ -3464,7 +3464,7 @@ function ToggleLights(Name oSwitchTag, bool bTurnOn)
 //------------------------------------------------------------------------
 function ForceUpdatePlayerLocation(int iIndex)
 {
-	EAIController(Characters[iIndex]).UpdatePlayerLocation( Characters[0].pawn, false, true );
+	EAIController(Characters[iIndex]).UpdatePlayerLocation(Characters[0].Pawn, false, true);
 }
 
 //--------------------------------------------------[Frederic Blais]-----
@@ -3478,7 +3478,7 @@ function int GetSmellDeltaTime(int SmellIndexFound)
 
 	PC = EPlayerController(Characters[0]);
 
-	if(PC.CurrentSmellIndex > SmellIndexFound)
+	if (PC.CurrentSmellIndex > SmellIndexFound)
 	{
 		return (PC.CurrentSmellIndex - SmellIndexFound);
 	}	
@@ -3500,34 +3500,34 @@ function CheckSmellPoints(int Index, name JumpLabel)
 	local EAIController AI;
 	local EPlayerController PC;
 
-	BestSmellPoint=-1;
-	BestDeltaTime=20;
+	BestSmellPoint = -1;
+	BestDeltaTime = 20;
 
 	AI = EAIController(characters[Index]);
 	PC = EPlayerController(Characters[0]);
 
 	//check if we are intersecting with smelling trail
-	for(i=0; i<20; i++)
+	for (i = 0; i < 20; i++)
 	{
 		SmellPointRadius = 800; // - (GetSmellDeltaTime(i) * 10);
 
-		if(PC.SmellArray[i] == vect(0,0,0))
+		if (PC.SmellArray[i] == vect(0,0,0))
 			continue;
 
 		//check we are intersecting
-		if( (VSize(PC.SmellArray[i] - AI.EPawn.Location) < ( AI.EPawn.SmellRadius + SmellPointRadius)) &&
-			(VSize(PC.SmellArray[i] - AI.EPawn.Location) > 35) )
+		if ((VSize(PC.SmellArray[i] - AI.EPawn.Location) < (AI.EPawn.SmellRadius + SmellPointRadius)) &&
+			(VSize(PC.SmellArray[i] - AI.EPawn.Location) > 35))
 	   {
 		   //check if it's the best choice
-		   if(BestDeltaTime >= GetSmellDeltaTime(i))
+		   if (BestDeltaTime >= GetSmellDeltaTime(i))
 		   {
-				BestSmellPoint=i;
+				BestSmellPoint = i;
 				BestDeltaTime = GetSmellDeltaTime(i);
 		   }
 	   }
 	}
 
-	if(BestSmellPoint >= 0)
+	if (BestSmellPoint >= 0)
 	{
 		AlertLocation = PC.SmellArray[BestSmellPoint];
 		GotoPatternLabel(JumpLabel);
@@ -3549,10 +3549,10 @@ function RemoveUsedSmellPoint(int Index)
 	AI = EAIController(characters[Index]);
 	PC = EPlayerController(Characters[0]);
 
-    for(i = 0; i < 20; i++)
+    for (i = 0; i < 20; i++)
 	{
         // Check if it was that point the trigered the searcj
-        if(AlertLocation == PC.SmellArray[i])
+        if (AlertLocation == PC.SmellArray[i])
         {
             // Remove the point from the smell point array
             PC.SmellArray[i] = vect(0,0,0);
@@ -3569,7 +3569,7 @@ function LockDoor(Name matchTag, bool IsLocked, bool IsUsable)
 {
     local EDoorMover  Door;
 
-    if(matchTag != '')
+    if (matchTag != '')
     {
 		foreach DynamicActors(class'EDoorMover', Door)
         {
@@ -3591,7 +3591,7 @@ function LockDoor(Name matchTag, bool IsLocked, bool IsUsable)
 //------------------------------------------------------------------------
 function SendNPCTransmission(string Text, sound SoundData)
 {
-	EMainHUD(EPlayerController(Characters[0]).myHUD).CommunicationBox.AddTransmission( self, TR_NPCS,Text, SoundData);
+	EMainHUD(EPlayerController(Characters[0]).myHUD).CommunicationBox.AddTransmission(self, TR_NPCS,Text, SoundData);
 }
 
 
@@ -3608,13 +3608,13 @@ function CheckIfDirectLine(int iIndex, Actor target,name JumpLabel)
 	local Material HitMaterial;
    
     //should be NPC_SHOT 
-	//Result = Characters[iIndex].pawn.Trace(HitLocation,HitNormal,target.Location,Characters[iIndex].pawn.Location,true);
+	//Result = Characters[iIndex].Pawn.Trace(HitLocation,HitNormal,target.Location,Characters[iIndex].Pawn.Location,true);
 
-	//Result = Characters[iIndex].pawn.TraceBone(PillTag, HitLocation, HitNormal, target.Location, Characters[iIndex].pawn.Location, HitMaterial, false);
-    if( Characters[iIndex].pawn.TraceTarget(target.Location, Characters[iIndex].pawn.Location,target,false,false,true) )
+	//Result = Characters[iIndex].Pawn.TraceBone(PillTag, HitLocation, HitNormal, target.Location, Characters[iIndex].Pawn.Location, HitMaterial, false);
+    if (Characters[iIndex].Pawn.TraceTarget(target.Location, Characters[iIndex].Pawn.Location,target,false,false,true))
         GotoPatternLabel(JumpLabel);
 
-	//if(Result == target)
+	//if (Result == target)
 	//	GotoPatternLabel(JumpLabel);
 }
 
@@ -3658,23 +3658,23 @@ function CheckNearestArmedNPC(name JumpLabel)
 
     NearestArmedNPC = None; // Reset
 
-	foreach RadiusActors ( class'EAIPawn', P, 2500, Characters[1].pawn.Location )
+	foreach RadiusActors (class'EAIPawn', P, 2500, Characters[1].Pawn.Location)
 	{            
-		if( (P.Controller != None)
+		if ((P.Controller != None)
          && (EAIController(P.Controller).Pattern.GetStateName() != 'attack') 
          && (!P.bDisableAI)  
          && (P.IsA('EAIProfessional')))
 		{
 			NavEnd = Epawn(AI.Pawn).GetAnchorForLocation(P.Location);
 
-			if((NavEnd != None) && (NavStart != None))
+			if ((NavEnd != None) && (NavStart != None))
 			{
 				fTempDist = Epawn(AI.Pawn).ArePointsConnected(NavStart, NavEnd); 
 			}
         
-			if(fTempDist != 0)
+			if (fTempDist != 0)
 			{
-				if((fBestDist == -1) || (fTempDist < fBestDist))
+				if ((fBestDist == -1) || (fTempDist < fBestDist))
 				{
 					//log("Temp nearest armed"@P);
 					NearestArmedNPC = P;
@@ -3707,7 +3707,7 @@ function CheckSwitchAlreadyLocked(int CharIndex, Actor ASwitch)
 
     EGO = EGameplayObject(ASwitch);
 
-    if(EGO == None)
+    if (EGO == None)
     {
         log(ASwitch $ "is Not a EGameplayObject");
         return;
@@ -3717,12 +3717,12 @@ function CheckSwitchAlreadyLocked(int CharIndex, Actor ASwitch)
     {
         AI = EAIController(C);
 
-        if(AI != None)
+        if (AI != None)
         {
 
-            for(i = 0; i < AI.LockedSwitches.Length; i++)
+            for (i = 0; i < AI.LockedSwitches.Length; i++)
             {
-                if(AI.LockedSwitches[i] == EGO)
+                if (AI.LockedSwitches[i] == EGO)
                 {
                     return;
                 }
@@ -3742,14 +3742,14 @@ function CheckSwitchAlreadyLocked(int CharIndex, Actor ASwitch)
 -----------------------------------------------------------------------------*/
 function SendUnrealEvent(name EventName)
 {
-	if(EventName == 'SaveWhoAreYou' && EPlayerController(Characters[0]).bShouldTurnFast)
+	if (EventName == 'SaveWhoAreYou' && EPlayerController(Characters[0]).bShouldTurnFast)
 	{
 		GotoState(, 'KillNikoAndPlayerBecauseMoved');
 	}
 	else
 	{
 		log("Event "$EventName$" sent...");
-		Super.TriggerEvent(EventName, self, Characters[0].pawn);
+		Super.TriggerEvent(EventName, self, Characters[0].Pawn);
 	}
 }
 
@@ -3765,31 +3765,31 @@ function CinCamera(int bEndCinematic, optional Name pos, optional Name target, o
 
 	Epc = EPlayerController(Characters[0]);
 
-	if( bEndCinematic == 0 )
+	if (bEndCinematic == 0)
 	{
 		// Stop player control //
 		// Try to catch whether the cinematic should be launched
-		if( !Epc.ToggleCinematic(self, true) )
+		if (!Epc.ToggleCinematic(self, true))
 		{
 			End();
 			return;
 		}
 
 	    // Move the camera //
-        if( pos != '' )
+        if (pos != '')
 		{
 			aPos = GetMatchingActor(pos);
-            if( aPos != None )
+            if (aPos != None)
                 Epc.SetLocation(aPos.Location);
 		}
 
         // Rotate the camera //
-        if( target != '' )
+        if (target != '')
         {
             aTarget = GetMatchingActor(target);
-            if( aTarget != None )
+            if (aTarget != None)
             {
-                if( aPos != None )
+                if (aPos != None)
                     Epc.SetRotation(Rotator(aTarget.Location - aPos.Location));
                 else
                     Epc.SetRotation(Rotator(aTarget.Location - Epc.Location));
@@ -3811,7 +3811,7 @@ function AlarmNPC(Pawn Target)
 {
     
 
-    if((TriggerEvent != None) && (Target != None))
+    if ((TriggerEvent != None) && (Target != None))
     {
 	    TriggerEvent.Reset();
 	    TriggerEvent.EventLocation = AlertLocation;	
@@ -3846,7 +3846,7 @@ function bool CheckGoalPriority(byte _priority)
 {
 	local EGoal CurGoal;
 
-	if( EAIController(Characters[1]).m_pGoalList.CheckGoalPriority(_priority) )
+	if (EAIController(Characters[1]).m_pGoalList.CheckGoalPriority(_priority))
 		return true;
 	else
 		return false;
@@ -3871,7 +3871,7 @@ function SendPatternEvent(name GroupTag, name JumpLabel)
 {
 	local EGroupAI Group;
 
-	foreach DynamicActors( class'EGroupAI', Group, GroupTag)
+	foreach DynamicActors(class'EGroupAI', Group, GroupTag)
 	{
 		Group.SendJumpEvent(JumpLabel,false,false);
 		break; 
@@ -3888,15 +3888,15 @@ function StartAlarm(name AlarmTag, optional int StartAlarm)
 {
 	local EAlarm Alarm;
 
-	foreach DynamicActors( class'EAlarm', Alarm, AlarmTag)
+	foreach DynamicActors(class'EAlarm', Alarm, AlarmTag)
 	{
-		if(StartAlarm > 0)
+		if (StartAlarm > 0)
 		{
-			Alarm.EnableAlarm(Characters[0].pawn,None);
+			Alarm.EnableAlarm(Characters[0].Pawn,None);
 		}
 		else
 		{
-			Alarm.DisableAlarm(Characters[0].pawn);
+			Alarm.DisableAlarm(Characters[0].Pawn);
 		}
 
 		break; 
@@ -3910,7 +3910,7 @@ function StartAlarm(name AlarmTag, optional int StartAlarm)
 -----------------------------------------------------------------------------*/
 function MakeDamage(Pawn _Target, int _dammage)
 {
-	_Target.TakeDamage( _dammage, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), None);
+	_Target.TakeDamage(_dammage, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), None);
 }
 
 /*---------------------------------[Frederic Blais - 15 Feb 2002]---------
@@ -3921,22 +3921,22 @@ function MakeDamage(Pawn _Target, int _dammage)
 -----------------------------------------------------------------------------*/
 function ResetNPC(int _index, bool bResetInteraction,  optional name _tag)
 {
-	//if(bAll)
+	//if (bAll)
 	//{
-		if(Characters[_index] != None)
+		if (Characters[_index] != None)
 		{
 			//reset health
-			Characters[_index].pawn.health  = EAIController(Characters[_index]).epawn.InitialHealth;
+			Characters[_index].Pawn.Health  = EAIController(Characters[_index]).ePawn.InitialHealth;
 
 			// Reset Interaction
-			if( bResetInteraction && EPawn(Characters[_index].Pawn).Interaction != None )
+			if (bResetInteraction && EPawn(Characters[_index].Pawn).Interaction != None)
 				ENpcZoneInteraction(EPawn(Characters[_index].Pawn).Interaction).ResetConversation();
 
 			//avoid NPCs burning
 			EAIController(Characters[_index]).ePawn.AttenuateFire(1);
 
 			//reset the gun state
-			if(EAIController(Characters[_index]).ePawn.CurrentWeapon != None)
+			if (EAIController(Characters[_index]).ePawn.CurrentWeapon != None)
 				EAIController(Characters[_index]).ePawn.CurrentWeapon.GotoState('s_Selected');
 
 			EAIController(Characters[_index]).ResetGoalList();
@@ -3952,25 +3952,25 @@ function ResetNPC(int _index, bool bResetInteraction,  optional name _tag)
 			EAIController(Characters[_index]).ePawn.GotoState('DefaultState'); 
 
 			//reset controller state
-			if(!EAIController(Characters[_index]).epawn.bKeepNPCAlive)
+			if (!EAIController(Characters[_index]).ePawn.bKeepNPCAlive)
 			{
             if ((EAIController(Characters[_index]).GetStateName() == 's_Unconscious')
             ||  (EAIController(Characters[_index]).GetStateName() == 's_Grabbed')
             ||  ((EAIController(Characters[_index]).GetStateName() == 's_Carried') 
-              && (EAIController(Characters[_index]).pawn.health > 0)))
+              && (EAIController(Characters[_index]).Pawn.Health > 0)))
             {
 			    EAIController(Characters[_index]).GotoState('s_Groggy');
             }
 			}
 			else
 			{
-				if(EAIController(Characters[_index]).group.scriptedpattern != None)
+				if (EAIController(Characters[_index]).group.scriptedpattern != None)
 				{
 					EAIController(Characters[_index]).group.scriptedpattern.bDisableMessages = false;
 					EAIController(Characters[_index]).group.scriptedpattern.bDisableEventTrigger = false;
 				}
 
-				EAIController(Characters[_index]).bNotResponsive=false;
+				EAIController(Characters[_index]).bNotResponsive = false;
 				EAIController(Characters[_index]).GotoState('s_default');
 			}
 
@@ -3979,7 +3979,7 @@ function ResetNPC(int _index, bool bResetInteraction,  optional name _tag)
 
 
 			//put the NPC back in the pattern
-			if(EAIController(Characters[_index]).group !=  None)
+			if (EAIController(Characters[_index]).group !=  None)
 			{
 				EAIController(Characters[_index]).group.AddAIMember(EAIController(Characters[_index]));
 			}
@@ -3996,7 +3996,7 @@ function ResetNPC(int _index, bool bResetInteraction,  optional name _tag)
 	//}
 	/*else
 	{
-		Characters[_index].pawn.health  = 100;
+		Characters[_index].Pawn.Health  = 100;
 	}*/
 }
 
@@ -4007,11 +4007,11 @@ function ResetNPC(int _index, bool bResetInteraction,  optional name _tag)
 -----------------------------------------------------------------------------*/
 function LaserMicSession(int bEndLaserMic, optional Name target, optional float SuccessRate, optional Name SuccessLabel)
 {
-	if(bEndLaserMic > 0)
+	if (bEndLaserMic > 0)
 	{
 		plog("Laser Mic Session Ended.  Success Requested: "$SuccessRate$" Session Success: "$SessionProgress);
 		// validate stuff
-		if(SuccessRate <= SessionProgress)
+		if (SuccessRate <= SessionProgress)
 		{
 			//lasermic session is a succes
 			MicrophoneMover.PlaySound(Sound'FisherEquipement.Play_LaserRecordOK', SLOT_Interface);
@@ -4027,14 +4027,14 @@ function LaserMicSession(int bEndLaserMic, optional Name target, optional float 
 	}
 	else
 	{
-		SessionProgress=0;
+		SessionProgress = 0;
 		LaserMicInit = true;
 
 		SetLaserMicSession(true);
 
-		if( MicrophoneMover != None )
+		if (MicrophoneMover != None)
 			Log(self$" ERROR: MicrophoneMover should be None for Pattern.");
-		else if( target != '' )
+		else if (target != '')
 
 		{
 			MicrophoneMover = ELaserMicMover(GetMatchingActor(target));
@@ -4046,7 +4046,7 @@ function LaserMicSession(int bEndLaserMic, optional Name target, optional float 
 
 //------------------------------------------------------------------------
 // Description		
-//		Return touching Mic, use if( GetTouchingMic() == None ) to check
+//		Return touching Mic, use if (GetTouchingMic() == None) to check
 //		if a Micro is touching
 //------------------------------------------------------------------------
 event bool MicIsTouchingSession()
@@ -4062,7 +4062,7 @@ event bool MicIsTouchingSession()
 //------------------------------------------------------------------------
 function int AddChangeAndSuggestBehavior(int _CharacterIndex, Vector Location, EChangeType ChangeType)
 {
-    if(EAIController(Characters[_CharacterIndex]).Group != None)
+    if (EAIController(Characters[_CharacterIndex]).Group != None)
     {
         return EAIController(Characters[_CharacterIndex]).Group.ChangeHistory_AddChangeAndSuggestBehavior(Location, ChangeType);
     }
@@ -4082,21 +4082,21 @@ function CheckFireMode(int iSnipeMode, int iBurstMode, Name JumpLabel)
 
     EPC = EPlayerController(Characters[0]);
 
-    if(EPC == None)
+    if (EPC == None)
     {
         return;
     }
 
     ESG = ESniperGun(EPC.MainGun);
 
-    if(ESG == None)
+    if (ESG == None)
     {
         return;
     }
 
     if (iSnipeMode != -1)
     {
-        if(((iSnipeMode == 1) && (!ESG.bSniperMode)) || ((iSnipeMode == 0) && (ESG.bSniperMode))) 
+        if (((iSnipeMode == 1) && (!ESG.bSniperMode)) || ((iSnipeMode == 0) && (ESG.bSniperMode))) 
         {
             GotoPatternLabel(JumpLabel); 
         }
@@ -4104,7 +4104,7 @@ function CheckFireMode(int iSnipeMode, int iBurstMode, Name JumpLabel)
 
     if (iBurstMode != -1)
     {
-        if(((iBurstMode == 1) && (ESG.eROFMode != ROF_Single)) || ((iBurstMode == 0) && (ESG.eROFMode != ROF_Auto))) 
+        if (((iBurstMode == 1) && (ESG.eROFMode != ROF_Single)) || ((iBurstMode == 0) && (ESG.eROFMode != ROF_Auto))) 
         {
             GotoPatternLabel(JumpLabel);
         }    
@@ -4126,7 +4126,7 @@ function AddRecon(class<ERecon> ReconClassName)
 
     EPC = EPlayerController(Characters[0]);	
 
-	if(EPC != None)
+	if (EPC != None)
 	{
 		EPC.AddRecon(ReconClassName);
 	}
@@ -4145,7 +4145,7 @@ function CheckIfPlayerUnseenWithin(float fMinimumUnseenTime, Name JumpLabel)
 
     EAIC = EAIController(Characters[1]);
 
-    if(fMinimumUnseenTime == 0.0f)
+    if (fMinimumUnseenTime == 0.0f)
     {
         return;
     }
@@ -4213,7 +4213,7 @@ function SetHideGoal(int _CharacterIndex)
     // Find NPC's anchor
     oNP = EPawn(Characters[_CharacterIndex].Pawn).GetAnchorForLocation(Characters[_CharacterIndex].Pawn.Location);
     
-    if((oNP != None) && (oNP.bDirectional))
+    if ((oNP != None) && (oNP.bDirectional))
     {
         // Anchor is directional, use its direction to hide
         oFocus = Characters[_CharacterIndex].Pawn.Location + (Vector(oNP.Rotation) * 300.0f);
@@ -4240,9 +4240,9 @@ function QuickSaveLoad(bool bSave, bool bFade)
 
     EPC = EPlayerController(Characters[0]);
 	
-    if(bSave)
+    if (bSave)
     {
-		if(EPC != None)
+		if (EPC != None)
 		{	
 			EPC.bAutoSaveLoad = true;
 			EPC.bSavingTraining = true;
@@ -4255,7 +4255,7 @@ function QuickSaveLoad(bool bSave, bool bFade)
     }
     else
     {
-		if(EPC != None)		
+		if (EPC != None)		
 		{		
 			EPC.bAutoSaveLoad = true;
 			EPC.bLoadingTraining = true;
@@ -4280,7 +4280,7 @@ function SetAlarmStage(int iNewStage)
     {
         iNewStage = 2;
     }
-    if((iNewStage >= 0) && (iNewStage <= 3))
+    if ((iNewStage >= 0) && (iNewStage <= 3))
     {
         EchelonLevelInfo(Level).AlarmStage = iNewStage;
     }
@@ -4302,13 +4302,13 @@ function CheckIfShotAllCams(name JumpLabel)
 
     EPC = EPlayerController(Characters[0]);	
 
-    if(EPC == None)
+    if (EPC == None)
     {
         return;
     }
   
     // Check Number of cams in inventory
-    if(EPawn(EPC.Pawn).FullInventory.GetNbItemInCategory(CAT_MAINGUN) > 1) // F2000 itself counts as 1
+    if (EPawn(EPC.Pawn).FullInventory.GetNbItemInCategory(CAT_MAINGUN) > 1) // F2000 itself counts as 1
     {
         // Still posesses 1+ cam , get out
         return;
@@ -4377,30 +4377,30 @@ function ToggleGroupAI(bool bEnable, Name GroupTag0, Name GroupTag1, Name GroupT
     GroupTagsInArray[4] = GroupTag4;
     GroupTagsInArray[5] = GroupTag5;
     
-    if(bEnable) // We're putting a EGroupAI ON duty - Just enable AI + Modify their music
+    if (bEnable) // We're putting a EGroupAI ON duty - Just enable AI + Modify their music
     {
     	// Try to find the NPCs
-	    foreach DynamicActors( class'EAIPawn', NPC)
+	    foreach DynamicActors(class'EAIPawn', NPC)
 	    {
-		    for ( i = 0; i < GroupTagsInArray.Length; i++ )
+		    for (i = 0; i < GroupTagsInArray.Length; i++)
 		    {
-			    if(NPC.m_GroupTag == GroupTagsInArray[i])
+			    if (NPC.m_GroupTag == GroupTagsInArray[i])
 			    {
 				    log("NPC "$NPC$" was reenabled...");				    
-				    NPC.bDisableAI=false;
-				    NPC.bDisableAIforSound=false;
+				    NPC.bDisableAI = false;
+				    NPC.bDisableAIforSound = false;
 
                     // Cancel music request for that NPC
-				    if( NPC.controller != None && EAIController(NPC.controller).pattern != None)
+				    if (NPC.controller != None && EAIController(NPC.controller).pattern != None)
 				    {
 					    // Check the current state of the default pattern
-					    if(EAIController(NPC.controller).pattern.GetStateName() == 'search')
+					    if (EAIController(NPC.controller).pattern.GetStateName() == 'search')
 					    {
 						    EchelonLevelInfo(Level).SendMusicRequest(0,true,EAIController(NPC.controller).pattern, true);
 						    EchelonLevelInfo(Level).SendMusicRequest(1,false,EAIController(NPC.controller).pattern);
 					    }
 
-					    if(EAIController(NPC.controller).pattern.GetStateName() == 'attack')
+					    if (EAIController(NPC.controller).pattern.GetStateName() == 'attack')
 					    {
 						    EchelonLevelInfo(Level).SendMusicRequest(0,false,EAIController(NPC.controller).pattern);
 						    EchelonLevelInfo(Level).SendMusicRequest(1,true,EAIController(NPC.controller).pattern, true);
@@ -4413,20 +4413,20 @@ function ToggleGroupAI(bool bEnable, Name GroupTag0, Name GroupTag1, Name GroupT
     else        // We're putting a EGroupAI OFF duty - Check Alarms + Disable AI + Modify Music + Check Inert Bodies 
     {
     	// Do a first pass to see if alarms are running
-	    foreach DynamicActors( class'EAIPawn', NPC)
+	    foreach DynamicActors(class'EAIPawn', NPC)
 	    {
-		    for ( i = 0; i < GroupTagsInArray.Length; i++ )
+		    for (i = 0; i < GroupTagsInArray.Length; i++)
 		    {
-			    if(NPC.m_GroupTag == GroupTagsInArray[i])
+			    if (NPC.m_GroupTag == GroupTagsInArray[i])
 			    {
-				    if(NPC.group != None)
+				    if (NPC.group != None)
 				    {
 					    // Avoid triggering an alarm if:
 					    // 1- The Body is in a group that is attacking
 					    // 2- The Body is in a group that is on an alarm
-					    if( (NPC.group.CurrentAlarm != None) || NPC.group.IsAMemberInAttack() )
+					    if ((NPC.group.CurrentAlarm != None) || NPC.group.IsAMemberInAttack())
 					    {
-						    bAlarmIsRunning=true;
+						    bAlarmIsRunning = true;
 						    break;
 					    }
 				    }
@@ -4436,32 +4436,32 @@ function ToggleGroupAI(bool bEnable, Name GroupTag0, Name GroupTag1, Name GroupT
 	    }
 
         // Disable NPC corresponding to EGroupAI
-        foreach DynamicActors( class'EAIPawn', NPC)
+        foreach DynamicActors(class'EAIPawn', NPC)
 	    {
-		    for ( i = 0; i < GroupTagsInArray.Length; i++ )
+		    for (i = 0; i < GroupTagsInArray.Length; i++)
 		    {
-			    if(NPC.m_GroupTag == GroupTagsInArray[i])
+			    if (NPC.m_GroupTag == GroupTagsInArray[i])
 			    {	
 				    //check if the NPC is inert
-				    if( (NPC.GetStateName() == 's_Unconscious') || (NPC.GetStateName() == 's_Dying'))
+				    if ((NPC.GetStateName() == 's_Unconscious') || (NPC.GetStateName() == 's_Dying'))
 				    {
-					    if(NPC.LastRenderTime < Level.TimeSeconds - 2.0f)
+					    if (NPC.LastRenderTime < Level.TimeSeconds - 2.0f)
 					    {
 						    //check visibility factor for each NPC
-						    if((NPC.GetVisibilityFactor(true) > 30) && (!NPC.bIsDog) && (!NPC.bSniper))
+						    if ((NPC.GetVisibilityFactor(true) > 30) && (!NPC.bIsDog) && (!NPC.bSniper))
 						    {
-							    if( !NPC.bBodyDetected && !bAlarmIsRunning )
+							    if (!NPC.bBodyDetected && !bAlarmIsRunning)
 							    {
 								    //flag the NPC as found
-								    NPC.bBodyDetected=true;
+								    NPC.bBodyDetected = true;
 
-								    bBodyFound=true;
+								    bBodyFound = true;
 							    }
 						    }
 					    }
 				    }
 
-				    if( NPC.controller != None && EAIController(NPC.controller).pattern != None)
+				    if (NPC.controller != None && EAIController(NPC.controller).pattern != None)
 				    {
 					    //cancel music request for that NPC
 					    EchelonLevelInfo(Level).SendMusicRequest(0,false,EAIController(NPC.controller).pattern);
@@ -4469,15 +4469,15 @@ function ToggleGroupAI(bool bEnable, Name GroupTag0, Name GroupTag1, Name GroupT
 				    }
 
 				    log("NPC "$NPC$" was disabled...");
-				    NPC.bDisableAI=true;
-				    NPC.bDisableAIforSound=true;
+				    NPC.bDisableAI = true;
+				    NPC.bDisableAIforSound = true;
 				    NPC.StopAllVoicesActor(true);
 			    }
             }
         }
 
         // Report inert NPCs 
-        if(bBodyFound)
+        if (bBodyFound)
 	    {
 		    log("** An Inert NPC was found **");
 
@@ -4487,7 +4487,7 @@ function ToggleGroupAI(bool bEnable, Name GroupTag0, Name GroupTag1, Name GroupT
 		        EchelonGameInfo(Level.Game).pPlayer.SendTransmissionMessage(Localize("Transmission", "BodyFound", "Localization\\HUD"), TR_NPCS);
 
 			    AddOneVoice();
-			    EchelonGameInfo(Level.Game).pPlayer.EPawn.PlaySound( (EchelonLevelInfo(Level)).FindCorpseSound, SLOT_Voice );
+			    EchelonGameInfo(Level.Game).pPlayer.EPawn.PlaySound((EchelonLevelInfo(Level)).FindCorpseSound, SLOT_Voice);
 
 		        //play alarm sound
 		        PlaySound(Sound'Electronic.Play_Seq_AlarmFindBody', SLOT_Interface);

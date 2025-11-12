@@ -41,21 +41,21 @@ auto state s_Emitting
 		Enable('Tick');
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
-		if( HeatIntensity + DeltaTime * GrowModifier > default.HeatIntensity && GrowModifier > 0 )
+		if (HeatIntensity + DeltaTime * GrowModifier > default.HeatIntensity && GrowModifier > 0)
 		{
 			GrowModifier = -Abs(GrowModifier);
 			HeatIntensity = default.HeatIntensity;
 			return;
 		}
-		else if( HeatIntensity + DeltaTime * GrowModifier < 0 && GrowModifier < 0 )
+		else if (HeatIntensity + DeltaTime * GrowModifier < 0 && GrowModifier < 0)
 		{
 			GrowModifier = Abs(GrowModifier);
 			HeatIntensity = 0;
 
 			// When down to 0, set timer
-			if( Delay > 0 )
+			if (Delay > 0)
 			{
 				Disable('Tick');
 				SetTimer(Delay, false);
@@ -68,9 +68,9 @@ auto state s_Emitting
 		HeatIntensity += DeltaTime * GrowModifier;
 	}
 
-	function Touch( Actor Other )
+	function Touch(Actor Other)
 	{
-		if( Other.bIsPawn )
+		if (Other.bIsPawn)
 			DestroyObject();
 	}
 }

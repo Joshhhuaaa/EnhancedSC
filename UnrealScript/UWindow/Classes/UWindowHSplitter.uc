@@ -36,19 +36,19 @@ function BeforePaint(Canvas C, float X, float Y)
 	local float NewW, NewH;
 
 	// Make Left panel resize
-	if(OldWinWidth != WinWidth && !bRightGrow)
+	if (OldWinWidth != WinWidth && !bRightGrow)
 	{
 		SplitPos = SplitPos + WinWidth - OldWinWidth;
 	}
 
 	SplitPos = FClamp(SplitPos, MinWinWidth, WinWidth - 7 - MinWinWidth);
-	if(MaxSplitPos != 0)
+	if (MaxSplitPos != 0)
 		SplitPos = FClamp(SplitPos, 0, MaxSplitPos);
 
 	NewW = SplitPos;
 	NewH = WinHeight;
 	
-	if(NewH != LeftClientWindow.WinHeight || NewW != LeftClientWindow.WinWidth)
+	if (NewH != LeftClientWindow.WinHeight || NewW != LeftClientWindow.WinWidth)
 	{
 		LeftClientWindow.SetSize(NewW, NewH);
 	}
@@ -58,7 +58,7 @@ function BeforePaint(Canvas C, float X, float Y)
 
 	NewW = WinWidth - SplitPos - 7;
 
-	if(NewH != RightClientWindow.WinHeight || NewW != RightClientWindow.WinWidth)
+	if (NewH != RightClientWindow.WinHeight || NewW != RightClientWindow.WinWidth)
 	{
 		RightClientWindow.SetSize(NewW, NewH);
 	}
@@ -73,7 +73,7 @@ function LMouseDown(float X, float Y)
 {
 	Super.LMouseDown(X, Y);
 
-	if(bSizable && (X >= SplitPos) && (X <= SplitPos + 7)) 
+	if (bSizable && (X >= SplitPos) && (X <= SplitPos + 7)) 
 	{
 		bSizing = True;
 		Root.CaptureMouse();
@@ -83,12 +83,12 @@ function LMouseDown(float X, float Y)
 function MouseMove(float X, float Y)
 {
 
-	if(bSizable && (X >= SplitPos) && (X <= SplitPos + 7)) 
+	if (bSizable && (X >= SplitPos) && (X <= SplitPos + 7)) 
 		Cursor = Root.HSplitCursor;
 	else
 		Cursor = Root.NormalCursor;
 
-	if(bSizing && bMouseDown)
+	if (bSizing && bMouseDown)
 	{
 		SplitPos = X;
 	} else bSizing = False;

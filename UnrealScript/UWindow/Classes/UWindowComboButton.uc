@@ -16,9 +16,9 @@ function BeforePaint(Canvas C, float X, float Y)
 
 function LMouseDown(float X, float Y)
 {
-	if(!bDisabled)
+	if (!bDisabled)
 	{
-		if(Owner.bListVisible)
+		if (Owner.bListVisible)
 			Owner.CloseUp();
 		else
 		{
@@ -36,7 +36,7 @@ function FocusOtherWindow(UWindowWindow W)
 {
 	Super.FocusOtherWindow(W);
 
-	if(Owner.bListVisible && W.ParentWindow != Owner && W.ParentWindow != Owner.List && W.ParentWindow.ParentWindow != Owner.List)
+	if (Owner.bListVisible && W.ParentWindow != Owner && W.ParentWindow != Owner.List && W.ParentWindow.ParentWindow != Owner.List)
 		Owner.CloseUp();
 }
 

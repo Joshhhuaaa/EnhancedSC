@@ -25,9 +25,9 @@ function Created()
     m_ListBox.m_ITitleLineItemHeight = m_ITitleLineItemHeight;
     
     InitVideoOptions();
-    m_ListBox.TitleFont=F_Normal;
+    m_ListBox.TitleFont = F_Normal;
     
-    m_ResetToDefault = EPCTextButton(CreateControl( class'EPCTextButton', m_IResetToDefaultXPos, m_IResetToDefaultYPos, m_IResetToDefaultWidth, m_IResetToDefaultHeight, self));
+    m_ResetToDefault = EPCTextButton(CreateControl(class'EPCTextButton', m_IResetToDefaultXPos, m_IResetToDefaultYPos, m_IResetToDefaultWidth, m_IResetToDefaultHeight, self));
     m_ResetToDefault.SetButtonText(Caps(Localize("OPTIONS","RESETTODEFAULT","Localization\\HUD")) ,TXT_CENTER);
     m_ResetToDefault.Font = F_Normal;
 }
@@ -37,7 +37,7 @@ function Notify(UWindowDialogControl C, byte E)
 {	
     local EPCGameOptions GO;
     
-	if(E == DE_Click && C == m_ResetToDefault)
+	if (E == DE_Click && C == m_ResetToDefault)
 	{
        ResetToDefault();
 	}

@@ -71,60 +71,60 @@ function Created()
 	m_DisabledTextColor.A = 255;
 	
 
-    m_AmbiantSoundScroll   = EPCHScrollBar(CreateControl( class'EPCHScrollBar', m_ILabelXPos + m_ILabelWidth, m_IFirstScrollyPos, m_IScrollWidth, LookAndFeel.Size_HScrollbarHeight, self));
+    m_AmbiantSoundScroll   = EPCHScrollBar(CreateControl(class'EPCHScrollBar', m_ILabelXPos + m_ILabelWidth, m_IFirstScrollyPos, m_IScrollWidth, LookAndFeel.Size_HScrollbarHeight, self));
     m_AmbiantSoundScroll.SetScrollHeight(12);
-    m_AmbiantSoundScroll.SetRange(0, 100, 1);
+    m_AmbiantSoundScroll.SetRange(0, 101, 1); // Joshua -  Offset slider range to show 0–100 in the GUI while maintaining correct internal values
 
-    m_VoicesSoundScroll   = EPCHScrollBar(CreateControl( class'EPCHScrollBar', m_ILabelXPos + m_ILabelWidth, m_AmbiantSoundScroll.WinTop + m_IScrollyOffset, m_IScrollWidth, LookAndFeel.Size_HScrollbarHeight, self));
+    m_VoicesSoundScroll   = EPCHScrollBar(CreateControl(class'EPCHScrollBar', m_ILabelXPos + m_ILabelWidth, m_AmbiantSoundScroll.WinTop + m_IScrollyOffset, m_IScrollWidth, LookAndFeel.Size_HScrollbarHeight, self));
     m_VoicesSoundScroll.SetScrollHeight(12);
-    m_VoicesSoundScroll.SetRange(0, 100, 1);
+    m_VoicesSoundScroll.SetRange(0, 101, 1); // Joshua -  Offset slider range to show 0–100 in the GUI while maintaining correct internal values
 
-    m_LMusicSoundScroll   = EPCHScrollBar(CreateControl( class'EPCHScrollBar', m_ILabelXPos + m_ILabelWidth, m_VoicesSoundScroll.WinTop + m_IScrollyOffset, m_IScrollWidth, LookAndFeel.Size_HScrollbarHeight, self));
+    m_LMusicSoundScroll   = EPCHScrollBar(CreateControl(class'EPCHScrollBar', m_ILabelXPos + m_ILabelWidth, m_VoicesSoundScroll.WinTop + m_IScrollyOffset, m_IScrollWidth, LookAndFeel.Size_HScrollbarHeight, self));
     m_LMusicSoundScroll.SetScrollHeight(12);
-    m_LMusicSoundScroll.SetRange(0, 100, 1);   
+    m_LMusicSoundScroll.SetRange(0, 101, 1); // Joshua -  Offset slider range to show 0–100 in the GUI while maintaining correct internal values
 
-    m_SFXSoundScroll   = EPCHScrollBar(CreateControl( class'EPCHScrollBar', m_ILabelXPos + m_ILabelWidth, m_LMusicSoundScroll.WinTop + m_IScrollyOffset, m_IScrollWidth, LookAndFeel.Size_HScrollbarHeight, self));
+    m_SFXSoundScroll   = EPCHScrollBar(CreateControl(class'EPCHScrollBar', m_ILabelXPos + m_ILabelWidth, m_LMusicSoundScroll.WinTop + m_IScrollyOffset, m_IScrollWidth, LookAndFeel.Size_HScrollbarHeight, self));
     m_SFXSoundScroll.SetScrollHeight(12);
-    m_SFXSoundScroll.SetRange(0, 100, 1);
+    m_SFXSoundScroll.SetRange(0, 101, 1); // Joshua -  Offset slider range to show 0–100 in the GUI while maintaining correct internal values
     
-    m_LAmbiantSound       = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos, m_AmbiantSoundScroll.WinTop, m_ILabelWidth, m_ILabelHeight, self));
+    m_LAmbiantSound       = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_ILabelXPos, m_AmbiantSoundScroll.WinTop, m_ILabelWidth, m_ILabelHeight, self));
     m_LAmbiantSound.SetLabelText(Localize("HUD","AMBIENTVOLUME","Localization\\HUD"),TXT_LEFT);
     m_LAmbiantSound.Font      = F_Normal;
     m_LAmbiantSound.TextColor = m_TextColor;
 
-    m_LVoicesSound       = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos, m_VoicesSoundScroll.WinTop, m_ILabelWidth, m_ILabelHeight, self));
+    m_LVoicesSound       = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_ILabelXPos, m_VoicesSoundScroll.WinTop, m_ILabelWidth, m_ILabelHeight, self));
     m_LVoicesSound.SetLabelText(Localize("HUD","VOICEVOLUME","Localization\\HUD"),TXT_LEFT);
     m_LVoicesSound.Font       = F_Normal;
     m_LVoicesSound.TextColor  = m_TextColor;
 
-    m_LMusicSound       = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos, m_LMusicSoundScroll.WinTop, m_ILabelWidth, m_ILabelHeight, self));
+    m_LMusicSound       = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_ILabelXPos, m_LMusicSoundScroll.WinTop, m_ILabelWidth, m_ILabelHeight, self));
     m_LMusicSound.SetLabelText(Localize("HUD","MUSICVOLUME","Localization\\HUD"),TXT_LEFT);
     m_LMusicSound.Font        = F_Normal;
     m_LMusicSound.TextColor   = m_TextColor;
 
-    m_LSFXSound       = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos, m_SFXSoundScroll.WinTop, m_ILabelWidth, m_ILabelHeight, self));
+    m_LSFXSound       = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_ILabelXPos, m_SFXSoundScroll.WinTop, m_ILabelWidth, m_ILabelHeight, self));
     m_LSFXSound.SetLabelText(Localize("HUD","SFXVOLUME","Localization\\HUD"),TXT_LEFT);
     m_LSFXSound.Font        = F_Normal;
     m_LSFXSound.TextColor   = m_TextColor;
 
     // Joshua - Label for each of the scroll bars
     // Joshua - Subtracting 1 from WinTop seems better alligned
-    m_LAmbiantSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_AmbiantSoundScroll.WinTop - 1, 40, m_ILabelHeight, self));
+    m_LAmbiantSoundValue = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_AmbiantSoundScroll.WinTop - 1, 40, m_ILabelHeight, self));
     m_LAmbiantSoundValue.Font = F_Normal;
     m_LAmbiantSoundValue.TextColor = m_TextColor;
     m_LAmbiantSoundValue.SetLabelText("0", TXT_LEFT);
 
-    m_LVoicesSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_VoicesSoundScroll.WinTop - 1, 40, m_ILabelHeight, self));
+    m_LVoicesSoundValue = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_VoicesSoundScroll.WinTop - 1, 40, m_ILabelHeight, self));
     m_LVoicesSoundValue.Font = F_Normal;
     m_LVoicesSoundValue.TextColor = m_TextColor;
     m_LVoicesSoundValue.SetLabelText("0", TXT_LEFT);
 
-    m_LMusicSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_LMusicSoundScroll.WinTop - 1, 40, m_ILabelHeight, self));
+    m_LMusicSoundValue = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_LMusicSoundScroll.WinTop - 1, 40, m_ILabelHeight, self));
     m_LMusicSoundValue.Font = F_Normal;
     m_LMusicSoundValue.TextColor = m_TextColor;
     m_LMusicSoundValue.SetLabelText("0", TXT_LEFT);
 
-    m_LSFXSoundValue = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_SFXSoundScroll.WinTop - 1, 40, m_ILabelHeight, self));
+    m_LSFXSoundValue = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_ILabelXPos + m_ILabelWidth + m_IScrollWidth + 5, m_SFXSoundScroll.WinTop - 1, 40, m_ILabelHeight, self));
     m_LSFXSoundValue.Font = F_Normal;
     m_LSFXSoundValue.TextColor = m_TextColor;
     m_LSFXSoundValue.SetLabelText("0", TXT_LEFT);
@@ -133,7 +133,7 @@ function Created()
     // * Drop Down
     // ***********************************************************************************************
 
-    m_LAudioVirt       = UWindowLabelControl(CreateControl( class'UWindowLabelControl', m_ILabelXPos, m_IDropDownLabelYPos - 3, m_ILabelWidth, m_ILabelHeight, self));
+    m_LAudioVirt       = UWindowLabelControl(CreateControl(class'UWindowLabelControl', m_ILabelXPos, m_IDropDownLabelYPos - 3, m_ILabelWidth, m_ILabelHeight, self));
     m_LAudioVirt.SetLabelText(Localize("HUD","AUDIOVIRT","Localization\\HUD"),TXT_LEFT);
     m_LAudioVirt.Font        = F_Normal;
     m_LAudioVirt.TextColor   = m_TextColor;
@@ -151,19 +151,19 @@ function Created()
     // * Check Boxes
     // ***********************************************************************************************
     
-    m_L3DAcc       = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabelXPos, m_IButtonsYPos, m_IButtonLabelWidth, m_ILabelHeight, self));
+    m_L3DAcc       = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_ILabelXPos, m_IButtonsYPos, m_IButtonLabelWidth, m_ILabelHeight, self));
     m_L3DAcc.SetLabelText(Caps(Localize("HUD","AUDIO3D","Localization\\HUD")),TXT_LEFT);
     m_L3DAcc.Font        = F_Normal;
     m_L3DAcc.TextColor   = m_TextColor;
 
-    /*m_LEax       = UWindowLabelControl(CreateWindow( class'UWindowLabelControl', m_ILabel3DAccXPos, m_IButtonsYPos, m_IButtonLabelWidth, m_ILabelHeight, self));
+    /*m_LEax       = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_ILabel3DAccXPos, m_IButtonsYPos, m_IButtonLabelWidth, m_ILabelHeight, self));
     m_LEax.SetLabelText("",TXT_LEFT);
     m_LEax.Font       = F_Normal;
     m_LEax.TextColor  = m_TextColor;*/
 
 
-    m_EaxButton      = EPCCheckBox(CreateControl( class'EPCCheckBox', m_ILabel3DAccXPos + m_IButtonLabelWidth - 64, m_IButtonsYPos, m_IButtonsWidth, m_ILabelHeight, self));
-    m_3DAccButton    = EPCCheckBox(CreateControl( class'EPCCheckBox', m_L3DAcc.WinLeft + m_L3DAcc.WinWidth, m_IButtonsYPos, m_IButtonsWidth, m_ILabelHeight, self));    
+    m_EaxButton      = EPCCheckBox(CreateControl(class'EPCCheckBox', m_ILabel3DAccXPos + m_IButtonLabelWidth - 64, m_IButtonsYPos, m_IButtonsWidth, m_ILabelHeight, self));
+    m_3DAccButton    = EPCCheckBox(CreateControl(class'EPCCheckBox', m_L3DAcc.WinLeft + m_L3DAcc.WinWidth, m_IButtonsYPos, m_IButtonsWidth, m_ILabelHeight, self));    
 
     m_EaxButton.ImageX      = 5;
     m_EaxButton.ImageY      = 5;
@@ -208,10 +208,10 @@ function Refresh()
 	
     GO = class'Actor'.static.GetGameOptions();
 
-    m_AmbiantSoundScroll.Pos = Clamp(GO.AmbiantVolume,0,99);
-    m_VoicesSoundScroll.Pos  = Clamp(GO.VoicesVolume, 0,99);
-    m_LMusicSoundScroll.Pos  = Clamp(GO.MusicVolume,0,99);
-    m_SFXSoundScroll.Pos  = Clamp(GO.SFXVolume,0,99);
+    m_AmbiantSoundScroll.Pos = InternalToGUI(GO.AmbiantVolume);
+    m_VoicesSoundScroll.Pos = InternalToGUI(GO.VoicesVolume);
+    m_LMusicSoundScroll.Pos = InternalToGUI(GO.MusicVolume);
+    m_SFXSoundScroll.Pos = InternalToGUI(GO.SFXVolume);
 
     // Joshua - Label for each of the scroll bars
     m_LAmbiantSoundValue.SetLabelText(string(int(m_AmbiantSoundScroll.Pos)), TXT_LEFT);
@@ -223,7 +223,7 @@ function Refresh()
     m_EaxButton.m_bSelected = GO.EAX;
     m_3DAccButton.m_bSelected = GO.Sound3DAcc;
 
-    if(m_bFirstRefresh)
+    if (m_bFirstRefresh)
     {
         Verify3DSound();  
     }
@@ -241,10 +241,10 @@ function SaveOptions()
 	
     GO = class'Actor'.static.GetGameOptions();
 
-    GO.AmbiantVolume = m_AmbiantSoundScroll.Pos;
-    GO.VoicesVolume = m_VoicesSoundScroll.Pos;
-    GO.MusicVolume = m_LMusicSoundScroll.Pos;
-    GO.SFXVolume = m_SFXSoundScroll.Pos;
+    GO.AmbiantVolume = GUIToInternal(m_AmbiantSoundScroll.Pos);
+    GO.VoicesVolume = GUIToInternal(m_VoicesSoundScroll.Pos);
+    GO.MusicVolume = GUIToInternal(m_LMusicSoundScroll.Pos);
+    GO.SFXVolume = GUIToInternal(m_SFXSoundScroll.Pos);
 
     GO.AudioVirt = m_AudioVirtCombo.GetSelectedIndex();
     GO.EAX = m_EaxButton.m_bSelected;
@@ -260,17 +260,17 @@ function Notify(UWindowDialogControl C, byte E)
 	
     GO = class'Actor'.static.GetGameOptions();
 
-	if (m_AmbiantSoundScroll.Pos == Clamp(GO.AmbiantVolume,0,99) &&
-		m_VoicesSoundScroll.Pos  == Clamp(GO.VoicesVolume, 0,99) &&
-		m_LMusicSoundScroll.Pos  == Clamp(GO.MusicVolume,0,99)   &&
-		m_SFXSoundScroll.Pos     == Clamp(GO.SFXVolume,0,99))
-	{
-		m_SliderInitialized = true;
-	}
-
-    if(E == DE_Click)
+    if (InternalToGUI(GO.AmbiantVolume) == m_AmbiantSoundScroll.Pos &&
+        InternalToGUI(GO.VoicesVolume) == m_VoicesSoundScroll.Pos &&
+        InternalToGUI(GO.MusicVolume) == m_LMusicSoundScroll.Pos &&
+        InternalToGUI(GO.SFXVolume) == m_SFXSoundScroll.Pos)
     {
-        switch(C)
+        m_SliderInitialized = true;
+    }
+
+    if (E == DE_Click)
+    {
+        switch (C)
         {   
         case m_3DAccButton:
             Verify3DSound();
@@ -280,9 +280,9 @@ function Notify(UWindowDialogControl C, byte E)
             break;  
         }
     }
-    if(E == DE_Change)
+    if (E == DE_Change)
     {
-        switch(C)
+        switch (C)
         {
         case m_AmbiantSoundScroll: 
         case m_VoicesSoundScroll:
@@ -292,10 +292,10 @@ function Notify(UWindowDialogControl C, byte E)
             m_bModified = true;
 			if (m_SliderInitialized)
 			{
-				GO.RTAmbiantVolume = m_AmbiantSoundScroll.Pos;
-				GO.RTVoicesVolume = m_VoicesSoundScroll.Pos;
-				GO.RTMusicVolume = m_LMusicSoundScroll.Pos;
-				GO.RTSFXVolume = m_SFXSoundScroll.Pos;
+                GO.RTAmbiantVolume = GUIToInternal(m_AmbiantSoundScroll.Pos);
+                GO.RTVoicesVolume = GUIToInternal(m_VoicesSoundScroll.Pos);
+                GO.RTMusicVolume = GUIToInternal(m_LMusicSoundScroll.Pos);
+                GO.RTSFXVolume = GUIToInternal(m_SFXSoundScroll.Pos);
 				GO.UpdateEngineSettings(true);
 			}
             // Joshua - Label for each of the scroll bars
@@ -313,7 +313,7 @@ function Notify(UWindowDialogControl C, byte E)
 //==============================================================================
 function Verify3DSound()
 {
-    if(m_3DAccButton.m_bSelected && IsEAXCapable())   // 3D SOUND was just ENABLED
+    if (m_3DAccButton.m_bSelected && IsEAXCapable())   // 3D SOUND was just ENABLED
     {
         // Enable EAX
         m_EaxButton.bDisabled = false;
@@ -346,11 +346,30 @@ function bool IsEAXCapable()
     return GO.EAX_Capable;
 }
 
+// Joshua - Functions to ensure audio sliders in settings display accurate values
+//==============================================================================
+// UIToInternal -  Maps UI slider value (0-100) to internal volume value (0–255)
+//==============================================================================
+function int GUIToInternal(float UIValue)
+{
+    // Convert 0-100 UI value to 0-255 internal value
+    return int(UIValue * 2.55 + 0.5); // Adding 0.5 for proper rounding
+}
+
+//==============================================================================
+// InternalToUI - Maps internal volume (0–255) to UI slider value (0–100)
+//==============================================================================
+function int InternalToGUI(float InternalValue)
+{
+    // Convert 0-255 internal value to 0-100 UI value
+    return int(InternalValue / 2.55 + 0.5); // Adding 0.5 for proper rounding
+}
+
 defaultproperties
 {
     m_IFirstScrollyPos=5
     m_IScrollyOffset=25
-    m_IScrollWidth=180 // Joshua - Reduced from 200 to fit the new label
+    m_IScrollWidth=175 // Joshua - Reduced from 200 to fit the new label
     m_ILabelXPos=15
     m_ILabelWidth=250
     m_ILabelHeight=18

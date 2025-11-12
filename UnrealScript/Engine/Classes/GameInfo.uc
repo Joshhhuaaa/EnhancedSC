@@ -7,7 +7,7 @@
 // to several classes to allow easy modification of specific game components.  These 
 // classes include GameInfo.  
 // A GameInfo actor is instantiated when the level is initialized for gameplay (in 
-// C++ UGameEngine::LoadMap() ).  The class of this GameInfo actor is determined by 
+// C++ UGameEngine::LoadMap()).  The class of this GameInfo actor is determined by 
 // (in order) either  if specified in the LevelInfo, or the 
 // DefaultGame entry in the game's .ini file (in the Engine.Engine section), unless 
 // its a network game in which case the DefaultServerGame entry is used.  
@@ -19,7 +19,7 @@ class GameInfo extends Info
 //-----------------------------------------------------------------------------
 // Variables.
 
-var byte					  Difficulty;				// 0=easy, 1=medium, 2=hard, 3=very hard.
+var byte					  Difficulty;				// 0 = easy, 1 = medium, 2 = hard, 3 = very hard.
 var bool				      bRestartLevel;			// Level should be restarted when player dies
 var bool				      bPauseable;				// Whether the game is pauseable.
 var	bool					  bGameEnded;				// set when game ends
@@ -88,12 +88,12 @@ function Reset()
 	bWaitingToStartMatch = true;
 }
 
-function bool SetPause( BOOL bPause, PlayerController P )
+function bool SetPause(BOOL bPause, PlayerController P)
 {
-	if( bPause )
-		Level.Pauser=P;
+	if (bPause)
+		Level.Pauser = P;
 	else
-		Level.Pauser=None;
+		Level.Pauser = None;
 	return True;
 }
 
@@ -111,11 +111,11 @@ event DetailChange()
 	local zoneinfo Z;
 	local skyzoneinfo S;
 
-	if( !Level.bHighDetailMode )
+	if (!Level.bHighDetailMode)
 	{
 		foreach DynamicActors(class'Actor', A)
 		{
-			if( A.bHighDetail )
+			if (A.bHighDetail)
 				A.Destroy();
 		}
 	}
@@ -129,19 +129,19 @@ event DetailChange()
 //
 // Grab the next option from a string.
 //
-function bool GrabOption( out string Options, out string Result )
+function bool GrabOption(out string Options, out string Result)
 {
-	if( Left(Options,1)=="?" )
+	if (Left(Options,1)=="?")
 	{
 		// Get result.
 		Result = Mid(Options,1);
-		if( InStr(Result,"?")>=0 )
-			Result = Left( Result, InStr(Result,"?") );
+		if (InStr(Result,"?")>=0)
+			Result = Left(Result, InStr(Result,"?"));
 
 		// Update options.
 		Options = Mid(Options,1);
-		if( InStr(Options,"?")>=0 )
-			Options = Mid( Options, InStr(Options,"?") );
+		if (InStr(Options,"?")>=0)
+			Options = Mid(Options, InStr(Options,"?"));
 		else
 			Options = "";
 
@@ -153,12 +153,12 @@ function bool GrabOption( out string Options, out string Result )
 //
 // Break up a key=value pair into its key and value.
 //
-function GetKeyValue( string Pair, out string Key, out string Value )
+function GetKeyValue(string Pair, out string Key, out string Value)
 {
-	if( InStr(Pair,"=")>=0 )
+	if (InStr(Pair,"=")>=0)
 	{
 		Key   = Left(Pair,InStr(Pair,"="));
-		Value = Mid(Pair,InStr(Pair,"=")+1);
+		Value = Mid(Pair,InStr(Pair,"=") + 1);
 	}
 	else
 	{
@@ -170,24 +170,24 @@ function GetKeyValue( string Pair, out string Key, out string Value )
 /* ParseOption()
  Find an option in the options string and return it.
 */
-function string ParseOption( string Options, string InKey )
+function string ParseOption(string Options, string InKey)
 {
 	local string Pair, Key, Value;
-	while( GrabOption( Options, Pair ) )
+	while (GrabOption(Options, Pair))
 	{
-		GetKeyValue( Pair, Key, Value );
-		if( Key ~= InKey )
+		GetKeyValue(Pair, Key, Value);
+		if (Key ~= InKey)
 			return Value;
 	}
 	return "";
 }
 
-function int GetIntOption( string Options, string ParseString, int CurrentValue)
+function int GetIntOption(string Options, string ParseString, int CurrentValue)
 {
 	local string InOpt;
 
-	InOpt = ParseOption( Options, ParseString );
-	if ( InOpt != "" )
+	InOpt = ParseOption(Options, ParseString);
+	if (InOpt != "")
 	{
 		log(ParseString@InOpt);
 		return int(InOpt);
@@ -217,19 +217,19 @@ event PlayerController Login
 	local Actor A;
 
 	// Find a start spot.
-	StartSpot = FindPlayerStart( None, 0, Portal );
+	StartSpot = FindPlayerStart(None, 0, Portal);
 
-	if( StartSpot == None )
+	if (StartSpot == None)
 	{
 		return None;
 	}
 
-	if ( PlayerControllerClass == None )
+	if (PlayerControllerClass == None)
 		PlayerControllerClass = class<PlayerController>(DynamicLoadObject(PlayerControllerClassName, class'Class'));
 	NewPlayer = spawn(PlayerControllerClass,,,StartSpot.Location,StartSpot.Rotation);
 
 	// Handle spawn failure.
-	if( NewPlayer == None )
+	if (NewPlayer == None)
 	{
 		log("Couldn't spawn player controller of class "$PlayerControllerClass);
 		return None;
@@ -237,17 +237,17 @@ event PlayerController Login
 
 	NewPlayer.StartSpot = StartSpot;
 
-	InClass = ParseOption( Options, "Class" );
-	if ( InClass != "" )
+	InClass = ParseOption(Options, "Class");
+	if (InClass != "")
 	{
 		DesiredPawnClass = class<Pawn>(DynamicLoadObject(InClass, class'Class'));
-		if ( DesiredPawnClass != None )
+		if (DesiredPawnClass != None)
 			NewPlayer.PawnClass = DesiredPawnClass;
 	}
 
 	// start match, or let player enter, immediately
 	bRestartLevel = false;	// let player spawn once in levels that must be restarted after every death
-	if ( bWaitingToStartMatch )
+	if (bWaitingToStartMatch)
 		StartMatch();
 	else
 		RestartPlayer(newPlayer);
@@ -264,17 +264,17 @@ function StartMatch()
 	local Actor A; 
 
 	// start human players first
-	for ( P = Level.ControllerList; P!=None; P=P.nextController )
-		if ( P.IsA('PlayerController') && (P.Pawn == None) )
+	for (P = Level.ControllerList; P != None; P = P.nextController)
+		if (P.IsA('PlayerController') && (P.Pawn == None))
 		{
-			if ( bGameEnded ) return; // telefrag ended the game with ridiculous frag limit
+			if (bGameEnded) return; // telefrag ended the game with ridiculous frag limit
 			else
 				RestartPlayer(P);
 		}
 
 	// start AI players
-	for ( P = Level.ControllerList; P!=None; P=P.nextController )
-		if ( P.bIsPlayer && !P.IsA('PlayerController') )
+	for (P = Level.ControllerList; P != None; P = P.nextController)
+		if (P.bIsPlayer && !P.IsA('PlayerController'))
 			RestartPlayer(P);
 
 	bWaitingToStartMatch = false;
@@ -283,34 +283,34 @@ function StartMatch()
 //
 // Restart a player.
 //
-function RestartPlayer( Controller aPlayer )	
+function RestartPlayer(Controller aPlayer)	
 {
 	local NavigationPoint StartSpot;
 	local bool foundStart;
 	local int TeamNum,i;
 	local class<Pawn> DefaultPlayerClass;
 
-	if( bRestartLevel )
+	if (bRestartLevel)
 		return;
 
 	TeamNum = 255;
 
 	StartSpot = FindPlayerStart(aPlayer, TeamNum);
-	if( StartSpot == None )
+	if (StartSpot == None)
 	{
 		log(" Player start not found!!!");
 		return;
 	}	
 
-	if ( aPlayer.PawnClass != None )
+	if (aPlayer.PawnClass != None)
 		aPlayer.Pawn = Spawn(aPlayer.PawnClass,,,StartSpot.Location,StartSpot.Rotation);
 
-	if( aPlayer.Pawn==None )
+	if (aPlayer.Pawn == None)
 	{
 		DefaultPlayerClass = class<Pawn>(DynamicLoadObject(GetDefaultPlayerClassName(aPlayer), class'Class'));
 		aPlayer.Pawn = Spawn(DefaultPlayerClass,,,StartSpot.Location,StartSpot.Rotation);
 	}
-	if ( aPlayer.Pawn == None )
+	if (aPlayer.Pawn == None)
 	{
 		log("Couldn't spawn player of type "$aPlayer.PawnClass$" at "$StartSpot);
 		aPlayer.GotoState('Dead');
@@ -322,7 +322,7 @@ function RestartPlayer( Controller aPlayer )
 
 	PlayTeleportEffect(aPlayer, true, true);
 //	aPlayer.ClientSetRotation(aPlayer.Pawn.Rotation);
-	TriggerEvent( StartSpot.Event, StartSpot, aPlayer.Pawn);
+	TriggerEvent(StartSpot.Event, StartSpot, aPlayer.Pawn);
 }
 
 function string GetDefaultPlayerClassName(Controller C)
@@ -336,15 +336,15 @@ function SetPlayerDefaults(Pawn PlayerPawn)
 	PlayerPawn.AirControl = PlayerPawn.Default.AirControl;
 }
 
-function NotifyKilled(Controller Killer, Controller Killed, Pawn KilledPawn )
+function NotifyKilled(Controller Killer, Controller Killed, Pawn KilledPawn)
 {
 	local Controller C;
 
-	for ( C=Level.ControllerList; C!=None; C=C.nextController )
+	for (C = Level.ControllerList; C != None; C = C.nextController)
 		C.NotifyKilled(Killer, Killed, KilledPawn);
 }
 
-function Killed( Controller Killer, Controller Killed, Pawn KilledPawn, class<DamageType> damageType )
+function Killed(Controller Killer, Controller Killed, Pawn KilledPawn, class<DamageType> damageType)
 {
 	local String Message, KillerWeapon, OtherWeapon;
 	local name logtype;
@@ -357,21 +357,21 @@ function Killed( Controller Killer, Controller Killed, Pawn KilledPawn, class<Da
 
 /* Send a player to a URL.
 */
-function SendPlayer( PlayerController aPlayer, string URL )
+function SendPlayer(PlayerController aPlayer, string URL)
 {
-	aPlayer.ClientTravel( URL, TRAVEL_Relative, true );
+	aPlayer.ClientTravel(URL, TRAVEL_Relative, true);
 }
 
 /* Play a teleporting special effect.
 */
-function PlayTeleportEffect( actor Incoming, bool bOut, bool bSound)
+function PlayTeleportEffect(actor Incoming, bool bOut, bool bSound)
 {
 	Incoming.MakeNoise(1.0);
 }
 
 //==========================================================================
 	
-function NavigationPoint FindPlayerStart( Controller Player, optional byte InTeam, optional string incomingName )
+function NavigationPoint FindPlayerStart(Controller Player, optional byte InTeam, optional string incomingName)
 {
 	local NavigationPoint N, BestStart;
 	local Teleporter Tel;
@@ -379,36 +379,36 @@ function NavigationPoint FindPlayerStart( Controller Player, optional byte InTea
 	local byte Team;
 
 	// always pick StartSpot at start of match
-	if((Player != None) && (Player.StartSpot != None))
+	if ((Player != None) && (Player.StartSpot != None))
 	{
 		return Player.StartSpot;
 	}	
 
 	// if incoming start is specified, then just use it
-	if( incomingName!="" )
-		foreach AllActors( class 'Teleporter', Tel )
-			if( string(Tel.Tag)~=incomingName )
+	if (incomingName!="")
+		foreach AllActors(class 'Teleporter', Tel)
+			if (string(Tel.Tag)~=incomingName)
 				return Tel;
 
 	Team = InTeam;
 
-	for ( N=Level.NavigationPointList; N!=None; N=N.NextNavigationPoint )
+	for (N = Level.NavigationPointList; N != None; N = N.NextNavigationPoint)
 	{
 		NewRating = RatePlayerStart(N,InTeam,Player);
-		if ( NewRating > BestRating )
+		if (NewRating > BestRating)
 		{
 			BestRating = NewRating;
 			BestStart = N;
 		}
 	}
 	
-	if ( BestStart == None )
+	if (BestStart == None)
 	{
 		log("Warning - PATHS NOT DEFINED or NO PLAYERSTART");			
-		foreach AllActors( class 'NavigationPoint', N )
+		foreach AllActors(class 'NavigationPoint', N)
 		{
 			NewRating = RatePlayerStart(N,0,Player);
-			if ( NewRating > BestRating )
+			if (NewRating > BestRating)
 			{
 				BestRating = NewRating;
 				BestStart = N;	
@@ -424,7 +424,7 @@ function float RatePlayerStart(NavigationPoint N, byte Team, Controller Player)
 	local PlayerStart P;
 
 	P = PlayerStart(N);
-	if ( P != None )
+	if (P != None)
 	{
 		return 1000;
 	}

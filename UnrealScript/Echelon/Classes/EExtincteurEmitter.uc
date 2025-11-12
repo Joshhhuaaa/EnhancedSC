@@ -3,7 +3,7 @@ class EExtincteurEmitter extends EConeDamageEmitter;
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
-	PlaySound(Sound'FisherEquipement.Play_GasGrenadeExplosion', SLOT_SFX );
+	PlaySound(Sound'FisherEquipement.Play_GasGrenadeExplosion', SLOT_SFX);
 	SetBase(Owner);
 }
 

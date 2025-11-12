@@ -18,7 +18,7 @@ function PostBeginPlay()
 
 	// get mic
 	Mic = ELaserMic(Owner);
-	if( Mic == None )
+	if (Mic == None)
 		Log(self$" ERROR : ELaserMicView Owner not a laserMic");
 }
 
@@ -29,31 +29,31 @@ function bool Locked()
 
 state s_Use
 {
-	function DrawView( HUD Hud, ECanvas Canvas )
+	function DrawView(HUD Hud, ECanvas Canvas)
 	{
 		local EPlayerController epc;
 		epc = EPlayerController(Mic.Controller);
 
 		Canvas.Style = ERenderStyle.STY_Alpha;
 
-        if(epc.bShowScope && Epc.bShowHUD) // Joshua - Show scope toggle
+        if (epc.bShowScope && Epc.bShowHUD) // Joshua - Show scope toggle
         {
             DrawNoiseBars(Canvas);
             DrawSideBars(Canvas);
             DrawTopBar(Canvas);
             DrawBottomBar(Canvas);
         }
-        if(epc.bShowCrosshair && Epc.bShowHUD) // Joshua - Show crosshair toggle
+        if (epc.bShowCrosshair && Epc.bShowHUD) // Joshua - Show crosshair toggle
             DrawCrosshair(Canvas);
 
-        if(epc.bShowScope && Epc.bShowHUD) // Joshua - Show scope toggle
+        if (epc.bShowScope && Epc.bShowHUD) // Joshua - Show scope toggle
             DrawBlackMask(Canvas);	
 
 		Canvas.Style = ERenderStyle.STY_Normal;
 	}
 }
 
-function DrawCrosshair( ECanvas Canvas )
+function DrawCrosshair(ECanvas Canvas)
 {
 	local EHUD_COLOR color;
 	local int iRefX, iRefY;
@@ -63,7 +63,7 @@ function DrawCrosshair( ECanvas Canvas )
 	iRefY = 0;
 	bDrawCorner = false;
 	
-	if( Locked() )
+	if (Locked())
 	{
 		color = EHC_ALPHA_RED;
 		bDrawCorner = true;		
@@ -83,7 +83,7 @@ function DrawCrosshair( ECanvas Canvas )
 	DrawRectangle(SCREEN_HALF_X - 0.5f * CROSS_CENTER + 1, SCREEN_HALF_Y - 0.5f * CROSS_CENTER + 1, SCREEN_HALF_X + 0.5f * CROSS_CENTER - 1, SCREEN_HALF_Y + 0.5f * CROSS_CENTER - 1, 1, EHC_ALPHA_BLACK, Canvas);
 	DrawLine(SCREEN_HALF_X - 0.5f * CROSS_CENTER + 2, SCREEN_HALF_Y - 0.5f * CROSS_CENTER + 2, SCREEN_HALF_X + 0.5f * CROSS_CENTER - 2, SCREEN_HALF_Y + 0.5f * CROSS_CENTER - 2, color, Canvas);
 
-	if ( bDrawCorner)
+	if (bDrawCorner)
 	{
 		iRefX = SCREEN_HALF_X - 0.5f * CROSS_CENTER;
 		iRefY = SCREEN_HALF_Y - 0.5f * CROSS_CENTER;
@@ -106,7 +106,7 @@ function DrawCrosshair( ECanvas Canvas )
 	}
 }
 
-function DrawTopBar( ECanvas Canvas )
+function DrawTopBar(ECanvas Canvas)
 {
 	local int i, j;
 	local int u, v;
@@ -123,35 +123,35 @@ function DrawTopBar( ECanvas Canvas )
 			 EHC_ALPHA_GREEN, Canvas);
 
 	// Sound equalizer
-	eqStart		= 4.f*SCREEN_X;
-	eqEnd		= SCREEN_END_X-4.f*SCREEN_X;
+	eqStart		= 4.f * SCREEN_X;
+	eqEnd		= SCREEN_END_X - 4.f * SCREEN_X;
 	eqHalfRange = (eqEnd - eqStart) / 2.f;
 
-	for( i=0; i<eqEnd-eqStart; i+=6 )
+	for (i = 0; i < eqEnd - eqStart; i += 6)
 	{
-		value = 6.f * (1-Abs((eqHalfRange-i)/eqHalfRange));
+		value = 6.f * (1 - Abs((eqHalfRange - i) / eqHalfRange));
 		value -= 6.f * FRand();
 		value = Clamp(value, 0, 5.5);
 		
-		for( j=0; j<6; j++ )
+		for (j = 0; j < 6; j++)
 		{
 			u = eqStart + i;
-			v = TOP_SCREEN_Y + 8 + 4*j;
-			cValue = Value / (6-j);
+			v = TOP_SCREEN_Y + 8 + 4 * j;
+			cValue = Value / (6 - j);
 
-			if( cValue<0.2f || Value<j || !Locked() )
+			if (cValue < 0.2f || Value < j || !Locked())
 				c = EHC_ALPHA_BLACK;
 			else				
 				c = EHC_ALPHA_GREEN;
 
-			DrawLine(u, v, u+4, v+2, c, Canvas);
+			DrawLine(u, v, u + 4, v + 2, c, Canvas);
 		}
 	}
 
 
 }
 
-function DrawBottomBar( ECanvas Canvas )
+function DrawBottomBar(ECanvas Canvas)
 {
     local string text;
 	local float xLen, yLen;
@@ -179,15 +179,15 @@ function DrawBottomBar( ECanvas Canvas )
     epc = EPlayerController(Mic.Controller);
     if (Epc.bLaserMicZoomLevels)
     {
-        RADCurr = (Mic.current_fov/180.0) * 3.1416;
-        RADDef = (90.0/180.0) * 3.1416;
-        fZoomRatio = tan(RADDef/2.0)/tan(RADCurr/2.0);
+        RADCurr = (Mic.current_fov / 180.0) * 3.1416;
+        RADDef = (90.0 / 180.0) * 3.1416;
+        fZoomRatio = tan(RADDef / 2.0) / tan(RADCurr / 2.0);
         if (fZoomRatio < 1.0)
             fZoomRatio = 1.0;
         strZoom = Localize("HUD", "LaserMicZoom", "Localization\\Enhanced") @ int(fZoomRatio)$"X";
 
         Canvas.TextSize(strZoom, xLen, yLen);
-        textY = SCREEN_END_Y - BOTTOM_SCREEN_Y - 0.5f*(BOTTOMBAR_HEIGHT+yLen);
+        textY = SCREEN_END_Y - BOTTOM_SCREEN_Y - 0.5f * (BOTTOMBAR_HEIGHT + yLen);
         Canvas.SetPos(SCREEN_X + SIDEBAR_WIDTH + 8, textY);
         Canvas.DrawText(strZoom);
     }
@@ -195,30 +195,30 @@ function DrawBottomBar( ECanvas Canvas )
     {
         text = Canvas.LocalizeStr("ZOOM_4X");
         Canvas.TextSize(text, xLen, yLen);
-        textY = SCREEN_END_Y - BOTTOM_SCREEN_Y - 0.5f*(BOTTOMBAR_HEIGHT+yLen);
+        textY = SCREEN_END_Y - BOTTOM_SCREEN_Y - 0.5f * (BOTTOMBAR_HEIGHT + yLen);
         Canvas.SetPos(SCREEN_X + SIDEBAR_WIDTH + 8, textY);
         Canvas.DrawText(text);
     }
 
-	text = "" $ VSize(EPlayerController(Mic.controller).m_targetLocation-Mic.Location)/100 $ " M";
+	text = "" $ VSize(EPlayerController(Mic.controller).m_targetLocation - Mic.Location) / 100 $ " M";
 	Canvas.TextSize(text, xLen, yLen);
-	textY = SCREEN_END_Y - BOTTOM_SCREEN_Y - 0.5f*(BOTTOMBAR_HEIGHT+yLen);
+	textY = SCREEN_END_Y - BOTTOM_SCREEN_Y - 0.5f * (BOTTOMBAR_HEIGHT + yLen);
     Canvas.SetPos(SCREEN_END_X - SIDEBAR_WIDTH - 40 - xLen, textY);
     Canvas.DrawText(text);
 
 	// Text
-	if( Locked() )
+	if (Locked())
 	{
 		text = Canvas.LocalizeStr("DECODING");
 		Canvas.TextSize(text, xLen, yLen);
-		Canvas.SetPos(SCREEN_HALF_X - 0.5f*xLen, textY);
+		Canvas.SetPos(SCREEN_HALF_X - 0.5f * xLen, textY);
 		Canvas.DrawText(text);
 	}
 	else
 	{
 		text = Canvas.LocalizeStr("SEARCHING");
 		Canvas.TextSize(text, xLen, yLen);
-		Canvas.SetPos(SCREEN_HALF_X - 0.5f*xLen, textY);
+		Canvas.SetPos(SCREEN_HALF_X - 0.5f * xLen, textY);
 		Canvas.DrawText(text);
 	}
 }
@@ -230,7 +230,7 @@ function DrawSideBars(ECanvas Canvas)
     Canvas.DrawColor = White;
 
     // Left Fill //
-    for(iCurrPos = TOP_SCREEN_Y + 2; iCurrPos < SCREEN_END_Y - BOTTOM_SCREEN_Y; iCurrPos += 6)
+    for (iCurrPos = TOP_SCREEN_Y + 2; iCurrPos < SCREEN_END_Y - BOTTOM_SCREEN_Y; iCurrPos += 6)
     {
         Canvas.SetPos(SCREEN_X + 2, iCurrPos);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_fond_ligne, SIDEBAR_WIDTH - 4, 6, 0, 0, 1, 6);
@@ -328,26 +328,26 @@ function DrawNoiseBars(ECanvas Canvas)
     Canvas.SetPos(SCREEN_HALF_X - rPos, yPos - 16);
     Canvas.DrawText("["$szFirstDir$"]");
 
-    Canvas.SetPos(SCREEN_HALF_X - rPos + p1, yPos-9);
+    Canvas.SetPos(SCREEN_HALF_X - rPos + p1, yPos - 9);
     Canvas.DrawText(".");
-    Canvas.SetPos(SCREEN_HALF_X - rPos + p1, yPos-8);
+    Canvas.SetPos(SCREEN_HALF_X - rPos + p1, yPos - 8);
     Canvas.DrawText(".");
 
     Canvas.SetPos(SCREEN_HALF_X + (630 - rPos), yPos - 16);
     Canvas.DrawText("["$szSecondDir$"]");
 
-    Canvas.SetPos(SCREEN_HALF_X + (630 - rPos) + p2, yPos-9);
+    Canvas.SetPos(SCREEN_HALF_X + (630 - rPos) + p2, yPos - 9);
     Canvas.DrawText(".");
-    Canvas.SetPos(SCREEN_HALF_X + (630 - rPos) + p2, yPos-8);
+    Canvas.SetPos(SCREEN_HALF_X + (630 - rPos) + p2, yPos - 8);
     Canvas.DrawText(".");
 
     // Draw noise bars //
     DrawNoiseBar(SCREEN_X + SIDEBAR_WIDTH               , yPos - 4, 
                  SCREEN_END_X - SCREEN_X - SIDEBAR_WIDTH, yPos, 
-                 rPos%126, Canvas);
+                 rPos % 126, Canvas);
     DrawNoiseBar(SCREEN_X + SIDEBAR_WIDTH               , yPos + 2, 
                  SCREEN_END_X - SCREEN_X - SIDEBAR_WIDTH, yPos + 6, 
-                 -rPos%126, Canvas);    
+                 -rPos % 126, Canvas);    
 }
 
 function DrawNoiseBar(int AX, int AY, int BX, int BY, int OffsetX, ECanvas Canvas)

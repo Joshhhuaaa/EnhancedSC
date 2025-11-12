@@ -27,14 +27,14 @@ var()  bool				 ConversationTrigger;
 | IsRelevant                                                 |
 |                                                            |
 \*-----------------------------------------------------------*/
-function bool IsRelevant( actor Other )
+function bool IsRelevant(actor Other)
 {
-	switch( ProximityType )
+	switch (ProximityType)
 	{
 		case PlayerProximity:
 			return Other.bIsPawn && Pawn(Other).IsPlayerPawn();
 		case NPCProximity:
-			return Other.bIsPawn && ( EAIController(Pawn(Other).controller) != None) ;
+			return Other.bIsPawn && (EAIController(Pawn(Other).controller) != None) ;
 		case PawnProximity:
 			return Other.bIsPawn;
 	}
@@ -52,21 +52,21 @@ function Touch(actor Other)
 	local EGroupAI Group;
 	local Pawn P;
 
-	//if ( ConversationTrigger && EchelonLevelInfo(Level).MusicObj.GetStateName() != 'Idle' )
+	//if (ConversationTrigger && EchelonLevelInfo(Level).MusicObj.GetStateName() != 'Idle')
 	//	return;
 
-	if(!( (bAlreadyVisited) && (bTriggerOnlyOnce) ))
+	if (!((bAlreadyVisited) && (bTriggerOnlyOnce)))
 	{
-		if(IsRelevant(Other))
+		if (IsRelevant(Other))
 		{
-			//if ( Level.TimeSeconds - TriggerTime < 0.2 )
+			//if (Level.TimeSeconds - TriggerTime < 0.2)
 			//	return;
 			//TriggerTime = Level.TimeSeconds;
 
 			//set visited flag
-			bAlreadyVisited=true;
+			bAlreadyVisited = true;
 
-			foreach DynamicActors( class'EGroupAI', Group, GroupTag)
+			foreach DynamicActors(class'EGroupAI', Group, GroupTag)
 			{
 				Group.SendJumpEvent(JumpLabel,bAffectLastZone,bForceJump);
 				break; 

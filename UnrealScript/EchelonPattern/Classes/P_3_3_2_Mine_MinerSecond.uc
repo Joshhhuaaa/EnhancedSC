@@ -12,9 +12,9 @@ var int Underway;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('Milestone');
@@ -42,13 +42,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ERussianMiner1')
+        if (P.name == 'ERussianMiner1')
             Characters[1] = P.controller;
-        if(P.name == 'ELambert1')
+        if (P.name == 'ELambert1')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     Underway=0;

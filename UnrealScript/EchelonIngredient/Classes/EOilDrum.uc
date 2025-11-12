@@ -41,9 +41,9 @@ state s_Flying
 		RotationRate.Roll=15000;
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
-		if( Velocity.Z < 0 )
+		if (Velocity.Z < 0)
 		{
 			Disable('Tick');
 			SetTimer(0.5,false);

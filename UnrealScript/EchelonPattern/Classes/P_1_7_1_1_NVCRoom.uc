@@ -12,9 +12,9 @@ var int TelDone;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('GoFalseNVCRoom');
@@ -48,15 +48,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EFalseRussianSoldier3')
+        if (P.name == 'EFalseRussianSoldier3')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz22')
+        if (P.name == 'spetsnaz22')
             Characters[2] = P.controller;
-        if(P.name == 'spetsnaz21')
+        if (P.name == 'spetsnaz21')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     TelDone=0;

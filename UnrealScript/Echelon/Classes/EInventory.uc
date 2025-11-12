@@ -23,19 +23,19 @@ var EInventoryItem		PreviousEquipedItem;		// Any of the above
 
 const NumberOfCat		= 3;
 
-native(1210) final function AddInventoryItem( EInventoryItem Item );
-native(1211) final function bool CanAddItem( EInventoryItem Item );
-native(1212) final function RemoveItem( EInventoryItem Item, optional int Quantity, optional bool bRemoveAll );
-native(1213) final function int GetNbItemInCategory( eInvCategory Category );
-native(1214) final function EInventoryItem GetItemInCategory( eInvCategory Category, int ItemNumber );
-native(1215) final function EInventoryItem GetItemByClass( Name ClassName );
-native(1216) final function bool Possesses( EInventoryItem Item );
+native(1210) final function AddInventoryItem(EInventoryItem Item);
+native(1211) final function bool CanAddItem(EInventoryItem Item);
+native(1212) final function RemoveItem(EInventoryItem Item, optional int Quantity, optional bool bRemoveAll);
+native(1213) final function int GetNbItemInCategory(eInvCategory Category);
+native(1214) final function EInventoryItem GetItemInCategory(eInvCategory Category, int ItemNumber);
+native(1215) final function EInventoryItem GetItemByClass(Name ClassName);
+native(1216) final function bool Possesses(EInventoryItem Item);
 
 //------------------------------------------------------------------------
 // Description		
 //		Call this instead of calling GetSelected == item
 //------------------------------------------------------------------------
-event bool IsSelected( EInventoryItem Item )
+event bool IsSelected(EInventoryItem Item)
 {
 	return Item == BackPackPrimSelectedItem || 
 		   Item == BackPackSecSelectedItem;
@@ -48,18 +48,18 @@ event bool IsSelected( EInventoryItem Item )
 function SetPreviousConfig()
 {
 	//Log("Use previous config * * * * * * * * * * *"@PreviousEquipedItem);
-	if( PreviousEquipedItem != None )
+	if (PreviousEquipedItem != None)
 	{
-		if( EPawn(Owner).Controller.bIsPlayer && !EPlayerController(EPawn(Owner).Controller).CanSwitchToHandItem(PreviousEquipedItem) )
+		if (EPawn(Owner).Controller.bIsPlayer && !EPlayerController(EPawn(Owner).Controller).CanSwitchToHandItem(PreviousEquipedItem))
 			return;
 
 		//Log("... equiping"@PreviousEquipedItem);
 		SetSelectedItem(PreviousEquipedItem);
 	}
-	else if( GetSelectedItem() != None )
+	else if (GetSelectedItem() != None)
 	{
 		// Sam specific
-		if( !GetSelectedItem().IsA('EMainGun') )
+		if (!GetSelectedItem().IsA('EMainGun'))
 		{
 			//Log("... unequiping"@GetSelectedItem());
 			UnEquipItem(GetSelectedItem());
@@ -71,14 +71,14 @@ function SetPreviousConfig()
 // Description		
 //		Select the item in the right package
 //------------------------------------------------------------------------
-event SetSelectedItem( EInventoryItem Item )
+event SetSelectedItem(EInventoryItem Item)
 {
-	if( Item == None )
+	if (Item == None)
 	{
 		//Log(self$" WARNING: SetSelecteditem with Item = None");
 		return;
 	}
-	else if( !Possesses(Item) )
+	else if (!Possesses(Item))
 	{
 		Log(self$" WARNING: SetSelectedItem with Item not present "$Item);
 		return;
@@ -86,17 +86,17 @@ event SetSelectedItem( EInventoryItem Item )
 
 	//Log("SetSelectedItem"@Item);
 
-	if( Item.IsA('EAbstractGoggle') )
+	if (Item.IsA('EAbstractGoggle'))
 	{
-		if( EPawn(Owner).Controller.bIsPlayer )
+		if (EPawn(Owner).Controller.bIsPlayer)
 			EPlayerController(EPawn(Owner).Controller).ChangeHeadObject(Item);
 	}
-	else if( !Item.IsA('ESecondaryAmmo') ) // primary
+	else if (!Item.IsA('ESecondaryAmmo')) // primary
 	{
 		// UnEquip the current selected primary
-		if( Item.bEquipable )
+		if (Item.bEquipable)
 		{
-			if( BackPackPrimSelectedItem != None && BackPackPrimSelectedItem != Item )
+			if (BackPackPrimSelectedItem != None && BackPackPrimSelectedItem != Item)
 				UnEquipItem(BackPackPrimSelectedItem, true, Item);
 
 			BackPackPrimSelectedItem = Item;
@@ -104,13 +104,13 @@ event SetSelectedItem( EInventoryItem Item )
 
 		Item.Select(self);
 		// It's possible that a pickup change handItem without changing selected item. Force Selected Item to be handItem
-		if( EPawn(Owner).Controller.bIsPlayer && Item.bEquipable )
+		if (EPawn(Owner).Controller.bIsPlayer && Item.bEquipable)
 			EPlayerController(EPawn(Owner).Controller).ChangeHandObject(Item);
 	}
 	else
 	{
 		// UnEquip the current selected secondary
-		if( BackPackSecSelectedItem != None )
+		if (BackPackSecSelectedItem != None)
 			UnEquipItem(BackPackSecSelectedItem, false, Item);
 
 		BackPackSecSelectedItem = Item;
@@ -123,9 +123,9 @@ event SetSelectedItem( EInventoryItem Item )
 // Description		
 //		Get the current selected item (hie never used i think)
 //------------------------------------------------------------------------
-function EInventoryItem GetSelectedItem( optional int hie )
+function EInventoryItem GetSelectedItem(optional int hie)
 {
-	if( hie == 0 )
+	if (hie == 0)
 		return BackPackPrimSelectedItem;
 	else
 		return BackPackSecSelectedItem;
@@ -135,15 +135,15 @@ function EInventoryItem GetSelectedItem( optional int hie )
 // Description		
 //		Unequip the current selected item
 //------------------------------------------------------------------------
-event UnEquipItem( EInventoryItem Item, optional bool bNoUpdate, optional EInventoryItem NewItem )
+event UnEquipItem(EInventoryItem Item, optional bool bNoUpdate, optional EInventoryItem NewItem)
 {
-	if ( Item == None ) 
+	if (Item == None) 
 		return;
 
 	//Log("UnEquipItem"@Item@bNoUpdate@NewItem);
 
 	// Keep last item equiped
-	if( Item == None || NewItem == None || Item.class != NewItem.class )
+	if (Item == None || NewItem == None || Item.class != NewItem.class)
 	{
 		//Log("BACKUPING"@Item);
 		PreviousEquipedItem	= Item;
@@ -151,16 +151,16 @@ event UnEquipItem( EInventoryItem Item, optional bool bNoUpdate, optional EInven
 	//else
 	//	Log("NO BACKUP"@Item == None@NewItem == None@Item.class != NewItem.class);
 
-	if( Item == BackPackPrimSelectedItem )
+	if (Item == BackPackPrimSelectedItem)
 	{
 		BackPackPrimSelectedItem.UnSelect(self);
 		BackPackPrimSelectedItem = None;
 
 		// send message handitem changed
-		if( Owner != none && EPawn(Owner).Controller.bIsPlayer && !bNoUpdate )
+		if (Owner != none && EPawn(Owner).Controller.bIsPlayer && !bNoUpdate)
 			EPlayerController(EPawn(Owner).Controller).ChangeHandObject(None);
 	}
-	else if( Item == BackPackSecSelectedItem )
+	else if (Item == BackPackSecSelectedItem)
 	{
 		BackPackSecSelectedItem.UnSelect(self);
 		BackPackSecSelectedItem = None;
@@ -186,7 +186,7 @@ event string GetPackageName()
 }
 event string GetCategoryName(eInvCategory Category)
 {
-	switch( Category )
+	switch (Category)
 	{
 		case CAT_MAINGUN: return Localize("HUD", "FN2000", "Localization\\HUD"); break;
 		case CAT_GADGETS: return Localize("HUD", "GADGETS", "Localization\\HUD"); break;

@@ -15,9 +15,9 @@ var int CSplayed;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('Death');
@@ -41,14 +41,14 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMasse0')
+        if (P.name == 'EMasse0')
         {
             Characters[1] = P.controller;
             EAIController(Characters[1]).bAllowKill = true;
             EAIController(Characters[1]).bAllowKnockout = true;
             EAIController(Characters[1]).bWasFound = true;
         }
-        if(P.name == 'spetsnaz13')
+        if (P.name == 'spetsnaz13')
         {
             Characters[2] = P.controller;
             EAIController(Characters[2]).bAllowKnockout = true;
@@ -57,11 +57,11 @@ function InitPattern()
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'ECompSonyClv2')
+        if (A.name == 'ECompSonyClv2')
             SoundActors[0] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     CSplayed=0;

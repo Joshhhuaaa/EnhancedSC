@@ -12,7 +12,7 @@ function Created()
 	Super.Created();
 	SetAcceptsFocus();
 
-	MessageArea = UWindowMessageBoxArea(CreateWindow(class'UWindowMessageBoxArea', 10, 10, WinWidth-20, WinHeight-44));
+	MessageArea = UWindowMessageBoxArea(CreateWindow(class'UWindowMessageBoxArea', 10, 10, WinWidth - 20, WinHeight - 44));
 }
 
 function KeyDown(int Key, float X, float Y)
@@ -21,7 +21,7 @@ function KeyDown(int Key, float X, float Y)
 
 	P = UWindowMessageBox(ParentWindow);
 
-	if(Key == GetPlayerOwner().Player.Console.EInputKey.IK_Enter && EnterResult != MR_None)
+	if (Key == GetPlayerOwner().Player.Console.EInputKey.IK_Enter && EnterResult != MR_None)
 	{
 		P = UWindowMessageBox(ParentWindow);
 		P.Result = EnterResult;
@@ -33,9 +33,9 @@ function BeforePaint(Canvas C, float X, float Y)
 {
 	Super.BeforePaint(C, X, Y);
 
-	MessageArea.SetSize(WinWidth-20, WinHeight-44);
+	MessageArea.SetSize(WinWidth - 20, WinHeight - 44);
 
-	switch(Buttons)
+	switch (Buttons)
 	{
 	case MB_YesNoCancel:
 		CancelButton.WinLeft = WinWidth - 52;
@@ -67,7 +67,7 @@ function BeforePaint(Canvas C, float X, float Y)
 function Resized()
 {
 	Super.Resized();
-	MessageArea.SetSize(WinWidth-20, WinHeight-44);
+	MessageArea.SetSize(WinWidth - 20, WinHeight - 44);
 }
 
 function float GetHeight(Canvas C)
@@ -80,7 +80,7 @@ function Paint(Canvas C, float X, float Y)
 	local Texture T;
 	Super.Paint(C, X, Y);
 	T = GetLookAndFeelTexture();
-	DrawUpBevel( C, 0, WinHeight-24, WinWidth, 24, T);
+	DrawUpBevel(C, 0, WinHeight - 24, WinWidth, 24, T);
 }
 
 function SetupMessageBoxClient(string InMessage, MessageBoxButtons InButtons, MessageBoxResult InEnterResult)
@@ -90,24 +90,24 @@ function SetupMessageBoxClient(string InMessage, MessageBoxButtons InButtons, Me
 	EnterResult = InEnterResult;
 
 	// Create buttons
-	switch(Buttons)
+	switch (Buttons)
 	{
 	case MB_YesNoCancel:
 		CancelButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', WinWidth - 52, WinHeight - 20, 48, 16));
 		CancelButton.SetText(CancelText);
-		if(EnterResult == MR_Cancel)
+		if (EnterResult == MR_Cancel)
 			CancelButton.SetFont(F_Bold);
 		else
 			CancelButton.SetFont(F_Normal);
 		NoButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', WinWidth - 104, WinHeight - 20, 48, 16));
 		NoButton.SetText(NoText);
-		if(EnterResult == MR_No)
+		if (EnterResult == MR_No)
 			NoButton.SetFont(F_Bold);
 		else
 			NoButton.SetFont(F_Normal);
 		YesButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', WinWidth - 156, WinHeight - 20, 48, 16));
 		YesButton.SetText(YesText);
-		if(EnterResult == MR_Yes)
+		if (EnterResult == MR_Yes)
 			YesButton.SetFont(F_Bold);
 		else
 			YesButton.SetFont(F_Normal);
@@ -115,13 +115,13 @@ function SetupMessageBoxClient(string InMessage, MessageBoxButtons InButtons, Me
 	case MB_YesNo:
 		NoButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', WinWidth - 52, WinHeight - 20, 48, 16));
 		NoButton.SetText(NoText);
-		if(EnterResult == MR_No)
+		if (EnterResult == MR_No)
 			NoButton.SetFont(F_Bold);
 		else
 			NoButton.SetFont(F_Normal);
 		YesButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', WinWidth - 104, WinHeight - 20, 48, 16));
 		YesButton.SetText(YesText);
-		if(EnterResult == MR_Yes)
+		if (EnterResult == MR_Yes)
 			YesButton.SetFont(F_Bold);
 		else
 			YesButton.SetFont(F_Normal);
@@ -129,13 +129,13 @@ function SetupMessageBoxClient(string InMessage, MessageBoxButtons InButtons, Me
 	case MB_OKCancel:
 		CancelButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', WinWidth - 52, WinHeight - 20, 48, 16));
 		CancelButton.SetText(CancelText);
-		if(EnterResult == MR_Cancel)
+		if (EnterResult == MR_Cancel)
 			CancelButton.SetFont(F_Bold);
 		else
 			CancelButton.SetFont(F_Normal);
 		OKButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', WinWidth - 104, WinHeight - 20, 48, 16));
 		OKButton.SetText(OKText);
-		if(EnterResult == MR_OK)
+		if (EnterResult == MR_OK)
 			OKButton.SetFont(F_Bold);
 		else
 			OKButton.SetFont(F_Normal);
@@ -143,7 +143,7 @@ function SetupMessageBoxClient(string InMessage, MessageBoxButtons InButtons, Me
 	case MB_OK:
 		OKButton = UWindowSmallButton(CreateControl(class'UWindowSmallButton', WinWidth - 52, WinHeight - 20, 48, 16));
 		OKButton.SetText(OKText);
-		if(EnterResult == MR_OK)
+		if (EnterResult == MR_OK)
 			OKButton.SetFont(F_Bold);
 		else
 			OKButton.SetFont(F_Normal);
@@ -157,9 +157,9 @@ function Notify(UWindowDialogControl C, byte E)
 
 	P = UWindowMessageBox(ParentWindow);
 
-	if(E == DE_Click)
+	if (E == DE_Click)
 	{
-		switch(C)
+		switch (C)
 		{
 		case YesButton:
 			P.Result = MR_Yes;

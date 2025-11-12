@@ -15,9 +15,9 @@ var int ElevLaserMicUnderway;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_HEAR_RICOCHET:
             EventJump('TheyDetectYouSomehow');
@@ -36,17 +36,17 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGrinko0')
+        if (P.name == 'EGrinko0')
             Characters[1] = P.controller;
-        if(P.name == 'EMasse0')
+        if (P.name == 'EMasse0')
             Characters[2] = P.controller;
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[3] = P.controller;
-        if(P.name == 'EAnna0')
+        if (P.name == 'EAnna0')
             Characters[4] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     ElevLaserMicUnderway=0;

@@ -14,9 +14,9 @@ var int HearAlerted;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('ShootAt');
@@ -41,18 +41,18 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EWilkes0')
+        if (P.name == 'EWilkes0')
             Characters[1] = P.controller;
-        if(P.name == 'EBaxter2')
+        if (P.name == 'EBaxter2')
             Characters[2] = P.controller;
-        if(P.name == 'ECIASecurity14')
+        if (P.name == 'ECIASecurity14')
         {
             Characters[3] = P.controller;
             EAIController(Characters[3]).bAllowKnockout = true;
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     HearAlerted=0;

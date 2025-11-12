@@ -14,15 +14,15 @@ function int Compare(UWindowList T, UWindowList B)
 	TI = UWindowComboListItem(T);
 	BI = UWindowComboListItem(B);
 
-	if(TI.SortWeight == BI.SortWeight)
+	if (TI.SortWeight == BI.SortWeight)
 	{
 		TS = caps(TI.Value);
 		BS = caps(BI.Value);
 
-		if(TS == BS)
+		if (TS == BS)
 			return 0;
 
-		if(TS < BS)
+		if (TS < BS)
 			return -1;
 
 		return 1;

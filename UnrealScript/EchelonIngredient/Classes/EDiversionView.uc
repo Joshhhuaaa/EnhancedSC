@@ -195,7 +195,7 @@ function UpdateDistanceMeter(float DeltaTime)
         
     Traced = Trace(HitLocation, HitNormal, TraceEnd, Location, True);
 
-    if(Traced != None)
+    if (Traced != None)
     {
         fDistance = Dist(HitLocation, Location);
     }

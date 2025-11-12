@@ -64,18 +64,18 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 event AdjustDefaultPatternState(EchelonEnums.GoalType _GoalT)
 {
 
-	switch(_GoalT)
+	switch (_GoalT)
 	{
 		case GOAL_Attack:
 		case GOAL_Charge:
-			if(GetStateName() != 'Attack')
+			if (GetStateName() != 'Attack')
 			{
 				//log("AdjustDefaultPatternState (Attack): "$self);
 				//GotoPatternState('Attack');
 			}
 			break;
 		case GOAL_Search:
-			if(GetStateName() != 'Search')
+			if (GetStateName() != 'Search')
 			{
 				//log("AdjustDefaultPatternState (Search): "$self);
 				//GotoPatternState('Search');
@@ -128,19 +128,19 @@ auto state Idle
 
 	function BeginState()
 	{
-		if(!bDontResetMusic)
+		if (!bDontResetMusic)
 		{
 		EchelonLevelInfo(Level).SendMusicRequest(0,false,self);
 		EchelonLevelInfo(Level).SendMusicRequest(1,false,self);
 		}
 
 		//reset the flag
-		bDontResetMusic=false;
+		bDontResetMusic = false;
 
 		ReloadWeapon(1,1);
 
 
-		if((Characters[1]!= None) && (Characters[1].GetStateName() == 's_Alert'))
+		if ((Characters[1]!= None) && (Characters[1].GetStateName() == 's_Alert'))
         {
 			EAIController(Characters[1]).GotoStateSafe('s_Investigate');
         }
@@ -168,13 +168,13 @@ auto state Idle
 	
 	function ReflexCallBack(EAIEvent Event)
 	{
-		if(!CheckGoalPriority(50)  && (Characters[1].GetStateName() != 's_SitDown') && !bDisableMessages)
+		if (!CheckGoalPriority(50)  && (Characters[1].GetStateName() != 's_SitDown') && !bDisableMessages)
 		{
-			switch ( Event.EventType )
+			switch (Event.EventType)
 			{
 				case AI_HEAR_SOMETHING :
 					
-					switch ( Event.EventNoiseType )
+					switch (Event.EventNoiseType)
 					{
 						case NOISE_GrenadeWarning : 
 							
@@ -183,7 +183,7 @@ auto state Idle
                         
                         case NOISE_Ricochet:
 
-                        if(fLastReflexTime < (Level.TimeSeconds - 5.0f))
+                        if (fLastReflexTime < (Level.TimeSeconds - 5.0f))
                         {							
 							plog("REFLEX -- Noise Ricochet response.");
 							Reaction(1, 50, TriggerEvent.EventLocation, REACT_ImmediateThreat);
@@ -213,7 +213,7 @@ auto state Idle
 	//------------------------------------------------------------------------
 	function CommunicationCallBack(AIEventType eType)
 	{
-		switch ( eType )
+		switch (eType)
 		{
 			case AI_LET_HIM_GO:
 				ePawn(Characters[1].Pawn).Bark_Type = BARK_ShootHim;
@@ -233,13 +233,13 @@ auto state Idle
 	event EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
 
-		if(EAIController(Characters[1]).bNotResponsive)
+		if (EAIController(Characters[1]).bNotResponsive)
 			return;
 
-		if(!bDisableMessages)
+		if (!bDisableMessages)
 		{
 
-			switch(Event.EventType)
+			switch (Event.EventType)
 			{
 				/*******  EXTERNAL EVENTS  ********************************************/
 
@@ -279,7 +279,7 @@ auto state Idle
 
 				case AI_HEAR_SOMETHING:
 					
-					switch ( Event.EventNoiseType )
+					switch (Event.EventNoiseType)
 					{
 						case NOISE_LightFootstep :
 														
@@ -372,7 +372,7 @@ auto state Idle
 
 					Level.RemoveChange(Event.EventTarget);		// !!! Don't forget to remove changed actor after handling it !!!
 
-					switch ( Event.EventTarget.ChangeType )
+					switch (Event.EventTarget.ChangeType)
 					{
 						case CHANGE_Flare :
 							EventJump('SeeFlare');
@@ -539,7 +539,7 @@ HearSomethingQuiet:
 	
 	plog("HearSomethingQuiet"); // straighten up, look around, search at source of sound
 	ResetGoals(1);
-	if(ePawn(Characters[1].Pawn).ICanBark())
+	if (ePawn(Characters[1].Pawn).ICanBark())
 	{
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_HeardFoot;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
@@ -552,7 +552,7 @@ HearSomethingInvestigate:
 	
 	plog("HearSomethingInvestigate - turn towards EventLocation call Search_Location"); // straighten up, turn towards noise, search
 	ResetGoals(1);
-	if(ePawn(Characters[1].Pawn).ICanBark())
+	if (ePawn(Characters[1].Pawn).ICanBark())
 	{
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_HeardFoot;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
@@ -566,7 +566,7 @@ HearDoorOpening:
 
 	plog("HearDoorOpening"); // straighten up, turn towards noise, search
 	ResetGoals(1);
-	if(ePawn(Characters[1].Pawn).ICanBark())
+	if (ePawn(Characters[1].Pawn).ICanBark())
 	{
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_HeardFoot;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
@@ -630,7 +630,7 @@ HearGunshot:
 	plog("HearGunshot");					// straighten up, turn towards noise, search
 	CheckIfThreatNearby(1,'HearRicochet');	// if gunshot is nearby, treat gunshot as if it were a ricochet
 	ResetGoals(1);
-	if(ePawn(Characters[1].Pawn).ICanBark())
+	if (ePawn(Characters[1].Pawn).ICanBark())
 	{
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_HeardGunShot;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
@@ -644,7 +644,7 @@ HearTurretFire:
 	plog("HearTurretFire");					// straighten up, turn towards noise, search
 	CheckIfThreatNearby(1,'HearCloseTurretFire');	// if gunshot is nearby, treat gunshot as if it were a ricochet
 	ResetGoals(1);
-	if(ePawn(Characters[1].Pawn).ICanBark())
+	if (ePawn(Characters[1].Pawn).ICanBark())
 	{
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_HeardGunShot;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
@@ -658,7 +658,7 @@ HearCloseTurretFire:
 	plog("HearCloseTurretFire");			// Same as HearRIchochet, but no UpdatePlayerLoc nor alarm
 	ResetGoals(1);	
 	//ForceUpdatePlayerLocation(1);
-	if(ePawn(Characters[1].Pawn).ICanBark())
+	if (ePawn(Characters[1].Pawn).ICanBark())
 	{
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_HeardGunShot;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
@@ -678,15 +678,15 @@ HearRicochet:
 	PlayerIdentified();
 	ResetGoals(1);	
 	//ForceUpdatePlayerLocation(1);
-	if(ePawn(Characters[1].Pawn).ICanBark())
+	if (ePawn(Characters[1].Pawn).ICanBark())
 	{
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_UnderFire;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
 	}
 
-	CheckIfDirectLine(1,Characters[0].pawn,'HearRicochetB');
+	CheckIfDirectLine(1,Characters[0].Pawn,'HearRicochetB');
 
-	if(Characters[1].GetStateName() != 's_SitDown')
+	if (Characters[1].GetStateName() != 's_SitDown')
 	{
 		Reaction(1, 50, TriggerEvent.EventLocation, REACT_ImmediateThreat);
 		DisableMessages(true);
@@ -697,7 +697,7 @@ HearRicochet:
 	Broadcast(1, BC_BACKUP_RADIO_ATTACK);
 
 	CheckAlarmProximity(1,'AlarmAttack',250); //check if NPC is stick to an alarm
-	EAIController(Characters[1]).LastKnownPlayerTime = Level.TimeSeconds-15;
+	EAIController(Characters[1]).LastKnownPlayerTime = Level.TimeSeconds - 15;
 	PlayerIsVisible(1,'AttackedFromUnknownLocation');
 	CheckAlarmProximity(1,'AlarmAttack');
 	Jump('AttackPlayer');
@@ -714,14 +714,14 @@ HearExplosion:
 	plog("HearExplosion");					// duck and run, search in direction of sound
 	CheckIfThreatNearby(1,'HearRicochet');	// if gunshot is nearby, treat gunshot as if it were a ricochet
 	ResetGoals(1);
-	if(ePawn(Characters[1].Pawn).ICanBark())
+	if (ePawn(Characters[1].Pawn).ICanBark())
 	{
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_HeardGunShot;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
 	}
 	Reaction(1, 50, TriggerEvent.EventLocation, REACT_DistantThreat);
 	Broadcast(1, BC_BACKUP_RADIO_INVESTIGATE);
-	bExplosionStimuli=true;
+	bExplosionStimuli = true;
 	Jump('Search_Location');
 	
 	
@@ -794,9 +794,9 @@ SeeLiveGrenade:
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_GroupScatter;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
 
-	//CheckIfDirectLine(1,Characters[0].pawn,'HearRicochetB');
+	//CheckIfDirectLine(1,Characters[0].Pawn,'HearRicochetB');
 
-	if(Characters[1].GetStateName() != 's_SitDown')
+	if (Characters[1].GetStateName() != 's_SitDown')
 	{
 		Reaction(1, 50, TriggerEvent.EventLocation, REACT_SeeGrenade);
 		DisableMessages(true);
@@ -820,31 +820,31 @@ SeeLiveGrenadeB:
 SeeUnconsciousBody:
 	
 	plog("SeeUnconsciousBody -- EventTarget:  " $ TriggerEvent.EventTarget);
-	if ( !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats )
+	if (!EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats)
 	{
 		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BodyFound");
 		EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound = true;
 	}
 	ResetGoals(1);
-	bReactedToAlarm=1; //to trigger the postattack behavior
+	bReactedToAlarm = 1; //to trigger the postattack behavior
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_SeeUnconscious;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
 	Broadcast(1, BC_INFO_RADIO_AWARE);
 	Reaction(1, 50, TriggerEvent.EventLocation, REACT_SeeBody);
-	if ( !ePawn(TriggerEvent.EventTarget).bNoUnconsciousRevival )
+	if (!ePawn(TriggerEvent.EventTarget).bNoUnconsciousRevival)
 		Goal(1, GOAL_InteractWith, 35,,,TriggerEvent.EventTarget,,,,,,MOVE_JogAlert);
 	Jump('Search_Location');
 	
 SeeDeadBody:
 	
-	plog("SeeDeadBody" );
-	if ( !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats )
+	plog("SeeDeadBody");
+	if (!EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats)
 	{
 		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BodyFound");
 		EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound = true;
 	}
-	bReactedToAlarm=1; //to trigger the postattack behavior
-	if ( EPawn(TriggerEvent.EventTarget) != none ) 
+	bReactedToAlarm = 1; //to trigger the postattack behavior
+	if (EPawn(TriggerEvent.EventTarget) != none) 
 	{
 		plog("   Time Since Death :  " $ Level.TimeSeconds - EPawn(TriggerEvent.EventTarget).TimeOfDeath);
 		if (Level.TimeSeconds - EPawn(TriggerEvent.EventTarget).TimeOfDeath < 2.0f)
@@ -863,7 +863,7 @@ SeeJustDied:
 	plog("JustDied");
 	PlayerIdentified();
 	ResetGoals(1);
-    if(!ePawn(TriggerEvent.EventTarget).bIsDog)
+    if (!ePawn(TriggerEvent.EventTarget).bIsDog)
 	    ePawn(Characters[1].Pawn).Bark_Type = BARK_SeeCorpse;
     else
         ePawn(Characters[1].Pawn).Bark_Type = BARK_Mystified;
@@ -880,7 +880,7 @@ SeeViolence:
 
 	plog("SeeViolence");
 	ResetGoals(1);
-	if(ePawn(Characters[1].Pawn).ICanBark())
+	if (ePawn(Characters[1].Pawn).ICanBark())
 	{
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_UnderFire;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
@@ -893,7 +893,7 @@ SeeFreshMeat:
 	
 	plog("SeeFreshMeat");	
 	ResetGoals(1);
-    if(!ePawn(TriggerEvent.EventTarget).bIsDog)
+    if (!ePawn(TriggerEvent.EventTarget).bIsDog)
 	    ePawn(Characters[1].Pawn).Bark_Type = BARK_SeeCorpse;
     else
         ePawn(Characters[1].Pawn).Bark_Type = BARK_Mystified;
@@ -909,7 +909,7 @@ SeeDeadBodyCold:
 	
 	plog("SeeDeadBodyCold");
 	ResetGoals(1);
-    if(!ePawn(TriggerEvent.EventTarget).bIsDog)
+    if (!ePawn(TriggerEvent.EventTarget).bIsDog)
 	    ePawn(Characters[1].Pawn).Bark_Type = BARK_SeeCorpse;
     else
         ePawn(Characters[1].Pawn).Bark_Type = BARK_Mystified;
@@ -918,7 +918,7 @@ SeeDeadBodyCold:
 	Reaction(1, 50, TriggerEvent.EventLocation, REACT_SeeBody);
 
 	//Do not interact with Pawn in fire
-	if( TriggerEvent.EventTarget.bIsPawn  && EPawn(TriggerEvent.EventTarget).BodyFlames.Length == 0)
+	if (TriggerEvent.EventTarget.bIsPawn  && EPawn(TriggerEvent.EventTarget).BodyFlames.Length == 0)
 	{
 	Goal_MoveTo(1, 36, TriggerEvent.EventTarget.Location, MOVE_JogAlert);
 	Goal_Action(1, 35, TriggerEvent.EventTarget.Location, ePawn(Characters[1].Pawn).ACheckDeadBody);
@@ -942,7 +942,7 @@ SeeObject:
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks, 1, 0, false);
 	Broadcast(1, BC_SELF_DIRECTED);
 	Reaction(1, 50,, REACT_MovingObject, TriggerEvent.EventTarget);
-	if ( VSize(TriggerEvent.EventTarget.Velocity) > 10.0f )
+	if (VSize(TriggerEvent.EventTarget.Velocity) > 10.0f)
 		Jump('Search_Origin');
 	else
 		Jump('Search_Location');
@@ -957,9 +957,9 @@ SeeAirCamera:
 	Goal_MoveTo(1, 21, TriggerEvent.EventTarget.Location + vector(TriggerEvent.EventTarget.Rotation) * 100.0f, MOVE_WalkAlert);
 	Reaction(1, 50, TriggerEvent.EventTarget.Location, REACT_SeeUnknownPerson);
 
-	if(EGamePlayObject(TriggerEvent.EventTarget) != None)
+	if (EGamePlayObject(TriggerEvent.EventTarget) != None)
 	{
-		EGamePlayObject(TriggerEvent.EventTarget).bWasSeen=true;
+		EGamePlayObject(TriggerEvent.EventTarget).bWasSeen = true;
 	}
 
 	Broadcast(1, BC_SELF_DIRECTED);
@@ -1063,7 +1063,7 @@ LightsTurnedOff:
     iSuggestedBehavior = AddChangeAndSuggestBehavior(1, vector(TriggerEvent.EventTarget.Rotation), CHANGE_LightTurnedOff);
 
     // Debug
-    switch(iSuggestedBehavior)
+    switch (iSuggestedBehavior)
     {
         case 0:log("Idle - LightsTurnedOff - Do Nothing"); break; 
         case 1:log("Idle - LightsTurnedOff - Bark Only"); break;
@@ -1076,7 +1076,7 @@ LightsTurnedOff:
 
     if ((iSuggestedBehavior & BARK_BIT) == BARK_BIT)
     {
-        if(TriggerEvent.EventTarget.owner.GetStateName() == 's_Off')
+        if (TriggerEvent.EventTarget.owner.GetStateName() == 's_Off')
         {
 	        ePawn(Characters[1].Pawn).Bark_Type = BARK_LightsOut;
         }
@@ -1091,7 +1091,7 @@ LightsTurnedOff:
 
 	ChangeState(1,'s_investigate');
 
-	EAIController(Characters[1]).EPawn.ForceFlashLight=false;
+	EAIController(Characters[1]).EPawn.ForceFlashLight = false;
     CheckSwitchAlreadyLocked(1, TriggerEvent.EventTarget.owner);
 	
     if ((iSuggestedBehavior & SEARCH_BIT) == SEARCH_BIT)
@@ -1110,7 +1110,7 @@ LightsShotOut:
     iSuggestedBehavior = AddChangeAndSuggestBehavior(1, vector(TriggerEvent.EventTarget.Rotation), CHANGE_LightTurnedOff);
 
     // Debug
-    switch(iSuggestedBehavior)
+    switch (iSuggestedBehavior)
     {
         case 0:log("Idle - LightsShotOut - Do Nothing"); break; 
         case 1:log("Idle - LightsShotOut - Bark Only"); break;
@@ -1131,7 +1131,7 @@ LightsShotOut:
     }
 
 	ChangeState(1,'s_investigate');
-	EAIController(Characters[1]).EPawn.ForceFlashLight=false;
+	EAIController(Characters[1]).EPawn.ForceFlashLight = false;
 
     if ((iSuggestedBehavior & SEARCH_BIT) == SEARCH_BIT)
     {
@@ -1260,7 +1260,7 @@ PlayerDead:
 
 Greetings:
    plog("Greetings");
-   if(ePawn(Characters[1].Pawn).ICanBark())
+   if (ePawn(Characters[1].Pawn).ICanBark())
    {
         log("Greet other dude");
 		ePawn(Characters[1].Pawn).Bark_Type = BARK_NormalGreeting;
@@ -1316,10 +1316,10 @@ AlarmSearch:
 	plog("AlarmSearch");
     ChangeState(1,'s_alert');
 	DisableMessages(true);
-	bRunningAlarm=true;
-	Goal(1,GOAL_InteractWith, 9,TriggerEvent.EventLocation,,TriggerEvent.EventTarget,,,,true,,MOVE_JogAlert  );
+	bRunningAlarm = true;
+	Goal(1,GOAL_InteractWith, 9,TriggerEvent.EventLocation,,TriggerEvent.EventTarget,,,,true,,MOVE_JogAlert);
 	WaitForGoal(1,GOAL_InteractWith);
-	bRunningAlarm=false;
+	bRunningAlarm = false;
 	DisableMessages(false);
 	Jump('Search_General');
 
@@ -1330,7 +1330,7 @@ InvestigateRequestFromGroupMember:
 	ResetGoals(1);
 	ChangeState(1,'s_investigate');
 	Goal_Stop(1, 50, 1.0f +  RandBias(0.50, 2.0f),, MOVE_Search,,TriggerEvent.EventLocation);
-    if(ePawn(Characters[1].Pawn).ICanBark())
+    if (ePawn(Characters[1].Pawn).ICanBark())
 	{
 		ePawn(Characters[1].Pawn).Bark_Type = BARK_CombArea;
 	    Talk(ePawn(Characters[1].Pawn).Sounds_Barks, 4, 0, false);
@@ -1390,7 +1390,7 @@ SeePlayerAgain:
 PlayerInZone:
 
 	ResetGoals(1);
-	log("Player In Zone - IDLE "$Characters[1].pawn);
+	log("Player In Zone - IDLE "$Characters[1].Pawn);
 	GotoPatternState('Attack', 'PlayerInZone');
 
 AlarmAttack:
@@ -1398,10 +1398,10 @@ AlarmAttack:
 	plog("AlarmAttack");
     ChangeState(1,'s_alert');
 	DisableMessages(true);
-	bRunningAlarm=true;
+	bRunningAlarm = true;
 	Goal(1,GOAL_InteractWith, 45,TriggerEvent.EventLocation,,TriggerEvent.EventTarget,,,,true,,MOVE_JogAlert);
 	WaitForGoal(1,GOAL_InteractWith);
-	bRunningAlarm=false;
+	bRunningAlarm = false;
 	DisableMessages(false);
 	//AllGroupLostPlayer('AttackedFromUnknownLocation');
 	//Jump('AttackPlayer');
@@ -1513,13 +1513,13 @@ state TakeCover
 	
 	function ReflexCallBack(EAIEvent Event)
 	{
-		if(!CheckGoalPriority(50) && !bDisableMessages)
+		if (!CheckGoalPriority(50) && !bDisableMessages)
 		{
-			switch ( Event.EventType )
+			switch (Event.EventType)
 			{
 				case AI_HEAR_SOMETHING :
 					
-					switch ( Event.EventNoiseType )
+					switch (Event.EventNoiseType)
 					{
 						case NOISE_GrenadeWarning : 
 							return;
@@ -1548,12 +1548,12 @@ state TakeCover
 	event EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
 
-		if(EAIController(Characters[1]).bNotResponsive)
+		if (EAIController(Characters[1]).bNotResponsive)
 			return;
 
-		if(!bDisableMessages)
+		if (!bDisableMessages)
 		{
-			switch(Event.EventType)
+			switch (Event.EventType)
 			{
 
 				/*******  EXTERNAL EVENTS  ********************************************/
@@ -1597,7 +1597,7 @@ WaitCover:
 	plog("WaitCover");
 	WaitForGoal(1,GOAL_MoveTo,'CoverFailed');
 	Broadcast(1, BC_BACKUP_RADIO_ATTACK);
-	if(ePawn(Characters[1].Pawn).ICanBark())
+	if (ePawn(Characters[1].Pawn).ICanBark())
 	{
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_UnderFire;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
@@ -1611,7 +1611,7 @@ CoverFailed:
 	plog("Cover Failed");
 	ResetGoals(1);
 	Broadcast(1, BC_BACKUP_RADIO_ATTACK);
-	if(ePawn(Characters[1].Pawn).ICanBark())
+	if (ePawn(Characters[1].Pawn).ICanBark())
 	{
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_UnderFire;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
@@ -1756,13 +1756,13 @@ state Search
 	
 	function ReflexCallBack(EAIEvent Event)
 	{
-		if(!CheckGoalPriority(50) && !bDisableMessages)
+		if (!CheckGoalPriority(50) && !bDisableMessages)
 		{
-			switch ( Event.EventType )
+			switch (Event.EventType)
 			{
 				case AI_HEAR_SOMETHING :
 					
-					switch ( Event.EventNoiseType )
+					switch (Event.EventNoiseType)
 					{
 						case NOISE_GrenadeWarning : 
 							
@@ -1797,12 +1797,12 @@ state Search
 	event EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
 
-		if(EAIController(Characters[1]).bNotResponsive)
+		if (EAIController(Characters[1]).bNotResponsive)
 			return;
 
-		if(!bDisableMessages)
+		if (!bDisableMessages)
 		{
-			switch(Event.EventType)
+			switch (Event.EventType)
 			{
 
 				/*******  EXTERNAL EVENTS  ********************************************/
@@ -1843,7 +1843,7 @@ state Search
 
 				case AI_HEAR_SOMETHING:
 					
-					switch ( Event.EventNoiseType )
+					switch (Event.EventNoiseType)
 					{
 						case NOISE_LightFootstep :
 						case NOISE_Object_Falling :
@@ -1915,15 +1915,15 @@ state Search
 
 					plog("AI_SEE_CHANGED_ACTOR");
 
-					if(Event.EventTarget.ChangeType == CHANGE_Unconscious)
+					if (Event.EventTarget.ChangeType == CHANGE_Unconscious)
 					{
-						if( Level.TimeSeconds - LastRevive < 5.0f )
+						if (Level.TimeSeconds - LastRevive < 5.0f)
 							return;
 					}
 
 					Level.RemoveChange(Event.EventTarget);		// !!! Don't forget to remove changed actor after handling it !!!
 
-					switch ( Event.EventTarget.ChangeType )
+					switch (Event.EventTarget.ChangeType)
 					{
 						case CHANGE_Bleeding :
 							EventJump('SeeViolence');
@@ -2132,7 +2132,7 @@ SearchFailed:
 	//Goal(1,GOAL_Action, 9,,,,, 'lookStNmRt2',);
 	//Goal(1,GOAL_Action, 9,,,,, 'lookStNmRt2',);
 	//Goal(1,GOAL_Action, 9,,,,, 'lookStNmBk2',);
-    if(bSearchWasDogTriggered)
+    if (bSearchWasDogTriggered)
 	    ePawn(Characters[1].Pawn).Bark_Type = BARK_DogLostTrail;
     else
 	    ePawn(Characters[1].Pawn).Bark_Type = BARK_SearchFailedOther;
@@ -2183,15 +2183,15 @@ HearRicochet:
 	PlayerIdentified();
 	ResetGoals(1);	
 	//ForceUpdatePlayerLocation(1);
-	if(ePawn(Characters[1].Pawn).ICanBark())
+	if (ePawn(Characters[1].Pawn).ICanBark())
 	{
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_UnderFire;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
 	}
 
-	CheckIfDirectLine(1,Characters[0].pawn,'HearRicochetB');
+	CheckIfDirectLine(1,Characters[0].Pawn,'HearRicochetB');
 
-	if(Characters[1].GetStateName() != 's_SitDown')
+	if (Characters[1].GetStateName() != 's_SitDown')
 	{
 		Reaction(1, 50, TriggerEvent.EventLocation, REACT_ImmediateThreat);
 		DisableMessages(true);
@@ -2240,7 +2240,7 @@ HearFriendlyScream:
 
 Greetings:
     plog("Greetings");
-    if(ePawn(Characters[1].Pawn).ICanBark())
+    if (ePawn(Characters[1].Pawn).ICanBark())
     {
         log("Greet other dude");
 		ePawn(Characters[1].Pawn).Bark_Type = BARK_InvestigationGreeting;
@@ -2337,7 +2337,7 @@ InvestigateRequestFromGroupMember:
     plog("InvestigateRequestFromGroupMember");
 	ChangeState(1,'s_investigate');
 	Goal_Stop(1, 50, 1.0f +  RandBias(0.50, 2.0f),, MOVE_Search,,TriggerEvent.EventLocation);
-    if(ePawn(Characters[1].Pawn).ICanBark())
+    if (ePawn(Characters[1].Pawn).ICanBark())
 	{
 		ePawn(Characters[1].Pawn).Bark_Type = BARK_CombArea;
 	    Talk(ePawn(Characters[1].Pawn).Sounds_Barks, 4, 0, false);
@@ -2354,9 +2354,9 @@ SeeLiveGrenade:
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_GroupScatter;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
 
-	//CheckIfDirectLine(1,Characters[0].pawn,'HearRicochetB');
+	//CheckIfDirectLine(1,Characters[0].Pawn,'HearRicochetB');
 
-	if(Characters[1].GetStateName() != 's_SitDown')
+	if (Characters[1].GetStateName() != 's_SitDown')
 	{
 		Reaction(1, 50, TriggerEvent.EventLocation, REACT_SeeGrenade);
 		DisableMessages(true);
@@ -2386,22 +2386,22 @@ TakeCoverAndWait:
 SeeUnconsciousBody:
 	
 	plog("SeeUnconsciousBody -- EventTarget:  " $ TriggerEvent.EventTarget);
-	if ( !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats )
+	if (!EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats)
 	{
 		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BodyFound");
 		EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound = true;
 	}
 	//ResetGoals(1);
-	bReactedToAlarm=1; //to trigger the postattack behavior
+	bReactedToAlarm = 1; //to trigger the postattack behavior
 	
-	if(Level.TimeSeconds - LastRevive > 15)
+	if (Level.TimeSeconds - LastRevive > 15)
 	{
 		ePawn(Characters[1].Pawn).Bark_Type = BARK_SeeUnconscious;
 		Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
 		Reaction(1, 50, TriggerEvent.EventLocation, REACT_SeeBody);
 	}
 
-    if ( !ePawn(TriggerEvent.EventTarget).bNoUnconsciousRevival )
+    if (!ePawn(TriggerEvent.EventTarget).bNoUnconsciousRevival)
 	{
 		LastRevive = Level.TimeSeconds;
 	    Goal(1, GOAL_InteractWith, 35,,,TriggerEvent.EventTarget,,,,,,MOVE_JogAlert);
@@ -2412,13 +2412,13 @@ SeeUnconsciousBody:
 SeeDeadBody:
 	
 	plog("SeeDeadBody");
-	if ( !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats )
+	if (!EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats)
 	{
 		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BodyFound");
 		EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound = true;
 	}
-	bReactedToAlarm=1; //to trigger the postattack behavior
-	if ( EPawn(TriggerEvent.EventTarget) != none ) 
+	bReactedToAlarm = 1; //to trigger the postattack behavior
+	if (EPawn(TriggerEvent.EventTarget) != none) 
 	{
 		plog("   Time Since Death :  " $ Level.TimeSeconds - EPawn(TriggerEvent.EventTarget).TimeOfDeath);
 		if (Level.TimeSeconds - EPawn(TriggerEvent.EventTarget).TimeOfDeath < 2.0f)
@@ -2437,7 +2437,7 @@ SeeJustDied:
 	plog("JustDied");
 	PlayerIdentified();
 	ResetGoals(1);
-    if(!ePawn(TriggerEvent.EventTarget).bIsDog)
+    if (!ePawn(TriggerEvent.EventTarget).bIsDog)
 	    ePawn(Characters[1].Pawn).Bark_Type = BARK_SeeCorpse;
     else
         ePawn(Characters[1].Pawn).Bark_Type = BARK_Mystified;
@@ -2456,7 +2456,7 @@ SeeViolence:
 
 	plog("SeeViolence");
 	ResetGoals(1);
-	if(ePawn(Characters[1].Pawn).ICanBark())
+	if (ePawn(Characters[1].Pawn).ICanBark())
 	{
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_UnderFire;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
@@ -2470,7 +2470,7 @@ SeeFreshMeat:
 	
 	plog("SeeFreshMeat");	
 	ResetGoals(1);
-    if(!ePawn(TriggerEvent.EventTarget).bIsDog)
+    if (!ePawn(TriggerEvent.EventTarget).bIsDog)
 	    ePawn(Characters[1].Pawn).Bark_Type = BARK_SeeCorpse;
     else
         ePawn(Characters[1].Pawn).Bark_Type = BARK_Mystified;
@@ -2486,7 +2486,7 @@ SeeDeadBodyCold:
 	
 	plog("SeeDeadBodyCold");
 	ResetGoals(1);
-    if(!ePawn(TriggerEvent.EventTarget).bIsDog)
+    if (!ePawn(TriggerEvent.EventTarget).bIsDog)
 	    ePawn(Characters[1].Pawn).Bark_Type = BARK_SeeCorpse;
     else
         ePawn(Characters[1].Pawn).Bark_Type = BARK_Mystified;
@@ -2494,7 +2494,7 @@ SeeDeadBodyCold:
 	Reaction(1, 50, TriggerEvent.EventLocation, REACT_SeeBody);
 	Broadcast(1, BC_INFO_RADIO_ALERT);
 
-	if( TriggerEvent.EventTarget.bIsPawn  && EPawn(TriggerEvent.EventTarget).BodyFlames.Length == 0)
+	if (TriggerEvent.EventTarget.bIsPawn  && EPawn(TriggerEvent.EventTarget).BodyFlames.Length == 0)
 	{
 	Goal_MoveTo(1, 36, TriggerEvent.EventTarget.Location, MOVE_JogAlert);
 	Goal_Action(1, 35, TriggerEvent.EventTarget.Location, ePawn(Characters[1].Pawn).ACheckDeadBody);
@@ -2541,7 +2541,7 @@ SeeObject:
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks, 1, 0, false);
 	Reaction(1, 50,, REACT_MovingObject, TriggerEvent.EventTarget);		// specify target so we 'watch' the object if it's moving
 	Broadcast(1, BC_SELF_DIRECTED);
-	if ( VSize(TriggerEvent.EventTarget.Velocity) > 10.0f )
+	if (VSize(TriggerEvent.EventTarget.Velocity) > 10.0f)
 		Jump('Search_Origin');
 	else
 		Jump('Search_Location');
@@ -2557,9 +2557,9 @@ SeeAirCamera:
 	Reaction(1, 50, TriggerEvent.EventTarget.Location, REACT_SeeUnknownPerson);
 	Broadcast(1, BC_SELF_DIRECTED);
 
-	if(EGamePlayObject(TriggerEvent.EventTarget) != None)
+	if (EGamePlayObject(TriggerEvent.EventTarget) != None)
 	{
-		EGamePlayObject(TriggerEvent.EventTarget).bWasSeen=true;
+		EGamePlayObject(TriggerEvent.EventTarget).bWasSeen = true;
 	}
 
 	Jump('Search_Location');
@@ -2572,7 +2572,7 @@ LightsTurnedOff:
     iSuggestedBehavior = AddChangeAndSuggestBehavior(1, vector(TriggerEvent.EventTarget.Rotation), CHANGE_LightTurnedOff);
 
     // Debug
-    switch(iSuggestedBehavior)
+    switch (iSuggestedBehavior)
     {
         case 0:log("Search - LightsTurnedOff - Do Nothing"); break; 
         case 1:log("Search - LightsTurnedOff - Bark Only"); break;
@@ -2585,7 +2585,7 @@ LightsTurnedOff:
 
     if ((iSuggestedBehavior & BARK_BIT) == BARK_BIT)
     {
-        if(TriggerEvent.EventTarget.owner.GetStateName() == 's_Off')
+        if (TriggerEvent.EventTarget.owner.GetStateName() == 's_Off')
         {
 	        ePawn(Characters[1].Pawn).Bark_Type = BARK_LightsOut;
         }
@@ -2599,7 +2599,7 @@ LightsTurnedOff:
     }
 	
 	ChangeState(1,'s_Alert');
-	EAIController(Characters[1]).EPawn.ForceFlashLight=false;
+	EAIController(Characters[1]).EPawn.ForceFlashLight = false;
     CheckSwitchAlreadyLocked(1, TriggerEvent.EventTarget.owner);
     Jump('WaitSearch');
 
@@ -2612,7 +2612,7 @@ LightsShotOut:
     iSuggestedBehavior = AddChangeAndSuggestBehavior(1, vector(TriggerEvent.EventTarget.Rotation), CHANGE_LightTurnedOff);
 
     // Debug
-    switch(iSuggestedBehavior)
+    switch (iSuggestedBehavior)
     {
         case 0:log("Search - LightsShotOut - Do Nothing"); break; 
         case 1:log("Search - LightsShotOut - Bark Only"); break;
@@ -2629,7 +2629,7 @@ LightsShotOut:
 	    ePawn(Characters[1].Pawn).Bark_Type = BARK_LightShot;
 	    Talk(EPawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
 	    Reaction(1, 50, TriggerEvent.EventTarget.Location, REACT_SeeLightsOut);
-	    EAIController(Characters[1]).EPawn.ForceFlashLight=false;
+	    EAIController(Characters[1]).EPawn.ForceFlashLight = false;
 	    Broadcast(1, BC_SELF_DIRECTED);
     }
 	
@@ -2690,11 +2690,11 @@ SlaveRequestFollow:
 Search_Location:
 	
 	plog("Search_Location -- Search at Event Location THEN in Random Direction");
-	if(bExplosionStimuli)
+	if (bExplosionStimuli)
 		Goal_Search(1, 15, TriggerEvent.EventLocation,,false,,MOVE_JogAlert);
 	else
 	Goal_Search(1, 15, TriggerEvent.EventLocation,,false);
-	bExplosionStimuli=false;
+	bExplosionStimuli = false;
 
     CheckLightSwitchVolumeAndAdd(1, TriggerEvent.EventLocation);
 	Jump('WaitSearch');
@@ -2741,7 +2741,7 @@ Search_General:
 Search_CHEAT:
 	
 	plog("Search_CHEAT -- Using Current Player Location as search key.   ** REPLACE **");	
-	Goal_Search(1, 15,GetNearestNavPointLocation(),,false,,,Characters[0].pawn);
+	Goal_Search(1, 15,GetNearestNavPointLocation(),,false,,,Characters[0].Pawn);
 	Jump('WaitSearch');
 	
 
@@ -2759,10 +2759,10 @@ AlarmAttack:
 	plog("AlarmAttack");
     ChangeState(1,'s_alert');
 	DisableMessages(true);
-	bRunningAlarm=true;
+	bRunningAlarm = true;
 	Goal(1,GOAL_InteractWith, 45,TriggerEvent.EventLocation,,TriggerEvent.EventTarget,,,,true,,MOVE_JogAlert);
 	WaitForGoal(1,GOAL_InteractWith);
-	bRunningAlarm=false;
+	bRunningAlarm = false;
 	DisableMessages(false);
 	AllGroupLostPlayer('AttackedFromUnknownLocation');
 	Jump('AttackPlayer');
@@ -2773,10 +2773,10 @@ AlarmSearch:
 	plog("AlarmSearch");
 	ChangeState(1,'s_alert');
 	DisableMessages(true);
-	bRunningAlarm=true;
-	Goal(1,GOAL_InteractWith, 45,TriggerEvent.EventLocation,,TriggerEvent.EventTarget,,,,true,,MOVE_JogAlert  );
+	bRunningAlarm = true;
+	Goal(1,GOAL_InteractWith, 45,TriggerEvent.EventLocation,,TriggerEvent.EventTarget,,,,true,,MOVE_JogAlert);
 	WaitForGoal(1,GOAL_InteractWith);
-	bRunningAlarm=false;
+	bRunningAlarm = false;
 	DisableMessages(false);
 	Jump('Search_General');
 		
@@ -2847,28 +2847,28 @@ AttackedFromUnknownLocation:
 
 state Attack
 {
-	function Tick( float Delta )
+	function Tick(float Delta)
 	{
 		local EGoal Goal;
 
-		Super.Tick(  Delta);
+		Super.Tick(Delta);
 
 		Goal = EAIController(Characters[1]).m_pGoalList.GetCurrent();
 
-		if(Goal.m_GoalType ==GOAL_Charge )
+		if (Goal.m_GoalType ==GOAL_Charge)
 			CheckIfInZone('PlayerInZone');
 
-		EAIController(Characters[1]).EPawn.ForceFlashLight=false;
+		EAIController(Characters[1]).EPawn.ForceFlashLight = false;
 
 	}
 	
 	function BeginState()
 	{
-		bCharge=0;
+		bCharge = 0;
 		SetFlags(bFirstTimeCharge,true);
 		SetFlags(bRunForAttackPoint,false);
 
-		if(!EGroupAI(Owner).bDontMirrorAttack)
+		if (!EGroupAI(Owner).bDontMirrorAttack)
 			EchelonLevelInfo(Level).SendMusicRequest(1,true,self);
 
 		EchelonLevelInfo(Level).SendMusicRequest(0,false,self);
@@ -2916,15 +2916,15 @@ state Attack
 	
 	function ReflexCallBack(EAIEvent Event)
 	{
-		switch ( Event.EventType )
+		switch (Event.EventType)
 		{
 			case AI_SEE_CHANGED_ACTOR:
 
-				switch ( Event.EventTarget.ChangeType )
+				switch (Event.EventTarget.ChangeType)
 				{
 					case CHANGE_WallMine :
-						//log("Distance: "$VSize(Event.EventTarget.Location - Characters[1].pawn.Location));
-						if(VSize(Event.EventTarget.Location - Characters[1].pawn.Location) > 550)
+						//log("Distance: "$VSize(Event.EventTarget.Location - Characters[1].Pawn.Location));
+						if (VSize(Event.EventTarget.Location - Characters[1].Pawn.Location) > 550)
 						{
 							Goal_Attack(1, 44, 0.0f, Event.EventTarget, MOVE_JogAlert,false);
 							Goal_Stop(1, 43, 0.5f, Event.EventTarget, MOVE_JogAlert);
@@ -2939,7 +2939,7 @@ state Attack
 
 			case AI_HEAR_SOMETHING :
 			
-				switch ( Event.EventNoiseType )
+				switch (Event.EventNoiseType)
 				{
 					case NOISE_GrenadeWarning : 
 						
@@ -2969,13 +2969,13 @@ state Attack
 	
 	event EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
-		if(EAIController(Characters[1]).bNotResponsive)
+		if (EAIController(Characters[1]).bNotResponsive)
 			return;
 
 
-		if(!bDisableMessages)
+		if (!bDisableMessages)
 		{
-			switch(Event.EventType)
+			switch (Event.EventType)
 			{
 
 				/*******  EXTERNAL EVENTS  ********************************************/
@@ -3005,7 +3005,7 @@ state Attack
 
 				case AI_HEAR_SOMETHING:
 					
-					switch ( Event.EventNoiseType )
+					switch (Event.EventNoiseType)
 					{
 						case NOISE_LightFootstep :
 						case NOISE_Object_Falling :
@@ -3045,7 +3045,7 @@ state Attack
 
 				case AI_SEE_CHANGED_ACTOR:
 
-					switch ( Event.EventTarget.ChangeType )
+					switch (Event.EventTarget.ChangeType)
 					{
 						case CHANGE_LightTurnedOff :
 							//   EventJump('LightsTurnedOff');
@@ -3187,7 +3187,7 @@ AfterChargeCompleted:
 	plog("AfterChargeCompleted");
 	AskGroupForPlayerPosition('PlayerLost');
 
-	if( EAIController(Characters[1]).epawn.ExpiredTime > 0 )
+	if (EAIController(Characters[1]).ePawn.ExpiredTime > 0)
 		Jump('Search_CHEAT');
 	else
 	{
@@ -3241,7 +3241,7 @@ OutOfDefendRadius:
 	SetFlags(bRunForAttackPoint,false);
 	CheckIfInZone('PlayerInZone');
 
-	if(!EAIController(Characters[1]).bPlayerSeen)
+	if (!EAIController(Characters[1]).bPlayerSeen)
 	{
 		PossiblyTakeCover(1, 0, 'TakeCoverAndCharge');
 		CheckAttackPoint(1,'AttackPointFound');
@@ -3293,8 +3293,8 @@ TakeDamage:
 	CheckIfPeeking(1,'WaitAttack');
 	CheckIfInZone('PlayerInZone');
 
-	if( (VSize(Characters[0].Pawn.Location - Characters[1].Pawn.Location) > 600 ) ||
-		!EAIController(Characters[1]).bPlayerSeen )
+	if ((VSize(Characters[0].Pawn.Location - Characters[1].Pawn.Location) > 600) ||
+		!EAIController(Characters[1]).bPlayerSeen)
 	    PossiblyTakeCover(1, 1500.0f, 'TakeCoverAndCharge');
 
 	PlayerIsVisible(1,'AttackedFromUnknownLocation');
@@ -3311,7 +3311,7 @@ AttackedFromUnknownLocation:
 	ResetGoals(1);
 	SetFlags(bRunForAttackPoint,false);
 	//Checkflags(bFirstTimeCharge,true,'BlindFire');
-	CheckIfDirectLine(1,Characters[0].pawn,'BlindFire');
+	CheckIfDirectLine(1,Characters[0].Pawn,'BlindFire');
 	PossiblyTakeCover(1, 1500.0f, 'TakeCoverAndCharge');
 	Jump('PlayerLost');
 
@@ -3339,8 +3339,8 @@ BlindFire:
 
 	plog("BlindFire");
 	//ForceUpdatePlayerLocation(1);
-	EAIController( Characters[1] ).LastKnownPlayerTime = Level.TimeSeconds-15;
-	Goal_Attack(1, 16,3f +  RandBias(0.35, 3.75f), Characters[0].Pawn, MOVE_JogAlert,true, EAIController( Characters[1] ).epawn.ASprayFire);
+	EAIController(Characters[1]).LastKnownPlayerTime = Level.TimeSeconds - 15;
+	Goal_Attack(1, 16,3f +  RandBias(0.35, 3.75f), Characters[0].Pawn, MOVE_JogAlert,true, EAIController(Characters[1]).ePawn.ASprayFire);
 	//Goal_SprayFire(1, 16, 20.25f +  RandBias(0.35, 3.0f), Characters[0].Pawn, MOVE_JogAlert,true);
 	PossiblyTakeCover(1, 1500.0f, 'TakeCoverAndChargeB');
 	Jump('WaitAttack');
@@ -3354,11 +3354,11 @@ TakeCoverAndChargeB:
 	SetFlags(bRunForAttackPoint,true);
    /* ePawn(Characters[1].Pawn).Bark_Type = BARK_LookingForYou;
     // MClarke test
-    if(ePawn(Characters[1].Pawn).ICanBark())
+    if (ePawn(Characters[1].Pawn).ICanBark())
 	    Talk(ePawn(Characters[1].Pawn).Sounds_Barks, 1, 0, false);*/
 	Goal_MoveTo(1, 15, CoverLocation, MOVE_JogAlert,,MOVE_JogAlert);
 	Goal_Attack(1, 14,5f +  RandBias(0.5, 10.75f), Characters[0].Pawn, MOVE_JogAlert,false);
-	//Goal_Charge(1,13,Characters[0].pawn,MOVE_JogAlert);
+	//Goal_Charge(1,13,Characters[0].Pawn,MOVE_JogAlert);
 	//Jump('WaitChargeAttack');
 	Jump('WaitAttack');
 
@@ -3388,7 +3388,7 @@ PlayerZoneSeq:
 
 WaitPlayerInZone:
 
-	log("WaitPlayerInZone - "$Characters[1].pawn);
+	log("WaitPlayerInZone - "$Characters[1].Pawn);
 	Jump('WaitAttack');
 
 
@@ -3487,7 +3487,7 @@ PlayerDead:
 	plog("PlayerDead");
 	DisableMessages(true);
 	ResetGoals(1);
-	Goal_Stop(1, 16, 3.0f, Characters[0].pawn, MOVE_JogAlert);
+	Goal_Stop(1, 16, 3.0f, Characters[0].Pawn, MOVE_JogAlert);
     Sleep(3);
 	ResetAllNPCs(1);
 	SetPlayerDeadAction(1);
@@ -3528,7 +3528,7 @@ AttackReqNotVisible:
 	plog("AttackReqNotVisible");
 	ResetGoals(1);
 	SetFlags(bRunForAttackPoint,false);
-	CheckIfDirectLine(1,Characters[0].pawn,'SprayFire');
+	CheckIfDirectLine(1,Characters[0].Pawn,'SprayFire');
 	Jump('PlayerLost');
 
 	//PlayerIsVisible(1,'PlayerLost');
@@ -3554,7 +3554,7 @@ CoverPointLostPlayer:
 	SetFlags(bRunForAttackPoint,false);
 	CheckIfInZone('PlayerInZone');
 	CheckTouchingCoverPoints(1,'CoverPointTouched');
-	Goal_Charge(1,15,Characters[0].pawn,MOVE_JogAlert);
+	Goal_Charge(1,15,Characters[0].Pawn,MOVE_JogAlert);
 	Jump('WaitChargeAttack');
 
 
@@ -3571,7 +3571,7 @@ PlayerLost:
 	CheckTouchingCoverPoints(1,'CoverPointTouched');
 	//CheckAttackPoint(1,'AttackPointFound');
 	//ReloadWeapon(1,0.45f);
-	Goal_Charge(1,15,Characters[0].pawn,MOVE_JogAlert);
+	Goal_Charge(1,15,Characters[0].Pawn,MOVE_JogAlert);
 	Jump('WaitChargeAttack');
 	
 PlayerLostAfter:
@@ -3598,7 +3598,7 @@ GroupLost:
 	CheckIfExecutingGoal(1, GOAL_Charge, 'WaitChargeAttack');
 	CheckFlags(bRunningCoverPoint,true,'ContinueCoverRunning');
 	
-	if( VSize(Characters[0].pawn.Location - EAIController(Characters[1]).LastKnownPLayerLocation) < 200 )
+	if (VSize(Characters[0].Pawn.Location - EAIController(Characters[1]).LastKnownPLayerLocation) < 200)
 		CheckFlags(bRunForAttackPoint,true,'ContinueAttackPointRun');
 
 	SetFlags(bRunForAttackPoint,false);
@@ -3612,13 +3612,13 @@ GroupLost:
     /*ePawn(Characters[1].Pawn).Bark_Type = BARK_LookingForYou;
 
     // MClarke test
-    if(ePawn(Characters[1].Pawn).ICanBark())
+    if (ePawn(Characters[1].Pawn).ICanBark())
     {
 	    Talk(ePawn(Characters[1].Pawn).Sounds_Barks, 1, 0, false);
     }*/
 
-	Goal_Stop(1, 16, 0.5 + RandBias(0.50, 2.0f), Characters[0].pawn, MOVE_JogAlert);
-	Goal_Charge(1,15,Characters[0].pawn,MOVE_JogAlert);
+	Goal_Stop(1, 16, 0.5 + RandBias(0.50, 2.0f), Characters[0].Pawn, MOVE_JogAlert);
+	Goal_Charge(1,15,Characters[0].Pawn,MOVE_JogAlert);
 	Jump('WaitChargeAttack');
 
 
@@ -3639,10 +3639,10 @@ TakeCoverAndChargeAfter:
 
 	plog("TakeCoverAndCharge - CoverLocation:  " $ CoverLocation);
 	ResetGoals(1);
-	bRunningCoverPoint=1;
+	bRunningCoverPoint = 1;
 	Goal_MoveTo(1, 15, CoverLocation, MOVE_JogAlert,,MOVE_JogAlert,true);
 	Goal_Attack(1, 14,5f +  RandBias(0.5, 4.75f), Characters[0].Pawn, MOVE_JogAlert,false);
-	//Goal_Charge(1,13,Characters[0].pawn,MOVE_JogAlert);
+	//Goal_Charge(1,13,Characters[0].Pawn,MOVE_JogAlert);
 	//Jump('WaitChargeAttack');
 	Jump('WaitAttack');
 
@@ -3674,7 +3674,7 @@ PlayerIsFar:
 	CheckFlags(bRunForAttackPoint,true,'WaitAttack');
 	ResetGoals(1);
 	SetFlags(bRunForAttackPoint,false);
-	Goal_Charge(1,15,Characters[0].pawn,MOVE_JogAlert);
+	Goal_Charge(1,15,Characters[0].Pawn,MOVE_JogAlert);
 	Jump('WaitChargeAttack');
 
 
@@ -3740,8 +3740,8 @@ AlarmAttack:
 	plog("AlarmAttack");
 	ResetGoals(1);	
 	//ForceUpdatePlayerLocation(1);
-	//EAIController( Characters[1] ).LastKnownPlayerTime = Level.TimeSeconds;
-	bReactedToAlarm=1;
+	//EAIController(Characters[1]).LastKnownPlayerTime = Level.TimeSeconds;
+	bReactedToAlarm = 1;
 	Goal_Charge(1,15,TriggerEvent.EventTarget,MOVE_JogAlert,true,TriggerEvent.EventLocation);
 	//Goal_Charge(1,15,TriggerEvent.EventTarget,MOVE_JogAlert,true);
 	Jump('WaitChargeAttack');
@@ -3759,7 +3759,7 @@ ThrowGrenade:
 	plog("ThrowGrenade");
 	DisableMessages(true);
 	
-	if( VSize(Characters[1].Pawn.Location-GetTargetLocation(1)) < 50 )
+	if (VSize(Characters[1].Pawn.Location - GetTargetLocation(1)) < 50)
 	{
 	Goal(1,GOAL_ThrowGrenade, 11,GrenadeLocation,GetTargetLocation(1),,,,,false,GrenadeTime);
 	WaitForGoal(1,GOAL_ThrowGrenade);

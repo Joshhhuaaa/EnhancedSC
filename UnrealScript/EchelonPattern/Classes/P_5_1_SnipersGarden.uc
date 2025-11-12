@@ -13,9 +13,9 @@ class P_5_1_SnipersGarden extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -31,15 +31,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianPalaceGuard17')
+        if (P.name == 'EGeorgianPalaceGuard17')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianPalaceGuard5')
+        if (P.name == 'EGeorgianPalaceGuard5')
             Characters[2] = P.controller;
-        if(P.name == 'EGeorgianPalaceGuard6')
+        if (P.name == 'EGeorgianPalaceGuard6')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

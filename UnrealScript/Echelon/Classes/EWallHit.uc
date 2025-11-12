@@ -19,11 +19,11 @@ function Noise()
     local Vector     vInitPos;
 
 	// Noise for NPCs
-    if(hitMaterial != None)
+    if (hitMaterial != None)
     {
         // MClarke: August 8th 2002
         // Drown based on surface type 
-        if((hitMaterial.SurfaceType == SURFACE_ConcreteHard)        // Resonating
+        if ((hitMaterial.SurfaceType == SURFACE_ConcreteHard)        // Resonating
          ||(hitMaterial.SurfaceType == SURFACE_WoodHard)
          ||(hitMaterial.SurfaceType == SURFACE_WoodBoomy)
          ||(hitMaterial.SurfaceType == SURFACE_WaterPuddle)
@@ -35,7 +35,7 @@ function Noise()
         {
             MakeNoise(RicochetNoiseRadius, NOISE_Ricochet);  
         }        
-        else if((hitMaterial.SurfaceType == SURFACE_Grass)          // Absorbing
+        else if ((hitMaterial.SurfaceType == SURFACE_Grass)          // Absorbing
               ||(hitMaterial.SurfaceType == SURFACE_ConcreteDirt)
               ||(hitMaterial.SurfaceType == SURFACE_Carpet)
               ||(hitMaterial.SurfaceType == SURFACE_SnowPowder)
@@ -58,11 +58,11 @@ function Noise()
 	    MakeNoise(RicochetNoiseRadius, NOISE_Ricochet);    
     }
 
-    if((HitActor != None) && (HitActor.bIsMover))
+    if ((HitActor != None) && (HitActor.bIsMover))
     {
         oDoor = EDoorMover(HitActor);
 
-        if((oDoor != None) && (oDoor.bPropagatesSound))
+        if ((oDoor != None) && (oDoor.bPropagatesSound))
         {
             oDoor.PropagateSound(self);
         }
@@ -77,10 +77,10 @@ function Emit()
 	local vector x, y, z;
 	local Material currentMtl;
 
-	currentMtl=hitMaterial;
-	while(Modifier(currentMtl) != none)
+	currentMtl = hitMaterial;
+	while (Modifier(currentMtl) != none)
 	{
-		currentMtl=Modifier(currentMtl).Material;
+		currentMtl = Modifier(currentMtl).Material;
 	}
 
 	hitMaterial = currentMtl;
@@ -94,14 +94,14 @@ function Emit()
 	//***********************************************
 	//* SPARK ***************************************
 	//***********************************************
-	sparkEmitter=class'EWallSpark';
-	if ( currentMtl != none )
+	sparkEmitter = class'EWallSpark';
+	if (currentMtl != none)
 	{
-		for(i=0; i<Level.ImpactSurfaceToEmitterLink.Length; i++)
+		for (i = 0; i < Level.ImpactSurfaceToEmitterLink.Length; i++)
 		{
-			if ( currentMtl.SurfaceType == Level.ImpactSurfaceToEmitterLink[i].surfType )
+			if (currentMtl.SurfaceType == Level.ImpactSurfaceToEmitterLink[i].surfType)
 			{
-				sparkEmitter=Level.ImpactSurfaceToEmitterLink[i].emitterClass;
+				sparkEmitter = Level.ImpactSurfaceToEmitterLink[i].emitterClass;
 				break;
 			}
 		}
@@ -114,15 +114,15 @@ function Emit()
 	//***********************************************
 	if (currentMtl != none && Level.pProjTexture != none)
 	{
-		for(i=0; i<Level.ImpactSurfaceToSubTexLink.Length; i++)
+		for (i = 0; i < Level.ImpactSurfaceToSubTexLink.Length; i++)
 		{
-			if ( currentMtl.SurfaceType == Level.ImpactSurfaceToSubTexLink[i].surfType )
+			if (currentMtl.SurfaceType == Level.ImpactSurfaceToSubTexLink[i].surfType)
 			{
 				break;
 			}
 		}
 
-		if (i!=Level.ImpactSurfaceToSubTexLink.Length)
+		if (i != Level.ImpactSurfaceToSubTexLink.Length)
 		{
 			GetAxes(Rotation, x, y, z);			
 			Level.AddImpact(Location, OrthoRotation(-x, -y, -z), false, false, i);

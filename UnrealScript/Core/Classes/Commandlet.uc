@@ -73,7 +73,7 @@ var bool ShowErrorCount;
 var bool ShowBanner;
 
 /// Entry point.
-native event int Main( string Parms );
+native event int Main(string Parms);
 
 defaultproperties
 {

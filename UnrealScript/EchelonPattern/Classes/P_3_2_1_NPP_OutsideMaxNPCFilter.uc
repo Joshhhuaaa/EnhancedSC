@@ -14,9 +14,9 @@ var int TwoDown;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('Alarm');
@@ -38,15 +38,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EFalseRussianSoldier4')
+        if (P.name == 'EFalseRussianSoldier4')
             Characters[1] = P.controller;
-        if(P.name == 'EFalseRussianSoldier2')
+        if (P.name == 'EFalseRussianSoldier2')
             Characters[2] = P.controller;
-        if(P.name == 'EFalseRussianSoldier1')
+        if (P.name == 'EFalseRussianSoldier1')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     Alarm=0;

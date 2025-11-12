@@ -13,9 +13,9 @@ class P_2_2_3_Ktech_RoofAmbushD extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -31,15 +31,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMafiaMuscle11')
+        if (P.name == 'EMafiaMuscle11')
             Characters[1] = P.controller;
-        if(P.name == 'EMafiaMuscle13')
+        if (P.name == 'EMafiaMuscle13')
             Characters[2] = P.controller;
-        if(P.name == 'EMafiaMuscle12')
+        if (P.name == 'EMafiaMuscle12')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

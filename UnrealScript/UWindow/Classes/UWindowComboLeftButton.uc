@@ -11,11 +11,11 @@ function LMouseDown(float X, float Y)
 	local int i;
 
 	Super.LMouseDown(X, Y);
-	if(!bDisabled)
+	if (!bDisabled)
 	{
 		i = UWindowComboControl(OwnerWindow).GetSelectedIndex();
 		i--;
-		if(i < 0)
+		if (i < 0)
 			i = UWindowComboControl(OwnerWindow).List.Items.Count() - 1;
 		UWindowComboControl(OwnerWindow).SetSelectedIndex(i);
 	}

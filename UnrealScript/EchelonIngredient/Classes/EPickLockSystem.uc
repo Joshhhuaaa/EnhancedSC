@@ -28,19 +28,19 @@ function PostBeginPlay()
 }
 
 // Init system
-function Init( Controller Instigator, EPickLockInteraction plint )
+function Init(Controller Instigator, EPickLockInteraction plint)
 {
 	PickLocker	= Instigator;
 	PLI			= plint;
 
 	CurrentPin	= 5;
 
-	bRenderAtEndOfFrame=true;
+	bRenderAtEndOfFrame = true;
 
 	PlaySound(PLI.LockPick.StartLockPick, SLOT_Interface);
 
 	// Joshua - Option to randomize lock pick combinations
-	if(EchelonGameInfo(Level.Game).bRandomizeLockpick)
+	if (EchelonGameInfo(Level.Game).bRandomizeLockpick)
     {
         PLI.MyDoor.RandomizeLockPattern();
     }
@@ -50,13 +50,13 @@ function Init( Controller Instigator, EPickLockInteraction plint )
 // Description		
 //		Move picks around
 //------------------------------------------------------------------------
-function MoveAxis( float aUpDown, float aLeftRight )
+function MoveAxis(float aUpDown, float aLeftRight)
 {
 	local EPickLockQuadrant Quadrant;
 	Quadrant = FindCurrentQuadrant(aUpDown, aLeftRight);
 
 	// if we moved the pick in the same quadrant
-	if( Quadrant == CurrentQuadrant && Abs(PrevF-aUpDown) + Abs(PrevS-aLeftRight) > PLI.MyDoor.MoveThreshold )
+	if (Quadrant == CurrentQuadrant && Abs(PrevF - aUpDown) + Abs(PrevS - aLeftRight) > PLI.MyDoor.MoveThreshold)
 	{
 		//Log("Tilting same quadrant"@CurrentQuadrant@TiltInQuadrant@fTimeElapsedInQuadrant@aUpDown@aLeftRight);
 
@@ -64,7 +64,7 @@ function MoveAxis( float aUpDown, float aLeftRight )
 		Tilt(Quadrant, aUpDown, aLeftRight);
 	}
 	// if we moved in a different Quadrant
-	else if( Quadrant != CurrentQuadrant )
+	else if (Quadrant != CurrentQuadrant)
 	{
 		//Log("Changing quadrant from"@CurrentQuadrant@"to"@Quadrant);
 
@@ -76,7 +76,7 @@ function MoveAxis( float aUpDown, float aLeftRight )
 	}
 }
 
-function EPickLockQuadrant FindCurrentQuadrant( float aUpDown, float aLeftRight)
+function EPickLockQuadrant FindCurrentQuadrant(float aUpDown, float aLeftRight)
 {
 	// Joshua - Adding controller support for lockpicks
 	local EPlayerController EPC;
@@ -87,30 +87,30 @@ function EPickLockQuadrant FindCurrentQuadrant( float aUpDown, float aLeftRight)
 	{
 		// For the PC, we want a single direction to avoid the wiggling on the keyboard.
 		// UpLeft == up, UpRigth == right, DownLeft == left, DownRight == right
-		if( aUpDown == 1 )
+		if (aUpDown == 1)
 			return PL_UpLeft; // up
-		else if( aLeftRight == 1 )
+		else if (aLeftRight == 1)
 			return PL_UpRight; // right
-		else if( aLeftRight == -1 )
+		else if (aLeftRight == -1)
 			return PL_DownLeft; // left
-		else if( aUpDown == -1 )
+		else if (aUpDown == -1)
 			return PL_DownRight; // down
-		else if( abs(aUpDown) == 1 && abs(aLeftRight) == 1 )	// 2 keys are pressed, invalid selection
+		else if (abs(aUpDown) == 1 && abs(aLeftRight) == 1)	// 2 keys are pressed, invalid selection
 			return PL_None;
 		else										// no quadrant change if border lines
 			return CurrentQuadrant;
 	}
 	else
 	{
-	if( aUpDown > 0 && aLeftRight < 0 )
+	if (aUpDown > 0 && aLeftRight < 0)
 		return PL_UpLeft;
-	else if( aUpDown > 0 && aLeftRight > 0 )
+	else if (aUpDown > 0 && aLeftRight > 0)
 		return PL_UpRight;
-	else if( aUpDown < 0 && aLeftRight < 0 )
+	else if (aUpDown < 0 && aLeftRight < 0)
 		return PL_DownLeft;
-	else if( aUpDown < 0 && aLeftRight > 0 )
+	else if (aUpDown < 0 && aLeftRight > 0)
 		return PL_DownRight;
-	else if( aUpDown == 0 && aLeftRight == 0 )	// only change to None when in full center
+	else if (aUpDown == 0 && aLeftRight == 0)	// only change to None when in full center
 		return PL_None;
 	else										// no quadrant change if border lines
 		return CurrentQuadrant;
@@ -121,13 +121,13 @@ function EPickLockQuadrant FindCurrentQuadrant( float aUpDown, float aLeftRight)
 // Description		
 //		Playing in the same quadrant
 //------------------------------------------------------------------------
-function Tilt( EPickLockQuadrant Q, float UpDown, float LeftRight );
+function Tilt(EPickLockQuadrant Q, float UpDown, float LeftRight);
 
 //------------------------------------------------------------------------
 // Description		
 //		Changing quadrant .. 
 //------------------------------------------------------------------------
-function ChangeQuadrant( EPickLockQuadrant Q );
+function ChangeQuadrant(EPickLockQuadrant Q);
 
 //------------------------------------------------------------------------
 // Description		
@@ -138,13 +138,13 @@ function ClickNext()
 	local name Anim;
 	//Log("Q["$CurrentPin+1$"] down .. ");
 
-	if( CurrentPin == 0 || PLI.MyDoor.Combinaison[CurrentPin-1] == PL_None )
+	if (CurrentPin == 0 || PLI.MyDoor.Combinaison[CurrentPin - 1] == PL_None)
 	{
 		GotoState('s_Picked');
 	}
 	else
 	{
-		switch( CurrentPin )
+		switch (CurrentPin)
 		{
 		case 1 : Anim = 'Nt5'; break;
 		case 2 : Anim = 'Nt4'; break;
@@ -165,9 +165,9 @@ function ClickNext()
 
 auto state s_TryLock
 {
-	function ChangeQuadrant( EPickLockQuadrant Q )
+	function ChangeQuadrant(EPickLockQuadrant Q)
 	{
-		if( Q == PLI.MyDoor.Combinaison[CurrentPin] )
+		if (Q == PLI.MyDoor.Combinaison[CurrentPin])
 			GotoState('s_PickLocking');
 	}
 }
@@ -187,9 +187,9 @@ state s_PickLocking
 		fTimeElapsedInQuadrant	= 0;
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
-		Level.RumbleShake(0.05f, FRand()/5.f);
+		Level.RumbleShake(0.05f, FRand() / 5.f);
 
 		fTimeElapsedInQuadrant += DeltaTime;
 
@@ -197,11 +197,11 @@ state s_PickLocking
 
 		// After [PLI.MyDoor.TimePerQuadrant] sec. in this quadrant and [TiltInQuadrant] Tilt, change to next
 		//Log(DeltaTime@fTimeElapsedInQuadrant@TiltInQuadrant);
-		if( fTimeElapsedInQuadrant >= PLI.MyDoor.TimePerQuadrant && TiltInQuadrant > PLI.MyDoor.TiltPerQuadrant )
+		if (fTimeElapsedInQuadrant >= PLI.MyDoor.TimePerQuadrant && TiltInQuadrant > PLI.MyDoor.TiltPerQuadrant)
 			ClickNext();
 	}
 
-	function Tilt( EPickLockQuadrant Q, float UpDown, float LeftRight )
+	function Tilt(EPickLockQuadrant Q, float UpDown, float LeftRight)
 	{
 		local name Anim;
 
@@ -211,10 +211,10 @@ state s_PickLocking
 		// Add a tilt in same quadrant
 		TiltInQuadrant++;
 
-		if(!IsPlaying(PLI.LockPick.TryLockPick))
+		if (!IsPlaying(PLI.LockPick.TryLockPick))
 			PlaySound(PLI.LockPick.TryLockPick, SLOT_Interface);
 
-		switch( CurrentPin )
+		switch (CurrentPin)
 		{
 		case 0 : Anim = 'Pin6'; break;
 		case 1 : Anim = 'Pin5'; break;
@@ -224,11 +224,11 @@ state s_PickLocking
 		case 5 : Anim = 'Pin1'; break;
 		}
 
-		if( !IsAnimating() )
+		if (!IsAnimating())
 			PlayAnim(Anim,2);
 	}
 
-	function ChangeQuadrant( EPickLockQuadrant Q )
+	function ChangeQuadrant(EPickLockQuadrant Q)
 	{
 		GotoState('s_TryLock');
 	}
@@ -251,7 +251,7 @@ state s_Picked
 		PLI.Interact(PickLocker);
 	}
 
-	function AnimEnd( optional int Channel )
+	function AnimEnd(optional int Channel)
 	{
 		PLI.PostInteract(PickLocker);
 		

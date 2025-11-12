@@ -21,7 +21,7 @@ var INT                 m_IFirstItemYOffset;
 function Created()
 {
 	Super.Created();
-	VertSB = UWindowVScrollbar(CreateWindow(class'UWindowVScrollbar', WinWidth-LookAndFeel.Size_ScrollbarWidth, 0, LookAndFeel.Size_ScrollbarWidth, WinHeight));
+	VertSB = UWindowVScrollbar(CreateWindow(class'UWindowVScrollbar', WinWidth - LookAndFeel.Size_ScrollbarWidth, 0, LookAndFeel.Size_ScrollbarWidth, WinHeight));
 }
 
 function UWindowListBoxItem AddItem(string C)
@@ -45,17 +45,17 @@ function BeforePaint(Canvas C, float MouseX, float MouseY)
 	local UWindowListBoxItem OverItem;
 	local string NewHelpText;
 
-	VertSB.SetRange(0, Items.CountShown(), int(WinHeight/ItemHeight));
+	VertSB.SetRange(0, Items.CountShown(), int(WinHeight / ItemHeight));
 
 	NewHelpText = DefaultHelpText;
-	if(SelectedItem != None)
+	if (SelectedItem != None)
 	{
 		OverItem = GetItemAt(MouseX, MouseY);
-		if(OverItem == SelectedItem && OverItem.HelpText != "")
+		if (OverItem == SelectedItem && OverItem.HelpText != "")
 			NewHelpText = OverItem.HelpText;
 	}
 	
-	if(NewHelpText != HelpText)
+	if (NewHelpText != HelpText)
 	{
 		HelpText = NewHelpText;
 		Notify(DE_HelpChanged);
@@ -82,26 +82,26 @@ function Paint(Canvas C, float MouseX, float MouseY)
 	CurItem = Items.Next;
 	i = 0;
 
-	while((CurItem != None) && (i < VertSB.Pos)) 
+	while ((CurItem != None) && (i < VertSB.Pos)) 
 	{
-		if(CurItem.ShowThisItem())
+		if (CurItem.ShowThisItem())
 			i++;
 		CurItem = CurItem.Next;
 	}
 
-	for(y=m_IFirstItemYOffset;(y + ItemHeight< WinHeight) && (CurItem != None);CurItem = CurItem.Next)
+	for (y = m_IFirstItemYOffset; (y + ItemHeight< WinHeight) && (CurItem != None); CurItem = CurItem.Next)
 	{
-		if(CurItem.ShowThisItem())
+		if (CurItem.ShowThisItem())
 		{
 			OldColor = TextColor;
 			if (bHotTrack)
 			{
-				if ( (GetItemAt(MouseX, MouseY) == CurItem) && (CurItem != SelectedItem) )
+				if ((GetItemAt(MouseX, MouseY) == CurItem) && (CurItem != SelectedItem))
 				{
 					TextColor = SelectionColor;
-					TextColor.R = max(0,TextColor.R-96); 
-					TextColor.G = max(0,TextColor.G-96); 
-					TextColor.B = max(0,TextColor.B-96);
+					TextColor.R = max(0,TextColor.R - 96); 
+					TextColor.G = max(0,TextColor.G - 96); 
+					TextColor.B = max(0,TextColor.B - 96);
 				} 
 			}				
 		
@@ -122,7 +122,7 @@ function Resized()
 {
 	Super.Resized();
 
-	VertSB.WinLeft = WinWidth-LookAndFeel.Size_ScrollbarWidth;
+	VertSB.WinLeft = WinWidth - LookAndFeel.Size_ScrollbarWidth;
 	VertSB.WinTop = 0;
 	VertSB.SetSize(LookAndFeel.Size_ScrollbarWidth, WinHeight);
 }
@@ -133,24 +133,24 @@ function UWindowListBoxItem GetItemAt(float MouseX, float MouseY)
 	local UWindowList CurItem;
 	local int i;
 	
-	if(MouseX < 0 || MouseX > WinWidth)
+	if (MouseX < 0 || MouseX > WinWidth)
 		return None;
 
 	CurItem = Items.Next;
 	i = 0;
 
-	while((CurItem != None) && (i < VertSB.Pos)) 
+	while ((CurItem != None) && (i < VertSB.Pos)) 
 	{
-		if(CurItem.ShowThisItem())
+		if (CurItem.ShowThisItem())
 			i++;
 		CurItem = CurItem.Next;
 	}
 
-	for(y=m_IFirstItemYOffset;(y < WinHeight) && (CurItem != None);CurItem = CurItem.Next)
+	for (y = m_IFirstItemYOffset; (y < WinHeight) && (CurItem != None); CurItem = CurItem.Next)
 	{
-		if(CurItem.ShowThisItem())
+		if (CurItem.ShowThisItem())
 		{
-			if(MouseY >= y && MouseY <= y+ItemHeight)
+			if (MouseY >= y && MouseY <= y + ItemHeight)
 				return UWindowListBoxItem(CurItem);
 			y = y + ItemHeight;
 		}
@@ -164,17 +164,17 @@ function MakeSelectedVisible()
 	local UWindowList CurItem;
 	local int i;
 	
-	VertSB.SetRange(0, Items.CountShown(), int(WinHeight/ItemHeight));
+	VertSB.SetRange(0, Items.CountShown(), int(WinHeight / ItemHeight));
 
-	if(SelectedItem == None)
+	if (SelectedItem == None)
 		return;
 
 	i = 0;
-	for(CurItem=Items.Next; CurItem != None; CurItem = CurItem.Next)
+	for (CurItem = Items.Next; CurItem != None; CurItem = CurItem.Next)
 	{
-		if(CurItem == SelectedItem)
+		if (CurItem == SelectedItem)
 			break;
-		if(CurItem.ShowThisItem())
+		if (CurItem.ShowThisItem())
 			i++;
 	}
 
@@ -183,14 +183,14 @@ function MakeSelectedVisible()
 
 function SetSelectedItem(UWindowListBoxItem NewSelected)
 {
-	if(NewSelected != None && SelectedItem != NewSelected)
+	if (NewSelected != None && SelectedItem != NewSelected)
 	{
-		if(SelectedItem != None)
+		if (SelectedItem != None)
 			SelectedItem.bSelected = False;
 
 		SelectedItem = NewSelected;
 
-		if(SelectedItem != None)
+		if (SelectedItem != None)
 			SelectedItem.bSelected = True;
 		
 		Notify(DE_Click);
@@ -211,7 +211,7 @@ function LMouseDown(float X, float Y)
 
 	SetSelected(X, Y);
 
-	if(bCanDrag || bCanDragExternal)
+	if (bCanDrag || bCanDragExternal)
 	{
 		bDragging = True;
 		Root.CaptureMouse();
@@ -223,7 +223,7 @@ function DoubleClick(float X, float Y)
 {
 	Super.DoubleClick(X, Y);
 
-	if(GetItemAt(X, Y) == SelectedItem)
+	if (GetItemAt(X, Y) == SelectedItem)
 	{
 		DoubleClickItem(SelectedItem);
 	}	
@@ -243,7 +243,7 @@ function DoubleClickItem(UWindowListBoxItem I)
 {
     Notify(DE_DoubleClick);
 
-	if(DoubleClickList != None && I != None)
+	if (DoubleClickList != None && I != None)
 		DoubleClickList.ReceiveDoubleClickItem(Self, I);
 }
 
@@ -254,13 +254,13 @@ function MouseMove(float X, float Y)
 	
 	Super.MouseMove(X, Y);
 
-	if(bDragging && bMouseDown)
+	if (bDragging && bMouseDown)
 	{
 		OverItem = GetItemAt(X, Y);
-		if(bCanDrag && OverItem != SelectedItem && OverItem != None && SelectedItem != None)
+		if (bCanDrag && OverItem != SelectedItem && OverItem != None && SelectedItem != None)
 		{
 			SelectedItem.Remove();
-			if(Y < DragY)
+			if (Y < DragY)
 				OverItem.InsertItemBefore(SelectedItem);
 			else
 				OverItem.InsertItemAfter(SelectedItem, True);
@@ -271,7 +271,7 @@ function MouseMove(float X, float Y)
 		}
 		else
 		{
-			if(bCanDragExternal && CheckExternalDrag(X, Y) != None)
+			if (bCanDragExternal && CheckExternalDrag(X, Y) != None)
 				bDragging = False;
 		}
 	}
@@ -295,12 +295,12 @@ function bool ExternalDragOver(UWindowDialogControl ExternalControl, float X, fl
 	// drag should be denied.
 
 	B = UWindowListBox(ExternalControl);
-	if(B != None && B.SelectedItem != None)
+	if (B != None && B.SelectedItem != None)
 	{	
 		OverItem = GetItemAt(X, Y);
 
 		B.SelectedItem.Remove();
-		if(OverItem != None)
+		if (OverItem != None)
 			OverItem.InsertItemBefore(B.SelectedItem);
 		else
 			Items.AppendItem(B.SelectedItem);
@@ -310,7 +310,7 @@ function bool ExternalDragOver(UWindowDialogControl ExternalControl, float X, fl
 		B.Notify(DE_Change);
 		Notify(DE_Change);
 
-		if(bCanDrag || bCanDragExternal)
+		if (bCanDrag || bCanDragExternal)
 		{
 			Root.CancelCapture();
 			bDragging = True;
@@ -335,12 +335,12 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 //   FIXME: Update to auto-set the item height 		
 
 	
-	if(UWindowListBoxItem(Item).bSelected)
+	if (UWindowListBoxItem(Item).bSelected)
 	{
 		if (!bNoSelectionBox)
 		{
 			C.DrawColor = SelectionBkgColor;
-			DrawStretchedTexture(C, X, Y, W, H-1, Texture'WhiteTexture');
+			DrawStretchedTexture(C, X, Y, W, H - 1, Texture'WhiteTexture');
 		}
 		C.DrawColor = SelectionColor;
 	}
@@ -354,12 +354,12 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 	switch (Align)
 	{
 		case TXT_LEFT:
-			TX = X+2;
+			TX = X + 2;
 		case TXT_CENTER:
-			TX = (W-4 - XL)/2;
+			TX = (W - 4 - XL) / 2;
 			break;
 		case TXT_RIGHT:
-			TX = W-XL - W-2;
+			TX = W - XL - W - 2;
 			break;
 	}	
 	
@@ -369,19 +369,19 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 
 function KeyUp(int Key, float X, float Y)
 {
-	if ( (key==0xC8) || (key==78) ) 
+	if ((key == 0xC8) || (key == 78)) 
 	{
-		If (SelectedItem.Prev.Prev!=None)
+		If (SelectedItem.Prev.Prev != None)
 			SetSelectedItem(UWindowListBoxItem(SelectedItem.Prev));
 	}
-	else if ( (key==0xC9) || (key==80) )
+	else if ((key == 0xC9) || (key == 80))
 	{
-		If (SelectedItem.Next!=None)
+		If (SelectedItem.Next != None)
 			SetSelectedItem(UWindowListBoxItem(SelectedItem.Next));
 	}
-	else if ( (key==0xCD) || (key==0x0d) )
+	else if ((key == 0xCD) || (key == 0x0d))
 	{
-		if ( (OwnerWindow!=None) && (OwnerWindow.IsA('UWindowDialogClientWindow')) )
+		if ((OwnerWindow != None) && (OwnerWindow.IsA('UWindowDialogClientWindow')))
 		{
 			UWindowDialogClientWindow(OwnerWindow).Notify(self,DE_Change);
 		}
@@ -393,13 +393,13 @@ function KeyUp(int Key, float X, float Y)
 
 function MouseWheelDown(FLOAT X, FLOAT Y)
 {
-    if(VertSB != None)
+    if (VertSB != None)
 	    VertSB.MouseWheelDown(X,Y);
 }
 
 function MouseWheelUp(FLOAT X, FLOAT Y)
 {
-    if(VertSB != None)
+    if (VertSB != None)
         VertSB.MouseWheelUp(X,Y);
 	    
 }

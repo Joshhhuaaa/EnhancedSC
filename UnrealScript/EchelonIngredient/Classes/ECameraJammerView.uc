@@ -54,7 +54,7 @@ function PostBeginPlay()
     Super.PostBeginPlay();
 
     camjam = ECameraJammer(owner);
-    if(camjam == None)
+    if (camjam == None)
         log("CAMERAJAMMERVIEW WITHOUT A CAMERAJAMMER");
 }
 
@@ -70,7 +70,7 @@ function DrawView(HUD Hud,ECanvas Canvas)
 
     EPC = EPlayerController(camjam.Owner);
 
-    if(EPC.bShowInventory && EPC.bShowHUD) // Joshua - Show Camera Jammer info only if inventory enabled
+    if (EPC.bShowInventory && EPC.bShowHUD) // Joshua - Show Camera Jammer info only if inventory enabled
     {
         xPos = 640 - eGame.HUD_OFFSET_X - CAMJAM_WIDTH - LIFEBAR_WIDTH;
         yPos = eGame.HUD_OFFSET_Y;
@@ -86,11 +86,11 @@ function DrawView(HUD Hud,ECanvas Canvas)
         Canvas.DrawLine(xPos + 13, yPos + 47, CAMJAM_WIDTH - 26, 1, lightgreen, -1, eLevel.TGAME);
 
 
-        DrawBatteryMeter(Canvas, xPos + (CAMJAM_WIDTH - BATTERY_WIDTH)/2, yPos + 47 - BATTERY_HEIGHT/2);
+        DrawBatteryMeter(Canvas, xPos + (CAMJAM_WIDTH - BATTERY_WIDTH) / 2, yPos + 47 - BATTERY_HEIGHT / 2);
         DrawCamJamInfo(Canvas, xPos + 14, yPos + 27, CAMJAM_WIDTH - 28);
     }
 
-    if(camjam != None && camjam.GetStateName() == 's_Jamming' && EPC.bShowCrosshair && EPC.bShowHUD) // Joshua - Show crosshair toggle
+    if (camjam != None && camjam.GetStateName() == 's_Jamming' && EPC.bShowCrosshair && EPC.bShowHUD) // Joshua - Show crosshair toggle
         DrawCrosshair(Canvas);
 }
 
@@ -127,19 +127,19 @@ function DrawBorders(ECanvas Canvas, int xPos, int yPos, int width, int height)
 
     // TOP BORDER //
     Canvas.SetPos(xPos + 6, yPos);
-    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sw_border_h, width - 2*6, 5, 0, 5, 1, -5);
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sw_border_h, width - 2 * 6, 5, 0, 5, 1, -5);
 
     // BOTTOM BORDER //
     Canvas.SetPos(xPos + 6, yPos + height - 5);
-    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sw_border_h, width - 2*6, 5, 0, 0, 1, 5);
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sw_border_h, width - 2 * 6, 5, 0, 0, 1, 5);
 
     // LEFT BORDER //
     Canvas.SetPos(xPos, yPos + 6);
-    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sw_border_v, 5, height - 2*6, 0, 0, 5, 1);
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sw_border_v, 5, height - 2 * 6, 0, 0, 5, 1);
 
     // RIGHT BORDER //
     Canvas.SetPos(xPos + width - 5, yPos + 6);
-    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sw_border_v, 5, height - 2*6, 5, 0, -5, 1);
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sw_border_v, 5, height - 2 * 6, 5, 0, -5, 1);
 
 	Canvas.Style = ERenderStyle.STY_Normal;
 }
@@ -163,8 +163,8 @@ function DrawBatteryMeter(ECanvas Canvas, int xPos, int yPos)
     Canvas.DrawLine(xPos, yPos + 2, 1, BATTERY_HEIGHT - 4, lightgreen, -1, eLevel.TGAME);
     Canvas.DrawLine(xPos + BATTERY_WIDTH - 2, yPos + 2, 1, BATTERY_HEIGHT - 4, lightgreen, -1, eLevel.TGAME);
 
-    Canvas.DrawLine(xPos + BATTERY_WIDTH - 1, yPos + BATTERY_HEIGHT/2 - 1, 1, 1, Canvas.black, -1, eLevel.TGAME);
-    Canvas.DrawLine(xPos + BATTERY_WIDTH - 1, yPos + BATTERY_HEIGHT - BATTERY_HEIGHT/2, 1, 1, Canvas.black, -1, eLevel.TGAME);
+    Canvas.DrawLine(xPos + BATTERY_WIDTH - 1, yPos + BATTERY_HEIGHT / 2 - 1, 1, 1, Canvas.black, -1, eLevel.TGAME);
+    Canvas.DrawLine(xPos + BATTERY_WIDTH - 1, yPos + BATTERY_HEIGHT - BATTERY_HEIGHT / 2, 1, 1, Canvas.black, -1, eLevel.TGAME);
 
     // DRAW + AND - //
     Canvas.DrawLine(xPos + 1, yPos + BATTERY_HEIGHT + 4, 5, 1, lightgreen, -1, eLevel.TGAME);
@@ -173,7 +173,7 @@ function DrawBatteryMeter(ECanvas Canvas, int xPos, int yPos)
     Canvas.DrawLine(xPos + BATTERY_WIDTH - 3, yPos + BATTERY_HEIGHT + 2, 1, 5, lightgreen, -1, eLevel.TGAME);
 
     // DRAW METER //
-    if(camjam != None)
+    if (camjam != None)
     {
         e = camjam.CurrentCharge / camjam.BatteryCharge;
         Canvas.DrawLine(xPos + 3, yPos + 2, e * float(BATTERY_WIDTH - 6), BATTERY_HEIGHT - 4, darkgreen, -1, eLevel.TGAME);
@@ -195,26 +195,26 @@ function DrawCamJamInfo(ECanvas Canvas, int xPos, int yPos, int width)
 
 	Canvas.Style = ERenderStyle.STY_Alpha;
 
-    if(camjam == None)
+    if (camjam == None)
         return;
 
     Canvas.DrawColor = darkgreen;
 
-    if(camjam.JammedCamera != None)
+    if (camjam.JammedCamera != None)
     {
         szText = Canvas.LocalizeStr("JAMMING");
         Canvas.DrawColor.A = 192;
     }   
-    else if(camjam.GetStateName() != 's_Jamming' && camjam.CurrentCharge < camjam.BatteryCharge)
+    else if (camjam.GetStateName() != 's_Jamming' && camjam.CurrentCharge < camjam.BatteryCharge)
         szText = Canvas.LocalizeStr("RECHARGING");
 
-    for(i = 0; i < NB_ANIMBARS; i++)
+    for (i = 0; i < NB_ANIMBARS; i++)
     {
-        Canvas.SetPos(xPos, yPos + i*2);
+        Canvas.SetPos(xPos, yPos + i * 2);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.cj_communication, width, 1, barOffset[i], 0, width, 1);
     }
 
-    if(szText != "" && bBlink)
+    if (szText != "" && bBlink)
     {
         Canvas.Font = font'EHUDFont';
         Canvas.DrawColor = lightgreen;
@@ -242,12 +242,12 @@ function DrawCrosshair(ECanvas Canvas)
     width = eLevel.TGAME.GetWidth(eLevel.TGAME.cj_mire);
     height = eLevel.TGAME.GetHeight(eLevel.TGAME.cj_mire);
 
-    if(camjam.JammedCamera != None)
+    if (camjam.JammedCamera != None)
         Canvas.SetDrawColor(79,8,8);
     else        
         Canvas.SetDrawColor(38,81,50);
 
-    Canvas.SetPos(SCREEN_HALF_X - width/2, SCREEN_HALF_Y - height/2);
+    Canvas.SetPos(SCREEN_HALF_X - width / 2, SCREEN_HALF_Y - height / 2);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.cj_mire, width, height, 0, 0, width, height);
 
 	Canvas.Style = ERenderStyle.STY_Normal;
@@ -260,25 +260,25 @@ state s_Selected
         local int i;
 
         animTimer += DeltaTime;
-        if(animTimer > ANIM_SPEED)
+        if (animTimer > ANIM_SPEED)
         {
-            for(i = 0; i < NB_ANIMBARS; i++)
+            for (i = 0; i < NB_ANIMBARS; i++)
             {
-                if(i%2 == 0)
+                if (i % 2 == 0)
                 {
                     barOffset[i] += 5;
-                    if(barOffset[i] > 64)
+                    if (barOffset[i] > 64)
                         barOffset[i] -= 64;
                 }
                 else
                 {
                     barOffset[i] -= 5;
-                    if(barOffset[i] < 0)
+                    if (barOffset[i] < 0)
                         barOffset[i] += 64;
                 }
             }
 
-            if(camjam.JammedCamera != None)
+            if (camjam.JammedCamera != None)
                 bBlink = !bBlink;
             else
                 bBlink = true;

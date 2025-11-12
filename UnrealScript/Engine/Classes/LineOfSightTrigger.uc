@@ -21,8 +21,8 @@ function PostBeginPlay()
 {
 	Super.PostBeginPlay();
 
-	RequiredViewDir = cos(MaxViewAngle * PI/180);
-	if ( (SeenActorTag != '') && (SeenActorTag != 'None') )
+	RequiredViewDir = cos(MaxViewAngle * PI / 180);
+	if ((SeenActorTag != '') && (SeenActorTag != 'None'))
 		ForEach AllActors(class'Actor',SeenActor,SeenActorTag)
 			break;
 }
@@ -33,7 +33,7 @@ event PlayerSeesMe(PlayerController P)
 	bTriggered = true;
 }
 
-function Trigger( actor Other, Pawn EventInstigator, optional name InTag ) // UBI MODIF - Additional parameter
+function Trigger(actor Other, Pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 {
 	bEnabled = true;
 }

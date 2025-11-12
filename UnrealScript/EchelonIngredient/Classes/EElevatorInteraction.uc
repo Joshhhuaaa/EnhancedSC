@@ -7,17 +7,17 @@ function string	GetDescription()
 	return Localize("Interaction", "Elevator", "Localization\\HUD");
 }
 
-function InitInteract( Controller Instigator )
+function InitInteract(Controller Instigator)
 {
 	Panel = EElevatorPanel(Owner);
-	if( Panel == None )
+	if (Panel == None)
 		Log("ERROR: problem with EElevatorInteraction owner "$Owner);
 	
-	if( Panel.bPowered )
+	if (Panel.bPowered)
 	{
 		Super.InitInteract(Instigator);
 		
-		if( Instigator.bIsPlayer )
+		if (Instigator.bIsPlayer)
 		{
 		Instigator.GotoState('s_KeyPadInteract');
 			Panel.GotoState('s_Use');
@@ -27,14 +27,14 @@ function InitInteract( Controller Instigator )
 			Instigator.GotoState('s_ElevatorInteract');
 		}
 	}
-	else if( Instigator.bIsPlayer )
+	else if (Instigator.bIsPlayer)
 	{
 		EPlayerController(Instigator).SendTransmissionMessage(Localize("Transmission", "ElevatorPower", "Localization\\HUD"), TR_CONSOLE);
 		EPlayerController(Instigator).ReturnFromInteraction();
 	}
 }
 
-function SetInteractLocation( Pawn InteractPawn )
+function SetInteractLocation(Pawn InteractPawn)
 {
 	local Vector X, Y, Z, MovePos;
 	local EPawn InteractEPawn;
@@ -65,43 +65,43 @@ function SetInteractLocation( Pawn InteractPawn )
 	}	
 }
 
-function KeyEvent( String Key, EInputAction Action, float Delta, optional bool bAuto )
+function KeyEvent(String Key, EInputAction Action, float Delta, optional bool bAuto)
 {
 	// Joshua - Adding controller support for elevators.
 	local EPlayerController EPC; 
 	EPC = EPlayerController(EElevatorInteraction(Interaction).InteractionController);
 
 	// Process Npc interaction
-	if( bAuto )
+	if (bAuto)
 	{
 		Action		= IST_Press;
 		Key			= "Interaction";
 
-		if( Panel.SelectedFloor < Panel.Floors.Length-1 )
+		if (Panel.SelectedFloor < Panel.Floors.Length - 1)
 			Panel.SelectedButton = 2;
 		else
 			Panel.SelectedButton = 1;
 	}
 
-	if( Action == IST_Press )
+	if (Action == IST_Press)
 	{
-		switch( Key )
+		switch (Key)
 		{
 		case "AnalogUp" :
 		case "MoveForward" :
-			if( Panel.SelectedButton < Panel.KeyButtons.Length-1 )
+			if (Panel.SelectedButton < Panel.KeyButtons.Length - 1)
 				Panel.SelectedButton++;
 			break;
 
 		case "AnalogDown" :
 		case "MoveBackward" :
-			if( Panel.SelectedButton > 0 )
+			if (Panel.SelectedButton > 0)
 				Panel.SelectedButton--;
 			break;
 		
 		case "Interaction" :
 			if (!EPC.eGame.bUseController) // Joshua - Adding controller support for elevators
-				if(bAuto)
+				if (bAuto)
 					Panel.KeyPushed();
 			else
 				Panel.KeyPushed();

@@ -11,9 +11,9 @@ class P_3_2_1_NPP_MeltdownRoomAlarm extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('MeltdownRoomAlert');
@@ -38,13 +38,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EFalseRussianSoldier13')
+        if (P.name == 'EFalseRussianSoldier13')
             Characters[1] = P.controller;
-        if(P.name == 'EFalseRussianSoldier14')
+        if (P.name == 'EFalseRussianSoldier14')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

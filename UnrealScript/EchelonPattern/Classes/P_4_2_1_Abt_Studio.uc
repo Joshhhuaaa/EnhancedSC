@@ -14,9 +14,9 @@ var int OnBoard;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -33,33 +33,33 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz4')
+        if (P.name == 'spetsnaz4')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz7')
+        if (P.name == 'spetsnaz7')
             Characters[2] = P.controller;
-        if(P.name == 'spetsnaz0')
+        if (P.name == 'spetsnaz0')
             Characters[3] = P.controller;
-        if(P.name == 'spetsnaz2')
+        if (P.name == 'spetsnaz2')
             Characters[4] = P.controller;
-        if(P.name == 'EGeorgianSoldier35')
+        if (P.name == 'EGeorgianSoldier35')
             Characters[5] = P.controller;
-        if(P.name == 'spetsnaz10')
+        if (P.name == 'spetsnaz10')
             Characters[6] = P.controller;
-        if(P.name == 'spetsnaz3')
+        if (P.name == 'spetsnaz3')
             Characters[7] = P.controller;
-        if(P.name == 'EGeorgianSoldier38')
+        if (P.name == 'EGeorgianSoldier38')
             Characters[8] = P.controller;
-        if(P.name == 'EGeorgianSoldier37')
+        if (P.name == 'EGeorgianSoldier37')
             Characters[9] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'StaticMeshActor294')
+        if (A.name == 'StaticMeshActor294')
             SoundActors[0] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     OnBoard=0;

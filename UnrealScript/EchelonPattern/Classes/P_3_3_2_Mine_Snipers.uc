@@ -11,9 +11,9 @@ class P_3_3_2_Mine_Snipers extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('FromBelow');
@@ -38,15 +38,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz4')
+        if (P.name == 'spetsnaz4')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz6')
+        if (P.name == 'spetsnaz6')
             Characters[2] = P.controller;
-        if(P.name == 'spetsnaz1')
+        if (P.name == 'spetsnaz1')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

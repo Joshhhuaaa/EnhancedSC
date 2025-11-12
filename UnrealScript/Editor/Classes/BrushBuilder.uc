@@ -34,18 +34,18 @@ var private name Group;
 var private bool MergeCoplanars;
 
 // Native support.
-native function BeginBrush( bool MergeCoplanars, name Group );
+native function BeginBrush(bool MergeCoplanars, name Group);
 native function bool EndBrush();
 native function int GetVertexCount();
-native function vector GetVertex( int i );
+native function vector GetVertex(int i);
 native function int GetPolyCount();
-native function bool BadParameters( optional string msg );
-native function int Vertexv( vector v );
-native function int Vertex3f( float x, float y, float z );
-native function Poly3i( int Direction, int i, int j, int k, optional name ItemName, optional int PolyFlags );
-native function Poly4i( int Direction, int i, int j, int k, int l, optional name ItemName, optional int PolyFlags );
-native function PolyBegin( int Direction, optional name ItemName, optional int PolyFlags );
-native function Polyi( int i );
+native function bool BadParameters(optional string msg);
+native function int Vertexv(vector v);
+native function int Vertex3f(float x, float y, float z);
+native function Poly3i(int Direction, int i, int j, int k, optional name ItemName, optional int PolyFlags);
+native function Poly4i(int Direction, int i, int j, int k, int l, optional name ItemName, optional int PolyFlags);
+native function PolyBegin(int Direction, optional name ItemName, optional int PolyFlags);
+native function Polyi(int i);
 native function PolyEnd();
 
 // Build interface.

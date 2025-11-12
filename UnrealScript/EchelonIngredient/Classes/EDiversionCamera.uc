@@ -17,9 +17,9 @@ function PostBeginPlay()
 	HowToUseMe  = "DiversionCameraHowToUseMe";
 }
 
-function LostChild( Actor Other )
+function LostChild(Actor Other)
 {
-	if( Other == GazCloud )
+	if (Other == GazCloud)
 		GazCloud = None;
 }
 
@@ -31,14 +31,14 @@ state s_Camera
 		Super.BeginState();
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
 		Super.Tick(DeltaTime);
        
         // Diversion Cam specific stuff
-		if( Epc.eGame.bUseController) // Joshua - Adding controller support for Diversion Cameras
+		if (Epc.eGame.bUseController) // Joshua - Adding controller support for Diversion Cameras
 		{
-			if( Epc.bJump != 0 && !bUsedUp )
+			if (Epc.bJump != 0 && !bUsedUp)
 			{
 				bUsedUp = true;
 				// Remove pickup interaction
@@ -53,19 +53,19 @@ state s_Camera
 
 				Epc.bJump = 0;
 			}
-			else if( Epc.bDuck != 0 )
+			else if (Epc.bDuck != 0)
 			{
 				PlaySound(Sound'FisherEquipement.Play_Random_StickyCamNoise', SLOT_SFX);
 
-				if(!bWasSeen)
-				MakeNoise(1250, NOISE_Object_Falling);
+				if (!bWasSeen)
+					MakeNoise(1250, NOISE_Object_Falling);
 
 				Epc.bDuck = 0;
 			}
 		}
 		else
 		{
-			if( Epc.bAltFire != 0 && !bUsedUp )
+			if (Epc.bAltFire != 0 && !bUsedUp)
 			{
 				bUsedUp = true;
 				// Remove pickup interaction
@@ -80,12 +80,12 @@ state s_Camera
 
 				Epc.bAltFire = 0;
 			}
-			else if( Epc.bInteraction == true )
+			else if (Epc.bInteraction == true)
 			{
 				PlaySound(Sound'FisherEquipement.Play_Random_StickyCamNoise', SLOT_SFX);
 
-				if(!bWasSeen)
-				MakeNoise(1250, NOISE_Object_Falling);
+				if (!bWasSeen)
+					MakeNoise(1250, NOISE_Object_Falling);
 
 				Epc.bInteraction = false;
 			}

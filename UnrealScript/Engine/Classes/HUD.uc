@@ -50,8 +50,8 @@ event Destroyed()
 // * ATurcotte (MTL) (28 Jan 2002)
 // * Purpose : 
 // ***********************************************************************************************
-function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta);
-function  RealKeyEvent( string RealKeyValue, EInputAction Action, FLOAT Delta);
+function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta);
+function  RealKeyEvent(string RealKeyValue, EInputAction Action, FLOAT Delta);
 // ***********************************************************************************************
 // * END UBI MODIF 
 // * ATurcotte (MTL) (28 Jan 2002)
@@ -73,22 +73,22 @@ exec function ShowDebug()
 
 event WorldSpaceOverlays()
 {
-	if ( bShowDebugInfo && Pawn(PlayerOwner.ViewTarget) != None )
+	if (bShowDebugInfo && Pawn(PlayerOwner.ViewTarget) != None)
 		DrawRoute();
 }
 
-event PostRender( canvas Canvas )
+event PostRender(Canvas Canvas)
 {
 	local HUD H;
 	local float YL,YPos;
 
-	if ( bShowDebugInfo )
+	if (bShowDebugInfo)
 	{
 		YPos = 5;
 		UseSmallFont(Canvas);
 		PlayerOwner.ViewTarget.DisplayDebug(Canvas,YL,YPos);
 	}
-	else for ( H=self; H!=None; H=H.NextHUD )
+	else for (H = self; H != None; H = H.NextHUD)
 		H.DrawHUD(Canvas);
 }
 
@@ -100,42 +100,42 @@ function DrawRoute()
 	local bool bPath;
 
 	C = Pawn(PlayerOwner.ViewTarget).Controller;
-	if ( C == None )
+	if (C == None)
 		return;
 	Start = PlayerOwner.ViewTarget.Location;
 
 	// show where pawn is going
-	if ( (C == PlayerOwner)
-		|| (C.MoveTarget == C.RouteCache[0]) && (C.MoveTarget != None) )
+	if ((C == PlayerOwner)
+		|| (C.MoveTarget == C.RouteCache[0]) && (C.MoveTarget != None))
 	{
-		if ( (C == PlayerOwner) && (C.Destination != vect(0,0,0)) )
+		if ((C == PlayerOwner) && (C.Destination != vect(0,0,0)))
 		{
-			if ( C.PointReachable(C.Destination) )
+			if (C.PointReachable(C.Destination))
 			{
 				Draw3DLine(C.Pawn.Location, C.Destination, class'Canvas'.Static.MakeColor(255,255,255));
 				return;
 			}
 			C.FindPathTo(C.Destination);
 		}
-		for ( i=0; i<16; i++ )
+		for (i = 0; i < 16; i++)
 		{
-			if ( C.RouteCache[i] == None )
+			if (C.RouteCache[i] == None)
 				break;
 			bPath = true;
 			Draw3DLine(Start,C.RouteCache[i].Location,class'Canvas'.Static.MakeColor(0,255,0));
 			Start = C.RouteCache[i].Location;
 		}
-		if ( bPath )
+		if (bPath)
 			Draw3DLine(Start,C.Destination,class'Canvas'.Static.MakeColor(255,255,255));
 	}
-	else if ( PlayerOwner.ViewTarget.Velocity != vect(0,0,0) )
+	else if (PlayerOwner.ViewTarget.Velocity != vect(0,0,0))
 		Draw3DLine(Start,C.Destination,class'Canvas'.Static.MakeColor(255,255,255));
 
-	if ( C == PlayerOwner )
+	if (C == PlayerOwner)
 		return;
 
 	// show where pawn is looking
-	if ( C.Focus != None )
+	if (C.Focus != None)
 		End = C.Focus.Location;
 	else
 		End = C.FocalPoint;
@@ -144,11 +144,11 @@ function DrawRoute()
 
 /* DrawHUD() Draw HUD elements on canvas.
 */
-function DrawHUD(canvas Canvas);
+function DrawHUD(Canvas Canvas);
 
-function bool ProcessKeyEvent( int Key, int Action, FLOAT Delta )
+function bool ProcessKeyEvent(int Key, int Action, FLOAT Delta)
 {
-	if ( NextHud != None )
+	if (NextHud != None)
 		return NextHud.ProcessKeyEvent(Key,Action,Delta);
 	return false;
 }
@@ -158,7 +158,7 @@ function bool ProcessKeyEvent( int Key, int Action, FLOAT Delta )
 
 function UseSmallFont(Canvas Canvas)
 {
-	if ( Canvas.ClipX <= 640 )
+	if (Canvas.ClipX <= 640)
 		Canvas.Font = SmallFont;
 	else
 		Canvas.Font = MedFont;
@@ -166,7 +166,7 @@ function UseSmallFont(Canvas Canvas)
 
 function UseMediumFont(Canvas Canvas)
 {
-	if ( Canvas.ClipX <= 640 )
+	if (Canvas.ClipX <= 640)
 		Canvas.Font = MedFont;
 	else
 		Canvas.Font = BigFont;
@@ -174,7 +174,7 @@ function UseMediumFont(Canvas Canvas)
 
 function UseLargeFont(Canvas Canvas)
 {
-	if ( Canvas.ClipX <= 640 )
+	if (Canvas.ClipX <= 640)
 		Canvas.Font = BigFont;
 	else
 		Canvas.Font = LargeFont;

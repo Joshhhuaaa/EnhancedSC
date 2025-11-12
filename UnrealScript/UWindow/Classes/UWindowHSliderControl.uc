@@ -42,7 +42,7 @@ function SetValue(float NewValue, optional bool bNoNotify)
 
 	Value = CheckValue(NewValue);
 
-	if(Value != OldValue && !bNoNotify)
+	if (Value != OldValue && !bNoNotify)
 	{
 		// Notify
 		Notify(DE_Change);
@@ -57,14 +57,14 @@ function float CheckValue(float Test)
 	
 	NewValue = Test;
 	
-	if(Step != 0)
+	if (Step != 0)
 	{
 		TempF = NewValue / Step;
 		NewValue = Int(TempF + 0.5) * Step;
 	}
 
-	if(NewValue < MinValue) NewValue = MinValue;
-	if(NewValue > MaxValue) NewValue = MaxValue;
+	if (NewValue < MinValue) NewValue = MinValue;
+	if (NewValue > MaxValue) NewValue = MaxValue;
 
 	return NewValue;
 }
@@ -80,9 +80,9 @@ function BeforePaint(Canvas C, float X, float Y)
 	Super.BeforePaint(C, X, Y);
 	
 	TextSize(C, Text, W, H);
-	WinHeight = H+1;
+	WinHeight = H + 1;
 	
-	switch(Align)
+	switch (Align)
 	{
 	case TXT_LEFT:
 		SliderDrawX = WinWidth - SliderWidth;
@@ -101,7 +101,7 @@ function BeforePaint(Canvas C, float X, float Y)
 	SliderDrawY = (WinHeight - 2) / 2;
 	TextY = (WinHeight - H) / 2;
 
-	TrackStart = SliderDrawX + (SliderWidth - TrackWidth) * ((Value - MinValue)/(MaxValue - MinValue));
+	TrackStart = SliderDrawX + (SliderWidth - TrackWidth) * ((Value - MinValue) / (MaxValue - MinValue));
 }
 
 
@@ -113,7 +113,7 @@ function Paint(Canvas C, float X, float Y)
 	T = GetLookAndFeelTexture();
 
 
-	if(Text != "")
+	if (Text != "")
 	{
 		C.DrawColor = TextColor;
 		ClipText(C, TextX, TextY, Text);
@@ -121,38 +121,38 @@ function Paint(Canvas C, float X, float Y)
 	}
 	
 	R = LookAndFeel.HLine;
-	DrawStretchedTextureSegment( C, SliderDrawX, SliderDrawY, SliderWidth, R.H, R.X, R.Y, R.W, R.H, T);
+	DrawStretchedTextureSegment(C, SliderDrawX, SliderDrawY, SliderWidth, R.H, R.X, R.Y, R.W, R.H, T);
 
-	DrawUpBevel(C, TrackStart, SliderDrawY-4, TrackWidth, 10, T);
+	DrawUpBevel(C, TrackStart, SliderDrawY - 4, TrackWidth, 10, T);
 }
 
 function LMouseUp(float X, float Y)
 {
 	Super.LMouseUp(X, Y);
 
-	if(bNoSlidingNotify)
+	if (bNoSlidingNotify)
 		Notify(DE_Change);
 }
 
 function LMouseDown(float X, float Y)
 {
 	Super.LMouseDown(X, Y);
-	if((X >= TrackStart) && (X <= TrackStart + TrackWidth)) {
+	if ((X >= TrackStart) && (X <= TrackStart + TrackWidth)) {
 		bSliding = True;
 		Root.CaptureMouse();
 	}
 
-	if(X < TrackStart && X > SliderDrawX)
+	if (X < TrackStart && X > SliderDrawX)
 	{
-		if(Step != 0)
+		if (Step != 0)
 			SetValue(Value - Step);
 		else
 			SetValue(Value - 1);
 	}
 	
-	if(X > TrackStart + TrackWidth && X < SliderDrawX + SliderWidth)
+	if (X > TrackStart + TrackWidth && X < SliderDrawX + SliderWidth)
 	{
-		if(Step != 0)
+		if (Step != 0)
 			SetValue(Value + Step);
 		else
 			SetValue(Value + 1);
@@ -163,7 +163,7 @@ function LMouseDown(float X, float Y)
 function MouseMove(float X, float Y)
 {
 	Super.MouseMove(X, Y);
-	if(bSliding && bMouseDown)
+	if (bSliding && bMouseDown)
 	{
 		SetValue((((X - SliderDrawX) / (SliderWidth - TrackWidth)) * (MaxValue - MinValue)) + MinValue, bNoSlidingNotify);
 	}
@@ -181,14 +181,14 @@ function KeyDown(int Key, float X, float Y)
 	switch (Key)
 	{
 	case C.EInputKey.IK_Left:
-		if(Step != 0)
+		if (Step != 0)
 			SetValue(Value - Step);
 		else
 			SetValue(Value - 1);
 
 		break;
 	case C.EInputKey.IK_Right:
-		if(Step != 0)
+		if (Step != 0)
 			SetValue(Value + Step);
 		else
 			SetValue(Value + 1);

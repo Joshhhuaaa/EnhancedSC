@@ -7,7 +7,7 @@ function PostBeginPlay()
 	// Do this first
 	Super.PostBeginPlay();
 
-	if( Owner.bIsPawn )
+	if (Owner.bIsPawn)
 		ResetInteraction();
 }
 
@@ -16,7 +16,7 @@ function name GetHandAttachTag()
 	return 'Briefcase';
 }
 
-function PhysicsVolumeChange( PhysicsVolume NewVolume )
+function PhysicsVolumeChange(PhysicsVolume NewVolume)
 {
 	local EVolume Vol;
 	
@@ -25,7 +25,7 @@ function PhysicsVolumeChange( PhysicsVolume NewVolume )
 	Vol = EVolume(NewVolume);
 
 	// send event to GroupAI when destroyed
-	if( Vol != None && Vol.bDyingZone && GroupAI != None && LostJumpLabel != '' )
+	if (Vol != None && Vol.bDyingZone && GroupAI != None && LostJumpLabel != '')
 		GroupAI.SendJumpEvent(LostJumpLabel, false, false);
 }
 

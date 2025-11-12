@@ -12,9 +12,9 @@ var int SweepStarted;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_HEAR_RICOCHET:
             EventJump('GoFalse');
@@ -46,21 +46,21 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz3')
+        if (P.name == 'spetsnaz3')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz7')
+        if (P.name == 'spetsnaz7')
             Characters[2] = P.controller;
-        if(P.name == 'spetsnaz8')
+        if (P.name == 'spetsnaz8')
             Characters[3] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'StaticMeshActor449')
+        if (A.name == 'StaticMeshActor449')
             SoundActors[0] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     SweepStarted=0;

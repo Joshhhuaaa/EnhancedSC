@@ -36,7 +36,7 @@ event Interaction AddInteraction(string InteractionName, optional Player AttachT
 	
 	NewInteractionClass = class<Interaction>(DynamicLoadObject(InteractionName, class'Class'));
 	
-	if (NewInteractionClass!=None)
+	if (NewInteractionClass != None)
 	{
 		NewInteraction = new NewInteractionClass;
 		if (NewInteraction != None)
@@ -47,13 +47,13 @@ event Interaction AddInteraction(string InteractionName, optional Player AttachT
 			if (AttachTo != None)	// Handle location Interactions
 			{
 				AttachTo.LocalInteractions.Length = AttachTo.LocalInteractions.Length + 1;
-				AttachTo.LocalInteractions[AttachTo.LocalInteractions.Length-1] = NewInteraction;
+				AttachTo.LocalInteractions[AttachTo.LocalInteractions.Length - 1] = NewInteraction;
 				NewInteraction.ViewportOwner = AttachTo;
 			}
 			else	// Handle Global Interactions
 			{
 				GlobalInteractions.Length = GlobalInteractions.Length + 1;
-				GlobalInteractions[GlobalInteractions.Length-1] = NewInteraction;
+				GlobalInteractions[GlobalInteractions.Length - 1] = NewInteraction;
 			}
 
 			// Initialize the Interaction
@@ -83,7 +83,7 @@ event RemoveInteraction(interaction RemoveMe)			// Removes a Interaction
 	{
 		for (Index = 0; Index < RemoveMe.ViewPortOwner.LocalInteractions.Length; Index++)
 		{
-			if ( RemoveMe.ViewPortOwner.LocalInteractions[Index] == RemoveMe )
+			if (RemoveMe.ViewPortOwner.LocalInteractions[Index] == RemoveMe)
 			{
 				RemoveMe.ViewPortOwner.LocalInteractions.Remove(Index,1);
 				return;
@@ -94,7 +94,7 @@ event RemoveInteraction(interaction RemoveMe)			// Removes a Interaction
 	{
 		for (Index = 0; Index < GlobalInteractions.Length; Index++)
 		{
-			if ( GlobalInteractions[Index] == RemoveMe )
+			if (GlobalInteractions[Index] == RemoveMe)
 			{
 				GlobalInteractions.Remove(Index,1);
 				return;
@@ -132,7 +132,7 @@ event SetFocusTo(Interaction Inter, optional Player ViewportOwner)
 	// Search for the Interaction
 
 	iIndex = -1;
-	for ( i=0; i<InteractionArray.Length; i++ )
+	for (i = 0; i < InteractionArray.Length; i++)
 	{
 		if (InteractionArray[i] == Inter)
 		{
@@ -143,20 +143,20 @@ event SetFocusTo(Interaction Inter, optional Player ViewportOwner)
 
 	// Was it found?
 	
-	if (iIndex<0)
+	if (iIndex < 0)
 	{
 		log("Interaction "$Inter$" is not in "$ViewportOwner$".",'IMaster');
 		return;
 	}
-	else if (iIndex==0)
+	else if (iIndex == 0)
 		return;					// Already has focus
 	
 
 	// Move it to the top.		
 		
 	temp = InteractionArray[iIndex];
-	for ( i=0; i<iIndex; i++)
-		InteractionArray[i+1] = InteractionArray[i];
+	for (i = 0; i < iIndex; i++)
+		InteractionArray[i + 1] = InteractionArray[i];
 		
 	InteractionArray[0] = temp;
 	InteractionArray[0].bActive = true;		// Give it Input
@@ -170,17 +170,17 @@ event SetFocusTo(Interaction Inter, optional Player ViewportOwner)
 // The Process functions are here to limit the # of switches from C++ to Script. 
 // ====================================================================
 		
-event bool Process_KeyType( array<Interaction> InteractionArray, out EInputKey Key ) // Process a single key press
+event bool Process_KeyType(array<Interaction> InteractionArray, out EInputKey Key) // Process a single key press
 {
 	local int Index;
 	
 	// Chain through the Interactions
 	
-	for ( Index=0; Index<InteractionArray.Length; Index++) 
+	for (Index = 0; Index < InteractionArray.Length; Index++) 
 	{
 		// Give each Interaction the chance to process the key event
 
-		if ( ( InteractionArray[Index].bActive ) && ( InteractionArray[Index].KeyType(key) ) )	
+		if ((InteractionArray[Index].bActive) && (InteractionArray[Index].KeyType(key)))	
 			return true;				// and break the chain if processed
 	
 	}
@@ -188,18 +188,18 @@ event bool Process_KeyType( array<Interaction> InteractionArray, out EInputKey K
 
 } // Process_KeyType
 
-event bool Process_KeyEvent( array<Interaction> InteractionArray,
-				out EInputKey Key, out EInputAction Action, FLOAT Delta ) // Process the range of input events
+event bool Process_KeyEvent(array<Interaction> InteractionArray,
+				out EInputKey Key, out EInputAction Action, FLOAT Delta) // Process the range of input events
 {
 	local int Index;
 
 	// Chain through the Interactions
 	
-	for ( Index=0; Index<InteractionArray.Length; Index++)
+	for (Index = 0; Index < InteractionArray.Length; Index++)
 	{
 		// Give each Interaction the chance to process the key event
 
-		if ( ( InteractionArray[Index].bActive ) && ( InteractionArray[Index].KeyEvent(Key, Action, Delta ) ) )
+		if ((InteractionArray[Index].bActive) && (InteractionArray[Index].KeyEvent(Key, Action, Delta)))
 		{
 			return true;						// and break the chain if processed
 		}
@@ -215,30 +215,30 @@ event bool Process_KeyEvent( array<Interaction> InteractionArray,
 // are drawn last. 
 // ====================================================================
 
-event Process_PreRender( array<Interaction> InteractionArray, canvas Canvas )
+event Process_PreRender(array<Interaction> InteractionArray, Canvas Canvas)
 {
 	local int index;
 
 	// Chain through the Interactions
 
-	for ( Index=InteractionArray.Length; Index>0; Index--)	// Give each Interaction PreRender time
+	for (Index = InteractionArray.Length; Index > 0; Index--)	// Give each Interaction PreRender time
 	{
-		if ( InteractionArray[Index-1].bVisible )
-			InteractionArray[Index-1].PreRender(canvas);
+		if (InteractionArray[Index - 1].bVisible)
+			InteractionArray[Index - 1].PreRender(Canvas);
 	}			
 		
 } // Process_PreRender
 
-event Process_PostRender( array<Interaction> InteractionArray, canvas Canvas )
+event Process_PostRender(array<Interaction> InteractionArray, Canvas Canvas)
 {
 	local int index;
 
 	// Chain through the Interactions
 
-	for ( Index=InteractionArray.Length; Index>0; Index--)	// Give each Interaction PreRender time
+	for (Index = InteractionArray.Length; Index > 0; Index--)	// Give each Interaction PreRender time
 	{
-		if ( InteractionArray[Index-1].bVisible )
-			InteractionArray[Index-1].PostRender(canvas);
+		if (InteractionArray[Index - 1].bVisible)
+			InteractionArray[Index - 1].PostRender(Canvas);
 	}			
 
 } // Process_PostRender
@@ -247,17 +247,17 @@ event Process_PostRender( array<Interaction> InteractionArray, canvas Canvas )
 // Tick - Interactions can request access to be ticked.
 // ====================================================================
 
-event Process_Tick( array<Interaction> InteractionArray, float DeltaTime )
+event Process_Tick(array<Interaction> InteractionArray, float DeltaTime)
 {
 	local int Index;
 	
 	// Chain through the Interactions
 
-	for ( Index=0; Index<InteractionArray.Length; Index++) 
+	for (Index = 0; Index < InteractionArray.Length; Index++) 
 	{
 		// Give each Interaction that requires it tick
 
-		if ( InteractionArray[Index].bRequiresTick )
+		if (InteractionArray[Index].bRequiresTick)
 			InteractionArray[Index].Tick(DeltaTime);	
 	}
 
@@ -268,13 +268,13 @@ event Process_Tick( array<Interaction> InteractionArray, float DeltaTime )
 // interactions.
 // ====================================================================
 
-event Process_Message( coerce string Msg, float MsgLife, array<Interaction> InteractionArray)
+event Process_Message(coerce string Msg, float MsgLife, array<Interaction> InteractionArray)
 {
 	local int Index;
 	
 	// Chain through the Interactions
 
-	for ( Index=0; Index<InteractionArray.Length; Index++) 
+	for (Index = 0; Index < InteractionArray.Length; Index++) 
 	{
 		// Give each Interaction the message
 

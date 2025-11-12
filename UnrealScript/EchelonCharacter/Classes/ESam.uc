@@ -214,7 +214,7 @@ function SetSamMesh(int SamMeshType)
     {
 		case 0:
 			Mesh = EchelonLevelInfo(Level).SamMesh;
-			if( Mesh == none )
+			if (Mesh == none)
 			{
 				// JFP: Temp hack, following the Oct-30-2002 merge some maps didn't have the SamMesh set.
 				// Added this for backward compatibility.
@@ -233,7 +233,7 @@ function SetSamMesh(int SamMeshType)
             break;
         default:
 			Mesh = EchelonLevelInfo(Level).SamMesh;
-			if( Mesh == none )
+			if (Mesh == none)
 			{
 				Mesh=SkeletalMesh'ESam.samAMesh';
 			}
@@ -244,7 +244,7 @@ function SetSamMesh(int SamMeshType)
 function PostBeginPlay()
 {
     // Joshua - Check for level specific overrides
-    switch(GetCurrentMapName())
+    switch (GetCurrentMapName())
     {
         case "0_0_2_Training":
         case "0_0_3_Training":
@@ -338,32 +338,32 @@ event GetRandomWaitAnim(out name ReturnName)
 	CamPan = Vector(Controller.Rotation) Dot Vector(Rotation);
 
 	r = FRand();
-	if( !bIsCrouched )
+	if (!bIsCrouched)
 	{
-		if( r <= 0.25f )
+		if (r <= 0.25f)
 			ReturnName = 'prsostalaa0';
-		else if( r <= 0.50f )
+		else if (r <= 0.50f)
 			ReturnName = 'prsostalbb0';
-		else if( r <= 0.75f && CamPan > 0.5 )
+		else if (r <= 0.75f && CamPan > 0.5)
 			ReturnName = 'prsostalcc0';
 		else
 			ReturnName = 'prsostaldd0';
 	}
 	else
 	{
-		if( r <= 0.50f )
+		if (r <= 0.50f)
 			ReturnName = 'prsocralaa0';
 		else
 			ReturnName = 'prsocralbb0';
 	}
 }
 
-function bool IsExtraWaiting( optional int f )
+function bool IsExtraWaiting(optional int f)
 {
 	local name CurrentAnimSeq;
 	CurrentAnimSeq = GetAnimName();
 	
-	switch( f )
+	switch (f)
 	{
 	case 0:
 		return CurrentAnimSeq == EPlayerController(Controller).SpecialWaitAnim ||
@@ -449,7 +449,7 @@ function InitAnims()
 function SwitchAnims()
 {
 	// Nothing in hand
-	if( WeaponStance == 0 )
+	if (WeaponStance == 0)
 	{
 		AWait						= 'waitStAlFd0';
 		AWalk						= 'walkstalfd0';
@@ -474,7 +474,7 @@ function SwitchAnims()
 	}
 
 	// One handed weapon
-	else if( WeaponStance == 1 )
+	else if (WeaponStance == 1)
 	{
 		AWait						= 'waitStSpFd1';
 
@@ -511,7 +511,7 @@ function SwitchAnims()
 		ASplitWait					= 'SpltStSpNt2';
 	}
 
-	if(bIsCrouched)
+	if (bIsCrouched)
 	{
 		ADeathForward				= 'XxxxCrAlFd0';
 		ADeathBack					= 'XxxxCrAlBk0';
@@ -529,21 +529,21 @@ function SwitchAnims()
 	}
 }
 
-function Tick( float DeltaTime )
+function Tick(float DeltaTime)
 {
 	local EInteractObject Interaction;
 	ForEach TouchingActors(class'EInteractObject', Interaction)
 		Interaction.Touch(self);
 
-	if( BodyFlames.Length > 0 )
+	if (BodyFlames.Length > 0)
 	{
-		if( FireTimer <= 0 )
+		if (FireTimer <= 0)
 			FireTimer = 1.f;
 		else
 		{
 			FireTimer -= DeltaTime;
 
-			if( FireTimer <= 0 )
+			if (FireTimer <= 0)
 				AttenuateFire(1.f);
 		}
 	}
@@ -551,7 +551,7 @@ function Tick( float DeltaTime )
 	Super.Tick(DeltaTime);
 }
 
-function TakeDamage( int Damage, Pawn instigatedBy, Vector Hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag )
+function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag)
 {
 	local Controller Killer;
 	local EPlayerController EPC;
@@ -560,41 +560,41 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector Hitlocation, vector H
 	local int sideDamage;
 	bAlreadyDead	= (Health <= 0);
 
-	if ( IsPlaying(Sound'Electronic.Play_Sq_ComputerKeyBoard')) //Stop keyboard sound when hit.
+	if (IsPlaying(Sound'Electronic.Play_Sq_ComputerKeyBoard')) //Stop keyboard sound when hit.
 		PlaySound(Sound'Electronic.Stop_Sq_ComputerKeyBoard', SLOT_SFX);
 
-	if(	Controller == None ||
+	if (Controller == None ||
 		eGame.pPlayer.bInvincible ||
 		(bKeepNPCAlive && Health == 1)) // in trans and already at minimum: dont play sound or shake
 		return;
 
 	// Experimental
 	EPC = EPlayerController(Controller);
-	if((Vector(Controller.Rotation) cross momentum).Z > 0.0)
+	if ((Vector(Controller.Rotation) cross momentum).Z > 0.0)
 		sideDamage = 1;
 	else
 		sideDamage = -1;
 
-	if( damageType == class'Crushed' )
+	if (damageType == class'Crushed')
 		EPC.m_camera.Shake(sideDamage * 800, 20000, 5000);
-	else if( damageType == None )
+	else if (damageType == None)
 		EPC.m_camera.Hit(sideDamage * 500, 3000);
 	else
 		EPC.m_camera.Shake(200, 10000, 2500);
 
 	// Blood effect
-	if( damageType == None )
+	if (damageType == None)
 		Spawn(class'EBloodSplat', self,, HitLocation, Rotator(Normal(momentum)));
 
 	// Check to be sure there is a pill .. else, use body pill
-	if( PillTag == 0 )
+	if (PillTag == 0)
 		PillTag = GetApproxPillFromHit(HitLocation);
 
 	// Gives real damage depending on the hit zone
 	ResolveDamage(damage, PillTag, damageType);
 	
 	//Play HitSound depending on the pill
-	if ( damageType == none )
+	if (damageType == none)
 	{
 		if (PillTag == 1) //head
 			PlaySound(Sound'GunCommon.Play_BulletHitHead', SLOT_SFX);
@@ -602,33 +602,33 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector Hitlocation, vector H
 			PlaySound(Sound'GunCommon.Play_Random_BulletHitBody', SLOT_SFX);
 	}
 	// If knocked but not on head
-	else if( damageType.name == 'EKnocked' && PillTag != P_Head )
+	else if (damageType.name == 'EKnocked' && PillTag != P_Head)
 		damageType = None;
 
 	// In all case, spawn flames on burned actor
-	if( damageType != None && damageType.name == 'EBurned' )
+	if (damageType != None && damageType.name == 'EBurned')
 		CatchOnFire();
 
 	// Used during transition where Sam would pop if killed
-	if(!bAlreadyDead && bKeepNPCAlive)
+	if (!bAlreadyDead && bKeepNPCAlive)
 		Health = Max(1, Health);
 
 	// play damage animations
 	if (Health > 0)
 	{
 
-		if ( damageType == None || damageType.Name == 'EKnocked' || damageType.Name == 'EElectrocuted' || damageType.Name == 'Crushed' || damageType.Name == 'EBurned' )
+		if (damageType == None || damageType.Name == 'EKnocked' || damageType.Name == 'EElectrocuted' || damageType.Name == 'Crushed' || damageType.Name == 'EBurned')
 		{	
-			if ( !IsPlaying(Sound'FisherVoice.Play_Random_FisherHitWeapon') )
+			if (!IsPlaying(Sound'FisherVoice.Play_Random_FisherHitWeapon'))
 				PlaySound(Sound'FisherVoice.Play_Random_FisherHitWeapon', SLOT_Barks);
 		}
 		else
 		{
-			if (!IsPlaying(Sound'FisherVoice.Play_Random_FisherCough') )
-				PlaySound(Sound'FisherVoice.Play_Random_FisherCough', SLOT_Barks );
+			if (!IsPlaying(Sound'FisherVoice.Play_Random_FisherCough'))
+				PlaySound(Sound'FisherVoice.Play_Random_FisherCough', SLOT_Barks);
 		}	
 	}
-	else if ( !bAlreadyDead )
+	else if (!bAlreadyDead)
 	{
 		SwitchAnims();
 		//The controller launches the sounds because all the sounds from an actor are killed in DiedE
@@ -636,7 +636,7 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector Hitlocation, vector H
 		StartFadeOut(40.0f);
 		EPlayerController(Controller).PlaySound(Sound'CommonMusic.Play_theme_FisherDeath1', SLOT_Fisher);
 
-	    if ( instigatedBy != None )
+	    if (instigatedBy != None)
         {
 				Killer = instigatedBy.Controller;
         }
@@ -645,9 +645,9 @@ function TakeDamage( int Damage, Pawn instigatedBy, Vector Hitlocation, vector H
 	}
 }
 
-function ResolveDamage( out int Damage, out int PillTag, out class<DamageType> damageType )
+function ResolveDamage(out int Damage, out int PillTag, out class<DamageType> damageType)
 {
-	if( damageType == class'ESleepingGas' && FRand() > 0.5 )
+	if (damageType == class'ESleepingGas' && FRand() > 0.5)
 		Damage = 0;
 
 	Super.ResolveDamage(Damage, PillTag, damageType);
@@ -657,10 +657,10 @@ singular event BaseChange()
 {
 	local EPawn npc;
 	npc = EPawn(Base);
-	if( npc != None )
+	if (npc != None)
 	{
 		// npc getting out of bed
-		if(npc.bSleeping && npc.Physics == PHYS_RootMotion)
+		if (npc.bSleeping && npc.Physics == PHYS_RootMotion)
 		{
 			// Fall tru npc
 			SetPhysics(PHYS_Falling);
@@ -669,7 +669,7 @@ singular event BaseChange()
 		else
 		npc.TakeDamage(npc.Health / 2, self, npc.Location, vect(0,0,1), vect(0,0,-1), class'EKnocked', P_Head);
 	}
-	else if( Base != None && Base.bFixedRotationDir && Base.RotationRate != rot(0,0,0))
+	else if (Base != None && Base.bFixedRotationDir && Base.RotationRate != rot(0,0,0))
 	{
 		// based on automatic rotating object
 		SetPhysics(PHYS_Falling);

@@ -14,9 +14,9 @@ var int closing;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('SamDetected');
@@ -59,13 +59,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EChineseSoldier22')
+        if (P.name == 'EChineseSoldier22')
             Characters[1] = P.controller;
-        if(P.name == 'EChineseSoldier4')
+        if (P.name == 'EChineseSoldier4')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     closing=0;

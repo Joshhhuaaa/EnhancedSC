@@ -8,7 +8,7 @@ var() float Height, Width, Breadth;
 var() int WidthSegments, DepthSegments;		// How many breaks to have in each direction
 var() name GroupName;
 
-function BuildTerrain( int Direction, float dx, float dy, float dz, int WidthSeg, int DepthSeg )
+function BuildTerrain(int Direction, float dx, float dy, float dz, int WidthSeg, int DepthSeg)
 {
 	local int n,nbottom,ntop,i,j,k,x,y,idx;
 	local float WidthStep, DepthStep;
@@ -20,10 +20,10 @@ function BuildTerrain( int Direction, float dx, float dy, float dz, int WidthSeg
 	n = GetVertexCount();
 
 	// Create vertices
-	for( i=-1; i<2; i+=2 )
-		for( j=-1; j<2; j+=2 )
-			for( k=-1; k<2; k+=2 )
-				Vertex3f( i*dx/2, j*dy/2, k*dz/2 );
+	for (i=-1; i<2; i+=2)
+		for (j=-1; j<2; j+=2)
+			for (k=-1; k<2; k+=2)
+				Vertex3f(i*dx/2, j*dy/2, k*dz/2);
 
 	// Create the top
 	Poly4i(Direction,n+3,n+1,n+5,n+7, 'sky');
@@ -38,19 +38,19 @@ function BuildTerrain( int Direction, float dx, float dy, float dz, int WidthSeg
 	WidthStep = dx / WidthSeg;
 	DepthStep = dy / DepthSeg;
 
-	for( x = 0 ; x < WidthSeg + 1 ; x++ )
-		for( y = 0 ; y < DepthSeg + 1 ; y++ )
-			Vertex3f( (WidthStep * x) - dx/2, (DepthStep * y) - dy/2, -(dz/2) );
+	for (x = 0 ; x < WidthSeg + 1 ; x++)
+		for (y = 0 ; y < DepthSeg + 1 ; y++)
+			Vertex3f((WidthStep * x) - dx/2, (DepthStep * y) - dy/2, -(dz/2));
 
 	ntop = GetVertexCount();
 
-	for( x = 0 ; x < WidthSeg + 1 ; x++ )
-		for( y = 0 ; y < DepthSeg + 1 ; y++ )
-			Vertex3f( (WidthStep * x) - dx/2, (DepthStep * y) - dy/2, dz/2 );
+	for (x = 0 ; x < WidthSeg + 1 ; x++)
+		for (y = 0 ; y < DepthSeg + 1 ; y++)
+			Vertex3f((WidthStep * x) - dx/2, (DepthStep * y) - dy/2, dz/2);
 
 	// Create the bottom as a mesh of triangles
-	for( x = 0 ; x < WidthSeg ; x++ )
-		for( y = 0 ; y < DepthSeg ; y++ )
+	for (x = 0 ; x < WidthSeg ; x++)
+		for (y = 0 ; y < DepthSeg ; y++)
 		{
 			Poly3i(-Direction,
 				(nbottom+y)		+ ((DepthSeg+1) * x),
@@ -69,45 +69,45 @@ function BuildTerrain( int Direction, float dx, float dy, float dz, int WidthSeg
 	//
 	// The bottom poly of each side is basically a triangle fan.
 	//
-	for( x = 0 ; x < WidthSeg ; x++ )
+	for (x = 0 ; x < WidthSeg ; x++)
 	{
 		Poly4i(-Direction,
 			nbottom + DepthSeg + ((DepthSeg+1) * x),
 			nbottom + DepthSeg + ((DepthSeg+1) * (x + 1)),
 			ntop + DepthSeg + ((DepthSeg+1) * (x + 1)),
 			ntop + DepthSeg + ((DepthSeg+1) * x),
-			'sky' );
+			'sky');
 		Poly4i(-Direction,
 			nbottom + ((DepthSeg+1) * (x + 1)),
 			nbottom + ((DepthSeg+1) * x),
 			ntop + ((DepthSeg+1) * x),
 			ntop + ((DepthSeg+1) * (x + 1)),
-			'sky' );
+			'sky');
 	}
-	for( y = 0 ; y < DepthSeg ; y++ )
+	for (y = 0 ; y < DepthSeg ; y++)
 	{
 		Poly4i(-Direction,
 			nbottom + y,
 			nbottom + (y + 1),
 			ntop + (y + 1),
 			ntop + y,
-			'sky' );
+			'sky');
 		Poly4i(-Direction,
 			nbottom + ((DepthSeg+1) * WidthSeg) + (y + 1),
 			nbottom + ((DepthSeg+1) * WidthSeg) + y,
 			ntop + ((DepthSeg+1) * WidthSeg) + y,
 			ntop + ((DepthSeg+1) * WidthSeg) + (y + 1),
-			'sky' );
+			'sky');
 	}
 }
 
 event bool Build()
 {
-	if( Height<=0 || Width<=0 || Breadth<=0 || WidthSegments<=0 || DepthSegments<=0 )
+	if (Height<=0 || Width<=0 || Breadth<=0 || WidthSegments<=0 || DepthSegments<=0)
 		return BadParameters();
 
-	BeginBrush( false, GroupName );
-	BuildTerrain( +1, Breadth, Width, Height, WidthSegments, DepthSegments );
+	BeginBrush(false, GroupName);
+	BuildTerrain(+1, Breadth, Width, Height, WidthSegments, DepthSegments);
 	return EndBrush();
 }
 

@@ -15,9 +15,9 @@ var int Pass2;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('AntennaSAFEflag');
@@ -40,21 +40,21 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianSoldier1')
+        if (P.name == 'EGeorgianSoldier1')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianSoldier14')
+        if (P.name == 'EGeorgianSoldier14')
             Characters[2] = P.controller;
-        if(P.name == 'spetsnaz9')
+        if (P.name == 'spetsnaz9')
             Characters[3] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'spetsnaz9')
+        if (A.name == 'spetsnaz9')
             SoundActors[0] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     OkayToTelep=1;

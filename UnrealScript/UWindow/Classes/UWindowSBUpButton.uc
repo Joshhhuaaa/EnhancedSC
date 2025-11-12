@@ -16,7 +16,7 @@ function Created()
 
 function Paint(Canvas C, float X, float Y) 
 {
-    if ( bDisabled && m_bHideSBWhenDisable)
+    if (bDisabled && m_bHideSBWhenDisable)
             return;
 
     Super.Paint(C, X, Y);
@@ -25,7 +25,7 @@ function Paint(Canvas C, float X, float Y)
 function LMouseDown(float X, float Y)
 {
 	Super.LMouseDown(X, Y);
-	if(bDisabled)
+	if (bDisabled)
 		return;
 	UWindowVScrollBar(ParentWindow).Scroll(-UWindowVScrollBar(ParentWindow).ScrollAmount);
 	NextClickTime = GetTime() + 0.5;
@@ -33,13 +33,13 @@ function LMouseDown(float X, float Y)
 
 function Tick(float Delta)
 {
-	if(bMouseDown && (NextClickTime > 0) && (NextClickTime < GetTime()))
+	if (bMouseDown && (NextClickTime > 0) && (NextClickTime < GetTime()))
 	{
 		UWindowVScrollBar(ParentWindow).Scroll(-UWindowVScrollBar(ParentWindow).ScrollAmount);
 		NextClickTime = GetTime() + 0.1;
 	}
 
-	if(!bMouseDown)
+	if (!bMouseDown)
 	{
 		NextClickTime = 0;
 	}

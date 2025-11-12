@@ -34,7 +34,7 @@ function Recoil(EPlayerController EPC)
 	local rotator setRot;
 	setRot = EPC.Rotation;
 	setRot.Pitch += recoilPitchAdd;
-	if(FRand() > 0.5)
+	if (FRand() > 0.5)
 		setRot.Yaw += recoilYawAdd;
 	else
 		setRot.Yaw -= recoilYawAdd;
@@ -42,7 +42,7 @@ function Recoil(EPlayerController EPC)
 
 	fatigueLevel += recoilFatigueUp;
 	fatigueLevel = FClamp(fatigueLevel, 0.0, 1.0);
-	if(fatigueLevel == 1.0)
+	if (fatigueLevel == 1.0)
 		isTired = true;
 	recoilUp = true;
 }
@@ -70,25 +70,25 @@ function bool Update(float deltaTime, EPlayerController EPC)
 	noiseDownSpeed = DampFloat(noiseDownSpeed, default.noiseDownSpeed * PosVar, 1.0, deltaTime);
 	holdMax = DampFloat(holdMax, default.holdMax * PosVar, 1.0, deltaTime);
 
-	deltaRot.yaw = Sin(Level.TimeSeconds * yawSpeed) * yawSize * noiseDamping;
-	deltaRot.pitch = Sin(Level.TimeSeconds * pitchSpeed) * pitchSize * noiseDamping;
-	deltaRot.pitch += recoilAdd;
+	deltaRot.Yaw = Sin(Level.TimeSeconds * yawSpeed) * yawSize * noiseDamping;
+	deltaRot.Pitch = Sin(Level.TimeSeconds * pitchSpeed) * pitchSize * noiseDamping;
+	deltaRot.Pitch += recoilAdd;
 
 	holding = EPC.bAltFire != 0 && !isTired;
 
-	if(holding)
+	if (holding)
 		fatigueLevel += deltaTime / holdMax;
 	else
 		fatigueLevel -= deltaTime / tiredMax;
 
 	fatigueLevel = FClamp(fatigueLevel, 0.0, 1.0);
 
-	if(fatigueLevel == 1.0)
+	if (fatigueLevel == 1.0)
 		isTired = true;
-	else if(fatigueLevel == 0.0)
+	else if (fatigueLevel == 0.0)
 		isTired = false;
 
-	if(holding && !isTired)
+	if (holding && !isTired)
 	{
 		if (EPC.m_holdingBreath == false)
 		{
@@ -111,10 +111,10 @@ function bool Update(float deltaTime, EPlayerController EPC)
 		noiseDamping = DampFloat(noiseDamping, 1.0, noiseUpSpeed, deltaTime);
 	}
 
-	if(recoilUp)
+	if (recoilUp)
 	{
 		recoilAdd = DampInt(recoilAdd, recoilSize, recoilUpSpeed, deltaTime);
-		if(recoilAdd == recoilSize)
+		if (recoilAdd == recoilSize)
 			recoilUp = false;
 	}
 	else

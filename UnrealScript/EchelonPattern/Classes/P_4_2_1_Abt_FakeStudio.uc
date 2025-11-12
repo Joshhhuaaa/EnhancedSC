@@ -13,9 +13,9 @@ class P_4_2_1_Abt_FakeStudio extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('MoveOut');
@@ -47,19 +47,19 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz6')
+        if (P.name == 'spetsnaz6')
             Characters[1] = P.controller;
-        if(P.name == 'spetsnaz9')
+        if (P.name == 'spetsnaz9')
             Characters[2] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'spetsnaz9')
+        if (A.name == 'spetsnaz9')
             SoundActors[0] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

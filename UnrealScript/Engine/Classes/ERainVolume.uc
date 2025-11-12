@@ -21,9 +21,9 @@ var native const ERainPrimitive		m_pPrimitive;
 var native const Box				m_RainVolume;
 
 
-//final native(3030) function Bool IsPointInside( Vector _position );
-//final native(3032) function Bool IsBoxInside(   Vector _min, Vector _max );
-//final native(3034) function Bool IsSphereInside( Vector _position, float radius );
+//final native(3030) function Bool IsPointInside(Vector _position);
+//final native(3032) function Bool IsBoxInside(Vector _min, Vector _max);
+//final native(3034) function Bool IsSphereInside(Vector _position, float radius);
 
 defaultproperties
 {

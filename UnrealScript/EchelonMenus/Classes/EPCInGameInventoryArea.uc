@@ -38,26 +38,26 @@ var INT                 m_INbScroll, m_INbLinesDisplayed;
 function Created()
 {
     
-    m_sc20kButton = EPCTextButton(CreateControl( class'EPCTextButton', m_IFirstButtonsXPos, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
-    m_GadgetsButton = EPCTextButton(CreateControl( class'EPCTextButton', m_sc20kButton.WinLeft + m_IXButtonOffset, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
-    m_ItemsButton  = EPCTextButton(CreateControl( class'EPCTextButton', m_GadgetsButton.WinLeft + m_IXButtonOffset, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
+    m_sc20kButton = EPCTextButton(CreateControl(class'EPCTextButton', m_IFirstButtonsXPos, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
+    m_GadgetsButton = EPCTextButton(CreateControl(class'EPCTextButton', m_sc20kButton.WinLeft + m_IXButtonOffset, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
+    m_ItemsButton  = EPCTextButton(CreateControl(class'EPCTextButton', m_GadgetsButton.WinLeft + m_IXButtonOffset, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
 
-    m_ArrowLeftButton  = EPCInGameInvButtons(CreateControl( class'EPCInGameInvButtons', m_IArrowLeftXPos, m_IInvYPos, m_IArrowButtonWidth, m_IInvButtonHeight, self));
-    m_ArrowRightButton = EPCInGameInvButtons(CreateControl( class'EPCInGameInvButtons', m_IArrowRightXPos, m_IInvYPos, m_IArrowButtonWidth, m_IInvButtonHeight, self));
+    m_ArrowLeftButton  = EPCInGameInvButtons(CreateControl(class'EPCInGameInvButtons', m_IArrowLeftXPos, m_IInvYPos, m_IArrowButtonWidth, m_IInvButtonHeight, self));
+    m_ArrowRightButton = EPCInGameInvButtons(CreateControl(class'EPCInGameInvButtons', m_IArrowRightXPos, m_IInvYPos, m_IArrowButtonWidth, m_IInvButtonHeight, self));
 
-    m_InventoryButtons[0] = EPCInGameInvButtons(CreateControl( class'EPCInGameInvButtons', m_IFirstInvButtonXPos, m_IInvYPos, m_IInvButtonWidth, m_IInvButtonHeight, self));
-    m_InventoryButtons[1] = EPCInGameInvButtons(CreateControl( class'EPCInGameInvButtons', m_InventoryButtons[0].WinLeft + m_IInvButtonXOffset, m_IInvYPos, m_IInvButtonWidth, m_IInvButtonHeight, self));
-    m_InventoryButtons[2] = EPCInGameInvButtons(CreateControl( class'EPCInGameInvButtons', m_InventoryButtons[1].WinLeft + m_IInvButtonXOffset, m_IInvYPos, m_IInvButtonWidth, m_IInvButtonHeight, self));
-    m_InventoryButtons[3] = EPCInGameInvButtons(CreateControl( class'EPCInGameInvButtons', m_InventoryButtons[2].WinLeft + m_IInvButtonXOffset, m_IInvYPos, m_IInvButtonWidth, m_IInvButtonHeight, self));
+    m_InventoryButtons[0] = EPCInGameInvButtons(CreateControl(class'EPCInGameInvButtons', m_IFirstInvButtonXPos, m_IInvYPos, m_IInvButtonWidth, m_IInvButtonHeight, self));
+    m_InventoryButtons[1] = EPCInGameInvButtons(CreateControl(class'EPCInGameInvButtons', m_InventoryButtons[0].WinLeft + m_IInvButtonXOffset, m_IInvYPos, m_IInvButtonWidth, m_IInvButtonHeight, self));
+    m_InventoryButtons[2] = EPCInGameInvButtons(CreateControl(class'EPCInGameInvButtons', m_InventoryButtons[1].WinLeft + m_IInvButtonXOffset, m_IInvYPos, m_IInvButtonWidth, m_IInvButtonHeight, self));
+    m_InventoryButtons[3] = EPCInGameInvButtons(CreateControl(class'EPCInGameInvButtons', m_InventoryButtons[2].WinLeft + m_IInvButtonXOffset, m_IInvYPos, m_IInvButtonWidth, m_IInvButtonHeight, self));
 
     m_InventoryButtons[0].m_bHideWhenDisabled = true;
     m_InventoryButtons[1].m_bHideWhenDisabled = true;
     m_InventoryButtons[2].m_bHideWhenDisabled = true;
     m_InventoryButtons[3].m_bHideWhenDisabled = true;
 
-    m_sc20kButton.SetButtonText( Caps(Localize("HUD",   "FN2000","Localization\\HUD"))        ,TXT_CENTER);    
-    m_GadgetsButton.SetButtonText( Caps(Localize("HUD", "GADGETS","Localization\\HUD"))       ,TXT_CENTER);
-    m_ItemsButton.SetButtonText( Caps(Localize("HUD",   "ITEMS","Localization\\HUD"))         ,TXT_CENTER);
+    m_sc20kButton.SetButtonText(Caps(Localize("HUD",   "FN2000","Localization\\HUD"))        ,TXT_CENTER);    
+    m_GadgetsButton.SetButtonText(Caps(Localize("HUD", "GADGETS","Localization\\HUD"))       ,TXT_CENTER);
+    m_ItemsButton.SetButtonText(Caps(Localize("HUD",   "ITEMS","Localization\\HUD"))         ,TXT_CENTER);
 
     m_ArrowLeftButton.SetupTextures(EchelonLevelInfo(GetLevel()).TICON.inv_fleche_icones, EchelonLevelInfo(GetLevel()).TICON);
     m_ArrowRightButton.m_bInvertHorizontalCoord = true;
@@ -73,9 +73,9 @@ function Created()
 
 function Reset()
 {
-	if(m_ItemsButton.m_bSelected)
+	if (m_ItemsButton.m_bSelected)
 		ChangeMenuSection(m_ItemsButton);    
-	else if(m_GadgetsButton.m_bSelected)
+	else if (m_GadgetsButton.m_bSelected)
 		ChangeMenuSection(m_GadgetsButton);    
 	else
 		ChangeMenuSection(m_sc20kButton);
@@ -85,9 +85,9 @@ function Paint(Canvas C, FLOAT X, FLOAT Y)
 {
     Render(C, X, Y);
 
-    if(m_BInitScrollBar)
+    if (m_BInitScrollBar)
     {
-        if(m_INbScroll > m_INbLinesDisplayed )
+        if (m_INbScroll > m_INbLinesDisplayed)
         {
             m_ScrollBar.ShowWindow();
             m_ScrollBar.SetRange(0, m_INbScroll,m_INbLinesDisplayed);
@@ -101,13 +101,13 @@ function Paint(Canvas C, FLOAT X, FLOAT Y)
 
 function MouseWheelDown(FLOAT X, FLOAT Y)
 {
-    if( (m_ScrollBar != None) && (Y >= m_ScrollBar.WinTop) )
+    if ((m_ScrollBar != None) && (Y >= m_ScrollBar.WinTop))
 	    m_ScrollBar.MouseWheelDown(X,Y);
 }
 
 function MouseWheelUp(FLOAT X, FLOAT Y)
 {
-    if( (m_ScrollBar != None) && (Y >= m_ScrollBar.WinTop) )
+    if ((m_ScrollBar != None) && (Y >= m_ScrollBar.WinTop))
         m_ScrollBar.MouseWheelUp(X,Y); 
 }
 
@@ -115,9 +115,9 @@ function MouseWheelUp(FLOAT X, FLOAT Y)
 function Notify(UWindowDialogControl C, byte E)
 {
 
-	if(E == DE_Click)
+	if (E == DE_Click)
 	{
-        switch(C)
+        switch (C)
         {
         case m_sc20kButton:
         case m_GadgetsButton:
@@ -125,22 +125,22 @@ function Notify(UWindowDialogControl C, byte E)
             ChangeMenuSection(EPCTextButton(C));            
             break;
         case m_ArrowLeftButton:           
-            SetupInventory( m_InventoryButtons[0].m_iButtonID  -1);
+            SetupInventory(m_InventoryButtons[0].m_iButtonID  -1);
             break;
         case m_ArrowRightButton:
-            SetupInventory( m_InventoryButtons[0].m_iButtonID  +1);
+            SetupInventory(m_InventoryButtons[0].m_iButtonID  +1);
             break;
         case m_InventoryButtons[0]:
         case m_InventoryButtons[1]:
         case m_InventoryButtons[2]:
         case m_InventoryButtons[3]:
             
-            m_InventoryButtons[0].m_bSelected=false;
-            m_InventoryButtons[1].m_bSelected=false;
-            m_InventoryButtons[2].m_bSelected=false;
-            m_InventoryButtons[3].m_bSelected=false;
+            m_InventoryButtons[0].m_bSelected = false;
+            m_InventoryButtons[1].m_bSelected = false;
+            m_InventoryButtons[2].m_bSelected = false;
+            m_InventoryButtons[3].m_bSelected = false;
             
-            EPCInGameInvButtons(C).m_bSelected=true;                        
+            EPCInGameInvButtons(C).m_bSelected = true;                        
             SetCurrentItem(EPCInGameInvButtons(C).m_iButtonID);
             break;
         }
@@ -168,13 +168,13 @@ function SetCurrentItem(INT currentItem)
 
     C.VideoStop();
 
-    if(nbItems == 0 || !WindowIsVisible())
+    if (nbItems == 0 || !WindowIsVisible())
     {
         m_bGadgetVideoIsPlaying = false;        
     }
     else
     {
-        Item = EpcInventory.GetItemInCategory(m_CurrentCategory, currentItem+1);          
+        Item = EpcInventory.GetItemInCategory(m_CurrentCategory, currentItem + 1);          
         m_ScrollBar.Pos = 0;
 
         // Start the new one
@@ -191,7 +191,7 @@ function SetCurrentItem(INT currentItem)
 
 }
 
-function ChangeMenuSection( EPCTextButton _SelectMe)
+function ChangeMenuSection(EPCTextButton _SelectMe)
 {
     m_sc20kButton.m_bSelected       =  false;
     m_GadgetsButton.m_bSelected     =  false;
@@ -200,7 +200,7 @@ function ChangeMenuSection( EPCTextButton _SelectMe)
     m_SelectedButton = _SelectMe;
     m_SelectedButton.m_bSelected    =  true;        
 
-    switch(_SelectMe)
+    switch (_SelectMe)
     {
     case m_sc20kButton:        
         m_CurrentCategory            = CAT_MAINGUN;
@@ -218,7 +218,7 @@ function ChangeMenuSection( EPCTextButton _SelectMe)
 }
 
 //Permet de r?initialiser les boutons apr?s un changement de cat?gorie
-function SetupInventory( INT _StartPos)
+function SetupInventory(INT _StartPos)
 {
     local INT nbItems;
     local EInventory EpcInventory;
@@ -246,14 +246,14 @@ function SetupButtons(INT _StartPos, INT _MaxElements)
    EpcInventory = Epc.ePawn.FullInventory;
    
    //Loop ? travers les 4 boutons
-   i=_StartPos;   
-   for(j=0; j < 4; j++ )
+   i = _StartPos;   
+   for (j = 0; j < 4; j++)
    {       
-       if(i < _MaxElements)
+       if (i < _MaxElements)
        {            
-           Item = EpcInventory.GetItemInCategory(m_CurrentCategory, i+1);          
+           Item = EpcInventory.GetItemInCategory(m_CurrentCategory, i + 1);          
 
-           if(i == m_ISelectedItem)
+           if (i == m_ISelectedItem)
                m_InventoryButtons[j].m_bSelected= true;
            else
                m_InventoryButtons[j].m_bSelected= false;
@@ -271,12 +271,12 @@ function SetupButtons(INT _StartPos, INT _MaxElements)
    }
 
    //Setup Arrows
-   if( _StartPos > 0)
+   if (_StartPos > 0)
         m_ArrowLeftButton.bDisabled = false;    
    else 
         m_ArrowLeftButton.bDisabled = true;    
 
-   if(_StartPos + 4 < _MaxElements) //Since we have 4 inv buttons
+   if (_StartPos + 4 < _MaxElements) //Since we have 4 inv buttons
         m_ArrowRightButton.bDisabled = false;
     else
         m_ArrowRightButton.bDisabled = true;

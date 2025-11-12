@@ -3,7 +3,7 @@ class EFish extends EGameplayObject;
 #exec OBJ LOAD FILE=..\textures\ETexIngredient.utx 
 #exec OBJ LOAD FILE=..\Animations\ESkelIngredients.ukx
 
-function rotator GetStillRotation( vector HitNormal )
+function rotator GetStillRotation(vector HitNormal)
 {
 	return FindSlopeRotation(HitNormal, Rotation);
 }
@@ -12,7 +12,7 @@ function StoppedMoving()
 {
 	Super.StoppedMoving();
 	
-	SetTimer(FRand()*25.f,false);
+	SetTimer(FRand() * 25.f,false);
 }
 
 function Timer()
@@ -31,9 +31,9 @@ auto state s_Swimming
 		SetCollisionSize(default.CollisionRadius, 12 * DrawScale);
 	}
 
-	function Bump( Actor Other, optional int Pill )
+	function Bump(Actor Other, optional int Pill)
 	{
-		if( Base == None || Other != Owner )
+		if (Base == None || Other != Owner)
 			return;
 		
 		SetBase(None);
@@ -45,8 +45,8 @@ state s_Flying
 	function BeginState()
 	{
 		local vector FishVel;
-		FishVel.X = (FRand()-0.5f)*250;
-		FishVel.Y = (FRand()-0.5f)*250;
+		FishVel.X = (FRand() - 0.5f) * 250;
+		FishVel.Y = (FRand() - 0.5f) * 250;
 		Velocity = FishVel;
 
 		SetCollisionSize(default.CollisionRadius, default.CollisionHeight);
@@ -59,9 +59,9 @@ state s_Flying
 		SetRotation(Rot(0,0,0));
 	}
 
-	function AnimEnd( int Channel )
+	function AnimEnd(int Channel)
 	{
-		PlayAnim('flip', FRand()*2.f, 0.1);
+		PlayAnim('flip', FRand() * 2.f, 0.1);
 	}
 }
 

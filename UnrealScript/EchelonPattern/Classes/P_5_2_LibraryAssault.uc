@@ -11,9 +11,9 @@ class P_5_2_LibraryAssault extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,28 +29,28 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EEliteForce3')
+        if (P.name == 'EEliteForce3')
         {
             Characters[1] = P.controller;
             EAIController(Characters[1]).bAllowKnockout = true;
             EAIController(Characters[1]).bBlockDetection = true;
             EAIController(Characters[1]).bWasFound = true;
         }
-        if(P.name == 'EEliteForce4')
+        if (P.name == 'EEliteForce4')
         {
             Characters[2] = P.controller;
             EAIController(Characters[2]).bAllowKnockout = true;
             EAIController(Characters[2]).bBlockDetection = true;
             EAIController(Characters[2]).bWasFound = true;
         }
-        if(P.name == 'EEliteForce6')
+        if (P.name == 'EEliteForce6')
         {
             Characters[3] = P.controller;
             EAIController(Characters[3]).bAllowKnockout = true;
             EAIController(Characters[3]).bBlockDetection = true;
             EAIController(Characters[3]).bWasFound = true;
         }
-        if(P.name == 'EEliteForce2')
+        if (P.name == 'EEliteForce2')
         {
             Characters[4] = P.controller;
             EAIController(Characters[4]).bAllowKnockout = true;
@@ -59,7 +59,7 @@ function InitPattern()
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

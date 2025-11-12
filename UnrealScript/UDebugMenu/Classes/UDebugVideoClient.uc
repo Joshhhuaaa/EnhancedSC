@@ -34,12 +34,12 @@ function Created()
 
 	Super.Created();
 
-	ControlWidth = WinWidth/2.5;
-	ControlLeft = (WinWidth/2 - ControlWidth)/2;
-	ControlRight = WinWidth/2 + ControlLeft;
+	ControlWidth = WinWidth / 2.5;
+	ControlLeft = (WinWidth / 2 - ControlWidth) / 2;
+	ControlRight = WinWidth / 2 + ControlLeft;
 
-	CenterWidth = (WinWidth/4)*3;
-	CenterPos = (WinWidth - CenterWidth)/2;
+	CenterWidth = (WinWidth / 4) * 3;
+	CenterPos = (WinWidth - CenterWidth) / 2;
 	
 
 	// Resolution
@@ -88,7 +88,7 @@ function LoadAvailableSettings()
 	while (P != -1) 
 	{
 		ResolutionCombo.AddItem(Left(ParseString, P));
-		ParseString = Mid(ParseString, P+1);
+		ParseString = Mid(ParseString, P + 1);
 		P = InStr(ParseString, " ");
 	}
 	ResolutionCombo.AddItem(ParseString);
@@ -112,7 +112,7 @@ function LoadAvailableSettings()
 function ResolutionChanged(float W, float H)
 {
 	Super.ResolutionChanged(H, H);
-	if(GetPlayerOwner().ConsoleCommand("GetCurrentRes") != ResolutionCombo.GetValue())
+	if (GetPlayerOwner().ConsoleCommand("GetCurrentRes") != ResolutionCombo.GetValue())
 		LoadAvailableSettings();
 }
 
@@ -123,12 +123,12 @@ function BeforePaint(Canvas C, float X, float Y)
 
 	Super.BeforePaint(C, X, Y);
 
-	ControlWidth = WinWidth/2.5;
-	ControlLeft = (WinWidth/2 - ControlWidth)/2;
-	ControlRight = WinWidth/2 + ControlLeft;
+	ControlWidth = WinWidth / 2.5;
+	ControlLeft = (WinWidth / 2 - ControlWidth) / 2;
+	ControlRight = WinWidth / 2 + ControlLeft;
 
-	CenterWidth = (WinWidth/4)*3;
-	CenterPos = (WinWidth - CenterWidth)/2;
+	CenterWidth = (WinWidth / 4) * 3;
+	CenterPos = (WinWidth - CenterWidth) / 2;
 
 	ResolutionCombo.SetSize(CenterWidth, 1);
 	ResolutionCombo.WinLeft = CenterPos;
@@ -143,10 +143,10 @@ function Notify(UWindowDialogControl C, byte E)
 {
 	Super.Notify(C, E);
 
-	switch(E)
+	switch (E)
 	{
 	case DE_Change:
-		switch(C)
+		switch (C)
 		{
 		case ResolutionCombo:
 			SettingsChanged();
@@ -163,13 +163,13 @@ function SettingsChanged()
 {
 	local string NewSettings;
 
-	if(bInitialized)
+	if (bInitialized)
 	{
 		OldSettings = GetPlayerOwner().ConsoleCommand("GetCurrentRes");
 
 		NewSettings = ResolutionCombo.GetValue();
 
-		if(NewSettings != OldSettings)
+		if (NewSettings != OldSettings)
 		{
 			GetPlayerOwner().ConsoleCommand("SetRes "$NewSettings);
 			LoadAvailableSettings();
@@ -180,10 +180,10 @@ function SettingsChanged()
 
 function MessageBoxDone(UWindowWindow W, MessageBoxResult Result)
 {
-	if(W == ConfirmSettings)
+	if (W == ConfirmSettings)
 	{
 		ConfirmSettings = None;
-		if(Result != MR_Yes)
+		if (Result != MR_Yes)
 		{
 			GetPlayerOwner().ConsoleCommand("SetRes "$OldSettings);
 			LoadAvailableSettings();			
@@ -194,7 +194,7 @@ function MessageBoxDone(UWindowWindow W, MessageBoxResult Result)
 
 function BrightnessChanged()
 {
-	if(bInitialized)
+	if (bInitialized)
 	{
 		GetPlayerOwner().ConsoleCommand("set ini:Engine.Engine.ViewportManager Brightness "$(BrightnessSlider.Value / 10));
 		GetPlayerOwner().ConsoleCommand("Brightness "$(BrightnessSlider.Value / 10));

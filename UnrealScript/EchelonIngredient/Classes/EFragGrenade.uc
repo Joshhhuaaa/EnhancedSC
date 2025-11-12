@@ -12,7 +12,7 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 
 	// manage quantity
-	if( Quantity == 1 )
+	if (Quantity == 1)
 		SetStaticMesh(default.StaticMesh);
 	else
 		SetStaticMesh(StaticMesh'EMeshIngredient.Item.FragGrenadePack_6');
@@ -36,7 +36,7 @@ function Throw(Controller Thrower, vector ThrowVelocity)
 {
 	Super.Throw(Thrower, ThrowVelocity);
 
-	if ( Thrower.bIsPlayer )
+	if (Thrower.bIsPlayer)
 		Level.AddChange(self, CHANGE_Grenade);
 }
 
@@ -59,7 +59,7 @@ state s_Flying
 	}
 }
 
-function Select( EInventory Inv )
+function Select(EInventory Inv)
 {
 	Super.Select(Inv);
 	PlaySound(Sound'Interface.Play_FisherEquipFragGrenade', SLOT_Interface);

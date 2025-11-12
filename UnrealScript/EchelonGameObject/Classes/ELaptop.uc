@@ -1,19 +1,19 @@
 class ELapTop extends EGameplayObject;
 
-function TakeDamage( int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag )
+function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag)
 {
 	Super.TakeDamage(Damage, EventInstigator, HitLocation, HitNormal, Momentum, DamageType, PillTag);
 
-	if( !bDamageable )
+	if (!bDamageable)
 		return;
 
 	// Stop ambient sound at first damage
-	if( StaticMesh != default.StaticMesh )
+	if (StaticMesh != default.StaticMesh)
 	{
 		// Remove interaction
 		ResetInteraction();
 
-		PlaySound( AmbientStopSound, SLOT_SFX);
+		PlaySound(AmbientStopSound, SLOT_SFX);
 	}
 }
 

@@ -22,7 +22,7 @@ event PawnEnteredVolume(Pawn Other)
     local INT iSoundIndex;
 	Super.PawnEnteredVolume(Other);
 
-    if(Other.IsHumanControlled() || NPCTrigger)
+    if (Other.IsHumanControlled() || NPCTrigger)
 	{        
         for (iSoundIndex = 0; iSoundIndex < m_EntrySound.Length; iSoundIndex++)
         {
@@ -36,7 +36,7 @@ event PawnLeavingVolume(Pawn Other)
     local INT iSoundIndex;
 	Super.PawnLeavingVolume(Other);
     
-    if(Other.IsHumanControlled() || NPCTrigger)
+    if (Other.IsHumanControlled() || NPCTrigger)
 	{
 		for (iSoundIndex = 0; iSoundIndex < m_ExitSound.Length; iSoundIndex++)
         {

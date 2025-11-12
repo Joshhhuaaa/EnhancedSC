@@ -21,20 +21,20 @@ var INT                   m_IAreaXPos, m_IAreaYPos,m_IAreaWidth,m_IAreaHeight;
 function Created()
 {
     
-    m_GoalsButton = EPCTextButton(CreateControl( class'EPCTextButton', m_IFirstButtonsXPos, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
-    m_NotesButton = EPCTextButton(CreateControl( class'EPCTextButton', m_GoalsButton.WinLeft + m_IXButtonOffset, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
-    m_DataButton  = EPCTextButton(CreateControl( class'EPCTextButton', m_NotesButton.WinLeft + m_IXButtonOffset, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
+    m_GoalsButton = EPCTextButton(CreateControl(class'EPCTextButton', m_IFirstButtonsXPos, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
+    m_NotesButton = EPCTextButton(CreateControl(class'EPCTextButton', m_GoalsButton.WinLeft + m_IXButtonOffset, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
+    m_DataButton  = EPCTextButton(CreateControl(class'EPCTextButton', m_NotesButton.WinLeft + m_IXButtonOffset, m_IButtonsYPos, m_IButtonsWidth, m_IButtonsHeight, self));
 
-    m_GoalsButton.SetButtonText( Caps(Localize("HUD","GOALS","Localization\\HUD"))    ,TXT_CENTER);    
-    m_NotesButton.SetButtonText( Caps(Localize("HUD","NOTES","Localization\\HUD"))    ,TXT_CENTER);
-    m_DataButton.SetButtonText( Caps(Localize("HUD","RECONS","Localization\\HUD"))    ,TXT_CENTER);
+    m_GoalsButton.SetButtonText(Caps(Localize("HUD","GOALS","Localization\\HUD"))    ,TXT_CENTER);    
+    m_NotesButton.SetButtonText(Caps(Localize("HUD","NOTES","Localization\\HUD"))    ,TXT_CENTER);
+    m_DataButton.SetButtonText(Caps(Localize("HUD","RECONS","Localization\\HUD"))    ,TXT_CENTER);
 
     m_GoalsButton.Font      = EPCMainMenuRootWindow(Root).TitleFont;    
     m_NotesButton.Font      = EPCMainMenuRootWindow(Root).TitleFont;    
     m_DataButton.Font       = EPCMainMenuRootWindow(Root).TitleFont;     
 
-    m_GoalsArea   = EPCInGameGoalsArea(CreateWindow( class'EPCInGameGoalsArea', m_IAreaXPos, m_IAreaYPos, m_IAreaWidth, m_IAreaHeight,self));
-    m_DataArea    = EPCInGameDataArea(CreateWindow( class'EPCInGameDataArea', m_GoalsArea.WinLeft, m_GoalsArea.WinTop, m_GoalsArea.WinWidth, m_GoalsArea.WinHeight, self));
+    m_GoalsArea   = EPCInGameGoalsArea(CreateWindow(class'EPCInGameGoalsArea', m_IAreaXPos, m_IAreaYPos, m_IAreaWidth, m_IAreaHeight,self));
+    m_DataArea    = EPCInGameDataArea(CreateWindow(class'EPCInGameDataArea', m_GoalsArea.WinLeft, m_GoalsArea.WinTop, m_GoalsArea.WinWidth, m_GoalsArea.WinHeight, self));
 
     ChangeMenuSection(m_GoalsButton);
 }
@@ -45,13 +45,13 @@ function Paint(Canvas C, float X, float Y)
 
 	EPC = EPlayerController(GetPlayerOwner());
 
-	if(EPC != None)
+	if (EPC != None)
 	{
-		if(m_GoalsArea.WindowIsVisible() && m_GoalsArea.m_bGoals)
+		if (m_GoalsArea.WindowIsVisible() && m_GoalsArea.m_bGoals)
 			EPC.bNewGoal = false;
-		if(m_GoalsArea.WindowIsVisible() && !m_GoalsArea.m_bGoals)
+		if (m_GoalsArea.WindowIsVisible() && !m_GoalsArea.m_bGoals)
 			EPC.bNewNote = false;
-		if(m_DataArea.WindowIsVisible())
+		if (m_DataArea.WindowIsVisible())
 			EPC.bNewRecon = false;
 	}
 
@@ -61,9 +61,9 @@ function Paint(Canvas C, float X, float Y)
 function Notify(UWindowDialogControl C, byte E)
 {
 
-	if(E == DE_Click)
+	if (E == DE_Click)
 	{
-        switch(C)
+        switch (C)
         {
         case m_GoalsButton:
         case m_NotesButton:
@@ -76,7 +76,7 @@ function Notify(UWindowDialogControl C, byte E)
 }
 
 
-function ChangeMenuSection( UWindowButton _SelectMe)
+function ChangeMenuSection(UWindowButton _SelectMe)
 {
     m_GoalsButton.m_bSelected   =  false;
     m_NotesButton.m_bSelected   =  false;
@@ -85,7 +85,7 @@ function ChangeMenuSection( UWindowButton _SelectMe)
     m_GoalsArea.HideWindow();    
     m_DataArea.HideWindow();
 
-    switch(_SelectMe)
+    switch (_SelectMe)
     {
     case m_GoalsButton:
         m_GoalsButton.m_bSelected    =  true;
@@ -107,11 +107,11 @@ function ChangeMenuSection( UWindowButton _SelectMe)
 
 function SelectArea(bool bNewGoal, bool bNewNote, bool bNewRecon)
 {
-	if(bNewGoal)
+	if (bNewGoal)
 		ChangeMenuSection(m_GoalsButton);
-	else if(bNewNote)
+	else if (bNewNote)
 		ChangeMenuSection(m_NotesButton);
-	else if(bNewRecon)
+	else if (bNewRecon)
 		ChangeMenuSection(m_DataButton);
 }
 
@@ -121,9 +121,9 @@ function Reset()
     m_DataArea.FillListBox();
 
 	// Reselect last selected
-	if(m_DataButton.m_bSelected)
+	if (m_DataButton.m_bSelected)
 		ChangeMenuSection(m_DataButton);
-	else if(m_NotesButton.m_bSelected)
+	else if (m_NotesButton.m_bSelected)
 		ChangeMenuSection(m_NotesButton);
 	else
 		ChangeMenuSection(m_GoalsButton);

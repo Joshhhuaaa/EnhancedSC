@@ -264,7 +264,7 @@ function PostBeginPlay()
 {
     Super.PostBeginPlay();
     
-    if(EchelonMainHUD(owner) != None)
+    if (EchelonMainHUD(owner) != None)
         myEchelonMainHUDOwner = EchelonMainHUD(owner);
 
     spawner = spawn(class'EPlayerInfo', self);
@@ -286,7 +286,7 @@ function Tick(float DeltaTime)
 -----------------------------------------------------------------------------*/
 event OwnerGotoStateSafe(name newState)
 {
-	if( newState == '' )
+	if (newState == '')
 		newState = EchelonMainHUD(owner).RestoreState();
     myEchelonMainHUDOwner.GotoState(newState);
 }
@@ -326,7 +326,7 @@ state s_StartGame
 =============================================================================*/
 state s_RestoreSaveGame
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_RestoreSaveGame(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_RestoreSaveGame(Key, Action, Delta);}
 
     function PostRender(ECanvas Canvas) {PostRender_s_RestoreSaveGame(Canvas);}
 
@@ -340,7 +340,7 @@ state s_MainMenu
 {		
 	function PostRender(ECanvas Canvas) {PostRender_s_MainMenu(Canvas);}
 
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_MainMenu(Key, Action, Delta);}    
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_MainMenu(Key, Action, Delta);}    
 
     function BeginState() {BeginState_s_MainMenu();}	
 
@@ -352,7 +352,7 @@ state s_MainMenu
 =============================================================================*/
 state s_KeyBoard
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_KeyBoard(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_KeyBoard(Key, Action, Delta);}
 
     function PostRender(ECanvas Canvas) {PostRender_s_KeyBoard(Canvas);}
 
@@ -370,7 +370,7 @@ state s_KeyBoard
 =============================================================================*/
 //state s_LoadPlayersInfo
 //{
-//    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_LoadPlayersInfo(Key, Action, Delta);}
+//    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_LoadPlayersInfo(Key, Action, Delta);}
 
 //    function PostRender(ECanvas Canvas) {PostRender_s_LoadPlayersInfo(Canvas);}
 
@@ -388,7 +388,7 @@ state s_KeyBoard
 =============================================================================*/
 state s_SavePlayerInfo
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_SavePlayerInfo(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_SavePlayerInfo(Key, Action, Delta);}
 
     function PostRender(ECanvas Canvas) {PostRender_s_SavePlayerInfo(Canvas);}
 
@@ -407,7 +407,7 @@ state s_SavePlayerInfo
 =============================================================================*/
 state s_Download
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_Download(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_Download(Key, Action, Delta);}
     
     function PostRender(ECanvas Canvas) {PostRender_s_Download(Canvas);}
 
@@ -421,7 +421,7 @@ state s_Credit
 {
 	function PostRender(ECanvas Canvas) {PostRender_s_Credit(Canvas);}
 
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_Credit(Key, Action, Delta);}       
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_Credit(Key, Action, Delta);}       
 
     function BeginState() {BeginState_s_Credit();}
 }
@@ -431,7 +431,7 @@ state s_Credit
 =============================================================================*/
 state s_PlayerMenu
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_PlayerMenu(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_PlayerMenu(Key, Action, Delta);}
     
     function PostRender(ECanvas Canvas) {PostRender_s_PlayerMenu(Canvas);}
 
@@ -449,7 +449,7 @@ state s_PlayerMenu
 =============================================================================*/
 state s_PlayerSettings
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_PlayerSettings(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_PlayerSettings(Key, Action, Delta);}
 
     function PostRender(ECanvas Canvas) {PostRender_s_PlayerSettings(Canvas);}
 
@@ -463,7 +463,7 @@ state s_PlayerSettings
 =============================================================================*/
 state s_Controller
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_Controller(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_Controller(Key, Action, Delta);}
 
     function PostRender(ECanvas Canvas) {PostRender_s_Controller(Canvas);}
 
@@ -481,7 +481,7 @@ state s_Controller
 =============================================================================*/
 state s_SaveGame
 {	
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_SaveGame(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_SaveGame(Key, Action, Delta);}
 
     function PostRender(ECanvas Canvas) {PostRender_s_SaveGame(Canvas);}
 
@@ -501,7 +501,7 @@ state s_SaveGame
 =============================================================================*/
 state s_LoadGame
 {		
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_LoadGame(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_LoadGame(Key, Action, Delta);}
 
     function PostRender(ECanvas Canvas) {PostRender_s_LoadGame(Canvas);}
 
@@ -519,7 +519,7 @@ state s_LoadGame
 =============================================================================*/
 state s_SettingsMenu
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_SettingsMenu(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_SettingsMenu(Key, Action, Delta);}
 
     function PostRender(ECanvas Canvas){ PostRender_s_SettingsMenu(Canvas);}
 
@@ -537,7 +537,7 @@ state s_SettingsMenu
 =============================================================================*/
 state s_SetHUDPosition
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_SetHUDPosition(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_SetHUDPosition(Key, Action, Delta);}
 
     function PostRender(ECanvas Canvas) {PostRender_s_SetHUDPosition(Canvas);}
 
@@ -552,7 +552,7 @@ state s_SetHUDPosition
 =============================================================================*/
 state s_SetBrightness
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_SetBrightness(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_SetBrightness(Key, Action, Delta);}
 
     function PostRender(ECanvas Canvas) {PostRender_s_SetBrightness(Canvas);}
 
@@ -566,7 +566,7 @@ state s_SetBrightness
 =============================================================================*/
 state s_PlayDemo
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_PlayDemo(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_PlayDemo(Key, Action, Delta);}
     
     function PostRender(ECanvas Canvas) {PostRender_s_PlayDemo(Canvas);}
 
@@ -578,7 +578,7 @@ state s_PlayDemo
 =============================================================================*/
 state s_Inactivity
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_Inactivity(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_Inactivity(Key, Action, Delta);}
     
     function PostRender(ECanvas Canvas) {PostRender_s_Inactivity(Canvas);}
 
@@ -590,7 +590,7 @@ state s_Inactivity
 =============================================================================*/
 state s_BehindTheScene
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_BehindTheScene(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_BehindTheScene(Key, Action, Delta);}
     
     function PostRender(ECanvas Canvas) {PostRender_s_BehindTheScene(Canvas);}
 
@@ -603,7 +603,7 @@ state s_BehindTheScene
 =============================================================================*/
 state s_UbiGame
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_UbiGame(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_UbiGame(Key, Action, Delta);}
     
     function PostRender(ECanvas Canvas) {PostRender_s_UbiGame(Canvas);}
 
@@ -615,7 +615,7 @@ state s_UbiGame
 =============================================================================*/
 state s_RandomFact
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta ) {return KeyEvent_s_RandomFact(Key, Action, Delta);}
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_RandomFact(Key, Action, Delta);}
     
     function PostRender(ECanvas Canvas) {PostRender_s_RandomFact(Canvas);}
 

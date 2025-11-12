@@ -112,10 +112,10 @@ native(4005) final function PostRender(Canvas Canvas, FLOAT X, FLOAT Y);
 
 native(4001) final function ClipText(Canvas C, float X, float Y, coerce string S, optional bool bCheckHotkey);
 
-native(4002) final function DrawClippedTexture( Canvas C, float X, float Y, texture Tex );
-native(4003) final function DrawStretchedTexture( Canvas C, float X, float Y, float W, float H, texture Tex );
-native(4004) final function DrawStretchedTextureSegment( Canvas C, float X, float Y, float W, float H, 
-									  float tX, float tY, float tW, float tH, texture Tex );
+native(4002) final function DrawClippedTexture(Canvas C, float X, float Y, texture Tex);
+native(4003) final function DrawStretchedTexture(Canvas C, float X, float Y, float W, float H, texture Tex);
+native(4004) final function DrawStretchedTextureSegment(Canvas C, float X, float Y, float W, float H, 
+									  float tX, float tY, float tW, float tH, texture Tex);
 
 native(4020) final function FLOAT GetTime(); //Returns App time
 
@@ -123,58 +123,58 @@ native(4020) final function FLOAT GetTime(); //Returns App time
 // Ideally Key would be a EInputKey but I can't see that class here.
 function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) 
 {
-	switch(Msg)
+	switch (Msg)
 	{
 	case WM_Paint:
 		Paint(C, X, Y);
 		PaintClients(C, X, Y);
 		break;
 	case WM_LMouseDown:
-		if(!Root.CheckCaptureMouseDown())
+		if (!Root.CheckCaptureMouseDown())
 		{
-			if(!MessageClients(Msg, C, X, Y, Key)) 
+			if (!MessageClients(Msg, C, X, Y, Key)) 
 				LMouseDown(X, Y);
 		}
 		break;	
 	case WM_LMouseUp:
-		if(!Root.CheckCaptureMouseUp())
+		if (!Root.CheckCaptureMouseUp())
 		{
-			if(!MessageClients(Msg, C, X, Y, Key))
+			if (!MessageClients(Msg, C, X, Y, Key))
 				LMouseUp(X, Y);
 		}
 		break;	
 	case WM_RMouseDown:
-		if(!MessageClients(Msg, C, X, Y, Key)) RMouseDown(X, Y);
+		if (!MessageClients(Msg, C, X, Y, Key)) RMouseDown(X, Y);
 		break;	
 	case WM_RMouseUp:
-		if(!MessageClients(Msg, C, X, Y, Key)) RMouseUp(X, Y);
+		if (!MessageClients(Msg, C, X, Y, Key)) RMouseUp(X, Y);
 		break;	
 	case WM_MMouseDown:
-		if(!MessageClients(Msg, C, X, Y, Key)) MMouseDown(X, Y);
+		if (!MessageClients(Msg, C, X, Y, Key)) MMouseDown(X, Y);
 		break;	
 	case WM_MMouseUp:
-		if(!MessageClients(Msg, C, X, Y, Key)) MMouseUp(X, Y);
+		if (!MessageClients(Msg, C, X, Y, Key)) MMouseUp(X, Y);
 		break;	
 	case WM_MouseWheelDown:
-		if(!MessageClients(Msg, C, X, Y, Key)) MouseWheelDown(X, Y);
+		if (!MessageClients(Msg, C, X, Y, Key)) MouseWheelDown(X, Y);
 		break;	
 	case WM_MouseWheelUp:
-		if(!MessageClients(Msg, C, X, Y, Key)) MouseWheelUp(X, Y);
+		if (!MessageClients(Msg, C, X, Y, Key)) MouseWheelUp(X, Y);
 		break;	
 	case WM_KeyDown:
-		if(!PropagateKey(Msg, C, X, Y, Key))
+		if (!PropagateKey(Msg, C, X, Y, Key))
 		{
 			KeyDown(Key, X, Y);
 		}
 		break;	
 	case WM_KeyUp:
-		if(!PropagateKey(Msg, C, X, Y, Key))
+		if (!PropagateKey(Msg, C, X, Y, Key))
 		{
 			KeyUp(Key, X, Y);
 		}
 		break;	
 	case WM_KeyType:
-		if(!PropagateKey(Msg, C, X, Y, Key))
+		if (!PropagateKey(Msg, C, X, Y, Key))
 			KeyType(Key, X, Y);
 		break;	
 	default:
@@ -195,15 +195,15 @@ final function PlayerController GetPlayerOwner()
 
 final function LevelInfo GetLevel()
 {
-    if(Root == None)
+    if (Root == None)
         log("GetLevel() Root == None");
-    else if(Root.Console == None)
+    else if (Root.Console == None)
         log("GetLevel() Root.Console == None");
-    else if(Root.Console.ViewportOwner == None)
+    else if (Root.Console.ViewportOwner == None)
         log("GetLevel() Root.Console.ViewportOwner == None");
-    else if(Root.Console.ViewportOwner.Actor == None)
+    else if (Root.Console.ViewportOwner.Actor == None)
         log("GetLevel() Root.Console.ViewportOwner.Actor == None");
-    else if(Root.Console.ViewportOwner.Actor.Level == None)
+    else if (Root.Console.ViewportOwner.Actor.Level == None)
         log("GetLevel() Root.Console.ViewportOwner.Actor.Level == None");
 
 	return Root.Console.ViewportOwner.Actor.Level;
@@ -287,7 +287,7 @@ function AfterCreate()
 
 function MouseEnter()
 {
-	if(ToolTipString != "") ToolTip(ToolTipString);
+	if (ToolTipString != "") ToolTip(ToolTipString);
 	// Implemented in a child class
 }
 
@@ -306,7 +306,7 @@ function MouseLeave()
 	bMouseDown = False;
 	bMMouseDown = False;
 	bRMouseDown = False;
-	if(ToolTipString != "") ToolTip("");
+	if (ToolTipString != "") ToolTip("");
 }
 
 function MouseMove(float X, float Y)
@@ -339,7 +339,7 @@ function bool HotKeyUp(int Key, float X, float Y)
 	return False;
 }
 
-function bool MouseUpDown( INT Key, FLOAT X, FLOAT Y)
+function bool MouseUpDown(INT Key, FLOAT X, FLOAT Y)
 {
 	return False;
 }
@@ -373,9 +373,9 @@ function RMouseDown(float X, float Y)
 
 function RMouseUp(float X, float Y) 
 {
-	if(bRMouseDown)
+	if (bRMouseDown)
 	{
-		if(!bIgnoreRDoubleClick && Abs(X-RClickX) <= 1 && Abs(Y-RClickY) <= 1 && GetTime() < RClickTime + 0.600)
+		if (!bIgnoreRDoubleClick && Abs(X - RClickX) <= 1 && Abs(Y - RClickY) <= 1 && GetTime() < RClickTime + 0.600)
 		{
 			RDoubleClick(X, Y);
 			RClickTime = 0;
@@ -403,9 +403,9 @@ function MMouseDown(float X, float Y)
 
 function MMouseUp(float X, float Y) 
 {
-	if(bMMouseDown)
+	if (bMMouseDown)
 	{
-		if(!bIgnoreMDoubleClick && Abs(X-MClickX) <= 1 && (Y-MClickY)<=1 && GetTime() < MClickTime + 0.600)
+		if (!bIgnoreMDoubleClick && Abs(X - MClickX) <= 1 && (Y - MClickY)<=1 && GetTime() < MClickTime + 0.600)
 		{
 			MDoubleClick(X, Y);
 			MClickTime = 0;
@@ -440,9 +440,9 @@ function LMouseDown(float X, float Y)
 
 function LMouseUp(float X, float Y)
 {
-	if(bMouseDown)
+	if (bMouseDown)
 	{
-		if(!bIgnoreLDoubleClick && Abs(X-ClickX) <= 1 && (Y-ClickY) <= 1 && GetTime() < ClickTime + 0.600)
+		if (!bIgnoreLDoubleClick && Abs(X - ClickX) <= 1 && (Y - ClickY) <= 1 && GetTime() < ClickTime + 0.600)
 		{
 			DoubleClick(X, Y);
 			ClickTime = 0;
@@ -460,7 +460,7 @@ function LMouseUp(float X, float Y)
 
 function FocusWindow()
 {
-	if(Root.FocusedWindow != None && Root.FocusedWindow != Self)
+	if (Root.FocusedWindow != None && Root.FocusedWindow != Self)
 		Root.FocusedWindow.FocusOtherWindow(Self);
 
 	Root.FocusedWindow = Self;
@@ -479,19 +479,19 @@ function Close(optional bool bByParent)
 {
 	local UWindowWindow Prev, Child;
 
-	for(Child = LastChildWindow;Child != None;Child = Prev)
+	for (Child = LastChildWindow;Child != None;Child = Prev)
 	{
 		Prev = Child.PrevSiblingWindow;
 		Child.Close(True);
 	}
 	SaveConfigs();
-	if(!bByParent)
+	if (!bByParent)
 		HideWindow();
 }
 
 final function SetSize(float W, float H)
 {
-	if(WinWidth != W || WinHeight != H)
+	if (WinWidth != W || WinHeight != H)
 	{
 		WinWidth = W;
 		WinHeight = H;
@@ -511,14 +511,14 @@ final function DoTick(float Delta)
 
 	Child = FirstChildWindow;
 
-	while(Child != None)
+	while (Child != None)
 	{
 		Child.bUWindowActive = bUWindowActive;
 
-		if(bLeaveOnScreen)
+		if (bLeaveOnScreen)
 			Child.bLeaveOnscreen = True;
 
-		if(bUWindowActive || Child.bLeaveOnscreen)
+		if (bUWindowActive || Child.bLeaveOnscreen)
 		{
 			Child.DoTick(Delta);
 		}
@@ -540,7 +540,7 @@ final function PaintClients(Canvas C, float X, float Y)
 
 	Child = FirstChildWindow;
 
-	while(Child != None)
+	while (Child != None)
 	{
 		Child.bUWindowActive = bUWindowActive;
 
@@ -552,19 +552,19 @@ final function PaintClients(Canvas C, float X, float Y)
 
 		Child.BeforePaint(C, X - Child.WinLeft, Y - Child.WinTop);
 
-		if(bLeaveOnScreen)
+		if (bLeaveOnScreen)
 			Child.bLeaveOnscreen = True;
 
-		if(bUWindowActive || Child.bLeaveOnscreen)
+		if (bUWindowActive || Child.bLeaveOnscreen)
 		{
 
-			C.OrgX = C.OrgX + Child.WinLeft*Root.GUIScale;
-			C.OrgY = C.OrgY + Child.WinTop*Root.GUIScale;
+			C.OrgX = C.OrgX + Child.WinLeft * Root.GUIScale;
+			C.OrgY = C.OrgY + Child.WinTop * Root.GUIScale;
 
-			if(!Child.bNoClip)
+			if (!Child.bNoClip)
 			{
-				C.ClipX = FMin(WinWidth - Child.WinLeft, Child.WinWidth)*Root.GUIScale;
-				C.ClipY = FMin(WinHeight - Child.WinTop, Child.WinHeight)*Root.GUIScale;
+				C.ClipX = FMin(WinWidth - Child.WinLeft, Child.WinWidth) * Root.GUIScale;
+				C.ClipY = FMin(WinHeight - Child.WinTop, Child.WinHeight) * Root.GUIScale;
 
 
 				// Translate to child's co-ordinate system
@@ -573,30 +573,30 @@ final function PaintClients(Canvas C, float X, float Y)
 				Child.ClippingRegion.W = ClippingRegion.W;
 				Child.ClippingRegion.H = ClippingRegion.H;
 
-				if(Child.ClippingRegion.X < 0)
+				if (Child.ClippingRegion.X < 0)
 				{
 					Child.ClippingRegion.W += Child.ClippingRegion.X;
 					Child.ClippingRegion.X = 0;
 				}
 
-				if(Child.ClippingRegion.Y < 0)
+				if (Child.ClippingRegion.Y < 0)
 				{
 					Child.ClippingRegion.H += Child.ClippingRegion.Y;
 					Child.ClippingRegion.Y = 0;
 				}
 
-				if(Child.ClippingRegion.W > Child.WinWidth - Child.ClippingRegion.X)
+				if (Child.ClippingRegion.W > Child.WinWidth - Child.ClippingRegion.X)
 				{
 					Child.ClippingRegion.W = Child.WinWidth - Child.ClippingRegion.X;
 				}
 
-				if(Child.ClippingRegion.H > Child.WinHeight - Child.ClippingRegion.Y)
+				if (Child.ClippingRegion.H > Child.WinHeight - Child.ClippingRegion.Y)
 				{
 					Child.ClippingRegion.H = Child.WinHeight - Child.ClippingRegion.Y;
 				}
 			}
 
-			if(Child.ClippingRegion.W > 0 && Child.ClippingRegion.H > 0) 
+			if (Child.ClippingRegion.W > 0 && Child.ClippingRegion.H > 0) 
 			{		
 				Child.WindowEvent(WM_Paint, C, X - Child.WinLeft, Y - Child.WinTop, 0);
 				Child.AfterPaint(C, X - Child.WinLeft, Y - Child.WinTop);
@@ -620,18 +620,18 @@ final function UWindowWindow FindWindowUnder(float X, float Y)
 	// go from Topmost downwards
 	Child = LastChildWindow;
 
-	while(Child != None)
+	while (Child != None)
 	{
 		Child.bUWindowActive = bUWindowActive;
 
-		if(bLeaveOnScreen)
+		if (bLeaveOnScreen)
 			Child.bLeaveOnscreen = True;
 
-		if(bUWindowActive || Child.bLeaveOnscreen)
+		if (bUWindowActive || Child.bLeaveOnscreen)
 		{
-			if((X >= Child.WinLeft) && (X <= Child.WinLeft+Child.WinWidth) &&
-			   (Y >= Child.WinTop) && (Y <= Child.WinTop+Child.WinHeight) &&
-			   (!Child.CheckMousePassThrough(X-Child.WinLeft, Y-Child.WinTop)))
+			if ((X >= Child.WinLeft) && (X <= Child.WinLeft + Child.WinWidth) &&
+			   (Y >= Child.WinTop) && (Y <= Child.WinTop + Child.WinHeight) &&
+			   (!Child.CheckMousePassThrough(X - Child.WinLeft, Y - Child.WinTop)))
 			{
 				return Child.FindWindowUnder(X - Child.WinLeft, Y - Child.WinTop);
 			}
@@ -655,17 +655,17 @@ function bool PropagateKey(WinMessage Msg, Canvas C, float X, float Y, int Key)
 	Child = LastChildWindow;
 
 	// HACK for always on top windows...need a better solution
-	if(ActiveWindow != None && Child != ActiveWindow && !Child.bTransient)
+	if (ActiveWindow != None && Child != ActiveWindow && !Child.bTransient)
 		Child = ActiveWindow;
 	
-	while(Child != None)
+	while (Child != None)
 	{
 		Child.bUWindowActive = bUWindowActive;
 
-		if(bLeaveOnScreen)
+		if (bLeaveOnScreen)
 			Child.bLeaveOnscreen = True;
 
-		if((bUWindowActive || Child.bLeaveOnscreen) && Child.bAcceptsFocus)
+		if ((bUWindowActive || Child.bLeaveOnscreen) && Child.bAcceptsFocus)
 		{
 
 			Child.WindowEvent(Msg, C, X - Child.WinLeft, Y - Child.WinTop, Key);
@@ -690,19 +690,19 @@ final function UWindowWindow CheckKeyFocusWindow()
 	// Check from WinTopmost for windows which accept key focus
 	Child = LastChildWindow;
 
-	if(ActiveWindow != None && Child != ActiveWindow && !Child.bTransient)
+	if (ActiveWindow != None && Child != ActiveWindow && !Child.bTransient)
 		Child = ActiveWindow;
 
-	while(Child != None)
+	while (Child != None)
 	{
 		Child.bUWindowActive = bUWindowActive;
 
-		if(bLeaveOnScreen)
+		if (bLeaveOnScreen)
 			Child.bLeaveOnscreen = True;
 
-		if(bUWindowActive || Child.bLeaveOnscreen)
+		if (bUWindowActive || Child.bLeaveOnscreen)
 		{
-			if(Child.bAcceptsFocus)
+			if (Child.bAcceptsFocus)
 			{
 				return Child.CheckKeyFocusWindow();
 			}
@@ -720,18 +720,18 @@ final function bool MessageClients(WinMessage Msg, Canvas C, float X, float Y, i
 	// go from topmost downwards
 	Child = LastChildWindow;
 
-	while(Child != None)
+	while (Child != None)
 	{
 		Child.bUWindowActive = bUWindowActive;
 
-		if(bLeaveOnScreen)
+		if (bLeaveOnScreen)
 			Child.bLeaveOnscreen = True;
 
-		if( (bUWindowActive || Child.bLeaveOnscreen) && Child.bAcceptsMouseFocus)
+		if ((bUWindowActive || Child.bLeaveOnscreen) && Child.bAcceptsMouseFocus)
 		{
-			if((X >= Child.WinLeft) && (X <= Child.WinLeft+Child.WinWidth) &&
-			   (Y >= Child.WinTop) && (Y <= Child.WinTop+Child.WinHeight)  &&
-			   (!Child.CheckMousePassThrough(X-Child.WinLeft, Y-Child.WinTop))) 
+			if ((X >= Child.WinLeft) && (X <= Child.WinLeft + Child.WinWidth) &&
+			   (Y >= Child.WinTop) && (Y <= Child.WinTop + Child.WinHeight)  &&
+			   (!Child.CheckMousePassThrough(X - Child.WinLeft, Y - Child.WinTop))) 
 			{
 				Child.WindowEvent(Msg, C, X - Child.WinLeft, Y - Child.WinTop, Key);
 				return True;
@@ -749,16 +749,16 @@ final function bool MessageClients(WinMessage Msg, Canvas C, float X, float Y, i
 //topmost window
 final function ActivateWindow(int Depth, bool bTransientNoDeactivate)
 {
-	if(Self == Root)
+	if (Self == Root)
 	{
-		if(Depth == 0)
+		if (Depth == 0)
 			FocusWindow();
 		return;
 	}
 
-	if(WaitModal()) return;
+	if (WaitModal()) return;
 
-	if(!bAlwaysBehind)
+	if (!bAlwaysBehind)
 	{
 		ParentWindow.HideChildWindow(Self);
 		ParentWindow.ShowChildWindow(Self);
@@ -766,9 +766,9 @@ final function ActivateWindow(int Depth, bool bTransientNoDeactivate)
 	
 	//Log("Activating Window "$Self);
 	
-	if(!(bTransient || bTransientNoDeactivate))
+	if (!(bTransient || bTransientNoDeactivate))
 	{
-		if(ParentWindow.ActiveWindow != None && ParentWindow.ActiveWindow != Self)
+		if (ParentWindow.ActiveWindow != None && ParentWindow.ActiveWindow != Self)
 		{
 			ParentWindow.ActiveWindow.Deactivated();
 		}
@@ -783,16 +783,16 @@ final function ActivateWindow(int Depth, bool bTransientNoDeactivate)
 		ParentWindow.ActivateWindow(Depth + 1, True);
 	}
 
-	if(Depth == 0)
+	if (Depth == 0)
 		FocusWindow();
 }
 //Bring a window to top
 final function BringToFront()
 {
-	if(Self == Root)
+	if (Self == Root)
 		return;
 
-	if(!bAlwaysBehind && !WaitModal())
+	if (!bAlwaysBehind && !WaitModal())
 	{
 		ParentWindow.HideChildWindow(Self);
 		ParentWindow.ShowChildWindow(Self);
@@ -811,17 +811,17 @@ final function HideChildWindow(UWindowWindow Child)
 {
 	local UWindowWindow Window;
 
-	if(!Child.bWindowVisible) return;
+	if (!Child.bWindowVisible) return;
 	Child.bWindowVisible = False;
 
-	if(Child.bAcceptsHotKeys)
+	if (Child.bAcceptsHotKeys)
 		Root.RemoveHotkeyWindow(Child);
 
 	// Check WinTopmost
-	if(LastChildWindow == Child) 
+	if (LastChildWindow == Child) 
 	{
 		LastChildWindow = Child.PrevSiblingWindow;
-		if(LastChildWindow != None)
+		if (LastChildWindow != None)
 		{
 			LastChildWindow.NextSiblingWindow = None;
 		}
@@ -830,10 +830,10 @@ final function HideChildWindow(UWindowWindow Child)
 			FirstChildWindow = None;
 		}
 	} 
-	else if(FirstChildWindow == Child) // Check bottommost
+	else if (FirstChildWindow == Child) // Check bottommost
 	{ 
 		FirstChildWindow = Child.NextSiblingWindow;
-		if(FirstChildWindow != None)
+		if (FirstChildWindow != None)
 		{
 			FirstChildWindow.PrevSiblingWindow = None;
 		}
@@ -846,9 +846,9 @@ final function HideChildWindow(UWindowWindow Child)
 	{
 		// you mean I have to go looking for it???
 		Window = FirstChildWindow;
-		while(Window != None)
+		while (Window != None)
 		{
-			if(Window.NextSiblingWindow == Child)
+			if (Window.NextSiblingWindow == Child)
 			{
 				Window.NextSiblingWindow = Child.NextSiblingWindow;
 				Window.NextSiblingWindow.PrevSiblingWindow = Window;
@@ -861,25 +861,25 @@ final function HideChildWindow(UWindowWindow Child)
 	// Set the active window
 	ActiveWindow = None;
 	Window = LastChildWindow;
-	while(Window != None)
+	while (Window != None)
 	{
-		if(!Window.bAlwaysOnTop)
+		if (!Window.bAlwaysOnTop)
 		{
 			ActiveWindow = Window;
 			break;
 		}
 		Window = Window.PrevSiblingWindow;
 	}
-	if(ActiveWindow == None) ActiveWindow = LastChildWindow;
+	if (ActiveWindow == None) ActiveWindow = LastChildWindow;
 }
 
 //Allow a window to have focus
 final function SetAcceptsFocus()
 {
-	if(bAcceptsFocus) return;
+	if (bAcceptsFocus) return;
 	bAcceptsFocus = True;
 
-	if(Self != Root)
+	if (Self != Root)
 		ParentWindow.SetAcceptsFocus();
 }
 
@@ -887,7 +887,7 @@ final function CancelAcceptsFocus()
 {
 	local UWindowWindow Child;
 
-	for(Child = LastChildWindow; Child != None; Child = Child.PrevSiblingWindow)
+	for (Child = LastChildWindow; Child != None; Child = Child.PrevSiblingWindow)
 		Child.CancelAcceptsFocus();
 
 	bAcceptsFocus = False;
@@ -901,7 +901,7 @@ final function GetMouseXY(out float X, out float Y)
 	Y = Int(Root.MouseY);
 	
 	P = Self;
-	while(P != Root)
+	while (P != Root)
 	{		
 		X = X - P.WinLeft;
 		Y = Y - P.WinTop;
@@ -918,7 +918,7 @@ final function GlobalToWindow(float GlobalX, float GlobalY, out float WinX, out 
 	WinY = GlobalY;
 
 	P = Self;
-	while(P != Root)
+	while (P != Root)
 	{		
 		WinX -= P.WinLeft;
 		WinY -= P.WinTop;
@@ -934,7 +934,7 @@ final function WindowToGlobal(float WinX, float WinY, out float GlobalX, out flo
 	GlobalY = WinY;
 
 	P = Self;
-	while(P != Root)
+	while (P != Root)
 	{		
 		GlobalX += P.WinLeft;
 		GlobalY += P.WinTop;
@@ -946,17 +946,17 @@ final function ShowChildWindow(UWindowWindow Child, optional bool bAtBack)
 {
 	local UWindowWindow W;
 	
-	if(!Child.bTransient) ActiveWindow = Child;
+	if (!Child.bTransient) ActiveWindow = Child;
 
-	if(Child.bWindowVisible) return;
+	if (Child.bWindowVisible) return;
 	Child.bWindowVisible = True;
 
-	if(Child.bAcceptsHotKeys)
+	if (Child.bAcceptsHotKeys)
 		Root.AddHotkeyWindow(Child);
 
-	if(bAtBack)
+	if (bAtBack)
 	{
-		if(FirstChildWindow == None)
+		if (FirstChildWindow == None)
 		{
 			Child.NextSiblingWindow = None;
 			Child.PrevSiblingWindow = None;
@@ -974,13 +974,13 @@ final function ShowChildWindow(UWindowWindow Child, optional bool bAtBack)
 	else
 	{
 		W = LastChildWindow;
-		while(True) 
+		while (True) 
 		{
-			if((Child.bAlwaysOnTop) || (W == None) || (!W.bAlwaysOnTop))
+			if ((Child.bAlwaysOnTop) || (W == None) || (!W.bAlwaysOnTop))
 			{
-				if(W == None)
+				if (W == None)
 				{	
-					if(LastChildWindow == None)
+					if (LastChildWindow == None)
 					{
 						// We're the only window
 						Child.NextSiblingWindow = None;
@@ -1003,7 +1003,7 @@ final function ShowChildWindow(UWindowWindow Child, optional bool bAtBack)
 
 					Child.NextSiblingWindow = W.NextSiblingWindow;
 					Child.PrevSiblingWindow = W;
-					if(W.NextSiblingWindow != None)
+					if (W.NextSiblingWindow != None)
 					{
 						W.NextSiblingWindow.PrevSiblingWindow = Child;
 					}
@@ -1039,11 +1039,11 @@ final function UWindowWindow CreateWindow(class<UWindowWindow> WndClass, float X
 {
 	local UWindowWindow Child;
 
-	if(bUnique)
+	if (bUnique)
 	{
 		Child = Root.FindChildWindow(WndClass, True);
 
-		if(Child != None)
+		if (Child != None)
 		{
 			Child.ShowWindow();
 			Child.BringToFront();
@@ -1051,13 +1051,13 @@ final function UWindowWindow CreateWindow(class<UWindowWindow> WndClass, float X
 		}
 	}
 
-	if(ObjectName != '')
+	if (ObjectName != '')
 		Child = New(None, string(ObjectName)) WndClass;
 	else
 		Child = New(None) WndClass;
 
 	
-	//log("CreateWindow:" @ Child @ Root @ self @ OwnerW );
+	//log("CreateWindow:" @ Child @ Root @ self @ OwnerW);
 	Child.BeginPlay();
 	Child.WinTop = Y;
 	Child.WinLeft = X;
@@ -1066,7 +1066,7 @@ final function UWindowWindow CreateWindow(class<UWindowWindow> WndClass, float X
 	Child.Root = Root;
 	Child.ParentWindow = Self;
 	Child.OwnerWindow = OwnerW;
-	if(Child.OwnerWindow == None)
+	if (Child.OwnerWindow == None)
 		Child.OwnerWindow = Self;
 		
 	Child.Cursor = Cursor;
@@ -1094,11 +1094,11 @@ final function Tile(Canvas C, Texture T)
 	X = 0;
 	Y = 0;
 
-	While(X < WinWidth)
+	While (X < WinWidth)
 	{
-		While(Y < WinHeight)
+		While (Y < WinHeight)
 		{
-			DrawClippedTexture( C, X, Y, T );
+			DrawClippedTexture(C, X, Y, T);
 			Y += T.VSize;
 		}
 		X += T.USize;
@@ -1106,69 +1106,69 @@ final function Tile(Canvas C, Texture T)
 	}
 }
 
-final function DrawHorizTiledPieces( Canvas C, float DestX, float DestY, float DestW, float DestH, TexRegion T1, TexRegion T2, TexRegion T3, TexRegion T4, TexRegion T5, float Scale )
+final function DrawHorizTiledPieces(Canvas C, float DestX, float DestY, float DestW, float DestH, TexRegion T1, TexRegion T2, TexRegion T3, TexRegion T4, TexRegion T5, float Scale)
 {
 	local TexRegion Pieces[5], R;
 	local int PieceCount;
 	local int j;
 	local float X, L;
 
-	Pieces[0] = T1; if(T1.T != None) PieceCount = 1;
-	Pieces[1] = T2; if(T2.T != None) PieceCount = 2;
-	Pieces[2] = T3; if(T3.T != None) PieceCount = 3;
-	Pieces[3] = T4; if(T4.T != None) PieceCount = 4;
-	Pieces[4] = T5; if(T5.T != None) PieceCount = 5;
+	Pieces[0] = T1; if (T1.T != None) PieceCount = 1;
+	Pieces[1] = T2; if (T2.T != None) PieceCount = 2;
+	Pieces[2] = T3; if (T3.T != None) PieceCount = 3;
+	Pieces[3] = T4; if (T4.T != None) PieceCount = 4;
+	Pieces[4] = T5; if (T5.T != None) PieceCount = 5;
 
 	j = 0;
 	X = DestX;
-	while( X < DestX + DestW )
+	while (X < DestX + DestW)
 	{
 		L = DestW - (X - DestX);
 		R = Pieces[j];
-		DrawStretchedTextureSegment( C, X, DestY, FMin(R.W*Scale, L), R.H*Scale, R.X, R.Y, FMin(R.W, L/Scale), R.H, R.T );
-		X += FMin(R.W*Scale, L);
-		j = (j+1)%PieceCount;
+		DrawStretchedTextureSegment(C, X, DestY, FMin(R.W * Scale, L), R.H * Scale, R.X, R.Y, FMin(R.W, L / Scale), R.H, R.T);
+		X += FMin(R.W * Scale, L);
+		j = (j + 1) % PieceCount;
 	}
 }
 
-final function DrawVertTiledPieces( Canvas C, float DestX, float DestY, float DestW, float DestH, TexRegion T1, TexRegion T2, TexRegion T3, TexRegion T4, TexRegion T5, float Scale )
+final function DrawVertTiledPieces(Canvas C, float DestX, float DestY, float DestW, float DestH, TexRegion T1, TexRegion T2, TexRegion T3, TexRegion T4, TexRegion T5, float Scale)
 {
 	local TexRegion Pieces[5], R;
 	local int PieceCount;
 	local int j;
 	local float Y, L;
 
-	Pieces[0] = T1; if(T1.T != None) PieceCount = 1;
-	Pieces[1] = T2; if(T2.T != None) PieceCount = 2;
-	Pieces[2] = T3; if(T3.T != None) PieceCount = 3;
-	Pieces[3] = T4; if(T4.T != None) PieceCount = 4;
-	Pieces[4] = T5; if(T5.T != None) PieceCount = 5;
+	Pieces[0] = T1; if (T1.T != None) PieceCount = 1;
+	Pieces[1] = T2; if (T2.T != None) PieceCount = 2;
+	Pieces[2] = T3; if (T3.T != None) PieceCount = 3;
+	Pieces[3] = T4; if (T4.T != None) PieceCount = 4;
+	Pieces[4] = T5; if (T5.T != None) PieceCount = 5;
 
 	j = 0;
 	Y = DestY;
-	while( Y < DestY + DestH )
+	while (Y < DestY + DestH)
 	{
 		L = DestH - (Y - DestY);
 		R = Pieces[j];
-		DrawStretchedTextureSegment( C, DestX, Y, R.W*Scale, FMin(R.H*Scale, L), R.X, R.Y, R.W, FMin(R.H, L/Scale), R.T );
-		Y += FMin(R.H*Scale, L);
-		j = (j+1)%PieceCount;
+		DrawStretchedTextureSegment(C, DestX, Y, R.W * Scale, FMin(R.H * Scale, L), R.X, R.Y, R.W, FMin(R.H, L / Scale), R.T);
+		Y += FMin(R.H * Scale, L);
+		j = (j + 1) % PieceCount;
 	}
 }
 
 
-//final function DrawClippedTexture( Canvas C, float X, float Y, texture Tex )
+//final function DrawClippedTexture(Canvas C, float X, float Y, texture Tex)
 //{
-//	DrawStretchedTextureSegment( C, X, Y, Tex.USize, Tex.VSize, 0, 0, Tex.USize, Tex.VSize, Tex);
+//	DrawStretchedTextureSegment(C, X, Y, Tex.USize, Tex.VSize, 0, 0, Tex.USize, Tex.VSize, Tex);
 //}
 //
-//final function DrawStretchedTexture( Canvas C, float X, float Y, float W, float H, texture Tex )
+//final function DrawStretchedTexture(Canvas C, float X, float Y, float W, float H, texture Tex)
 //{
-//	DrawStretchedTextureSegment( C, X, Y, W, H, 0, 0, Tex.USize, Tex.VSize, Tex);
+//	DrawStretchedTextureSegment(C, X, Y, W, H, 0, 0, Tex.USize, Tex.VSize, Tex);
 //}
 //
-//final function DrawStretchedTextureSegment( Canvas C, float X, float Y, float W, float H, 
-//									  float tX, float tY, float tW, float tH, texture Tex ) 
+//final function DrawStretchedTextureSegment(Canvas C, float X, float Y, float W, float H, 
+//									  float tX, float tY, float tW, float tH, texture Tex) 
 //{
 //	local float OrgX, OrgY, ClipX, ClipY;
 //
@@ -1177,11 +1177,11 @@ final function DrawVertTiledPieces( Canvas C, float DestX, float DestY, float De
 //	ClipX = C.ClipX;
 //	ClipY = C.ClipY;
 //
-//	C.SetOrigin(OrgX + ClippingRegion.X*Root.GUIScale, OrgY + ClippingRegion.Y*Root.GUIScale);
-//	C.SetClip(ClippingRegion.W*Root.GUIScale, ClippingRegion.H*Root.GUIScale);
+//	C.SetOrigin(OrgX + ClippingRegion.X * Root.GUIScale, OrgY + ClippingRegion.Y * Root.GUIScale);
+//	C.SetClip(ClippingRegion.W * Root.GUIScale, ClippingRegion.H * Root.GUIScale);
 //
-//	C.SetPos((X - ClippingRegion.X)*Root.GUIScale, (Y - ClippingRegion.Y)*Root.GUIScale);
-//	C.DrawTileClipped( Tex, W*Root.GUIScale, H*Root.GUIScale, tX, tY, tW, tH);
+//	C.SetPos((X - ClippingRegion.X) * Root.GUIScale, (Y - ClippingRegion.Y) * Root.GUIScale);
+//	C.DrawTileClipped(Tex, W * Root.GUIScale, H * Root.GUIScale, tX, tY, tW, tH);
 //	
 //	C.SetClip(ClipX, ClipY);
 //	C.SetOrigin(OrgX, OrgY);
@@ -1215,10 +1215,10 @@ function DrawSimpleBorder(Canvas C)
 //	ClipX = C.ClipX;
 //	ClipY = C.ClipY;
 //
-//	C.SetOrigin(OrgX + ClippingRegion.X*Root.GUIScale, OrgY + ClippingRegion.Y*Root.GUIScale);
-//	C.SetClip(ClippingRegion.W*Root.GUIScale, ClippingRegion.H*Root.GUIScale);
+//	C.SetOrigin(OrgX + ClippingRegion.X * Root.GUIScale, OrgY + ClippingRegion.Y * Root.GUIScale);
+//	C.SetClip(ClippingRegion.W * Root.GUIScale, ClippingRegion.H * Root.GUIScale);
 //
-//	C.SetPos((X - ClippingRegion.X)*Root.GUIScale, (Y - ClippingRegion.Y)*Root.GUIScale);
+//	C.SetPos((X - ClippingRegion.X) * Root.GUIScale, (Y - ClippingRegion.Y) * Root.GUIScale);
 //	C.DrawTextClipped(S, bCheckHotKey);
 //
 //	C.SetClip(ClipX, ClipY);
@@ -1237,7 +1237,7 @@ final function int WrapClipText(Canvas C, float X, float Y, coerce string S, opt
 
 	// replace \\n's with Chr(13)'s
 	i = InStr(S, "\\n");
-	while(i != -1)
+	while (i != -1)
 	{
 		S = Left(S, i) $ Chr(13) $ Mid(S, i + 2);
 		i = InStr(S, "\\n");
@@ -1247,10 +1247,10 @@ final function int WrapClipText(Canvas C, float X, float Y, coerce string S, opt
 	bSentry = True;
 	Out = "";
 	NumLines = 1;
-	while( bSentry && Y < WinHeight )
+	while (bSentry && Y < WinHeight)
 	{
 		// Get the line to be drawn.
-		if(Out == "")
+		if (Out == "")
 		{
 			i++;
 			if (Length > 0)
@@ -1264,7 +1264,7 @@ final function int WrapClipText(Canvas C, float X, float Y, coerce string S, opt
 		CRPos = InStr(Out, Chr(13));
 		
 		bCR = False;
-		if(CRPos != -1 && (CRPos < SpacePos || SpacePos == -1))
+		if (CRPos != -1 && (CRPos < SpacePos || SpacePos == -1))
 		{
 			WordPos = CRPos;
 			bCR = True;
@@ -1276,7 +1276,7 @@ final function int WrapClipText(Canvas C, float X, float Y, coerce string S, opt
 		
 		// Get the current word.
 		C.SetPos(0, 0);
-		if(WordPos == -1)
+		if (WordPos == -1)
 			Temp = Out;
 		else
 			Temp = Left(Out, WordPos)$" ";
@@ -1285,11 +1285,11 @@ final function int WrapClipText(Canvas C, float X, float Y, coerce string S, opt
 		TextSize(C, Temp, W, H);
 
 		// Calculate draw offset.
-		if ( (Mid(Out, Len(Temp)) == "") && (PaddingLength > 0) )
+		if ((Mid(Out, Len(Temp)) == "") && (PaddingLength > 0))
 		{
 			Padding = Mid(S, Length, PaddingLength);
 			TextSize(C, Padding, pW, pH);
-			if(W + X + pW > WinWidth && X > 0)
+			if (W + X + pW > WinWidth && X > 0)
 			{
 				X = 0;
 				Y += H;
@@ -1298,7 +1298,7 @@ final function int WrapClipText(Canvas C, float X, float Y, coerce string S, opt
 		}
 		else
 		{
-			if(W + X > WinWidth && X > 0)
+			if (W + X > WinWidth && X > 0)
 			{
 				X = 0;
 				Y += H;
@@ -1307,12 +1307,12 @@ final function int WrapClipText(Canvas C, float X, float Y, coerce string S, opt
 		}
 
 		// Draw the line.
-		if(!bNoDraw)
+		if (!bNoDraw)
 			ClipText(C, X, Y, Temp, bCheckHotKey);
 
 		// Increment the draw offset.
 		X += W;
-		if(bCR)
+		if (bCR)
 		{
 			X =0;
 			Y += H;
@@ -1330,14 +1330,14 @@ final function ClipTextWidth(Canvas C, float X, float Y, coerce string S, float 
 	ClipText(C, X, Y, S);
 }
 
-final function DrawClippedActor( Canvas C, float X, float Y, Actor A, bool WireFrame, rotator RotOffset, vector LocOffset )
+final function DrawClippedActor(Canvas C, float X, float Y, Actor A, bool WireFrame, rotator RotOffset, vector LocOffset)
 {
 	local vector MeshLoc;
 	local float FOV;
 
 	FOV = GetPlayerOwner().FOVAngle * Pi / 180;
 	
-	MeshLoc.X = 4 / tan(FOV/2);
+	MeshLoc.X = 4 / tan(FOV / 2);
 	MeshLoc.Y = 0;
 	MeshLoc.Z = 0;
 
@@ -1348,113 +1348,113 @@ final function DrawClippedActor( Canvas C, float X, float Y, Actor A, bool WireF
 }
 
 
-final function DrawUpBevel( Canvas C, float X, float Y, float W, float H, Texture T)
+final function DrawUpBevel(Canvas C, float X, float Y, float W, float H, Texture T)
 {
 	local Region R;
 
 	R = LookAndFeel.BevelUpTL;
-	DrawStretchedTextureSegment( C, X, Y, R.W, R.H, R.X, R.Y, R.W, R.H, T );
+	DrawStretchedTextureSegment(C, X, Y, R.W, R.H, R.X, R.Y, R.W, R.H, T);
 
 	R = LookAndFeel.BevelUpT;
-	DrawStretchedTextureSegment( C, X+LookAndFeel.BevelUpTL.W, Y, 
+	DrawStretchedTextureSegment(C, X + LookAndFeel.BevelUpTL.W, Y, 
 									W - LookAndFeel.BevelUpTL.W
 									- LookAndFeel.BevelUpTR.W,
-									R.H, R.X, R.Y, R.W, R.H, T );
+									R.H, R.X, R.Y, R.W, R.H, T);
 
 	R = LookAndFeel.BevelUpTR;
-	DrawStretchedTextureSegment( C, X + W - R.W, Y, R.W, R.H, R.X, R.Y, R.W, R.H, T );
+	DrawStretchedTextureSegment(C, X + W - R.W, Y, R.W, R.H, R.X, R.Y, R.W, R.H, T);
 	
 	R = LookAndFeel.BevelUpL;
-	DrawStretchedTextureSegment( C, X, Y + LookAndFeel.BevelUpTL.H,
+	DrawStretchedTextureSegment(C, X, Y + LookAndFeel.BevelUpTL.H,
 									R.W,  
 									H - LookAndFeel.BevelUpTL.H
 									- LookAndFeel.BevelUpBL.H,
-									R.X, R.Y, R.W, R.H, T );
+									R.X, R.Y, R.W, R.H, T);
 
 	R = LookAndFeel.BevelUpR;
-	DrawStretchedTextureSegment( C, X + W - R.W, Y + LookAndFeel.BevelUpTL.H,
+	DrawStretchedTextureSegment(C, X + W - R.W, Y + LookAndFeel.BevelUpTL.H,
 									R.W,  
 									H - LookAndFeel.BevelUpTL.H
 									- LookAndFeel.BevelUpBL.H,
-									R.X, R.Y, R.W, R.H, T );
+									R.X, R.Y, R.W, R.H, T);
 
 	
 	R = LookAndFeel.BevelUpBL;
-	DrawStretchedTextureSegment( C, X, Y + H - R.H, R.W, R.H, R.X, R.Y, R.W, R.H, T );
+	DrawStretchedTextureSegment(C, X, Y + H - R.H, R.W, R.H, R.X, R.Y, R.W, R.H, T);
 
 	R = LookAndFeel.BevelUpB;
-	DrawStretchedTextureSegment( C, X + LookAndFeel.BevelUpBL.W, Y + H - R.H, 
+	DrawStretchedTextureSegment(C, X + LookAndFeel.BevelUpBL.W, Y + H - R.H, 
 									W - LookAndFeel.BevelUpBL.W
 									- LookAndFeel.BevelUpBR.W,
-									R.H, R.X, R.Y, R.W, R.H, T );
+									R.H, R.X, R.Y, R.W, R.H, T);
 
 	R = LookAndFeel.BevelUpBR;
-	DrawStretchedTextureSegment( C, X + W - R.W, Y + H - R.H, R.W, R.H, R.X, R.Y, 
-									R.W, R.H, T );
+	DrawStretchedTextureSegment(C, X + W - R.W, Y + H - R.H, R.W, R.H, R.X, R.Y, 
+									R.W, R.H, T);
 
 	R = LookAndFeel.BevelUpArea;
-	DrawStretchedTextureSegment( C, X + LookAndFeel.BevelUpTL.W,
+	DrawStretchedTextureSegment(C, X + LookAndFeel.BevelUpTL.W,
 	                                Y + LookAndFeel.BevelUpTL.H,
 									W - LookAndFeel.BevelUpBL.W
 									- LookAndFeel.BevelUpBR.W,
 									H - LookAndFeel.BevelUpTL.H
 									- LookAndFeel.BevelUpBL.H,
-									R.X, R.Y, R.W, R.H, T );
+									R.X, R.Y, R.W, R.H, T);
 	
 }
 
-final function DrawMiscBevel( Canvas C, float X, float Y, float W, float H, Texture T, int BevelType)
+final function DrawMiscBevel(Canvas C, float X, float Y, float W, float H, Texture T, int BevelType)
 {
 	local Region R;
 
 	R = LookAndFeel.MiscBevelTL[BevelType];
-	DrawStretchedTextureSegment( C, X, Y, R.W, R.H, R.X, R.Y, R.W, R.H, T );
+	DrawStretchedTextureSegment(C, X, Y, R.W, R.H, R.X, R.Y, R.W, R.H, T);
 
 	R = LookAndFeel.MiscBevelT[BevelType];
-	DrawStretchedTextureSegment( C, X+LookAndFeel.MiscBevelTL[BevelType].W, Y, 
+	DrawStretchedTextureSegment(C, X + LookAndFeel.MiscBevelTL[BevelType].W, Y, 
 									W - LookAndFeel.MiscBevelTL[BevelType].W
 									- LookAndFeel.MiscBevelTR[BevelType].W,
-									R.H, R.X, R.Y, R.W, R.H, T );
+									R.H, R.X, R.Y, R.W, R.H, T);
 
 	R = LookAndFeel.MiscBevelTR[BevelType];
-	DrawStretchedTextureSegment( C, X + W - R.W, Y, R.W, R.H, R.X, R.Y, R.W, R.H, T );
+	DrawStretchedTextureSegment(C, X + W - R.W, Y, R.W, R.H, R.X, R.Y, R.W, R.H, T);
 	
 	R = LookAndFeel.MiscBevelL[BevelType];
-	DrawStretchedTextureSegment( C, X, Y + LookAndFeel.MiscBevelTL[BevelType].H,
+	DrawStretchedTextureSegment(C, X, Y + LookAndFeel.MiscBevelTL[BevelType].H,
 									R.W,  
 									H - LookAndFeel.MiscBevelTL[BevelType].H
 									- LookAndFeel.MiscBevelBL[BevelType].H,
-									R.X, R.Y, R.W, R.H, T );
+									R.X, R.Y, R.W, R.H, T);
 
 	R = LookAndFeel.MiscBevelR[BevelType];
-	DrawStretchedTextureSegment( C, X + W - R.W, Y + LookAndFeel.MiscBevelTL[BevelType].H,
+	DrawStretchedTextureSegment(C, X + W - R.W, Y + LookAndFeel.MiscBevelTL[BevelType].H,
 									R.W,  
 									H - LookAndFeel.MiscBevelTL[BevelType].H
 									- LookAndFeel.MiscBevelBL[BevelType].H,
-									R.X, R.Y, R.W, R.H, T );
+									R.X, R.Y, R.W, R.H, T);
 
 	
 	R = LookAndFeel.MiscBevelBL[BevelType];
-	DrawStretchedTextureSegment( C, X, Y + H - R.H, R.W, R.H, R.X, R.Y, R.W, R.H, T );
+	DrawStretchedTextureSegment(C, X, Y + H - R.H, R.W, R.H, R.X, R.Y, R.W, R.H, T);
 
 	R = LookAndFeel.MiscBevelB[BevelType];
-	DrawStretchedTextureSegment( C, X + LookAndFeel.MiscBevelBL[BevelType].W, Y + H - R.H, 
+	DrawStretchedTextureSegment(C, X + LookAndFeel.MiscBevelBL[BevelType].W, Y + H - R.H, 
 									W - LookAndFeel.MiscBevelBL[BevelType].W
 									- LookAndFeel.MiscBevelBR[BevelType].W,
-									R.H, R.X, R.Y, R.W, R.H, T );
+									R.H, R.X, R.Y, R.W, R.H, T);
 
 	R = LookAndFeel.MiscBevelBR[BevelType];
-	DrawStretchedTextureSegment( C, X + W - R.W, Y + H - R.H, R.W, R.H, R.X, R.Y, 
-									R.W, R.H, T );
+	DrawStretchedTextureSegment(C, X + W - R.W, Y + H - R.H, R.W, R.H, R.X, R.Y, 
+									R.W, R.H, T);
 
 	R = LookAndFeel.MiscBevelArea[BevelType];
-	DrawStretchedTextureSegment( C, X + LookAndFeel.MiscBevelTL[BevelType].W,
+	DrawStretchedTextureSegment(C, X + LookAndFeel.MiscBevelTL[BevelType].W,
 	                                Y + LookAndFeel.MiscBevelTL[BevelType].H,
 									W - LookAndFeel.MiscBevelBL[BevelType].W
 									- LookAndFeel.MiscBevelBR[BevelType].W,
 									H - LookAndFeel.MiscBevelTL[BevelType].H
 									- LookAndFeel.MiscBevelBL[BevelType].H,
-									R.X, R.Y, R.W, R.H, T );
+									R.X, R.Y, R.W, R.H, T);
 }
 
 
@@ -1480,35 +1480,35 @@ final function byte ParseAmpersand(string S, out string Result, out string Under
 	Result = "";
 	Underline = "";
 
-	while(True)
+	while (True)
 	{
 		Temp = Mid(S, Pos);
 
 		NewPos = InStr(Temp, "&");
 		
-		if(NewPos == -1) break;
+		if (NewPos == -1) break;
 		Pos += NewPos;
 
-		if(Mid(Temp, NewPos + 1, 1) == "&")
+		if (Mid(Temp, NewPos + 1, 1) == "&")
 		{
 			// It's a double &, lets add one to the output.
 			Result = Result $ Left(Temp, NewPos) $ "&";
 			
-			if(bCalcUnderline) 
+			if (bCalcUnderline) 
 				Underline = Underline $ " ";
 
 			Pos++;
 		}
 		else
 		{
-			if(HotKey == 0)
+			if (HotKey == 0)
 				HotKey = Asc(Caps(Mid(Temp, NewPos + 1, 1)));
 
 			Result = Result $ Left(Temp, NewPos);
 			
-			if(bCalcUnderline)
+			if (bCalcUnderline)
 			{
-				for(i=0;i<NewPos - 1;i++) 
+				for (i = 0;i < NewPos - 1; i++) 
 					Underline = Underline $ " ";
 				Underline = Underline $ "_";
 			}
@@ -1528,7 +1528,7 @@ final function bool MouseIsOver()
 
 function ToolTip(string strTip) 
 {
-	if(ParentWindow != Root) ParentWindow.ToolTip(strTip);
+	if (ParentWindow != Root) ParentWindow.ToolTip(strTip);
 }
 
 // Sets mouse window for mouse capture.
@@ -1549,10 +1549,10 @@ function bool IsActive()
 
 function SetAcceptsHotKeys(bool bNewAccpetsHotKeys)
 {
-	if(bNewAccpetsHotKeys && !bAcceptsHotKeys && bWindowVisible)
+	if (bNewAccpetsHotKeys && !bAcceptsHotKeys && bWindowVisible)
 		Root.AddHotkeyWindow(Self);
 	
-	if(!bNewAccpetsHotKeys && bAcceptsHotKeys && bWindowVisible)
+	if (!bNewAccpetsHotKeys && bAcceptsHotKeys && bWindowVisible)
 		Root.RemoveHotkeyWindow(Self);
 
 	bAcceptsHotKeys = bNewAccpetsHotKeys;
@@ -1563,16 +1563,16 @@ final function UWindowWindow GetParent(class<UWindowWindow> ParentClass, optiona
 	local UWindowWindow P;
 
 	P = ParentWindow;
-	while(P != Root)
+	while (P != Root)
 	{
-		if(bExactClass)
+		if (bExactClass)
 		{
-			if(P.Class == ParentClass)
+			if (P.Class == ParentClass)
 				return P;
 		}
 		else
 		{
-			if(ClassIsChildOf(P.Class, ParentClass))
+			if (ClassIsChildOf(P.Class, ParentClass))
 				return P;
 		}
 		P = P.ParentWindow;
@@ -1585,19 +1585,19 @@ final function UWindowWindow FindChildWindow(class<UWindowWindow> ChildClass, op
 {
 	local UWindowWindow Child, Found;
 
-	for(Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
+	for (Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
 	{
-		if(bExactClass)
+		if (bExactClass)
 		{
-			if(Child.Class == ChildClass) return Child;
+			if (Child.Class == ChildClass) return Child;
 		}
 		else
 		{
-			if(ClassIsChildOf(Child.Class, ChildClass)) return Child;
+			if (ClassIsChildOf(Child.Class, ChildClass)) return Child;
 		}
 
 		Found = Child.FindChildWindow(ChildClass);
-		if(Found != None) return Found;
+		if (Found != None) return Found;
 	}
 
 	return None;
@@ -1611,14 +1611,14 @@ function GetDesiredDimensions(out float W, out float H)
 	MaxW = 0;
 	MaxH = 0;
 
-	for(Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
+	for (Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
 	{
 		Child.GetDesiredDimensions(TW, TH);
 		//Log("Calling: "$GetPlayerOwner().GetItemName(string(Child)));
 		
 
-		if(TW > MaxW) MaxW = TW;
-		if(TH > MaxH) MaxH = TH;
+		if (TW > MaxW) MaxW = TW;
+		if (TH > MaxH) MaxH = TH;
 	}
 	W = MaxW;
 	H = MaxH;
@@ -1649,7 +1649,7 @@ function ResolutionChanged(float W, float H)
 {
 	local UWindowWindow Child;
 
-	for(Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
+	for (Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
 	{
 		Child.ResolutionChanged(W, H);
 	}
@@ -1664,7 +1664,7 @@ function ShowModal(UWindowWindow W)
 
 function bool WaitModal()
 {
-	if(ModalWindow != None && ModalWindow.bWindowVisible)
+	if (ModalWindow != None && ModalWindow.bWindowVisible)
 		return True;
 
 	ModalWindow = None;
@@ -1676,7 +1676,7 @@ function WindowHidden()
 {
 	local UWindowWindow Child;
 
-	for(Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
+	for (Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
 		Child.WindowHidden();
 }
 
@@ -1684,7 +1684,7 @@ function WindowShown()
 {
 	local UWindowWindow Child;
 
-	for(Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
+	for (Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
 		Child.WindowShown();
 }
 
@@ -1696,10 +1696,10 @@ function bool CheckMousePassThrough(float X, float Y)
 
 final function bool WindowIsVisible()
 {
-	if(Self == Root)
+	if (Self == Root)
 		return True;
 
-	if(!bWindowVisible)
+	if (!bWindowVisible)
 		return False;
 	return ParentWindow.WindowIsVisible();
 }
@@ -1720,7 +1720,7 @@ function UWindowMessageBox MessageBox(string Title, string Message, MessageBoxBu
 	W.SetupMessageBox(Title, Message, Buttons, ESCResult, EnterResult, TimeOut);
 	F = UWindowFramedWindow(GetParent(class'UWindowFramedWindow'));
 
-	if(F!= None)
+	if (F!= None)
 		F.ShowModal(W);
 	else
 		Root.ShowModal(W);
@@ -1736,7 +1736,7 @@ function NotifyQuitUnreal()
 {
 	local UWindowWindow Child;
 
-	for(Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
+	for (Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
 		Child.NotifyQuitUnreal();
 }
 
@@ -1744,7 +1744,7 @@ function NotifyBeforeLevelChange()
 {
 	local UWindowWindow Child;
 
-	for(Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
+	for (Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
 		Child.NotifyBeforeLevelChange();
 }
 
@@ -1754,7 +1754,7 @@ function SetCursor(MouseCursor C)
 
 	Cursor = C;
 
-	for(Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
+	for (Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
 		Child.SetCursor(C);
 }
 
@@ -1762,7 +1762,7 @@ function NotifyAfterLevelChange()
 {
 	local UWindowWindow Child;
 
-	for(Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
+	for (Child = LastChildWindow;Child != None;Child = Child.PrevSiblingWindow)
 		Child.NotifyAfterLevelChange();
 }
 
@@ -1774,7 +1774,7 @@ final function ReplaceText(out string Text, string Replace, string With)
 	Input = Text;
 	Text = "";
 	i = InStr(Input, Replace);
-	while(i != -1)
+	while (i != -1)
 	{	
 		Text = Text $ Left(Input, i) $ With;
 		Input = Mid(Input, i + Len(Replace));	

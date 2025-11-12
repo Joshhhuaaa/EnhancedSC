@@ -17,7 +17,7 @@ function ReplaceMemoryText(out string Text, string Replace, string With)
 	Input = Text;
 	Text = "";
 	i = InStr(Input, Replace);
-	while(i != -1)
+	while (i != -1)
 	{	
 		Text = Text $ Left(Input, i) $ With;
 		Input = Mid(Input, i + Len(Replace));	
@@ -26,7 +26,7 @@ function ReplaceMemoryText(out string Text, string Replace, string With)
 	Text = Text $ Input;
 }
 
-function MakeText(	string sObjName,
+function MakeText(string sObjName,
 					string sMemoryTextSection,
 					string sFrom,
 					string sTo,

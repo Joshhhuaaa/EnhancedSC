@@ -11,9 +11,9 @@ class P_4_1_2_CEmb_FeirongGuards extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('FeirongGuards');
@@ -62,13 +62,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EChineseSoldier25')
+        if (P.name == 'EChineseSoldier25')
             Characters[1] = P.controller;
-        if(P.name == 'EChineseSoldier26')
+        if (P.name == 'EChineseSoldier26')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

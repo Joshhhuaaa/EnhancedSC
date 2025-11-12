@@ -14,9 +14,9 @@ var int FanSuccess;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -32,18 +32,18 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ELambert1')
+        if (P.name == 'ELambert1')
             Characters[1] = P.controller;
-        if(P.name == 'EAnna0')
+        if (P.name == 'EAnna0')
             Characters[2] = P.controller;
-        if(P.name == 'ECIAAgent2')
+        if (P.name == 'ECIAAgent2')
         {
             Characters[3] = P.controller;
             EAIController(Characters[3]).bAllowKnockout = true;
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     FanSuccess=0;
@@ -81,7 +81,7 @@ comm2120:
     SetFlags(V2_1_1CIA(Level.VarObject).ServerDone,TRUE);
     GoalCompleted('GoalServer');
     // Joshua - Enhanced change: Removing the one alarm limit, player has accessed CIA central server
-    if(IsEliteMode()) 
+    if (IsEliteMode()) 
     {
         GoalCompleted('GoalAlarm');
         EchelonLevelInfo(Level).bOneAlarmLevel = false;

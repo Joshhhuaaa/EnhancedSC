@@ -16,14 +16,14 @@ function Created() {
 function BeforePaint(Canvas C, float X, float Y)
 {
 	Super.BeforePaint(C, X, Y);
-	if(WinWidth < 1) WinWidth = 1;
+	if (WinWidth < 1) WinWidth = 1;
 }
 
 function LMouseDown(float X, float Y)
 {
 	Super.LMouseDown(X, Y);
 
-	if(X > Min(WinWidth - 5, ParentWindow.WinWidth - WinLeft - 5) && Y < 12)
+	if (X > Min(WinWidth - 5, ParentWindow.WinWidth - WinLeft - 5) && Y < 12)
 	{
 		bSizing = True;
 		UWindowGrid(ParentWindow.ParentWindow).bSizingColumn = True;
@@ -41,7 +41,7 @@ function LMouseUp(float X, float Y)
 
 function MouseMove(float X, float Y)
 {
-	if(X > Min(WinWidth - 5, ParentWindow.WinWidth - WinLeft - 5) && Y < 12)
+	if (X > Min(WinWidth - 5, ParentWindow.WinWidth - WinLeft - 5) && Y < 12)
 	{
 		Cursor = Root.HSplitCursor;
 	}
@@ -50,11 +50,11 @@ function MouseMove(float X, float Y)
 		Cursor = Root.NormalCursor;
 	}
 
-	if(bSizing && bMouseDown)
+	if (bSizing && bMouseDown)
 	{
 		WinWidth = X;
-		if(WinWidth < 1) WinWidth = 1;
-		if(WinWidth > ParentWindow.WinWidth - WinLeft - 1) WinWidth = ParentWindow.WinWidth - WinLeft - 1;
+		if (WinWidth < 1) WinWidth = 1;
+		if (WinWidth > ParentWindow.WinWidth - WinLeft - 1) WinWidth = ParentWindow.WinWidth - WinLeft - 1;
 	}
 	else
 	{
@@ -71,7 +71,7 @@ function Paint(Canvas C, float X, float Y)
 
 	UWindowGrid(ParentWindow.ParentWindow).PaintColumn(C, Self, X, Y);
 
-	if(IsActive())
+	if (IsActive())
 	{
 		T = LookAndFeel.Active;
 		FC = LookAndFeel.HeadingActiveTitleColor;
@@ -84,11 +84,11 @@ function Paint(Canvas C, float X, float Y)
 
 	C.SetDrawColor(255,255,255);
 
-	DrawUpBevel( C, 0, 0, WinWidth, LookAndFeel.ColumnHeadingHeight, T);
+	DrawUpBevel(C, 0, 0, WinWidth, LookAndFeel.ColumnHeadingHeight, T);
 
 	C.DrawColor = FC;
 
-	ClipText( C, 2, 1, ColumnHeading);
+	ClipText(C, 2, 1, ColumnHeading);
 
 	C.SetDrawColor(255,255,255);
 }
@@ -97,9 +97,9 @@ function Click(float X, float Y)
 {
 	local int Row;
 
-	if(Y < 12)
+	if (Y < 12)
 	{
-		if(X <= Min(WinWidth - 5, ParentWindow.WinWidth - WinLeft - 5))
+		if (X <= Min(WinWidth - 5, ParentWindow.WinWidth - WinLeft - 5))
 		{
 			UWindowGrid(ParentWindow.ParentWindow).SortColumn(Self);
 		}
@@ -116,11 +116,11 @@ function RMouseDown(float X, float Y)
 	local int Row;
 	Super.RMouseDown(X, Y);
 
-	if(Y > 12)
+	if (Y > 12)
 	{
 		Row = ((Y - 12) / UWindowGrid(ParentWindow.ParentWindow).RowHeight) + UWindowGrid(ParentWindow.ParentWindow).TopRow;
 		UWindowGrid(ParentWindow.ParentWindow).SelectRow(Row);
-		UWindowGrid(ParentWindow.ParentWindow).RightClickRowDown(Row, X+WinLeft, Y+WinTop);
+		UWindowGrid(ParentWindow.ParentWindow).RightClickRowDown(Row, X + WinLeft, Y + WinTop);
 	}
 }
 
@@ -129,11 +129,11 @@ function RMouseUp(float X, float Y)
 	local int Row;
 	Super.RMouseUp(X, Y);
 
-	if(Y > 12)
+	if (Y > 12)
 	{
 		Row = ((Y - 12) / UWindowGrid(ParentWindow.ParentWindow).RowHeight) + UWindowGrid(ParentWindow.ParentWindow).TopRow;
 		UWindowGrid(ParentWindow.ParentWindow).SelectRow(Row);
-		UWindowGrid(ParentWindow.ParentWindow).RightClickRow(Row, X+WinLeft, Y+WinTop);
+		UWindowGrid(ParentWindow.ParentWindow).RightClickRow(Row, X + WinLeft, Y + WinTop);
 	}
 }
 
@@ -141,7 +141,7 @@ function DoubleClick(float X, float Y)
 {
 	local int Row;
 
-	if(Y < 12)
+	if (Y < 12)
 	{
 		Click(X, Y);
 	}

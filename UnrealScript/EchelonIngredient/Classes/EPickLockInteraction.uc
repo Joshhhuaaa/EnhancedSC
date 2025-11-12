@@ -6,7 +6,7 @@ var EPickLockSystem		PLS;
 
 function PostBeginPlay();
 
-function Set( ESwingingDoor door, ELockPick pick )
+function Set(ESwingingDoor door, ELockPick pick)
 {
 	MyDoor = door;
 	LockPick = pick;
@@ -15,7 +15,7 @@ function Set( ESwingingDoor door, ELockPick pick )
 function InitInteract(Controller Instigator)
 {
 	PLS = spawn(class'EPickLockSystem');
-	if( PLS == None )
+	if (PLS == None)
 		Log(self$" ERROR: Couldn't spawn pick lock system");
 	// For base processing in EPopObjectInteraction
 	SetOwner(PLS);
@@ -25,12 +25,12 @@ function InitInteract(Controller Instigator)
 	Pls.Init(Instigator, self);
 }
 
-function Interact( Controller Instigator )
+function Interact(Controller Instigator)
 {
 	MyDoor.Unlock();
 }
 
-function PostInteract( Controller Instigator )
+function PostInteract(Controller Instigator)
 {
 	// reset interaction
 	Instigator.Interaction	= None;
@@ -39,36 +39,36 @@ function PostInteract( Controller Instigator )
 	EPlayerController(Instigator).ReturnFromInteraction();
 
 	// Send transmission
-	if( !MyDoor.Locked )
+	if (!MyDoor.Locked)
 		EPlayerController(Instigator).SendTransmissionMessage(Localize("Transmission", "DoorPick", "Localization\\HUD"), TR_CONSOLE);
 
 	LockPick.Interaction = None;
 
-	if( PLS != None )
+	if (PLS != None)
 		PLS.Destroy();
 	Destroy();
 }
 
-function ProcessAxis( Controller C, float aForward, float aStrafe, float XAxis, float YAxis )
+function ProcessAxis(Controller C, float aForward, float aStrafe, float XAxis, float YAxis)
 {
-	if( PLS != None )
+	if (PLS != None)
 		PLS.MoveAxis(aForward, aStrafe);
 }
 
-function SetInteractLocation( Pawn InteractPawn )
+function SetInteractLocation(Pawn InteractPawn)
 {
 	local Vector X, Y, Z, MovePos;
 	local EPawn InteractEPawn;
 	local bool isSideFront;
 	
 	InteractEPawn = EPawn(InteractPawn);
-	if( InteractEPawn == None )
+	if (InteractEPawn == None)
 		return;
 
 	GetAxes(MyDoor.MyKnob.Rotation, X, Y, Z);
 	// Get door opening direction
 	isSideFront = MyDoor.GetPawnSide(InteractPawn) == ESide_Front;
-	if( !isSideFront )
+	if (!isSideFront)
 		Y = -Y;
 	
 	MovePos	 = MyDoor.MyKnob.Location;
@@ -79,7 +79,7 @@ function SetInteractLocation( Pawn InteractPawn )
 	InteractEPawn.m_locationStart	= InteractEPawn.Location;
 	InteractEPawn.m_orientationStart= InteractEPawn.Rotation;
 	InteractEPawn.m_locationEnd		= MovePos;
-	if(isSideFront)
+	if (isSideFront)
 		InteractEPawn.m_orientationEnd	= Rotator(Y) - Rot(0,7000,0);
 	else
 		InteractEPawn.m_orientationEnd	= Rotator(Y) + Rot(0,7000,0);

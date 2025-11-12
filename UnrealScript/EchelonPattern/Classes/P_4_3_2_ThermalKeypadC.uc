@@ -14,9 +14,9 @@ var int InElevator;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('KeypadCDeadCheck');
@@ -39,19 +39,19 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EChineseSoldier2')
+        if (P.name == 'EChineseSoldier2')
             Characters[1] = P.controller;
-        if(P.name == 'EAzeriColonel0')
+        if (P.name == 'EAzeriColonel0')
             Characters[2] = P.controller;
     }
 
     ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'ESoundTrigger6')
+        if (A.name == 'ESoundTrigger6')
             SoundActors[0] = A;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     InElevator=0;

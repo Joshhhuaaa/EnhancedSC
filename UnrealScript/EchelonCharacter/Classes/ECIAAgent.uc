@@ -16,10 +16,10 @@ class ECIAAgent extends EAIProfessional
 
 function name GetWeaponSelectAnim()
 {
-	if ( bIsCrouched )
+	if (bIsCrouched)
 	{
 		// weapon selection depends on the handedness of the weapon this AI owns
-		switch ( WeaponHandedness ) 
+		switch (WeaponHandedness) 
 		{ 
 			case 0 : 
 				return '';
@@ -34,7 +34,7 @@ function name GetWeaponSelectAnim()
 	else
 	{
 		// weapon selection depends on the handedness of the weapon this AI owns
-		switch ( WeaponHandedness ) 
+		switch (WeaponHandedness) 
 		{ 
 			case 0 : 
 				return '';
@@ -58,7 +58,7 @@ function name GetWeaponSelectAnim()
 
 function AttachWeaponAway()	
 {
-	if ( CurrentWeapon != none )
+	if (CurrentWeapon != none)
 	{		
 		Super.AttachWeaponAway();
 		CurrentWeapon.bHidden = true;	// hiding weapon in jacket

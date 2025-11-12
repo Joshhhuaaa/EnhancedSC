@@ -12,22 +12,22 @@ function PostBeginPlay()
     local int i;
 
 	Button = spawn(class'EGameplayObject', self,, ToWorld(ButtonOffset));
-	if( Button == None )
+	if (Button == None)
 		log("Problem with ELightSwitch"@self@"spawning button");
 	Button.SetStaticMesh(ButtonMesh);
 	Button.SetCollision(false);
 	Button.bDamageable = false;
 
-	if( TriggeredObjects.Length == 0 )
+	if (TriggeredObjects.Length == 0)
     {
 		Log(self$" should have at least one light attached to");
     }
     else // Remove for retail!
     {
         // 
-        for(i = 0; i < TriggeredObjects.Length; i++)
+        for (i = 0; i < TriggeredObjects.Length; i++)
         {
-            if((TriggeredObjects[i] != None)
+            if ((TriggeredObjects[i] != None)
                 && (TriggeredObjects[i].IsA('ELight')))
             {
                 log(self@"links directly to"@TriggeredObjects[i]@". Switches should link to the EGamplayObjectLight instead");
@@ -40,7 +40,7 @@ function PostBeginPlay()
 
 function Destroyed()
 {
-	if( Button != None )
+	if (Button != None)
 		Button.Destroy();
 	Super.Destroyed();
 }
@@ -49,7 +49,7 @@ auto state s_On
 {
 	function BeginState()
 	{
-		Button.SetRotation(Rotation+Rot(8191,0,0));
+		Button.SetRotation(Rotation + Rot(8191,0,0));
 		
 		Super.BeginState();
 	}
@@ -59,7 +59,7 @@ state s_Off
 {
 	function BeginState()
 	{
-		Button.SetRotation(Rotation-Rot(8191,0,0));
+		Button.SetRotation(Rotation - Rot(8191,0,0));
 
 		Super.BeginState();
 	}

@@ -73,10 +73,10 @@ event int SpecialCost(Pawn Seeker);
 
 // Accept an actor that has teleported in.
 // used for random spawning and initial placement of creatures
-event bool Accept( actor Incoming, actor Source )
+event bool Accept(actor Incoming, actor Source)
 {
 	// Move the actor here.
-	taken = Incoming.SetLocation( Location );
+	taken = Incoming.SetLocation(Location);
 	if (taken)
 	{
 		Incoming.Velocity = vect(0,0,0);
@@ -89,7 +89,7 @@ event bool Accept( actor Incoming, actor Source )
 
 /* SuggestMovePreparation()
 Optionally tell Pawn any special instructions to prepare for moving to this goal
-(called by Pawn.PrepareForMove() if this node's bSpecialMove==true
+(called by Pawn.PrepareForMove() if this node's bSpecialMove == true
 */
 event bool SuggestMovePreparation(Pawn Other)
 {
@@ -127,7 +127,7 @@ function PostBeginPlay()
     local NavigationPoint pCurrentPoint;
 	local int i;
 
-	if(bCoverPoint)
+	if (bCoverPoint)
 	{
 		SetCollisionSize(250.0f, 100.0f);
 		SetCollision(true);
@@ -137,7 +137,7 @@ function PostBeginPlay()
 	{
 		for (i = 0; i < Patrol.m_sNextPatrolPointTag.Length; i++)
 		{
-			if ( Patrol.m_sNextPatrolPointTag[i] != '' )
+			if (Patrol.m_sNextPatrolPointTag[i] != '')
 			{
 				foreach AllActors(class 'NavigationPoint', pCurrentPoint, Patrol.m_sNextPatrolPointTag[i])
 				{
@@ -164,13 +164,13 @@ function PostBeginPlay()
 // 
 //------------------------------------------------------------------------
 
-function Trigger( Actor other, Pawn EventInstigator, optional name InTag)		// UBI MODIF - DAK - added optional InTag parameter
+function Trigger(Actor other, Pawn EventInstigator, optional name InTag)		// UBI MODIF - DAK - added optional InTag parameter
 {
 	if (Patrol != none)
 	{
 		if (Patrol.m_WaitingController != none)
 		{
-			Patrol.m_WaitingController.Trigger( other, EventInstigator, Tag ); 
+			Patrol.m_WaitingController.Trigger(other, EventInstigator, Tag); 
 		}
 
 		Patrol.m_WaitingController = none;
@@ -228,7 +228,7 @@ event NavigationPoint GetNext(optional bool bNoReverse)
 			}
 			else
 			{				
-				if ( bNoReverse )
+				if (bNoReverse)
 					return none;
 
 				// at path's end .. reverse our direction
@@ -247,7 +247,7 @@ event NavigationPoint GetNext(optional bool bNoReverse)
 			}
 			else
 			{
-				if ( bNoReverse )
+				if (bNoReverse)
 					return none;
 
 				// reverse our direction
@@ -308,12 +308,12 @@ function SetAllPatrolDirections(bool _isBackwards)
 
 		if (_isBackwards) 
 		{
-			for ( i = 0; i < Patrol.m_pPrevious.Length; i++ )
+			for (i = 0; i < Patrol.m_pPrevious.Length; i++)
 				Patrol.m_pPrevious[i].SetAllPatrolDirections(_isBackwards);
 		}
 		else
 		{
-			for ( i = 0; i < Patrol.m_pNext.Length; i++ )
+			for (i = 0; i < Patrol.m_pNext.Length; i++)
 				Patrol.m_pNext[i].SetAllPatrolDirections(_isBackwards);
 		}
 	}
@@ -323,11 +323,11 @@ function SetAllPatrolDirections(bool _isBackwards)
 function touch(actor other)
 {
 	local Pawn myPawn;
-	if ( other != none && other.bIsPawn )
+	if (other != none && other.bIsPawn)
 	{
 		myPawn = Pawn(other);
 		
-		if((myPawn.Controller != None) && (!myPawn.Controller.bIsPlayer))
+		if ((myPawn.Controller != None) && (!myPawn.Controller.bIsPlayer))
 			myPawn.Controller.touch(self);
 	}
 }
@@ -335,10 +335,10 @@ function touch(actor other)
 function untouch(actor other)
 {
 	local Pawn myPawn;
-	if ( other != none && other.bIsPawn )
+	if (other != none && other.bIsPawn)
 	{
 		myPawn = Pawn(other);
-		if((myPawn.Controller != None) && (!myPawn.Controller.bIsPlayer))
+		if ((myPawn.Controller != None) && (!myPawn.Controller.bIsPlayer))
 			myPawn.Controller.untouch(self);
 	}
 }

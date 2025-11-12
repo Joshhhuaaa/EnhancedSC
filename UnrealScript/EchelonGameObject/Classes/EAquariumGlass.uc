@@ -3,10 +3,10 @@ class EAquariumGlass extends ELiquidContainer;
 var float hit_z;
 var float hit_level;
 
-// Get the hitlocation.z and hit_level
-function float GetHitLevel( vector hit_location )
+// Get the HitLocation.Z and hit_level
+function float GetHitLevel(vector hit_location)
 {
-	hit_z = hit_location.z;
+	hit_z = hit_location.Z;
 	hit_level = Super.GetHitLevel(hit_location);
 	return hit_level;
 }

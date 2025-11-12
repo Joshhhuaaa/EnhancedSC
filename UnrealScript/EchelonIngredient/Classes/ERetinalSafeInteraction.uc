@@ -10,13 +10,13 @@ function string	GetDescription()
 function GetScanner()
 {
 	Scanner = ERetinalSafe(Owner);
-	if( Scanner == None )
+	if (Scanner == None)
 		Log("ERetinalSafeInteraction problem with Owner");
 }
 
-function InitInteract( Controller Instigator )
+function InitInteract(Controller Instigator)
 {
-	if ( Scanner == none )
+	if (Scanner == none)
 		GetScanner();
 
 	// Make scanner begin process
@@ -24,25 +24,25 @@ function InitInteract( Controller Instigator )
 
 		// Make pawn interact
 	Instigator.Interaction = self;
-	if( Instigator.GetStateName() == 's_Grab' )
+	if (Instigator.GetStateName() == 's_Grab')
 		Instigator.GotoState(,'RetinalScan');
 	else
 		Instigator.GotoState('s_RetinalScanner');
 }
 
-function Interact( Controller Instigator )
+function Interact(Controller Instigator)
 {
-	if ( Scanner == none )
+	if (Scanner == none)
 		GetScanner();
 
 	// Trigger object only if scanned pawn has valid class
-	if( Scanner.IsValid(Instigator.Pawn) )
+	if (Scanner.IsValid(Instigator.Pawn))
 		Owner.Trigger(Self, Instigator.Pawn);
 
 	Scanner.ValidateUser(Instigator.Pawn);
 }
 
-function PostInteract( Controller Instigator )
+function PostInteract(Controller Instigator)
 {
 	Instigator.Interaction = None;
 
@@ -50,16 +50,16 @@ function PostInteract( Controller Instigator )
 	Instigator.GotoState(,'RetinalEnd');
 }
 
-function SetInteractLocation( Pawn InteractPawn )
+function SetInteractLocation(Pawn InteractPawn)
 {
 	local vector MovePos, X,Y,Z;
 	local EPawn InteractEPawn;
 	
-	if ( Scanner == none )
+	if (Scanner == none)
 		GetScanner();
 
 	InteractEPawn = EPawn(InteractPawn);
-	if( InteractEPawn == None )
+	if (InteractEPawn == None)
 		return;
 
 	GetAxes(Scanner.Rotation, X,Y,Z);
@@ -67,14 +67,14 @@ function SetInteractLocation( Pawn InteractPawn )
 	// set location depending on state
 	MovePos		= Scanner.Location;
 	MovePos    += Scanner.default.CollisionRadius * X;
-	switch( InteractEPawn.Controller.GetStateName() )
+	switch (InteractEPawn.Controller.GetStateName())
 	{
 	case 's_RetinalScanner':
 		MovePos    += (2.f + InteractEPawn.CollisionRadius) * X;
 		break;
 
 	case 's_Grab':
-		MovePos    += InteractEPawn.CollisionRadius*1.8f * X;
+		MovePos    += InteractEPawn.CollisionRadius * 1.8f * X;
 		break;
 	}
 	MovePos.Z	= InteractEPawn.Location.Z;									// keep on same Z

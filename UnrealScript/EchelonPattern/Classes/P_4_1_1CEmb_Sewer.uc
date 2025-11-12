@@ -13,9 +13,9 @@ class P_4_1_1CEmb_Sewer extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('CheckIfDead');
@@ -37,15 +37,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EChineseSoldier10')
+        if (P.name == 'EChineseSoldier10')
             Characters[1] = P.controller;
-        if(P.name == 'EChineseSoldier11')
+        if (P.name == 'EChineseSoldier11')
             Characters[2] = P.controller;
-        if(P.name == 'EChineseSoldier12')
+        if (P.name == 'EChineseSoldier12')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

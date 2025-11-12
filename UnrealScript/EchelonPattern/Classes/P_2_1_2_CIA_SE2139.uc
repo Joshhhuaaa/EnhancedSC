@@ -14,9 +14,9 @@ var int bdone;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_ALARM_ON_PRIMARY:
             EventJump('ProjAlert');
@@ -59,17 +59,17 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ECIABureaucrat42')
+        if (P.name == 'ECIABureaucrat42')
             Characters[1] = P.controller;
-        if(P.name == 'ECIABureaucrat43')
+        if (P.name == 'ECIABureaucrat43')
             Characters[2] = P.controller;
-        if(P.name == 'ECIABureaucrat44')
+        if (P.name == 'ECIABureaucrat44')
             Characters[3] = P.controller;
-        if(P.name == 'ECIAAgent0')
+        if (P.name == 'ECIAAgent0')
             Characters[4] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     bdone=0;

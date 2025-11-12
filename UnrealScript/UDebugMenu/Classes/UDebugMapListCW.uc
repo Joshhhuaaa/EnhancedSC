@@ -20,10 +20,10 @@ function Created()
 	MapList = UDebugMapListBox(CreateWindow(class'UDebugMapListBox', 0, 0, 100, 100, Self));
 	LoadMapList();
 
-	CloseButton = UWindowSmallCloseButton(CreateWindow(class'UWindowSmallCloseButton', WinWidth-56, WinHeight-24, 48, 16));
-	OkButton    = UDebugSmallLoadMapButton(CreateWindow(class'UDebugSmallLoadMapButton', WinWidth-120, WinHeight-24, 58, 16));
+	CloseButton = UWindowSmallCloseButton(CreateWindow(class'UWindowSmallCloseButton', WinWidth - 56, WinHeight - 24, 48, 16));
+	OkButton    = UDebugSmallLoadMapButton(CreateWindow(class'UDebugSmallLoadMapButton', WinWidth - 120, WinHeight - 24, 58, 16));
 
-	GameCombo   = UWindowComboControl(CreateWindow(class'UWindowComboControl',5,WinHeight-24,WinWidth-130,16));
+	GameCombo   = UWindowComboControl(CreateWindow(class'UWindowComboControl', 5, WinHeight - 24, WinWidth - 130, 16));
 	GameCombo.SetButtons(True);
 	GameCombo.SetText("Game Type:");
 	GameCombo.SetFont(F_Normal);
@@ -33,7 +33,7 @@ function Created()
 	GameCombo.AddItem("WarfareGame.WarfareDeathMatch");
 	GameCombo.AddItem("WarfareGame.WarfareTeamGame");
 	GameCombo.AddItem("WarfareGame.WarfareCTFGame");
-	GameCombo.EditBox.WinWidth = GameCombo.WinWidth-60;
+	GameCombo.EditBox.WinWidth = GameCombo.WinWidth - 60;
 	if (LastGameType!="")
 	{
 		index = GameCombo.List.FindItemIndex(LastGameType);
@@ -42,7 +42,7 @@ function Created()
 	else	
 		GameCombo.SetSelectedIndex(0);
 
-	NetworkCombo   = UWindowComboControl(CreateWindow(class'UWindowComboControl',5,WinHeight-20,WinWidth-130,16));
+	NetworkCombo   = UWindowComboControl(CreateWindow(class'UWindowComboControl', 5, WinHeight - 20, WinWidth - 130,16));
 	NetworkCombo.SetButtons(True);
 	NetworkCombo.SetText("Network Game:");
 	NetworkCombo.SetFont(F_Normal);
@@ -64,26 +64,26 @@ function Paint(Canvas C, float X, float Y)
 	Super.Paint(C, X, Y);
 	
 	T = GetLookAndFeelTexture();
-	DrawUpBevel( C, 0, WinHeight-46, WinWidth, 46, T);
+	DrawUpBevel(C, 0, WinHeight - 46, WinWidth, 46, T);
 }
 
 
 function Resized()
 {
 	MapList.WinWidth = WinWidth;
-	MapList.WinHeight = WinHeight-46;
-	MapList.VertSB.WinLeft = MapList.WinWidth-MapList.VertSB.WinWidth;
-	MapList.VertSB.WinHeight=MapList.WinHeight;
-	CloseButton.WinLeft = WinWidth-52;
-	CloseButton.WinTop = WinHeight-40;
-	OkButton.WinLeft = WinWidth-120;
-	OkButton.WinTop = WinHeight-40;
-	GameCombo.WinTop = WinHeight-40;
-	GameCombo.WinWidth = WinWidth-130;
-	GameCombo.EditBoxWidth = GameCombo.WinWidth-75;
-	NetworkCombo.WinTop = WinHeight-21;
-	NetworkCombo.WinWidth = WinWidth-130;
-	NetworkCombo.EditBoxWidth = GameCombo.WinWidth-75;
+	MapList.WinHeight = WinHeight - 46;
+	MapList.VertSB.WinLeft = MapList.WinWidth - MapList.VertSB.WinWidth;
+	MapList.VertSB.WinHeight = MapList.WinHeight;
+	CloseButton.WinLeft = WinWidth - 52;
+	CloseButton.WinTop = WinHeight - 40;
+	OkButton.WinLeft = WinWidth - 120;
+	OkButton.WinTop = WinHeight - 40;
+	GameCombo.WinTop = WinHeight - 40;
+	GameCombo.WinWidth = WinWidth - 130;
+	GameCombo.EditBoxWidth = GameCombo.WinWidth - 75;
+	NetworkCombo.WinTop = WinHeight - 21;
+	NetworkCombo.WinWidth = WinWidth - 130;
+	NetworkCombo.EditBoxWidth = GameCombo.WinWidth - 75;
 	
 }
 
@@ -99,7 +99,7 @@ function LoadMapList()
 	{
 		L = UDebugMapList(MapList.Items.Append(class'UDebugMapList'));
 		L.MapName = NextMap;
-		if(Right(NextMap, 4) ~= ".unr")
+		if (Right(NextMap, 4) ~= ".unr")
 			L.DisplayName = Left(NextMap, Len(NextMap) - 4);
 		else
 			L.DisplayName = NextMap;
@@ -114,10 +114,10 @@ function LoadMapList()
 function Notify(UWindowDialogControl C, byte E)
 {
 	Super.Notify(C, E);
-	switch(E)
+	switch (E)
 	{
 	case DE_Change:
-		switch(C)
+		switch (C)
 		{
 		case GameCombo:
 			LastGameType = GameCombo.GetValue();
@@ -131,11 +131,11 @@ function Notify(UWindowDialogControl C, byte E)
 
 function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) 
 {
-	if (Msg==WM_KeyDown)
+	if (Msg == WM_KeyDown)
 	{
-		if (Key==236)
+		if (Key == 236)
 			MapList.VertSB.Scroll(-1);
-		else if (Key==237)
+		else if (Key == 237)
 			MapList.VertSB.Scroll(+1);
 			
 		return;

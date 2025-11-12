@@ -11,9 +11,9 @@ class P_2_2_3_Ktech_RoofAmbushB extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('FireLikeMad');
@@ -35,21 +35,21 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMafiaMuscle5')
+        if (P.name == 'EMafiaMuscle5')
         {
             Characters[1] = P.controller;
             EAIController(Characters[1]).bAllowKnockout = true;
             EAIController(Characters[1]).bBlockDetection = true;
             EAIController(Characters[1]).bWasFound = true;
         }
-        if(P.name == 'EMafiaMuscle6')
+        if (P.name == 'EMafiaMuscle6')
         {
             Characters[2] = P.controller;
             EAIController(Characters[2]).bAllowKnockout = true;
             EAIController(Characters[2]).bBlockDetection = true;
             EAIController(Characters[2]).bWasFound = true;
         }
-        if(P.name == 'EMafiaMuscle7')
+        if (P.name == 'EMafiaMuscle7')
         {
             Characters[3] = P.controller;
             EAIController(Characters[3]).bAllowKnockout = true;
@@ -58,7 +58,7 @@ function InitPattern()
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

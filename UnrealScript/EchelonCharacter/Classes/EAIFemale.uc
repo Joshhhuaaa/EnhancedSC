@@ -178,10 +178,10 @@ function PostBeginPlay()
 	
 	// load female anim package
 
-	if(Mesh != None)
+	if (Mesh != None)
 	{
 		Anim = MeshAnimation(DynamicLoadObject("EFemale.FemaleAnims", class'MeshAnimation'));
-		LinkSkelAnim( Anim );
+		LinkSkelAnim(Anim);
 	}
 }
 
@@ -235,7 +235,7 @@ function GetReactionAnim(out name Anim, out name AnimB, out float BlendAlpha, op
 	Anim = 'ReacStFmAA0';
 }
 
-event CheckForTransition( MoveFlags NewMoveFlags ) {}
+event CheckForTransition(MoveFlags NewMoveFlags) {}
 
 
 event GetRandomWaitAnim(out name ReturnName) 
@@ -250,10 +250,10 @@ event GetRandomWaitAnim(out name ReturnName)
 
 	choice = rand(5);
 
-	switch ( WeaponStance )
+	switch (WeaponStance)
 	{				
 		case 0 : 			
-			switch(choice)
+			switch (choice)
 			{
 				case 0 : ReturnName = 'PrsoStFmAA0'; break;
 				case 1 : ReturnName = 'PrsoStFmBB0'; break;
@@ -267,7 +267,7 @@ event GetRandomWaitAnim(out name ReturnName)
 }
 
 
-function bool IsExtraWaiting( optional int f ) { return false; }
+function bool IsExtraWaiting(optional int f) { return false; }
 
 defaultproperties
 {

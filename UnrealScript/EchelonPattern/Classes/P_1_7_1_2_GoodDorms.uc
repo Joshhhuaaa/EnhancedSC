@@ -11,9 +11,9 @@ class P_1_7_1_2_GoodDorms extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,15 +29,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'spetsnaz18')
+        if (P.name == 'spetsnaz18')
             Characters[1] = P.controller;
-        if(P.name == 'EFalseRussianSoldier0')
+        if (P.name == 'EFalseRussianSoldier0')
             Characters[2] = P.controller;
-        if(P.name == 'EFalseRussianSoldier2')
+        if (P.name == 'EFalseRussianSoldier2')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

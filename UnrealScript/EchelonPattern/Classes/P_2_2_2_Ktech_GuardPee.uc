@@ -13,9 +13,9 @@ class P_2_2_2_Ktech_GuardPee extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -31,13 +31,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EMafiaMuscle16')
+        if (P.name == 'EMafiaMuscle16')
             Characters[1] = P.controller;
-        if(P.name == 'EMafiaMuscle15')
+        if (P.name == 'EMafiaMuscle15')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

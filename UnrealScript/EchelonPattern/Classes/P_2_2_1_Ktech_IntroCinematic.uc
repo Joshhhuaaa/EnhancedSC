@@ -15,9 +15,9 @@ var int PlayIntroOnce;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('WilkesDied');
@@ -40,9 +40,9 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EWilkes0')
+        if (P.name == 'EWilkes0')
             Characters[1] = P.controller;
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[2] = P.controller;
     }
 
@@ -51,7 +51,7 @@ function InitPattern()
     {
         ForEach DynamicActors(class'Pawn', P)
         {
-            if(P.name == 'EMafiaMuscle0')
+            if (P.name == 'EMafiaMuscle0')
             {
                 Hat = spawn(class'EHat', EPawn(P));
                 Hat.SetStaticMesh(StaticMesh(DynamicLoadObject("EMeshCharacter.Mafia.KnitCap", class'StaticMesh')));
@@ -59,18 +59,18 @@ function InitPattern()
                 EPawn(P).AttachToBone(Hat, 'HatBone');
                 EPawn(P).Hat = Hat;
             }
-            if(P.name == 'EMafiaMuscle5' || P.name == 'EMafiaMuscle8')
+            if (P.name == 'EMafiaMuscle5' || P.name == 'EMafiaMuscle8')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.Grunt.GruntA", class'Texture'));
             }
-            if(P.name == 'EMafiaMuscle14')
+            if (P.name == 'EMafiaMuscle14')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.Grunt.GruntB", class'Texture'));
             }
         }
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     PlayIntroOnce=0;

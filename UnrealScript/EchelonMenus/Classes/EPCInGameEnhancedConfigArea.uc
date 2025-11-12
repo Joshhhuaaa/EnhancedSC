@@ -12,11 +12,11 @@ function Created()
 
     m_ListBox = EPCEnhancedListBox(CreateWindow(class'EPCEnhancedListBox', 0, 0, WinWidth, 176));
     m_ListBox.SetAcceptsFocus();
-    m_ListBox.TitleFont=F_Normal;
+    m_ListBox.TitleFont = F_Normal;
     
     InitEnhancedSettings();
 
-    m_ResetToDefault = EPCTextButton(CreateControl( class'EPCTextButton', m_IResetToDefaultXPos, m_IResetToDefaultYPos, m_IResetToDefaultWidth, m_IResetToDefaultHeight, self));
+    m_ResetToDefault = EPCTextButton(CreateControl(class'EPCTextButton', m_IResetToDefaultXPos, m_IResetToDefaultYPos, m_IResetToDefaultWidth, m_IResetToDefaultHeight, self));
     m_ResetToDefault.SetButtonText(Caps(Localize("OPTIONS","RESETTODEFAULT","Localization\\HUD")) ,TXT_CENTER);
     m_ResetToDefault.Font = F_Normal;
 }
@@ -24,7 +24,7 @@ function Created()
 
 function Notify(UWindowDialogControl C, byte E)
 {    
-	if(E == DE_Click && C == m_ResetToDefault)
+	if (E == DE_Click && C == m_ResetToDefault)
 	{
         ResetToDefault();
 	}  

@@ -11,9 +11,9 @@ class P_3_1_1_Ship_Bobrov extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -29,13 +29,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EBobrov0')
+        if (P.name == 'EBobrov0')
             Characters[1] = P.controller;
-        if(P.name == 'ELambert2')
+        if (P.name == 'ELambert2')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

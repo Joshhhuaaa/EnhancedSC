@@ -17,9 +17,9 @@ var int ServerActive;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -45,7 +45,7 @@ function InitPattern()
         TurretController = Spawn(class'ETurretController', , , vect(-4000, 4900, 518), rot(0, 16384, 0));
         ForEach AllActors(class'Actor', A)
         {
-            if(A.name == 'ETurret2')
+            if (A.name == 'ETurret2')
                 TurretController.LinkedTurret = ETurret(A);
         }
 
@@ -53,7 +53,7 @@ function InitPattern()
         TurretController = Spawn(class'ETurretController', , , vect(-4120, 4420, 518), rot(0, 49152, 0));
         ForEach AllActors(class'Actor', A)
         {
-            if(A.name == 'ETurret3')
+            if (A.name == 'ETurret3')
                 TurretController.LinkedTurret = ETurret(A);
         }
 
@@ -61,7 +61,7 @@ function InitPattern()
         TurretController = Spawn(class'ETurretController', , , vect(-3200, 4800, 518), rot(0, 16384, 0));
         ForEach AllActors(class'Actor', A)
         {
-            if(A.name == 'ETurret4')
+            if (A.name == 'ETurret4')
                 TurretController.LinkedTurret = ETurret(A);
         }
 
@@ -69,7 +69,7 @@ function InitPattern()
         TurretController = Spawn(class'ETurretController', , , vect(-3350, 4300, 518), rot(0, 49152, 0));
         ForEach AllActors(class'Actor', A)
         {
-            if(A.name == 'ETurret5')
+            if (A.name == 'ETurret5')
                 TurretController.LinkedTurret = ETurret(A);
         }
 
@@ -102,44 +102,44 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'ELambert0')
+        if (P.name == 'ELambert0')
             Characters[1] = P.controller;
-        if(P.name == 'EAnna0')
+        if (P.name == 'EAnna0')
             Characters[2] = P.controller;
     }
 
     // Joshua - Adding texture to several meshes, disabling a trigger that caused game to crash
    ForEach AllActors(class'Actor', A)
     {
-        if(A.name == 'EEventTrigger8')
+        if (A.name == 'EEventTrigger8')
             A.SetCollision(False);
-        if(A.name == 'ESwingingDoor18')
+        if (A.name == 'ESwingingDoor18')
             A.Skins[0] = Texture(DynamicLoadObject("3_4_Severo_tex.Door07_SEV", class'Texture'));
-        if(A.name == 'StaticMeshActor946')
+        if (A.name == 'StaticMeshActor946')
             A.Skins[0] = Texture(DynamicLoadObject("3_4_Severo_tex.Door07_SEV", class'Texture'));
-        if(A.name == 'StaticMeshActor237') // Joshua - Hiding the placeholder Osprey
+        if (A.name == 'StaticMeshActor237') // Joshua - Hiding the placeholder Osprey
             A.bHidden = True;
-        if(A.name == 'ESBPatchActor2') 
+        if (A.name == 'ESBPatchActor2') 
             A.Texture = Shader(DynamicLoadObject("3_4_Severo_tex.Objects.plasticshd", class'Shader'));
-        if(A.name == 'StaticMeshActor273')
+        if (A.name == 'StaticMeshActor273')
             A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
-        if(A.name == 'StaticMeshActor393')
+        if (A.name == 'StaticMeshActor393')
             A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
-        if(A.name == 'StaticMeshActor1037')
+        if (A.name == 'StaticMeshActor1037')
             A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
-        if(A.name == 'StaticMeshActor1318')
+        if (A.name == 'StaticMeshActor1318')
             A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
-        if(A.name == 'StaticMeshActor1319')
+        if (A.name == 'StaticMeshActor1319')
             A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
-        if(A.name == 'StaticMeshActor1343')
+        if (A.name == 'StaticMeshActor1343')
             A.Skins[0] = Texture(DynamicLoadObject("EGO_Tex.GenTexGO.GO_laptop", class'Texture'));
-        if(A.name == 'StaticMeshActor1344')
+        if (A.name == 'StaticMeshActor1344')
             A.Skins[0] = Texture(DynamicLoadObject("EGO_Tex.GenTexGO.GO_laptop", class'Texture'));
-        if(A.name == 'EChair0') // Joshua - Hiding placeholder chair
+        if (A.name == 'EChair0') // Joshua - Hiding placeholder chair
             A.bHidden = True;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     FinalePlayed=0;

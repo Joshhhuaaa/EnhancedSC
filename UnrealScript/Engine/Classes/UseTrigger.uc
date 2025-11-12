@@ -6,11 +6,11 @@ class UseTrigger extends Triggers;
 
 var() localized string Message;
 
-function UsedBy( Pawn user )
+function UsedBy(Pawn user)
 {
 	TriggerEvent(Event, user, user);
 }
 
-function Touch( Actor Other )
+function Touch(Actor Other)
 {
 }

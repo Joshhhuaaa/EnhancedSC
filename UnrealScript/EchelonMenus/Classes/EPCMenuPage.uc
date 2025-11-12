@@ -15,12 +15,12 @@ function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
 {
 	super.WindowEvent(Msg, C, X, Y, Key);
 	
-	if(Msg==WM_KeyDown)
+	if (Msg == WM_KeyDown)
 	{
-		if(Key == GetPlayerOwner().Player.Console.EInputKey.IK_Escape)
+		if (Key == GetPlayerOwner().Player.Console.EInputKey.IK_Escape)
 		{
 			// No escape available is message box is poped up
-			if( EPCMainMenuRootWindow(Root).m_MessageBox == None )
+			if (EPCMainMenuRootWindow(Root).m_MessageBox == None)
 				EscapeMenu();
 		}
 	}

@@ -13,9 +13,9 @@ class P_3_2_1_NPP_ElevatorMonkeys extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('Damage');
@@ -34,13 +34,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EPowerPlantEmployee0')
+        if (P.name == 'EPowerPlantEmployee0')
             Characters[1] = P.controller;
-        if(P.name == 'EPowerPlantEmployee1')
+        if (P.name == 'EPowerPlantEmployee1')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

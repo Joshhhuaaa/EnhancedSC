@@ -13,9 +13,9 @@ class P_1_1_2_Tbilisi_FirstAlarm extends EPattern;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         default:
             break;
@@ -31,15 +31,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianCop4')
+        if (P.name == 'EGeorgianCop4')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianCop3')
+        if (P.name == 'EGeorgianCop3')
             Characters[2] = P.controller;
-        if(P.name == 'ERussianCivilian1')
+        if (P.name == 'ERussianCivilian1')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     }

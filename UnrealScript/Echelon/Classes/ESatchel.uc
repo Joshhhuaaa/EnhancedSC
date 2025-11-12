@@ -8,13 +8,13 @@ function PostBeginPlay()
 	Super.PostBeginPlay();
 
 	Holder = EPawn(Owner);
-	if( Holder == None )
+	if (Holder == None)
 		Log(self$" ERROR: Satchel owner should be an EPawn.");
 	else
 		Holder.AttachToBone(self, 'SatchelBone');
 }
 
-function bool NotifyPickup( Controller Instigator )
+function bool NotifyPickup(Controller Instigator)
 {
 	local array<EMemoryStick>	FoundMems;
 	local EInventoryItem		item;
@@ -22,22 +22,22 @@ function bool NotifyPickup( Controller Instigator )
 	local bool					bFound, bNotEmpty;
 
 	// Should not happen
-	if( Holder == None )
+	if (Holder == None)
 		return false;
 
 	// Distribute items to Instigator
-	for( i=0; i<Holder.SatchelItems.Length; i++ )
+	for (i = 0; i < Holder.SatchelItems.Length; i++)
 	{
-		if( Holder.SatchelItems[i] != None )
+		if (Holder.SatchelItems[i] != None)
 		{
 			bFound = true;
 
 			item = Spawn(Holder.SatchelItems[i], Instigator);
-			if( EPawn(Instigator.Pawn).FullInventory.CanAddItem(item) )
+			if (EPawn(Instigator.Pawn).FullInventory.CanAddItem(item))
 			{
 				item.NotifyPickup(Instigator);
 				// General msg already in notify pickup
-				//if( Instigator.bIsPlayer )
+				//if (Instigator.bIsPlayer)
 				//	EPlayerController(Instigator).SendTransmissionMessage(item.ItemName $ Localize("Transmission", "SatchelFind", "Localization\\HUD"), TR_INVENTORY);
 
 				Holder.SatchelItems[i] = None;
@@ -46,7 +46,7 @@ function bool NotifyPickup( Controller Instigator )
 			{
 				bNotEmpty = true;
 
-				if( Instigator.bIsPlayer )
+				if (Instigator.bIsPlayer)
 					EPlayerController(Instigator).SendTransmissionMessage(Localize("Transmission", "NoPickUp", "Localization\\HUD") $ Localize("InventoryItem", Item.ItemName, "Localization\\HUD"), TR_INVENTORY);
 
 				item.Destroy();
@@ -55,26 +55,26 @@ function bool NotifyPickup( Controller Instigator )
 	}
 
 	// Look for mem stick
-	if( EchelonLevelInfo(Level).GetMemoryStick(FoundMems, Holder) )
+	if (EchelonLevelInfo(Level).GetMemoryStick(FoundMems, Holder))
 	{
-		for( i=0; i<FoundMems.Length; i++ )
+		for (i = 0; i < FoundMems.Length; i++)
 		{
 			bFound = true;
 			Log("Adding memory information in "$Instigator.Pawn$"'s Inventory.");
 			FoundMems[i].NotifyPickup(Instigator);
 		}
 
-		if( EPlayerController(Instigator) != None )
+		if (EPlayerController(Instigator) != None)
 			EPlayerController(Instigator).SendTransmissionMessage(Localize("GameplayObject", string(FoundMems[0].ObjectName), "Localization\\HUD") $ 
 																  Localize("Transmission", "SatchelFind", "Localization\\HUD"), 
 																  TR_INVENTORY);
 	}
 
-	if( !bFound )
+	if (!bFound)
 		Log(self$" ERROR :  Satchel containing nothing");
 
 	// if not empty, assuming already in Flying
-	if( bNotEmpty )
+	if (bNotEmpty)
 		Throw(Instigator, Vect(0,0,0));
 	else
 		Destroy();
@@ -82,15 +82,15 @@ function bool NotifyPickup( Controller Instigator )
 	return true; // no go in hand
 }
 
-function TakeDamage( int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag )
+function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag)
 {
-	if(EventInstigator == Owner) // dont fly off if shot by owner
+	if (EventInstigator == Owner) // dont fly off if shot by owner
 		return;
 
 	SetOwner(None);
 	GotoState('s_Flying');
 
-	if( damageType == none )
+	if (damageType == none)
 		PlaySound(Sound'GunCommon.Play_Random_BulletHitBody', SLOT_SFX);
 
 	MakeNoise(200, NOISE_Ricochet);
@@ -103,7 +103,7 @@ function StoppedMoving()
 	// Set pickup interaction
 	Super.StoppedMoving();
 	// Set satchel priority to less than Npc interaction priority
-	if( Interaction != None && Holder != None && Holder.Interaction != None )
+	if (Interaction != None && Holder != None && Holder.Interaction != None)
 		Interaction.SetPriority(Holder.Interaction.iPriority - 1);
 }
 

@@ -19,14 +19,14 @@ var float					ScrollAmount;
 
 function Show(float P)
 {
-	if(P < 0) return;
-	if(P > MaxPos + MaxVisible) return;
+	if (P < 0) return;
+	if (P > MaxPos + MaxVisible) return;
 
-	while(P < Pos) 
-		if(!Scroll(-1))
+	while (P < Pos) 
+		if (!Scroll(-1))
 			break;
-	while(P - Pos > MaxVisible - 1)
-		if(!Scroll(1))
+	while (P - Pos > MaxVisible - 1)
+		if (!Scroll(1))
 			break;
 }
 
@@ -43,7 +43,7 @@ function bool Scroll(float Delta)
 
 function SetRange(float NewMinPos, float NewMaxPos, float NewMaxVisible, optional float NewScrollAmount)
 {
-	if(NewScrollAmount == 0)
+	if (NewScrollAmount == 0)
 		NewScrollAmount = 1;
 
 	ScrollAmount = NewScrollAmount;
@@ -56,34 +56,34 @@ function SetRange(float NewMinPos, float NewMaxPos, float NewMaxVisible, optiona
 
 function CheckRange() 
 {
-	if(Pos < MinPos)
+	if (Pos < MinPos)
 	{
 		Pos = MinPos;
 	}
 	else
 	{
-		if(Pos > MaxPos) Pos = MaxPos;
+		if (Pos > MaxPos) Pos = MaxPos;
 	}
 
 	bDisabled = (MaxPos <= MinPos);
 	LeftButton.bDisabled = bDisabled;
 	RightButton.bDisabled = bDisabled;
 
-	if(bDisabled)
+	if (bDisabled)
 	{
 		Pos = 0;
 	}
 	else
 	{
-		ThumbStart = ((Pos - MinPos) * (WinWidth - (2*LookAndFeel.Size_HScrollbarButtonWidth))) / (MaxPos + MaxVisible - MinPos);
-		ThumbWidth = (MaxVisible * (WinWidth - (2*LookAndFeel.Size_HScrollbarButtonWidth))) / (MaxPos + MaxVisible - MinPos);
+		ThumbStart = ((Pos - MinPos) * (WinWidth - (2 * LookAndFeel.Size_HScrollbarButtonWidth))) / (MaxPos + MaxVisible - MinPos);
+		ThumbWidth = (MaxVisible * (WinWidth - (2 * LookAndFeel.Size_HScrollbarButtonWidth))) / (MaxPos + MaxVisible - MinPos);
 
-		if(ThumbWidth < LookAndFeel.Size_HMinScrollbarWidth) 
+		if (ThumbWidth < LookAndFeel.Size_HMinScrollbarWidth) 
 			ThumbWidth = LookAndFeel.Size_HMinScrollbarWidth;
 		
-		if(ThumbWidth + ThumbStart > WinWidth - 2*LookAndFeel.Size_HScrollbarButtonWidth)
+		if (ThumbWidth + ThumbStart > WinWidth - 2 * LookAndFeel.Size_HScrollbarButtonWidth)
 		{
-			ThumbStart = WinWidth - 2*LookAndFeel.Size_HScrollbarButtonWidth - ThumbWidth;
+			ThumbStart = WinWidth - 2 * LookAndFeel.Size_HScrollbarButtonWidth - ThumbWidth;
 		}
 
 		ThumbStart = ThumbStart + LookAndFeel.Size_HScrollbarButtonWidth;
@@ -94,7 +94,7 @@ function Created()
 {
 	Super.Created();
 	LeftButton = UWindowSBLeftButton(CreateWindow(class'UWindowSBLeftButton', 0, 0, LookAndFeel.Size_HScrollbarButtonWidth, LookAndFeel.Size_HScrollbarHeight));
-	RightButton = UWindowSBRightButton(CreateWindow(class'UWindowSBRightButton', WinWidth-LookAndFeel.Size_HScrollbarButtonWidth, 0, LookAndFeel.Size_HScrollbarButtonWidth, LookAndFeel.Size_HScrollbarHeight));
+	RightButton = UWindowSBRightButton(CreateWindow(class'UWindowSBRightButton', WinWidth - LookAndFeel.Size_HScrollbarButtonWidth, 0, LookAndFeel.Size_HScrollbarButtonWidth, LookAndFeel.Size_HScrollbarHeight));
 }
 
 
@@ -122,22 +122,22 @@ function LMouseDown(float X, float Y)
 {
 	Super.LMouseDown(X, Y);
 
-	if(bDisabled) return;
+	if (bDisabled) return;
 
-	if(X < ThumbStart)
+	if (X < ThumbStart)
 	{
-		Scroll(-(MaxVisible-1));
+		Scroll(-(MaxVisible - 1));
 		NextClickTime = GetTime() + 0.5;
 		return;
 	}
-	if(X > ThumbStart + ThumbWidth)
+	if (X > ThumbStart + ThumbWidth)
 	{
-		Scroll(MaxVisible-1);
+		Scroll(MaxVisible - 1);
 		NextClickTime = GetTime() + 0.5;
 		return;
 	}
 
-	if((X >= ThumbStart) && (X <= ThumbStart + ThumbWidth))
+	if ((X >= ThumbStart) && (X <= ThumbStart + ThumbWidth))
 	{
 		DragX = X - ThumbStart;
 		bDragging = True;
@@ -152,31 +152,31 @@ function Tick(float Delta)
 	local bool bLeft, bRight;
 	local float X, Y;
 
-	if(bDragging) return;
+	if (bDragging) return;
 
 	bLeft = False;
 	bRight = False;
 
-	if(bMouseDown)
+	if (bMouseDown)
 	{
 		GetMouseXY(X, Y);
 		bLeft = (X < ThumbStart);
 		bRight = (X > ThumbStart + ThumbWidth);
 	}
 	
-	if(bMouseDown && (NextClickTime > 0) && (NextClickTime < GetTime())  && bLeft)
+	if (bMouseDown && (NextClickTime > 0) && (NextClickTime < GetTime())  && bLeft)
 	{
-		Scroll(-(MaxVisible-1));
+		Scroll(-(MaxVisible - 1));
 		NextClickTime = GetTime() + 0.1;
 	}
 
-	if(bMouseDown && (NextClickTime > 0) && (NextClickTime < GetTime())  && bRight)
+	if (bMouseDown && (NextClickTime > 0) && (NextClickTime < GetTime())  && bRight)
 	{
-		Scroll(MaxVisible-1);
+		Scroll(MaxVisible - 1);
 		NextClickTime = GetTime() + 0.1;
 	}
 
-	if(!bMouseDown || (!bLeft && !bRight))
+	if (!bMouseDown || (!bLeft && !bRight))
 	{
 		NextClickTime = 0;
 	}
@@ -184,14 +184,14 @@ function Tick(float Delta)
 
 function MouseMove(float X, float Y)
 {
-	if(bDragging && bMouseDown && !bDisabled)
+	if (bDragging && bMouseDown && !bDisabled)
 	{
-		while(X < (ThumbStart+DragX) && Pos > MinPos)
+		while (X < (ThumbStart + DragX) && Pos > MinPos)
 		{
 			Scroll(-1);
 		}
 
-		while(X > (ThumbStart+DragX) && Pos < MaxPos)
+		while (X > (ThumbStart + DragX) && Pos < MaxPos)
 		{
 			Scroll(1);
 		}	

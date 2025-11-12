@@ -17,9 +17,9 @@ var int Visit6;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('Death');
@@ -41,13 +41,13 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EWilkes0')
+        if (P.name == 'EWilkes0')
             Characters[1] = P.controller;
-        if(P.name == 'ELambert1')
+        if (P.name == 'ELambert1')
             Characters[2] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     PreVisit=0;

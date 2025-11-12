@@ -89,7 +89,7 @@ var float		ZoomLevel;
 var HUD	myHUD;	// heads up display info
 var transient int iErrorMsg;
 
-// Components ( inner classes )
+// Components (inner classes)
 var CheatManager			CheatManager;	// Object within playercontroller that manages "cheat" commands
 var class<CheatManager>		CheatClass;		// class of my CheatManager
 var transient PlayerInput	PlayerInput;	// Object within playercontroller that manages player input.
@@ -120,18 +120,18 @@ event PlayerGiven();
 //Init the controller after it is loaded from a load game.
 event InitLoadGame();
 
-event bool KeyEvent( string Key, EInputAction Action, FLOAT Delta )
+event bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 {
 	return myHUD.KeyEvent(Key, Action, Delta);
 }
 
 //clauzon 9/11/2002 To change key mapping in Menus
-event  RealKeyEvent( string RealKeyValue, EInputAction Action, FLOAT Delta)
+event  RealKeyEvent(string RealKeyValue, EInputAction Action, FLOAT Delta)
 {
-	myHUD.RealKeyEvent( RealKeyValue, Action, Delta);
+	myHUD.RealKeyEvent(RealKeyValue, Action, Delta);
 }
 
-function bool CanAddInteract( EInteractObject IntObj )
+function bool CanAddInteract(EInteractObject IntObj)
 {
 	return false;
 }
@@ -146,8 +146,8 @@ function UpdateCameraRotation(actor ViewActor);	// handle in EPlayerController
 // * ATurcotte (MTL) (13 juin 2001)
 // ***********************************************************************************************
 
-native function string ConsoleCommand( string Command );
-event string SendConsoleCommand( string Command )
+native function string ConsoleCommand(string Command);
+event string SendConsoleCommand(string Command)
 {
 	return ConsoleCommand(Command);
 }
@@ -163,11 +163,11 @@ native(4018) final function LoadKeyboard();
 // * END UBI MODIF 
 // ***********************************************************************************************
 native final function SetViewTarget(Actor NewViewTarget);
-native event ClientTravel( string URL, ETravelType TravelType, bool bItems );
+native event ClientTravel(string URL, ETravelType TravelType, bool bItems);
 native(546) final function UpdateURL(string NewOption, string NewValue, bool bSaveDefault);
 native final function string GetDefaultURL(string Option);
 // Execute a console command in the context of this player, then forward to Actor.ConsoleCommand.
-native function CopyToClipboard( string Text );
+native function CopyToClipboard(string Text);
 native function string PasteFromClipboard();
 
 event PostBeginPlay()
@@ -214,11 +214,11 @@ function Possess(Pawn aPawn)
 // unpossessed a pawn (not because pawn was killed)
 function UnPossess()
 {
-	if ( Pawn != None )
+	if (Pawn != None)
 	{
 		SetLocation(Pawn.Location);
 		Pawn.UnPossessed();
-		if ( Viewtarget == Pawn )
+		if (Viewtarget == Pawn)
 			SetViewTarget(self);
 	}
 	Pawn = None;
@@ -226,10 +226,10 @@ function UnPossess()
 
 event Destroyed()
 {
-	if ( Pawn != None )
+	if (Pawn != None)
 	{
 		Pawn.Health = 0;
-		Pawn.Died( self, None, Pawn.Location );
+		Pawn.Died(self, None, Pawn.Location);
 	}
 	Super.Destroyed();
 	myHud.Destroy();
@@ -267,7 +267,7 @@ exec function FOV(float F)
 
 function HandleWalking()
 {
-	if ( Pawn != None )
+	if (Pawn != None)
 		Pawn.SetWalking((bRun != 0) || (bDuck != 0)); 
 }
 
@@ -278,33 +278,33 @@ function HandleWalking()
 	 
 function damageAttitudeTo(pawn Other, float Damage, class<DamageType> damageType,optional int PillTag) //UBI MODIF - Additional parameter
 {
-	if ( (Other != None) && (Other != Pawn) && (Damage > 0) )
+	if ((Other != None) && (Other != Pawn) && (Damage > 0))
 		Enemy = Other;
 }
 
 exec function RestartLevel()
 {
-	ClientTravel( "?restart", TRAVEL_Relative, false );
+	ClientTravel("?restart", TRAVEL_Relative, false);
 }
 
-exec function LocalTravel( string URL )
+exec function LocalTravel(string URL)
 {
-	ClientTravel( URL, TRAVEL_Relative, true );
+	ClientTravel(URL, TRAVEL_Relative, true);
 }
 
-event bool SetPause( BOOL bPause )
+event bool SetPause(BOOL bPause)
 {
 	return Level.Game.SetPause(bPause, self);
 }
 
 exec function Pause()
 {
-	SetPause(Level.Pauser==None);
+	SetPause(Level.Pauser == None);
 }
 
 exec function Suicide()
 {
-	Pawn.KilledBy( None );
+	Pawn.KilledBy(None);
 }
 
 function Restart()
@@ -319,7 +319,7 @@ function EnterStartState();
 
 function ClientRestart()
 {
-	if ( Pawn == None )
+	if (Pawn == None)
 	{
 		GotoState('WaitingForPawn');
 		return;
@@ -329,7 +329,7 @@ function ClientRestart()
 	EnterStartState();	
 }
 
-event PlayerTick( float DeltaTime )
+event PlayerTick(float DeltaTime)
 {
 	PlayerInput.PlayerInput(DeltaTime);
 
@@ -340,19 +340,19 @@ event PlayerTick( float DeltaTime )
 
 function PlayerMove(float DeltaTime);
 
-event PlayerCalcView(out actor ViewActor, out vector CameraLocation, out rotator CameraRotation );
+event PlayerCalcView(out actor ViewActor, out vector CameraLocation, out rotator CameraRotation);
 
 // ***********************************************************************************************
 // * BEGIN UBI MODIF 
 // ***********************************************************************************************
-event PlayerCalcEye( out vector EyeLocation, out rotator EyeRotation )
+event PlayerCalcEye(out vector EyeLocation, out rotator EyeRotation)
 {
 	local vector X,Y,Z;
 	EyeRotation = Pawn.GetViewRotation();
 	GetAxes(EyeRotation, X,Y,Z);
 	EyeLocation = Pawn.Location;
-	EyeLocation.Z += Pawn.CollisionHeight*0.8;
-	EyeLocation += X*Pawn.CollisionRadius/2;
+	EyeLocation.Z += Pawn.CollisionHeight * 0.8;
+	EyeLocation += X * Pawn.CollisionRadius / 2;
 }
 // ***********************************************************************************************
 // * END UBI MODIF 

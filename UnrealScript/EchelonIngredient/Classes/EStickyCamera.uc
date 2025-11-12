@@ -33,15 +33,20 @@ state s_Camera
 		current_fov			= MaxFov;
 	}
 
-	function Tick( float DeltaTime )
+	function Tick(float DeltaTime)
 	{
 		local bool zoomed;
+		local float simDeltaTime;
+
+		// Joshua - Made zooming frame rate independent by using a consistent DeltaTime
+		simDeltaTime = 1.0f / 30.0f;
+
         // Night vision
-        if( Epc.bDPadLeft != 0 )
+        if (Epc.bDPadLeft != 0)
 		{
-			if( RenderingMode != REN_NightVision )
+			if (RenderingMode != REN_NightVision)
 			{
-				if( RenderingMode != REN_ThermalVision )
+				if (RenderingMode != REN_ThermalVision)
 					PlaySound(Sound'FisherEquipement.Play_GoggleRun', SLOT_SFX);
 				RenderingMode = REN_NightVision;
 			}
@@ -52,11 +57,11 @@ state s_Camera
 			Epc.bDPadLeft	= 0;
 		}
 		// Thermal vision
-		else if( Epc.bDPadRight != 0 )
+		else if (Epc.bDPadRight != 0)
 		{
-			if( RenderingMode != REN_ThermalVision )
+			if (RenderingMode != REN_ThermalVision)
 			{
-				if( RenderingMode != REN_NightVision )
+				if (RenderingMode != REN_NightVision)
 					PlaySound(Sound'FisherEquipement.Play_GoggleRun', SLOT_SFX);
 				RenderingMode = REN_ThermalVision;				
 			}
@@ -71,53 +76,53 @@ state s_Camera
 		}
 
 		// Joshua - Adding controller support for Sticky Camera (zoom in)
-        if( Epc.bDPadUp != 0 )
+        if (Epc.bDPadUp != 0)
 		{
-			current_fov -= DeltaTime * ZoomSpeed;
-			if ( current_fov >= MinFov )
+			current_fov -= simDeltaTime * ZoomSpeed;
+			if (current_fov >= MinFov)
 			{
 				zoomed = true;
 
 			}
 		}
 		// Joshua - Adding controller support for Sticky Camera (zoom out)
-		else if( Epc.bDPadDown != 0 )
+		else if (Epc.bDPadDown != 0)
 		{
-			current_fov += DeltaTime * ZoomSpeed;	    
-			if ( current_fov <= MaxFov )
+			current_fov += simDeltaTime * ZoomSpeed;	    
+			if (current_fov <= MaxFov)
 			{
 				zoomed = true;
 			}
 		}
 
 		// Zoom in
-        if( Epc.bIncSpeedPressed == true )
+        if (Epc.bIncSpeedPressed == true)
 		{
-			Epc.bIncSpeedPressed=false;
-			current_fov -= DeltaTime * ZoomSpeed;
-			if ( current_fov >= MinFov )
+			Epc.bIncSpeedPressed = false;
+			current_fov -= simDeltaTime * ZoomSpeed;
+			if (current_fov >= MinFov)
 			{
 				zoomed = true;
 
 			}
 		}
 		// Zoom out
-		else if( Epc.bDecSpeedPressed == true )
+		else if (Epc.bDecSpeedPressed == true)
 		{
-			Epc.bDecSpeedPressed=false;
-			current_fov += DeltaTime * ZoomSpeed;	    
-			if ( current_fov <= MaxFov )
+			Epc.bDecSpeedPressed = false;
+			current_fov += simDeltaTime * ZoomSpeed;	    
+			if (current_fov <= MaxFov)
 			{
 				zoomed = true;
 			}
 		}
 
-		if(zoomed)
+		if (zoomed)
 		{
 			if (!IsPlaying(Sound'FisherEquipement.Play_StickyCamZoom'))
 				PlaySound(Sound'FisherEquipement.Play_StickyCamZoom', SLOT_SFX);
 			Level.RumbleVibrate(0.07f, 0.5);
-			if(FRand() > 0.5)
+			if (FRand() > 0.5)
 				Epc.m_camera.Hit(60, 20000, true);
 			else
 				Epc.m_camera.Hit(-60, 20000, true);
@@ -126,7 +131,7 @@ state s_Camera
 		// Clamp fov and calculate zoom factor
         current_fov = FClamp(current_fov, MinFov, MaxFov);
 		MaxDamping = Damping;
-		MaxDamping /= (MaxFov)/current_fov;
+		MaxDamping /= (MaxFov) / current_fov;
 
 		// Modify vision fov
 		Epc.SetCameraFOV(self, current_fov);

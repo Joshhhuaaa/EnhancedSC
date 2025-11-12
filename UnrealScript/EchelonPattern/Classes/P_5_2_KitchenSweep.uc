@@ -14,9 +14,9 @@ var int Started;
 
 function EventCallBack(EAIEvent Event,Actor TriggerActor)
 {
-    if(!bDisableMessages)
+    if (!bDisableMessages)
     {
-        switch(Event.EventType)
+        switch (Event.EventType)
         {
         case AI_DEAD:
             EventJump('DropKit');
@@ -65,15 +65,15 @@ function InitPattern()
 
     ForEach DynamicActors(class'Pawn', P)
     {
-        if(P.name == 'EGeorgianPalaceGuard20')
+        if (P.name == 'EGeorgianPalaceGuard20')
             Characters[1] = P.controller;
-        if(P.name == 'EGeorgianPalaceGuard18')
+        if (P.name == 'EGeorgianPalaceGuard18')
             Characters[2] = P.controller;
-        if(P.name == 'EGeorgianPalaceGuard15')
+        if (P.name == 'EGeorgianPalaceGuard15')
             Characters[3] = P.controller;
     }
 
-    if( !bInit )
+    if (!bInit)
     {
     bInit=TRUE;
     Started=0;
