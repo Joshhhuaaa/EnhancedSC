@@ -1,11 +1,11 @@
-	//=============================================================================
+//=============================================================================
 // WindowConsole - console replacer to implement UWindow UI System
 //=============================================================================
 class WindowConsole extends Console;
 
 // Constants.
-const MaxLines=64;
-const TextMsgSize=128;
+const MaxLines = 64;
+const TextMsgSize = 128;
 
 // Variables.
 var viewport            Viewport;
@@ -51,7 +51,7 @@ var config EInputKey	UWindowKey;
 
 function ResetUWindow()
 {
-	if(Root != None)
+	if (Root != None)
 		Root.Close();
 	Root = None;
 	bCreatedRoot = False;
@@ -60,14 +60,14 @@ function ResetUWindow()
 	CloseUWindow();
 }
 
-function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
+function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 {
 	local byte k;
 	k = Key;
-	switch(Action)
+	switch (Action)
 	{
 	case IST_Press:
-		switch(k)
+		switch (k)
 		{
 		case EInputKey.IK_Escape:
 			log("WindowConsole.uc, KeyEvent, IST_Press IK_Escape");
@@ -83,7 +83,7 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 
 			bQuickKeyEnable = True;
 			LaunchUWindow();
-			if(!bShowConsole)
+			if (!bShowConsole)
 				ShowConsole();
 			return true;
 		}
@@ -98,7 +98,7 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 function ShowConsole()
 {
 	bShowConsole = true;
-//ORIGINAL UNREAL CONSOLE	if(bCreatedRoot)
+//ORIGINAL UNREAL CONSOLE	if (bCreatedRoot)
 //ORIGINAL UNREAL CONSOLE		ConsoleWindow.ShowWindow();
 }
 
@@ -110,15 +110,15 @@ function HideConsole()
 //ORIGINAL UNREAL CONSOLE		ConsoleWindow.HideWindow();
 }
 
-event Tick( float Delta )
+event Tick(float Delta)
 {
 	Super.Tick(Delta);
 
-	if(bLevelChange && Root != None && string(ViewportOwner.Actor.Level) != OldLevel)
+	if (bLevelChange && Root != None && string(ViewportOwner.Actor.Level) != OldLevel)
 	{
 		OldLevel = string(ViewportOwner.Actor.Level);
 		// if this is Entry, we could be falling through to another level...
-		if(ViewportOwner.Actor.Level != ViewportOwner.Actor.GetEntryLevel())
+		if (ViewportOwner.Actor.Level != ViewportOwner.Actor.GetEntryLevel())
 			bLevelChange = False;
 		Root.NotifyAfterLevelChange();
 	}
@@ -126,28 +126,28 @@ event Tick( float Delta )
 
 state UWindow
 {
-	event Tick( float Delta )
+	event Tick(float Delta)
 	{
 		Global.Tick(Delta);
-		if(Root != None)
+		if (Root != None)
 			Root.DoTick(Delta);
 	}
 
-	function PostRender( canvas Canvas )
+	function PostRender(Canvas Canvas)
 	{
-		if(Root != None)
+		if (Root != None)
 			Root.bUWindowActive = True;
-		RenderUWindow( Canvas );
+		RenderUWindow(Canvas);
 	}
 
-	function bool KeyType( EInputKey Key )
+	function bool KeyType(EInputKey Key)
 	{
 		if (Root != None)
 			Root.WindowEvent(WM_KeyType, None, MouseX, MouseY, Key);
 		return True;
 	}
 
-	function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
+	function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 	{
 		local byte k;
 		k = Key;
@@ -158,19 +158,19 @@ state UWindow
 			switch (k)
 			{
 			case EInputKey.IK_LeftMouse:
-				if(Root != None) 
+				if (Root != None) 
 					Root.WindowEvent(WM_LMouseUp, None, MouseX, MouseY, k);
 				break;
 			case EInputKey.IK_RightMouse:
-				if(Root != None)
+				if (Root != None)
 					Root.WindowEvent(WM_RMouseUp, None, MouseX, MouseY, k);
 				break;
 			case EInputKey.IK_MiddleMouse:
-				if(Root != None)
+				if (Root != None)
 					Root.WindowEvent(WM_MMouseUp, None, MouseX, MouseY, k);
 				break;
 			default:
-				if(Root != None)
+				if (Root != None)
 					Root.WindowEvent(WM_KeyUp, None, MouseX, MouseY, k);
 				break;
 			}
@@ -186,12 +186,12 @@ state UWindow
 				if (bShowConsole)
 				{
 					HideConsole();
-					if(bQuickKeyEnable)
+					if (bQuickKeyEnable)
 						CloseUWindow();
 				}
 				else
 				{
-					if(Root.bAllowConsole)
+					if (Root.bAllowConsole)
 						ShowConsole();
 					else
 						Root.WindowEvent(WM_KeyDown, None, MouseX, MouseY, k);
@@ -199,23 +199,23 @@ state UWindow
 				break;
 			case EInputKey.IK_Escape:
 				log("WindowConsole.uc, state UWindow, KeyEvent, IST_Press IK_Escape");
-				if(Root != None)
+				if (Root != None)
 					Root.CloseActiveWindow();
 				break;
 			case EInputKey.IK_LeftMouse:
-				if(Root != None)
+				if (Root != None)
 					Root.WindowEvent(WM_LMouseDown, None, MouseX, MouseY, k);
 				break;
 			case EInputKey.IK_RightMouse:
-				if(Root != None)
+				if (Root != None)
 					Root.WindowEvent(WM_RMouseDown, None, MouseX, MouseY, k);
 				break;
 			case EInputKey.IK_MiddleMouse:
-				if(Root != None)
+				if (Root != None)
 					Root.WindowEvent(WM_MMouseDown, None, MouseX, MouseY, k);
 				break;
 			default:
-				if(Root != None)
+				if (Root != None)
 					Root.WindowEvent(WM_KeyDown, None, MouseX, MouseY, k);
 				break;
 			}
@@ -224,10 +224,12 @@ state UWindow
 			switch (Key)
 			{
 			case IK_MouseX:
-				MouseX = MouseX + (MouseScale * Delta);
+				// Joshua - Made mouse sensitivity frame rate independent by using a consistent DeltaTime
+				MouseX = MouseX; // + (MouseScale * Delta);
 				break;
 			case IK_MouseY:
-				MouseY = MouseY - (MouseScale * Delta);
+				// Joshua - Made mouse sensitivity frame rate independent by using a consistent DeltaTime
+				MouseY = MouseY; // - (MouseScale * Delta);
 				break;					
 			}
 		default:
@@ -251,7 +253,7 @@ function LaunchUWindow()
 	bUWindowActive = !bQuickKeyEnable;
 	ViewportOwner.bShowWindowsMouse = True;
 
-	if(Root != None)
+	if (Root != None)
 		Root.bWindowVisible = True;
 
 	GotoState('UWindow');
@@ -259,14 +261,14 @@ function LaunchUWindow()
 
 function CloseUWindow()
 {
-	if(!bQuickKeyEnable && ViewportOwner.Actor != None)
-		ViewportOwner.Actor.SetPause( False );
+	if (!bQuickKeyEnable && ViewportOwner.Actor != None)
+		ViewportOwner.Actor.SetPause(False);
 
 	bQuickKeyEnable = False;
 	bUWindowActive = False;
 	ViewportOwner.bShowWindowsMouse = False;
 
-	if(Root != None)
+	if (Root != None)
 		Root.bWindowVisible = False;
 	GotoState('');
 	ViewportOwner.bSuspendPrecaching = False;
@@ -276,7 +278,7 @@ function CreateRootWindow(Canvas Canvas)
 {
 	local int i;
 
-	if(Canvas != None)
+	if (Canvas != None)
 	{
 		OldClipX = Canvas.ClipX;
 		OldClipY = Canvas.ClipY;
@@ -295,7 +297,7 @@ function CreateRootWindow(Canvas Canvas)
 	Root.WinTop = 0;
 	Root.WinLeft = 0;
 
-	if(Canvas != None)
+	if (Canvas != None)
 	{
 		Root.WinWidth = Canvas.ClipX / Root.GUIScale;
 		Root.WinHeight = Canvas.ClipY / Root.GUIScale;
@@ -324,17 +326,20 @@ function CreateRootWindow(Canvas Canvas)
 
 	// Create the console window.
 //ORIGINAL UNREAL CONSOLE	ConsoleWindow = UWindowConsoleWindow(Root.CreateWindow(ConsoleClass, 100, 100, 200, 200));
-	if(!bShowConsole)
+	if (!bShowConsole)
 		HideConsole();
 
 //ORIGINAL UNREAL CONSOLE	UWindowConsoleClientWindow(ConsoleWindow.ClientArea).TextArea.AddText(" ");
-//ORIGINAL UNREAL CONSOLE	for (I=0; I<4; I++)
+//ORIGINAL UNREAL CONSOLE	for (I = 0; I < 4; I++)
 //ORIGINAL UNREAL CONSOLE		UWindowConsoleClientWindow(ConsoleWindow.ClientArea).TextArea.AddText(MsgText[I]);
 }
 
-function RenderUWindow( canvas Canvas )
+function RenderUWindow(Canvas Canvas)
 {
 	local UWindowWindow NewFocusWindow;
+	local string CurrentRes;
+	local int i, ResX, ResY;
+	local float AspectRatio, MaxMouseX, MinMouseX;
 
 	Canvas.bNoSmooth = False;
 	Canvas.Z = 1;
@@ -347,20 +352,20 @@ function RenderUWindow( canvas Canvas )
     MouseScale = 0.6f;
 
 
-	if(ViewportOwner.bWindowsMouseAvailable && Root != None)
+	if (ViewportOwner.bWindowsMouseAvailable && Root != None)
 	{
-		MouseX = ViewportOwner.WindowsMouseX/Root.GUIScale;
-		MouseY = ViewportOwner.WindowsMouseY/Root.GUIScale;
+		MouseX = ViewportOwner.WindowsMouseX / Root.GUIScale;
+		MouseY = ViewportOwner.WindowsMouseY / Root.GUIScale;
 	}
 
-	if(!bCreatedRoot) 
+	if (!bCreatedRoot) 
 		CreateRootWindow(Canvas);
 
 	Root.bWindowVisible = True;
 	Root.bUWindowActive = bUWindowActive;
 	Root.bQuickKeyEnable = bQuickKeyEnable;
 
-	if(Canvas.ClipX != OldClipX || Canvas.ClipY != OldClipY)
+	if (Canvas.ClipX != OldClipX || Canvas.ClipY != OldClipY)
 	{
 		OldClipX = Canvas.ClipX;
 		OldClipY = Canvas.ClipY;
@@ -381,18 +386,39 @@ function RenderUWindow( canvas Canvas )
 		Root.Resized();
 	}
 
-	//if(MouseX > Root.WinWidth) MouseX = Root.WinWidth;
-	//if(MouseY > Root.WinHeight) MouseY = Root.WinHeight;
-    if(MouseX > 629) MouseX   = 629; //640-11 //clauzon fix, mouse out of window
-    if(MouseY > 461) MouseY   = 461; //480-19
-	if(MouseX < 0) MouseX = 0;
-	if(MouseY < 0) MouseY = 0;
-
+	//if (MouseX > Root.WinWidth) MouseX = Root.WinWidth;
+	//if (MouseY > Root.WinHeight) MouseY = Root.WinHeight;
+	
+	// Joshua - Dynamic mouse bounds based on aspect ratio
+	CurrentRes = ViewportOwner.Actor.ConsoleCommand("GETCURRENTRES");
+	i = InStr(CurrentRes, "x");
+	if(i > 0)
+	{
+		ResX = int(Left(CurrentRes, i)  );
+		ResY = int(Mid(CurrentRes, i + 1));
+		AspectRatio = float(ResX) / float(ResY);
+		
+		// 4:3: MinMouseX = 0, MaxMouseX = 629 (640 - 11)
+		// 16:9: MinMouseX = -106, MaxMouseX = 736
+		MaxMouseX = 629 + ((736 - 629) * (AspectRatio - (4.0 / 3.0)) / ((16.0 / 9.0) - (4.0 / 3.0)));
+		MinMouseX = 0 + ((-106 - 0) * (AspectRatio - (4.0 / 3.0)) / ((16.0 / 9.0) - (4.0 / 3.0)));
+	}
+	else 
+	{
+		// Couldn't parse GetCurrentRes call, using fallback values
+		MaxMouseX = 629;
+		MinMouseX = 0;
+	}
+		
+	if (MouseX > MaxMouseX) MouseX = MaxMouseX;
+	if (MouseY > 466) MouseY = 466; // Joshua - Increased from 461 to be closer to screen edge
+	if (MouseX < MinMouseX) MouseX = MinMouseX;
+	if (MouseY < 0) MouseY = 0;
 
 	// Check for keyboard focus
 	NewFocusWindow = Root.CheckKeyFocusWindow();
 
-	if(NewFocusWindow != Root.KeyFocusWindow)
+	if (NewFocusWindow != Root.KeyFocusWindow)
 	{
 		Root.KeyFocusWindow.KeyFocusExit();		
 		Root.KeyFocusWindow = NewFocusWindow;
@@ -407,14 +433,14 @@ function RenderUWindow( canvas Canvas )
 		Root.DrawMouse(Canvas);
 }
 
-event Message( coerce string Msg, float MsgLife )
+event Message(coerce string Msg, float MsgLife)
 {
-	Super.Message( Msg, MsgLife );
+	Super.Message(Msg, MsgLife);
 
-	if ( ViewportOwner.Actor == None )
+	if (ViewportOwner.Actor == None)
 		return;
 
-//ORIGINAL UNREAL CONSOLE	if( (Msg!="") && (ConsoleWindow != None) )
+//ORIGINAL UNREAL CONSOLE	if ((Msg!="") && (ConsoleWindow != None))
 //ORIGINAL UNREAL CONSOLE		UWindowConsoleClientWindow(ConsoleWindow.ClientArea).TextArea.AddText(MsgText[TopLine]);
 }
 
@@ -422,15 +448,15 @@ function UpdateHistory()
 {
 	// Update history buffer.
 	History[HistoryCur++ % MaxHistory] = TypedStr;
-	if( HistoryCur > HistoryBot )
+	if (HistoryCur > HistoryBot)
 		HistoryBot++;
-	if( HistoryCur - HistoryTop >= MaxHistory )
+	if (HistoryCur - HistoryTop >= MaxHistory)
 		HistoryTop = HistoryCur - MaxHistory + 1;
 }
 
 function HistoryUp()
 {
-	if( HistoryCur > HistoryTop )
+	if (HistoryCur > HistoryTop)
 	{
 		History[HistoryCur % MaxHistory] = TypedStr;
 		TypedStr = History[--HistoryCur % MaxHistory];
@@ -440,7 +466,7 @@ function HistoryUp()
 function HistoryDown()
 {
 	History[HistoryCur % MaxHistory] = TypedStr;
-	if( HistoryCur < HistoryBot )
+	if (HistoryCur < HistoryBot)
 		TypedStr = History[++HistoryCur % MaxHistory];
 	else
 		TypedStr="";
@@ -451,14 +477,14 @@ function NotifyLevelChange()
 //	Super.NotifyLevelChange();
     log("WindowConsole NotifyLevelChange");
 	bLevelChange = True;
-	if(Root != None)
+	if (Root != None)
 		Root.NotifyBeforeLevelChange();
 }
 
 function NotifyAfterLevelChange()
 {
     log("WindowConsole NotifyAfterLevelChange");
-	if(bLevelChange && Root != None)
+	if (bLevelChange && Root != None)
 	{	
 	    bLevelChange = False;
 		Root.NotifyAfterLevelChange();
