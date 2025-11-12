@@ -202,16 +202,21 @@ enum ETurnOffDistanceScale
 var(Enhanced) config ETurnOffDistanceScale TurnOffDistanceScale;
 
 // Native Variables
-var(Enhanced) config bool bEnableRumble; // Joshua - UseRumble in Engine.GameInfo  is now deprecated, this setting will now toggle rumble
+var(Enhanced) config bool bEnableRumble; // Joshua - UseRumble in Engine.GameInfo is now deprecated, this setting will now toggle rumble
 var(Enhanced) config bool bSkipIntroVideos;
 var(Enhanced) config bool bDisableMenuIdleTimer; // Joshua - Disables inactivity videos
-var(Enhanced) config bool bXboxFont;
+enum EFontType
+{
+    Font_PC,
+    Font_Xbox,
+    Font_GameCube
+};
+var(Enhanced) config EFontType FontType; // Joshua - Font type selection for different console platforms
 var(Enhanced) config bool bLODDistance;
 var(Enhanced) config bool bPauseOnFocusLoss;
 var(Enhanced) config bool bCheckForUpdates;
 var(Enhanced) config bool bSteamDeckMode; // Joshua - Block opening links on Steam Deck as it will crash the game
-
-//=============================================================================
+var(Enhanced) int bWidescreenMode; // Joshua - Widescreen mode via ThirteenAG Widescreen Fix
 
 //----------------------------------------[FSchelling - 15 June 2001]-----
 function PostBeginPlay()
@@ -223,7 +228,7 @@ function PostBeginPlay()
 	//load the the specific variable class
 	VarObjectClassName = class<EVariable>(DynamicLoadObject("EchelonPattern.VGame", class'Class'));
 
-	if(VarObjectClassName != None)
+	if (VarObjectClassName != None)
 	{
 		//spawn variable class
 		VarObject = spawn(VarObjectClassName,self);
@@ -234,7 +239,7 @@ function PostBeginPlay()
 	// set EchelonLevelInfo reference
 	ELevel = EchelonLevelInfo(Level);
 
-	if ( ELevel == none )
+	if (ELevel == none)
 		log("ECHELON LEVEL INFO COULD NOT BE SET");
 }
 
@@ -452,7 +457,7 @@ defaultproperties
     ESam_Vselka=SMT_Default
     TurnOffDistanceScale=TurnOffDistance_4x
     bEnableRumble=True
-    bXboxFont=true
+    FontType=Font_Xbox
     bLODDistance=true
     bPauseOnFocusLoss=true
     bCheckForUpdates=true
