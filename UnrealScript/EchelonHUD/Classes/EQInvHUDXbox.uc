@@ -30,6 +30,7 @@ var EchelonLevelInfo eLevel;
 var bool		bPreviousConfig;
 var bool        bStopDrawing;
 var int         iCurrentPos;
+var FLOAT       fCurrentPosAccum; // Joshua - Accumulates fractional progress for smooth animation at all framerates
 var FLOAT       fTimerValue;
 var bool        bStartTimer;
 var string      szAlarmText;
@@ -106,26 +107,32 @@ const ICON_SPACING              = 20;
 const FBLINKINGTIME	            = 0.45f;
 const MAX_BLINK_TIME	        = 120.0f;
 
-function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta );
+function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta);
 
 function Tick(float Delta)
-{	
+{
 	fTime += Delta;
 
-	if ( bStartTimer ) 
+	if (bStartTimer) 
 	{		
 		fTimerValue += Delta;
 	}
 
-	if ( bStopDrawing )
+	if (bStopDrawing)
 	{				
-		if ( iCurrentPos < 100 )
+		if (iCurrentPos < 100)
 		{
-			iCurrentPos +=  int(Delta * 100);			
+            // Joshua - Accumulates fractional progress for smooth animation at all framerates
+			fCurrentPosAccum += Delta * 100;
+			if (fCurrentPosAccum >= 1.0)
+			{
+				iCurrentPos += int(fCurrentPosAccum);
+				fCurrentPosAccum -= int(fCurrentPosAccum);
+			}
 		}	
 		else
 		{
-			if ( !bStartTimer)
+			if (!bStartTimer)
 			{				
 				bStartTimer = true;
 				fTimerValue = 0.0;
@@ -134,8 +141,14 @@ function Tick(float Delta)
 	}
 	else
 	{		
-		iCurrentPos -=  int(Delta * 100);
-		if (iCurrentPos < 0 ) iCurrentPos = 0;					
+		// Joshua - Accumulates fractional progress for smooth animation at all framerates
+		fCurrentPosAccum += Delta * 100;
+		if (fCurrentPosAccum >= 1.0)
+		{
+			iCurrentPos -= int(fCurrentPosAccum);
+			fCurrentPosAccum -= int(fCurrentPosAccum);
+		}
+		if (iCurrentPos < 0) iCurrentPos = 0;					
 	}	
 	
 	//Manage the blinking state		
@@ -143,11 +156,11 @@ function Tick(float Delta)
 
 	if (fBlinkTime >= FBLINKINGTIME)
 	{
-		fBlinkTime = fBlinkTime-FBLINKINGTIME;
+		fBlinkTime = fBlinkTime - FBLINKINGTIME;
 		if (bBlink)
-			bBlink=false;
+			bBlink = false;
 		else
-			bBlink=true;
+			bBlink = true;
 	}
 
 	// Joshua - Alarm blinking
@@ -197,11 +210,11 @@ function PostRender(Canvas C)
 		DrawStealthMeter(Canvas);
 
 	// Display current goal		
-	/*if ( Epc.CurrentGoal != "" && (Epc.CurrentGoalSection != "") && (Epc.CurrentGoalKey != "") && (Epc.CurrentGoalPackage != "") ) 
+	/*if (Epc.CurrentGoal != "" && (Epc.CurrentGoalSection != "") && (Epc.CurrentGoalKey != "") && (Epc.CurrentGoalPackage != "")) 
 	{
 		sCurrentGoal = Localize(Epc.CurrentGoalSection, Epc.CurrentGoalKey, Epc.CurrentGoalPackage);
 
-		if ( sCurrentGoal != "(null)" && Epc.bShowCurrentGoal && Epc.bShowHUD ) 
+		if (sCurrentGoal != "(null)" && Epc.bShowCurrentGoal && Epc.bShowHUD) 
 			DisplayCurrentGoal(Canvas);
 	}*/
 
@@ -250,8 +263,11 @@ function DrawAlarmBox(ECanvas Canvas)
     local string szText, sMaxAlarm;
     local int AlarmAlpha;
 
-    xPos = SCREEN_END_X - eGame.HUD_OFFSET_X - ITEMBOX_WIDTH_L - CURRENT_GOAL_WIDTH - 5;
-    yPos = SCREEN_END_Y - eGame.HUD_OFFSET_Y + 1 - ITEMBOX_HEIGHT_L - SPACE_EXTRA_GOAL;
+    if (eGame.bWidescreenMode > 0)
+        xPos = eGame.HUD_OFFSET_X + 16; // Aligned with ETimer.TIMER_X_OFFSET
+    else
+        xPos = SCREEN_END_X - eGame.HUD_OFFSET_X - ITEMBOX_WIDTH_L - CURRENT_GOAL_WIDTH - 5;
+	yPos = SCREEN_END_Y - eGame.HUD_OFFSET_Y + 1 - ITEMBOX_HEIGHT_L - SPACE_EXTRA_GOAL;
     
     yPos += 2; // 6 pixels from top of goal box
 
@@ -264,10 +280,15 @@ function DrawAlarmBox(ECanvas Canvas)
 
     szText = string(eLevel.AlarmStage) $ "/" $ sMaxAlarm;
 
-    //if ( eLevel.bIgnoreAlarmStage )
+    //if (eLevel.bIgnoreAlarmStage)
     //    szText = "-/--";
 
-    if (!Epc.bShowCurrentGoal || !bHasCurrentGoal)
+    // In widescreen mode, alarm should always be visible
+    if (eGame.bWidescreenMode > 0)
+    {
+        AlarmAlpha = 255;
+    }
+    else if (!Epc.bShowCurrentGoal || !bHasCurrentGoal)
     {
 		// Show Current Goal is disabled - always show alarm
         AlarmAlpha = 255;
@@ -312,8 +333,8 @@ function DrawAlarmBox(ECanvas Canvas)
     Canvas.DrawColor.A = AlarmAlpha;
     Canvas.Font = Canvas.ETextFont;
     Canvas.TextSize(szText, xLen, yLen);
-	if (Canvas.ETextFont == Font'ETextFontPC')
-		Canvas.SetPos(xPos + 26, yPos + 8); // Shifted for the PC font
+	if (Canvas.ETextFont == Font'ETextFontPC' || Canvas.ETextFont == Font'ETextFontGameCube')
+		Canvas.SetPos(xPos + 26, yPos + 8); // Shifted for the PC/GameCube font
 	else
 		Canvas.SetPos(xPos + 22, yPos + 8);
     Canvas.DrawTextAligned(szText, TXT_LEFT);
@@ -325,65 +346,65 @@ function DrawAlarmBox(ECanvas Canvas)
 //-------------------------------------------------------------------------------
 state s_QDisplayXbox
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta )
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
 		local EInventoryItem	Item;
 		local int nbItem, HoldCategory, HoldItem;
 
-		if ( Action == IST_Press )
+		if (Action == IST_Press)
 		{
 			// ignore Timer, reset it now.
-			if ( bPreviousConfig )
+			if (bPreviousConfig)
 				Timer();
 
 			HoldCategory = CurrentCategory;
 			HoldItem = CurrentItem;
 			
-			switch( Key )
+			switch (Key)
 			{
 			case "DPadUp" :
 			case "AnalogUp" :
 			case "MoveForward" :
 				// if over category name and not last item .. move to above item
-				if ( CurrentCategory != -1 )
-					CurrentItem = Min(CurrentItem+1, PCInventory.GetNbItemInCategory(GetCategory(CurrentCategory))-1);
+				if (CurrentCategory != -1)
+					CurrentItem = Min(CurrentItem + 1, PCInventory.GetNbItemInCategory(GetCategory(CurrentCategory)) - 1);
 				break;
 
 			case "DPadDown" :
 			case "AnalogDown" :
 			case "MoveBackward" :
-				if ( CurrentCategory != -1 )
-					CurrentItem = Max(CurrentItem-1, -1);
+				if (CurrentCategory != -1)
+					CurrentItem = Max(CurrentItem - 1, -1);
 				break;
 				
 			case "DPadRight" :
             case "AnalogRight" :
 			case "StrafeRight" :
-                if ( CurrentCategory > -1 )
+                if (CurrentCategory > -1)
                     CurrentCategory--;
 
-                while ( !IsCategoryAvailable(GetCategory(CurrentCategory)) && CurrentCategory > -1 )
+                while (!IsCategoryAvailable(GetCategory(CurrentCategory)) && CurrentCategory > -1)
 	    			CurrentCategory--;
 
-				CurrentItem = Min(HoldItem, PCInventory.GetNbItemInCategory(GetCategory(CurrentCategory))-1);
+				CurrentItem = Min(HoldItem, PCInventory.GetNbItemInCategory(GetCategory(CurrentCategory)) - 1);
 
 				break;
 			
 			case "DPadLeft" :
             case "AnalogLeft":
 			case "StrafeLeft" :
-				while ( true )
+				while (true)
 				{
 					CurrentCategory++;
-					if ( CurrentCategory <= PCInventory.GetNumberOfCategories()-1 && IsCategoryAvailable(GetCategory(CurrentCategory)) )
+					if (CurrentCategory <= PCInventory.GetNumberOfCategories() - 1 && IsCategoryAvailable(GetCategory(CurrentCategory)))
 						break;
-					else if ( CurrentCategory == PCInventory.GetNumberOfCategories() )
+					else if (CurrentCategory == PCInventory.GetNumberOfCategories())
 					{
 						CurrentCategory = HoldCategory;
 						break;
 					}
 				}
-				CurrentItem = Min(HoldItem, PCInventory.GetNbItemInCategory(GetCategory(CurrentCategory))-1);
+				CurrentItem = Min(HoldItem, PCInventory.GetNbItemInCategory(GetCategory(CurrentCategory)) - 1);
 
 				break;
 
@@ -398,8 +419,8 @@ state s_QDisplayXbox
 			}
 			
 			// If selection has changed, play sound
-			if ( HoldCategory != CurrentCategory || HoldItem != CurrentItem )
-				Epc.Pawn.playsound(Sound'Interface.Play_NavigatePackSac', SLOT_Interface);
+			if (HoldCategory != CurrentCategory || HoldItem != CurrentItem)
+				Epc.Pawn.PlaySound(Sound'Interface.Play_NavigatePackSac', SLOT_Interface);
 		}
     
     if (Key == "QuickInventory")
@@ -462,7 +483,7 @@ state s_QDisplayXbox
         local ECanvas			Canvas;
 
 		// draw normal view until timer expired
-		if ( bPreviousConfig )
+		if (bPreviousConfig)
 		{
 			Global.PostRender(C);
 			return;
@@ -473,7 +494,11 @@ state s_QDisplayXbox
         DrawHandItem(Canvas, SCREEN_END_Y - eGame.HUD_OFFSET_Y - ITEMBOX_HEIGHT_L  - TEXTBOX_HEIGHT - ITEMBOX_HEIGHT_B - SPACE_BETWEEN_BOX - SPACE_EXTRA_GOAL, true);
         DrawInfoBar(Canvas);
         DrawNavigationText(Canvas);
-        DrawCategory(Canvas);		
+        DrawCategory(Canvas);
+
+        // Joshua - Display alarms in widescreen mode even during inventory
+		if (eGame.bWidescreenMode > 0 && Epc.bShowHUD && Epc.bShowAlarms && !eLevel.bIgnoreAlarmStage)
+			DrawAlarmBox(Canvas);	
     }
 
 	function Timer()
@@ -481,7 +506,7 @@ state s_QDisplayXbox
 		//Log("QUICK"@Epc.CanAccessQuick()@!Epc.bStopInput);
 
 		// Get out!
-		if ( !Epc.CanAccessQuick() || Epc.bStopInput )
+		if (!Epc.CanAccessQuick() || Epc.bStopInput)
 		{
 			GotoState('');
 			Owner.GotoState(EchelonMainHud(Owner).RestoreState());
@@ -489,13 +514,17 @@ state s_QDisplayXbox
 		}
 
         if (Epc.bInteractionPause) // Joshua - Adding interaction pause option
+        {
 			Epc.SetPause(true);
+            Epc.PauseSound(); // Joshua - Pausing sounds here to prevent looping ones from constantly playing when opening inventory, like in Pandora Tomorrow
+        }
 		else
-			EPC.bStopInput = true;
+			Epc.bStopInput = true;
+
 		bPreviousConfig = false;
 
-		if ( !Epc.EPawn.IsPlaying(Sound'Interface.Play_OpenPackSac') )
-			Epc.EPawn.playsound(Sound'Interface.Play_OpenPackSac', SLOT_Interface);
+		if (!Epc.EPawn.IsPlaying(Sound'Interface.Play_OpenPackSac'))
+			Epc.EPawn.PlaySound(Sound'Interface.Play_OpenPackSac', SLOT_Interface);
 	}
 
 	function BeginState()
@@ -511,12 +540,15 @@ state s_QDisplayXbox
 	function EndState()
 	{
 		// Quick tap to get back to previous item
-		if ( !bPreviousConfig )
-			Epc.EPawn.playsound(Sound'Interface.Play_ClosePackSac', SLOT_Interface);
+		if (!bPreviousConfig)
+			Epc.EPawn.PlaySound(Sound'Interface.Play_ClosePackSac', SLOT_Interface);
 
         Epc.FakeMouseToggle(false);
         if (Epc.bInteractionPause) // Joshua - Adding interaction pause option
+        {
 			Epc.SetPause(false);
+            Epc.ResumeSound();
+        }
 		else
 			Epc.bStopInput = false;
 
@@ -540,17 +572,18 @@ state s_QDisplayXbox
 function PostBeginPlay()
 {
 	Epc = EPlayerController(Owner.Owner);
-	if ( Epc == None )
+	if (Epc == None)
 		Log("ERROR: Getting PlayerController in quick inv");
 
 	PCInventory = Epc.ePawn.FullInventory;
-	if ( PCInventory == None )
+	if (PCInventory == None)
 		Log("Problem to get player inventory in Quick inv. HUD");
 
     eGame  = EchelonGameInfo(Level.Game);
     eLevel = EchelonLevelInfo(Level);
 	bStopDrawing = false;
 	iCurrentPos = 0;
+    fCurrentPosAccum = 0.0; // Joshua - Accumulates fractional progress for smooth animation at all framerates
 	fTimerValue = 0.0f;
 	bStartTimer = false;
 	iAlarmIndex = 0;
@@ -572,7 +605,7 @@ function PostBeginPlay()
 -----------------------------------------------------------------------------*/
 function eInvCategory GetCategory(int c)
 {
-	switch(c)
+	switch (c)
 	{
 		case 0: return CAT_MAINGUN;
 		case 1: return CAT_GADGETS;
@@ -587,14 +620,14 @@ function eInvCategory GetCategory(int c)
 
  Description:   -
 ------------------------------------------------------------------------------*/
-function bool IsCategoryAvailable( eInvCategory cat )
+function bool IsCategoryAvailable(eInvCategory cat)
 {
     if (PCInventory.GetNbItemInCategory(cat) == 0)
         return false;
 
-    if ( cat != CAT_MAINGUN && (Epc.GetStateName() == 's_FirstPersonTargeting' ||
+    if (cat != CAT_MAINGUN && (Epc.GetStateName() == 's_FirstPersonTargeting' ||
 							   Epc.GetStateName() == 's_RappellingTargeting' ||
-							   Epc.GetStateName() == 's_SplitTargeting') )
+							   Epc.GetStateName() == 's_SplitTargeting'))
         return false;
 
     return true;
@@ -605,7 +638,7 @@ function bool IsCategoryAvailable( eInvCategory cat )
 
  Description:   -
 -----------------------------------------------------------------------------*/
-function WriteText(ECanvas Canvas, float X, float Y, coerce string t, Color c )
+function WriteText(ECanvas Canvas, float X, float Y, coerce string t, Color c)
 {
 	Canvas.DrawColor = c;
 	Canvas.SetPos(X, Y);
@@ -633,8 +666,8 @@ function DrawStealthMeter(ECanvas Canvas)
 
     // METER BORDERS //
     
-    xPos += (ITEMBOX_WIDTH_L - STEALTH_METER_WIDTH)/2;
-    yPos += (ITEMBOX_HEIGHT_L - STEALTH_METER_HEIGHT)/2 + 1;
+    xPos += (ITEMBOX_WIDTH_L - STEALTH_METER_WIDTH) / 2;
+    yPos += (ITEMBOX_HEIGHT_L - STEALTH_METER_HEIGHT) / 2 + 1;
 
     Canvas.DrawLine(xPos + 1, yPos, STEALTH_METER_WIDTH - 2, 1, Canvas.black, BLACK_BORDER_ALPHA, eLevel.TGAME);
     Canvas.DrawLine(xPos + 1, yPos + STEALTH_METER_HEIGHT - 1, STEALTH_METER_WIDTH - 2, 1, Canvas.black, BLACK_BORDER_ALPHA, eLevel.TGAME);
@@ -646,13 +679,13 @@ function DrawStealthMeter(ECanvas Canvas)
     Canvas.DrawLine(xPos + STEALTH_METER_WIDTH - 2, yPos + 1, 1, 1, Canvas.black, BLACK_BORDER_ALPHA, eLevel.TGAME);
     Canvas.DrawLine(xPos + STEALTH_METER_WIDTH - 2, yPos + STEALTH_METER_HEIGHT - 2, 1, 1, Canvas.black, BLACK_BORDER_ALPHA, eLevel.TGAME);
 
-    stealStatusWidth  = (STEALTH_METER_WIDTH - 2 - (NB_STEALTH_STATUS-1)) / NB_STEALTH_STATUS;
-    stealStatusHeight = (STEALTH_METER_HEIGHT - 3)/2;
+    stealStatusWidth  = (STEALTH_METER_WIDTH - 2 - (NB_STEALTH_STATUS - 1)) / NB_STEALTH_STATUS;
+    stealStatusHeight = (STEALTH_METER_HEIGHT - 3) / 2;
     
     for (i = 0; i < NB_STEALTH_STATUS - 1; i++)
     {
-        Canvas.DrawLine(xPos + (i+1) * (stealStatusWidth+1), yPos + 1, 1, stealStatusHeight, Canvas.black, BLACK_BORDER_ALPHA, eLevel.TGAME);
-        Canvas.DrawLine(xPos + (i+1) * (stealStatusWidth+1), yPos + STEALTH_METER_HEIGHT - stealStatusHeight - 1, 1, stealStatusHeight, Canvas.black, BLACK_BORDER_ALPHA, eLevel.TGAME);
+        Canvas.DrawLine(xPos + (i + 1) * (stealStatusWidth + 1), yPos + 1, 1, stealStatusHeight, Canvas.black, BLACK_BORDER_ALPHA, eLevel.TGAME);
+        Canvas.DrawLine(xPos + (i + 1) * (stealStatusWidth + 1), yPos + STEALTH_METER_HEIGHT - stealStatusHeight - 1, 1, stealStatusHeight, Canvas.black, BLACK_BORDER_ALPHA, eLevel.TGAME);
     }
     
     Canvas.SetDrawColor(128,128,128,BLACK_BORDER_ALPHA);
@@ -810,7 +843,7 @@ function DrawRateOfFire(ECanvas Canvas)
 
        for (j = 0; j < 5; j++)
        {
-            Canvas.SetPos(xPos + 54 + j*5, yPos + 8);
+            Canvas.SetPos(xPos + 54 + j * 5, yPos + 8);
 			Canvas.Style = ERenderStyle.STY_Alpha;
             eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_fire, 5, 8, 0, 0, 5, 8);
 			Canvas.Style = ERenderStyle.STY_Normal;
@@ -818,15 +851,15 @@ function DrawRateOfFire(ECanvas Canvas)
     }
 }
 
-function GetWeaponInfo( EWeapon Weapon, out int nbAmmo, out int nbClip )
+function GetWeaponInfo(EWeapon Weapon, out int nbAmmo, out int nbClip)
 {
 	local float f;
 
-	nbAmmo = int(float(Weapon.ClipAmmo)/float(Weapon.ClipMaxAmmo)*10.0f + 0.99f);
+	nbAmmo = int(float(Weapon.ClipAmmo) / float(Weapon.ClipMaxAmmo) * 10.0f + 0.99f);
 
-    nbClip = (Weapon.Ammo - Weapon.ClipAmmo)/Weapon.ClipMaxAmmo;
-	f = float(Weapon.Ammo - Weapon.ClipAmmo)/Weapon.ClipMaxAmmo;
-	if ( f - nbClip > 0 )
+    nbClip = (Weapon.Ammo - Weapon.ClipAmmo) / Weapon.ClipMaxAmmo;
+	f = float(Weapon.Ammo - Weapon.ClipAmmo) / Weapon.ClipMaxAmmo;
+	if (f - nbClip > 0)
 		nbClip++;
 }
 
@@ -883,7 +916,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
 
     // WEAPON DISPLAY //
     Weapon = EWeapon(Item);
-	if ( Weapon != None )
+	if (Weapon != None)
 	{
         Canvas.DrawColor = Canvas.TextBlack;
         Canvas.SetPos(xPos + offset + 36, yPos + 29);
@@ -897,7 +930,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
 		{
             Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
 
-			Canvas.SetPos(xPos + offset + 38 + i*5, yPos + 35);
+			Canvas.SetPos(xPos + offset + 38 + i * 5, yPos + 35);
 			Canvas.Style = ERenderStyle.STY_Alpha;
             eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sl_stroke, 3, 1, 0, 0, 1, 1);
 			Canvas.Style = ERenderStyle.STY_Normal;
@@ -907,7 +940,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
             else
                 Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
 
-            Canvas.SetPos(xPos + offset + 38 + i*5, yPos + 37);
+            Canvas.SetPos(xPos + offset + 38 + i * 5, yPos + 37);
 			Canvas.Style = ERenderStyle.STY_Alpha;
             eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bullet, 3, 5, 0, 0, 3, 5);
 			Canvas.Style = ERenderStyle.STY_Normal;
@@ -916,7 +949,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
             {
                 Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
 
-                Canvas.SetPos(xPos + offset + 38 + i*5, yPos + 30);
+                Canvas.SetPos(xPos + offset + 38 + i * 5, yPos + 30);
 				Canvas.Style = ERenderStyle.STY_Alpha;
                 eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_clip, 3, 4, 0, 0, 3, 4);
 				Canvas.Style = ERenderStyle.STY_Normal;
@@ -937,7 +970,7 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
             {
                 szText = string(SecAmmo.Quantity);
                 Canvas.TextSize(szText, xLen, yLen);
-                WriteText(Canvas, xPos + 3 + SEC_AMMO_WIDTH/2 - xLen/2, yPos + 30, szText, Canvas.TextBlack);
+                WriteText(Canvas, xPos + 3 + SEC_AMMO_WIDTH / 2 - xLen / 2, yPos + 30, szText, Canvas.TextBlack);
             }
 
             // DRAW ICON //
@@ -950,19 +983,19 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
             Canvas.Style = ERenderStyle.STY_Normal;
         }
     }
-    else if ( Item != None && Item.MaxQuantity > 1 )
+    else if (Item != None && Item.MaxQuantity > 1)
     {		
-		WriteText(Canvas, xPos+70, yPos+9, "x", Canvas.TextBlack);
+		WriteText(Canvas, xPos + 70, yPos + 9, "x", Canvas.TextBlack);
 
         if (Item.Quantity < 10)
         {
             if (Item.Quantity == 1)
-                WriteText(Canvas, xPos+69, yPos+24, Item.Quantity, Canvas.TextBlack);
+                WriteText(Canvas, xPos + 69, yPos + 24, Item.Quantity, Canvas.TextBlack);
             else
-                WriteText(Canvas, xPos+70, yPos+24, Item.Quantity, Canvas.TextBlack);
+                WriteText(Canvas, xPos + 70, yPos + 24, Item.Quantity, Canvas.TextBlack);
         }
         else
-            WriteText(Canvas, xPos+65, yPos+24, Item.Quantity, Canvas.TextBlack);
+            WriteText(Canvas, xPos + 65, yPos + 24, Item.Quantity, Canvas.TextBlack);
     }
 
     // NOT SELECTED FILTER //
@@ -995,28 +1028,28 @@ function DrawHandItem(ECanvas Canvas, int yPos, bool bDisplayState)
 
  Description:   -
 -----------------------------------------------------------------------------*/
-function DrawInfoBar(Ecanvas Canvas)
+function DrawInfoBar(ECanvas Canvas)
 {
 	local EInventoryItem Item;
     local int xPos, yPos, nbCat, width;
 
 	nbCat = PCInventory.GetNumberOfCategories();
-	width = FIRSTCAT_OFFSET + nbCat * ITEMBOX_WIDTH_L + (nbCat-1) * SPACE_BETWEEN_CAT;
-    xPos = SCREEN_END_X - eGame.HUD_OFFSET_X - FIRSTCAT_OFFSET - nbCat * ITEMBOX_WIDTH_L - (nbCat-1) * SPACE_BETWEEN_CAT;
+	width = FIRSTCAT_OFFSET + nbCat * ITEMBOX_WIDTH_L + (nbCat - 1) * SPACE_BETWEEN_CAT;
+    xPos = SCREEN_END_X - eGame.HUD_OFFSET_X - FIRSTCAT_OFFSET - nbCat * ITEMBOX_WIDTH_L - (nbCat - 1) * SPACE_BETWEEN_CAT;
     yPos = SCREEN_END_Y - eGame.HUD_OFFSET_Y - ITEMBOX_HEIGHT_L - SPACE_EXTRA_GOAL;
 
 	DrawBoxBorders(Canvas, xPos, yPos, width, ITEMBOX_HEIGHT_L);
 
     // No current cursor over item
-	if ( CurrentCategory == -1 || CurrentItem == -1 )
+	if (CurrentCategory == -1 || CurrentItem == -1)
 	{
 		Canvas.Font = Canvas.ETextFont;
 		Canvas.DrawColor = Canvas.TextBlack;		
 		Canvas.SetPos(xPos + width - 15, yPos + 5);	
 		
-		if ( (Epc.CurrentGoalSection != "") && (Epc.CurrentGoalKey != "") && (Epc.CurrentGoalPackage != "") )
+		if ((Epc.CurrentGoalSection != "") && (Epc.CurrentGoalKey != "") && (Epc.CurrentGoalPackage != ""))
 		{
-			if ( Localize(Epc.CurrentGoalSection, Epc.CurrentGoalKey, Epc.CurrentGoalPackage) != "(null)" )
+			if (Localize(Epc.CurrentGoalSection, Epc.CurrentGoalKey, Epc.CurrentGoalPackage) != "(null)")
 			{
 				Canvas.DrawTextRightAligned(Localize(Epc.CurrentGoalSection, Epc.CurrentGoalKey, Epc.CurrentGoalPackage));		
 			}			
@@ -1028,7 +1061,7 @@ function DrawInfoBar(Ecanvas Canvas)
     Canvas.Font = Canvas.ETextFont;
     Canvas.DrawColor = Canvas.TextBlack;
 
-	Item = PCInventory.GetItemInCategory(GetCategory(CurrentCategory), CurrentItem+1);
+	Item = PCInventory.GetItemInCategory(GetCategory(CurrentCategory), CurrentItem + 1);
     if (Item != None)
     {
         Canvas.SetPos(xPos + width - 15, yPos + 5);
@@ -1042,7 +1075,7 @@ function DrawInfoBar(Ecanvas Canvas)
 
  Description:   -
 -----------------------------------------------------------------------------*/
-function DrawNavigationText(Ecanvas Canvas)
+function DrawNavigationText(ECanvas Canvas)
 {
     local int xPos, yPos, width, j, hold, nbCat;
     local float xLen, yLen;
@@ -1056,8 +1089,8 @@ function DrawNavigationText(Ecanvas Canvas)
 
     nbCat = PCInventory.GetNumberOfCategories();
 
-    width = FIRSTCAT_OFFSET + nbCat * ITEMBOX_WIDTH_L + (nbCat-1) * SPACE_BETWEEN_CAT;
-    xPos  = SCREEN_END_X - eGame.HUD_OFFSET_X - FIRSTCAT_OFFSET - nbCat * ITEMBOX_WIDTH_L - (nbCat-1) * SPACE_BETWEEN_CAT;
+    width = FIRSTCAT_OFFSET + nbCat * ITEMBOX_WIDTH_L + (nbCat - 1) * SPACE_BETWEEN_CAT;
+    xPos  = SCREEN_END_X - eGame.HUD_OFFSET_X - FIRSTCAT_OFFSET - nbCat * ITEMBOX_WIDTH_L - (nbCat - 1) * SPACE_BETWEEN_CAT;
     yPos = SCREEN_END_Y - eGame.HUD_OFFSET_Y - ITEMBOX_HEIGHT_L - (TEXTBOX_HEIGHT + SPACE_BETWEEN_BOX) - SPACE_EXTRA_GOAL;
 
     DrawBoxBorders(Canvas, xPos, yPos, width, TEXTBOX_HEIGHT, true);
@@ -1068,14 +1101,14 @@ function DrawNavigationText(Ecanvas Canvas)
 	
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sl_stroke, width - 9, TEXTBOX_HEIGHT - 7, 0, 0, 1, 1);
 
-    if ( CurrentCategory == -1 )
+    if (CurrentCategory == -1)
         drawColor = TextSelectedColor;
     else
         drawColor = TextColor;
 
     szText = PCInventory.GetPackageName();
     Canvas.TextSize(szText, xLen, yLen);
-    WriteText(Canvas, xPos + width - ITEMBOX_WIDTH_L/2 - xLen/2, yPos + 4, szText, drawColor);
+    WriteText(Canvas, xPos + width - ITEMBOX_WIDTH_L / 2 - xLen / 2, yPos + 4, szText, drawColor);
 
     hold = CurrentCategory;
     for (j = 0; j < nbCat; j++)
@@ -1094,7 +1127,7 @@ function DrawNavigationText(Ecanvas Canvas)
             drawColor = TextDisabledColor;
 
         Canvas.TextSize(szText, xLen, yLen);
-        WriteText(Canvas, xPos + width - FIRSTCAT_OFFSET - j*(ITEMBOX_WIDTH_L+SPACE_BETWEEN_CAT) - ITEMBOX_WIDTH_L/2 - xLen/2, yPos + 4, szText, drawColor);
+        WriteText(Canvas, xPos + width - FIRSTCAT_OFFSET - j * (ITEMBOX_WIDTH_L + SPACE_BETWEEN_CAT) - ITEMBOX_WIDTH_L / 2 - xLen / 2, yPos + 4, szText, drawColor);
     }
     CurrentCategory = hold;
 }
@@ -1140,14 +1173,14 @@ function DrawBoxBorders(ECanvas Canvas, int xPos, int yPos, int width, int heigh
     Canvas.SetPos(xPos + width - 5, yPos + 7);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v, 5, height - 11, 5, 0, -5, 1);
 
-	if ( bNoDrawBackGround )
+	if (bNoDrawBackGround)
 		return;
 
     // OPACITY BACKGROUND //
     Canvas.DrawLine(xPos + 5, yPos + 6, width - 10, height - 10, Canvas.white, -1, eLevel.TGAME);
     Canvas.DrawRectangle(xPos + 5, yPos + 6, width - 10, height - 10, 1, Canvas.black, INSIDE_BORDER_ALPHA, eLevel.TGAME);
 
-	if ( bOpacityOnly )
+	if (bOpacityOnly)
 		return;
 	
     // TRANSPARENCY BACKGROUND //
@@ -1182,7 +1215,7 @@ function DrawCategory(ECanvas Canvas)
     height = nbItems * ITEMBOX_HEIGHT_CAT + (nbItems - 1) * SEPARATOR_HEIGTHT + 12;
 
 	Canvas.Style = ERenderStyle.STY_Alpha;
-	DrawBoxBorders(Canvas, xPos, yPos-height, ITEMBOX_WIDTH_L, height);
+	DrawBoxBorders(Canvas, xPos, yPos - height, ITEMBOX_WIDTH_L, height);
 	Canvas.Style = ERenderStyle.STY_Normal;
 
     // SEPARATOR //
@@ -1196,7 +1229,7 @@ function DrawCategory(ECanvas Canvas)
         Canvas.DrawLine(xPos + 6, yPos - ITEMBOX_HEIGHT_CAT * i - SEPARATOR_HEIGTHT * i - 6, 1, 3, Canvas.black, INSIDE_BORDER_ALPHA, eLevel.TGAME);
         Canvas.DrawLine(xPos + ITEMBOX_WIDTH_L - 7, yPos - ITEMBOX_HEIGHT_CAT * i - SEPARATOR_HEIGTHT * i - 6, 1, 3, Canvas.black, INSIDE_BORDER_ALPHA, eLevel.TGAME);
 
-        if (i-1 == CurrentItem)
+        if (i - 1 == CurrentItem)
         {
             xLightPos = xPos + 5;
             yLightPos = yPos - ITEMBOX_HEIGHT_CAT * i - SEPARATOR_HEIGTHT * i - 4;			
@@ -1210,7 +1243,7 @@ function DrawCategory(ECanvas Canvas)
     }
 
     // LIGHT //
-	if ( CurrentItem > -1 )
+	if (CurrentItem > -1)
 	{
 		Canvas.SetDrawColor(128,128,128,128);
 		Canvas.SetPos(xLightPos, yLightPos);
@@ -1237,7 +1270,7 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
     Canvas.Font = Canvas.ETextFont;
 
     MainGun = EMainGun(PCInventory.GetSelectedItem());
-    if ( Item == PCInventory.GetSelectedItem() || (MainGun != None && MainGun.SecondaryAmmo != None && Item == MainGun.SecondaryAmmo) )
+    if (Item == PCInventory.GetSelectedItem() || (MainGun != None && MainGun.SecondaryAmmo != None && Item == MainGun.SecondaryAmmo))
        bEquipedItem = true;
     else
        bEquipedItem = false;
@@ -1255,7 +1288,7 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
 
       // WEAPON DISPLAY //
     Weapon = EWeapon(Item);
-	if ( Weapon != None )
+	if (Weapon != None)
 	{        
         Canvas.DrawColor = Canvas.TextBlack;
 
@@ -1274,7 +1307,7 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
             else
                 Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
 
-			Canvas.SetPos(xPos + 33 + i*5, yPos + 31);
+			Canvas.SetPos(xPos + 33 + i * 5, yPos + 31);
 			Canvas.Style = ERenderStyle.STY_Alpha;
             eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sl_stroke, 3, 1, 0, 0, 1, 1);
 			Canvas.Style = ERenderStyle.STY_Normal;
@@ -1294,7 +1327,7 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
                     Canvas.DrawColor.A = INSIDE_BORDER_ALPHA;
             }
 
-            Canvas.SetPos(xPos + 33 + i*5, yPos + 33);
+            Canvas.SetPos(xPos + 33 + i * 5, yPos + 33);
 			Canvas.Style = ERenderStyle.STY_Alpha;
             eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bullet, 3, 5, 0, 0, 3, 5);
 			Canvas.Style = ERenderStyle.STY_Normal;
@@ -1306,28 +1339,28 @@ function DrawItem(ECanvas Canvas, int xPos, int yPos, EInventoryItem Item, bool 
                 else
                     Canvas.DrawColor.A = BLACK_BORDER_ALPHA;
 
-                Canvas.SetPos(xPos + 33 + i*5, yPos + 26);
+                Canvas.SetPos(xPos + 33 + i * 5, yPos + 26);
 				Canvas.Style = ERenderStyle.STY_Alpha;
                 eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_clip, 3, 4, 0, 0, 3, 4);
 				Canvas.Style = ERenderStyle.STY_Normal;
             }
 		}
     }
-	else if ( Item != None && Item.MaxQuantity > 1 )
+	else if (Item != None && Item.MaxQuantity > 1)
     {        
         txtColor = Canvas.TextBlack;
 
-		WriteText(Canvas, xPos+65, yPos+5, "x", txtColor);
+		WriteText(Canvas, xPos + 65, yPos + 5, "x", txtColor);
 
         if (Item.Quantity < 10)
         {
             if (Item.Quantity == 1)
-                WriteText(Canvas, xPos+64, yPos+20, Item.Quantity, txtColor);
+                WriteText(Canvas, xPos + 64, yPos + 20, Item.Quantity, txtColor);
             else
-                WriteText(Canvas, xPos+65, yPos+20, Item.Quantity, txtColor);
+                WriteText(Canvas, xPos + 65, yPos + 20, Item.Quantity, txtColor);
         }
         else
-            WriteText(Canvas, xPos+60, yPos+20, Item.Quantity, txtColor);
+            WriteText(Canvas, xPos + 60, yPos + 20, Item.Quantity, txtColor);
     }
 
     if (!bSelected)
@@ -1358,14 +1391,14 @@ function DisplayCurrentGoal(ECanvas Canvas)
     yPos = SCREEN_END_Y - eGame.HUD_OFFSET_Y + 1 - ITEMBOX_HEIGHT_L - SPACE_EXTRA_GOAL;    
 
 
-	if ( VSize(Epc.ePawn.Velocity) != 0.0 ) 	
+	if (VSize(Epc.ePawn.Velocity) != 0.0) 	
 	{
 		fTimerValue = 0.0;
 		bStopDrawing = true;									
 	}
 	else
 	{		
-		if ( bStartTimer && (fTimerValue > fHIDE_TIME) ) 
+		if (bStartTimer && (fTimerValue > fHIDE_TIME)) 
 		{			
 			bStopDrawing = false;	
 			bStartTimer = false;							
@@ -1376,7 +1409,7 @@ function DisplayCurrentGoal(ECanvas Canvas)
 	
 
     Canvas.SetDrawColor(128,128,128);
-	Canvas.Style=ERenderStyle.STY_Alpha;       		
+	Canvas.Style = ERenderStyle.STY_Alpha;       		
 
 	// Draw the second box with the interaction messages	
 	// TOP LEFT CORNER 
@@ -1410,22 +1443,36 @@ function DisplayCurrentGoal(ECanvas Canvas)
 	// BOTTOM
 	Canvas.SetPos(xPos + 3, yPos + blackHeight - 2);
 	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_bord_h, CURRENT_GOAL_WIDTH - 6, 2, 0, 0, 1, 2);		
-	Canvas.Style=ERenderStyle.STY_Normal;
+	Canvas.Style = ERenderStyle.STY_Normal;
 
 	// Fill the background
 	Canvas.DrawLine(xPos + 2, yPos + 2, CURRENT_GOAL_WIDTH - 4, blackHeight - 4, Canvas.black, 200, eLevel.TMENU);
 	
 	// Write the mission current goal
 	Canvas.SetClip(CURRENT_GOAL_WIDTH, yLen);
-	Canvas.SetPos(xPos + CURRENT_GOAL_WIDTH - 5, yPos + 4);	    
+	
+	// Joshua - Set position based on alignment
+	switch (EchelonMainHUD(Owner).CurrentGoalAlignment)
+	{
+		case TXT_LEFT:
+			Canvas.SetPos(xPos + 5, yPos + 4);
+			break;
+		case TXT_CENTER:
+			Canvas.SetPos(xPos + 5, yPos + 4);
+			break;
+		case TXT_RIGHT:
+			Canvas.SetPos(xPos + CURRENT_GOAL_WIDTH - 5, yPos + 4);
+			break;
+	}
+	
 	Canvas.SetDrawColor(68,77,55);	
 	//DrawAnimText(Canvas, xPos, yPos, xLen, yLen);		
 					
-	Canvas.DrawTextAligned(sCurrentGoal,TXT_RIGHT);	
+	Canvas.DrawTextAligned(sCurrentGoal, EchelonMainHUD(Owner).CurrentGoalAlignment);	
 	
 		
 	Canvas.Style = ERenderStyle.STY_Normal;
-	Canvas.SetClip(640,480);
+    Canvas.SetClip(640,480);
 }
 
 /*-----------------------------------------------------------------------------
@@ -1446,8 +1493,8 @@ function DrawAnimText(ECanvas Canvas, int xPos, int yPos, FLOAT xLen, FLOAT yLen
         length = Len(szAlarmText);		
 				
 		// Fill with blank
-		iEmptySpot = int( (CURRENT_GOAL_WIDTH - ( length * xLen ))/xLen );					
-		if ( iEmptySpot > 0 )
+		iEmptySpot = int((CURRENT_GOAL_WIDTH - (length * xLen)) / xLen);					
+		if (iEmptySpot > 0)
 		{						
 			for (y = 0; y < iEmptySpot; y++)
 			{
@@ -1468,7 +1515,7 @@ function DrawAnimText(ECanvas Canvas, int xPos, int yPos, FLOAT xLen, FLOAT yLen
     }
       
     //Canvas.font = Canvas.ETextFont;
-    Canvas.SetPos(xPos, yPos + yLen/4);
+    Canvas.SetPos(xPos, yPos + yLen / 4);
     Canvas.DrawText(szAlarmText);
 
     // Overwrite the end of text 
@@ -1496,75 +1543,75 @@ function DisplayIconsGoalNoteRecon(ECanvas Canvas)
 
 	temp = ITEMBOX_WIDTH_L / 3;
 
-	if ( Epc.bNewGoal && ( bBlink || bStopBlinkGoal) )
+	if (Epc.bNewGoal && (bBlink || bStopBlinkGoal))
 	{
 		fNbrGoalBlink += FBLINKINGTIME;
-		if ( fNbrGoalBlink > MAX_BLINK_TIME )
+		if (fNbrGoalBlink > MAX_BLINK_TIME)
 			bStopBlinkGoal = true;
 	
-		Canvas.SetPos(xPos + (temp/2) - eLevel.TGAME.GetWidth(eLevel.TGAME.com_ic_goals)/2 ,yPos);
-		eLevel.TGAME.DrawTileFromManager( Canvas, 
+		Canvas.SetPos(xPos + (temp / 2) - eLevel.TGAME.GetWidth(eLevel.TGAME.com_ic_goals) / 2 ,yPos);
+		eLevel.TGAME.DrawTileFromManager(Canvas, 
 										  eLevel.TGAME.com_ic_goals, 
 		                                  eLevel.TGAME.GetWidth(eLevel.TGAME.com_ic_goals), 
 										  eLevel.TGAME.GetHeight(eLevel.TGAME.com_ic_goals), 
 										  0, 
 										  0, 
 										  eLevel.TGAME.GetWidth(eLevel.TGAME.com_ic_goals), 
-										  eLevel.TGAME.GetHeight(eLevel.TGAME.com_ic_goals) );
+										  eLevel.TGAME.GetHeight(eLevel.TGAME.com_ic_goals));
 	}
 	else
 	{
-		if ( bStopBlinkGoal )
+		if (bStopBlinkGoal)
 		{
 			bStopBlinkGoal = false;
 			fNbrGoalBlink = 0;
 		}
 	}
 	
-	if ( Epc.bNewNote && ( bBlink || bStopBlinkNote) )
+	if (Epc.bNewNote && (bBlink || bStopBlinkNote))
 	{		
 		fNbrNoteBlink += FBLINKINGTIME;
-		if ( fNbrNoteBlink > MAX_BLINK_TIME )
+		if (fNbrNoteBlink > MAX_BLINK_TIME)
 			bStopBlinkNote = true;
 
-		Canvas.SetPos(xPos + temp + (temp/2) - eLevel.TGAME.GetWidth(eLevel.TGAME.com_ic_notes)/2 ,yPos);
-		eLevel.TGAME.DrawTileFromManager( Canvas, 
+		Canvas.SetPos(xPos + temp + (temp / 2) - eLevel.TGAME.GetWidth(eLevel.TGAME.com_ic_notes) / 2 ,yPos);
+		eLevel.TGAME.DrawTileFromManager(Canvas, 
 										  eLevel.TGAME.com_ic_notes, 
 		                                  eLevel.TGAME.GetWidth(eLevel.TGAME.com_ic_notes), 
 										  eLevel.TGAME.GetHeight(eLevel.TGAME.com_ic_notes), 
 										  0, 
 										  0, 
 										  eLevel.TGAME.GetWidth(eLevel.TGAME.com_ic_notes), 
-										  eLevel.TGAME.GetHeight(eLevel.TGAME.com_ic_notes) );
+										  eLevel.TGAME.GetHeight(eLevel.TGAME.com_ic_notes));
 	}
 	else
 	{
-		if ( bStopBlinkNote )
+		if (bStopBlinkNote)
 		{
 			bStopBlinkNote = false;
 			fNbrNoteBlink = 0;
 		}
 	}
 
-	if ( Epc.bNewRecon && ( bBlink || bStopBlinkRecon) )
+	if (Epc.bNewRecon && (bBlink || bStopBlinkRecon))
 	{		
 		fNbrReconBlink += FBLINKINGTIME;		
-		if ( fNbrReconBlink > MAX_BLINK_TIME )
+		if (fNbrReconBlink > MAX_BLINK_TIME)
 			bStopBlinkRecon = true;				
 
-		Canvas.SetPos(xPos + 2*temp + (temp/2) - eLevel.TGAME.GetWidth(eLevel.TGAME.com_ic_recon)/2 ,yPos);
-		eLevel.TGAME.DrawTileFromManager( Canvas, 
+		Canvas.SetPos(xPos + 2 * temp + (temp / 2) - eLevel.TGAME.GetWidth(eLevel.TGAME.com_ic_recon) / 2 ,yPos);
+		eLevel.TGAME.DrawTileFromManager(Canvas, 
 										  eLevel.TGAME.com_ic_recon, 
 		                                  eLevel.TGAME.GetWidth(eLevel.TGAME.com_ic_recon), 
 										  eLevel.TGAME.GetHeight(eLevel.TGAME.com_ic_recon), 
 										  0, 
 										  0, 
 										  eLevel.TGAME.GetWidth(eLevel.TGAME.com_ic_recon), 
-										  eLevel.TGAME.GetHeight(eLevel.TGAME.com_ic_recon) );
+										  eLevel.TGAME.GetHeight(eLevel.TGAME.com_ic_recon));
 	}
 	else
 	{
-		if ( bStopBlinkRecon )
+		if (bStopBlinkRecon)
 		{
 			bStopBlinkRecon = false;
 			fNbrReconBlink = 0;
