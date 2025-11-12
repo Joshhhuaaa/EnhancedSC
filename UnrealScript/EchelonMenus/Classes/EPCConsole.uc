@@ -18,7 +18,6 @@ var BOOL   bShowFakeWindow;
 var BOOL   bMusicPlaying;
 var BOOL   bInGameMenuActive;
 var BOOL   bMainMenuActive;
-var BOOL   bAltHeld; // Joshua - Track Alt key state for Alt+F4
 
 var config BOOL StartMenus;
 var config BOOL HideMenusAtStart;
@@ -27,19 +26,19 @@ var Sound   MenuMusic;
 
 event Initialized()
 {  
-   if(StartMenus == true)
+   if (StartMenus == true)
         LaunchMainMenu();   
 }
 
 event GameSaved(bool success)
 {
-    if( EPCMainMenuRootWindow(Root) != None)   
+    if (EPCMainMenuRootWindow(Root) != None)   
         EPCMainMenuRootWindow(Root).GameSaved(success);
 }
 
 event GameLoaded(bool success)
 {
-    if( EPCMainMenuRootWindow(Root) != None)   
+    if (EPCMainMenuRootWindow(Root) != None)   
         EPCMainMenuRootWindow(Root).GameLoaded(success);
 }
 
@@ -62,9 +61,12 @@ event ShowMainMenu()
 	LeaveGame(LG_MainMenu);
 }
 
+// Joshua - This isn't great, it's very easy to break sound
+// As an alternative, implement Pause on Focus Loss directly in the ASI patch
+/* 
 event ExitAltTab()
 {
-	if(bMainMenuActive)
+	if (bMainMenuActive)
 	{
 		ViewportOwner.Actor.StopAllSounds();
 	}
@@ -72,24 +74,28 @@ event ExitAltTab()
 	{
 		ViewportOwner.Actor.PauseSound(true);
 
-		if(!bInGameMenuActive)
+		if (!bInGameMenuActive)
 		{
 			ViewportOwner.Actor.SetPause(true);
 		}
 	}
 }
+*/
 
 event ShowGameMenu(bool GoToSaveLoadArea)
 {
 	GotoState('UWindow');
 	Root.ChangeCurrentWidget(WidgetID_InGameMenu);
-	if(GoToSaveLoadArea)
+	if (GoToSaveLoadArea)
 		EPCMainMenuRootWindow(Root).m_InGameMenu.GoToSaveLoadArea();
 }
 
+// Joshua - This isn't great, it's very easy to break sound
+// As an alternative, implement Pause on Focus Loss directly in the ASI patch
+/*
 event EnterAltTab()
 {
-	if(bMainMenuActive)
+	if (bMainMenuActive)
 	{	
 		MouseX = Root.WinWidth / 2;
 		MouseY = Root.WinHeight / 2;
@@ -97,7 +103,7 @@ event EnterAltTab()
 	}
 	else
 	{
-		if(!bInGameMenuActive)
+		if (!bInGameMenuActive)
 		{
 			ViewportOwner.Actor.SetPause(false);
 		}
@@ -110,6 +116,7 @@ event EnterAltTab()
 		ViewportOwner.Actor.ResumeSound(true);
 	}
 }
+*/
 
 function PopCD()
 {
@@ -118,26 +125,26 @@ function PopCD()
 	EPCMainMenuRootWindow(Root).PopCD();
 }
 	
-function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
+function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 {
     
-    if(bShowLog)log("Maint KeyEvent Key"@Key@"Action"@Action);
+    if (bShowLog)log("Maint KeyEvent Key"@Key@"Action"@Action);
     
     
 //
-//    if( (Key == EInputKey.IK_O) && (Action == IST_Release) && (Root != None) ) 
+//    if ((Key == EInputKey.IK_O) && (Action == IST_Release) && (Root != None)) 
 //    {
 //                GotoState('UWindow');
 //                Root.ChangeCurrentWidget(WidgetID_MainMenu);        		
 //                return true;
 //    }    
-//    else if( (Key == EInputKey.IK_P) && (Action == IST_Release) && (Root != None) ) 
+//    else if ((Key == EInputKey.IK_P) && (Action == IST_Release) && (Root != None)) 
 //    
 //    
 
-    if( (Key == ViewportOwner.Actor.GetKey("FullInventory", false)) && (Action == IST_Press) && (Root != None) )     
+    if ((Key == ViewportOwner.Actor.GetKey("FullInventory", false)) && (Action == IST_Press) && (Root != None))     
     {
-		if(	ViewportOwner.Actor.Level.Pauser == None)
+		if (ViewportOwner.Actor.Level.Pauser == None)
 		{
 			bLaunchWasCalled = false;
 			bReturnToMenu = false;
@@ -147,7 +154,7 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 			return true;
 		}
     }
-    else if( (Key == ConsoleKey) && (Action == IST_Press) ) 
+    else if ((Key == ConsoleKey) && (Action == IST_Press)) 
     {
         if (bLocked)
             return true;
@@ -162,37 +169,40 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 
 }
 
-function bool KeyType( EInputKey Key )
+function bool KeyType(EInputKey Key)
 {
-	if(bShowLog) log("ERROR!!!!!!!!!!!!!!!!!!! IN R6Console >> KeyType");
+	if (bShowLog) log("ERROR!!!!!!!!!!!!!!!!!!! IN R6Console >> KeyType");
     return false;
 }
 
-function PostRender( canvas Canvas )
+function PostRender(Canvas Canvas)
 {
-	if(Root == None)
+	if (Root == None)
 		CreateRootWindow(Canvas);
-	if(bShowLog) log("ERROR!!!!!!!!!!!!!!!!!!! IN R6Console >> PostRender");
+	if (bShowLog) log("ERROR!!!!!!!!!!!!!!!!!!! IN R6Console >> PostRender");
 }
 
 state FakeWindow extends UWindow
 {
     function BeginState()
     {
-        if(Root != None)    
+        if (Root != None)    
             Root.ChangeCurrentWidget(WidgetID_FakeWindow);
     }
     
-    function PostRender( canvas Canvas )
+    function PostRender(Canvas Canvas)
     { 
-        if(Root != None)
+        if (Root != None)
             Root.bUWindowActive = True;
-        RenderUWindow( Canvas );        
+        RenderUWindow(Canvas);        
     }
  
+    // Joshua - This isn't great, it's very easy to break sound
+    // As an alternative, implement Pause on Focus Loss directly in the ASI patch
+    /*
 	event ExitAltTab()
 	{
-		if(!bMainMenuActive)
+		if (!bMainMenuActive)
 		{
 			ViewportOwner.Actor.SetPause(True);
 			ViewportOwner.Actor.PauseSound(true);
@@ -201,44 +211,29 @@ state FakeWindow extends UWindow
 
 	event EnterAltTab()
 	{
-		if(!bMainMenuActive)
+		if (!bMainMenuActive)
 		{
 			ViewportOwner.Actor.SetPause(False);
 			ViewportOwner.Actor.ResumeSound(true);
 		}
 	}
-	
-    function bool KeyEvent( EInputKey eKey, EInputAction eAction, FLOAT fDelta )
+    */
+
+    function bool KeyEvent(EInputKey eKey, EInputAction eAction, FLOAT fDelta)
     {        
 
         local byte k;
         k = eKey;                
         
-        if(bShowLog)log("Console state FakeWindow KeyEvent eAction"@eAction@"Key"@eKey);
+        if (bShowLog)log("Console state FakeWindow KeyEvent eAction"@eAction@"Key"@eKey);
         
-        // Joshua - Track Alt key state for Alt+F4
-        if( eKey == IK_Alt )
-        {
-            if( eAction == IST_Press || eAction == IST_Hold )
-                bAltHeld = true;
-            else if( eAction == IST_Release )
-                bAltHeld = false;
-        }
-        
-        // Joshua - Alt+F4 to quit the game
-        if( bAltHeld && eAction == IST_Press && eKey == IK_F4 )
-        {
-            ViewportOwner.Actor.ConsoleCommand("QUIT");
-            return true;
-        }
-        
-        switch(eAction)
+        switch (eAction)
         {
         case IST_Release:
             
             ///////////////////////////////////////////////////
             //---------------  No Root  -----------------------
-            if(Root == None)
+            if (Root == None)
                 return false;
             //-------------------------------------------------
             ///////////////////////////////////////////////////            
@@ -256,7 +251,7 @@ state FakeWindow extends UWindow
                 break;
             case EInputKey.IK_Escape:
 				// To close window when hitting ESC
-				if(EPCMainMenuRootWindow(Root) != None && EPCMainMenuRootWindow(Root).m_FakeWidget != None)
+				if (EPCMainMenuRootWindow(Root) != None && EPCMainMenuRootWindow(Root).m_FakeWidget != None)
 	                EPCMainMenuRootWindow(Root).m_FakeWidget.Click(0.0, 0.0);
                 break;
             default:				
@@ -277,12 +272,12 @@ state FakeWindow extends UWindow
                 }            
                 ///////////////////////////////////////////////////
                 //---------------  No Root  -----------------------
-                if(Root == None)
+                if (Root == None)
                     return false;
                 //-------------------------------------------------
                 ///////////////////////////////////////////////////
                 
-                switch(k)
+                switch (k)
                 {
                 case EInputKey.IK_LeftMouse:				                
                     Root.WindowEvent(WM_LMouseDown, None, MouseX, MouseY, k);   
@@ -319,7 +314,7 @@ state FakeWindow extends UWindow
                     
                     ///////////////////////////////////////////////////
                     //---------------  No Root  -----------------------
-                    if(Root == None)
+                    if (Root == None)
                         return false;
                     //-------------------------------------------------
                     ///////////////////////////////////////////////////
@@ -334,7 +329,7 @@ state FakeWindow extends UWindow
     
     function EndState()
     {
-        if(Root != None)    
+        if (Root != None)    
             Root.ChangeCurrentWidget(WidgetID_None);
     }
     
@@ -343,31 +338,31 @@ state FakeWindow extends UWindow
 // A window is displayed, trapping all the input
 state UWindow
 {   
-    function PostRender( canvas Canvas )
+    function PostRender(Canvas Canvas)
 	{    
-        if(ViewportOwner.Actor != None)
+        if (ViewportOwner.Actor != None)
         {        
-            ViewportOwner.Actor.SetPause( true );           //Pause Game
+            ViewportOwner.Actor.SetPause(true);           //Pause Game
             ViewportOwner.Actor.bStopRenderWorld = true;    //Stop Rendering World
 
-			if(	ViewportOwner.Actor.Level != None &&
+			if (ViewportOwner.Actor.Level != None &&
 				ViewportOwner.Actor.Level.bIsStartMenu &&
 				!bMusicPlaying)
 			{
-				if(ViewportOwner.Actor.PlaySound(MenuMusic, SLOT_Music))
+				if (ViewportOwner.Actor.PlaySound(MenuMusic, SLOT_Music))
 				{
 					bMusicPlaying = true;
 				}
 			}
         }
 
-        if(bReturnToMenu == true && Root != None)
+        if (bReturnToMenu == true && Root != None)
         {          
             bReturnToMenu = false; 
 
             //Force Menu Res       
 
-            switch(m_eNextStep)
+            switch (m_eNextStep)
             {
             case LG_MainMenu:
                 //Go to Next Level
@@ -377,52 +372,37 @@ state UWindow
         
         }
         
-        if(bLaunchWasCalled==true && Root != None)
+        if (bLaunchWasCalled == true && Root != None)
         {                     
            ReturnToGame();           
-           bLaunchWasCalled=false;
+           bLaunchWasCalled = false;
 
         }
         else
         {
-            if(Root != None)
+            if (Root != None)
 			    Root.bUWindowActive = True;
 
-		    RenderUWindow( Canvas );                       
+		    RenderUWindow(Canvas);                       
                 
         }	
 
 	}
 
-    function bool KeyEvent( EInputKey eKey, EInputAction eAction, FLOAT fDelta )
+    function bool KeyEvent(EInputKey eKey, EInputAction eAction, FLOAT fDelta)
     {
         local byte k;
         local EMainMenuHUD MenuHUD;
         k = eKey;
         
-        if(bShowLog)log("Console state Uwindow KeyEvent eAction"@eAction@"Key"@eKey);
-
-        // Joshua - Track Alt key state for Alt+F4
-        if( eKey == IK_Alt )
-        {
-            if( eAction == IST_Press || eAction == IST_Hold )
-                bAltHeld = true;
-            else if( eAction == IST_Release )
-                bAltHeld = false;
-        }
-        
-        // Joshua - Alt+F4 to quit the game
-        if( bAltHeld && eAction == IST_Press && eKey == IK_F4 )
-        {
-            ViewportOwner.Actor.ConsoleCommand("QUIT");
-            return true;
-        }
+        if (bShowLog)
+            log("Console state Uwindow KeyEvent eAction"@eAction@"Key"@eKey);
 
         // Joshua - Add functionality to skip inactivity videos
-        if(eAction == IST_Press)
+        if (eAction == IST_Press)
         {
             MenuHUD = EchelonMainHUD(ViewportOwner.Actor.myHUD).MainMenuHUD;
-            if(MenuHUD != None && MenuHUD.bInactVideoPlaying)
+            if (MenuHUD != None && MenuHUD.bInactVideoPlaying)
             {
                 bMusicPlaying = false; // Joshua - Fixes a bug where music stops playing after skipping inactivity video
                 MenuHUD.bStopInactVideo = true;
@@ -431,13 +411,13 @@ state UWindow
         }
 
 
-        switch(eAction)
+        switch (eAction)
         {
 		case IST_Release:
             
             ///////////////////////////////////////////////////
             //---------------  No Root  -----------------------
-            if(Root == None)
+            if (Root == None)
                 return false;
             //-------------------------------------------------
             ///////////////////////////////////////////////////            
@@ -476,12 +456,12 @@ state UWindow
             }            
             ///////////////////////////////////////////////////
             //---------------  No Root  -----------------------
-            if(Root == None)
+            if (Root == None)
                 return false;
             //-------------------------------------------------
             ///////////////////////////////////////////////////
 
-            switch(k)
+            switch (k)
             {
 			case EInputKey.IK_LeftMouse:				                
 			    Root.WindowEvent(WM_LMouseDown, None, MouseX, MouseY, k);   
@@ -518,7 +498,7 @@ state UWindow
 
             ///////////////////////////////////////////////////
             //---------------  No Root  -----------------------
-            if(Root == None)
+            if (Root == None)
                 return false;
             //-------------------------------------------------
             ///////////////////////////////////////////////////
@@ -533,7 +513,7 @@ state UWindow
 
 	function BeginState()
 	{
-		if(	ViewportOwner != None &&
+		if (ViewportOwner != None &&
 			ViewportOwner.Actor != None &&
 			ViewportOwner.Actor.Level != None &&
 			!ViewportOwner.Actor.Level.bIsStartMenu)
@@ -544,15 +524,15 @@ state UWindow
 	{
         local Canvas C;
 
-		if(bMusicPlaying && ViewportOwner.Actor != None)
+		if (bMusicPlaying && ViewportOwner.Actor != None)
 		{
 			ViewportOwner.Actor.StopSound(MenuMusic, 0.25);
 			bMusicPlaying = false;
 		}
 
-        if(ViewportOwner.Actor != None)
+        if (ViewportOwner.Actor != None)
         {
-		    ViewportOwner.Actor.SetPause( false );         //Unpause Game
+		    ViewportOwner.Actor.SetPause(false);         //Unpause Game
             ViewportOwner.Actor.bStopRenderWorld = false; //Render World
 			ViewportOwner.Actor.SkipPresent(1);
         }
@@ -560,11 +540,11 @@ state UWindow
         C = class'Actor'.static.GetCanvas();       
         C.VideoStop();
 
-        if(bShowFakeWindow)
+        if (bShowFakeWindow)
             GotoState('FakeWindow');
-        else if(Root != None)
+        else if (Root != None)
 		{
-			if(!ViewportOwner.Actor.Level.bIsStartMenu)
+			if (!ViewportOwner.Actor.Level.bIsStartMenu)
 			{
 				ViewportOwner.Actor.ResumeSound(ViewportOwner.Actor.bShouldResumeAll);
 				ViewportOwner.Actor.bShouldResumeAll = false;
@@ -583,7 +563,7 @@ function LaunchMainMenu()
 	bQuickKeyEnable = False;
 	LaunchUWindow();   
 
-	if(Root != None)
+	if (Root != None)
     {
         //something wrong!!!!
 		Root.bWindowVisible = true;
@@ -610,7 +590,7 @@ event ResetMainMenu()
 event LeaveGame(ELeaveGame _bwhatToDo)
 { 
     //Go Back to menu
-    if(bReturnToMenu)
+    if (bReturnToMenu)
         return;
 
     bReturnToMenu   = true;    
@@ -620,7 +600,7 @@ event LeaveGame(ELeaveGame _bwhatToDo)
     CloseMainMenu();
     LaunchMainMenu();
 
-    switch(_bwhatToDo)
+    switch (_bwhatToDo)
     {      
 	    case LG_MainMenu:        
 		default: //Go back to main menu       
@@ -650,22 +630,22 @@ function ReturnToGame() //used to return to game and hide menus as well
 // Ex: english to french : A is A -- Space is Espace -- Backspace is reculer etc...
 //	   the localization is in R6Menu.int 
 // ====================================================================
-function string ConvertKeyToLocalisation( BYTE _Key, string _szEnumKeyName)
+function string ConvertKeyToLocalisation(BYTE _Key, string _szEnumKeyName)
 {
 	local string szResult;
 	
 	// number
-	if (( _Key > EInputKey.IK_0 - 1) && ( _Key < EInputKey.IK_9 + 1))
+	if ((_Key > EInputKey.IK_0 - 1) && (_Key < EInputKey.IK_9 + 1))
 	{
 		szResult = string(_Key - EInputKey.IK_0);
 	}
 	// alphabet
-	else if (( _Key > EInputKey.IK_A - 1) && ( _Key < EInputKey.IK_Z + 1))
+	else if ((_Key > EInputKey.IK_A - 1) && (_Key < EInputKey.IK_Z + 1))
 	{
 		szResult = Chr(_Key);
 	}
 	// F1 to F24
-	else if (( _Key > EInputKey.IK_F1 - 1) && ( _Key < EInputKey.IK_F24 + 1))
+	else if ((_Key > EInputKey.IK_F1 - 1) && (_Key < EInputKey.IK_F24 + 1))
 	{
 		szResult = "F"$(_Key - EInputKey.IK_F1 + 1); //+1 because of the substraction
 	}
@@ -674,7 +654,7 @@ function string ConvertKeyToLocalisation( BYTE _Key, string _szEnumKeyName)
 		szResult = Localize("Interactions", "IK_"$_szEnumKeyName, "Localization\\HUD");
 		
 		// if the key is not define
-		if ( szResult == Localize("Interactions", "IK_None", "Localization\\HUD"))
+		if (szResult == Localize("Interactions", "IK_None", "Localization\\HUD"))
 		{
 			szResult = "";
 		}

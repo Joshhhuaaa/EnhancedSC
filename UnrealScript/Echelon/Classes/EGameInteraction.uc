@@ -4,100 +4,82 @@ class EGameInteraction extends EInteraction;
 
 var EInteractObject ExitInteraction;
 var bool bInteracting;
-var bool bAltHeld; // Joshua - Track Alt key state for Alt+F4
 
-function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
+function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 {
 	local string actionName;
 	actionName = FindAction(Key);
 
-	if( Epc.Level.Pauser != None )
+	if (Epc.Level.Pauser != None)
 		return false;
-
-	// Joshua - Track Alt key state for Alt+F4
-	if( Key == IK_Alt )
-	{
-		if( Action == IST_Press || Action == IST_Hold )
-			bAltHeld = true;
-		else if( Action == IST_Release )
-			bAltHeld = false;
-	}
 	
-	// Joshua - Alt+F4 to quit the game
-	if( bAltHeld && Action == IST_Press && Key == IK_F4 )
-	{
-		if (!Epc.bProfileDeletionPending)
-			Epc.ConsoleCommand("QUIT");
-		return true;
-	}
-
 	// Joshua - Adding NumPad support for keypads
-	if( Action == IST_Press )
+	if (Action == IST_Press)
 	{
-		if( Epc.GetStateName() == 's_KeyPadInteract' )
+		if (Epc.GetStateName() == 's_KeyPadInteract')
 		{
 			// NumPad binds take priority if there's a conflic
-			if( Key == IK_NumPad0 )
+			if (Key == IK_NumPad0)
 			{
 				Epc.KeyEvent("Keypad_NumPad0", Action, Delta);
 				return true;
 			}
-			else if( Key == IK_NumPad1 )
+			else if (Key == IK_NumPad1)
 			{
 				Epc.KeyEvent("Keypad_NumPad1", Action, Delta);
 				return true;
 			}
-			else if( Key == IK_NumPad2 )
+			else if (Key == IK_NumPad2)
 			{
 				Epc.KeyEvent("Keypad_NumPad2", Action, Delta);
 				return true;
 			}
-			else if( Key == IK_NumPad3 )
+			else if (Key == IK_NumPad3)
 			{
 				Epc.KeyEvent("Keypad_NumPad3", Action, Delta);
 				return true;
 			}
-			else if( Key == IK_NumPad4 )
+			else if (Key == IK_NumPad4)
 			{
 				Epc.KeyEvent("Keypad_NumPad4", Action, Delta);
 				return true;
 			}
-			else if( Key == IK_NumPad5 )
+			else if (Key == IK_NumPad5)
 			{
 				Epc.KeyEvent("Keypad_NumPad5", Action, Delta);
 				return true;
 			}
-			else if( Key == IK_NumPad6 )
+			else if (Key == IK_NumPad6)
 			{
 				Epc.KeyEvent("Keypad_NumPad6", Action, Delta);
 				return true;
 			}
-			else if( Key == IK_NumPad7 )
+			else if (Key == IK_NumPad7)
 			{
 				Epc.KeyEvent("Keypad_NumPad7", Action, Delta);
 				return true;
 			}
-			else if( Key == IK_NumPad8 )
+			else if (Key == IK_NumPad8)
 			{
 				Epc.KeyEvent("Keypad_NumPad8", Action, Delta);
 				return true;
 			}
-			else if( Key == IK_NumPad9 )
+			else if (Key == IK_NumPad9)
 			{
 				Epc.KeyEvent("Keypad_NumPad9", Action, Delta);
 				return true;
 			}
-			else if( Key == IK_NumPadPeriod )
+			else if (Key == IK_NumPadPeriod)
 			{
 				Epc.KeyEvent("Keypad_NumPadPeriod", Action, Delta);
 				return true;
 			}
-			else if( Key == IK_GreyStar )
+			else if (Key == IK_GreyStar)
 			{
 				Epc.KeyEvent("Keypad_GreyStar", Action, Delta);
 				return true;
 			}
-			else if( Key == IK_Backspace )
+			else if (Key == IK_Backspace)
 			{
 				Epc.KeyEvent("Keypad_Backspace", Action, Delta);
 				return true;
@@ -105,14 +87,14 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 		}
 	}
 
-	if( Action == IST_Press || Action == IST_Hold )
+	if (Action == IST_Press || Action == IST_Hold)
 	{
 		//clauzon 9/17/2002 replaced a switch checking the key pressed by the mapped action test.
-		if(actionName == "Interaction")
+		if (actionName == "Interaction")
 		{
-			if( Epc.IManager.GetNbInteractions() > 0 && 
+			if (Epc.IManager.GetNbInteractions() > 0 && 
 				Epc.CanInteract() &&
-				!Epc.bStopInput )							// Prevent interacting in cinematic
+				!Epc.bStopInput)							// Prevent interacting in cinematic
 			{			
 				bInteracting = true;
 
@@ -157,7 +139,7 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 			Epc.SetKey("JoyZ \"Axis aTurn DeadZone=0.3\"", "");
 			Epc.SetKey("JoyV \"Axis aLookUp DeadZone=0.3\"", "");
 			
-			if (Epc.GetStateName() == 's_FirstPersonTargeting' || Epc.GetStateName() == 's_PlayerSniping' || Epc.GetStateName() == 's_PlayerBTWTargeting')
+			if (Epc.GetStateName() == 's_FirstPersonTargeting' || Epc.GetStateName() == 's_PlayerSniping' || Epc.GetStateName() == 's_RappellingTargeting' || Epc.GetStateName() == 's_RappellingSniping' || Epc.GetStateName() == 's_PlayerBTWTargeting')
 			{
 				Epc.SetKey("Joy1 ReloadGun", ""); // Joshua - Xbox used Joy5 originally but added whistling
 				Epc.SetKey("Joy4 Snipe", "");
@@ -196,7 +178,7 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 			Epc.SetKey("JoyZ \"Axis aTurn DeadZone=0.3\"", "");
 			Epc.SetKey("JoyV \"Axis aLookUp DeadZone=0.3\"", "");
 
-			if (Epc.GetStateName() == 's_FirstPersonTargeting' || Epc.GetStateName() == 's_PlayerSniping' || Epc.GetStateName() == 's_PlayerBTWTargeting')
+			if (Epc.GetStateName() == 's_FirstPersonTargeting' || Epc.GetStateName() == 's_PlayerSniping' || Epc.GetStateName() == 's_RappellingTargeting' || Epc.GetStateName() == 's_RappellingSniping' || Epc.GetStateName() == 's_PlayerBTWTargeting')
 			{
 				Epc.SetKey("Joy1 ReloadGun", "");
 				Epc.SetKey("Joy11 SwitchROF", ""); // Joshua - Pandora used both thumbsticks to snipe because it had no ROF
@@ -236,7 +218,7 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 			Epc.SetKey("JoyZ \"Axis aTurn DeadZone=0.3\"", "");
 			Epc.SetKey("JoyV \"Axis aLookUp DeadZone=0.3\"", "");
 
-			if (Epc.GetStateName() == 's_FirstPersonTargeting' || Epc.GetStateName() == 's_PlayerSniping' || Epc.GetStateName() == 's_PlayerBTWTargeting')
+			if (Epc.GetStateName() == 's_FirstPersonTargeting' || Epc.GetStateName() == 's_PlayerSniping' || Epc.GetStateName() == 's_RappellingTargeting' || Epc.GetStateName() == 's_RappellingSniping' || Epc.GetStateName() == 's_PlayerBTWTargeting')
 			{
 				Epc.SetKey("Joy1 ReloadGun", ""); // Joshua - PlayStation used Joy5 originally but added whistling
 				Epc.SetKey("Joy11 SwitchROF", "");
@@ -260,11 +242,11 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 //=============================================================================
 
 	// Joshua - Workaround to prevent controller from interrupting mission failed state before it reloads the last save
-	if(Epc.myHUD.IsPlayerGameOver())
+	if (Epc.myHUD.IsPlayerGameOver())
 	{
-		Epc.SetKey( "Joy1 None", "");
-		Epc.SetKey( "Joy8 None", "");
-		Epc.SetKey( "Joy10 None", "");
+		Epc.SetKey("Joy1 None", "");
+		Epc.SetKey("Joy8 None", "");
+		Epc.SetKey("Joy10 None", "");
 	}
 
 //=============================================================================
@@ -281,7 +263,7 @@ function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
 			Key == IK_JoyX  || Key == IK_JoyY  || Key == IK_JoyZ  || Key == IK_JoyR  ||
 			Key == IK_JoyU  || Key == IK_JoyV  || Key == IK_AnalogUp || Key == IK_AnalogDown ||
 			Key == IK_AnalogLeft || Key == IK_AnalogRight
-		)
+)
 		{
 			if (!Epc.eGame.bUseController &&
 				!Epc.IsInQuickInv() &&
@@ -330,7 +312,7 @@ state s_GameInteractionMenu
 		Epc.IManager.SelectedInteractions = 1;
 		
 		// Add exit button, spawn it only the first time in
-		if( ExitInteraction == None )
+		if (ExitInteraction == None)
 			ExitInteraction = Epc.IManager.spawn(class'EExitInteraction', Epc.IManager);
 		Epc.IManager.ShowExit(ExitInteraction);
 
@@ -340,7 +322,7 @@ state s_GameInteractionMenu
 
 	function EndState()
 	{
-		if( Epc.IManager.GetCurrentInteraction() == None )
+		if (Epc.IManager.GetCurrentInteraction() == None)
 			Log("ERROR: Interaction not valid on stack.");
 
 		if (Epc.bInteractionPause) // Joshua - Adding interaction pause option
@@ -356,7 +338,7 @@ state s_GameInteractionMenu
 		Epc.IManager.ShowExit(None);
 	}
 
-	function bool KeyEvent( EInputKey Key, EInputAction Action, FLOAT Delta )
+	function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 	{
 		local string actionName;
 		actionName = FindAction(Key);
@@ -368,29 +350,29 @@ state s_GameInteractionMenu
 			GotoState('');
 		}
 		
-		if( Action == IST_Press )
+		if (Action == IST_Press)
 		{
 			//clauzon 9/17/2002 replaced a switch checking the key pressed by the mapped action test.
-			if(actionName=="MoveForward" || Key == IK_MouseWheelUp || actionName == "DPadUp") // Joshua - Adding controller support for interaction box
+			if (actionName=="MoveForward" || Key == IK_MouseWheelUp || actionName == "DPadUp") // Joshua - Adding controller support for interaction box
 			{
-				if( Epc.IManager.SelectNextItem() )
+				if (Epc.IManager.SelectNextItem())
 				{
 					//Log("Interaction menu UP");
-					Epc.EPawn.playsound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
+					Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
 				}				
 			}
-			else if(actionName == "MoveBackward" || Key == IK_MouseWheelDown || actionName == "DPadDown") // Joshua - Adding controller support for interaction box
+			else if (actionName == "MoveBackward" || Key == IK_MouseWheelDown || actionName == "DPadDown") // Joshua - Adding controller support for interaction box
 			{
-				if( Epc.IManager.SelectPreviousItem() )
+				if (Epc.IManager.SelectPreviousItem())
 				{
 					//Log("Interaction menu DOWN");
-					Epc.EPawn.playsound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
+					Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
 				}
 			}
 		}
-		else if( Action == IST_Release )
+		else if (Action == IST_Release)
 		{
-			if(actionName=="Interaction")
+			if (actionName=="Interaction")
 			{
 				bInteracting = false;
 				// Exit GameInteraction menu
@@ -417,16 +399,16 @@ function BindSnipe()
 	SnipeKeyByte = Epc.GetKey("Snipe", false);
 
 	// Don't consider controller keys (196-215) as bindings
-	if(SnipeKeyByte != 0 && !(SnipeKeyByte >= 196 && SnipeKeyByte <= 215))
+	if (SnipeKeyByte != 0 && !(SnipeKeyByte >= 196 && SnipeKeyByte <= 215))
 	{
 		bSnipeBound = true;
 	}
 
-	if(!bSnipeBound)
+	if (!bSnipeBound)
 	{
 		BoundAction = Epc.GetActionKey(MiddleMouseKeyByte);
 
-		if(BoundAction == "" || BoundAction == "None")
+		if (BoundAction == "" || BoundAction == "None")
 		{
 			Epc.SetKey("MiddleMouse Snipe", "");
 		}
@@ -448,16 +430,16 @@ function BindWhistle()
 	WhistleKeyByte = Epc.GetKey("Whistle", false);
 
 	// Don't consider controller keys (196-215) as bindings
-	if(WhistleKeyByte != 0 && !(WhistleKeyByte >= 196 && WhistleKeyByte <= 215))
+	if (WhistleKeyByte != 0 && !(WhistleKeyByte >= 196 && WhistleKeyByte <= 215))
 	{
 		bWhistleBound = true;
 	}
 
-	if(!bWhistleBound)
+	if (!bWhistleBound)
 	{
 		BoundAction = Epc.GetActionKey(VKeyByte);
 
-		if(BoundAction == "" || BoundAction == "None")
+		if (BoundAction == "" || BoundAction == "None")
 		{
 			Epc.SetKey("V Whistle", "");
 		}
@@ -479,16 +461,16 @@ function BindToggleHUD()
 	ToggleHUDKeyByte = Epc.GetKey("ToggleHUD", false);
 
 	// Don't consider controller keys (196-215) as bindings
-	if(ToggleHUDKeyByte != 0 && !(ToggleHUDKeyByte >= 196 && ToggleHUDKeyByte <= 215))
+	if (ToggleHUDKeyByte != 0 && !(ToggleHUDKeyByte >= 196 && ToggleHUDKeyByte <= 215))
 	{
 		bToggleHUDBound = true;
 	}
 
-	if(!bToggleHUDBound)
+	if (!bToggleHUDBound)
 	{
 		BoundAction = Epc.GetActionKey(F1KeyByte);
 
-		if(BoundAction == "" || BoundAction == "None")
+		if (BoundAction == "" || BoundAction == "None")
 		{
 			Epc.SetKey("F1 ToggleHUD", "");
 		}
@@ -510,16 +492,16 @@ function BindPreviousGadget()
 	PreviousGadgetKeyByte = Epc.GetKey("PreviousGadget", false);
 
 	// Don't consider controller keys (196-215) as bindings
-	if(PreviousGadgetKeyByte != 0 && !(PreviousGadgetKeyByte >= 196 && PreviousGadgetKeyByte <= 215))
+	if (PreviousGadgetKeyByte != 0 && !(PreviousGadgetKeyByte >= 196 && PreviousGadgetKeyByte <= 215))
 	{
 		bPreviousGadgetBound = true;
 	}
 
-	if(!bPreviousGadgetBound)
+	if (!bPreviousGadgetBound)
 	{
 		BoundAction = Epc.GetActionKey(Num4KeyByte);
 
-		if(BoundAction == "" || BoundAction == "None")
+		if (BoundAction == "" || BoundAction == "None")
 		{
 			Epc.SetKey("4 PreviousGadget", "");
 		}
@@ -541,16 +523,16 @@ function BindNextGadget()
 	NextGadgetKeyByte = Epc.GetKey("NextGadget", false);
 
 	// Don't consider controller keys (196-215) as bindings
-	if(NextGadgetKeyByte != 0 && !(NextGadgetKeyByte >= 196 && NextGadgetKeyByte <= 215))
+	if (NextGadgetKeyByte != 0 && !(NextGadgetKeyByte >= 196 && NextGadgetKeyByte <= 215))
 	{
 		bNextGadgetBound = true;
 	}
 
-	if(!bNextGadgetBound)
+	if (!bNextGadgetBound)
 	{
 		BoundAction = Epc.GetActionKey(Num5KeyByte);
 
-		if(BoundAction == "" || BoundAction == "None")
+		if (BoundAction == "" || BoundAction == "None")
 		{
 			Epc.SetKey("5 NextGadget", "");
 		}
@@ -572,16 +554,16 @@ function BindPlayerStats()
 	PlayerStatsKeyByte = Epc.GetKey("PlayerStats", false);
 
 	// Don't consider controller keys (196-215) as bindings
-	if(PlayerStatsKeyByte != 0 && !(PlayerStatsKeyByte >= 196 && PlayerStatsKeyByte <= 215))
+	if (PlayerStatsKeyByte != 0 && !(PlayerStatsKeyByte >= 196 && PlayerStatsKeyByte <= 215))
 	{
 		bToggleStatsBound = true;
 	}
 
-	if(!bToggleStatsBound)
+	if (!bToggleStatsBound)
 	{
 		BoundAction = Epc.GetActionKey(TabKeyByte);
 
-		if(BoundAction == "" || BoundAction == "None")
+		if (BoundAction == "" || BoundAction == "None")
 		{
 			Epc.SetKey("Tab PlayerStats", "");
 		}
