@@ -56,6 +56,7 @@ var ETICON TICON; // Super Texture - Put here to be accessible everywhere
 
 var(AI)	bool bOneAlarmLevel; // Joshua - New flag for one alarm levels like Defense Ministry, replaces SetAlarmStage(3) hack
 var bool bAlarmStageChanged;
+var bool bGameOver; // Joshua - Prevents player from dying during GameOver and prevents NPC barks
 
 //---------------------------------------[Frederic Blais - 20 Nov 2001]-----
 // 
@@ -70,7 +71,7 @@ function PostBeginPlay()
 	local Actor A;
 
 	// Joshua - Apply TurnOffDistance scaling based on user settings
-    switch(EchelonGameInfo(Level.Game).TurnOffDistanceScale)
+    switch (EchelonGameInfo(Level.Game).TurnOffDistanceScale)
     {
         case TurnOffDistance_1x:
             // Default behavior, keep original values
@@ -111,7 +112,7 @@ function PostBeginPlay()
     }
 
 	// Joshua - Assigning new default meshes to these levels
-	switch(GetCurrentMapName())
+	switch (GetCurrentMapName())
 	{
 		case "1_3_2CaspianOilRefinery":
         case "1_3_3CaspianOilRefinery": 
@@ -145,7 +146,7 @@ function PostBeginPlay()
 	{
 		ForEach AllActors(class'EEventTrigger', EventTrigger)
 		{
-			if(EventTrigger.name == 'EEventTrigger10')
+			if (EventTrigger.name == 'EEventTrigger10')
 			{
 				EventTrigger.SetCollision(False);
 				EventTrigger.GroupTag = '';
@@ -190,138 +191,138 @@ function PostBeginPlay()
 
 	////////////////////////////////////////////////////////
 	//spawn the level pattern
-	if(PatternClass !=  None)
+	if (PatternClass !=  None)
 	{
 		Pattern	= Spawn(PatternClass, self);
 	}
 
 	///////////////////////////////////////////////////////
 	//spawn the lambert warnings patterns
-	if(AlarmPatternClass != None)
+	if (AlarmPatternClass != None)
 	{
 		AlarmPattern	= Spawn(AlarmPatternClass, self);
 	}
 
 /*
-	for(i=0; i<ImpactSurfaceToEmitterLink.length; i++)
+	for (i = 0; i < ImpactSurfaceToEmitterLink.length; i++)
 	{
-		log("ImpactSurfaceToEmitterLink["$i$"].surfType="$ImpactSurfaceToEmitterLink[i].surfType$";");
-		log("ImpactSurfaceToEmitterLink["$i$"].emitterClass=class'"$ImpactSurfaceToEmitterLink[i].emitterClass$"';");
+		log("ImpactSurfaceToEmitterLink["$i$"].surfType = "$ImpactSurfaceToEmitterLink[i].surfType$";");
+		log("ImpactSurfaceToEmitterLink["$i$"].emitterClass = class'"$ImpactSurfaceToEmitterLink[i].emitterClass$"';");
 	}
 */
-	pProjTexture=texture'impact01';
+	pProjTexture = texture'impact01';
 
-	ImpactSurfaceToEmitterLink.length=12;
-	ImpactSurfaceToEmitterLink[0].surfType=SURFACE_ConcreteHard;
-	ImpactSurfaceToEmitterLink[0].emitterClass=class'EchelonEffect.EImpactStone';
-	ImpactSurfaceToEmitterLink[1].surfType=SURFACE_BreakingGlass;
-	ImpactSurfaceToEmitterLink[1].emitterClass=class'EchelonEffect.EGlassSmallParticleB';
-	ImpactSurfaceToEmitterLink[2].surfType=SURFACE_WoodHard;
-	ImpactSurfaceToEmitterLink[2].emitterClass=class'EchelonEffect.EImpactWood';
-	ImpactSurfaceToEmitterLink[3].surfType=SURFACE_DeepWater;
-	ImpactSurfaceToEmitterLink[3].emitterClass=class'EchelonEffect.EImpactWater';
-	ImpactSurfaceToEmitterLink[4].surfType=SURFACE_ConcreteDirt;
-	ImpactSurfaceToEmitterLink[4].emitterClass=class'EchelonEffect.EImpactStone';
-	ImpactSurfaceToEmitterLink[5].surfType=SURFACE_Grass;
-	ImpactSurfaceToEmitterLink[5].emitterClass=class'EchelonEffect.EImpactGrass';
-	ImpactSurfaceToEmitterLink[6].surfType=SURFACE_WoodBoomy;
-	ImpactSurfaceToEmitterLink[6].emitterClass=class'EchelonEffect.EImpactWood';
-	ImpactSurfaceToEmitterLink[7].surfType=SURFACE_RoofTile;
-	ImpactSurfaceToEmitterLink[7].emitterClass=class'EchelonEffect.EGlassSmallParticleB';
-	ImpactSurfaceToEmitterLink[8].surfType=SURFACE_WaterPuddle;
-	ImpactSurfaceToEmitterLink[8].emitterClass=class'EchelonEffect.EImpactWater';
-	ImpactSurfaceToEmitterLink[9].surfType=SURFACE_Bush;
-	ImpactSurfaceToEmitterLink[9].emitterClass=class'EchelonEffect.EImpactLeaf';
-	ImpactSurfaceToEmitterLink[10].surfType=SURFACE_Sand;
-	ImpactSurfaceToEmitterLink[10].emitterClass=class'EchelonEffect.EImpactStone';
-	ImpactSurfaceToEmitterLink[11].surfType=SURFACE_Carpet;
-	ImpactSurfaceToEmitterLink[11].emitterClass=none;
+	ImpactSurfaceToEmitterLink.length = 12;
+	ImpactSurfaceToEmitterLink[0].surfType = SURFACE_ConcreteHard;
+	ImpactSurfaceToEmitterLink[0].emitterClass = class'EchelonEffect.EImpactStone';
+	ImpactSurfaceToEmitterLink[1].surfType = SURFACE_BreakingGlass;
+	ImpactSurfaceToEmitterLink[1].emitterClass = class'EchelonEffect.EGlassSmallParticleB';
+	ImpactSurfaceToEmitterLink[2].surfType = SURFACE_WoodHard;
+	ImpactSurfaceToEmitterLink[2].emitterClass = class'EchelonEffect.EImpactWood';
+	ImpactSurfaceToEmitterLink[3].surfType = SURFACE_DeepWater;
+	ImpactSurfaceToEmitterLink[3].emitterClass = class'EchelonEffect.EImpactWater';
+	ImpactSurfaceToEmitterLink[4].surfType = SURFACE_ConcreteDirt;
+	ImpactSurfaceToEmitterLink[4].emitterClass = class'EchelonEffect.EImpactStone';
+	ImpactSurfaceToEmitterLink[5].surfType = SURFACE_Grass;
+	ImpactSurfaceToEmitterLink[5].emitterClass = class'EchelonEffect.EImpactGrass';
+	ImpactSurfaceToEmitterLink[6].surfType = SURFACE_WoodBoomy;
+	ImpactSurfaceToEmitterLink[6].emitterClass = class'EchelonEffect.EImpactWood';
+	ImpactSurfaceToEmitterLink[7].surfType = SURFACE_RoofTile;
+	ImpactSurfaceToEmitterLink[7].emitterClass = class'EchelonEffect.EGlassSmallParticleB';
+	ImpactSurfaceToEmitterLink[8].surfType = SURFACE_WaterPuddle;
+	ImpactSurfaceToEmitterLink[8].emitterClass = class'EchelonEffect.EImpactWater';
+	ImpactSurfaceToEmitterLink[9].surfType = SURFACE_Bush;
+	ImpactSurfaceToEmitterLink[9].emitterClass = class'EchelonEffect.EImpactLeaf';
+	ImpactSurfaceToEmitterLink[10].surfType = SURFACE_Sand;
+	ImpactSurfaceToEmitterLink[10].emitterClass = class'EchelonEffect.EImpactStone';
+	ImpactSurfaceToEmitterLink[11].surfType = SURFACE_Carpet;
+	ImpactSurfaceToEmitterLink[11].emitterClass = none;
 
-	ImpactSurfaceToSubTexLink.length=14;
-	ImpactSurfaceToSubTexLink[0].surfType=SURFACE_ConcreteHard;
-	ImpactSurfaceToSubTexLink[0].X=192;
-	ImpactSurfaceToSubTexLink[0].Y=64;
-	ImpactSurfaceToSubTexLink[0].Width=32;
-	ImpactSurfaceToSubTexLink[0].Height=32;
-	ImpactSurfaceToSubTexLink[0].Scale=0.50;
-	ImpactSurfaceToSubTexLink[1].surfType=SURFACE_ConcreteDirt;
-	ImpactSurfaceToSubTexLink[1].X=64;
-	ImpactSurfaceToSubTexLink[1].Y=92;
-	ImpactSurfaceToSubTexLink[1].Width=32;
-	ImpactSurfaceToSubTexLink[1].Height=32;
-	ImpactSurfaceToSubTexLink[1].Scale=0.40;
-	ImpactSurfaceToSubTexLink[2].surfType=SURFACE_Carpet;
-	ImpactSurfaceToSubTexLink[2].X=160;
-	ImpactSurfaceToSubTexLink[2].Y=0;
-	ImpactSurfaceToSubTexLink[2].Width=32;
-	ImpactSurfaceToSubTexLink[2].Height=32;
-	ImpactSurfaceToSubTexLink[2].Scale=0.40;
-	ImpactSurfaceToSubTexLink[3].surfType=SURFACE_MetalReverb;
-	ImpactSurfaceToSubTexLink[3].X=192;
-	ImpactSurfaceToSubTexLink[3].Y=0;
-	ImpactSurfaceToSubTexLink[3].Width=32;
-	ImpactSurfaceToSubTexLink[3].Height=32;
-	ImpactSurfaceToSubTexLink[3].Scale=0.25;
-	ImpactSurfaceToSubTexLink[4].surfType=SURFACE_Generic;
-	ImpactSurfaceToSubTexLink[4].X=96;
-	ImpactSurfaceToSubTexLink[4].Y=64;
-	ImpactSurfaceToSubTexLink[4].Width=32;
-	ImpactSurfaceToSubTexLink[4].Height=32;
-	ImpactSurfaceToSubTexLink[4].Scale=0.25;
-	ImpactSurfaceToSubTexLink[5].surfType=SURFACE_MetalSheet;
-	ImpactSurfaceToSubTexLink[5].X=160;
-	ImpactSurfaceToSubTexLink[5].Y=32;
-	ImpactSurfaceToSubTexLink[5].Width=32;
-	ImpactSurfaceToSubTexLink[5].Height=32;
-	ImpactSurfaceToSubTexLink[5].Scale=0.25;
-	ImpactSurfaceToSubTexLink[6].surfType=SURFACE_BreakingGlass;
-	ImpactSurfaceToSubTexLink[6].X=96;
-	ImpactSurfaceToSubTexLink[6].Y=96;
-	ImpactSurfaceToSubTexLink[6].Width=64;
-	ImpactSurfaceToSubTexLink[6].Height=64;
-	ImpactSurfaceToSubTexLink[6].Scale=1.00;
-	ImpactSurfaceToSubTexLink[7].surfType=SURFACE_WoodHard;
-	ImpactSurfaceToSubTexLink[7].X=64;
-	ImpactSurfaceToSubTexLink[7].Y=64;
-	ImpactSurfaceToSubTexLink[7].Width=32;
-	ImpactSurfaceToSubTexLink[7].Height=32;
-	ImpactSurfaceToSubTexLink[7].Scale=0.40;
-	ImpactSurfaceToSubTexLink[8].surfType=SURFACE_MetalHard;
-	ImpactSurfaceToSubTexLink[8].X=192;
-	ImpactSurfaceToSubTexLink[8].Y=0;
-	ImpactSurfaceToSubTexLink[8].Width=32;
-	ImpactSurfaceToSubTexLink[8].Height=32;
-	ImpactSurfaceToSubTexLink[8].Scale=0.25;
-	ImpactSurfaceToSubTexLink[9].surfType=SURFACE_Snow;
-	ImpactSurfaceToSubTexLink[9].X=128;
-	ImpactSurfaceToSubTexLink[9].Y=64;
-	ImpactSurfaceToSubTexLink[9].Width=32;
-	ImpactSurfaceToSubTexLink[9].Height=32;
-	ImpactSurfaceToSubTexLink[9].Scale=0.25;
-	ImpactSurfaceToSubTexLink[10].surfType=SURFACE_RoofTile;
-	ImpactSurfaceToSubTexLink[10].X=192;
-	ImpactSurfaceToSubTexLink[10].Y=64;
-	ImpactSurfaceToSubTexLink[10].Width=32;
-	ImpactSurfaceToSubTexLink[10].Height=32;
-	ImpactSurfaceToSubTexLink[10].Scale=0.25;
-	ImpactSurfaceToSubTexLink[11].surfType=SURFACE_WoodBoomy;
-	ImpactSurfaceToSubTexLink[11].X=64;
-	ImpactSurfaceToSubTexLink[11].Y=64;
-	ImpactSurfaceToSubTexLink[11].Width=32;
-	ImpactSurfaceToSubTexLink[11].Height=32;
-	ImpactSurfaceToSubTexLink[11].Scale=0.40;
-	ImpactSurfaceToSubTexLink[12].surfType=SURFACE_RoofCanevas;
-	ImpactSurfaceToSubTexLink[12].X=160;
-	ImpactSurfaceToSubTexLink[12].Y=32;
-	ImpactSurfaceToSubTexLink[12].Width=32;
-	ImpactSurfaceToSubTexLink[12].Height=32;
-	ImpactSurfaceToSubTexLink[12].Scale=0.25;
-	ImpactSurfaceToSubTexLink[13].surfType=SURFACE_Sand;
-	ImpactSurfaceToSubTexLink[13].X=192;
-	ImpactSurfaceToSubTexLink[13].Y=64;
-	ImpactSurfaceToSubTexLink[13].Width=32;
-	ImpactSurfaceToSubTexLink[13].Height=32;
-	ImpactSurfaceToSubTexLink[13].Scale=0.50;
+	ImpactSurfaceToSubTexLink.length = 14;
+	ImpactSurfaceToSubTexLink[0].surfType = SURFACE_ConcreteHard;
+	ImpactSurfaceToSubTexLink[0].X = 192;
+	ImpactSurfaceToSubTexLink[0].Y = 64;
+	ImpactSurfaceToSubTexLink[0].Width = 32;
+	ImpactSurfaceToSubTexLink[0].Height = 32;
+	ImpactSurfaceToSubTexLink[0].Scale = 0.50;
+	ImpactSurfaceToSubTexLink[1].surfType = SURFACE_ConcreteDirt;
+	ImpactSurfaceToSubTexLink[1].X = 64;
+	ImpactSurfaceToSubTexLink[1].Y = 92;
+	ImpactSurfaceToSubTexLink[1].Width = 32;
+	ImpactSurfaceToSubTexLink[1].Height = 32;
+	ImpactSurfaceToSubTexLink[1].Scale = 0.40;
+	ImpactSurfaceToSubTexLink[2].surfType = SURFACE_Carpet;
+	ImpactSurfaceToSubTexLink[2].X = 160;
+	ImpactSurfaceToSubTexLink[2].Y = 0;
+	ImpactSurfaceToSubTexLink[2].Width = 32;
+	ImpactSurfaceToSubTexLink[2].Height = 32;
+	ImpactSurfaceToSubTexLink[2].Scale = 0.40;
+	ImpactSurfaceToSubTexLink[3].surfType = SURFACE_MetalReverb;
+	ImpactSurfaceToSubTexLink[3].X = 192;
+	ImpactSurfaceToSubTexLink[3].Y = 0;
+	ImpactSurfaceToSubTexLink[3].Width = 32;
+	ImpactSurfaceToSubTexLink[3].Height = 32;
+	ImpactSurfaceToSubTexLink[3].Scale = 0.25;
+	ImpactSurfaceToSubTexLink[4].surfType = SURFACE_Generic;
+	ImpactSurfaceToSubTexLink[4].X = 96;
+	ImpactSurfaceToSubTexLink[4].Y = 64;
+	ImpactSurfaceToSubTexLink[4].Width = 32;
+	ImpactSurfaceToSubTexLink[4].Height = 32;
+	ImpactSurfaceToSubTexLink[4].Scale = 0.25;
+	ImpactSurfaceToSubTexLink[5].surfType = SURFACE_MetalSheet;
+	ImpactSurfaceToSubTexLink[5].X = 160;
+	ImpactSurfaceToSubTexLink[5].Y = 32;
+	ImpactSurfaceToSubTexLink[5].Width = 32;
+	ImpactSurfaceToSubTexLink[5].Height = 32;
+	ImpactSurfaceToSubTexLink[5].Scale = 0.25;
+	ImpactSurfaceToSubTexLink[6].surfType = SURFACE_BreakingGlass;
+	ImpactSurfaceToSubTexLink[6].X = 96;
+	ImpactSurfaceToSubTexLink[6].Y = 96;
+	ImpactSurfaceToSubTexLink[6].Width = 64;
+	ImpactSurfaceToSubTexLink[6].Height = 64;
+	ImpactSurfaceToSubTexLink[6].Scale = 1.00;
+	ImpactSurfaceToSubTexLink[7].surfType = SURFACE_WoodHard;
+	ImpactSurfaceToSubTexLink[7].X = 64;
+	ImpactSurfaceToSubTexLink[7].Y = 64;
+	ImpactSurfaceToSubTexLink[7].Width = 32;
+	ImpactSurfaceToSubTexLink[7].Height = 32;
+	ImpactSurfaceToSubTexLink[7].Scale = 0.40;
+	ImpactSurfaceToSubTexLink[8].surfType = SURFACE_MetalHard;
+	ImpactSurfaceToSubTexLink[8].X = 192;
+	ImpactSurfaceToSubTexLink[8].Y = 0;
+	ImpactSurfaceToSubTexLink[8].Width = 32;
+	ImpactSurfaceToSubTexLink[8].Height = 32;
+	ImpactSurfaceToSubTexLink[8].Scale = 0.25;
+	ImpactSurfaceToSubTexLink[9].surfType = SURFACE_Snow;
+	ImpactSurfaceToSubTexLink[9].X = 128;
+	ImpactSurfaceToSubTexLink[9].Y = 64;
+	ImpactSurfaceToSubTexLink[9].Width = 32;
+	ImpactSurfaceToSubTexLink[9].Height = 32;
+	ImpactSurfaceToSubTexLink[9].Scale = 0.25;
+	ImpactSurfaceToSubTexLink[10].surfType = SURFACE_RoofTile;
+	ImpactSurfaceToSubTexLink[10].X = 192;
+	ImpactSurfaceToSubTexLink[10].Y = 64;
+	ImpactSurfaceToSubTexLink[10].Width = 32;
+	ImpactSurfaceToSubTexLink[10].Height = 32;
+	ImpactSurfaceToSubTexLink[10].Scale = 0.25;
+	ImpactSurfaceToSubTexLink[11].surfType = SURFACE_WoodBoomy;
+	ImpactSurfaceToSubTexLink[11].X = 64;
+	ImpactSurfaceToSubTexLink[11].Y = 64;
+	ImpactSurfaceToSubTexLink[11].Width = 32;
+	ImpactSurfaceToSubTexLink[11].Height = 32;
+	ImpactSurfaceToSubTexLink[11].Scale = 0.40;
+	ImpactSurfaceToSubTexLink[12].surfType = SURFACE_RoofCanevas;
+	ImpactSurfaceToSubTexLink[12].X = 160;
+	ImpactSurfaceToSubTexLink[12].Y = 32;
+	ImpactSurfaceToSubTexLink[12].Width = 32;
+	ImpactSurfaceToSubTexLink[12].Height = 32;
+	ImpactSurfaceToSubTexLink[12].Scale = 0.25;
+	ImpactSurfaceToSubTexLink[13].surfType = SURFACE_Sand;
+	ImpactSurfaceToSubTexLink[13].X = 192;
+	ImpactSurfaceToSubTexLink[13].Y = 64;
+	ImpactSurfaceToSubTexLink[13].Width = 32;
+	ImpactSurfaceToSubTexLink[13].Height = 32;
+	ImpactSurfaceToSubTexLink[13].Scale = 0.50;
 	
 	Super.PostBeginPlay();
 }
@@ -348,18 +349,22 @@ function Timer()
     local EAIController Searcher;
     local EAIController Attacker;
 
-    if((EchelonGameInfo(Level.Game).pPlayer == None) 
-       ||(EchelonGameInfo(Level.Game).pPlayer.pawn.Health <=0))
+    if ((EchelonGameInfo(Level.Game).pPlayer == None) 
+    || (EchelonGameInfo(Level.Game).pPlayer.Pawn.Health <= 0))
     {
         // Do not bark if player is dead
         return;
     }
 
+	// Joshua - Prevents player from dying during GameOver and prevents NPC barks
+	if (EchelonLevelInfo(Level).bGameOver)
+		return;
+
     for (C = Level.ControllerList; C != None; C = C.nextController)  
     {
         AI = EAIController(C);
 
-        if((AI == None) 
+        if ((AI == None) 
         || (AI.EPawn.bIsDog)
         || (AI.GetStateName() == 's_Unconscious'))
         {
@@ -367,23 +372,23 @@ function Timer()
         }
 
         // Check if its an NPC firing at some gameplay object
-        if((AI.m_pGoalList.GetCurrent().m_GoalType == GOAL_Attack) 
+        if ((AI.m_pGoalList.GetCurrent().m_GoalType == GOAL_Attack) 
         && ((AI.m_pGoalList.GetCurrent().GoalTarget) != (EchelonGameInfo(Level.Game).pPlayer.Pawn)))
         {
             continue;
         }
 
-        if(AI.GetStateName() == 's_Grabbed')
+        if (AI.GetStateName() == 's_Grabbed')
         {
             iGrabbed++;
         }
 
         
-        if(AI.Pattern != None)
+        if (AI.Pattern != None)
         {
-            if(AI.Pattern.GetStateName() == 'attack')
+            if (AI.Pattern.GetStateName() == 'attack')
             {
-                if(AI.bPlayerSeen)
+                if (AI.bPlayerSeen)
                 {
                     iSeeingPlayer++;
                 }
@@ -396,9 +401,9 @@ function Timer()
 
                 iAttack++; 
 
-				if(Attacker != None)
+				if (Attacker != None)
 				{
-					if( FRand() > 0.4 )
+					if (FRand() > 0.4)
                 Attacker = AI;
 				}
 				else
@@ -408,27 +413,27 @@ function Timer()
 
                 fSpeedTotal += VSize(AI.Pawn.Velocity);
 
-                if((AI.m_pGoalList.GetCurrent().m_GoalType == GOAL_MoveAndAttack )
-                    || AI.m_pGoalList.GetCurrent().m_GoalType == GOAL_Charge )
+                if ((AI.m_pGoalList.GetCurrent().m_GoalType == GOAL_MoveAndAttack)
+                    || AI.m_pGoalList.GetCurrent().m_GoalType == GOAL_Charge)
                 {
                     bMoveOrCharge = true;
                 }
 
-                if(AI.TargetIsFiring())
+                if (AI.TargetIsFiring())
                 {
                     bPlayerIsFiring = true;
                 }
 
             }
-            else if(AI.Pattern.GetStateName() == 'search')
+            else if (AI.Pattern.GetStateName() == 'search')
             {
-                if(AI.LastKnownPlayerTime != 0)
+                if (AI.LastKnownPlayerTime != 0)
                 {
                     bSawPlayerOnce = true;
 
-					if(Searcher != None)
+					if (Searcher != None)
 					{
-						if( FRand() > 0.4 )
+						if (FRand() > 0.4)
 							Searcher = AI;
 					}
 					else
@@ -454,60 +459,60 @@ function Timer()
      && (Attacker.Group.PlayerHasBeenSeen()))
     {
         // BARK_AttackMove
-        if((bMoveOrCharge) && (fSpeedTotal != 0.0))
+        if ((bMoveOrCharge) && (fSpeedTotal != 0.0))
         {
             EPawn(Attacker.Pawn).PlayAttackMove(); 
         }
         // BARK_LookingForYou        
-        else if(iSeeingPlayer == 0)
+        else if (iSeeingPlayer == 0)
         {
-            if(ePawn(Attacker.Pawn).ICanBark())
+            if (ePawn(Attacker.Pawn).ICanBark())
             {
 				ePawn(Attacker.Pawn).Bark_Type = BARK_LookingForYou;
 	            Attacker.Pawn.PlaySound(ePawn(Attacker.Pawn).Sounds_Barks, SLOT_Barks);    
 
-                if(ePawn(Attacker.Pawn).bIsHotBlooded)
+                if (ePawn(Attacker.Pawn).bIsHotBlooded)
                 {
                     Attacker.TimedForceFire();
                 }
             }
         }
         // BARK_AttackGetDown       
-        else if(bPlayerIsFiring)
+        else if (bPlayerIsFiring)
         {
             EPawn(Attacker.Pawn).PlayAttackGetDown();
         }
         // BARK_AttackStop        
-        else if(fSpeedTotal == 0.0)
+        else if (fSpeedTotal == 0.0)
         {
             EPawn(Attacker.Pawn).PlayAttackStop();   
         }
     }
     // 1 guy attacking Sam, and not seeing him - just use the BARK_LookingForYou
-    else if((iAttack == 1) 
+    else if ((iAttack == 1) 
          && (iGrabbed == 0) 
          && (Attacker != None) 
          && (Attacker.Group != None) 
          && (Attacker.Group.PlayerHasBeenSeen()))
     {
-        if(iSeeingPlayer == 0)
+        if (iSeeingPlayer == 0)
         {
-            if(ePawn(Attacker.Pawn).ICanBark())
+            if (ePawn(Attacker.Pawn).ICanBark())
             {
 				ePawn(Attacker.Pawn).Bark_Type = BARK_LookingForYou;
 	            Attacker.Pawn.PlaySound(ePawn(Attacker.Pawn).Sounds_Barks, SLOT_Barks);
                     
-                if(ePawn(Attacker.Pawn).bIsHotBlooded)
+                if (ePawn(Attacker.Pawn).bIsHotBlooded)
                 {
                     Attacker.TimedForceFire();
                 }
             }
         }
     }
-    else if((iSearch > 1) && (iAttack == 0) && (bSawPlayerOnce) && (Searcher != None))
+    else if ((iSearch > 1) && (iAttack == 0) && (bSawPlayerOnce) && (Searcher != None))
     {
         // BARK_LostPlayer
-        if(ePawn(Searcher.Pawn).ICanBark())
+        if (ePawn(Searcher.Pawn).ICanBark())
 		{
 			ePawn(Searcher.Pawn).Bark_Type = BARK_LostPlayer;
 	        Searcher.Pawn.PlaySound(ePawn(Searcher.Pawn).Sounds_Barks, SLOT_Barks);
@@ -531,9 +536,9 @@ function IncreaseAlarmStage()
     }
 
 	//be sure the pattern is initialize
-    if( AlarmPattern !=  None)
+    if (AlarmPattern !=  None)
     {
-	    if(!AlarmPattern.bInit)
+	    if (!AlarmPattern.bInit)
 		    AlarmPattern.InitPattern();
     }
 
@@ -547,7 +552,7 @@ function IncreaseAlarmStage()
 
 		log("*** Last Alarm stage reached: GameOver ***");
 
-		if( AlarmPattern !=  None)
+		if (AlarmPattern !=  None)
 		{
 			log("AlarmPattern !=  None");
 			AlarmPattern.GotoPatternLabel('AlarmStageD');
@@ -555,19 +560,19 @@ function IncreaseAlarmStage()
 	}
     else if (EchelonGameInfo(Level.Game).bEliteMode) // Joshua - Elite Mode, 3 alarms and the mission's over
 	{
-		if(AlarmStage < 2)
+		if (AlarmStage < 2)
 		{
 			AlarmStage++;
 			EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("AlarmTriggered");
 
 			log("**** Alarm Stage increased at level: "$AlarmStage$" ****");
 
-			if( AlarmPattern !=  None)
+			if (AlarmPattern !=  None)
 			{
-				switch(AlarmStage)
+				switch (AlarmStage)
 				{
 				case 1:
-					if(!bLiteWarnings)
+					if (!bLiteWarnings)
 						AlarmPattern.GotoPatternLabel('AlarmStageA');
 					break;
 				case 2:
@@ -576,14 +581,14 @@ function IncreaseAlarmStage()
 				}
 			}
 		}
-		else if(AlarmStage == 2)
+		else if (AlarmStage == 2)
 		{
 			AlarmStage++;
 			EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("AlarmTriggered");
 
 			log("*** Last Alarm stage reached: GameOver ***");
 
-			if( AlarmPattern !=  None)
+			if (AlarmPattern !=  None)
 			{
 				log("AlarmPattern !=  None");
 				AlarmPattern.GotoPatternLabel('AlarmStageD');
@@ -592,19 +597,19 @@ function IncreaseAlarmStage()
 	}
 	else
 	{
-		if(AlarmStage < 3)
+		if (AlarmStage < 3)
 		{
 			AlarmStage++;
 			EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("AlarmTriggered");
 
 			log("**** Alarm Stage increased at level: "$AlarmStage$" ****");
 
-			if( AlarmPattern !=  None)
+			if (AlarmPattern !=  None)
 			{
-				switch(AlarmStage)
+				switch (AlarmStage)
 				{
 				case 1:
-					if(!bLiteWarnings)
+					if (!bLiteWarnings)
 						AlarmPattern.GotoPatternLabel('AlarmStageA');
 					break;
 				case 2:
@@ -615,14 +620,14 @@ function IncreaseAlarmStage()
 				}
 			}
 		}
-		else if(AlarmStage == 3)
+		else if (AlarmStage == 3)
 		{
 			AlarmStage++;
 			EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("AlarmTriggered");
 
 			log("*** Last Alarm stage reached: GameOver ***");
 
-			if( AlarmPattern !=  None)
+			if (AlarmPattern !=  None)
 			{
 				log("AlarmPattern !=  None");
 				AlarmPattern.GotoPatternLabel('AlarmStageD');
@@ -637,18 +642,18 @@ function IncreaseAlarmStage()
 // MEMORY INFORMATION 
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
-function bool GetMemoryStick( out Array<EMemoryStick> Mems, Actor AccessActor, optional bool bTest )
+function bool GetMemoryStick(out Array<EMemoryStick> Mems, Actor AccessActor, optional bool bTest)
 {
 	local int i, j;
 
 	//Log("Bank information"@MemoryBank.Length);
 	//Log("Asking for memory with info class="$AccessClass$" tag="$AccessTag$" actor="$AccessActor);
 
-	for( i=0; i<MemoryBank.Length; i++ )
+	for (i = 0; i < MemoryBank.Length; i++)
 	{
-		for( j=0; j< MemoryBank[i].AccessActors.Length; j++ )
+		for (j = 0; j < MemoryBank[i].AccessActors.Length; j++)
 		{
-			if( MemoryBank[i].AccessActors[j] != AccessActor )
+			if (MemoryBank[i].AccessActors[j] != AccessActor)
 				continue;
 
 			// Found
@@ -657,7 +662,7 @@ function bool GetMemoryStick( out Array<EMemoryStick> Mems, Actor AccessActor, o
 
 			// If this stick should be destroyed after reading, remove now from list,
 			// since mem stick destroys itself in this case
-			if( MemoryBank[i].DestroyUponRead && !bTest )
+			if (MemoryBank[i].DestroyUponRead && !bTest)
 			{
 				MemoryBank.Remove(i,1);
 				i--;
@@ -672,12 +677,12 @@ function bool GetMemoryStick( out Array<EMemoryStick> Mems, Actor AccessActor, o
 	return Mems.Length > 0;
 }
 
-function RemoveMemoryStick( EMemoryStick Ms )
+function RemoveMemoryStick(EMemoryStick Ms)
 {
 	local int i;
-	for( i=0; i<MemoryBank.Length; i++ )
+	for (i = 0; i < MemoryBank.Length; i++)
 	{
-		if( MemoryBank[i] == Ms )
+		if (MemoryBank[i] == Ms)
 		{
 			MemoryBank.Remove(i,1);
 			return;
@@ -701,7 +706,7 @@ function RemoveMemoryStick( EMemoryStick Ms )
 //					1 | from bottom to top
 // 
 //------------------------------------------------------------------------
-native(1528) final function LockLadder( int LadderID, Pawn LockingPawn, bool bClimbingUp, bool bClimbingDown, bool bAtTop, bool bAtBottom );
+native(1528) final function LockLadder(int LadderID, Pawn LockingPawn, bool bClimbingUp, bool bClimbingDown, bool bAtTop, bool bAtBottom);
 
 
 //----------------------------------------[David Kalina - 3 Aug 2001]-----
@@ -714,7 +719,7 @@ native(1528) final function LockLadder( int LadderID, Pawn LockingPawn, bool bCl
 //
 //------------------------------------------------------------------------
 
-native(1529) final function UnlockLadder( int LadderID );
+native(1529) final function UnlockLadder(int LadderID);
 
 
 //----------------------------------------[David Kalina - 3 Aug 2001]-----
@@ -730,7 +735,7 @@ native(1529) final function UnlockLadder( int LadderID );
 // 
 //------------------------------------------------------------------------
 
-native(1530) final function bool IsLadderLocked( int LadderID, byte Direction );
+native(1530) final function bool IsLadderLocked(int LadderID, byte Direction);
 
 
 
@@ -742,7 +747,7 @@ native(1530) final function bool IsLadderLocked( int LadderID, byte Direction );
 // 
 //------------------------------------------------------------------------
 
-native(1532) final function bool IsLadderLockedBy( int LadderID, Pawn LockingPawn );
+native(1532) final function bool IsLadderLockedBy(int LadderID, Pawn LockingPawn);
 
 
 
@@ -759,10 +764,10 @@ native(1532) final function bool IsLadderLockedBy( int LadderID, Pawn LockingPaw
 // true = play
 //
 //------------------------------------------------------------------------
-function SendMusicRequest(int _Type, bool _bPlay, Actor _Instigator, optional bool DontPlayPunch )
+function SendMusicRequest(int _Type, bool _bPlay, Actor _Instigator, optional bool DontPlayPunch)
 {
-	if( bMusicEnabled && MusicObj != None )
-		MusicObj.SendMusicRequest( _Type,  _bPlay,  _Instigator, DontPlayPunch );
+	if (bMusicEnabled && MusicObj != None)
+		MusicObj.SendMusicRequest(_Type,  _bPlay,  _Instigator, DontPlayPunch);
 }
 
 // Joshua - Override rumble functions to check bEnableRumble setting
@@ -772,7 +777,7 @@ function RumbleShake(float Duration, float Strenth)
 	
 	eGame = EchelonGameInfo(Game);
 
-	if(eGame != None && eGame.bUseController && eGame.bEnableRumble && Rumble != None)
+	if (eGame != None && eGame.bUseController && eGame.bEnableRumble && Rumble != None)
 		Rumble.Shake(Duration, Strenth);
 }
 
@@ -782,8 +787,15 @@ function RumbleVibrate(float Duration, float Strenth)
 	
 	eGame = EchelonGameInfo(Game);
 
-	if(eGame != None && eGame.bUseController && eGame.bEnableRumble && Rumble != None)
+	if (eGame != None && eGame.bUseController && eGame.bEnableRumble && Rumble != None)
 		Rumble.Vibrate(Duration, Strenth);
+}
+
+// Joshua - Prevents player from dying during GameOver and prevents NPC barks
+function GameOver()
+{
+	EchelonGameInfo(Level.Game).pPlayer.bInvincible = true;
+	bGameOver = true;
 }
 
 defaultproperties
