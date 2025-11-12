@@ -98,6 +98,7 @@ var(Enhanced) config bool bShowInteractionBox;
 var(Enhanced) config bool bShowCommunicationBox;
 var(Enhanced) config bool bShowTimer;
 var(Enhanced) config bool bLetterBoxCinematics;
+var(Enhanced) config ECanvas.ETextAligned CurrentGoalAlignment;
 
 exec function SaveEnhancedOptions()
 {
@@ -152,7 +153,7 @@ event StopRender(bool bSet)
 
  Description:   To be able to switch state in c++
 -----------------------------------------------------------------------------*/
-event GotoStateSafe( name State )
+event GotoStateSafe(name State)
 {
 	GotoState(State);
 }
@@ -165,7 +166,7 @@ event GotoStateSafe( name State )
 function PostBeginPlay()
 {
 	Epc = EPlayerController(Owner);
-	if ( Epc == None )
+	if (Epc == None)
 		Log("ERROR: invalid PlayerController for EchelonMainHud");
 
     QuickInvAndCurrentItems 	= spawn(class'EQInvHUD',self);
@@ -268,9 +269,9 @@ function PostBeginPlay()
     Super.PostBeginPlay();
 
 	// Joshua - Controller related   
-	if ( Level.bIsStartMenu )
+	if (Level.bIsStartMenu)
 	{			
-		if ( Epc.iErrorMsg == -3 )
+		if (Epc.iErrorMsg == -3)
 		{			
 			Epc.iErrorMsg = -2;		
 		}
@@ -288,10 +289,10 @@ function PostBeginPlay()
 // Description		
 //		
 //------------------------------------------------------------------------
-function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta );
+function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta);
 
 //clauzon 9/11/2002 To change key mapping in Menus
-function RealKeyEvent( string RealKeyValue, EInputAction Action, FLOAT Delta)
+function RealKeyEvent(string RealKeyValue, EInputAction Action, FLOAT Delta)
 {
 	//log("RealKeyEvent received in EchelonMainHUD " $ RealKeyValue);
 	
@@ -302,27 +303,27 @@ function RealKeyEvent( string RealKeyValue, EInputAction Action, FLOAT Delta)
 
 function DrawSaveLoadBox(ECanvas Canvas)
 {
-	if ( Epc.bSavingTraining )
+	if (Epc.bSavingTraining)
 	{
 		if (Epc.bAutoSaveLoad)
 		{
 			if (Epc.bCheckpoint)
 			{
-				DrawErrorMsgBox( Canvas, Localize("Common", "Checkpoint", "Localization\\Enhanced") );	
+				DrawErrorMsgBox(Canvas, Localize("Common", "Checkpoint", "Localization\\Enhanced"));	
 			}
 			else
-				DrawErrorMsgBox( Canvas, Localize("HUD", "AUTOSAVING", "Localization\\HUD") );
+				DrawErrorMsgBox(Canvas, Localize("HUD", "AUTOSAVING", "Localization\\HUD"));
 		}
 		else
-			DrawErrorMsgBox( Canvas, Localize("HUD", "QUICKSAVING", "Localization\\HUD") );
+			DrawErrorMsgBox(Canvas, Localize("HUD", "QUICKSAVING", "Localization\\HUD"));
 	}
 
-	if ( Epc.bLoadingTraining )
+	if (Epc.bLoadingTraining)
 	{
 		if (Epc.bAutoSaveLoad)
-			DrawErrorMsgBox( Canvas, Localize("HUD", "AUTOLOADING", "Localization\\HUD") );
+			DrawErrorMsgBox(Canvas, Localize("HUD", "AUTOLOADING", "Localization\\HUD"));
 		else
-			DrawErrorMsgBox( Canvas, Localize("HUD", "QUICKLOADING", "Localization\\HUD") );
+			DrawErrorMsgBox(Canvas, Localize("HUD", "QUICKLOADING", "Localization\\HUD"));
 	}		
 }
 
@@ -337,24 +338,26 @@ function DrawDebugInfo(ECanvas Canvas)
 	
 	if	(Epc.bDebugInput)
 	{
-		//Canvas.Font = font'SmallFont';
+		Canvas.Font = Font'SmallFont';
 		Canvas.SetPos(0,0);
+		YPos = 0.0;
 
-		Epc.ShowDebugInput(Canvas);
+		// Joshua - Refactored for clearer formatting
+		Epc.ShowDebugInput(Canvas, YL, YPos);
 	}
 
 	if (Epc.bDebugStealth)
 	{
-		if (Epc.ePawn!=None)
+		if (Epc.ePawn !=None)
 		{
-			Epc.Epawn.show_lighting_debug_info(Canvas);	
+			Epc.ePawn.show_lighting_debug_info(Canvas);
 		}
 	}
 
 	// Joshua - Temporary PlayerStats debug
 	if (Epc.bDebugStats)
 	{
-		Canvas.Font = font'SmallFont';
+		Canvas.Font = Font'SmallFont';
 		Canvas.SetPos(0,0);
 		YPos = 0.0;
 
@@ -382,13 +385,13 @@ function DrawLifeBar(ECanvas Canvas)
 
     Canvas.SetDrawColor(128,128,128);
 
-	Canvas.Style=ERenderStyle.STY_Alpha;
+	Canvas.Style = ERenderStyle.STY_Alpha;
     // TOP LEFT CORNER //
     Canvas.SetPos(xPos, yPos);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin2, 8, 4, 8, 4, -8, -4);
 
     // BOTTOM LEFT CORNER //
-    Canvas.SetPos(xPos, yPos+ LIFEBAR_HEIGHT - 7);
+    Canvas.SetPos(xPos, yPos + LIFEBAR_HEIGHT - 7);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin1, 8, 7, 0, 0, 8, 7);
 
     // TOP RIGHT CORNER //
@@ -401,11 +404,11 @@ function DrawLifeBar(ECanvas Canvas)
 
     // LEFT BORDER //
     Canvas.SetPos(xPos, yPos + 4);
-    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v,5, LIFEBAR_HEIGHT - 11, 0, 0, 5, 1);
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v, 5, LIFEBAR_HEIGHT - 11, 0, 0, 5, 1);
     
     // RIGHT //    
     Canvas.SetPos(xPos + LIFEBAR_WIDTH - 5, yPos + 4);
-    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v,5, LIFEBAR_HEIGHT - 11, 5, 0, -5, 1);
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v, 5, LIFEBAR_HEIGHT - 11, 5, 0, -5, 1);
     
     // TOP //
     Canvas.SetPos(xPos + 8, yPos);
@@ -414,25 +417,28 @@ function DrawLifeBar(ECanvas Canvas)
     // BOTTOM//
     Canvas.SetPos(xPos + 8, yPos + LIFEBAR_HEIGHT - 6);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_h, LIFEBAR_WIDTH - 16, 6, 0, 0, 1, 6);
-	Canvas.Style=ERenderStyle.STY_Normal;
+	Canvas.Style = ERenderStyle.STY_Normal;
 
     // BACKGROUND //		    	
-	Canvas.SetPos(xPos + 5,yPos + 4);
-	Canvas.DrawColor=Canvas.black;
-	Canvas.DrawColor.A=40;
-	Canvas.Style=ERenderStyle.STY_Alpha;	
-	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.lf_niv_plein, 8,LIFEBAR_HEIGHT - 10, 0, 0, 7, 1);
+	Canvas.SetPos(xPos + 5, yPos + 4);
+	Canvas.DrawColor = Canvas.black;
+	Canvas.DrawColor.A = 40;
+	Canvas.Style = ERenderStyle.STY_Alpha;	
+	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.lf_niv_plein, 8, LIFEBAR_HEIGHT - 10, 0, 0, 7, 1);
 	
 
     // LIFE //
     if (Epc.Pawn != None && Epc.ePawn.Health > 0.0f)
     {
 		// (Yanick Mimee) June-27-2002
-		Canvas.SetDrawColor(128,128 + (127 * (1 - (float(Epc.ePawn.Health) / Epc.ePawn.InitialHealth))) ,128,255);	
-		Canvas.Style=ERenderStyle.STY_Normal;	
-		LifeBarSize = (LIFEBAR_HEIGHT - 10) * (float(Epc.ePawn.Health) / Epc.ePawn.InitialHealth);
-        Canvas.SetPos(xPos + 4, yPos + LIFEBAR_HEIGHT - LifeBarSize - 7);
-        eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.lf_niv_plein, 8,LifeBarSize, 0, 0, 7, 1);		
+		Canvas.SetDrawColor(128,128 + (127 * (1 - (float(Epc.ePawn.Health) / Epc.ePawn.InitialHealth))), 128, 255);	
+		Canvas.Style = ERenderStyle.STY_Normal;	
+		// Joshua - Fixed life bar size to fit the vertically better
+		//LifeBarSize = (LIFEBAR_HEIGHT - 10) * (float(Epc.ePawn.Health) / Epc.ePawn.InitialHealth);
+		LifeBarSize = (LIFEBAR_HEIGHT - 8) * (float(Epc.ePawn.Health) / Epc.ePawn.InitialHealth);
+        //Canvas.SetPos(xPos + 4, yPos + LIFEBAR_HEIGHT - LifeBarSize - 7);
+		Canvas.SetPos(xPos + 4, yPos + LIFEBAR_HEIGHT - LifeBarSize - 5);
+        eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.lf_niv_plein, 8, LifeBarSize, 0, 0, 7, 1);		
 	}	
 }
 
@@ -452,9 +458,9 @@ function DisplayInteractBox(ECanvas Canvas, int iNbrOfInter, int iCurrentInter)
     Canvas.SetDrawColor(128,128,128);	
     Canvas.TextSize("T", xLen, yLen);
 
-	// Find box width with the max number of caracter in a description
+	// Find box width with the max number of characters in a description
 	// Find the height of the option box with the number of interaction and the FONT height
-	if ( Epc.egi.bInteracting )
+	if (Epc.egi.bInteracting)
 	{
 		INTER_OPT_BOX_HEIGHT = (iNbrOfInter - 1) * yLen + 3 + 3;
 	}
@@ -466,50 +472,55 @@ function DisplayInteractBox(ECanvas Canvas, int iNbrOfInter, int iCurrentInter)
 	INTER_OPT_BOX_WIDTH  = xLen * MAX_INTER_NAME_LENGHT + 3 + 3;
 	INTER_BOX_WIDTH = INTER_OPT_BOX_WIDTH;
 	INTER_BOX_HEIGHT = yLen + 5 + 5 + 12;
-		
-	
+
+
 	xPos = 640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - INTER_BOX_WIDTH;
     yPos = eGame.HUD_OFFSET_Y + INTER_BOX_HEIGHT + 1;
-		
+
 
 	IO = Epc.IManager.Interactions[iCurrentInter];
-	if ( IO != None )
+	if (IO != None)
 	{	
-		if ( iCurrentInter == Epc.IManager.SelectedInteractions )
+		if (iCurrentInter == Epc.IManager.SelectedInteractions)
 		{	
 			// Draw selector		
 			// When X is hold selector can go on BACK TO MAIN MENU
-			if ( Epc.egi.bInteracting && (iCurrentInter == 0) )
+			if (Epc.egi.bInteracting && (iCurrentInter == 0))
 			{
-				Canvas.SetPos( 640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - INTER_BOX_WIDTH + 4 ,eGame.HUD_OFFSET_Y + (INTER_BOX_HEIGHT/2) - (yLen/2) );	
+				Canvas.SetPos(640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - INTER_BOX_WIDTH + 4 ,eGame.HUD_OFFSET_Y + (INTER_BOX_HEIGHT / 2) - (yLen / 2));
+				// Joshua - Fixing bug with Interaction Box selector not extending fully
+				Canvas.Style = ERenderStyle.STY_Alpha;
+				eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_selecteur, INTER_BOX_WIDTH - 8, yLen + 2, 0, 0, 1, 1);
 			}
 			else
 			{
-				Canvas.SetPos( xPos + 2, yPos + 2 + ((iNbrOfInter - 1) * yLen ) - ( iCurrentInter * yLen ) );		
+				Canvas.SetPos(xPos + 2, yPos + 2 + ((iNbrOfInter - 1) * yLen) - (iCurrentInter * yLen));
+				// Joshua - Fixing bug with Interaction Box selector not extending fully
+				Canvas.Style = ERenderStyle.STY_Alpha;			
+				eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_selecteur, INTER_OPT_BOX_WIDTH - 4, yLen + 2, 0, 0, 1, 1);
 			}
-			Canvas.Style=ERenderStyle.STY_Alpha;			
-			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_selecteur, INTER_BOX_WIDTH - 8, yLen, 0, 0, 1, 1);
-			Canvas.Style=ERenderStyle.STY_Normal;
+			Canvas.Style = ERenderStyle.STY_Normal;
 
 			// Color given by the interface artist (Veronique)
 			Canvas.SetDrawColor(92,109,76);		
-		}            
+		}
 		else
 		{		
 			// Color given by the interface artist (Veronique)
 			Canvas.SetDrawColor(49,56,40);
 		}
 
-		if ( Epc.egi.bInteracting && (iCurrentInter == 0) )
+		if (Epc.egi.bInteracting && (iCurrentInter == 0))
 		{
 			//Canvas.SetDrawColor(92,109,76);		
-			Canvas.SetPos( 640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - INTER_BOX_WIDTH + 5 ,eGame.HUD_OFFSET_Y + (INTER_BOX_HEIGHT/2) - (yLen/2) );				
-			Canvas.DrawTextAligned( Caps(IO.GetDescription() ) );		
+			Canvas.SetPos(640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - INTER_BOX_WIDTH + 5 ,eGame.HUD_OFFSET_Y + (INTER_BOX_HEIGHT / 2) - (yLen / 2));				
+			Canvas.DrawTextAligned(Caps(IO.GetDescription()));		
 		}
 		else
 		{
-			Canvas.SetPos( xPos + 8, yPos + 2 + ((iNbrOfInter - 1) * yLen ) - ( iCurrentInter * yLen ) );		
-			Canvas.DrawTextAligned( Caps(IO.GetDescription() ) );		
+			// Joshua - xPos + 5 changed from + 8 to lineup interaction text
+			Canvas.SetPos(xPos + 5, yPos + 2 + ((iNbrOfInter - 1) * yLen) - (iCurrentInter * yLen));		
+			Canvas.DrawTextAligned(Caps(IO.GetDescription()));		
 		}
 	}		
 }
@@ -536,7 +547,7 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
     iNbrOfInter = Epc.IManager.GetNbInteractions();
 
 	// Display the interaction boxes
-	if ( ( iNbrOfInter > 0 ) || ( bSetPos ) )
+	if ((iNbrOfInter > 0) || (bSetPos))
 	{		
 		Canvas.Font = Canvas.ETextFont;
 		Canvas.SetDrawColor(128,128,128);	
@@ -544,7 +555,7 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 
 		// Find box width with the max number of caracter in a description
 		// Find the height of the option box with the number of interaction and the FONT height
-		if ( Epc.egi.bInteracting )
+		if (Epc.egi.bInteracting)
 		{
 			INTER_OPT_BOX_HEIGHT = (iNbrOfInter - 1) * yLen + 3 + 3;
 		}
@@ -553,14 +564,15 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 			INTER_OPT_BOX_HEIGHT = iNbrOfInter * yLen + 3 + 3;
 		}		
 
-		INTER_OPT_BOX_WIDTH  = xLen * MAX_INTER_NAME_LENGHT + 3 + 3;
+		// Joshua - Use fixed width to maintain consistent size across all fonts/platforms
+		INTER_OPT_BOX_WIDTH  = 206; // Fixed pixel width (Xbox: 206, PC: 226 with dynamic calculation)
 		INTER_BOX_WIDTH = INTER_OPT_BOX_WIDTH;
 		INTER_BOX_HEIGHT = yLen + 5 + 5 + 12;
 
 		xPos = 640 - INTER_BOX_WIDTH - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH;
 		yPos = eGame.HUD_OFFSET_Y;
 
-		Canvas.Style=ERenderStyle.STY_Alpha;
+		Canvas.Style = ERenderStyle.STY_Alpha;
 		// Draw the top box with "INTERACT..." title
 		// TOP LEFT CORNER 
 		Canvas.SetPos(xPos, yPos);
@@ -600,21 +612,21 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 		// Reset color
 		// (Yanick Mimee) June-27-2002
 		Canvas.SetDrawColor(128,128,128,255);	
-		Canvas.Style=ERenderStyle.STY_Normal;	
+		Canvas.Style = ERenderStyle.STY_Normal;	
 		
-		if ( !Epc.egi.bInteracting )
+		if (!Epc.egi.bInteracting)
 		{
 			// Display "INTERACT"
 			// Color given by the interface artist (Veronique)
 			Canvas.SetDrawColor(49,56,40);
-			Canvas.SetPos( xPos + 5 ,yPos + (INTER_BOX_HEIGHT/2) - (yLen/2) );
+			Canvas.SetPos(xPos + 5 ,yPos + (INTER_BOX_HEIGHT / 2) - (yLen / 2));
 			Canvas.DrawTextAligned(Localize("HUD", "INTERACT", "Localization\\HUD"));
 
 			// Draw the X button 						
 			// Color given by the interface artist (Veronique)
 			if (eGame.bUseController)
 			{
-				Canvas.SetPos( 640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - 30 ,eGame.HUD_OFFSET_Y + (INTER_BOX_HEIGHT/2) - 11 );
+				Canvas.SetPos(640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - 30 ,eGame.HUD_OFFSET_Y + (INTER_BOX_HEIGHT / 2) - 11);
 				Canvas.SetDrawColor(92,109,76);
 				switch (Epc.ControllerIcon)
 				{
@@ -639,7 +651,7 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 		xPos = 640 - eGame.HUD_OFFSET_X - INTER_BOX_WIDTH - LIFEBAR_WIDTH;
 		yPos = eGame.HUD_OFFSET_Y + INTER_BOX_HEIGHT + 1;
 
-		Canvas.Style=ERenderStyle.STY_Alpha;
+		Canvas.Style = ERenderStyle.STY_Alpha;
 
 		// Draw the second box with the interaction messages	
 		// TOP LEFT CORNER 
@@ -673,17 +685,17 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 		// BOTTOM
 		Canvas.SetPos(xPos + 3, yPos + INTER_OPT_BOX_HEIGHT - 2);
 		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_bord_h, INTER_OPT_BOX_WIDTH - 6, 2, 0, 0, 1, 2);		
-		Canvas.Style=ERenderStyle.STY_Normal;
+		Canvas.Style = ERenderStyle.STY_Normal;
 
 		// Fill the background
 		Canvas.DrawLine(xPos + 2, yPos + 2, INTER_OPT_BOX_WIDTH - 4, INTER_OPT_BOX_HEIGHT - 4, Canvas.black, 200, eLevel.TMENU);
 	}
 
-	if ( !bSetPos )
+	if (!bSetPos)
 	{
 		for (i = 0; i < iNbrOfInter; i++)
 		{		        
-			DisplayInteractBox( Canvas, iNbrOfInter, i);        
+			DisplayInteractBox(Canvas, iNbrOfInter, i);        
 		}
 	}
 }
@@ -724,8 +736,8 @@ function DrawMainHUD(ECanvas Canvas)
 
 	if ((Epc.bShowHUD && bShowInteractionBox) || (!Epc.egi.bInteracting && (Epc.IManager.GetNbInteractions() > 1)) || (Epc.egi.bInteracting && (Epc.IManager.GetNbInteractions() > 2)))
 	{
-	// Interaction manager
-	DisplayInteractIcons(Canvas, false);
+		// Interaction manager
+		DisplayInteractIcons(Canvas, false);
 	}
 
 	// Debug information
@@ -734,7 +746,7 @@ function DrawMainHUD(ECanvas Canvas)
     // Timer //
 	if (Epc.bShowHUD && bShowTimer)
 	{
-		if ( TimerView != None )
+		if (TimerView != None)
 			TimerView.PostRender(Canvas);
 	}
 }
@@ -744,10 +756,10 @@ function DrawMainHUD(ECanvas Canvas)
     
  Description:   Draw any additionnal HUd info requested by InventoryItem
 -----------------------------------------------------------------------------*/
-function DrawInventoryItemInfo( ECanvas Canvas )
+function DrawInventoryItemInfo(ECanvas Canvas)
 {
 	// if item needs to add anything to the HUD, draw here
-	if ( EInventoryItem(Epc.ePawn.HandItem) != None && hud_master == None && Epc.GetStateName() != 's_Pickup' )
+	if (EInventoryItem(Epc.ePawn.HandItem) != None && hud_master == None && Epc.GetStateName() != 's_Pickup')
 		EInventoryItem(Epc.ePawn.HandItem).DrawAdditionalInfo(self, Canvas);
 }
 
@@ -774,14 +786,14 @@ function DrawConfigMainHUD(ECanvas Canvas)
 	DisplayInteractIcons(Canvas, true);
 }
 
-event DrawErrorMsgBox( ECanvas Canvas, String sErrorMsg )
+event DrawErrorMsgBox(ECanvas Canvas, String sErrorMsg)
 {
 	local int xPos, yPos, iNbrOfLine, test, iErrorBoxHeight;    	
 	local float xLen, yLen; 		
 
 	// Compute usefull infos on text
 	Canvas.Font = Canvas.ETextFont;
-	Canvas.SetClip( ERROR_BOX_WIDTH - 100, yLen);
+	Canvas.SetClip(ERROR_BOX_WIDTH - 100, yLen);
 	Canvas.SetPos(0,0);
 	Canvas.TextSize(sErrorMsg, xLen, yLen);
 	iNbrOfLine = Canvas.GetNbStringLines(sErrorMsg, 1.0f);
@@ -789,14 +801,14 @@ event DrawErrorMsgBox( ECanvas Canvas, String sErrorMsg )
 
 	iErrorBoxHeight = (iNbrOfLine * yLen) + SPACING_ERROR_BOX;
 
-	xPos = SCREEN_WIDTH/2 - ERROR_BOX_WIDTH/2;
-	yPos = SCREEN_HEIGHT/2 - iErrorBoxHeight/2;
+	xPos = SCREEN_WIDTH / 2 - ERROR_BOX_WIDTH / 2;
+	yPos = SCREEN_HEIGHT / 2 - iErrorBoxHeight / 2;
 	
-	Canvas.Style=ERenderStyle.STY_Alpha;
+	Canvas.Style = ERenderStyle.STY_Alpha;
 
     // FILL BACKGROUND //
-    Canvas.DrawLine( (SCREEN_WIDTH/2 - ERROR_BOX_WIDTH/2) + 2,
-		             (SCREEN_HEIGHT/2 - iErrorBoxHeight/2) + 2,
+    Canvas.DrawLine((SCREEN_WIDTH / 2 - ERROR_BOX_WIDTH / 2) + 2,
+		             (SCREEN_HEIGHT / 2 - iErrorBoxHeight / 2) + 2,
 					 ERROR_BOX_WIDTH - 4,
 					 iErrorBoxHeight - 4,
 					 Canvas.white, -1, eLevel.TGAME);
@@ -853,9 +865,9 @@ event DrawErrorMsgBox( ECanvas Canvas, String sErrorMsg )
 	
 	Canvas.SetDrawColor(128,128,128,255);
 	Canvas.DrawColor = Canvas.TextBlack;
-	Canvas.SetClip( ERROR_BOX_WIDTH - 100, yLen);
-	Canvas.SetPos( xPos + (ERROR_BOX_WIDTH/2), yPos + (iErrorBoxHeight/2) - ((yLen * iNbrOfLine)/2) );			
-	Canvas.DrawTextAligned( sErrorMsg, TXT_CENTER );		        
+	Canvas.SetClip(ERROR_BOX_WIDTH - 100, yLen);
+	Canvas.SetPos(xPos + (ERROR_BOX_WIDTH / 2), yPos + (iErrorBoxHeight / 2) - ((yLen * iNbrOfLine) / 2));			
+	Canvas.DrawTextAligned(sErrorMsg, TXT_CENTER);		        
 
 		
 	Canvas.Style = ERenderStyle.STY_Normal;
@@ -878,7 +890,7 @@ state MainHUD
 	function EndState()
 	{
 		// Dismiss the controller splash if changing state
-		if ( bShowCtrl ) 
+		if (bShowCtrl) 
 		{
 			bShowCtrl = false;
 			Epc.SetPause(false);
@@ -888,14 +900,14 @@ state MainHUD
 	}
 	 */
 	 
-	function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta )
+	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
-		if ( Action == IST_Press || Action == IST_Hold )
+		if (Action == IST_Press || Action == IST_Hold)
 		{
-			switch( Key )
+			switch (Key)
 			{
 			case "QuickInventory" :
-				if ( Level.Pauser == None && Epc.CanAccessQuick() && !Epc.bStopInput )
+				if (Level.Pauser == None && Epc.CanAccessQuick() && !Epc.bStopInput)
 				{
 					SaveState();
 					GotoState('QuickInventory');
@@ -903,7 +915,7 @@ state MainHUD
 				}
 				break;
 			case "PlayerStats" :
-				if ( Level.Pauser == None && Epc.CanAccessPlayerStats() && !Epc.bStopInput )
+				if (Level.Pauser == None && Epc.CanAccessPlayerStats() && Epc.bEnablePlayerStats && !Epc.bStopInput)
 				{
 					SaveState();
 					GotoState('PlayerStats');
@@ -916,7 +928,7 @@ state MainHUD
 		return false; // continue input processing
 	} 
 
-	function PostRender( Canvas C )
+	function PostRender(Canvas C)
 	{
 		local ECanvas Canvas;
 		
@@ -926,7 +938,7 @@ state MainHUD
 		DrawMainHUD(Canvas);	
 
 		// Draw item selected
-		if ( hud_master != None )
+		if (hud_master != None)
 			hud_Master.DrawView(self,Canvas);
 
 			DrawInventoryItemInfo(Canvas);
@@ -954,30 +966,30 @@ state s_Slavery
 		hud_master = None;
 	}
 
-	function Slave( EGameplayObject NewMaster )
+	function Slave(EGameplayObject NewMaster)
 	{
 		hud_master = NewMaster;
 		BeginState();
 	}
 
-	function PostRender( Canvas C )
+	function PostRender(Canvas C)
 	{
 		local ECanvas Canvas;
 		Canvas = ECanvas(C);		
 
-		if ( hud_master != None )
+		if (hud_master != None)
 			hud_master.DrawView(self, Canvas);
 
-		if ( !Epc.bLockedCamera )
+		if (!Epc.bLockedCamera)
 		{
-			if ( Epc.GetStateName() == 's_FirstPersonTargeting'	|| 
+			if (Epc.GetStateName() == 's_FirstPersonTargeting'	|| 
 				Epc.GetStateName() == 's_CameraJammerTargeting'	||
 				Epc.GetStateName() == 's_RappellingTargeting'	||
 				Epc.GetStateName() == 's_PlayerBTWTargeting'	||
 				Epc.GetStateName() == 's_HOHTargeting'			||
 				Epc.GetStateName() == 's_SplitTargeting'		||
 				Epc.GetStateName() == 's_GrabTargeting'			||
-				Epc.GetStateName() == 's_PlayerSniping' )
+				Epc.GetStateName() == 's_PlayerSniping')
 			{
 				if (Epc.bShowHUD)
 				{
@@ -994,7 +1006,7 @@ state s_Slavery
 					}
 				}
 
-				if ( Epc.GetStateName() != 's_PlayerSniping' && ( Epc.bShowHUD || GetStateName() == 'QuickInventory' ) )
+				if (Epc.GetStateName() != 's_PlayerSniping' && (Epc.bShowHUD || GetStateName() == 'QuickInventory'))
 				{
 					// Quick Inventory
 					if (!eGame.bUseController) // Joshua - Check if they're using a controller
@@ -1005,14 +1017,14 @@ state s_Slavery
 			}
 
 			//Interactions
-			if ( Epc.GetStateName() == 's_FirstPersonTargeting' && ( ( Epc.bShowHUD && bShowInteractionBox ) || ( !Epc.egi.bInteracting && ( Epc.IManager.GetNbInteractions() > 1 ) ) || ( Epc.egi.bInteracting && (Epc.IManager.GetNbInteractions() > 2 ) ) ) )
+			if (Epc.GetStateName() == 's_FirstPersonTargeting' && ((Epc.bShowHUD && bShowInteractionBox) || (!Epc.egi.bInteracting && (Epc.IManager.GetNbInteractions() > 1)) || (Epc.egi.bInteracting && (Epc.IManager.GetNbInteractions() > 2))))
 				DisplayInteractIcons(Canvas, false);
 		}
 
 		// Timer //
 		if (Epc.bShowHUD && bShowTimer)
 		{
-			if ( TimerView != None )
+			if (TimerView != None)
 				TimerView.PostRender(Canvas);
 		}
 		
@@ -1026,20 +1038,20 @@ state s_Slavery
 		Super.PostRender(Canvas);
 	}
 
-	function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta )
+	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
-		if ( Action == IST_Press || 
-			Action == IST_Hold )
+		if (Action == IST_Press || 
+			Action == IST_Hold)
 		{
-			switch( Key )
+			switch (Key)
 			{
 			case "QuickInventory" :
-				if ( Epc.CanAccessQuick() &&
+				if (Epc.CanAccessQuick() &&
 					!Epc.bStopInput && 
 					Level.Pauser == None && 
 					(Epc.GetStateName() == 's_FirstPersonTargeting'	||
 					 Epc.GetStateName() == 's_RappellingTargeting'	||
-					 Epc.GetStateName() == 's_SplitTargeting') )
+					 Epc.GetStateName() == 's_SplitTargeting'))
 				{
 					SaveState();
 					GotoState('QuickInventory');
@@ -1047,13 +1059,14 @@ state s_Slavery
 				}
 				break;
 			case "PlayerStats" :
-				if ( Epc.CanAccessPlayerStats() &&
+				if (Epc.CanAccessPlayerStats() &&
+					Epc.bEnablePlayerStats &&
 					!Epc.bStopInput && 
 					Level.Pauser == None && 
 					(Epc.GetStateName() == 's_FirstPersonTargeting'	 ||
 					 Epc.GetStateName() == 's_CameraJammerTargeting' ||
 					 Epc.GetStateName() == 's_RappellingTargeting'	 ||
-					 Epc.GetStateName() == 's_SplitTargeting') )
+					 Epc.GetStateName() == 's_SplitTargeting'))
 				{
 					SaveState();
 					GotoState('PlayerStats');
@@ -1076,16 +1089,16 @@ state s_MainMenu
 {
 	Ignores FullInventory;
 
-	function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta )
+	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{				
         MainMenuHUD.DemoTimer = 0.0f;
 		return MainMenuHUD.KeyEvent(Key,Action, Delta);
 	}
 
-	function PostRender( Canvas C )	
+	function PostRender(Canvas C)	
 	{
 		Local ECanvas Canvas;
-		Canvas=ECanvas(C);
+		Canvas = ECanvas(C);
 
 		Canvas.Style = ERenderStyle.STY_Normal;
 
@@ -1099,22 +1112,25 @@ state s_MainMenu
 		CheckError(Canvas, Epc.GetPause());
 
 		Super.PostRender(Canvas);
+
+		Epc.bStopInput = false; // Joshua - Hack to prevent input before menu has rendered
 	}
 
 	function BeginState()
 	{
 		StopAllSounds();
         Epc.SetPause(true);
+		Epc.bStopInput = true; // Joshua - Hack to prevent input before menu has rendered
 		Epc.bStopRenderWorld = true;
 
-		if ( GameMenuHUD.bGameIsFinished )
+		if (GameMenuHUD.bGameIsFinished)
 		{			
 			GameMenuHUD.bGameIsFinished = false;
 			MainMenuHUD.GotoState('s_StartGame');
 		}
 		else
 		{
-			if ( !EPC.bQuickLoad )
+			if (!EPC.bQuickLoad)
 			{				
 				MainMenuHUD.GotoState('s_StartGame');
 			}
@@ -1139,15 +1155,15 @@ state s_MainMenu
 =============================================================================*/
 state s_GameMenu
 {
-	function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta )
+	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
         return GameMenuHUD.KeyEvent(Key, Action, Delta);
 	}
 
-	function PostRender( Canvas C )	
+	function PostRender(Canvas C)	
 	{
 		Local ECanvas Canvas;
-		Canvas=ECanvas(C);
+		Canvas = ECanvas(C);
 		Canvas.Style = ERenderStyle.STY_Normal;
 
         if (bDrawMainHUD)
@@ -1160,7 +1176,7 @@ state s_GameMenu
 
         DrawDebugInfo(Canvas);
 
-		CheckError( Canvas, Epc.GetPause());
+		CheckError(Canvas, Epc.GetPause());
 
 		Super.PostRender(Canvas);
 	}
@@ -1170,11 +1186,11 @@ state s_GameMenu
 		// Player just poped up game menu
         Epc.SetPause(true);
 
-		Epc.EPawn.playsound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
+		Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
 		
 		// (Yanick Mimee) June-17-2002
 		// Go back to the last menu page access.
-		if ( Epc.bNewGoal || Epc.bNewNote || Epc.bNewRecon)
+		if (Epc.bNewGoal || Epc.bNewNote || Epc.bNewRecon)
 		{
 			GameMenuHUD.bNbrOfSpotIsFound = false;
 			GameMenuHUD.bScrollUp   = true;  // update the text the first time through
@@ -1195,13 +1211,13 @@ state s_GameMenu
 
 
 			GameMenuHUD.nLastMenuPage = 's_gameInfo';
-			if ( Epc.bNewGoal )
+			if (Epc.bNewGoal)
 			{
 				GameMenuHUD.TitleSectionGameInfo = 0;
 			}
 			else
 			{
-				if ( Epc.bNewRecon )
+				if (Epc.bNewRecon)
 				{
 					GameMenuHUD.TitleSectionGameInfo = 2;
 				}			
@@ -1241,7 +1257,7 @@ state s_QuickSaveMenu
 {	
 	Ignores FullInventory;
 
-	function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta )
+	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
 
 		if (!EchelonGameInfo(Level.game).bDemoMode)
@@ -1250,10 +1266,10 @@ state s_QuickSaveMenu
 			return GameMenuHUD.KeyEvent(Key, Action, Delta);
 	}
 
-	function PostRender( Canvas C )	
+	function PostRender(Canvas C)	
 	{
 		Local ECanvas Canvas;
-		Canvas=ECanvas(C);
+		Canvas = ECanvas(C);
 		Canvas.Style = ERenderStyle.STY_Normal;
 
 		if (!EchelonGameInfo(Level.game).bDemoMode)
@@ -1261,7 +1277,7 @@ state s_QuickSaveMenu
 		else
 			GameMenuHUD.PostRender(Canvas);
 
-		CheckError( Canvas, Epc.GetPause());
+		CheckError(Canvas, Epc.GetPause());
 
 		Super.PostRender(Canvas);
 	}
@@ -1269,7 +1285,7 @@ state s_QuickSaveMenu
 	function BeginState()
 	{		
         Epc.SetPause(true);
-		Epc.EPawn.playsound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
+		Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
 
 		if (!EchelonGameInfo(Level.game).bDemoMode)
 			MainMenuHUD.GoToState('s_SaveGame');		
@@ -1297,7 +1313,7 @@ state s_QuickLoadMenu
 {
 	Ignores FullInventory;
 
-	function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta )
+	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{       
 		if (!EchelonGameInfo(Level.game).bDemoMode)
 			return MainMenuHUD.KeyEvent(Key, Action, Delta);
@@ -1305,10 +1321,10 @@ state s_QuickLoadMenu
 			return GameMenuHUD.KeyEvent(Key, Action, Delta);
 	}
 
-	function PostRender( Canvas C )	
+	function PostRender(Canvas C)	
 	{
 		Local ECanvas Canvas;
-		Canvas=ECanvas(C);
+		Canvas = ECanvas(C);
 		Canvas.Style = ERenderStyle.STY_Normal;
 
 		if (!EchelonGameInfo(Level.game).bDemoMode)
@@ -1316,7 +1332,7 @@ state s_QuickLoadMenu
 		else
 			GameMenuHUD.PostRender(Canvas);
 
-		CheckError( Canvas, Epc.GetPause());
+		CheckError(Canvas, Epc.GetPause());
 
 		Super.PostRender(Canvas);
 	}
@@ -1324,7 +1340,7 @@ state s_QuickLoadMenu
 	function BeginState()
 	{
         Epc.SetPause(true);
-		Epc.EPawn.playsound(Sound'Interface.Play_ActionChoice', SLOT_Interface);				
+		Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);				
 
 		if (!EchelonGameInfo(Level.game).bDemoMode)
 			MainMenuHUD.GoToState('s_LoadGame');
@@ -1364,17 +1380,17 @@ state QuickInventory
 	{
 		if (!eGame.bUseController) // Joshua - Check if they're using a controller
 		{
-			if ( QuickInvAndCurrentItems.GetStateName() == 's_QDisplay' )
+			if (QuickInvAndCurrentItems.GetStateName() == 's_QDisplay')
 				QuickInvAndCurrentItems.GotoState('');
 		}
 		else
 		{
-			if ( QuickInvAndCurrentItemsXbox.GetStateName() == 's_QDisplayXbox' ) // Joshua - Xbox quick inventory
+			if (QuickInvAndCurrentItemsXbox.GetStateName() == 's_QDisplayXbox') // Joshua - Xbox quick inventory
 				QuickInvAndCurrentItems.GotoState('');
 		}
 	}
 
-	function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta )
+	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
 		if (!eGame.bUseController) // Joshua - Check if they're using a controller
 			return QuickInvAndCurrentItems.KeyEvent(Key, Action, Delta);
@@ -1382,11 +1398,11 @@ state QuickInventory
 			return QuickInvAndCurrentItemsXbox.KeyEvent(Key, Action, Delta); // Joshua - Xbox quick inventory
 	}
 
-	function PostRender( Canvas C )
+	function PostRender(Canvas C)
 	{
 		DrawMainHUD(ECanvas(C));
 		
-		CheckError( ECanvas(C), Epc.GetPause());
+		CheckError(ECanvas(C), Epc.GetPause());
 		Super.PostRender(C);
 	}
 }
@@ -1398,22 +1414,22 @@ state QuickInventory
 =============================================================================*/
 state s_Training
 {
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta )
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
         return GameMenuHUD.KeyEvent(Key, Action, Delta);
 	}
 
-	function PostRender( Canvas C )	
+	function PostRender(Canvas C)	
 	{
 		Local ECanvas Canvas;
-		Canvas=ECanvas(C);
+		Canvas = ECanvas(C);
 		Canvas.Style = ERenderStyle.STY_Normal;
 
 		
 			GameMenuHUD.PostRender(Canvas);
 
 
-		CheckError( Canvas, Epc.GetPause());
+		CheckError(Canvas, Epc.GetPause());
 
         DrawDebugInfo(Canvas);
 
@@ -1441,10 +1457,10 @@ state s_Loading
 {	
 	Ignores FullInventory;
 
-	function PostRender( Canvas C )	
+	function PostRender(Canvas C)	
 	{
 		local ECanvas Canvas;
-		Canvas=ECanvas(C);
+		Canvas = ECanvas(C);
 
 		Canvas.Style     = ERenderStyle.STY_Normal;
         
@@ -1462,7 +1478,7 @@ state s_Mission
 {
 	Ignores FullInventory, Slave, NormalView;
 
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta )
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
         return GameMenuHUD.KeyEvent(Key, Action, Delta);        
 	}
@@ -1472,10 +1488,10 @@ state s_Mission
 		return GameMenuHUD.GetStateName() == 's_MissionFailed';
 	}
 
-    function PostRender( Canvas C )	
+    function PostRender(Canvas C)	
 	{
 		local ECanvas Canvas;
-		Canvas=ECanvas(C);
+		Canvas = ECanvas(C);
 
 		Canvas.Style     = ERenderStyle.STY_Normal;
         
@@ -1483,7 +1499,7 @@ state s_Mission
 
 		PlayerStatsHUD.PostRender(Canvas);
 	
-		CheckError( Canvas, Epc.GetPause());
+		CheckError(Canvas, Epc.GetPause());
 
         DrawDebugInfo(Canvas);
 
@@ -1505,7 +1521,8 @@ Complete:
 		PlaySound(Sound'CommonMusic.Play_theme_MissionSuccess', SLOT_Fisher);
 	GameMenuHUD.GotoState('s_MissionComplete');
 	Sleep(6);
-	PlayerStatsHUD.GoToState('s_MissionComplete');
+	if (Epc.bEnablePlayerStats)
+		PlayerStatsHUD.GoToState('s_MissionComplete');
 	Stop;
 }
 
@@ -1529,7 +1546,7 @@ state s_Cinematic
 {
 	Ignores FullInventory;
 
-   	function PostRender( Canvas C )
+   	function PostRender(Canvas C)
 	{
 		local ECanvas Canvas;
 
@@ -1539,7 +1556,7 @@ state s_Cinematic
 		{
 			// Draw Black Line //
 			Canvas.DrawLine(0, 0, 640, 60, Canvas.black, -1, eLevel.TMENU);
-			Canvas.DrawLine(0, 480-60, 640, 60, Canvas.black, -1, eLevel.TMENU);
+			Canvas.DrawLine(0, 480 - 60, 640, 60, Canvas.black, -1, eLevel.TMENU);
 		}
 
 		DrawDebugInfo(Canvas);
@@ -1550,7 +1567,7 @@ state s_Cinematic
 			CommunicationBox.Draw(Canvas);
 		}
 
-		CheckError( Canvas, Epc.GetPause());
+		CheckError(Canvas, Epc.GetPause());
 
 		Super.PostRender(Canvas);
 	}
@@ -1568,7 +1585,7 @@ state s_Cinematic
 	// If Player is drawing weapon while cinematic starts, it will pop here ..
 	// saving as if he was in slavery before cinemtic so that everything gets 
 	// restored properly when coming back form cinematic
-	function Slave( EGameplayObject NewMaster )
+	function Slave(EGameplayObject NewMaster)
 	{
 		in_game_state_name	= 's_Slavery';
 		in_game_hud_master	= NewMaster;
@@ -1591,15 +1608,15 @@ state PlayerStats
 
 	function EndState()
 	{
-		if ( PlayerStatsHUD.GetStateName() == 's_StandardDisplay' )
+		if (PlayerStatsHUD.GetStateName() == 's_StandardDisplay')
 			PlayerStatsHUD.GotoState('');
 	}
-	function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta )
+	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
 		return PlayerStatsHUD.KeyEvent(Key, Action, Delta);
 	}
 
-	function PostRender( Canvas C )
+	function PostRender(Canvas C)
 	{
 		local ECanvas Canvas;
 		Canvas = ECanvas(C);
@@ -1633,21 +1650,21 @@ state s_FinalMapStats
         PlayerStatsHUD.GotoState('s_FinalMapStats');
     }
 
-    function bool KeyEvent( string Key, EInputAction Action, FLOAT Delta )
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
     {
         return PlayerStatsHUD.KeyEvent(Key, Action, Delta);
     }
 
-    function PostRender( Canvas C )	
+    function PostRender(Canvas C)	
     {
         local ECanvas Canvas;
-        Canvas=ECanvas(C);
+        Canvas = ECanvas(C);
 
         Canvas.Style = ERenderStyle.STY_Normal;
         
         PlayerStatsHUD.PostRender(Canvas);
     
-        CheckError( Canvas, Epc.GetPause());
+        CheckError(Canvas, Epc.GetPause());
 
         DrawDebugInfo(Canvas);
 
@@ -1663,4 +1680,5 @@ defaultproperties
 	bShowCommunicationBox=true
 	bShowTimer=true
 	bLetterBoxCinematics=true
+	CurrentGoalAlignment=TXT_RIGHT
 }
