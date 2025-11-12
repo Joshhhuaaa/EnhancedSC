@@ -235,13 +235,13 @@ function Reset()
 
 function RumbleShake(float Duration, float Strenth)
 {
-	if(Rumble != None)
+	if (Rumble != None)
 		Rumble.Shake(Duration, Strenth);
 }
 
 function RumbleVibrate(float Duration, float Strenth)
 {
-	if(Rumble != None)
+	if (Rumble != None)
 		Rumble.Vibrate(Duration, Strenth);
 }
 
@@ -257,7 +257,7 @@ function RumbleVibrate(float Duration, float Strenth)
 //		type : 
 //
 //------------------------------------------------------------------------
-function AddChange( Actor changedActor, EChangeType type )
+function AddChange(Actor changedActor, EChangeType type)
 {
 	changedActor.ChangeType = type;
 	changedActor.AddChangedActor();
@@ -271,7 +271,7 @@ function AddChange( Actor changedActor, EChangeType type )
 // 
 //------------------------------------------------------------------------
 
-function RemoveChange( Actor changedActor )
+function RemoveChange(Actor changedActor)
 {
 	//changedActor.ChangeType = CHANGE_None;
 	changedActor.RemoveChangedActor();
@@ -296,7 +296,7 @@ local int i;
     temp = GetCurrentMapName();
 
 
-    if( InStr(temp, ".") > 0)
+    if (InStr(temp, ".") > 0)
     {
         temp = Left(temp, InStr(temp, "."));
     }
@@ -312,15 +312,15 @@ local int i;
     //log("Variable ClassName : "$ClassName);
 
 	//spawn variable class
-	if(VarObjectClassName != None)
+	if (VarObjectClassName != None)
 		VarObject = spawn(VarObjectClassName,self);
 //	else
 //		Log(self$" Variable class for the level could not be spawned");
 
-	if(Game.UseRumble)
+	if (Game.UseRumble)
 	{
 		Rumble = new class'ERumble';
-		if(Rumble == None)
+		if (Rumble == None)
 			Log("Cant create ERumble actor");
 	}
 }
@@ -357,4 +357,5 @@ defaultproperties
     bBlockNPCShot=true
     bBlockNPCVision=true
     bHiddenEd=true
+	EngineVersion="Enhanced" // Joshua - Enhanced version identifer
 }
