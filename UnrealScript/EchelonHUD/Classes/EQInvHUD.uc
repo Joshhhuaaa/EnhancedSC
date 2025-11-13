@@ -328,7 +328,7 @@ function DrawAlarmBox(ECanvas Canvas)
 		if (bAlarmBlink)
 		{
 			Canvas.DrawColor.A = AlarmAlpha;
-			Canvas.SetPos(xPos + 4, yPos + 8);
+			Canvas.SetPos(xPos + 2, yPos + 8);
 			Canvas.DrawTile(Texture'HUD_Enhanced.HUD.Alarm', 16, 16, 0, 0, 16, 16);
 		}
 	}
@@ -336,7 +336,7 @@ function DrawAlarmBox(ECanvas Canvas)
 	{
 		// No alarm change – always show the icon
 		Canvas.DrawColor.A = AlarmAlpha;
-		Canvas.SetPos(xPos + 4, yPos + 8);
+		Canvas.SetPos(xPos + 2, yPos + 8);
 		Canvas.DrawTile(Texture'HUD_Enhanced.HUD.Alarm', 16, 16, 0, 0, 16, 16);
 	}
     
@@ -346,7 +346,7 @@ function DrawAlarmBox(ECanvas Canvas)
     Canvas.Font = Canvas.ETextFont;
     Canvas.TextSize(szText, xLen, yLen);
 	if (Canvas.ETextFont == Font'ETextFontPC' || Canvas.ETextFont == Font'ETextFontGameCube')
-		Canvas.SetPos(xPos + 26, yPos + 8); // Shifted for the PC/GameCube font
+		Canvas.SetPos(xPos + 29, yPos + 8); // Shifted for the PC/GameCube font
 	else
 		Canvas.SetPos(xPos + 22, yPos + 8);
     Canvas.DrawTextAligned(szText, TXT_LEFT);
