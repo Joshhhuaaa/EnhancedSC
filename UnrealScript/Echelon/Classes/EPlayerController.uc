@@ -282,8 +282,6 @@ var bool m_ChooseNextGadget;
 var bool bDPadUpPressed, bDPadDownPressed;
 var bool bUsingAirCamera; // Joshua - True when the player is using a camera, prevents movement speed changes with mouse wheel
 
-var(Enhanced) config bool bSnipeToResetCamera; // Joshua - Snipe key will reset the camera
-
 // Joshua - Adding the option to use Camera Jammer camera behavior from Pandora Tomorrow
 var(Enhanced) config bool bCameraJammerAutoLock;
 var Actor JammedCam; 
@@ -1373,8 +1371,6 @@ exec function Snipe()
 
 	if (ActiveGun != None && ActiveGun == MainGun && ePawn.HandItem == ActiveGun && !bInGunTransition)
 		bPressSnip = true;
-	else if (bSnipeToResetCamera)
-		bResetCamera = 1;
 }
 
 //---------------------------------------[Joshua - 15 Jul 2025]-----

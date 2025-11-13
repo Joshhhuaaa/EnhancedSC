@@ -242,12 +242,12 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 //=============================================================================
 
 	// Joshua - Workaround to prevent controller from interrupting mission failed state before it reloads the last save
-	if (Epc.myHUD.IsPlayerGameOver())
-	{
-		Epc.SetKey("Joy1 None", "");
-		Epc.SetKey("Joy8 None", "");
-		Epc.SetKey("Joy10 None", "");
-	}
+	//if (Epc.myHUD.IsPlayerGameOver())
+	//{
+	//	Epc.SetKey("Joy1 None", "");
+	//	Epc.SetKey("Joy8 None", "");
+	//	Epc.SetKey("Joy10 None", "");
+	//}
 
 //=============================================================================
 // Joshua - Automatically toggle controller mode

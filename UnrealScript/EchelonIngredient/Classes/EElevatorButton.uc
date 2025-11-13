@@ -26,7 +26,7 @@ function Trigger(Actor Other, Pawn EventInstigator, name InTag)
 
 	// light up the button
 	if (!ControllerPanel.bPowered && EventInstigator == EchelonGameInfo(Level.game).pPlayer.ePawn)
-		EchelonGameInfo(Level.game).pPlayer.SendTransmissionMessage(Localize("Transmission", "ElevatorPower", "Localization\\HUD"), TR_CONSOLE);
+		EchelonGameInfo(Level.Game).pPlayer.SendTransmissionMessage(Localize("Transmission", "ElevatorPower", "Localization\\HUD"), TR_CONSOLE);
 
 	// call elevator on this floor
 	ControllerPanel.RequestElevator(self);

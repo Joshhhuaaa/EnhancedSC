@@ -55,7 +55,7 @@ var FLOAT                           fTimer;
 var FLOAT                           fDuration;
 var bool                            bWithVoice;
 
-native(1401) final function AddTransmission(Actor Owner, EchelonEnums.eTransmissionType eType, String TextData, Sound SoundData, optional byte eEvent,optional String SpecialString); //Fblais
+native(1401) final function AddTransmission(Actor Owner, EchelonEnums.eTransmissionType eType, String TextData, Sound SoundData, optional byte eEvent, optional String SpecialString); //Fblais
 native(1402) final function GetCurrentSize(out float YL); //Fblais
 
 /*-----------------------------------------------------------------------------

@@ -2393,8 +2393,8 @@ function Close(optional bool bInterrupted)
 //------------------------------------------------------------------------
 function Console(String Text, byte Event)
 {
-	if (CommBox!= None)
-		CommBox.AddTransmission(self, TR_CONSOLE, Text,None,Event);
+	if (CommBox != None)
+		CommBox.AddTransmission(self, TR_CONSOLE, Text, None, Event);
 }
 
 //------------------------------------------------------------------------
@@ -3591,7 +3591,7 @@ function LockDoor(Name matchTag, bool IsLocked, bool IsUsable)
 //------------------------------------------------------------------------
 function SendNPCTransmission(string Text, sound SoundData)
 {
-	EMainHUD(EPlayerController(Characters[0]).myHUD).CommunicationBox.AddTransmission(self, TR_NPCS,Text, SoundData);
+	EMainHUD(EPlayerController(Characters[0]).myHUD).CommunicationBox.AddTransmission(self, TR_NPCS, Text, SoundData);
 }
 
 

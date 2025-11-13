@@ -17,7 +17,6 @@ var UWindowLabelControl  m_LMouseSensitivityValue; // Joshua - Label for the mou
 var EPCHScrollBar        m_InitialSpeedScroll; // Joshua - Enhanced setting
 var EPCCheckBox          m_InvertMouseButton;
 var EPCCheckBox          m_FireEquipGun;
-var EPCCheckBox          m_bSnipeToResetCamera; // Joshua - Enhanced setting
 var EPCCheckBox          m_bNormalizeMovement; // Joshua - Enhanced setting
 var EPCCheckBox          m_bCrouchDrop; // Joshua - Enhanced setting
 var EPCCheckBox          m_bToggleBTWTargeting; // Joshua - Enhanced setting
@@ -86,6 +85,7 @@ function InitOptionControls()
     AddKeyItem(Localize("Keys","K_Interaction","Localization\\HUD"), "Interaction");
     AddKeyItem(Localize("Keys","K_Reload","Localization\\HUD"), "ReloadGun");
     AddKeyItem(Localize("Keys","K_SwitchROF","Localization\\HUD"), "SwitchROF");
+    AddKeyItem(Localize("Keys","K_ResetCamera","Localization\\HUD"), "ResetCamera");
     AddKeyItem(Localize("Keys","K_Whistle","Localization\\Enhanced"), "Whistle");
     AddKeyItem(Localize("Keys","K_QuickSave","Localization\\HUD"), "QuickSave");
 	AddKeyItem(Localize("Keys","K_QuickLoad","Localization\\HUD"), "QuickLoad");
@@ -97,7 +97,6 @@ function InitOptionControls()
 
     AddLineItem();
 	AddFireEquipControls();
-    AddEnhancedCheckBoxControl("SnipeToResetCamera", m_bSnipeToResetCamera);
     AddEnhancedCheckBoxControl("ToggleBTWTargeting", m_bToggleBTWTargeting);
     AddEnhancedCheckBoxControl("CameraJammerAutoLock", m_bCameraJammerAutoLock);
     AddLineItem();
@@ -156,7 +155,6 @@ function SaveOptions()
 	GO.FireEquipGun = m_FireEquipGun.m_bSelected;
 
     EPC.eGame.m_defautSpeed = m_InitialSpeedScroll.Pos;
-    EPC.bSnipeToResetCamera = m_bSnipeToResetCamera.m_bSelected;
     EPC.bNormalizeMovement = m_bNormalizeMovement.m_bSelected;
     EPC.bCrouchDrop = m_bCrouchDrop.m_bSelected;
     EPC.bToggleBTWTargeting = m_bToggleBTWTargeting.m_bSelected;
@@ -237,9 +235,6 @@ function Refresh()
     if (m_InitialSpeedScroll != None)
         m_InitialSpeedScroll.Pos = EPC.eGame.m_defautSpeed;
 
-    if (m_bSnipeToResetCamera != None)
-        m_bSnipeToResetCamera.m_bSelected = EPC.bSnipeToResetCamera;
-
     if (m_bNormalizeMovement != None)
         m_bNormalizeMovement.m_bSelected = EPC.bNormalizeMovement;
 
@@ -305,7 +300,6 @@ function ResetToDefault()
 
     EPC = EPlayerController(GetPlayerOwner());
     m_InitialSpeedScroll.Pos = 5;
-    m_bSnipeToResetCamera.m_bSelected = false;
     m_bNormalizeMovement.m_bSelected = true;
     m_bCrouchDrop.m_bSelected = true;
     m_bToggleBTWTargeting.m_bSelected = true;
@@ -541,7 +535,6 @@ function RefreshKeyList(bool bKeysOnly) // MClarke - Patch 1 Beta 2 - Added bool
         m_InvertMouseButton.m_bSelected = GO.InvertMouse;    
 	    m_FireEquipGun.m_bSelected = GO.FireEquipGun;
         m_InitialSpeedScroll.Pos = Clamp(EPC.eGame.m_defautSpeed, 1,6);
-        m_bSnipeToResetCamera.m_bSelected = EPC.bSnipeToResetCamera;
         m_bNormalizeMovement.m_bSelected = EPC.bNormalizeMovement;
         m_bCrouchDrop.m_bSelected = EPC.bCrouchDrop;
         m_bToggleBTWTargeting.m_bSelected = EPC.bToggleBTWTargeting;
@@ -772,10 +765,6 @@ function Notify(UWindowDialogControl C, byte E)
             m_LMouseSensitivityValue.SetLabelText(string(int(m_MouseSensitivityScroll.Pos)), TXT_LEFT);
     }
     else if (E == DE_Change && C == m_InitialSpeedScroll)
-    {
-        m_bModified = true;
-    }
-    else if (E == DE_Click && C == m_bSnipeToResetCamera)
     {
         m_bModified = true;
     }
