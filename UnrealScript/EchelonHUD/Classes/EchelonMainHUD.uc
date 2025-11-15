@@ -564,8 +564,7 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 			INTER_OPT_BOX_HEIGHT = iNbrOfInter * yLen + 3 + 3;
 		}		
 
-		// Joshua - Use fixed width to maintain consistent size across all fonts/platforms
-		INTER_OPT_BOX_WIDTH  = 206; // Fixed pixel width (Xbox: 206, PC: 226 with dynamic calculation)
+		INTER_OPT_BOX_WIDTH  = xLen * MAX_INTER_NAME_LENGHT + 3 + 3;
 		INTER_BOX_WIDTH = INTER_OPT_BOX_WIDTH;
 		INTER_BOX_HEIGHT = yLen + 5 + 5 + 12;
 
@@ -619,7 +618,7 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 			// Display "INTERACT"
 			// Color given by the interface artist (Veronique)
 			Canvas.SetDrawColor(49,56,40);
-			Canvas.SetPos(xPos + 5 ,yPos + (INTER_BOX_HEIGHT / 2) - (yLen / 2));
+			Canvas.SetPos(xPos + 5, yPos + (INTER_BOX_HEIGHT / 2) - (yLen / 2));
 			Canvas.DrawTextAligned(Localize("HUD", "INTERACT", "Localization\\HUD"));
 
 			// Draw the X button 						
