@@ -1308,7 +1308,7 @@ exec function IncSpeed()
 	SnipeZoomIn();
 
 	// Joshua - QoL improvement: variable speeds in weapon mode but we must prevent it while zooming or using air camera
-	if (GetStateName() != 's_PlayerSniping' && GetStateName() != 's_LaserMicTargeting' && !bUsingAirCamera)
+	if (GetStateName() != 's_PlayerSniping' && GetStateName() != 's_RappellingSniping' && GetStateName() != 's_LaserMicTargeting' && !bUsingAirCamera)
 	{
 		m_curWalkSpeed += 1;
 		if (m_curWalkSpeed > eGame.m_maxSpeedInterval)
@@ -1336,7 +1336,7 @@ exec function DecSpeed()
 	SnipeZoomOut();
 
 	// Joshua - QoL improvement: variable speeds in weapon mode but we must prevent it while zooming or using air camera
-	if (GetStateName() != 's_PlayerSniping' && GetStateName() != 's_LaserMicTargeting' && !bUsingAirCamera)
+	if (GetStateName() != 's_PlayerSniping' && GetStateName() != 's_RappellingSniping' && GetStateName() != 's_LaserMicTargeting' && !bUsingAirCamera)
 	{
 		m_curWalkSpeed -= 1;
 		if (m_curWalkSpeed <= 0)
@@ -1382,7 +1382,7 @@ exec function SnipeZoomIn()
 	if (Level.Pauser != None || bStopInput)
 		return;
 
-	if (bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping')
+	if (bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && (GetStateName() == 's_PlayerSniping' || GetStateName() == 's_RappellingSniping'))
 		ESniperGun(ActiveGun).ZoomIn();
 }
 
@@ -1395,7 +1395,7 @@ exec function SnipeZoomOut()
 	if (Level.Pauser != None || bStopInput)
 		return;
 
-	if (bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping')
+	if (bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && (GetStateName() == 's_PlayerSniping' || GetStateName() == 's_RappellingSniping'))
 		ESniperGun(ActiveGun).ZoomOut();
 }
 
@@ -1780,17 +1780,17 @@ function ShowDebugStats(Canvas Canvas, out float YL, out float YPos)
     
     Canvas.StrLen("TEST", XL, YL);
     
-    T = "[EPlayerStats]";
+    T = "[]";
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4,YPos);
 
-	T = "MissionName: "$playerStats.MissionName;
+	T = "SoundWalkingRatio: "$EPawn.SoundWalkingRatio;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4,YPos);
 
-	T = "MissionTime: "$playerStats.MissionTime;
+	T = "WalkingRatio: "$EPawn.WalkingRatio;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4,YPos);
@@ -2746,7 +2746,7 @@ exec function PreviousGadget()
 		return;
 
 	// Joshua - If the player is in sniping mode, don't change gadget
-	if (ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping')
+	if (ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && (GetStateName() == 's_PlayerSniping' || GetStateName() == 's_RappellingSniping'))
 		return;
 
 	if (!CanAccessQuick())
@@ -2764,7 +2764,7 @@ exec function NextGadget()
 		return;
 
 	// Joshua - If the player is in sniping mode, don't change gadget
-	if (ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && GetStateName() == 's_PlayerSniping')
+	if (ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && (GetStateName() == 's_PlayerSniping' || GetStateName() == 's_RappellingSniping'))
 		return;
 
 	if (!CanAccessQuick())
@@ -8075,6 +8075,27 @@ state s_RappellingSniping extends s_PlayerSniping
 			bPressSnip = false;
 			bInTransition = true;
 			GotoState(,'BackToFirstPerson');
+		}
+
+		// Joshua - Controller support for zoom levels
+		if (bDPadUp != 0 && !bDPadUpPressed)
+		{
+			bDPadUpPressed = true;
+			SnipeZoomIn();
+		}
+		else if (bDPadUp == 0)
+		{
+			bDPadUpPressed = false;
+		}
+
+		if (bDPadDown != 0 && !bDPadDownPressed)
+		{
+			bDPadDownPressed = true;
+			SnipeZoomOut();
+		}
+		else if (bDPadDown == 0)
+		{
+			bDPadDownPressed = false;
 		}
 	}
 
