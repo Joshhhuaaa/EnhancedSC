@@ -94,9 +94,9 @@ state s_RayTracing
 
 defaultproperties
 {
-    SprayDistance150.000000
-    SprayDamage2
-    DamageTypeClass'ESleepingGas'
-    bCollideActorstrue
-    bDirectionaltrue
+    SprayDistance=150.000000
+    SprayDamage=2
+    DamageType=Class'ESleepingGas'
+    bCollideActors=true
+    bDirectional=true
 }
