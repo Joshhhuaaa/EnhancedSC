@@ -161,7 +161,7 @@ function DrawBox(ECanvas Canvas, int xPos, int yPos, int width, int height, bool
     // FILL BACKGROUND //
     Canvas.DrawLine(xPos + 5, yPos + 6, width - 10, height - 12, Canvas.white, -1, eLevel.TGAME);
 
-    Canvas.SetDrawColor(128,128,128);
+    Canvas.SetDrawColor(128, 128, 128);
 
     // CORNERS //
 
@@ -204,7 +204,7 @@ function DrawBox(ECanvas Canvas, int xPos, int yPos, int width, int height, bool
 
     if (bExpand)
     {
-        Canvas.SetDrawColor(64,64,64);
+        Canvas.SetDrawColor(64, 64, 64);
         Canvas.Style = ERenderStyle.STY_Modulated;
 
         Canvas.SetPos(xPos + width - 6 - ICON_WIDTH, yPos + 7);
@@ -221,7 +221,7 @@ function DrawBox(ECanvas Canvas, int xPos, int yPos, int width, int height, bool
 -----------------------------------------------------------------------------*/
 function DrawBoxBackground(ECanvas Canvas, int xPos, int yPos, int width, int height)
 {
-    Canvas.SetDrawColor(64,64,64,255);
+    Canvas.SetDrawColor(64, 64, 64, 255);
     Canvas.Style = ERenderStyle.STY_Modulated;
 
     Canvas.SetPos(xPos + 5, yPos + 6);
@@ -244,7 +244,7 @@ function DrawIcon(ECanvas Canvas, int iconIndex, int xBoxPos, int yBoxPos, int b
     iconHeight = eLevel.TICON.GetHeight(iconIndex);
 
     // DRAW ICON IN THE CENTER //
-    Canvas.SetDrawColor(64,64,64);
+    Canvas.SetDrawColor(64, 64, 64);
     Canvas.Style = ERenderStyle.STY_Modulated;
 
     Canvas.SetPos(xBoxPos + boxWidth - 6 - ICON_WIDTH + (ICON_WIDTH - iconWidth) / 2, yBoxPos + (boxHeight - iconHeight) / 2);
@@ -485,7 +485,7 @@ state() StandardDisplay
 						tmpVal = 1.0f;
 
                     color = Canvas.TextBlack.R + (50 - (tmpVal * 50.0f));
-                    Canvas.SetDrawColor(color,color,color);
+                    Canvas.SetDrawColor(color, color, color);
                 }
                 else
                     Canvas.DrawColor = Canvas.TextBlack;
@@ -494,10 +494,12 @@ state() StandardDisplay
 				if (bIsAGoal)
 				{
 					// DRAW TEXT				
-					Canvas.SetDrawColor(128,128,128, 153);
+					Canvas.SetDrawColor(128, 128, 128, 153);
 					Canvas.Style = ERenderStyle.STY_Alpha;
-					Canvas.DrawLine(xTextPos, yTextPos + 1, COMBOX_WIDTH - 15 - ICON_WIDTH, 15, Canvas.black, 150, eLevel.TMENU);				
-					Canvas.SetDrawColor(128,128,128);
+					//Canvas.DrawLine(xTextPos, yTextPos + 1, COMBOX_WIDTH - 15 - ICON_WIDTH, 15, Canvas.black, 150, eLevel.TMENU);
+                    // Joshua - Adjusted objective bar for consistency (adding 1px to the right, subtracting 1px from the bottom)
+                    Canvas.DrawLine(xTextPos, yTextPos + 1, COMBOX_WIDTH - 14 - ICON_WIDTH, 14, Canvas.black, 150, eLevel.TMENU);
+					Canvas.SetDrawColor(128, 128, 128);
 					Canvas.Style = ERenderStyle.STY_Normal;
 
 					Canvas.SetPos(xTextPos,yTextPos);
@@ -505,7 +507,7 @@ state() StandardDisplay
 					// Display the word OBJECTIVE in a blinking way
 					if (!bBlink)
 					{
-						Canvas.DrawText(Localize("HUD", "OBJECTIVE", "Localization\\HUD"),false);						
+						Canvas.DrawText(Localize("HUD", "OBJECTIVE", "Localization\\HUD"), false);						
 					}
 					
 					Canvas.DrawColor = Canvas.TextBlack;
@@ -703,5 +705,5 @@ state s_Menu
 
 defaultproperties
 {
-    bHidden=true
+    bHidden=True
 }
