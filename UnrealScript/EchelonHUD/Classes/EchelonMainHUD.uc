@@ -185,7 +185,7 @@ function PostBeginPlay()
     GameMenuHUD.CurrentCategory = CAT_NONE;
 
 		
-	if (!EchelonGameInfo(Level.game).bDemoMode)
+	if (!EchelonGameInfo(Level.Game).bDemoMode)
 	{
 		GameMenuHUD.nLastMenuPage = 's_Inventory';		
 	}
@@ -1300,6 +1300,14 @@ state s_GameMenu
 
         GameMenuHUD.PostRender(Canvas);
 
+		// Joshua - Handles the transition from the Xbox pause screen to the PC menus
+		if (GameMenuHUD.MenuSection == 2 && GameMenuHUD.TitleSectionMainMenu != -1)
+		{
+			// Close the Xbox pause menu
+			Epc.bPCMenuPending = true;
+			GotoState(RestoreState());
+		}
+
         // Transmissions //
 	    CommunicationBox.DrawMenuSpeech(Canvas);		
 
@@ -1313,6 +1321,13 @@ state s_GameMenu
 
 	function BeginState()
 	{
+		// Joshua - Handles the transition from the Xbox pause screen to the PC menus
+		if (GameMenuHUD.nLastMenuPage == 's_MainMenu')
+			GameMenuHUD.nLastMenuPage = 's_GameInfo';
+
+		if (GameMenuHUD.TitleSectionMainMenu != 1)
+			GameMenuHUD.TitleSectionMainMenu = -1;
+
 		// Player just poped up game menu
         Epc.SetPause(true);
 
@@ -1343,7 +1358,7 @@ state s_GameMenu
 			GameMenuHUD.ItemPos = 0;
 
 
-			GameMenuHUD.nLastMenuPage = 's_gameInfo';
+			GameMenuHUD.nLastMenuPage = 's_GameInfo';
 			if (Epc.bNewGoal)
 			{
 				GameMenuHUD.TitleSectionGameInfo = 0;
@@ -1393,7 +1408,7 @@ state s_QuickSaveMenu
 	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
 
-		if (!EchelonGameInfo(Level.game).bDemoMode)
+		if (!EchelonGameInfo(Level.Game).bDemoMode)
 			return MainMenuHUD.KeyEvent(Key, Action, Delta);
 		else
 			return GameMenuHUD.KeyEvent(Key, Action, Delta);
@@ -1405,7 +1420,7 @@ state s_QuickSaveMenu
 		Canvas = ECanvas(C);
 		Canvas.Style = ERenderStyle.STY_Normal;
 
-		if (!EchelonGameInfo(Level.game).bDemoMode)
+		if (!EchelonGameInfo(Level.Game).bDemoMode)
 			MainMenuHUD.PostRender(Canvas);
 		else
 			GameMenuHUD.PostRender(Canvas);
@@ -1420,7 +1435,7 @@ state s_QuickSaveMenu
         Epc.SetPause(true);
 		Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
 
-		if (!EchelonGameInfo(Level.game).bDemoMode)
+		if (!EchelonGameInfo(Level.Game).bDemoMode)
 			MainMenuHUD.GoToState('s_SaveGame');		
 		else
 			GameMenuHUD.GoToState('s_QuickSave');		
@@ -1430,7 +1445,7 @@ state s_QuickSaveMenu
     {
         Epc.SetPause(false);
 
-		if (!EchelonGameInfo(Level.game).bDemoMode)
+		if (!EchelonGameInfo(Level.Game).bDemoMode)
 			MainMenuHUD.GoToState('');
 		else
 			GameMenuHUD.GoToState('');
@@ -1448,7 +1463,7 @@ state s_QuickLoadMenu
 
 	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{       
-		if (!EchelonGameInfo(Level.game).bDemoMode)
+		if (!EchelonGameInfo(Level.Game).bDemoMode)
 			return MainMenuHUD.KeyEvent(Key, Action, Delta);
 		else
 			return GameMenuHUD.KeyEvent(Key, Action, Delta);
@@ -1460,7 +1475,7 @@ state s_QuickLoadMenu
 		Canvas = ECanvas(C);
 		Canvas.Style = ERenderStyle.STY_Normal;
 
-		if (!EchelonGameInfo(Level.game).bDemoMode)
+		if (!EchelonGameInfo(Level.Game).bDemoMode)
 			MainMenuHUD.PostRender(Canvas);
 		else
 			GameMenuHUD.PostRender(Canvas);
@@ -1475,7 +1490,7 @@ state s_QuickLoadMenu
         Epc.SetPause(true);
 		Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);				
 
-		if (!EchelonGameInfo(Level.game).bDemoMode)
+		if (!eGame.bDemoMode)
 			MainMenuHUD.GoToState('s_LoadGame');
 		else
 			GameMenuHUD.GoToState('s_QuickLoad');		
@@ -1485,7 +1500,7 @@ state s_QuickLoadMenu
     {
         Epc.SetPause(false);
 
-		if (!EchelonGameInfo(Level.game).bDemoMode)
+		if (!EchelonGameInfo(Level.Game).bDemoMode)
 			MainMenuHUD.GoToState('');
 		else
 			GameMenuHUD.GoToState('');

@@ -232,6 +232,9 @@ var(EnhancedDebug) string sDebugString3;
 var(EnhancedDebug) bool bEnableBTWThrow;
 var bool bBTWThrow; // Joshua - Player is using BTW throw, swap animations
 var(EnhancedDebug) bool bEnableHOHFUTargeting;
+
+var bool bPCMenuPending; // Joshua - Handles the transition from the Xbox pause screen to the PC menus
+
 var(Enhanced) config bool bMissionFailedQuickMenu;
 var string LastSaveName;					// Joshua - Used for mission failed screen to load last save
 var bool bMissionFailedShowConfirmation;  	// Joshua - Show confirmation prompt overlay on Mission Failed screen
@@ -3162,7 +3165,7 @@ state s_Grab
 		}
 
 		if (ePawn.Physics == PHYS_Falling)
-			return ;
+			return;
 
 		if (bInTransition)
 			return;

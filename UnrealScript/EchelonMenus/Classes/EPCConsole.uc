@@ -179,6 +179,23 @@ function PostRender(Canvas Canvas)
 {
 	if (Root == None)
 		CreateRootWindow(Canvas);
+	
+	// Joshua - Handles the transition from the Xbox pause screen to the PC menus
+	if (ViewportOwner != None && 
+		ViewportOwner.Actor != None && 
+		EPlayerController(ViewportOwner.Actor) != None &&
+		EPlayerController(ViewportOwner.Actor).bPCMenuPending &&
+		ViewportOwner.Actor.Level.Pauser == None &&
+		Root != None)
+	{
+		EPlayerController(ViewportOwner.Actor).bPCMenuPending = false;
+		bLaunchWasCalled = false;
+		bReturnToMenu = false;
+		GotoState('UWindow');
+		Root.ChangeCurrentWidget(WidgetID_InGameMenu);
+		EPCMainMenuRootWindow(Root).m_InGameMenu.CheckSubMenu();
+	}
+	
 	if (bShowLog) log("ERROR!!!!!!!!!!!!!!!!!!! IN R6Console >> PostRender");
 }
 
@@ -193,7 +210,7 @@ state FakeWindow extends UWindow
     function PostRender(Canvas Canvas)
     { 
         if (Root != None)
-            Root.bUWindowActive = True;
+            Root.bUWindowActive = true;
         RenderUWindow(Canvas);        
     }
  
@@ -381,7 +398,7 @@ state UWindow
         else
         {
             if (Root != None)
-			    Root.bUWindowActive = True;
+			    Root.bUWindowActive = true;
 
 		    RenderUWindow(Canvas);                       
                 
@@ -560,7 +577,7 @@ function LaunchMainMenu()
 	bUWindowActive = true;
 	bVisible = true;
 
-	bQuickKeyEnable = False;
+	bQuickKeyEnable = false;
 	LaunchUWindow();   
 
 	if (Root != None)
