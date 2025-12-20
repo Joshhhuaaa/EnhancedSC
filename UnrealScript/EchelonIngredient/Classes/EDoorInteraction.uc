@@ -296,6 +296,7 @@ function SetInteractLocation(Pawn InteractPawn)
 	local Vector X, Y, Z, MovePos;
 	local EPawn InteractEPawn;
 	local vector HitLocation, HitNormal;
+	local bool bLeftSide; // Joshua - Calculate side locally to prevent race condition
 
 	InteractEPawn = EPawn(InteractPawn);
 	if (InteractEPawn == None)
@@ -303,14 +304,17 @@ function SetInteractLocation(Pawn InteractPawn)
 
 	GetAxes(Owner.Rotation, X, Y, Z);
 
+	// Joshua - Calculate which side this pawn is on
+	bLeftSide = MyDoor.GetPawnSide(InteractEPawn) == ESide_Front;
+
 	// switch Y angle
-	if (!LeftSideInteraction)
+	if (!bLeftSide)
 		Y = -Y;
 	
 	MovePos	= Owner.Location;
 	if (InteractEPawn.bIsPlayerPawn)
 	{
-			MovePos -= 1.2f * InteractEPawn.CollisionRadius * Y;
+		MovePos -= 1.2f * InteractEPawn.CollisionRadius * Y;
 	}
 	else
 	{
@@ -321,7 +325,7 @@ function SetInteractLocation(Pawn InteractPawn)
 
 	if (InteractEPawn.bIsPlayerPawn)
 	{
-	MovePos.Z = InteractEPawn.Location.Z;	// keep on same Z
+		MovePos.Z = InteractEPawn.Location.Z; // keep on same Z
 	}
 	else
 	{
