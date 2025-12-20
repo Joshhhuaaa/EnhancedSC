@@ -55,6 +55,11 @@ var int 		iMaxAlarmFlashNbr;
 var FLOAT		fAlarmFlashTime;
 var FLOAT 		fAlarmFlashMaxTimePer;
 
+// Joshua - Sheath support
+var bool bNeedSheath;
+var bool bIsFirstPerson;
+var EInventoryItem MyItem;
+
 /*-----------------------------------------------------------------------------
                       T Y P E   D E F I N I T I O N S 
 -----------------------------------------------------------------------------*/
@@ -353,6 +358,87 @@ function DrawAlarmBox(ECanvas Canvas)
     Canvas.DrawTextAligned(szText, TXT_LEFT);
 
     Canvas.Style = ERenderStyle.STY_Normal;
+}
+
+//-------------------------------------------------------------------------------
+// Joshua - Function to handle item selection with sheath logic
+//-------------------------------------------------------------------------------
+function bool HandleItemSelection(EInventoryItem Item, optional bool bFromTick, optional EInventoryItem PreviousItem)
+{
+	// Sheath support
+	// If PreviousItem is provided (bPreviousConfig), use it
+	if (PreviousItem != None)
+		MyItem = PreviousItem;
+	else
+		MyItem = PCInventory.GetSelectedItem(); // Get current item
+
+	bIsFirstPerson = (Epc.GetStateName() == 's_FirstPersonTargeting' ||
+					  Epc.GetStateName() == 's_PlayerSniping' ||
+					  Epc.GetStateName() == 's_Throw' ||
+					  Epc.GetStateName() == 's_HOHTargeting' ||
+					  Epc.GetStateName() == 's_SplitTargeting' ||
+					  Epc.GetStateName() == 's_SplitSniping' ||
+					  Epc.GetStateName() == 's_RappellingTargeting' ||
+					  Epc.GetStateName() == 's_RappellingSniping' ||
+					  Epc.GetStateName() == 's_CameraJammerTargeting');
+
+	bNeedSheath = false;
+	Epc.bSwitchingGuns = false;
+
+	if (bIsFirstPerson)
+	{
+		if (MyItem.Category != Item.Category)
+			bNeedSheath = true; 
+		else 
+		{
+			if ((MyItem.IsA('ESecondaryAmmo') && Item.IsA('EMainGun')) || (Item.IsA('ESecondaryAmmo') && MyItem.IsA('EMainGun')))
+				bNeedSheath = false;
+			else
+			{
+				if (!PCInventory.IsSelected(Item) && !MyItem.IsA('EMainGun'))
+					bNeedSheath = true;
+				else
+					bNeedSheath = false;
+			}
+		}
+	}
+
+	if ((Epc.GetStateName() == 's_FirstPersonTargeting' || Epc.GetStateName() == 's_SplitTargeting' || Epc.GetStateName() == 's_RappellingTargeting') && 
+		(((MyItem.IsA('EMainGun') || MyItem.IsA('ESecondaryAmmo')) && Item.IsA('EHandGun')) || 
+		 (Item.IsA('EMainGun') || Item.IsA('ESecondaryAmmo')) && MyItem.IsA('EHandGun')))
+		Epc.bSwitchingGuns = true;
+	
+	if (bNeedSheath)
+	{
+		if (Epc.GetStateName() == 's_CameraJammerTargeting')
+		{
+			Epc.ePawn.HandItem.Scope();
+		}
+		else
+		{
+			Epc.DoSheath();
+			Epc.ProcessScope();
+		}
+		Owner.GotoState('MainHUD');
+	}
+		
+	if (MyItem != Item)
+	{
+		PCInventory.SetSelectedItem(Item);
+		// Briefly displays the gadget name after selection (GameCube feature)
+		bDisplayGadget = true;
+		fGadgetNameTimer = 0;
+	}
+	/*if (!PCInventory.IsSelected(Item))
+		PCInventory.SetSelectedItem(Item);*/
+	else if (!Item.IsA('EMainGun') && !Item.IsA('EOneHandedWeapon'))
+		PCInventory.UnEquipItem(Item);
+
+	// Special handling for Tick function - clear the fake mouse clicked flag
+	if (bFromTick)
+		Epc.m_FakeMouseClicked = false;
+
+	return bNeedSheath;
 }
 
 //-------------------------------------------------------------------------------
@@ -783,10 +869,12 @@ function bool IsCategoryAvailable(eInvCategory cat)
     if (PCInventory.GetNbItemInCategory(cat) == 0)
         return false;
 
-    if (cat != CAT_MAINGUN && (Epc.GetStateName() == 's_FirstPersonTargeting' ||
+	// Joshua - Sheath support
+    /*if (cat != CAT_MAINGUN && (Epc.GetStateName() == 's_FirstPersonTargeting' ||
 							   Epc.GetStateName() == 's_RappellingTargeting' ||
 							   Epc.GetStateName() == 's_SplitTargeting'))
         return false;
+	*/
 
     return true;
 }

@@ -293,6 +293,8 @@ var bool bDisableWhistle; // Joshua - Used to disable whistle while in Diversion
 var(Enhanced) config bool bF2000ZoomLevels; // Joshua - Enables 2x/4x/6x zoom for F2000 sniper (default game had 6x only)
 var int LastSniperFOVIndex; // Joshua - Remember the last FOV index so we can restore it after reloading
 
+var bool bSwitchingGuns; // Joshua - True when the player is in Targeting mode and switching between MainGun and HandGun
+
 var(Enhanced) config bool bLaserMicZoomLevels; // Joshua - Enables zoom functionality for the Laser Mic
 var(Enhanced) config bool bLaserMicVisions; // Joshua - Allows the Laser Mic use all vision modes like PS2 version
 
@@ -2969,7 +2971,10 @@ function DoSheath()
 {
 	//Log("DoSheath"@ePawn.HandItem@ActiveGun);
 	// Grab release will call this .. do nothing if no weapon in hands
-	if (ActiveGun == None)
+	
+	//if (ActiveGun == None)
+	// Joshua - Sheath support
+	if (ActiveGun == None || (ePawn.HandItem != None && ActiveGun != ePawn.HandItem))
 		return;
 
 	ActiveGun.InTargetingMode = false;
@@ -4134,6 +4139,7 @@ state s_PlayerWalking
 			ePawn.PlaySound(Sound'FisherVoice.Stop_Sq_FisherBreathRun', SLOT_SFX);
 			bIsPlaying = false;
 		}
+		bSwitchingGuns = false; // Joshua - If switching guns failed, we don't want to try again when re-entering this state
     }
 
 	function SetPawnAccel(vector X, float accel)
@@ -4345,10 +4351,6 @@ state s_PlayerWalking
 		}
 
 		CheckForCrouch();
-		
-		// Joshua - Anti-spam crouch timer
-		if (m_CrouchTimer > 0.0)
-			m_CrouchTimer -= DeltaTime;
 			
 		ePawn.ResetZones();
 
@@ -5126,7 +5128,9 @@ state s_Targeting
 
 	function bool CanAccessQuick()
 	{
-		return ePawn.FullInventory.GetSelectedItem() == MainGun && !bInTransition && !bInGunTransition && !bLockedCamera;
+		//return ePawn.FullInventory.GetSelectedItem() == MainGun && !bInTransition && !bInGunTransition && !bLockedCamera;
+		// Joshua - Sheath support
+		return !bInTransition && !bInGunTransition && !bLockedCamera;
 	}
 
 	function bool CanAccessPlayerStats()
@@ -5136,7 +5140,9 @@ state s_Targeting
 
 	function bool CanSwitchToHandItem(EInventoryItem Item)
 	{
-		return Item.IsA('ESecondaryAmmo');
+		//return Item.IsA('ESecondaryAmmo')
+		// Joshua - Player can now switch between guns using bPreviousConfig
+		return Item.IsA('ESecondaryAmmo') || Item.IsA('EMainGun') || Item.IsA('EHandGun');
 	}
 }
 
@@ -5212,7 +5218,11 @@ state s_FirstPersonTargeting extends s_Targeting
 			return;
 
 		if (!bInGunTransition && !ePawn.PressingFire())
-			GotoState('s_PlayerWalking');
+		{
+			// Joshua - Switch weapons in targeting mode
+			if (!bSwitchingGuns)
+				GotoState('s_PlayerWalking');
+		}
 	}
 
 	// from cam
@@ -5244,6 +5254,19 @@ state s_FirstPersonTargeting extends s_Targeting
         }
     }
 
+	// Joshua - Switch weapons in targeting mode
+	function PlayerTick(float DeltaTime)
+	{
+		Super.PlayerTick(DeltaTime);
+
+		if (bSwitchingGuns && !bInGunTransition)
+		{
+			bSwitchingGuns = false;
+			SheathWeapon();
+			GotoState(, 'SwitchWeapon');
+		}
+	}
+
 Begin:
 	// will not happen from Sniper mode
 	// DrawWeapon in BeginState to prevent a PlayerMove with bInGunTransition == false
@@ -5258,7 +5281,23 @@ Begin:
 	// send after anim is over.
 	if (iGameOverMsg != -1)
 		ProcessScope();
+	Stop;
+
+// Joshua - Switch weapons in targeting mode
+SwitchWeapon:
+	FinishAnim(EPawn.ACTIONCHANNEL);
+	
+	if (ePawn.FullInventory.GetSelectedItem() != None && ePawn.FullInventory.GetSelectedItem().IsA('EWeapon'))
+	{
+		ActiveGun = EWeapon(ePawn.FullInventory.GetSelectedItem());
+		bInTransition = true;
+		DrawWeapon();
+		FinishAnim(EPawn.ACTIONCHANNEL);
+		bInTransition = false;
+		EMainHUD(myHud).Slave(ActiveGun);
+	}
 }
+
 
 // ----------------------------------------------------------------------
 // state s_PlayerSniping
@@ -5275,10 +5314,10 @@ state s_PlayerSniping extends s_Targeting
 	{
 		Super.EndState();
 
-		ZoomLevel	= 0.0f;
-		SetCameraFOV(self, DesiredFov);			// restore Fov that may have changed in sniping mode
+		ZoomLevel = 0.0f;
+		SetCameraFOV(self, DesiredFov); // Restore Fov that may have changed in sniping mode
 		ESniperGun(ActiveGun).SetSniperMode(false);
-		bHideSam	= false;
+		bHideSam = false;
 		LastSniperFOVIndex = 0; // Joshua - Set FOV index to default when leaving
 	}
 
@@ -5312,10 +5351,10 @@ state s_PlayerSniping extends s_Targeting
 		if (ESniperGun(ActiveGun) != None)
 			LastSniperFOVIndex = ESniperGun(ActiveGun).FOVIndex;
 
-		ZoomLevel			= 0.0f;
-		SetCameraFOV(self, DesiredFov);			// restore Fov that may have changed in sniping mode
+		ZoomLevel = 0.0f;
+		SetCameraFOV(self, DesiredFov);	// Restore Fov that may have changed in sniping mode
 		ESniperGun(ActiveGun).SetSniperMode(false);
-		bHideSam		= false;
+		bHideSam = false;
 
 		m_camera.SetMode(ECM_FirstPerson);
 		Global.NotifyReloading();
@@ -5341,8 +5380,8 @@ state s_PlayerSniping extends s_Targeting
 		if (bHideSam)
 		{
 			// Update this value for motion blur		
-			ZoomLevel = FMax(Abs(aTurn),Abs(aLookUp));		  
-			ZoomLevel = FClamp(ZoomLevel,0.0f,1.0f);
+			ZoomLevel = FMax(Abs(aTurn), Abs(aLookUp));		  
+			ZoomLevel = FClamp(ZoomLevel, 0.0f, 1.0f);
 			ZoomLevel *= 0.7f;
 		}
 
@@ -5470,6 +5509,12 @@ state s_CameraJammerTargeting extends s_Targeting
 	function bool CanSwitchGoggleManually()
 	{
 		return true;
+	}
+
+	// Joshua - Sheath support
+	function bool CanAccessQuick()
+	{
+		return false;
 	}
 
 Begin:
@@ -8528,7 +8573,11 @@ state s_RappellingTargeting
 	function ProcessScope()
 	{
 		if (!bInTransition && !bInGunTransition)
-			GoToState(,'PutGunBack');
+		{
+			// Joshua - Don't leave state if switching guns
+			if (!bSwitchingGuns)
+				GoToState(,'PutGunBack');
+		}
 	}
 
 	function ProcessHeadSet(float i)
@@ -8564,7 +8613,7 @@ state s_RappellingTargeting
 
 	function PlayerMove(float DeltaTime)
 	{
-		if (bIntransition)
+		if (bInTransition)
 			return;
 
 		ePawn.LoopAnimOnly(StateWaitLoopingAnim(),,0.2);
@@ -8579,6 +8628,20 @@ state s_RappellingTargeting
 			bPressSnip = false;
 			bInTransition = true;
 			GotoState(,'BeginSniping');
+		}
+	}
+
+	// Joshua - PlayerTick to check for weapon switch completion (like FirstPersonTargeting)
+	function PlayerTick(float DeltaTime)
+	{
+		Super.PlayerTick(DeltaTime);
+
+		// Check if we're switching guns - initiate the holster and switch
+		if (bSwitchingGuns && !bInGunTransition)
+		{
+			bSwitchingGuns = false; // Clear immediately to prevent loop
+			SheathWeapon();
+			GotoState(, 'SwitchWeapon');
 		}
 	}
 
@@ -8616,7 +8679,9 @@ state s_RappellingTargeting
 
 	function bool CanAccessQuick()
 	{
-		return ePawn.FullInventory.GetSelectedItem() == MainGun && !bInTransition && !bInGunTransition;
+		//return ePawn.FullInventory.GetSelectedItem() == MainGun && !bInTransition && !bInGunTransition;
+		// Joshua - Sheath support
+		return !bInTransition && !bInGunTransition;
 	}
 
 	function bool CanAccessPlayerStats()
@@ -8674,7 +8739,27 @@ Begin:
 		RapelRopeType = 2;
 	SwitchCameraMode();
 	EMainHUD(myHud).Slave(ActiveGun);
-	bIntransition = false;
+	bInTransition = false;
+	Stop;
+
+// Joshua - Weapon switch
+SwitchWeapon:
+	// Don't wait for full sheath animation so hands don't go back on the rope
+	Sleep(ePawn.GetAnimTime(ePawn.GetAnimName(EPawn.ACTIONCHANNEL)) * 0.75);
+	
+	if (ePawn.FullInventory.GetSelectedItem() != None && ePawn.FullInventory.GetSelectedItem().IsA('EWeapon'))
+	{
+		ActiveGun = EWeapon(ePawn.FullInventory.GetSelectedItem());
+		bInTransition = true;
+		
+		// Start the draw animation
+		DrawWeapon();
+		ePawn.AnimBlendParams(EPawn.ACTIONCHANNEL, 1.0);
+		FinishAnim(EPawn.ACTIONCHANNEL);
+		
+		bInTransition = false;
+		EMainHUD(myHud).Slave(ActiveGun);
+	}
 }
 
 // ----------------------------------------------------------------------
@@ -8926,7 +9011,9 @@ state s_Split
 
 	function bool CanAccessQuick()
 	{
-		return true;
+		//return true;
+		// Joshua - Sheath support
+		return !bInTransition && !bInGunTransition;
 	}
 
 	function bool CanAccessPlayerStats()
@@ -9080,7 +9167,27 @@ Begin:
 
 	SwitchCameraMode();
 	EMainHUD(myHud).Slave(ActiveGun);
-	bIntransition = false;
+	bInTransition = false;
+	Stop;
+
+// Joshua - Weapon switch
+SwitchWeapon:
+	m_SMInTrans = true;
+	FinishAnim(EPawn.ACTIONCHANNEL);
+	
+	if (ePawn.FullInventory.GetSelectedItem() != None && ePawn.FullInventory.GetSelectedItem().IsA('EWeapon'))
+	{
+		ActiveGun = EWeapon(ePawn.FullInventory.GetSelectedItem());
+		bInTransition = true;
+		
+		DrawWeapon();
+		ePawn.AnimBlendParams(EPawn.ACTIONCHANNEL, 1.0, 0.0, 0.0, ePawn.UpperBodyBoneName);
+		FinishAnim(EPawn.ACTIONCHANNEL);
+		
+		bInTransition = false;
+		m_useTarget = true;
+		EMainHUD(myHud).Slave(ActiveGun);
+	}
 }
 
 // ----------------------------------------------------------------------
@@ -10155,6 +10262,12 @@ state s_HOHTargeting extends s_FirstPersonTargeting
 	function SwitchCameraMode()
 	{
 		m_camera.SetMode(ECM_HOHFP);
+	}
+
+	// Joshua - Sheath support
+	function bool CanAccessQuick()
+	{
+		return false;
 	}
 
     function PlayerMove(float DeltaTime)
