@@ -28,6 +28,7 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
 function InitPattern()
 {
     local Pawn P;
+    local EVolume Volume;
 
     Super.InitPattern();
 
@@ -37,26 +38,37 @@ function InitPattern()
             Characters[1] = P.controller;
     }
 
-    // Joshua - Chinese Embassy 2 requires 2 bullets to shoot lights to avoid detection for Elite mode
-    if (!bInit && EchelonGameInfo(Level.Game).bEliteMode && EPlayerController(Characters[0]) != None && EPlayerController(Characters[0]).HandGun != None)
+    if (!bInit)
     {
-        if (EPlayerController(Characters[0]).HandGun.Ammo == 0 && EPlayerController(Characters[0]).HandGun.ClipAmmo == 0)
+        // Joshua - Chinese Embassy 2 requires 2 bullets to shoot lights to avoid detection for Elite mode
+        if (EchelonGameInfo(Level.Game).bEliteMode && EPlayerController(Characters[0]) != None && EPlayerController(Characters[0]).HandGun != None)
         {
-            if (EPlayerController(Characters[0]).playerStats.BulletFired == 0)
+            if (EPlayerController(Characters[0]).HandGun.Ammo == 0 && EPlayerController(Characters[0]).HandGun.ClipAmmo == 0)
             {
-                // No bullets fired, give 2
-                EPlayerController(Characters[0]).HandGun.Ammo = 2;
-                EPlayerController(Characters[0]).HandGun.ClipAmmo = 2;
+                if (EPlayerController(Characters[0]).playerStats.BulletFired == 0)
+                {
+                    // No bullets fired, give 2
+                    EPlayerController(Characters[0]).HandGun.Ammo = 2;
+                    EPlayerController(Characters[0]).HandGun.ClipAmmo = 2;
+                }
+                else if (EPlayerController(Characters[0]).playerStats.BulletFired == 1)
+                {
+                    // 1 bullet fired, give 1
+                    EPlayerController(Characters[0]).HandGun.Ammo = 1;
+                    EPlayerController(Characters[0]).HandGun.ClipAmmo = 1;
+                }
             }
-            else if (EPlayerController(Characters[0]).playerStats.BulletFired == 1)
+        }
+
+        // Joshua - Adjusted the EVolume on the Xbox version of the Chinese Embassy 2 map so that the player fails the mission if they fall beneath the zipline balcony
+        ForEach AllActors(class'EVolume', Volume)
+        {
+            if (Volume.name == 'EVolume3')
             {
-                // 1 bullet fired, give 1
-                EPlayerController(Characters[0]).HandGun.Ammo = 1;
-                EPlayerController(Characters[0]).HandGun.ClipAmmo = 1;
+                Volume.SetLocation(Volume.Location + vect(-440, 0, 0));
             }
         }
     }
-
 
     if (!bInit)
     {

@@ -44,22 +44,25 @@ function InitPattern()
             Characters[4] = P.controller;
     }
 
-    // Joshua - Chinese Embassy 2 requires 2 bullets to shoot lights to avoid detection for Elite mode
-    if (!bInit && EchelonGameInfo(Level.Game).bEliteMode && EPlayerController(Characters[0]) != None && EPlayerController(Characters[0]).HandGun != None)
+    if (!bInit)
     {
-        if (EPlayerController(Characters[0]).HandGun.Ammo == 0 && EPlayerController(Characters[0]).HandGun.ClipAmmo == 0)
+        // Joshua - Chinese Embassy 2 requires 2 bullets to shoot lights to avoid detection for Elite mode
+        if (EchelonGameInfo(Level.Game).bEliteMode && EPlayerController(Characters[0]) != None && EPlayerController(Characters[0]).HandGun != None)
         {
-            if (EPlayerController(Characters[0]).playerStats.BulletFired == 0)
+            if (EPlayerController(Characters[0]).HandGun.Ammo == 0 && EPlayerController(Characters[0]).HandGun.ClipAmmo == 0)
             {
-                // No bullets fired, give 2
-                EPlayerController(Characters[0]).HandGun.Ammo = 2;
-                EPlayerController(Characters[0]).HandGun.ClipAmmo = 2;
-            }
-            else if (EPlayerController(Characters[0]).playerStats.BulletFired == 1)
-            {
-                // 1 bullet fired, give 1
-                EPlayerController(Characters[0]).HandGun.Ammo = 1;
-                EPlayerController(Characters[0]).HandGun.ClipAmmo = 1;
+                if (EPlayerController(Characters[0]).playerStats.BulletFired == 0)
+                {
+                    // No bullets fired, give 2
+                    EPlayerController(Characters[0]).HandGun.Ammo = 2;
+                    EPlayerController(Characters[0]).HandGun.ClipAmmo = 2;
+                }
+                else if (EPlayerController(Characters[0]).playerStats.BulletFired == 1)
+                {
+                    // 1 bullet fired, give 1
+                    EPlayerController(Characters[0]).HandGun.Ammo = 1;
+                    EPlayerController(Characters[0]).HandGun.ClipAmmo = 1;
+                }
             }
         }
     }
