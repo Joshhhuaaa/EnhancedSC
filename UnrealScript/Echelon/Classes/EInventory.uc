@@ -194,7 +194,124 @@ event string GetCategoryName(eInvCategory Category)
 	}
 }
 
+//---------------------------------------[Joshua - 4 Dec 2025]------------
+// 
+// Description
+//		Returns the sort priority for an inventory item.
+//		Lower values appear at the bottom of the inventory list.
+// 
+//------------------------------------------------------------------------
+function int GetInventorySortPriority(EInventoryItem Item)
+{
+	local Name ClassName;
+	
+	if (Item == None)
+		return 999;
+	
+	ClassName = Item.class.Name;
+
+	// CAT_MAINGUN
+	if (ClassName == 'EF2000')              return 0;
+	if (ClassName == 'ERingAirfoilRound')   return 1;
+	if (ClassName == 'EStickyShocker')      return 2;
+	if (ClassName == 'ESmokeGrenade')       return 3;
+	if (ClassName == 'EDiversionCamera')    return 4;
+	if (ClassName == 'EStickyCamera')       return 5;
+
+	// CAT_GADGETS
+	if (ClassName == 'EFn7')                return 100;
+	if (ClassName == 'ELockpick')           return 101;
+	if (ClassName == 'EDisposablePick')     return 102;
+	if (ClassName == 'EOpticCable')         return 103;
+	if (ClassName == 'ELaserMic')           return 104;
+	if (ClassName == 'ECameraJammer')       return 105;
+
+	// CAT_ITEMS
+	if (ClassName == 'EMedKit')             return 200;
+	if (ClassName == 'EFlare')              return 201;
+	if (ClassName == 'EChemFlare')          return 202;
+	if (ClassName == 'EFragGrenade')        return 203;
+	if (ClassName == 'EConcussionGrenade')  return 204;
+	if (ClassName == 'EWallMine')           return 205;
+
+	// Unknown items get sorted to end of their category
+	return 999;
+}
+
+//---------------------------------------[Joshua - 4 Dec 2025]------------
+// 
+// Description
+//		Sorts a single category of the inventory so items appear in
+//		a consistent order.
+// 
+//------------------------------------------------------------------------
+function SortCategory(eInvCategory Category)
+{
+	local int i, j, NumItems;
+	local array<EInventoryItem> TempItems;
+	local EInventoryItem Temp;
+	local int PriorityI, PriorityJ;
+	local bool bSwapped;
+
+	NumItems = GetNbItemInCategory(Category);
+	
+	if (NumItems <= 1)
+		return;
+
+	// Copy items to temp array
+	for (i = 1; i <= NumItems; i++)
+	{
+		TempItems[TempItems.Length] = GetItemInCategory(Category, i);
+	}
+
+	for (i = 0; i < TempItems.Length - 1; i++)
+	{
+		bSwapped = false;
+		for (j = 0; j < TempItems.Length - i - 1; j++)
+		{
+			PriorityI = GetInventorySortPriority(TempItems[j]);
+			PriorityJ = GetInventorySortPriority(TempItems[j+1]);
+
+			// Lower priority first
+			if (PriorityI > PriorityJ)
+			{
+				Temp = TempItems[j];
+				TempItems[j] = TempItems[j+1];
+				TempItems[j+1] = Temp;
+				bSwapped = true;
+			}
+		}
+		if (!bSwapped)
+			break;
+	}
+
+	// Remove all items from this category (don't destroy them)
+	for (i = 0; i < TempItems.Length; i++)
+	{
+		RemoveItem(TempItems[i], 0, true);
+	}
+
+	// Re-add items in sorted order
+	for (i = 0; i < TempItems.Length; i++)
+	{
+		AddInventoryItem(TempItems[i]);
+	}
+}
+
+//---------------------------------------[Joshua - 4 Dec 2025]------------
+// 
+// Description
+//		Sorts all categories in the inventory.
+// 
+//------------------------------------------------------------------------
+function SortInventory()
+{
+	SortCategory(CAT_MAINGUN);
+	SortCategory(CAT_GADGETS);
+	SortCategory(CAT_ITEMS);
+}
+
 defaultproperties
 {
-    bHidden=true
+    bHidden=True
 }

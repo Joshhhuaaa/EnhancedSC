@@ -202,6 +202,9 @@ function Add(Actor NewOwner, Controller NewController, EInventory Inventory)
 		Log(self@"Problem in EInventoryItem::Add inventory == None");
 
 	Inventory.AddInventoryItem(self);
+	
+	// Joshua - Sort the inventory after adding so items appear in consistent order
+	Inventory.SortInventory();
 }
 
 // ----------------------------------------------------------------------
@@ -271,8 +274,8 @@ defaultproperties
     Category=CAT_ITEMS
     Quantity=1
     MaxQuantity=1
-    bEquipable=true
-    bPickable=true
-    bDamageable=false
-    bTravel=true
+    bEquipable=True
+    bPickable=True
+    bDamageable=False
+    bTravel=True
 }
