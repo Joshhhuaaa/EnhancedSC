@@ -553,7 +553,7 @@ function DisplayInteractBox(ECanvas Canvas, int iNbrOfInter, int iCurrentInter)
 
 
 	Canvas.Font = Canvas.ETextFont;
-    Canvas.SetDrawColor(128,128,128);	
+    Canvas.SetDrawColor(128, 128, 128);	
     Canvas.TextSize("T", xLen, yLen);
 
 	// Find box width with the max number of characters in a description
@@ -571,9 +571,17 @@ function DisplayInteractBox(ECanvas Canvas, int iNbrOfInter, int iCurrentInter)
 	INTER_BOX_WIDTH = INTER_OPT_BOX_WIDTH;
 	INTER_BOX_HEIGHT = yLen + 5 + 5 + 12;
 
-
-	xPos = 640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - INTER_BOX_WIDTH;
-    yPos = eGame.HUD_OFFSET_Y + INTER_BOX_HEIGHT + 1;
+	// Joshua - Adjust anchor position for horizontal health bar
+	if (Epc.bHorizontalLifeBar)
+	{
+		xPos = 640 - eGame.HUD_OFFSET_X - INTER_BOX_WIDTH;
+		yPos = eGame.HUD_OFFSET_Y + LIFEBAR_WIDTH + INTER_BOX_HEIGHT + 1;
+	}
+	else
+	{
+		xPos = 640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - INTER_BOX_WIDTH;
+		yPos = eGame.HUD_OFFSET_Y + INTER_BOX_HEIGHT + 1;
+	}
 
 
 	IO = Epc.IManager.Interactions[iCurrentInter];
@@ -585,10 +593,14 @@ function DisplayInteractBox(ECanvas Canvas, int iNbrOfInter, int iCurrentInter)
 			// When X is hold selector can go on BACK TO MAIN MENU
 			if (Epc.egi.bInteracting && (iCurrentInter == 0))
 			{
-				Canvas.SetPos(640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - INTER_BOX_WIDTH + 4 ,eGame.HUD_OFFSET_Y + (INTER_BOX_HEIGHT / 2) - (yLen / 2));
+				// Joshua - Adjust anchor position for horizontal health bar
+				if (Epc.bHorizontalLifeBar)
+					Canvas.SetPos(640 - eGame.HUD_OFFSET_X - INTER_BOX_WIDTH + 4, eGame.HUD_OFFSET_Y + LIFEBAR_WIDTH + (INTER_BOX_HEIGHT / 2) - (yLen / 2) + 2);
+				else
+					Canvas.SetPos(640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - INTER_BOX_WIDTH + 4, eGame.HUD_OFFSET_Y + (INTER_BOX_HEIGHT / 2) - (yLen / 2) + 2);
 				// Joshua - Fixing bug with Interaction Box selector not extending fully
 				Canvas.Style = ERenderStyle.STY_Alpha;
-				eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_selecteur, INTER_BOX_WIDTH - 8, yLen + 2, 0, 0, 1, 1);
+				eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_selecteur, INTER_BOX_WIDTH - 8, yLen - 2, 0, 0, 1, 1);
 			}
 			else
 			{
@@ -604,23 +616,27 @@ function DisplayInteractBox(ECanvas Canvas, int iNbrOfInter, int iCurrentInter)
 					Canvas.SetPos(xPos + 2, yPos + 2 + ((iNbrOfInter - 1) * yLen) - (iCurrentInter * yLen) + 2);
 				// Joshua - Fixing bug with Interaction Box selector not extending fully
 				Canvas.Style = ERenderStyle.STY_Alpha;			
-				eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_selecteur, INTER_OPT_BOX_WIDTH - 4, yLen + 2, 0, 0, 1, 1);
+				eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_selecteur, INTER_OPT_BOX_WIDTH - 4, yLen - 2, 0, 0, 1, 1);
 			}
 			Canvas.Style = ERenderStyle.STY_Normal;
 
 			// Color given by the interface artist (Veronique)
-			Canvas.SetDrawColor(92,109,76);		
+			Canvas.SetDrawColor(92, 109, 76);		
 		}
 		else
 		{		
 			// Color given by the interface artist (Veronique)
-			Canvas.SetDrawColor(49,56,40);
+			Canvas.SetDrawColor(49, 56, 40);
 		}
 
 		if (Epc.egi.bInteracting && (iCurrentInter == 0))
 		{
-			//Canvas.SetDrawColor(92,109,76);		
-			Canvas.SetPos(640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - INTER_BOX_WIDTH + 5 ,eGame.HUD_OFFSET_Y + (INTER_BOX_HEIGHT / 2) - (yLen / 2));				
+			//Canvas.SetDrawColor(92, 109, 76);
+			// Joshua - Adjust anchor position for horizontal health bar
+			if (Epc.bHorizontalLifeBar)
+				Canvas.SetPos(640 - eGame.HUD_OFFSET_X - INTER_BOX_WIDTH + 5, eGame.HUD_OFFSET_Y + LIFEBAR_WIDTH + (INTER_BOX_HEIGHT / 2) - (yLen / 2));
+			else
+				Canvas.SetPos(640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - INTER_BOX_WIDTH + 5, eGame.HUD_OFFSET_Y + (INTER_BOX_HEIGHT / 2) - (yLen / 2));
 			Canvas.DrawTextAligned(Caps(IO.GetDescription()));		
 		}
 		else
@@ -655,7 +671,7 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 	local int INTER_OPT_BOX_HEIGHT, INTER_OPT_BOX_WIDTH, INTER_BOX_WIDTH, INTER_BOX_HEIGHT;
 	local float xLen, yLen; 		
 
-    Canvas.SetDrawColor(128,128,128);
+    Canvas.SetDrawColor(128, 128, 128);
     Canvas.Font = Canvas.EHUDFont;
 
     yPos  = SCREEN_HEIGHT - eGame.HUD_OFFSET_Y;
@@ -665,7 +681,7 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 	if ((iNbrOfInter > 0) || (bSetPos))
 	{		
 		Canvas.Font = Canvas.ETextFont;
-		Canvas.SetDrawColor(128,128,128);	
+		Canvas.SetDrawColor(128, 128, 128);	
 		Canvas.TextSize("T", xLen, yLen);
 
 		// Find box width with the max number of caracter in a description
@@ -683,8 +699,17 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 		INTER_BOX_WIDTH = INTER_OPT_BOX_WIDTH;
 		INTER_BOX_HEIGHT = yLen + 5 + 5 + 12;
 
-		xPos = 640 - INTER_BOX_WIDTH - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH;
-		yPos = eGame.HUD_OFFSET_Y;
+		// Joshua - Adjust anchor position for horizontal health bar
+		if (Epc.bHorizontalLifeBar)
+		{
+			xPos = 640 - INTER_BOX_WIDTH - eGame.HUD_OFFSET_X;
+			yPos = eGame.HUD_OFFSET_Y + LIFEBAR_WIDTH;
+		}
+		else
+		{
+			xPos = 640 - INTER_BOX_WIDTH - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH;
+			yPos = eGame.HUD_OFFSET_Y;
+		}
 
 		Canvas.Style = ERenderStyle.STY_Alpha;
 		// Draw the top box with "INTERACT..." title
@@ -725,23 +750,27 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 				
 		// Reset color
 		// (Yanick Mimee) June-27-2002
-		Canvas.SetDrawColor(128,128,128,255);	
+		Canvas.SetDrawColor(128, 128, 128, 255);	
 		Canvas.Style = ERenderStyle.STY_Normal;	
 		
 		if (!Epc.egi.bInteracting)
 		{
 			// Display "INTERACT"
 			// Color given by the interface artist (Veronique)
-			Canvas.SetDrawColor(49,56,40);
+			Canvas.SetDrawColor(49, 56, 40);
 			Canvas.SetPos(xPos + 5, yPos + (INTER_BOX_HEIGHT / 2) - (yLen / 2));
-			Canvas.DrawTextAligned(Localize("HUD", "INTERACT", "Localization\\HUD"));
+			Canvas.DrawTextAligned(Caps(Localize("HUD", "INTERACT", "Localization\\HUD"))); // Joshua - Added caps to be consistent with the other interaction text
 
 			// Draw the X button 						
 			// Color given by the interface artist (Veronique)
 			if (eGame.bUseController)
 			{
-				Canvas.SetPos(640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - 30 ,eGame.HUD_OFFSET_Y + (INTER_BOX_HEIGHT / 2) - 11);
-				Canvas.SetDrawColor(92,109,76);
+				// Joshua - Adjust anchor position for horizontal health bar
+				if (Epc.bHorizontalLifeBar)
+					Canvas.SetPos(640 - eGame.HUD_OFFSET_X - 30, eGame.HUD_OFFSET_Y + LIFEBAR_WIDTH + (INTER_BOX_HEIGHT / 2) - 11);
+				else
+					Canvas.SetPos(640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - 30, eGame.HUD_OFFSET_Y + (INTER_BOX_HEIGHT / 2) - 11);
+				Canvas.SetDrawColor(92, 109, 76);
 				switch (Epc.ControllerIcon)
 				{
 					case CI_Xbox:
@@ -760,10 +789,19 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 		}
 				
 		// Reset color
-		Canvas.SetDrawColor(128,128,128,255);
+		Canvas.SetDrawColor(128, 128, 128, 255);
 
-		xPos = 640 - eGame.HUD_OFFSET_X - INTER_BOX_WIDTH - LIFEBAR_WIDTH;
-		yPos = eGame.HUD_OFFSET_Y + INTER_BOX_HEIGHT + 1;
+		// Joshua - Adjust anchor position for horizontal health bar
+		if (Epc.bHorizontalLifeBar)
+		{
+			xPos = 640 - eGame.HUD_OFFSET_X - INTER_BOX_WIDTH;
+			yPos = eGame.HUD_OFFSET_Y + LIFEBAR_WIDTH + INTER_BOX_HEIGHT + 1;
+		}
+		else
+		{
+			xPos = 640 - eGame.HUD_OFFSET_X - INTER_BOX_WIDTH - LIFEBAR_WIDTH;
+			yPos = eGame.HUD_OFFSET_Y + INTER_BOX_HEIGHT + 1;
+		}
 
 		Canvas.Style = ERenderStyle.STY_Alpha;
 

@@ -270,9 +270,21 @@ function DrawWhiteSquareCorner(int xTopLeft, int yTopLeft, int width, int height
 function DrawStaticFrame(ECanvas Canvas)
 {
 	local int xPos, yPos;
+	local EPlayerController EPC;
+	
+	EPC = EPlayerController(oPC);
 
-	xPos = 640 - eGame.HUD_OFFSET_X - RETICAL_BOX_WIDTH - LIFE_BAR_WIDTH;
-    yPos = eGame.HUD_OFFSET_Y;     
+	// Joshua - Adjust position for horizontal lifebar (place under lifebar on right edge)
+	if (EPC != None && EPC.bHorizontalLifeBar)
+	{
+		xPos = 640 - eGame.HUD_OFFSET_X - RETICAL_BOX_WIDTH;
+		yPos = eGame.HUD_OFFSET_Y + LIFE_BAR_WIDTH;
+	}
+	else
+	{
+		xPos = 640 - eGame.HUD_OFFSET_X - RETICAL_BOX_WIDTH - LIFE_BAR_WIDTH;
+		yPos = eGame.HUD_OFFSET_Y;
+	}     
 
 	Canvas.Style = ERenderStyle.STY_Alpha;
 	
@@ -391,38 +403,53 @@ function DrawDynamicStuff(ECanvas Canvas)
 -----------------------------------------------------------------------------*/
 function DrawRetinalTarget(ECanvas Canvas)
 {
-    local int i;
+    local int i, xPos, yPos;
+    local EPlayerController EPC;
+    
+    EPC = EPlayerController(oPC);
+
+    // Joshua - Adjust position for horizontal lifebar (place under lifebar on right edge)
+    if (EPC != None && EPC.bHorizontalLifeBar)
+    {
+        xPos = 640 - eGame.HUD_OFFSET_X - RETICAL_BOX_WIDTH;
+        yPos = eGame.HUD_OFFSET_Y + LIFE_BAR_WIDTH;
+    }
+    else
+    {
+        xPos = 640 - eGame.HUD_OFFSET_X - RETICAL_BOX_WIDTH - LIFE_BAR_WIDTH;
+        yPos = eGame.HUD_OFFSET_Y;
+    }
     
     Canvas.DrawColor = White;
-    Canvas.SetPos(ORIGIN_X + 50, ORIGIN_Y + 42);
+    Canvas.SetPos(xPos + 50, yPos + 42);
     Canvas.DrawTile(Texture'rs_scan1', 32, 32, 0, 0, 32, 32);
 
     // Square around Eye
-    DrawSquare(ORIGIN_X + 11, ORIGIN_Y + 16, ORIGIN_X + 115, ORIGIN_Y + 100, 1, FrameLightGreen, Canvas);
+    DrawSquare(xPos + 11, yPos + 16, xPos + 115, yPos + 100, 1, FrameLightGreen, Canvas);
 
     // Little lines
     // Top
     for (i = 0; i < 6; i++)
     {
-        Canvas.DrawLine(ORIGIN_X + 65, ORIGIN_Y + 20 + (i * 4), 2, 1, FrameLightGreen, -1, eLevel.TGAME);   
+        Canvas.DrawLine(xPos + 65, yPos + 20 + (i * 4), 2, 1, FrameLightGreen, -1, eLevel.TGAME);   
     }
 
     // Bottom
     for (i = 0; i < 6; i++)
     {
-        Canvas.DrawLine(ORIGIN_X + 65, ORIGIN_Y + 75 + (i * 4), 2, 1, FrameLightGreen, -1, eLevel.TGAME);   
+        Canvas.DrawLine(xPos + 65, yPos + 75 + (i * 4), 2, 1, FrameLightGreen, -1, eLevel.TGAME);   
     }
 
     // Left
     for (i = 0; i < 8; i++)
     {
-        Canvas.DrawLine(ORIGIN_X + 16 + (i * 4), ORIGIN_Y + 59, 2, 1, FrameLightGreen, -1, eLevel.TGAME);   
+        Canvas.DrawLine(xPos + 16 + (i * 4), yPos + 59, 2, 1, FrameLightGreen, -1, eLevel.TGAME);   
     }
 
     // Right
     for (i = 0; i < 8; i++)
     {
-        Canvas.DrawLine(ORIGIN_X + 83 + (i * 4), ORIGIN_Y + 59, 2, 1, FrameLightGreen, -1, eLevel.TGAME);   
+        Canvas.DrawLine(xPos + 83 + (i * 4), yPos + 59, 2, 1, FrameLightGreen, -1, eLevel.TGAME);   
     }
 }
 
@@ -436,9 +463,21 @@ function DrawTextOutput(ECanvas Canvas)
 	local int xPos, yPos;
 	local float xLen, yLen; 
 	local string text;
+	local EPlayerController EPC;
+	
+	EPC = EPlayerController(oPC);
 
-	xPos = 640 - eGame.HUD_OFFSET_X - RETICAL_BOX_WIDTH - LIFE_BAR_WIDTH;
-    yPos = eGame.HUD_OFFSET_Y;
+	// Joshua - Adjust position for horizontal lifebar (place under lifebar on right edge)
+	if (EPC != None && EPC.bHorizontalLifeBar)
+	{
+		xPos = 640 - eGame.HUD_OFFSET_X - RETICAL_BOX_WIDTH;
+		yPos = eGame.HUD_OFFSET_Y + LIFE_BAR_WIDTH;
+	}
+	else
+	{
+		xPos = 640 - eGame.HUD_OFFSET_X - RETICAL_BOX_WIDTH - LIFE_BAR_WIDTH;
+		yPos = eGame.HUD_OFFSET_Y;
+	}
 
 	Canvas.Font = Font'EHUDFont';
 	text = "T";
@@ -540,15 +579,30 @@ function DrawEffects(ECanvas Canvas)
 function DrawLeftEffects(ECanvas Canvas, bool bDynamic)
 {
     local string    strRandomText;
-    local int       i;
+    local int       i, xPos, yPos;
+    local EPlayerController EPC;
+    
+    EPC = EPlayerController(oPC);
+
+    // Joshua - Adjust position for horizontal lifebar
+    if (EPC != None && EPC.bHorizontalLifeBar)
+    {
+        xPos = 640 - eGame.HUD_OFFSET_X - RETICAL_BOX_WIDTH;
+        yPos = eGame.HUD_OFFSET_Y + LIFE_BAR_WIDTH;
+    }
+    else
+    {
+        xPos = 640 - eGame.HUD_OFFSET_X - RETICAL_BOX_WIDTH - LIFE_BAR_WIDTH;
+        yPos = eGame.HUD_OFFSET_Y;
+    }
     
     Canvas.Font = Font'Verdana6';
     Canvas.DrawColor = FrameDarkGreen;
-    Canvas.SetPos(ORIGIN_X + 132, ORIGIN_Y + 25);
+    Canvas.SetPos(xPos + 132, yPos + 25);
 
     for (i = 0; i < COLUMN_SIZE; i++)
     {
-        Canvas.SetPos(ORIGIN_X + 132, ORIGIN_Y + 25 + (i * 6));
+        Canvas.SetPos(xPos + 132, yPos + 25 + (i * 6));
 
         if (bDynamic)
         {
@@ -569,14 +623,29 @@ function DrawLeftEffects(ECanvas Canvas, bool bDynamic)
 function DrawRightEffects(ECanvas Canvas, bool bDynamic)
 {
     local string    strRandomText;
-    local int       i;
+    local int       i, xPos, yPos;
+    local EPlayerController EPC;
+    
+    EPC = EPlayerController(oPC);
+
+    // Joshua - Adjust position for horizontal lifebar
+    if (EPC != None && EPC.bHorizontalLifeBar)
+    {
+        xPos = 640 - eGame.HUD_OFFSET_X - RETICAL_BOX_WIDTH;
+        yPos = eGame.HUD_OFFSET_Y + LIFE_BAR_WIDTH;
+    }
+    else
+    {
+        xPos = 640 - eGame.HUD_OFFSET_X - RETICAL_BOX_WIDTH - LIFE_BAR_WIDTH;
+        yPos = eGame.HUD_OFFSET_Y;
+    }
     
     Canvas.Font = Font'Verdana6';
     Canvas.DrawColor = FrameDarkGreen;
 
     for (i = 0; i < COLUMN_SIZE; i++)
     {
-        Canvas.SetPos(ORIGIN_X + 178, ORIGIN_Y + 25 + (i * 6));
+        Canvas.SetPos(xPos + 178, yPos + 25 + (i * 6));
         
         if (bDynamic)
         {
@@ -597,12 +666,24 @@ function DrawRightEffects(ECanvas Canvas, bool bDynamic)
 function DrawScanEffect(ECanvas Canvas)
 {
 	local int xPos, yPos;
+	local EPlayerController EPC;
+	
+	EPC = EPlayerController(oPC);
 
     Canvas.DrawColor = White;
     iEffectCounter += 2;
 
-	xPos = 640 - eGame.HUD_OFFSET_X - RETICAL_BOX_WIDTH - LIFE_BAR_WIDTH;
-    yPos = eGame.HUD_OFFSET_Y;  
+	// Joshua - Adjust position for horizontal lifebar
+	if (EPC != None && EPC.bHorizontalLifeBar)
+	{
+		xPos = 640 - eGame.HUD_OFFSET_X - RETICAL_BOX_WIDTH;
+		yPos = eGame.HUD_OFFSET_Y + LIFE_BAR_WIDTH;
+	}
+	else
+	{
+		xPos = 640 - eGame.HUD_OFFSET_X - RETICAL_BOX_WIDTH - LIFE_BAR_WIDTH;
+		yPos = eGame.HUD_OFFSET_Y;
+	}  
 
 	
     // The "if else's" are there because we need to do it in there parts, cause cliping doesn't work
@@ -850,12 +931,12 @@ Validate:
 defaultproperties
 {
     rrr=(Pitch=10000,Yaw=0,Roll=0)
-    bIsRetinalScanner=true
+    bIsRetinalScanner=True
     AlarmLinkType=EAlarm_Trigger
     StaticMesh=StaticMesh'EMeshIngredient.Object.retinal_scanner'
     CollisionRadius=8.000000
     CollisionHeight=37.000000
-    bBlockPlayers=true
-    bBlockActors=true
+    bBlockPlayers=True
+    bBlockActors=True
     InteractionClass=Class'ERetinalScannerInteraction'
 }

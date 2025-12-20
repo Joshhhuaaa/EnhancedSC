@@ -72,8 +72,17 @@ function DrawView(HUD Hud,ECanvas Canvas)
 
     if (EPC.bShowInventory && EPC.bShowHUD) // Joshua - Show Camera Jammer info only if inventory enabled
     {
-        xPos = 640 - eGame.HUD_OFFSET_X - CAMJAM_WIDTH - LIFEBAR_WIDTH;
-        yPos = eGame.HUD_OFFSET_Y;
+        // Joshua - Adjust position for horizontal lifebar (place under lifebar on right edge)
+        if (Epc.bHorizontalLifeBar)
+        {
+            xPos = 640 - eGame.HUD_OFFSET_X - CAMJAM_WIDTH;
+            yPos = eGame.HUD_OFFSET_Y + LIFEBAR_WIDTH;
+        }
+        else
+        {
+            xPos = 640 - eGame.HUD_OFFSET_X - CAMJAM_WIDTH - LIFEBAR_WIDTH;
+            yPos = eGame.HUD_OFFSET_Y;
+        }
 
         DrawBorders(Canvas, xPos, yPos, CAMJAM_WIDTH, CAMJAM_HEIGHT);
 
@@ -106,7 +115,7 @@ function DrawBorders(ECanvas Canvas, int xPos, int yPos, int width, int height)
 
     // BORDERS //
 
-    Canvas.SetDrawColor(128,128,128);
+    Canvas.SetDrawColor(128, 128, 128);
 	Canvas.Style = ERenderStyle.STY_Alpha;
 
     // TOP LEFT CORNER //
@@ -216,7 +225,7 @@ function DrawCamJamInfo(ECanvas Canvas, int xPos, int yPos, int width)
 
     if (szText != "" && bBlink)
     {
-        Canvas.Font = font'EHUDFont';
+        Canvas.Font = Font'EHUDFont';
         Canvas.DrawColor = lightgreen;
 
         Canvas.Textsize(szText, xLen, yLen);
@@ -243,9 +252,9 @@ function DrawCrosshair(ECanvas Canvas)
     height = eLevel.TGAME.GetHeight(eLevel.TGAME.cj_mire);
 
     if (camjam.JammedCamera != None)
-        Canvas.SetDrawColor(79,8,8);
+        Canvas.SetDrawColor(79, 8, 8);
     else        
-        Canvas.SetDrawColor(38,81,50);
+        Canvas.SetDrawColor(38, 81, 50);
 
     Canvas.SetPos(SCREEN_HALF_X - width / 2, SCREEN_HALF_Y - height / 2);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.cj_mire, width, height, 0, 0, width, height);
@@ -295,5 +304,5 @@ defaultproperties
 {
     lightgreen=(R=38,G=81,B=50,A=255)
     darkgreen=(R=19,G=41,B=25,A=255)
-    bBlink=true
+    bBlink=True
 }
