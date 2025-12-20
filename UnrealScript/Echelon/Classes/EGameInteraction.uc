@@ -19,7 +19,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 	{
 		if (Epc.GetStateName() == 's_KeyPadInteract')
 		{
-			// NumPad binds take priority if there's a conflic
+			// NumPad binds take priority if there's a conflict
 			if (Key == IK_NumPad0)
 			{
 				Epc.KeyEvent("Keypad_NumPad0", Action, Delta);
@@ -95,7 +95,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 		{
 			if (Epc.IManager.GetNbInteractions() > 0 && 
 				Epc.CanInteract() &&
-				!Epc.bStopInput)							// Prevent interacting in cinematic
+				!Epc.bStopInput) // Prevent interacting in cinematic
 			{			
 				bInteracting = true;
 
@@ -103,7 +103,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 				//Log("Interaction pressed with"$Epc.IManager.GetNbInteractions()$" interaction on stack");
 				GotoState('s_GameInteractionMenu');
 				 
-				return true; // grabbed
+				return true; // Grabbed
 			}		
 		}
 	}
@@ -119,14 +119,71 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			Epc.SetKey("Joy2 Duck", "");
 			Epc.SetKey("Joy3 Scope", "");
 			Epc.SetKey("Joy4 Jump", "");
-			Epc.SetKey("Joy5 Whistle", ""); // Joshua - Adding whistle to default layout
+			Epc.SetKey("Joy5 Whistle", "");
 			Epc.SetKey("Joy6 QuickInventory", "");
 			Epc.SetKey("Joy7 AltFire", "");
 			Epc.SetKey("Joy8 Fire", "");
 			Epc.SetKey("Joy9 PlayerStats", "");
 			Epc.SetKey("Joy10 FullInventory", "");
-			Epc.SetKey("Joy11 BackToWall", ""); // Joshua - Xbox used Joy5 originally but we addeds whistling
-			Epc.SetKey("Joy12 ResetCamera", "");
+			Epc.SetKey("Joy11 BackToWall", "");
+			if (Epc.bBinoculars)
+				Epc.SetKey("Joy12 Snipe", "");
+			else
+				Epc.SetKey("Joy12 ResetCamera", "");
+			Epc.SetKey("Joy13 DPadUp", "");
+			Epc.SetKey("Joy14 DPadDown", "");
+			Epc.SetKey("Joy15 DPadLeft", "");
+			Epc.SetKey("Joy16 DPadRight", "");
+			Epc.SetKey("AnalogUp MoveForward", "");
+			Epc.SetKey("AnalogDown MoveBackward", "");
+			Epc.SetKey("AnalogLeft StrafeLeft", "");
+			Epc.SetKey("AnalogRight StrafeRight", "");
+			Epc.SetKey("JoyX \"Axis aStrafe DeadZone=0.3\"", "");
+			Epc.SetKey("JoyY \"Axis aForward DeadZone=0.3\"", "");
+			Epc.SetKey("JoyZ \"Axis aTurn DeadZone=0.3\"", "");
+			Epc.SetKey("JoyV \"Axis aLookUp DeadZone=0.3\"", "");
+
+			if (Epc.GetStateName() == 's_FirstPersonTargeting' ||
+				Epc.GetStateName() == 's_RappellingTargeting' ||
+				Epc.GetStateName() == 's_PlayerBTWTargeting' ||
+				Epc.GetStateName() == 's_HOHFUTargeting' ||
+				Epc.GetStateName() == 's_PlayerSniping' ||
+				Epc.GetStateName() == 's_SplitSniping' ||
+				Epc.GetStateName() == 's_RappellingSniping')
+			{
+				Epc.SetKey("Joy1 ReloadGun", "");
+				Epc.SetKey("Joy11 SwitchROF", "");
+				Epc.SetKey("Joy12 Snipe", "");
+			}
+
+			if (Epc.IManager.GetNbInteractions() > 0 && Epc.CanInteract())
+			{
+				Epc.SetKey("Joy1 Interaction", "");
+			}
+			break;
+
+		case CS_Xbox:
+			Epc.SetKey("Joy1 Interaction", "");
+			Epc.SetKey("Joy2 Duck", "");
+			Epc.SetKey("Joy3 Scope", "");
+			Epc.SetKey("Joy4 Jump", "");
+			if (Epc.bWhistle)
+				Epc.SetKey("Joy5 Whistle", "");
+			else
+				Epc.SetKey("Joy5 BackToWall", "");
+			Epc.SetKey("Joy6 QuickInventory", "");
+			Epc.SetKey("Joy7 AltFire", "");
+			Epc.SetKey("Joy8 Fire", "");
+			Epc.SetKey("Joy9 PlayerStats", "");
+			Epc.SetKey("Joy10 FullInventory", "");
+			if (Epc.bWhistle)
+				Epc.SetKey("Joy11 BackToWall", "");
+			else
+				Epc.SetKey("Joy11 None", "");
+			if (Epc.bBinoculars)
+				Epc.SetKey("Joy12 Snipe", "");
+			else
+				Epc.SetKey("Joy12 ResetCamera", "");
 			Epc.SetKey("Joy13 DPadUp", "");
 			Epc.SetKey("Joy14 DPadDown", "");
 			Epc.SetKey("Joy15 DPadLeft", "");
@@ -140,52 +197,25 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			Epc.SetKey("JoyZ \"Axis aTurn DeadZone=0.3\"", "");
 			Epc.SetKey("JoyV \"Axis aLookUp DeadZone=0.3\"", "");
 			
-			if (Epc.GetStateName() == 's_FirstPersonTargeting' || Epc.GetStateName() == 's_PlayerSniping' || Epc.GetStateName() == 's_RappellingTargeting' || Epc.GetStateName() == 's_RappellingSniping' || Epc.GetStateName() == 's_PlayerBTWTargeting')
+			if (Epc.GetStateName() == 's_FirstPersonTargeting' ||
+				Epc.GetStateName() == 's_RappellingTargeting' ||
+				Epc.GetStateName() == 's_PlayerBTWTargeting' ||
+				Epc.GetStateName() == 's_HOHFUTargeting' ||
+				Epc.GetStateName() == 's_PlayerSniping' ||
+				Epc.GetStateName() == 's_SplitSniping' ||
+				Epc.GetStateName() == 's_RappellingSniping')
 			{
-				Epc.SetKey("Joy1 ReloadGun", ""); // Joshua - Xbox used Joy5 originally but added whistling
+				if (Epc.bWhistle)
+					Epc.SetKey("Joy1 ReloadGun", "");
+				else
+					Epc.SetKey("Joy1 Interaction", "");
 				Epc.SetKey("Joy4 Snipe", "");
-				Epc.SetKey("Joy11 SwitchROF", "");
+				if (Epc.bWhistle)
+					Epc.SetKey("Joy5 Whistle", "");
+				else
+					Epc.SetKey("Joy5 ReloadGun", "");
+				Epc.SetKey("Joy12 ResetCamera", "");
 			}
-
-			if (Epc.IManager.GetNbInteractions() > 0 && Epc.CanInteract())
-			{
-				Epc.SetKey("Joy1 Interaction", "");
-			}
-			break;
-
-		case CS_Pandora:
-			Epc.SetKey("Joy1 Interaction", "");
-			Epc.SetKey("Joy2 Duck", "");
-			Epc.SetKey("Joy3 Scope", "");
-			Epc.SetKey("Joy4 Jump", "");
-			Epc.SetKey("Joy5 QuickInventory", "");
-			Epc.SetKey("Joy6 Whistle", "");
-			Epc.SetKey("Joy7 AltFire", "");
-			Epc.SetKey("Joy8 Fire", "");
-			Epc.SetKey("Joy9 PlayerStats", "");
-			Epc.SetKey("Joy10 FullInventory", "");
-			Epc.SetKey("Joy11 BackToWall", "");
-			Epc.SetKey("Joy12 ResetCamera", "");
-			Epc.SetKey("Joy13 DPadUp", "");
-			Epc.SetKey("Joy14 DPadDown", "");
-			Epc.SetKey("Joy15 DPadLeft", "");
-			Epc.SetKey("Joy16 DPadRight", "");
-			Epc.SetKey("AnalogUp MoveForward", "");
-			Epc.SetKey("AnalogDown MoveBackward", "");
-			Epc.SetKey("AnalogLeft StrafeLeft", "");
-			Epc.SetKey("AnalogRight StrafeRight", "");
-			Epc.SetKey("JoyX \"Axis aStrafe DeadZone=0.3\"", "");
-			Epc.SetKey("JoyY \"Axis aForward DeadZone=0.3\"", "");
-			Epc.SetKey("JoyZ \"Axis aTurn DeadZone=0.3\"", "");
-			Epc.SetKey("JoyV \"Axis aLookUp DeadZone=0.3\"", "");
-
-			if (Epc.GetStateName() == 's_FirstPersonTargeting' || Epc.GetStateName() == 's_PlayerSniping' || Epc.GetStateName() == 's_RappellingTargeting' || Epc.GetStateName() == 's_RappellingSniping' || Epc.GetStateName() == 's_PlayerBTWTargeting')
-			{
-				Epc.SetKey("Joy1 ReloadGun", "");
-				Epc.SetKey("Joy11 SwitchROF", ""); // Joshua - Pandora used both thumbsticks to snipe because it had no ROF
-				Epc.SetKey("Joy12 Snipe", "");
-			}
-
 
 			if (Epc.IManager.GetNbInteractions() > 0 && Epc.CanInteract())
 			{
@@ -205,7 +235,10 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			Epc.SetKey("Joy9 PlayerStats", "");
 			Epc.SetKey("Joy10 FullInventory", "");
 			Epc.SetKey("Joy11 BackToWall", "");
-			Epc.SetKey("Joy12 ResetCamera", "");
+			if (Epc.bBinoculars)
+				Epc.SetKey("Joy12 Snipe", "");
+			else
+				Epc.SetKey("Joy12 ResetCamera", "");
 			Epc.SetKey("Joy13 DPadUp", "");
 			Epc.SetKey("Joy14 DPadDown", "");
 			Epc.SetKey("Joy15 DPadLeft", "");
@@ -219,13 +252,18 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			Epc.SetKey("JoyZ \"Axis aTurn DeadZone=0.3\"", "");
 			Epc.SetKey("JoyV \"Axis aLookUp DeadZone=0.3\"", "");
 
-			if (Epc.GetStateName() == 's_FirstPersonTargeting' || Epc.GetStateName() == 's_PlayerSniping' || Epc.GetStateName() == 's_RappellingTargeting' || Epc.GetStateName() == 's_RappellingSniping' || Epc.GetStateName() == 's_PlayerBTWTargeting')
+			if (Epc.GetStateName() == 's_FirstPersonTargeting' ||
+				Epc.GetStateName() == 's_RappellingTargeting' ||
+				Epc.GetStateName() == 's_PlayerBTWTargeting' ||
+				Epc.GetStateName() == 's_HOHFUTargeting' ||
+				Epc.GetStateName() == 's_PlayerSniping' ||
+				Epc.GetStateName() == 's_SplitSniping' ||
+				Epc.GetStateName() == 's_RappellingSniping')
 			{
 				Epc.SetKey("Joy1 ReloadGun", ""); // Joshua - PlayStation used Joy5 originally but added whistling
 				Epc.SetKey("Joy11 SwitchROF", "");
 				Epc.SetKey("Joy12 Snipe", "");
 			}
-
 
 			if (Epc.IManager.GetNbInteractions() > 0 && Epc.CanInteract())
 			{
