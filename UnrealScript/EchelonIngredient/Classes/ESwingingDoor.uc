@@ -75,16 +75,18 @@ function PostBeginPlay()
 
 	if (InitialState != 'BumpOpenTimed')
 	{
-	MyKnob = spawn(class'eknob', self,, DoorPos);
-	MyKnob.SetStaticMesh(None);
-	Myknob.setBase(self);
+		MyKnob = spawn(class'EKnob', self,, DoorPos);
+		MyKnob.SetStaticMesh(None);
+		Myknob.setBase(self);
 	}
 
 	// if linked to an opener object, remove interaction
 	if (FrontOpener != None || BackOpener != None)
 	{
 		// Assigned to something else, toggle door interaction off
-		MyKnob.ToggleInteraction(false);
+		// Joshua - Keep door interaction enabled for optic cable when using new door interaction system
+		if (!EchelonGameInfo(Level.Game).bNewDoorInteraction)
+			MyKnob.ToggleInteraction(false);
 		// Using the opener will unlock it
 		Locked = true;
 	}
@@ -140,7 +142,7 @@ function SetInteraction(class<EInteractObject> ClassName)
 
 		MyKnob.Interaction.Destroy();
 		MyKnob.InteractionClass	= ClassName;
-		MyKnob.Interaction		= Spawn(ClassName, MyKnob, ,myKnob.Location);
+		MyKnob.Interaction = Spawn(ClassName, MyKnob, , MyKnob.Location);
 	}
 }
 
@@ -352,6 +354,7 @@ function RandomizeLockPattern()
         }
     }
 }
+
 defaultproperties
 {
     KnobOffsetX=120
