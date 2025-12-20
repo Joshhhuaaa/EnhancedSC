@@ -671,6 +671,11 @@ function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocat
 				if (DamagedMeshes[i].CollPrimMesh != None)
 					SetCollisionPrim(DamagedMeshes[i].CollPrimMesh);
 
+				// Joshua - Remove all skins from the object when switching to the damaged mesh
+				// Fixes a Kola Cell laptop with screen skin applied, not sure if this fix should apply to other EGameplayObjects
+				if (IsA('ELaptop'))
+				Skins.Remove(0, Skins.Length);
+
 				iChosenMesh = i;
 				bObjectModifed = true;
 			}
@@ -1123,8 +1128,8 @@ defaultproperties
 {
     ObjectName="DefaultObject"
     LastTimeChange=-1.000000
-    bDamageable=true
-    bDestroyWhenDestructed=true
+    bDamageable=True
+    bDestroyWhenDestructed=True
     HitPoints=100
     ExplosionClass=Class'EchelonEffect.EExplosion'
     ExplosionDamageClass=Class'EBurned'
@@ -1133,21 +1138,21 @@ defaultproperties
     ExplosionMaxRadius=500.000000
     ExplosionNoiseRadius=2000.000000
     ExplosionMomentum=60000
-    TriggerPatternJustOnce=true
-    ChangeListWhenThrown=true
-    ChangeListWhenDamaged=true
+    TriggerPatternJustOnce=True
+    ChangeListWhenThrown=True
+    ChangeListWhenDamaged=True
     TriggerType=NoRestriction
-    bAcceptsProjectors=true
+    bAcceptsProjectors=True
     DrawType=DT_StaticMesh
     StaticMesh=StaticMesh'generic_obj.Misc.G_O'
-    bCollideActors=true
-    bStaticMeshCylColl=true
-    bBlockProj=true
-    bBlockBullet=true
-    bBlockNPCVision=true
-    bSideFadeEffect=true
+    bCollideActors=True
+    bStaticMeshCylColl=True
+    bBlockProj=True
+    bBlockBullet=True
+    bBlockNPCVision=True
+    bSideFadeEffect=True
     VolumeLightMesh=StaticMesh'LightGenOBJ.LightCubebeam.lightcubebeamB'
     SpotProjectedMaterial=ELightBeamMaterial'ETexRenderer.Dev.SpotLightBeam_Default'
-    bIsGamePlayObject=true
-    bIsTouchable=false
+    bIsGamePlayObject=True
+    bIsTouchable=False
 }

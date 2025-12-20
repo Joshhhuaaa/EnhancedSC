@@ -17,9 +17,17 @@ function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector
 	}
 }
 
+// Joshua - Always remove interaction when laptop is destroyed, this handles cases where ProcessDamage is called directly (bShatterable objects)
+event Destructed()
+{
+	ResetInteraction();
+	SetCollision(false, false, false); // Joshua - Disable collision when destroyed
+	Super.Destructed();
+}
+
 defaultproperties
 {
-    bShatterable=true
+    bShatterable=True
     HitPoints=400
     DamagedMeshes(0)=(StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_laptop_00B',Percent=25.000000)
     DamagedMeshes(1)=(StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_laptop_01B',Percent=50.000000)
