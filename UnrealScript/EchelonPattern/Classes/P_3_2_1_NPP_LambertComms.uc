@@ -52,59 +52,62 @@ function InitPattern()
         }
     }
 
-    // Joshua - Disposable pick was assigned the incorrect mesh
-    ForEach DynamicActors(class'EGameplayObject', EGO)
-    {
-        if (EGO.name == 'EDisposablePick0')
-        {
-            EGO.SetStaticMesh(StaticMesh'EMeshIngredient.Item.DisposablePick');
-            EGO.SetLocation(EGO.Location + vect(0,0,-22));
-        }
-    }
-
-    // Joshua - Disabling collision on these two vent frames as it was preventing the player from progressing
-    ForEach AllActors(class'Actor', A)
-    {
-        if (A.name == 'StaticMeshActor706')
-            A.SetCollision(False);
-
-        if (A.name == 'StaticMeshActor821')
-            A.SetCollision(False);
-    }
-
-    // Joshua - Removing EGroupAI20 from the PrimaryGroups (killing the NPC instead for now)
-    /*ForEach AllActors(class'EAlarm', Alarm)
-    {
-        if (Alarm.name == 'EAlarm5')
-        {
-            for (i = 0; i < Alarm.PrimaryGroups.Length; i++)
-            {
-                if (Alarm.PrimaryGroups[i] == EGroupAI(DynamicLoadObject("3_2_1_PowerPlant.EGroupAI20", class'EGroupAI')))
-                {
-                    Alarm.PrimaryGroups.Remove(i, 1);
-                    break;
-                }
-            }
-        }
-    }*/
-
-    // Joshua - Destroying the hat from the NPC that we teleport / kill
-    ForEach DynamicActors(class'EPawn', EP)
-    {
-        if (EP.Name == 'EPowerPlantEmployee14')
-        {
-            EP.Hat = None;
-            EP.HatMesh = None;
-        }
-    }
-
     if (!bInit)
     {
-    bInit=TRUE;
-    Code=0;
-    Molestered=0;
-    }
+        // Joshua - Disposable pick was assigned the incorrect mesh
+        ForEach DynamicActors(class'EGameplayObject', EGO)
+        {
+            if (EGO.name == 'EDisposablePick0')
+            {
+                EGO.SetStaticMesh(StaticMesh'EMeshIngredient.Item.DisposablePick');
+                EGO.SetLocation(EGO.Location + vect(0, 0, -22));
+            }
+        }
 
+        // Joshua - Disabling collision on these two vent frames as it was preventing the player from progressing
+        ForEach AllActors(class'Actor', A)
+        {
+            if (A.name == 'StaticMeshActor706')
+                A.SetCollision(False);
+
+            if (A.name == 'StaticMeshActor821')
+                A.SetCollision(False);
+        }
+
+        // Joshua - Removing EGroupAI20 from the PrimaryGroups (killing the NPC instead for now)
+        /*ForEach AllActors(class'EAlarm', Alarm)
+        {
+            if (Alarm.name == 'EAlarm5')
+            {
+                for (i = 0; i < Alarm.PrimaryGroups.Length; i++)
+                {
+                    if (Alarm.PrimaryGroups[i] == EGroupAI(DynamicLoadObject("3_2_1_PowerPlant.EGroupAI20", class'EGroupAI')))
+                    {
+                        Alarm.PrimaryGroups.Remove(i, 1);
+                        break;
+                    }
+                }
+            }
+        }*/
+
+        // Joshua - Destroying the hat from the NPC that we teleport / kill
+        ForEach DynamicActors(class'EPawn', EP)
+        {
+            if (EP.Name == 'EPowerPlantEmployee14')
+            {
+                EP.Hat = None;
+                EP.HatMesh = None;
+            }
+        }
+
+        if (!bInit)
+        {
+        bInit=TRUE;
+        Code=0;
+        Molestered=0;
+        }
+
+    }
 }
 
 

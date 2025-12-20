@@ -71,10 +71,6 @@ function InitPattern()
                 //EGO.DamagedMeshes[0].CollPrimMesh = None;
             }
 
-            // Joshua - Destroying the concussion grenade (canceled gadget) to prevent a crash
-            if (EGO.name == 'EConcussionGrenade0')
-                EGO.Destroy();
-
             // Joshua - Replacing the Chemcial Flares for Flares for the turret section (possibly revert later)
             if (EGO.name == 'EChemFlare0' || EGO.name == 'EChemFlare1' || EGO.name == 'EChemFlare2')
                 EGO.Destroy();
@@ -83,7 +79,7 @@ function InitPattern()
             if (EGO.name == 'EDisposablePick0')
             {
                 EGO.SetStaticMesh(StaticMesh'EMeshIngredient.Item.DisposablePick');
-                EGO.SetLocation(EGO.Location + vect(0,0,-13.5));
+                EGO.SetLocation(EGO.Location + vect(0, 0, -13.5));
             }
 
             // Joshua - Door nametag placement fix
