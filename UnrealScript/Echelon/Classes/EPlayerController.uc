@@ -319,6 +319,14 @@ var(Enhanced) config bool bOpticCableVisions; // Joshua - Allows the Optic Cable
 var(Enhanced) config bool bShowKeypadGoal; 
 var bool bShowKeyNum;
 
+// Joshua - Track recent transmission messages to prevent duplicates
+struct RecentTransmission
+{
+	var string Message;
+	var float Timestamp;
+};
+var array<RecentTransmission> RecentTransmissions;
+
 // Joshua - Player statistics tracking
 var EPlayerStats playerStats;
 var bool bConfirmStats;
@@ -2673,7 +2681,43 @@ function SendTransmissionMessage(string TextData, EchelonEnums.eTransmissionType
 	local EListNode Node;
 	local ETransmissionObj T;
 	local ESList TransmissionList;
+	local int i;
+	local float CurrentTime;
+	local RecentTransmission RT;
+	
+	CurrentTime = Level.TimeSeconds;
+	
+	// Joshua - Only check for duplicates on these types
+	switch (eType)
+	{
+		case TR_HINT:
+		case TR_CONSOLE:
+		case TR_NPCS:
+		case TR_INVENTORY:
+		case TR_COMMWARNING:
+			break;
+		default:
+			// Joshua - Original behavior:
+			EMainHUD(myHUD).CommunicationBox.AddTransmission(self, eType, TextData, None);
+			return;
+	}
+	
+	// Joshua - Check recent transmissions first to prevent rapid duplicates
+	for (i = RecentTransmissions.Length - 1; i >= 0; i--)
+	{
+		// Joshua - Clean up messages older than 1 second
+		if (CurrentTime - RecentTransmissions[i].Timestamp > 1.0)
+		{
+			RecentTransmissions.Remove(i, 1);
+			continue;
+		}
 		
+		// Joshua - Same message sent within 1 second, ignore it
+		if (RecentTransmissions[i].Message == TextData)
+			return;
+	}
+	
+	// Joshua - Get the appropriate transmission list
 	switch (eType)
 	{
 		case TR_HINT:
@@ -2687,27 +2731,37 @@ function SendTransmissionMessage(string TextData, EchelonEnums.eTransmissionType
 		case TR_COMMWARNING:
 			TransmissionList = EMainHUD(myHUD).CommunicationBox.InventoryList;
 			break;
-		default:
-			// For other types, don't check for duplicates in the list
-			EMainHUD(myHUD).CommunicationBox.AddTransmission(self, eType, TextData, None);
-			return;
 	}
 	
-	// Check if the same message already exists in the transmission list
+	// Joshua - Check if the same message already exists in the visible list
 	if (TransmissionList != None && TransmissionList.FirstNode != None)
 	{
 		for (Node = TransmissionList.FirstNode; Node != None; Node = Node.NextNode)
 		{
 			T = ETransmissionObj(Node.Data);
 			if (T != None && T.Data == TextData)
-			{
-				// Same message already exists, don't add it
 				return;
-			}
 		}
 	}
 	
-	// Joshua - Original behavior: Message doesn't exist, add it
+	// Joshua - Also check the queued list (messages waiting while Lambert talks)
+	if (EMainHUD(myHUD).CommunicationBox.QueuedList != None && 
+		EMainHUD(myHUD).CommunicationBox.QueuedList.FirstNode != None)
+	{
+		for (Node = EMainHUD(myHUD).CommunicationBox.QueuedList.FirstNode; Node != None; Node = Node.NextNode)
+		{
+			T = ETransmissionObj(Node.Data);
+			if (T != None && T.Data == TextData)
+				return;
+		}
+	}
+	
+	// Joshua - Add this message to recent transmissions tracking
+	RT.Message = TextData;
+	RT.Timestamp = CurrentTime;
+	RecentTransmissions[RecentTransmissions.Length] = RT;
+	
+	// Joshua - Original behavior:
 	EMainHUD(myHUD).CommunicationBox.AddTransmission(self, eType, TextData, None);
 }
 
