@@ -288,7 +288,9 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 //    
 //    
 
-    if ((Key == ViewportOwner.Actor.GetKey("FullInventory", false)) && (Action == IST_Press) && (Root != None))     
+    if ((Key == ViewportOwner.Actor.GetKey("FullInventory", false)) && 
+    (EPlayerController(ViewportOwner.Actor).CanGoBackToGame()) && // Joshua - Prevent the PC menus during GameOver
+    (Action == IST_Press) && (Root != None))     
     {
 		if (ViewportOwner.Actor.Level.Pauser == None)
 		{
