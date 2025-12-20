@@ -2852,7 +2852,13 @@ function DiscardPickup(optional bool bSheathItem, optional bool bNoVelocity)
 	
 	DropVel = ePawn.Velocity;
 	if (!bNoVelocity)
-		DropVel += ePawn.ToWorldDir(Vect(50,50,0));
+	{
+		// Joshua - In back to wall, throw item backwards away from wall
+		if (IsInState('s_PlayerBTWPeek') || IsInState('s_PlayerBTW') || IsInState('s_PlayerBTWMove') || IsInState('s_PlayerBTWTargeting'))
+			DropVel += ePawn.ToWorldDir(Vect(-50,50,0));
+		else
+			DropVel += ePawn.ToWorldDir(Vect(50,50,0));
+	}
 
 	// If it's a simple g.o. so item can not be added to inventory
 	if (!ePawn.HandItem.IsA('EInventoryItem'))
@@ -7907,7 +7913,7 @@ state s_PlayerBTWBase
 
 	function ProcessBackToWall()
 	{
-		if (!bIntransition && CheckBTWRelease())
+		if (!bInTransition && CheckBTWRelease())
 		{
 			JumpLabel = '';
 			GotoState(, 'Release');
@@ -7916,7 +7922,7 @@ state s_PlayerBTWBase
 	
 	function ProcessScope()
 	{
-		if (!bIntransition && CheckBTWRelease() && ActiveGun != None)
+		if (!bInTransition && CheckBTWRelease() && ActiveGun != None)
 		{
 			JumpLabel = 'Scope';
 			GotoState(, 'Release');
@@ -7950,7 +7956,7 @@ state s_PlayerBTW extends s_PlayerBTWBase
     {
 		StickBTW();
 
-		if (bIntransition || CheckForCrouchBTW())
+		if (bInTransition || CheckForCrouchBTW())
 			return;
 
 		if (!CheckBTW() && CheckBTWRelease())
@@ -7976,16 +7982,16 @@ state s_PlayerBTW extends s_PlayerBTWBase
     }
 
 ToggleCrouch:
-	bIntransition = true;
+	bInTransition = true;
 	m_camera.SetMode(ECM_BTW);
 	KillPawnSpeed();
 	ePawn.PlayBTW('BackStAlDn0', '', 'BackStAlDn0', '', false, 1.0, 0.0, true);
 	FinishAnim(0);
-	bIntransition = false;
+	bInTransition = false;
 	Stop;
 
 Release:
-	bIntransition = true;
+	bInTransition = true;
 	SetBTWCamera(ECM_WalkingCr, ECM_WalkingCr, ECM_Walking, ECM_Walking);
 	if (JumpLabel == 'Scope')
 		ePawn.PlayBTW('BackCrAlEd0', '', 'BackStAlEd0', '', false, 1.5, 0.0);
@@ -7998,7 +8004,7 @@ Release:
 		ePawn.PlayAnimOnly(ePawn.AWaitCrouch);
 	else
 		ePawn.PlayAnimOnly(ePawn.AWait);
-	bIntransition = false;
+	bInTransition = false;
 	if (JumpLabel == 'Scope')
 		OnGroundScope();
 	else
@@ -8011,7 +8017,7 @@ Entering:
 	ePawn.PlaySound(Sound'FisherFoley.Play_FisherBackToWallGear', SLOT_SFX);
 	ePawn.PlayBTW('BackCrAlBg0', '', 'BackStAlBg0', '', false, 1.0, 0.0);
 	FinishAnim(0);
-	bIntransition = false;
+	bInTransition = false;
 	Stop;
 
 EnteringBack:
@@ -8022,7 +8028,7 @@ EnteringBack:
 	ePawn.PlaySound(Sound'FisherFoley.Play_FisherBackToWallGear', SLOT_SFX);
 	ePawn.PlayBTW('BackCrAlEd0', '', 'BackStAlEd0', '', false, 1.0, 0.0, true, true);
 	FinishAnim(0);
-	bIntransition = false;
+	bInTransition = false;
 	Stop;
 }
 
@@ -8047,7 +8053,7 @@ state s_PlayerBTWMove extends s_PlayerBTWBase
 		else
 			ePawn.GroundSpeed = m_speedBTW;
 
-		if (bIntransition)
+		if (bInTransition)
 		{
 			if (CheckBTWEyes() > 0)
 				KillPawnSpeed();
@@ -8096,7 +8102,7 @@ ToggleCrouch:
 	Stop;
 
 Release:
-	bIntransition = true;
+	bInTransition = true;
 	SetBTWCamera(ECM_WalkingCr, ECM_WalkingCr, ECM_Walking, ECM_Walking);
 	SetBTWAcceleration(0.0);
 	if (JumpLabel == 'Scope')
@@ -8110,19 +8116,19 @@ Release:
 		ePawn.PlayAnimOnly(ePawn.AWaitCrouch);
 	else
 		ePawn.PlayAnimOnly(ePawn.AWait);
-	bIntransition = false;
+	bInTransition = false;
 	if (JumpLabel == 'Scope')
 		OnGroundScope();
 	else
 		GotoState('s_PlayerWalking');
 
 GoBack:
-	bIntransition = true;
+	bInTransition = true;
 	m_camera.SetMode(ECM_BTW);
 	KillPawnSpeed();
 	ePawn.PlayBTW('BackCrAlNt0', 'BackCrAlNt0', 'BackStAlNt0', 'BackStAlNt0', m_BTWSide, 1.0, 0.3);
 	Sleep(0.3);
-	bIntransition = false;
+	bInTransition = false;
 	GotoState('s_PlayerBTW');
 }
 
@@ -8130,6 +8136,13 @@ state s_PlayerBTWPeek extends s_PlayerBTWBase
 {
 	function ProcessScope()
 	{
+		// Joshua - Back to Wall throw support
+		if (bEnableBTWThrow && CheckBTWEyes() == 2 && CheckBTWRelease() && ePawn.HandItem != None && ePawn.HandItem.bIsProjectile)
+		{
+			GotoState('s_PlayerBTWThrow');
+			return;
+		}
+
 		if (CheckBTWEyes() == 2 && CheckBTWRelease() && HandGun != None)
 			GotoState('s_PlayerBTWTargeting', 'Entering');
 	}
@@ -8144,7 +8157,7 @@ state s_PlayerBTWPeek extends s_PlayerBTWBase
 
     function PlayerMove(float deltaTime)
     {
-		if (bIntransition)
+		if (bInTransition)
 			return;
 
 		if (CheckForCrouchBTW())
@@ -8168,19 +8181,19 @@ state s_PlayerBTWPeek extends s_PlayerBTWBase
     }
 
 Release:
-	bIntransition = true;
+	bInTransition = true;
 	m_camera.SetMode(ECM_BTW);
 	ePawn.PlayBTW('BackCrAlNt0', 'BackCrAlNt0', 'BackStAlNt0', 'BackStAlNt0', m_BTWSide, 1.0, 0.2);
 	Sleep(0.2);
 	GotoState('s_PlayerBTW', 'Release');
-	bIntransition = false;
+	bInTransition = false;
 
 ToggleCrouch:
-	bIntransition = true;
+	bInTransition = true;
 	SetBTWCamera(ECM_BTWPeakLeft, ECM_BTWPeakRight, ECM_BTWPeakLeft, ECM_BTWPeakRight);
 	ePawn.PlayBTW('BackStPkDnL', 'BackStPkDnR', 'BackStPkDnL', 'BackStPkDnR', m_BTWSide, 1.0, 0.0, true);
 	FinishAnim(0);
-	bIntransition = false;
+	bInTransition = false;
 	Stop;
 }
 
@@ -8190,7 +8203,7 @@ state s_PlayerBTWTargeting extends s_PlayerBTWBase
 	{
 		ePawn.WalkingRatio = 0;
 		ePawn.SoundWalkingRatio = 0;
-		bIntransition = true;
+		bInTransition = true;
 		m_useTarget = true;
 		m_SMInTrans = false;
 		Super.BeginState();
@@ -8229,7 +8242,7 @@ state s_PlayerBTWTargeting extends s_PlayerBTWBase
 
 	function ProcessScope()
 	{
-		if (!bIntransition && !bInGunTransition)
+		if (!bInTransition && !bInGunTransition)
 			GotoState(, 'GoBack');
 	}
 
@@ -8253,7 +8266,7 @@ state s_PlayerBTWTargeting extends s_PlayerBTWBase
 				ePawn.AimAt(AAHOH, Normal(m_targetLocation - Location), Vector(ePawn.Rotation), -10, 65, -70, 70);
 		}
 
-		if (bIntransition || bInGunTransition || CheckForCrouchBTW())
+		if (bInTransition || bInGunTransition || CheckForCrouchBTW())
 			return;
 
 		if (!CheckBTW() && CheckBTWRelease())
@@ -8328,22 +8341,22 @@ state s_PlayerBTWTargeting extends s_PlayerBTWBase
 	}
 
 ToggleCrouch:
-	bIntransition = true;
+	bInTransition = true;
 	SetBTWCamera(ECM_BTWLeftFP, ECM_BTWRightFP, ECM_BTWLeftFP, ECM_BTWRightFP);
 	ePawn.PlayBTW('BackStSpDnL', 'BackStSpDnR', 'BackStSpDnL', 'BackStSpDnR', m_BTWSide, 1.0, 0.0, true);
 	FinishAnim();
-	bIntransition = false;
+	bInTransition = false;
 	Stop;
 
 GoBack:
-	bIntransition = true;
+	bInTransition = true;
 	m_SMInTrans = true;
 	SetBTWCamera(ECM_BTWPeakLeft, ECM_BTWPeakRight, ECM_BTWPeakLeft, ECM_BTWPeakRight);
 	EMainHUD(myHud).NormalView();
 	SheathWeapon();
 	FinishAnim(ePawn.ACTIONCHANNEL);
 	m_SMInTrans = false;
-	bIntransition = false;
+	bInTransition = false;
 	GotoState('s_PlayerBTWPeek', JumpLabelPrivate);
 
 Entering:
@@ -8354,7 +8367,7 @@ Entering:
 	FinishAnim(ePawn.ACTIONCHANNEL);
 	EMainHUD(myHud).Slave(ActiveGun);
 	m_SMInTrans = false;
-	bIntransition = false;
+	bInTransition = false;
 	ePawn.PlayBTW('BackCrSpNtL', 'BackCrSpNtR', 'BackStSpNtL', 'BackStSpNtR', m_BTWSide, 1.0, 0.0);
 	Stop;
 }
@@ -9645,7 +9658,7 @@ state s_Fence
 OutFast:
 	ePawn.PlayAnimOnly('FencStAlIO0', , , true, true);
 	FinishAnim();
-	bIntransition = false;
+	bInTransition = false;
 	GoToState('s_PlayerWalking');
 
 OutBottom:
@@ -10766,7 +10779,7 @@ state s_GrabbingNarrowLadder extends s_GrabbingGE
     {
 		if (m_SMInTrans && IsPushingFull() && ((m_EnterDir dot GetPushingDir()) < -0.7))
 		{
-			bIntransition = false;
+			bInTransition = false;
 			m_SMInTrans = false;
 			GotoState(, 'OutFast');
 		}
@@ -10775,7 +10788,7 @@ state s_GrabbingNarrowLadder extends s_GrabbingGE
 OutFast:
 	ePawn.PlayAnimOnly('LaddStAlIOR', , , true, true);
 	FinishAnim();
-	bIntransition = false;
+	bInTransition = false;
 	GoToState('s_PlayerWalking');
 
 FromUnder:
@@ -11281,7 +11294,7 @@ state s_GrabbingPipe extends s_GrabbingGE
     {
 		if (m_SMInTrans && IsPushingFull() && ((m_EnterDir dot GetPushingDir()) < -0.7))
 		{
-			bIntransition = false;
+			bInTransition = false;
 			m_SMInTrans = false;
 			GotoState(, 'OutFast');
 		}
@@ -11290,7 +11303,7 @@ state s_GrabbingPipe extends s_GrabbingGE
 OutFast:
 	ePawn.PlayAnimOnly('pipvstalior', , , true, true);
 	FinishAnim();
-	bIntransition = false;
+	bInTransition = false;
 	GoToState('s_PlayerWalking');
 
 FromTop:
@@ -11911,7 +11924,7 @@ state s_GrabbingPole extends s_GrabbingGE
     {
 		if (m_SMInTrans && IsPushingFull() && ((m_EnterDir dot GetPushingDir()) < -0.7))
 		{
-			bIntransition = false;
+			bInTransition = false;
 			m_SMInTrans = false;
 			GotoState(, 'OutFast');
 		}
@@ -11921,7 +11934,7 @@ state s_GrabbingPole extends s_GrabbingGE
 OutFast:
 	ePawn.PlayAnimOnly('RopeStAlIOR', , , true, true);
 	FinishAnim();
-	bIntransition = false;
+	bInTransition = false;
 	GoToState('s_PlayerWalking');
 
 FromGround:
