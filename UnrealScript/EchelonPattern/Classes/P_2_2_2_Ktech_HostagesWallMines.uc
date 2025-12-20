@@ -55,7 +55,7 @@ WallMinesOff:
     Log("WallMinesOff");
     SetFlags(V2_2_2_Kalinatek(Level.VarObject).WallMinesOff,TRUE);
     PlayerMove(false);
-    Sleep(5);
+    Sleep(1.5); // Joshua - Reduced from 5, seem unnecessarily long
     SendUnrealEvent('HostagesSaveGame');
     Sleep(1);
     SendUnrealEvent('WallMineTech03');
