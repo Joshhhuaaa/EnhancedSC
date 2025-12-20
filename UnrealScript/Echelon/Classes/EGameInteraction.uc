@@ -4,6 +4,7 @@ class EGameInteraction extends EInteraction;
 
 var EInteractObject ExitInteraction;
 var bool bInteracting;
+var bool bForceExited; // Joshua - Force exit the interaction menu when the player dies
 
 function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 {
@@ -330,8 +331,17 @@ state s_GameInteractionMenu
 		else
 			Epc.bStopInput = false;
 
-		//Log("Interaction menu .. Interaction released .. initInteract");
-		Epc.IManager.GetCurrentInteraction().InitInteract(Epc);
+		// Joshua - Force exit the interaction menu when the player dies
+		if (!bForceExited)
+		{
+			//Log("Interaction menu .. Interaction released .. initInteract");
+			Epc.IManager.GetCurrentInteraction().InitInteract(Epc);
+		}
+		else
+		{
+			bForceExited = false;
+		}
+		
 		Epc.IManager.SelectedInteractions = -1;
 
 		// Remove exit button
@@ -382,6 +392,18 @@ state s_GameInteractionMenu
 		}
 		return true;
 	} 
+}
+
+// Joshua - Force exit the interaction menu when the player dies
+function ForceExitInteractionMenu()
+{
+	// Only exit if we're currently in the interaction menu state
+	if (IsInState('s_GameInteractionMenu'))
+	{
+		bForceExited = true;
+		bInteracting = false;
+		GotoState('');
+	}
 }
 
 // Joshua - Function to bind Sniper to Middle Mouse
