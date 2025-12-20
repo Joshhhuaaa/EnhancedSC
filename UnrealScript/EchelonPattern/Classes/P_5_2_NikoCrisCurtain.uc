@@ -144,6 +144,7 @@ NikoFinallyDead:
     SendPatternEvent('DoorOpener','Milestone');
     Sleep(1);
     Speech(Localize("P_5_2_NikoCrisCurtain", "Speech_0001L", "Localization\\P_5_1_2_PresidentialPalace"), Sound'S5_1_2Voice.Play_51_80_01', 2, 0, TR_HEADQUARTER, 0, false);
+    CheckIfIsDead(3,'CrisDiedAfter'); // Joshua - Check one more time if Cristavi is dead
     SendPatternEvent('Courtyard','NoExtra');
     Speech(Localize("P_5_2_NikoCrisCurtain", "Speech_0008L", "Localization\\P_5_1_2_PresidentialPalace"), Sound'S5_1_2Voice.Play_51_80_02', 0, 0, TR_CONVERSATION, 0, false);
     Speech(Localize("P_5_2_NikoCrisCurtain", "Speech_0009L", "Localization\\P_5_1_2_PresidentialPalace"), Sound'S5_1_2Voice.Play_51_80_03', 2, 2, TR_HEADQUARTER, 0, false);
@@ -215,6 +216,17 @@ CrisDied:
     Speech(Localize("P_5_2_NikoCrisCurtain", "Speech_0005L", "Localization\\P_5_1_2_PresidentialPalace"), Sound'S5_1_2Voice.Play_51_72_01', 2, 0, TR_HEADQUARTER, 0, true);
     Close();
     GameOver(false, 0);
+    End();
+CrisDiedAfter: // Joshua - Check one more time if Cristavi is dead
+    Log("CrisDiedAfter");
+    SetProfileDeletion();
+    DisableMessages(TRUE, TRUE);
+    IgnoreAlarmStage(TRUE);
+    PlayerMove(false);
+    Speech(Localize("P_5_2_GoalUpdate", "Speech_0014L", "Localization\\P_5_1_2_PresidentialPalace"), Sound'S5_1_Voice.Play_51_95_01', 1, 0, TR_HEADQUARTER, 0, true);
+    Close();
+    GameOver(false, 0);
+    End();
 End:
     End();
 
