@@ -99,6 +99,24 @@ var int pi_mire_cote;
 var int controller_s_front_fond;
 var int inv_fleche_icones;
 
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
+// Joshua - Binoculars
+var int border_binocular;
+var int bino_bousole;
+var int bino_distance;
+
+// Joshua - Horizontal Life Bar
+var int qi_coin1_hor;
+var int qi_coin2_hor;
+var int qi_bord_v_hor;
+var int qi_bord_h_hor;
+var int qi_bord_h2_hor;
+var int lf_niv_plein_hor;
+
 /*-----------------------------------------------------------------------------
                      D E F A U L T   P R O P E R T I E S 
 -----------------------------------------------------------------------------*/
@@ -187,6 +205,17 @@ defaultproperties
     pi_mire_cote=81
     controller_s_front_fond=82
     inv_fleche_icones=83
+    // Joshua - Binoculars
+    border_binocular=84
+    bino_bousole=85
+    bino_distance=86
+    // Joshua - Horizontal Life Bar
+    qi_coin1_hor=87
+    qi_coin2_hor=88
+    qi_bord_v_hor=89
+    qi_bord_h_hor=90
+    qi_bord_h2_hor=91
+    lf_niv_plein_hor=92
     ArrayTexture(0)=(TextureName="ic_lock",TextureOwner=Texture'HUD.HUD.ETGAME',Origin=(X=202.000000,Y=103.000000),Size=(X=12.000000,Y=15.000000))
     ArrayTexture(1)=(TextureName="ic_unlock",TextureOwner=Texture'HUD.HUD.ETGAME',Origin=(X=184.000000,Y=103.000000),Size=(X=12.000000,Y=17.000000))
     ArrayTexture(2)=(TextureName="trai_s_button",TextureOwner=Texture'HUD.HUD.ETGAME',Origin=(X=454.000000,Y=155.000000),Size=(X=13.000000,Y=13.000000))
@@ -271,5 +300,16 @@ defaultproperties
     ArrayTexture(81)=(TextureName="pi_mire_cote",TextureOwner=Texture'HUD.HUD.ETGAME',Origin=(X=163.000000,Y=121.000000),Size=(X=6.000000,Y=5.000000))
     ArrayTexture(82)=(TextureName="controller_s_front_fond",TextureOwner=Texture'HUD.HUD.ETGAME',Origin=(X=333.000000,Y=172.000000),Size=(X=99.000000,Y=79.000000))
     ArrayTexture(83)=(TextureName="inv_fleche_icones",TextureOwner=Texture'HUD.HUD.ETGAME',Origin=(X=160.000000,Y=103.000000),Size=(X=5.000000,Y=9.000000))
+    // Joshua - Binoculars
+    ArrayTexture(84)=(TextureName="border_binocular",TextureOwner=Texture'HUD_Enhanced.HUD.ETGAME_PS2',Origin=(X=132.000000,Y=1.000000),Size=(X=68.000000,Y=72.000000))
+    ArrayTexture(85)=(TextureName="bino_bousole",TextureOwner=Texture'HUD_Enhanced.HUD.ETGAME_PS2',Origin=(X=203.000000,Y=1.000000),Size=(X=24.000000,Y=11.000000))
+    ArrayTexture(86)=(TextureName="bino_distance",TextureOwner=Texture'HUD_Enhanced.HUD.ETGAME_PS2',Origin=(X=1.000000,Y=169.000000),Size=(X=100.000000,Y=54.000000))
+    // Joshua - Horizontal Life Bar
+    ArrayTexture(87)=(TextureName="qi_coin1_hor",TextureOwner=Texture'HUD_Enhanced.HUD.ETGAME_Hor',Origin=(X=408.000000,Y=66.000000),Size=(X=7.000000,Y=8.000000))
+    ArrayTexture(88)=(TextureName="qi_coin2_hor",TextureOwner=Texture'HUD_Enhanced.HUD.ETGAME_Hor',Origin=(X=451.000000,Y=121.000000),Size=(X=4.000000,Y=8.000000))
+    ArrayTexture(89)=(TextureName="qi_bord_v_hor",TextureOwner=Texture'HUD_Enhanced.HUD.ETGAME_Hor',Origin=(X=389.000000,Y=7.000000),Size=(X=1.000000,Y=5.000000))
+    ArrayTexture(90)=(TextureName="qi_bord_h_hor",TextureOwner=Texture'HUD_Enhanced.HUD.ETGAME_Hor',Origin=(X=382.000000,Y=14.000000),Size=(X=6.000000,Y=1.000000))
+    ArrayTexture(91)=(TextureName="qi_bord_h2_hor",TextureOwner=Texture'HUD_Enhanced.HUD.ETGAME_Hor',Origin=(X=390.000000,Y=61.000000),Size=(X=4.000000,Y=1.000000))
+    ArrayTexture(92)=(TextureName="lf_niv_plein_hor",TextureOwner=Texture'HUD_Enhanced.HUD.ETGAME_Hor',Origin=(X=407.000000,Y=78.000000),Size=(X=8.000000,Y=8.000000))
     pixel=40
 }

@@ -374,6 +374,13 @@ function DrawLifeBar(ECanvas Canvas)
 {
 	local int LifeBarSize, xPos, yPos;
 	local color Green;
+
+	// Joshua - Optional horizontal health bar
+	if (Epc.bHorizontalLifeBar)
+	{
+		DrawLifeBarHorizontal(Canvas);
+		return;
+	}
 	
 	Green.R = 98;
 	Green.G = 113;
@@ -383,7 +390,7 @@ function DrawLifeBar(ECanvas Canvas)
     xPos = 640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH;
     yPos = eGame.HUD_OFFSET_Y;
 
-    Canvas.SetDrawColor(128,128,128);
+    Canvas.SetDrawColor(128, 128, 128);
 
 	Canvas.Style = ERenderStyle.STY_Alpha;
     // TOP LEFT CORNER //
@@ -411,8 +418,11 @@ function DrawLifeBar(ECanvas Canvas)
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v, 5, LIFEBAR_HEIGHT - 11, 5, 0, -5, 1);
     
     // TOP //
-    Canvas.SetPos(xPos + 8, yPos);
-    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_h2, LIFEBAR_WIDTH - 16, 4, 0, 0, 1, 4);
+    //Canvas.SetPos(xPos + 8, yPos);
+    //eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_h2, LIFEBAR_WIDTH - 16, 4, 0, 0, 1, 4);
+	// Joshua - Fixed life bar gap
+	Canvas.SetPos(xPos + 8, yPos + 4);
+	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_h2, LIFEBAR_WIDTH - 16, -4, 0, 0, 1, 4);
 
     // BOTTOM//
     Canvas.SetPos(xPos + 8, yPos + LIFEBAR_HEIGHT - 6);
@@ -431,7 +441,7 @@ function DrawLifeBar(ECanvas Canvas)
     if (Epc.Pawn != None && Epc.ePawn.Health > 0.0f)
     {
 		// (Yanick Mimee) June-27-2002
-		Canvas.SetDrawColor(128,128 + (127 * (1 - (float(Epc.ePawn.Health) / Epc.ePawn.InitialHealth))), 128, 255);	
+		Canvas.SetDrawColor(128, 128 + (127 * (1 - (float(Epc.ePawn.Health) / Epc.ePawn.InitialHealth))), 128, 255);	
 		Canvas.Style = ERenderStyle.STY_Normal;	
 		// Joshua - Fixed life bar size to fit the vertically better
 		//LifeBarSize = (LIFEBAR_HEIGHT - 10) * (float(Epc.ePawn.Health) / Epc.ePawn.InitialHealth);
@@ -440,6 +450,75 @@ function DrawLifeBar(ECanvas Canvas)
 		Canvas.SetPos(xPos + 4, yPos + LIFEBAR_HEIGHT - LifeBarSize - 5);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.lf_niv_plein, 8, LifeBarSize, 0, 0, 7, 1);		
 	}	
+}
+
+/*-----------------------------------------------------------------------------
+ Function:      DrawLifeBarHorizontal
+
+ Description:   Horizontal life bar similar to early Splinter Cell builds
+-----------------------------------------------------------------------------*/
+function DrawLifeBarHorizontal(ECanvas Canvas)
+{
+	local int LifeBarSize, xPos, yPos;
+	local int HOR_WIDTH, HOR_HEIGHT;
+	local float xLen, yLen;
+
+	Canvas.Font = Canvas.ETextFont;
+	Canvas.TextSize("T", xLen, yLen);
+	//HOR_WIDTH = LIFEBAR_HEIGHT;
+	// Joshua - Horizontal life bar will use interaction box as its width
+	HOR_WIDTH = xLen * MAX_INTER_NAME_LENGHT + 3 + 3;
+	HOR_HEIGHT = LIFEBAR_WIDTH;
+
+	xPos = 640 - eGame.HUD_OFFSET_X - HOR_WIDTH;
+	yPos = eGame.HUD_OFFSET_Y;
+
+	Canvas.SetDrawColor(128, 128, 128);
+	Canvas.Style = ERenderStyle.STY_Alpha;
+
+	Canvas.SetPos(xPos + HOR_WIDTH - 4, yPos);
+	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin2_hor, 4, 8, 4, 8, -4, -8);
+
+	Canvas.SetPos(xPos, yPos);
+	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin1_hor, 7, 8, 0, 0, 7, 8);
+
+	Canvas.SetPos(xPos + HOR_WIDTH - 4, yPos + HOR_HEIGHT - 8);
+	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin2_hor, 4, 8, 4, 0, -4, 8);
+
+	Canvas.SetPos(xPos, yPos + HOR_HEIGHT - 8);
+	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin1_hor, 7, 8, 0, 8, 7, -8);
+
+	Canvas.SetPos(xPos + 7, yPos);
+	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v_hor, HOR_WIDTH - 11, 5, 0, 0, 1, 5);
+
+	Canvas.SetPos(xPos + 7, yPos + HOR_HEIGHT - 5);
+	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v_hor, HOR_WIDTH - 11, 5, 0, 5, 1, -5);
+
+	Canvas.SetPos(xPos, yPos + 8);
+	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_h_hor, 6, HOR_HEIGHT - 16, 0, 0, 6, 1);
+
+	Canvas.SetPos(xPos + HOR_WIDTH - 4, yPos + 8);
+	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_h2_hor, 4, HOR_HEIGHT - 16, 4, 0, -4, 1);
+	Canvas.Style = ERenderStyle.STY_Normal;
+
+	// BACKGROUND //
+	Canvas.SetPos(xPos + 4, yPos + 5);
+	Canvas.DrawColor = Canvas.black;
+	Canvas.DrawColor.A = 40;
+	Canvas.Style = ERenderStyle.STY_Alpha;
+	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.lf_niv_plein_hor, HOR_WIDTH - 8, 8, 0, 0, 1, 7);
+
+	// LIFE //
+	if (Epc.Pawn != None && Epc.ePawn.Health > 0.0f)
+	{
+		// (Yanick Mimee) June-27-2002
+		Canvas.SetDrawColor(128, 128 + (127 * (1 - (float(Epc.ePawn.Health) / Epc.ePawn.InitialHealth))), 128, 255);
+		Canvas.Style = ERenderStyle.STY_Normal;
+		// Health fills from right to left (left is max health)
+		LifeBarSize = (HOR_WIDTH - 8) * (float(Epc.ePawn.Health) / Epc.ePawn.InitialHealth);
+		Canvas.SetPos(xPos + 5, yPos + 4);
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.lf_niv_plein_hor, LifeBarSize, 8, 0, 0, 1, 7);
+	}
 }
 
 /*-----------------------------------------------------------------------------
