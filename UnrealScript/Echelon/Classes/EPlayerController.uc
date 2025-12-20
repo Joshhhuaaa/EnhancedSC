@@ -1207,6 +1207,11 @@ function Possess(Pawn aPawn)
 		}
 	}
 
+	// Joshua - Give Sam AbstractGoggle for zooming
+	GoggleItem = spawn(class'EAbstractGoggle', self);
+	GoggleItem.controller = self;
+	GoggleItem.SetBase(ePawn);
+
 	Super.Possess(aPawn);
 
 	//
@@ -1289,6 +1294,10 @@ function Destroyed()
 
 function PawnDied()
 {
+	// Joshua - Force exit interaction menu if player dies while in it
+	if (egi != None)
+		egi.ForceExitInteractionMenu();
+
 	if (ePawn != None)
 	{
 		SetLocation(ePawn.Location);
@@ -1513,7 +1522,12 @@ exec function IncSpeed()
 	SnipeZoomIn();
 
 	// Joshua - QoL improvement: variable speeds in weapon mode but we must prevent it while zooming or using air camera
-	if (GetStateName() != 's_PlayerSniping' && GetStateName() != 's_RappellingSniping' && GetStateName() != 's_LaserMicTargeting' && !bUsingAirCamera)
+	if (GetStateName() != 's_PlayerSniping' &&
+		GetStateName() != 's_RappellingSniping' &&
+		GetStateName() != 's_SplitSniping' &&
+		GetStateName() != 's_LaserMicTargeting' &&
+		GetStateName() != 's_Zooming' &&
+		!bUsingAirCamera)
 	{
 		m_curWalkSpeed += 1;
 		if (m_curWalkSpeed > eGame.m_maxSpeedInterval)
@@ -1541,7 +1555,12 @@ exec function DecSpeed()
 	SnipeZoomOut();
 
 	// Joshua - QoL improvement: variable speeds in weapon mode but we must prevent it while zooming or using air camera
-	if (GetStateName() != 's_PlayerSniping' && GetStateName() != 's_RappellingSniping' && GetStateName() != 's_LaserMicTargeting' && !bUsingAirCamera)
+	if (GetStateName() != 's_PlayerSniping' &&
+		GetStateName() != 's_RappellingSniping' &&
+		GetStateName() != 's_SplitSniping' &&
+		GetStateName() != 's_LaserMicTargeting' &&
+		GetStateName() != 's_Zooming' &&
+		!bUsingAirCamera)
 	{
 		m_curWalkSpeed -= 1;
 		if (m_curWalkSpeed <= 0)
@@ -1574,7 +1593,7 @@ exec function Snipe()
 	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 
-	if (!bInGunTransition && (((GetStateName() == 's_PlayerWalking' || GetStateName() == 's_Split') && bBinoculars) || GetStateName() == 's_Zooming' || GetStateName() == 's_SplitZooming' || (ActiveGun != None && ActiveGun == MainGun && ePawn.HandItem == ActiveGun && !bInGunTransition)
+	if (!bInGunTransition && (((GetStateName() == 's_PlayerWalking' || GetStateName() == 's_Split') && bBinoculars) || GetStateName() == 's_Zooming' || GetStateName() == 's_SplitZooming' || (ActiveGun != None && ActiveGun == MainGun && ePawn.HandItem == ActiveGun)))
 		bPressSnip = true;
 }
 
@@ -1587,7 +1606,14 @@ exec function SnipeZoomIn()
 	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 
-	if (bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && (GetStateName() == 's_PlayerSniping' || GetStateName() == 's_RappellingSniping'))
+	if (bF2000ZoomLevels 
+    && ActiveGun != None 
+    && ePawn.HandItem == ActiveGun 
+    && ActiveGun.GetStateName() != 's_Reloading' 
+    && ESniperGun(ActiveGun) != None 
+    && (GetStateName() == 's_PlayerSniping' 
+        || GetStateName() == 's_RappellingSniping' 
+        || GetStateName() == 's_SplitSniping')) 
 		ESniperGun(ActiveGun).ZoomIn();
 }
 
@@ -1600,8 +1626,17 @@ exec function SnipeZoomOut()
 	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 
-	if (bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && (GetStateName() == 's_PlayerSniping' || GetStateName() == 's_RappellingSniping'))
+	if (bF2000ZoomLevels
+		&& ActiveGun != None
+		&& ePawn.HandItem == ActiveGun
+		&& ActiveGun.GetStateName() != 's_Reloading'
+		&& ESniperGun(ActiveGun) != None
+		&& (GetStateName() == 's_PlayerSniping'
+			|| GetStateName() == 's_RappellingSniping'
+			|| GetStateName() == 's_SplitSniping')) 
+	{
 		ESniperGun(ActiveGun).ZoomOut();
+	}
 }
 
 //---------------------------------------[Joshua - 17 Apr 2025]-----
@@ -3117,9 +3152,8 @@ exec function Whistle()
 {
 	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate || bDisableWhistle)
 		return;
-	}
 
-	if (!EPawn.IsPawnTalking() && bWhistle && Level.TimeSeconds - m_WhistleTime > 1.0)
+	if (!EPawn.IsPawnTalking() && EPawn.Health > 0 && bWhistle && Level.TimeSeconds - m_WhistleTime > 1.0)
 	{
 		// Joshua - Doesn't look the best with SC1 SkeletalMesh
 		//ePawn.BlendAnimOverCurrent('PT_Whistle', 1, 'B Head');
@@ -3132,7 +3166,6 @@ exec function Whistle()
 		m_WhistleTime = Level.TimeSeconds;
 	}
 }
-
 
 exec function PreviousGadget()
 {
@@ -3651,7 +3684,7 @@ state s_GrabTargeting
 		}
 
 		if (ePawn.Physics == PHYS_Falling)
-			return ;
+			return;
 
 		if (bInGunTransition && (ePawn.Rotation.Yaw&65535) == (Rotation.Yaw&65535))
 			GotoState(,'Aim');
@@ -3759,7 +3792,7 @@ state s_Carry
 				NpcSetup(ePawn.ToWorldDir(vect(-200,0,200)),'CaryCrAlQk0', true);
 		}
 
- 		// Joshua - PT carry interact
+ 		// Joshua - SCPT carry interact
 		//m_AttackTarget = None;
 		ElapsedTime = 0.0f;
 		if (bIsPlaying)
@@ -3795,7 +3828,7 @@ state s_Carry
 			return false;
 	}
 
-	// Joshua - PT carry interact
+	// Joshua - SCPT carry interact
 	function bool CanInteract()
 	{
 		return ePawn.Physics != PHYS_Falling;
@@ -3809,7 +3842,7 @@ state s_Carry
 
 	function ProcessInteract()
 	{
-		// Joshua - PT carry interact
+		// Joshua - SCPT carry interact
 		if (IManager.Interactions.length != 0)
 			return;
 
@@ -3986,7 +4019,7 @@ QuickDrop:
 		FinishAnim();
 	bInTransition = false;
 	bNoLedgePush = false;
-	m_AttackTarget = None; // Joshua - PT carry interact
+	m_AttackTarget = None; // Joshua - SCPT carry interact
 	// if ActiveGun, go in targeting mode automatically
 	if (ActiveGun != None)
 		OnGroundScope();
@@ -4011,7 +4044,7 @@ QuickDropJump:
 	FinishAnim();
 	bInTransition = false;
 	bNoLedgePush = false;
-	m_AttackTarget = None; // Joshua - PT carry interact
+	m_AttackTarget = None; // Joshua - SCPT carry interact
 	GotoState('s_PlayerWalking');
 	Stop;
 
@@ -4045,8 +4078,8 @@ Drop:
 	bInTransition = false;
 	bNoLedgePush = false;
 
-	m_AttackTarget = None; // Joshua - PT carry interact
-	GotoState('s_playerwalking');
+	m_AttackTarget = None; // Joshua - SCPT carry interact
+	GotoState('s_PlayerWalking');
 
 Crouch:
 	bInTransition = true;
@@ -4179,7 +4212,7 @@ state s_PlayerWalking
 	Ignores MayReload;
 
     function BeginState()
-    {
+    {		
 		if (ePawn.WeaponStance != 0 && !ePawn.IsAnimating(ePawn.ACTIONCHANNEL))
 		{
 			ForceGunAway(true);
@@ -4326,12 +4359,12 @@ state s_PlayerWalking
 	{
 		if (CheckBTW(, true))
 		{
-			bIntransition = true;
+			bInTransition = true;
 			GotoState('s_PlayerBTW', 'Entering');
 		}
 		else if (CheckBTW(true, true))
 		{
-			bIntransition = true;
+			bInTransition = true;
 			GotoState('s_PlayerBTW', 'EnteringBack');
 		}
 	}
@@ -4497,17 +4530,6 @@ state s_PlayerWalking
         }
     }
 
-	// Joshua - Anti-spam crouch timer
-	function CheckForCrouch()
-	{
-		if (bDuck > 0 && m_CrouchTimer <= 0.0)
-		{
-			m_CrouchTimer = 0.35;
-			ePawn.bWantsToCrouch = !ePawn.bWantsToCrouch;
-			bDuck = 0;
-		}
-	}
-
 	function bool CanSwitchGoggleManually()
 	{
 		return true;
@@ -4536,7 +4558,7 @@ state s_PlayerWalking
 	function GEOUnCrouch()
 	{
 		KillPawnSpeed();
-		ePawn.bWantsToCrouch = False;
+		ePawn.bWantsToCrouch = false;
 		ePawn.UnCrouch(false);
 		m_LPStartTime = Level.TimeSeconds;
 	}
@@ -7202,9 +7224,9 @@ Begin:
 Aborted:
 	bInTransition = false;
 	if (!ePawn.bIsCrouched)
-		ePawn.PlayAnimOnly('minestalbg0',,0.1, true, ePawn.GetAnimName()=='minestalbg0');
+		ePawn.PlayAnimOnly('minestalbg0',,0.1, true, ePawn.GetAnimName() == 'minestalbg0');
 	else
-		ePawn.PlayAnimOnly('minecralbg0',,0.1, true, ePawn.GetAnimName()=='minecralbg0');
+		ePawn.PlayAnimOnly('minecralbg0',,0.1, true, ePawn.GetAnimName() == 'minecralbg0');
 
 Finish:
 	FinishAnim();
@@ -8421,7 +8443,7 @@ state s_Rappelling
 
 		PawnLookAt();
 
-		if (bIntransition || bInGunTransition)
+		if (bInTransition || bInGunTransition)
 			return;
 
 		ePawn.SetPhysics(PHYS_Linear);
@@ -8616,14 +8638,14 @@ OverEdge:
 	GotoState('s_PlayerWalking');
 
 OpenWindow:
-	bIntransition = true;
+	bInTransition = true;
 	ePawn.Acceleration = Vect(0,0,0);
 	ePawn.PlayAnimOnly('raplStAlOp0',,0.1);
 	FinishAnim();
 	Goto('Begin');
 
 EnterWindow:
-	bIntransition = true;
+	bInTransition = true;
 	ePawn.bWantsToCrouch = true; // will be crouched after animation
 	ePawn.Acceleration = Vect(0,0,0);
 	ePawn.m_locationEnd = ePawn.ToWorld(Vect(40.4f, 0, 78.1f));
@@ -10332,6 +10354,15 @@ FeetDown:
 	FinishAnim();
 	bInTransition = false;
 	GoToState('s_HandOverHand', JumpLabelPrivate);
+
+FromTarget:
+	bInTransition = true;
+	KillPawnSpeed();
+	ePawn.m_CurrentArmsZone.Z -= eGame.m_HOHFeetUpColVertOffset;
+	ePawn.PlaySound(Sound'FisherFoley.Play_Fisher_StandToCrouchGear', SLOT_SFX);
+	ePawn.LoopAnimOnly('PT_piphpralnt0', , 0.2);
+	bInTransition = false;
+	Stop;
 }
 
 state s_HOHTargeting extends s_FirstPersonTargeting
