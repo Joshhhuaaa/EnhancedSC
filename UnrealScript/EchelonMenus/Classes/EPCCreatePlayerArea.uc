@@ -48,8 +48,9 @@ function Created()
     m_EPlayerName.SetBorderColor(m_EditBorderColor);
     m_EPlayerName.SetEditTextColor(m_EditBorderColor);
 
-	// Set Profile name lenght to a maximum of 17 character
-    m_EPlayerName.SetMaxLength(17);
+	// Set Profile name length to a maximum of 15 characters
+    // Joshua - Reduced from 17 to 15 to match save games
+    m_EPlayerName.SetMaxLength(15);
 
     m_LDifficultyNormal = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_EPlayerName.WinLeft + m_IDifficultyXOffset, m_IDifficultyRadioYPos, m_ILabelWidth, m_ILabelHeight, self));
     m_LDifficultyHard   = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_EPlayerName.WinLeft + m_IDifficultyXOffset, m_IDifficultyRadioYPos + m_IDifficultyYOffset, m_ILabelWidth, m_ILabelHeight, self));
