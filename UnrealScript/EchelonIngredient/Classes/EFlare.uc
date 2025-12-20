@@ -46,6 +46,13 @@ function EndEvent()
 	PlaySound(Sound'FisherEquipement.Stop_FlareBurn', SLOT_SFX);
 }
 
+// Joshua - Flares should destroy when hitting a Fake Backdrop
+function HitFakeBackDrop()
+{
+	EndEvent();
+	Super.HitFakeBackDrop();
+}
+
 state s_Selected
 {
 	function Use()
@@ -87,6 +94,6 @@ defaultproperties
     CollisionRadius=2.000000
     CollisionHeight=2.000000
     HeatIntensity=0.800000
-    bIsProjectile=true
+    bIsProjectile=True
     Mass=15.000000
 }

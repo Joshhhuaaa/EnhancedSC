@@ -7,6 +7,9 @@ var bool	Used;
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
+
+	HeatIntensity = 0; // Joshua - Chem Flare will now generate heat
+
     HUDTex       = EchelonLevelInfo(Level).TICON.qi_ic_glowstick;
     InventoryTex = EchelonLevelInfo(Level).TICON.inv_ic_glowstick;
     ItemName     = "ChemFlare";
@@ -37,6 +40,7 @@ function EndEvent()
 	GlowTime = 0;
 	ScaleGlow = 0;
 	LightType = LT_None;
+	HeatIntensity = 0.0f; // Joshua - Chem Flare will now generate heat
 }
 
 function Tick(float DeltaTime)
@@ -74,6 +78,8 @@ state s_Selected
 		Used = true;
 		bGlowDisplay = true;
 		
+		HeatIntensity = default.HeatIntensity; // Joshua - Chem Flare will now generate heat
+
 		if (Level.Game.PlayerC.ShadowMode == 0)
 		{
 			LightEffect = LE_None;
@@ -90,8 +96,15 @@ state s_Inventory
 {
 	function BeginState()
 	{
-		// Make sure to kill light if it's not thrown
-		EndEvent();
+		// Joshua - Don't kill the flare if it's still within GlowTime, only stop the glow display from rendering in inventory
+		if (Used && GlowTime > 0)
+		{
+			bGlowDisplay = false;
+		}
+		else
+		{
+			EndEvent();
+		}
 		Super.BeginState();
 	}
 }
@@ -101,7 +114,7 @@ defaultproperties
     GlowTime=30.000000
     ScaleGlow=1.000000
     MaxQuantity=10
-    bDynamicLight=true
+    bDynamicLight=True
     StaticMesh=StaticMesh'EMeshIngredient.Item.GreenStick'
     CollisionRadius=1.000000
     CollisionHeight=1.000000
@@ -109,9 +122,10 @@ defaultproperties
     LightBrightness=153
     LightHue=26
     LightSaturation=59
-    bGlowDisplay=false
+    bGlowDisplay=False
     MinDistance=1.000000
     MaxDistance=50.000000
-    bIsProjectile=true
+	HeatIntensity=0.800000 // Joshua - Chem Flare will now generate heat
+    bIsProjectile=True
     Mass=10.000000
 }
