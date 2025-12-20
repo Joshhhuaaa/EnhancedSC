@@ -142,6 +142,13 @@ function DrawNoiseBars(ECanvas Canvas)
 
     pRotation = float(Camera.camera_rotation.Yaw & 65535) / 65535.0;
 
+    // Hack for Defense Ministry
+    // Joshua - This shifts the compass by 90 degrees so the East Wing of the map point towards East on the binoculars
+	if (left(GetCurrentMapName(), 3) == "1_2")
+		pRotation += 0.25;
+	if (pRotation >= 1.0)
+		pRotation -= 1.0;
+
     position = pRotation * 5040;
 
     qPos = position / 630;
@@ -201,7 +208,7 @@ function DrawNoiseBars(ECanvas Canvas)
 
     // Draw Compass Coordinates //
     Canvas.DrawColor = Green;
-    Canvas.Font = font'EHUDFont';
+    Canvas.Font = Font'EHUDFont';
 
     Canvas.SetPos(SCREEN_HALF_X - rPos, yPos - 16);
     Canvas.DrawText("["$szFirstDir$"]");
