@@ -11790,12 +11790,6 @@ state s_ZipLine
 
     function BeginState()
     {
-		// Joshua - Dirty hack to automatically raise legs up on Oil Rig's zipline, preventing players from falling into the water at higher FPS
-		if (GetCurrentMapName() == "1_3_2CaspianOilRefinery")
-		{
-			GotoState(, 'AutoLegsUp');
-		}
-
 		ePawn.bWantsToCrouch = false; // Joshua - Prevents animation bug when entering zipline while holding crouch
 		m_ZipLineDropTimer = 0.0; // Joshua - Anti-spam stance change on zipline
 		ePawn.SetZipLineZones();
@@ -11914,12 +11908,13 @@ state s_ZipLine
     }
 
 Begin:
-
-// Joshua - Dirty hack to automatically raise legs up on Oil Rig's zipline, preventing players from falling into the water at higher FPS
-AutoLegsUp:
-    Sleep(0.5);
-    ePawn.bWantsToCrouch = true;
-    ePawn.PlayZipLineTransition(true);
+	// Joshua - Dirty hack to automatically raise legs up on Oil Rig's zipline, preventing players from falling into the water at higher FPS
+	if (GetCurrentMapName() == "1_3_2CaspianOilRefinery")
+	{
+		Sleep(0.5);
+		ePawn.bWantsToCrouch = true;
+		ePawn.PlayZipLineTransition(true);
+	}
 }
 
 state s_GrabbingPole extends s_GrabbingGE
