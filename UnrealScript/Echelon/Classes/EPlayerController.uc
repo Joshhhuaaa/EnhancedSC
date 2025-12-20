@@ -225,9 +225,8 @@ const MAX_REGULAR_MAP = 13;
 // Joshua - This is a native class. New variables must be added only after all original ones have been declared.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
-
-var bool bCheckpoint; // Joshua - New variable for Checkpoints
-var string CheckpointLevel; // Joshua - New variable to keep track which level the Checkpoint was on
+var(EnhancedDebug) bool bEnableBTWThrow;
+var bool bBTWThrow; // Joshua - Player is using BTW throw, swap animations
 
 enum EInputMode 
 {
@@ -5752,6 +5751,155 @@ Throw:
 	FinishAnim();
 	bInTransition = false;
 	GotoState('s_PlayerWalking');
+}
+
+// Joshua - Add Back to Wall throw
+state s_PlayerBTWThrow extends s_Throw
+{
+	/*
+	[ECM_BTWLeftThrow]
+	parent=					ECM_BTWPeakLeft
+	minYaw=					v=-9000
+	maxYaw=					v=3000
+	minPitch=				v=-8000
+	maxPitch=				v=2500
+
+	[ECM_BTWRightThrow]
+	parent=					ECM_BTWPeakRight
+	minYaw=					v=-3000
+	maxYaw=					v=9000
+	minPitch=				v=-8000
+	maxPitch=				v=2500
+	*/
+
+	function BeginState()
+	{
+		bBTWThrow = true;
+		ePawn.HandItem.Use();
+		m_ThrowSpeed = m_ThrowMinSpeed;
+		FastIKFade();
+		bInTransition = true;
+		if (bShowCrosshair && bShowHUD) // Joshua - Hide throw targeting if crosshair hidden
+			bThrowTargeting = true;
+		else
+			bThrowTargeting = false;
+		ePawn.WeaponStance = 1;
+		//--SC1--ePawn.SwitchAnims();
+		//SetBTWCamera(ECM_BTWLeftThrow, ECM_BTWRightThrow, ECM_BTWLeftThrow, ECM_BTWRightThrow);
+		SetBTWCamera(ECM_BTWPeakLeft, ECM_BTWPeakRight, ECM_BTWPeakLeft, ECM_BTWPeakRight);
+	}
+
+	function EndState()
+	{
+		NormalIKFade();
+		CheckHandObject();
+		bThrowTargeting = false;
+		ePawn.PlayAnim('PT_BackStThEdR',,0.1);
+		//--SC1--ePawn.AnimBlendToAlpha(EPawn.ACTIONCHANNEL, 0.0, 0.2);
+		bBTWThrow = false;
+	}
+
+	function ProcessScope()
+	{
+		if (!bInTransition)
+			GotoState('s_PlayerBTWPeek');
+	}
+
+	function PlayerMove(float DeltaTime)
+	{
+		local vector X,Y,Z, NewAccel;
+		local float pushingForce;
+
+		pushingForce = GetPushingForce();
+
+		//--SC1--ePawn.AimAt(AAVERT, Vector(Rotation), Vector(ePawn.Rotation), 0, 0, -60, 80);
+
+		m_ThrowSpeed = DampVec(m_ThrowSpeed, ((1.0 - aAltFire) * m_ThrowMinSpeed) + (aAltFire * m_ThrowMaxSpeed), m_ThrowVarSpeed, DeltaTime);
+
+		if (bInTransition || CheckForCrouchBTW())
+			return;
+
+		if (bShowCrosshair && bShowHUD) // Joshua - Hide throw targeting if crosshair hidden
+			bThrowTargeting = true;
+		else
+			bThrowTargeting = false;
+
+		PlayOnGroundSniping((pushingForce > 0.3), pushingForce * GetGroundSpeed(), false);
+
+		if (m_BTWSide)
+			ePawn.AimAt(AABTW, Normal(m_targetLocation - Location), Vector(ePawn.Rotation), -65, 10, -70, 70);
+		else
+			ePawn.AimAt(AAHOH, Normal(m_targetLocation - Location), Vector(ePawn.Rotation), -10, 65, -70, 70);
+
+		if (m_BTWSide)
+		{
+			if (ePawn.bIsCrouched)
+				ePawn.LoopAnim('PT_BackCrThNtR');
+			else
+				ePawn.LoopAnim('PT_BackStThNtR');
+		}
+		else
+		{
+			if (ePawn.bIsCrouched)
+				ePawn.LoopAnim('PT_BackCrThNtL');
+			else
+				ePawn.LoopAnim('PT_BackStThNtL');
+		}
+
+		//log("EPawn["$EPawn.Rotation$"] EPC["$Rotation$"]");
+	}
+
+Begin:
+	bInTransition = true;
+	if(m_BTWSide)
+	{
+		if (ePawn.bIsCrouched)
+			ePawn.PlayAnimOnly('PT_BackCrThBgR', ,0.05);
+		else
+			ePawn.PlayAnimOnly('PT_BackStThBgR', ,0.05);
+	}
+	else
+	{
+		if (ePawn.bIsCrouched)
+			ePawn.PlayAnimOnly('PT_BackCrThBgL', ,0.05);
+		else
+			ePawn.PlayAnimOnly('PT_BackStThBgL', ,0.05);
+	}
+	FinishAnim();
+	bInTransition = false;
+	Stop;
+
+ToggleCrouch:
+	bIntransition = true;
+	SetBTWCamera(ECM_BTWLeftFP, ECM_BTWRightFP, ECM_BTWLeftFP, ECM_BTWRightFP);
+	ePawn.PlayBTW('PT_BackStThDnL', 'PT_BackStThDnR', 'PT_BackStThDnL', 'PT_BackStThDnR', m_BTWSide, 1.0, 0.0, true);
+	FinishAnim();
+	bIntransition = false;
+	Stop;
+
+Throw:
+	bThrowTargeting = false;
+	bInTransition = true;
+	KillPawnSpeed();
+	if (m_BTWSide)
+	{
+		if (ePawn.bIsCrouched)
+			ePawn.PlayAnimOnly('PT_BackCrThEdR', 1.0 + 0.5 * ((VSize(m_ThrowSpeed) - VSize(m_ThrowMinSpeed)) / (VSize(m_ThrowMaxSpeed) - VSize(m_ThrowMinSpeed))),0.05);
+		else
+			ePawn.PlayAnimOnly('PT_BackStThEdR', 1.0 + 0.5 * ((VSize(m_ThrowSpeed) - VSize(m_ThrowMinSpeed)) / (VSize(m_ThrowMaxSpeed) - VSize(m_ThrowMinSpeed))),0.05);
+	}
+	else
+	{
+		if(ePawn.bIsCrouched )
+			ePawn.PlayAnimOnly('PT_BackCrThEdL', 1.0 + 0.5 * ((VSize(m_ThrowSpeed) - VSize(m_ThrowMinSpeed)) / (VSize(m_ThrowMaxSpeed) - VSize(m_ThrowMinSpeed))),0.05);
+		else
+			ePawn.PlayAnimOnly('PT_BackStThEdL', 1.0 + 0.5 * ((VSize(m_ThrowSpeed) - VSize(m_ThrowMinSpeed)) / (VSize(m_ThrowMaxSpeed) - VSize(m_ThrowMinSpeed))),0.05);
+	}
+
+	FinishAnim();
+	bInTransition = false;
+	GotoState('s_PlayerBTWPeek');
+
 }
 
 // ----------------------------------------------------------------------

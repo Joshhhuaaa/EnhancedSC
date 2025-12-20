@@ -1938,8 +1938,32 @@ function name GetWeaponSelectAnim()
 
 function name GetItemSelectAnim()
 {
+	local EPlayerController EPC; // Joshua - Back to Wall throw support
+
+	EPC = EPlayerController(Owner);
+
 	if (!PendingItem.bIsProjectile)
 		return '';
+
+	// Joshua - Back to Wall throw support
+	if (EPC.bBTWThrow)
+	{
+		if (EPC.m_BTWSide)
+		{
+			if (bIsCrouched)
+				return 'PT_BackCrThBgR';
+			else
+				return 'PT_BackStThBgR';
+		}
+		else
+		{
+			if (bIsCrouched)
+				return 'PT_BackCrThBgL';
+			else
+				return 'PT_BackStThBgL';
+		}
+	}
+
 	if (bIsCrouched)
 		return 'ThroCrAlBgH';
 	else
@@ -2016,6 +2040,6 @@ defaultproperties
     CrouchRadius=35.000000
     m_NarrowLadderArmsZone=(X=38.000000,Y=0.000000,Z=100.000000)
     m_NarrowLadderArmsRadius=10.000000
-    bBlockNPCVision=false
-    bIsNPCPawn=true
+    bBlockNPCVision=False
+    bIsNPCPawn=True
 }
