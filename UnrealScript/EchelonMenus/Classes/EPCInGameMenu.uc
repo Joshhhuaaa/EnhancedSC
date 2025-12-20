@@ -29,9 +29,20 @@ var EPCMessageBox        m_MessageBoxMain, m_MessageBoxSettings;
 var BOOL                 m_bStartGame;  //Return to game after answering the massage box
 var BOOL                 m_bAskExitToMenu;
 
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
+// Joshua - Display profile name and difficulty on pause screen
+var UWindowLabelControl m_ProfileLabel, m_DifficultyLabel;
+var INT                 m_IProfileLabelXPos, m_IProfileLabelYPos, m_IDifficultyLabelXPos;
+
 function Created()
 {
-
+    local string PlayerName;
+    local string DifficultyString;
+    
     m_MainMenu  = EPCTextButton(CreateControl(class'EPCTextButton', m_IMainButtonsXPos, m_IMainButtonsYPos, m_IMainButtonsWidth, m_IMainButtonsHeight, self));
     m_MainMenu.SetButtonText(Caps(Localize("HUD","MAINMENU","Localization\\HUD")) ,TXT_CENTER);
     m_MainMenu.Font = F_Normal;
@@ -61,9 +72,52 @@ function Created()
     m_SettingsArea = EPCInGameSettingsArea(CreateWindow(class'EPCInGameSettingsArea', m_IAreaXPos, m_IAreaYPos, m_IAreaWidth, m_IAreaHeight, self));    
     m_SaveLoadArea = EPCInGameSaveLoadArea(CreateWindow(class'EPCInGameSaveLoadArea', m_IAreaXPos, m_IAreaYPos, m_IAreaWidth, m_IAreaHeight, self));    
     m_SectionInfoArea = EPCInGameSectionInfoArea(CreateWindow(class'EPCInGameSectionInfoArea', m_IAreaXPos - 8, m_IAreaYPos, m_IAreaWidth, m_IAreaHeight, self));
+
+    // Joshua - Display profile name and difficulty on pause screen
+    m_ProfileLabel = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_IProfileLabelXPos, m_IProfileLabelYPos, 200, 18, self));
+    m_DifficultyLabel = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', m_IDifficultyLabelXPos, m_IProfileLabelYPos, 200, 18, self));
+    m_ProfileLabel.SetLabelText(GetPlayerOwner().playerInfo.PlayerName, TXT_LEFT);
+    m_DifficultyLabel.SetLabelText(string(GetPlayerOwner().playerInfo.Difficulty), TXT_RIGHT);
+    m_ProfileLabel.Font = F_Normal;
+    m_DifficultyLabel.Font = F_Normal;
+
+    PlayerName = GetPlayerOwner().playerInfo.PlayerName;
+
+    switch (GetPlayerOwner().playerInfo.Difficulty)
+    {
+        case 0:
+            DifficultyString = Localize("HUD","Normal","Localization\\HUD");
+            break;
+        case 1:
+            DifficultyString = Localize("HUD","Hard","Localization\\HUD");
+            break;
+        case 2:
+            DifficultyString = Localize("Common","Elite","Localization\\Enhanced");
+            break;
+        case 3:
+            DifficultyString = Localize("Common","HardPermadeath","Localization\\Enhanced");
+            break;
+        case 4:
+            DifficultyString = Localize("Common","ElitePermadeath","Localization\\Enhanced");
+            break;
+        default:
+            DifficultyString = "";
+    }
+
+    m_ProfileLabel.SetLabelText(Localize("PlayerStats","Profile","Localization\\Enhanced") @ PlayerName, TXT_LEFT);
+    m_DifficultyLabel.SetLabelText(Localize("PlayerStats","Difficulty","Localization\\Enhanced") @ DifficultyString, TXT_RIGHT);
+    m_ProfileLabel.TextColor.R = 51;
+    m_ProfileLabel.TextColor.G = 51;
+    m_ProfileLabel.TextColor.B = 51;
+    m_ProfileLabel.TextColor.A = 255;
+
+    m_DifficultyLabel.TextColor.R = 51;
+    m_DifficultyLabel.TextColor.G = 51;
+    m_DifficultyLabel.TextColor.B = 51;
+    m_DifficultyLabel.TextColor.A = 255;
+
     
     ChangeMenuSection(m_BSaveLoad);
- 
 }
 
 function Paint(Canvas C, float MouseX, float MouseY)
@@ -206,7 +260,6 @@ function MessageBoxDone(UWindowWindow W, MessageBoxResult Result)
             m_SettingsArea.m_EnhancedArea.SaveOptions();  // Joshua - Added Enhance area
             
             GO.UpdateEngineSettings();
-			
         }
         else
         {
@@ -356,4 +409,10 @@ defaultproperties
     m_IAreaYPos=90
     m_IAreaWidth=450
     m_IAreaHeight=250
+	//=============================================================================
+	// Enhanced Variables
+	//=============================================================================
+    m_IProfileLabelXPos=60
+    m_IProfileLabelYPos=393
+    m_IDifficultyLabelXPos=381
 }
