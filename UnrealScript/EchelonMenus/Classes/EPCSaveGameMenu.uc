@@ -133,6 +133,12 @@ function FillListBox()
     }
 	m_FileListBox.Sort();
 
+	// Joshua - Store the newest save game filename in EPlayerController
+	if (m_FileListBox.Items.Next != None)
+		EPC.LastSaveName = EPCListBoxItem(m_FileListBox.Items.Next).Caption;
+	else
+		EPC.LastSaveName = "";
+
     m_ListBox.Clear();
 
     //Filling Unlocked Levels
@@ -272,15 +278,20 @@ function EscapeMenu()
 function ConfirmButtonPressed()
 {
     local String Error;    
+    local EPlayerController EPC; // Joshua - For LastSaveName
     
 	// Check valid CD in
 	if (!EPCMainMenuRootWindow(Root).CheckCD())
 		return;
 
+    EPC = EPlayerController(GetPlayerOwner()); // Joshua - For LastSaveName
+
     if (m_SaveGamesButton.m_bSelected)
     {        
         if (m_FileListBox.SelectedItem != None)
         {
+			// Joshua - Store pending load name in Console (survives load) to restore after
+			EPCConsole(Root.Console).PendingLoadSaveName = EPCListBoxItem(m_FileListBox.SelectedItem).Caption;
 			// Added extension (.sav) (YM)
             Error = GetPlayerOwner().ConsoleCommand("LoadGame Filename="$EPCListBoxItem(m_FileListBox.SelectedItem).Caption$".en2"); // Joshua - Enhanced save games are not compatible, changing extension to avoid confusion       
         }

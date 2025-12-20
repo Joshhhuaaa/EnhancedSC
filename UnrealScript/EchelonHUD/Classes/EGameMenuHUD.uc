@@ -532,19 +532,11 @@ state s_GameInfo
 =============================================================================*/
 state s_MainMenu
 {
-/*
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_MainMenu(Key, Action, Delta);}
 
 	function PostRender(ECanvas Canvas)	{PostRender_s_MainMenu(Canvas);}
     
     function BeginState() {BeginState_s_MainMenu();}
- */
- // Joshua - Replaced with s_GameInfo to prevent accessing Xbox-specific menus that crash the game
-    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_GameInfo(Key, Action, Delta);}
-
-	function PostRender(ECanvas Canvas)	{PostRender_s_GameInfo(Canvas);}
-    
-    function BeginState() {BeginState_s_GameInfo();}
 }
 
 /*=============================================================================

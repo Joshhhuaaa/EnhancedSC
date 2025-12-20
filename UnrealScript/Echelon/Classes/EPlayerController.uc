@@ -235,6 +235,8 @@ var(EnhancedDebug) bool bEnableHOHFUTargeting;
 
 var bool bPCMenuPending; // Joshua - Handles the transition from the Xbox pause screen to the PC menus
 
+var bool bCheckpoint; // Joshua - New variable to mark a save as a checkpoint
+
 var(Enhanced) config bool bMissionFailedQuickMenu;
 var string LastSaveName;					// Joshua - Used for mission failed screen to load last save
 var bool bMissionFailedShowConfirmation;  	// Joshua - Show confirmation prompt overlay on Mission Failed screen
@@ -356,6 +358,81 @@ event bool CanLoadGame()
 	return !IsInQuickInv() && !IsInXboxGameMenu() && ((!eGame.bEliteMode || bDebugMode) || bLoadingTraining); // Joshua - No quick loading in Elite mode
 }
 
+// Joshua - Load the last save game tracked in LastSaveName
+exec function bool LoadLastSave()
+{
+	local string Error;
+	local ECanvas C;
+
+	if (!CanLoadGame())
+		return false;
+
+	if (LastSaveName == "")
+		return false;
+
+	// Joshua - Store pending load name in Console (survives load) to restore after
+	C = ECanvas(class'Actor'.static.GetCanvas());
+	
+	C.Viewport.Console.PendingLoadSaveName = LastSaveName;
+
+	Error = ConsoleCommand("LOADGAME FILENAME=" $ LastSaveName $ ".en2");
+	return (Error == "");
+}
+
+// Joshua - Find the oldest checkpoint to overwrite
+function string GetOldestCheckpointName()
+{
+	local ECanvas C;
+	
+	C = ECanvas(class'Actor'.static.GetCanvas());
+
+	if (C == None || C.Viewport == None || C.Viewport.Console == None)
+		return Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "1";
+	
+	return C.Viewport.Console.GetOldestCheckpointName();
+}
+
+exec function RestartMission()
+{
+	local string Mission;
+
+	Mission = GetCurrentMapName();
+
+	if (left(GetCurrentMapName(), 3) == "0_0")
+		Mission = playerInfo.UnlockedMap[0];
+	else if (left(GetCurrentMapName(), 3) == "1_1")
+		Mission = playerInfo.UnlockedMap[1];
+	else if (left(GetCurrentMapName(), 3) == "1_2")
+		Mission = playerInfo.UnlockedMap[2];
+	else if (left(GetCurrentMapName(), 3) == "1_3")
+		Mission = playerInfo.UnlockedMap[3];
+	else if (left(GetCurrentMapName(), 3) == "2_1")
+		Mission = playerInfo.UnlockedMap[4];
+	else if (left(GetCurrentMapName(), 3) == "2_2")
+		Mission = playerInfo.UnlockedMap[5];
+	else if (left(GetCurrentMapName(), 3) == "4_1")
+		Mission = playerInfo.UnlockedMap[6];
+	else if (left(GetCurrentMapName(), 3) == "4_2")
+		Mission = playerInfo.UnlockedMap[7];
+	else if (left(GetCurrentMapName(), 3) == "4_3")
+		Mission = playerInfo.UnlockedMap[8];
+	else if (left(GetCurrentMapName(), 3) == "5_1")
+		Mission = playerInfo.UnlockedMap[9];
+	else if (left(GetCurrentMapName(), 5) == "1_6_1")
+		Mission = playerInfo.UnlockedMap[10];
+	else if (left(GetCurrentMapName(), 5) == "1_7_1")
+		Mission = playerInfo.UnlockedMap[11];
+	else if (left(GetCurrentMapName(), 3) == "3_2")
+		Mission = "3_2_1_PowerPlant";
+	else if (left(GetCurrentMapName(), 3) == "3_4")
+		Mission = "3_4_2Severonickel";
+
+	ConsoleCommand("Open" @ Mission);
+}
+
+exec function QuitToMainMenu()
+{	
+	ConsoleCommand("Open menu\\menu");
 }
 
 event bool CanGoBackToGame()
@@ -696,11 +773,27 @@ event PlayerGiven()
 
 event InitLoadGame()
 {
+	local ECanvas C;
+	local string QuickSaveName;
+
 	SetViewTarget(Pawn);
 
 	Pawn.bStasis = false;
 	PawnClass = Pawn.Class;
 	egi.Setup(self);
+
+	// Joshua - Set LastSaveName if we were loading from QuickLoad key
+	C = ECanvas(class'Actor'.static.GetCanvas());
+	QuickSaveName = Localize("HUD", "QUICKSAVENAME", "Localization\\HUD");
+	
+	// Check if the loaded save name matches the quicksave name
+	if (C.Viewport.Console.PendingLoadSaveName == QuickSaveName || C.Viewport.Console.PendingLoadSaveName == "")
+	{
+		if (C.Viewport.Console.PendingLoadSaveName == "")
+			LastSaveName = QuickSaveName;
+		else
+			LastSaveName = C.Viewport.Console.PendingLoadSaveName;
+	}
 }
 
 //---------------------------------[Francois Schelling - 24 Mar 2002]-----
@@ -11545,5 +11638,6 @@ defaultproperties
 	// Enhanced Variables
 	//=============================================================================
 	bMissionFailedQuickMenu=True
+	LastSaveName=""
 	CheatClass=Class'ECheatManager'
 }

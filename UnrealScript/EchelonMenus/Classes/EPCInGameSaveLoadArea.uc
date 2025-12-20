@@ -282,6 +282,8 @@ function Load()
     {        
         if (m_FileListBox.SelectedItem != None)
         {
+			// Joshua - Store pending load name in Console (survives load) to restore after
+			EPCConsole(Root.Console).PendingLoadSaveName = EPCListBoxItem(m_FileListBox.SelectedItem).Caption;
 			// Added extension (.sav) (YM)
             Error = GetPlayerOwner().ConsoleCommand("LoadGame Filename="$EPCListBoxItem(m_FileListBox.SelectedItem).Caption$".en2"); // Joshua - Enhanced save games are not compatible, changing extension to avoid confusion
 			noLoadMap = true;
@@ -318,6 +320,10 @@ function GameSaved(bool success)
 	if (success)
 	{
 	    FillListBox();
+
+		// Joshua - Update LastSaveName with the newly saved game
+		EPlayerController(GetPlayerOwner()).LastSaveName = m_SaveArea.GetSaveName();
+
 		// Close de messagebox
 		if (m_SavingLoadingMessageBox != None)
 		{
@@ -455,7 +461,7 @@ function Reset()
         FileManager = EPCMainMenuRootWindow(Root).m_FileManager;
         if (FileManager != None)
         {
-            ProfilePath = "..\\Save\\"$EPC.playerInfo.PlayerName;
+            ProfilePath = "..\\Save\\" $ EPC.playerInfo.PlayerName;
             FileManager.DeleteDirectory(ProfilePath, true);
             
             GetLevel().ConsoleCommand("Open menu\\menu");

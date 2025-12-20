@@ -32,12 +32,158 @@ event Initialized()
 
 event GameSaved(bool success)
 {
+    // Joshua - Update LastSaveName with the newest save file after any successful save
+    if (success)
+        UpdateLastSaveName();
+
     if (EPCMainMenuRootWindow(Root) != None)   
         EPCMainMenuRootWindow(Root).GameSaved(success);
 }
 
+// Joshua - Find and store the most recent save file name
+function UpdateLastSaveName()
+{
+    local EPCFileManager FileManager;
+    local EPlayerInfo PlayerInfo;
+    local EPlayerController EPC;
+    local String Path, Name;
+    local int i;
+    local String NewestName;
+    local String NewestTime;
+
+    EPC = EPlayerController(ViewportOwner.Actor);
+    if (EPC == None)
+        return;
+
+    PlayerInfo = EPC.playerInfo;
+    if (PlayerInfo == None)
+        return;
+
+    FileManager = EPCMainMenuRootWindow(Root).m_FileManager;
+    if (FileManager == None)
+        return;
+
+    Path = "..\\Save\\"$PlayerInfo.PlayerName$"\\*.en2";
+    FileManager.DetailedFindFiles(Path);
+
+    // Find the newest save by comparing FileCompletTime
+    NewestName = "";
+    NewestTime = "";
+    for (i = 0; i < FileManager.m_pDetailedFileList.Length; i++)
+    {
+        if (FileManager.m_pDetailedFileList[i].FileCompletTime > NewestTime)
+        {
+            NewestTime = FileManager.m_pDetailedFileList[i].FileCompletTime;
+            Name = FileManager.m_pDetailedFileList[i].Filename;
+            NewestName = Left(Name, Len(Name) - 4); // Remove .en2 extension
+        }
+    }
+
+    EPC.LastSaveName = NewestName;
+}
+
+// Joshua - Find the oldest checkpoint to overwrite
+function string GetOldestCheckpointName()
+{
+    local EPCFileManager FileManager;
+    local EPlayerInfo PlayerInfo;
+    local EPlayerController EPC;
+    local String Path, Name;
+    local int i;
+    local String OldestName;
+    local String OldestTime;
+    local String CheckpointNames[3];
+    local int CheckpointExists[3];
+    local String CheckpointTimes[3];
+    
+    EPC = EPlayerController(ViewportOwner.Actor);
+    if (EPC == None)
+        return Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "1";
+
+    PlayerInfo = EPC.playerInfo;
+    if (PlayerInfo == None)
+        return Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "1";
+
+    FileManager = EPCMainMenuRootWindow(Root).m_FileManager;
+    if (FileManager == None)
+        return Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "1";
+
+    CheckpointNames[0] = class'Actor'.static.Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "1";
+    CheckpointNames[1] = class'Actor'.static.Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "2";
+    CheckpointNames[2] = class'Actor'.static.Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "3";
+    
+    Path = "..\\Save\\"$PlayerInfo.PlayerName$"\\*.en2";
+    FileManager.DetailedFindFiles(Path);
+    
+    // Check which checkpoints exist and get their timestamps
+    for (i = 0; i < FileManager.m_pDetailedFileList.Length; i++)
+    {
+        Name = FileManager.m_pDetailedFileList[i].Filename;
+        Name = Left(Name, Len(Name) - 4); // Remove .en2 extension
+        
+        if (Name == CheckpointNames[0])
+        {
+            CheckpointExists[0] = 1;
+            CheckpointTimes[0] = FileManager.m_pDetailedFileList[i].FileCompletTime;
+        }
+        else if (Name == CheckpointNames[1])
+        {
+            CheckpointExists[1] = 1;
+            CheckpointTimes[1] = FileManager.m_pDetailedFileList[i].FileCompletTime;
+        }
+        else if (Name == CheckpointNames[2])
+        {
+            CheckpointExists[2] = 1;
+            CheckpointTimes[2] = FileManager.m_pDetailedFileList[i].FileCompletTime;
+        }
+    }
+    
+    // If not all checkpoints exist, return the first non-existing one
+    for (i = 0; i < 3; i++)
+    {
+        if (CheckpointExists[i] == 0)
+            return CheckpointNames[i];
+    }
+    
+    // All checkpoints exist, find the oldest by timestamp
+    OldestName = CheckpointNames[0];
+    OldestTime = CheckpointTimes[0];
+    
+    for (i = 1; i < 3; i++)
+    {
+        if (CheckpointTimes[i] < OldestTime)
+        {
+            OldestTime = CheckpointTimes[i];
+            OldestName = CheckpointNames[i];
+        }
+    }
+    
+    return OldestName;
+}
+
 event GameLoaded(bool success)
 {
+    local EPlayerController EPC;
+
+    // Joshua - Restore LastSaveName from pending load name (set before load started)
+    if (success)
+    {
+        EPC = EPlayerController(ViewportOwner.Actor);
+        if (EPC != None)
+        {
+            if (PendingLoadSaveName != "")
+            {
+                EPC.LastSaveName = PendingLoadSaveName;
+                PendingLoadSaveName = "";
+            }
+            else if (EPC.LastSaveName == "")
+            {
+                // Fallback: scan for newest save if no pending name was set
+                UpdateLastSaveName();
+            }
+        }
+    }
+
     if (EPCMainMenuRootWindow(Root) != None)   
         EPCMainMenuRootWindow(Root).GameLoaded(success);
 }

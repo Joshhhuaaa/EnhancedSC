@@ -127,6 +127,7 @@ function Touch(actor Other)
 	local Pawn Player;
 	local EGroupAI Group;
 	local EGameplayObject EGO;
+	local string CheckpointName;
 
 	Super.Touch(Other);
 
@@ -137,14 +138,19 @@ function Touch(actor Other)
 	 || (EchelonGameInfo(Level.Game).bEliteMode && EchelonLevelInfo(Level).AlarmStage < 3)) // Joshua - Elite only allows for 3 alarms
 	 && !IsGameOver()) // Do not save if the player is about to be put GameOver because of the alarm stage
 	{
-		// Joshua - New method to add PC checkpoints
-		if (EchelonGameInfo(level.Game).bEnableCheckpoints)
+		// Joshua - New method to add PC checkpoints with rotating 3-slot system
+		if (EchelonGameInfo(Level.Game).bEnableCheckpoints)
 		{
 			EPlayerController(EPawn(Other).Controller).bAutoSaveLoad = true;
 			EPlayerController(EPawn(Other).Controller).bSavingTraining = true;
 			EPlayerController(EPawn(Other).Controller).bCheckpoint = true;
-			EPlayerController(EPawn(Other).Controller).CheckpointLevel = GetCurrentMapName();
-			ConsoleCommand("SAVEGAME FILENAME=" $ Localize("Common", "CheckpointName", "Localization\\Enhanced") $ " OVERWRITE=TRUE");
+			
+			// Joshua - Get the oldest checkpoint to overwrite (rotates between CHECKPOINT1, CHECKPOINT2, CHECKPOINT3)
+			CheckpointName = EPlayerController(EPawn(Other).Controller).GetOldestCheckpointName();
+			
+			// Joshua - Update LastSaveName for checkpoint before saving
+			EPlayerController(EPawn(Other).Controller).LastSaveName = CheckpointName;
+			ConsoleCommand("SAVEGAME FILENAME=" $ CheckpointName $ " OVERWRITE=TRUE");
 		}
 		bSavegame = false;
 	}
@@ -265,7 +271,7 @@ function PawnLeavingVolume(Pawn P)
 
 defaultproperties
 {
-    bAffectLastZone=true
-    bDetectCarriedPawn=true
-    bStatic=false
+    bAffectLastZone=True
+    bDetectCarriedPawn=True
+    bStatic=False
 }
