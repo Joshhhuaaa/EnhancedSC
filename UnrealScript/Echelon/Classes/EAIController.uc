@@ -216,15 +216,17 @@ var Array<EAIController>         aoCloseControllers;
 // Joshua - This is a native class. New variables must be added only after all original ones have been declared.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
+var(Enhanced) bool bDontTakeDamage; // Joshua - Prevent this NPC from taking damage
 
-var(Enhanced) bool	bWasKnockedOut; // Joshua - Tracks if this NPC was ever knocked out
-var(Enhanced) bool	bWasInjured; // Joshua - Tracks if this NPC has been injured
-var(Enhanced) bool 	bWasFound; // Joshua - Tracks if this NPC has been found as a body
-var(Enhanced) bool	bAllowKill;  // Joshua - Allows NPC to be killed without affecting the Stealth Rating
-var(Enhanced) bool	bAllowKnockout;  // Joshua - Allows NPC to be knocked out without affecting the Stealth Rating
-var(Enhanced) bool	bBlockDetection;  // Joshua - Allows NPC to detect the player without affecting the Stealth Rating
-var(Enhanced) bool 	bNotInStats; // Joshua - NPC should not be included in the Player Statistics
-var(Enhanced) bool 	bBlockJumpDetection; // Joshua - Workaround so drop attacking NPC doesn't trigger a detection
+// Joshua - Player stats
+var(Enhanced) bool bWasKnockedOut; // Joshua - Tracks if this NPC was ever knocked out
+var(Enhanced) bool bWasInjured; // Joshua - Tracks if this NPC has been injured
+var(Enhanced) bool bWasFound; // Joshua - Tracks if this NPC has been found as a body
+var(Enhanced) bool bAllowKill;  // Joshua - Allows NPC to be killed without affecting the Stealth Rating
+var(Enhanced) bool bAllowKnockout;  // Joshua - Allows NPC to be knocked out without affecting the Stealth Rating
+var(Enhanced) bool bBlockDetection;  // Joshua - Allows NPC to detect the player without affecting the Stealth Rating
+var(Enhanced) bool bNotInStats; // Joshua - NPC should not be included in the Player Statistics
+var(Enhanced) bool bBlockJumpDetection; // Joshua - Workaround so drop attacking NPC doesn't trigger a detection
 
 
 
@@ -736,7 +738,6 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 {
 	local String T;
 	
-
 	Super.DisplayDebug(Canvas, YL, YPos);
 
 	Canvas.DrawColor.B = 255;	
@@ -4091,6 +4092,59 @@ state s_KeyPadInteract
 		return true;
 	}
 
+	// Joshua - Fix NPCs being softlocked if knocked in a keypad interaction
+	function damageAttitudeTo(pawn Other, float Damage, class<DamageType> damageType, optional int PillTag)
+	{
+		if (DamageType == class'EKnocked' && Other != None && Other.IsPlayerPawn())
+		{
+			// Clean up interaction state
+			if (Interaction != None)
+			{
+				Interaction.LockOwner(false);
+				Interaction = None;
+			}
+			
+			bInteractionComplete = false;
+			bInteractionActive = false;
+			
+			// If PillTag == 1, it's a full grab, let global handler take over
+			if (PillTag == 1)
+			{
+				Global.damageAttitudeTo(Other, Damage, damageType, PillTag);
+				return;
+			}
+			
+			// Otherwise it's just a elbow hit, exit to alert state and let EPawn handle the stagger animation
+			m_LastStateName = 's_Alert';
+			GotoState('s_Alert');
+			
+			// Still notify the group about taking damage
+			AIEvent.Reset();
+			AIEvent.EventType = AI_TAKE_DAMAGE;
+			AIEvent.EventTarget = Other;
+			AIEvent.EventLocation = Other.Location;
+			Group.AIEventCallBack(self, AIEvent);
+			return;
+		}
+		
+		// For other damage types, send event to group and exit interaction
+		if (Other != None && Damage > 0)
+		{
+			if (Other.IsPlayerPawn())
+				UpdatePlayerLocation(Other, true, true);
+
+			AIEvent.Reset();
+			AIEvent.EventType = AI_TAKE_DAMAGE;
+			AIEvent.EventTarget = Other;
+			AIEvent.EventLocation = Other.Location;
+
+			Group.AIEventCallBack(self, AIEvent);
+			
+			// Exit keypad interaction
+			GotoState(m_LastStateName);
+		}
+	}
+
 begin:
 	// move to interact location
 	WalkToDestination(ePawn.m_locationEnd);
@@ -4115,6 +4169,55 @@ state s_ElevatorInteract
 
 		Interaction.KeyEvent("Interaction", IST_Press, 1, true);
 		GotoState(m_LastStateName);
+	}
+
+	// Joshua - Fix NPCs being softlocked if knocked in a elevator interaction
+	function damageAttitudeTo(pawn Other, float Damage, class<DamageType> damageType, optional int PillTag)
+	{
+		// Handle being knocked during elevator interaction
+		if (DamageType == class'EKnocked' && Other != None && Other.IsPlayerPawn())
+		{
+			// Clean up interaction state
+			Interaction = None;
+			bInteractionComplete = false;
+			bInteractionActive = false;
+			
+			// If PillTag == 1, it's a full grab, let global handler take over
+			if (PillTag == 1)
+			{
+				Global.damageAttitudeTo(Other, Damage, damageType, PillTag);
+				return;
+			}
+			
+			// Otherwise it's just a elbow hit, exit to alert state and let EPawn handle the stagger animation
+			m_LastStateName = 's_Alert';
+			GotoState('s_Alert');
+			
+			// Still notify the group about taking damage
+			AIEvent.Reset();
+			AIEvent.EventType = AI_TAKE_DAMAGE;
+			AIEvent.EventTarget = Other;
+			AIEvent.EventLocation = Other.Location;
+			Group.AIEventCallBack(self, AIEvent);
+			return;
+		}
+		
+		// For other damage types, send event to group and exit interaction
+		if (Other != None && Damage > 0)
+		{
+			if (Other.IsPlayerPawn())
+				UpdatePlayerLocation(Other, true, true);
+
+			AIEvent.Reset();
+			AIEvent.EventType = AI_TAKE_DAMAGE;
+			AIEvent.EventTarget = Other;
+			AIEvent.EventLocation = Other.Location;
+
+			Group.AIEventCallBack(self, AIEvent);
+			
+			// Exit elevator interaction
+			GotoState(m_LastStateName);
+		}
 	}
 
 begin:
