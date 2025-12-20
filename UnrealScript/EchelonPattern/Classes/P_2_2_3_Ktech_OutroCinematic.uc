@@ -30,7 +30,11 @@ function InitPattern()
     ForEach DynamicActors(class'Pawn', P)
     {
         if (P.name == 'EWilkes1')
+        {
             Characters[1] = P.controller;
+            // Joshua - Make Wilkes invincible before/during cinematic so player can't knockout or kill
+            EAIController(Characters[1]).bIgnoreDamage = true;
+        }
         if (P.name == 'EMafiaMuscle18')
         {
             Characters[2] = P.controller;
@@ -57,6 +61,7 @@ state Pattern
 Begin:
 OutroCinematicStart:
     Log("OutroCinematicStart");
+    EAIController(Characters[1]).bIgnoreDamage = false; // Joshua - Allow Wilkes to take damage now for scripted death
     Teleport(2, 'OutroCinematicMafiosoTeleport');
     ResetGroupGoals();
     Goal_Default(2,GOAL_Guard,9,,'OutroCinematicTarget02','OutroCinematicTarget02',,,FALSE,,MOVE_JogAlert,,MOVE_JogAlert);

@@ -216,7 +216,7 @@ var Array<EAIController>         aoCloseControllers;
 // Joshua - This is a native class. New variables must be added only after all original ones have been declared.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
-var(Enhanced) bool bDontTakeDamage; // Joshua - Prevent this NPC from taking damage
+var(Enhanced) bool bIgnoreDamage; // Joshua - Prevent this NPC from taking damage
 
 // Joshua - Player stats
 var(Enhanced) bool bWasKnockedOut; // Joshua - Tracks if this NPC was ever knocked out

@@ -2916,7 +2916,7 @@ function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector Hi
 	local class<DamageType> backUpdamageType;
 
 	// Joshua - Prevent this NPC from taking damage
-	if (EAIController(Controller).bDontTakeDamage)
+	if (EAIController(Controller).bIgnoreDamage)
 		return;
 
 	// Joshua - Prevent Wilkes and Frances from dying on EndMission
@@ -4421,7 +4421,7 @@ state s_Transition
 		// todo : is there a better way to abort a root motion transition??
 
 		// Joshua - Prevent this NPC from taking damage
-		if (EAIController(Controller).bDontTakeDamage)
+		if (EAIController(Controller).bIgnoreDamage)
 			return;
 
 		// Joshua - Prevent Wilkes and Frances from dying on EndMission
@@ -4500,7 +4500,7 @@ state s_Sitting
 		local bool bAlreadyDead;
 
 		// Joshua - Prevent this NPC from taking damage
-		if (EAIController(Controller).bDontTakeDamage)
+		if (EAIController(Controller).bIgnoreDamage)
 			return;
 
 		// Joshua - Prevent Wilkes and Frances from dying on EndMission
@@ -5430,7 +5430,7 @@ state s_Carried
 		local bool bAlreadyDead;
 
 		// Joshua - Prevent this NPC from taking damage
-		if (EAIController(Controller).bDontTakeDamage)
+		if (EAIController(Controller).bIgnoreDamage)
 			return;
 
 		// Joshua - Prevent Wilkes and Frances from dying on EndMission
