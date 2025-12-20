@@ -306,8 +306,7 @@ var(Enhanced) config bool bShowKeypadGoal;
 var bool bShowKeyNum;
 
 // Joshua - Player statistics tracking
-var(Enhanced) config bool bEnablePlayerStats;
-var EPlayerStats playerStats; 
+var EPlayerStats playerStats;
 var bool bConfirmStats;
 var bool bDebugStats;
 

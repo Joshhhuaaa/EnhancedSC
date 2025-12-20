@@ -28,6 +28,36 @@ var bool bRequiresTick; 	// Does this interaction require game TICK
 var Player ViewportOwner;		// Pointer to the ViewPort that "Owns" this interaction or none if it's Global
 var InteractionMaster Master;	// Pointer to the Interaction Master
 
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
+// Joshua - Player stats persistence between levels
+var string StatsMissionName;
+var float StatsMissionTime;
+var int StatsPlayerIdentified;
+var int StatsBodyFound;
+var int StatsAlarmTriggered;
+var int StatsEnemyKnockedOut;
+var int StatsEnemyKnockedOutRequired;
+var int StatsEnemyInjured;
+var int StatsEnemyKilled;
+var int StatsEnemyKilledRequired;
+var int StatsCivilianKnockedOut;
+var int StatsCivilianKnockedOutRequired;
+var int StatsCivilianInjured;
+var int StatsCivilianKilled;
+var int StatsCivilianKilledRequired;
+var int StatsBulletFired;
+var int StatsLightDestroyed;
+var int StatsObjectDestroyed;
+var int StatsLockPicked;
+var int StatsLockDestroyed;
+var int StatsMedkitUsed;
+var int StatsNPCsInterrogated;
+var bool StatsCheatsActive;
+
 //-----------------------------------------------------------------------------
 // natives.
 
@@ -152,5 +182,5 @@ function Tick(float DeltaTime);
 
 defaultproperties
 {
-    bActive=true
+    bActive=True
 }
