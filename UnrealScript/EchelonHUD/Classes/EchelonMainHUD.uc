@@ -321,6 +321,8 @@ function DrawSaveLoadBox(ECanvas Canvas)
 	{
 		if (Epc.bAutoSaveLoad)
 			DrawErrorMsgBox(Canvas, Localize("HUD", "AUTOLOADING", "Localization\\HUD"));
+		else if (GameMenuHud.GetStateName() == 's_MissionFailed') // Joshua - Load last save from mission failed
+			DrawErrorMsgBox(Canvas, Localize("HUD", "LOADING", "Localization\\HUD"));
 		else
 			DrawErrorMsgBox(Canvas, Localize("HUD", "QUICKLOADING", "Localization\\HUD"));
 	}		
@@ -1589,6 +1591,8 @@ state s_Mission
 		CheckError(Canvas, Epc.GetPause());
 
         DrawDebugInfo(Canvas);
+		if (IsPlayerGameOver())
+			DrawSaveLoadBox(Canvas);
 
 		Super.PostRender(Canvas);
 	}
@@ -1610,6 +1614,9 @@ Complete:
 	Sleep(6);
 	if (Epc.bEnablePlayerStats)
 		PlayerStatsHUD.GoToState('s_MissionComplete');
+// Joshua - Load last save from mission failed
+BeginLoadLastSave:
+	GameMenuHUD.GotoState('s_MissionFailed', 'LoadLastSave');
 	Stop;
 }
 

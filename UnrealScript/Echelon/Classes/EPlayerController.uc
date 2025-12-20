@@ -228,6 +228,13 @@ const MAX_REGULAR_MAP = 13;
 var(EnhancedDebug) bool bEnableBTWThrow;
 var bool bBTWThrow; // Joshua - Player is using BTW throw, swap animations
 var(EnhancedDebug) bool bEnableHOHFUTargeting;
+var(Enhanced) config bool bMissionFailedQuickMenu;
+var string LastSaveName;					// Joshua - Used for mission failed screen to load last save
+var bool bMissionFailedShowConfirmation;  	// Joshua - Show confirmation prompt overlay on Mission Failed screen
+var int iMissionFailedConfirmAction;      	// Joshua - 0=None, 1=Restart, 2=Quit
+var bool bMissionFailedConfirmYes;        	// Joshua - Current selection: true=Yes, false=No
+var float MissionQuickMenuTimer;
+var int MissionQuickMenuAlpha;
 
 enum EInputMode 
 {
@@ -11429,7 +11436,7 @@ Begin:
 
 defaultproperties
 {
-    bDebugNavPoints=true
+    bDebugNavPoints=True
     m_ThrowMinSpeed=(X=800.000000,Y=0.000000,Z=100.000000)
     m_ThrowMaxSpeed=(X=1500.000000,Y=0.000000,Z=250.000000)
     m_ThrowVarSpeed=1000.000000
@@ -11448,27 +11455,9 @@ defaultproperties
     m_speedCarry=130.000000
     m_turnMul=0.500000
     m_towardAngle=0.707000
-	CheckpointLevel="None" // Joshua - New variable to keep track which level the Checkpoint was on
-	InputMode=IM_Auto // Joshua - Input mode
-	ControllerScheme=CS_Default // Joshua - Default, Pandora, PlayStation
-	ControllerIcon=CI_Xbox // Joshua - Xbox, PlayStation, GameCube
-	bNormalizeMovement=true // Joshua - Option to normalize movement
-	bToggleBTWTargeting=true // Joshua - Used to toggle BTW targeting instead of holding direction
-	bWhistle=true // Joshua - Option to enable whlisting in keybinds
-	m_WhistleTime=-10.00 // Joshua - New variable to keep track of last whistle
-	bF2000ZoomLevels=true // Joshua - Enables 2x/4x/6x zoom for F2000 sniper (default game had 6x only)
-	bLaserMicZoomLevels=true // Joshua - Enables zoom functionality for the Laser Mic
-	bBurstFire=true // Joshua - Restoring burst fire from early Splinter Cell builds
-	bCameraJammerAutoLock=false // Joshua - Adding the option to use Camera Jammer camera behavior from Pandora Tomorrow
-	bEnablePlayerStats=true // Joshua -  Player statistics tracking
-	bShowHUD=true
-	bShowInventory=true
-	bShowStealthMeter=true
-	bShowCurrentGoal=true
-	bShowKeypadGoal=true
-	bShowMissionInformation=true
-	bShowCrosshair=true
-	bShowScope=true
-	bShowAlarms=true
+	//=============================================================================
+	// Enhanced Variables
+	//=============================================================================
+	bMissionFailedQuickMenu=True
 	CheatClass=Class'ECheatManager'
 }

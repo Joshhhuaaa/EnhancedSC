@@ -111,8 +111,6 @@ var string MissionFailedMsg;
 // GameInfo
 var bool bInsideSubMenu;
 
-
-
 /*-----------------------------------------------------------------------------
                                 M E T H O D S
 -----------------------------------------------------------------------------*/
@@ -175,6 +173,292 @@ function PostBeginPlay()
     EpcInventory = Epc.ePawn.FullInventory;
 	if (EpcInventory == None)
 		Log("Problem to get player inventory in Game Menu HUD.");
+}
+
+/*-----------------------------------------------------------------------------
+ Function:      DrawConfirmationBox
+
+ Description:   Joshua - Draws a wider confirmation dialog box with Yes/No options
+-----------------------------------------------------------------------------*/
+function DrawConfirmationBox(ECanvas Canvas, string sMessage)
+{
+	local int xPos, yPos, iNbrOfLine, iBoxHeight, iBoxWidth;    	
+	local float xLen, yLen;
+	local int yesX, yesY, yesW, yesH;
+	local int noX, noY, noW, noH;
+	local int oldSelection;
+
+	iBoxWidth = 400;
+
+	Canvas.Font = Canvas.ETextFont;
+	Canvas.SetClip(iBoxWidth - 100, yLen);
+	Canvas.SetPos(0, 0);
+	Canvas.TextSize(sMessage, xLen, yLen);
+	iNbrOfLine = Canvas.GetNbStringLines(sMessage, 1.0f);
+	Canvas.SetClip(640, 480);
+
+	iBoxHeight = (iNbrOfLine * yLen) + 80; // Extra space for Yes/No buttons
+
+	xPos = 320 - iBoxWidth / 2;
+	yPos = 240 - iBoxHeight / 2;
+	
+	// Yes/No button regions
+	yesX = xPos + (iBoxWidth / 4) - 50;
+	yesY = yPos + iBoxHeight - 40;
+	yesW = 100;
+	yesH = 40;
+	
+	noX = xPos + (iBoxWidth * 3 / 4) - 50;
+	noY = yPos + iBoxHeight - 40;
+	noW = 100;
+	noH = 40;
+
+	// Check mouse hover for Yes/No buttons
+	if (!Epc.eGame.bUseController)
+	{
+		oldSelection = int(Epc.bMissionFailedConfirmYes);
+		
+		if (Epc.m_FakeMouseX > yesX && Epc.m_FakeMouseX < yesX + yesW &&
+			Epc.m_FakeMouseY > yesY && Epc.m_FakeMouseY < yesY + yesH)
+		{
+			if (!Epc.bMissionFailedConfirmYes)
+				Epc.Pawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
+			Epc.bMissionFailedConfirmYes = true;
+		}
+		else if (Epc.m_FakeMouseX > noX && Epc.m_FakeMouseX < noX + noW &&
+				 Epc.m_FakeMouseY > noY && Epc.m_FakeMouseY < noY + noH)
+		{
+			if (Epc.bMissionFailedConfirmYes)
+				Epc.Pawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
+			Epc.bMissionFailedConfirmYes = false;
+		}
+	}
+	
+	Canvas.Style = ERenderStyle.STY_Alpha;
+
+    // FILL BACKGROUND //
+    Canvas.DrawLine(xPos + 2, yPos + 2, iBoxWidth - 4, iBoxHeight - 4, Canvas.white, -1, eLevel.TGAME);
+
+    Canvas.SetDrawColor(128, 128, 128);
+	
+    // CORNERS //
+    // TOP LEFT CORNER //
+    Canvas.SetPos(xPos, yPos);
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin1, 8, 7, 0, 7, 8, -7);
+
+    // BOTTOM LEFT CORNER //
+    Canvas.SetPos(xPos, yPos + iBoxHeight - 7);
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin1, 8, 7, 0, 0, 8, 7);
+
+    // TOP RIGHT CORNER //
+    Canvas.SetPos(xPos + iBoxWidth - 8, yPos);
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin1, 8, 7, 8, 7, -8, -7);
+
+    // BOTTOM RIGHT CORNER //
+    Canvas.SetPos(xPos + iBoxWidth - 8, yPos + iBoxHeight - 7);
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin1, 8, 7, 8, 0, -8, 7);
+
+    // OUTSIDE BORDERS //
+
+    // TOP BORDER //
+    Canvas.SetPos(xPos + 8, yPos);
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_h, iBoxWidth - 16, 6, 0, 6, 1, -6);
+
+    // BOTTOM BORDER //
+    Canvas.SetPos(xPos + 8, yPos + iBoxHeight - 6);
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_h, iBoxWidth - 16, 6, 0, 0, 1, 6);
+
+    // LEFT BORDER //
+    Canvas.SetPos(xPos, yPos + 7);
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v, 5, iBoxHeight - 14, 0, 0, 5, 1);
+
+    // RIGHT BORDER //
+    Canvas.SetPos(xPos + iBoxWidth - 5, yPos + 7);
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v, 5, iBoxHeight - 14, 5, 0, -5, 1);
+	
+    // INSIDE BORDERS //	
+    Canvas.DrawRectangle(xPos + 5, yPos + 6, iBoxWidth - 10, iBoxHeight - 12, 1, Canvas.black, 77, eLevel.TGAME);	
+
+	Canvas.SetDrawColor(64, 64, 64, 255);
+    Canvas.Style = ERenderStyle.STY_Modulated;
+
+    Canvas.SetPos(xPos + 5, yPos + 6);
+    Canvas.DrawTile(Texture'HUD.HUD.ETMenuBar', iBoxWidth - 10, iBoxHeight - 12, 0, 0, 128, 2);	
+
+	// Draw message text			
+	Canvas.SetDrawColor(128, 128, 128, 255);
+	Canvas.DrawColor = Canvas.TextBlack;
+	Canvas.SetClip(iBoxWidth - 100, yLen);
+	Canvas.SetPos(xPos + (iBoxWidth / 2), yPos + 25);
+	Canvas.DrawTextAligned(sMessage, TXT_CENTER);
+	Canvas.SetClip(640, 480);
+
+	// Draw Yes/No options
+	Canvas.Font = Canvas.ETextFont;
+	
+	// Yes option
+	Canvas.SetPos(xPos + (iBoxWidth / 4), yPos + iBoxHeight - 30);
+	if (Epc.bMissionFailedConfirmYes)
+		Canvas.SetDrawColor(92, 109, 76, 255); // Highlighted green
+	else
+		Canvas.SetDrawColor(64, 64, 64, 255); // Darker gray
+	Canvas.DrawTextAligned(Localize("HUD", "Yes", "Localization\\HUD"), TXT_CENTER);
+
+	// No option
+	Canvas.SetPos(xPos + (iBoxWidth * 3 / 4), yPos + iBoxHeight - 30);
+	if (!Epc.bMissionFailedConfirmYes)
+		Canvas.SetDrawColor(92, 109, 76, 255); // Highlighted green
+	else
+		Canvas.SetDrawColor(64, 64, 64, 255); // Darker gray
+	Canvas.DrawTextAligned(Localize("HUD", "No", "Localization\\HUD"), TXT_CENTER);
+
+	Canvas.Style = ERenderStyle.STY_Normal;
+}
+
+/*-----------------------------------------------------------------------------
+ Function:      IsMouseInConfirmButton
+
+ Description:   Joshua - Checks if mouse is within Yes or No button region
+-----------------------------------------------------------------------------*/
+function int IsMouseInConfirmButton(ECanvas Canvas)
+{
+	local int iBoxWidth, iBoxHeight, iNbrOfLine;
+	local int xPos, yPos;
+	local int yesX, yesY, yesW, yesH;
+	local int noX, noY, noW, noH;
+	local float xLen, yLen;
+	local string sMessage;
+
+	iBoxWidth = 400;
+	
+	// Get the message text to calculate height
+	if (Epc.iMissionFailedConfirmAction == 1)
+		sMessage = Localize("MissionFailed", "RestartMission_Confirm", "Localization\\Enhanced");
+	else
+		sMessage = Localize("MissionFailed", "Quit_Confirm", "Localization\\Enhanced");
+	
+	// Calculate box height
+	Canvas.Font = Canvas.ETextFont;
+	Canvas.SetClip(iBoxWidth - 100, yLen);
+	Canvas.SetPos(0, 0);
+	Canvas.TextSize(sMessage, xLen, yLen);
+	iNbrOfLine = Canvas.GetNbStringLines(sMessage, 1.0f);
+	Canvas.SetClip(640, 480);
+	
+	iBoxHeight = (iNbrOfLine * yLen) + 80;
+	
+	xPos = 320 - iBoxWidth / 2;
+	yPos = 240 - iBoxHeight / 2;
+	
+	// Calculate button regions
+	yesX = xPos + (iBoxWidth / 4) - 50;
+	yesY = yPos + iBoxHeight - 40;
+	yesW = 100;
+	yesH = 40;
+	
+	noX = xPos + (iBoxWidth * 3 / 4) - 50;
+	noY = yPos + iBoxHeight - 40;
+	noW = 100;
+	noH = 40;
+	
+	// Check if mouse is in Yes button
+	if (Epc.m_FakeMouseX > yesX && Epc.m_FakeMouseX < yesX + yesW &&
+		Epc.m_FakeMouseY > yesY && Epc.m_FakeMouseY < yesY + yesH)
+	{
+		return 1; // Yes button
+	}
+	// Check if mouse is in No button
+	else if (Epc.m_FakeMouseX > noX && Epc.m_FakeMouseX < noX + noW &&
+			 Epc.m_FakeMouseY > noY && Epc.m_FakeMouseY < noY + noH)
+	{
+		return 2; // No button
+	}
+	
+	return 0; // None
+}
+
+/*-----------------------------------------------------------------------------
+ Function:      GetInputPrompt
+
+ Description:   Joshua - Returns localized input prompt string for keyboard or controller
+-----------------------------------------------------------------------------*/
+function string GetInputPrompt(int ButtonType)
+{
+	local string ButtonName;
+
+    // Chr(0xFD) = Square
+    // Chr(0xDA) = Cross
+    // Chr(0xD9) = Circle
+    // Chr(0xDB) = Triangle
+
+	if (Epc.eGame.bUseController)
+	{
+		// Controller - use button names based on controller type
+		switch (ButtonType)
+		{
+			case 0: // Cross / A
+				if (Epc.ControllerIcon == CI_PlayStation)
+					ButtonName = Chr(0xDA);
+				else // Xbox, GameCube
+					ButtonName = "A";
+				break;
+			case 1: // Triangle / Y
+				if (Epc.ControllerIcon == CI_PlayStation)
+					ButtonName = Chr(0xDB);
+				else // Xbox, GameCube
+					ButtonName = "Y";
+				break;
+			case 2: // Circle / B
+				if (Epc.ControllerIcon == CI_PlayStation)
+					ButtonName = Chr(0xD9);
+				else // Xbox, GameCube
+					ButtonName = "B";
+				break;
+			case 3: // Square / X
+				if (Epc.ControllerIcon == CI_PlayStation)
+					ButtonName = Chr(0xFD);
+				else // Xbox, GameCube
+					ButtonName = "X";
+				break;
+		}
+	}
+	else
+	{
+		// Keyboard - use localized key names
+		switch (ButtonType)
+		{
+			case 0: // Space
+				ButtonName = Caps(Localize("Interactions", "IK_Space", "Localization\\HUD"));
+				break;
+			case 1: // LeftMouse
+				ButtonName = Caps(Localize("Interactions", "IK_LeftMouse", "Localization\\HUD"));
+				break;
+			case 2: // Escape
+				ButtonName = Caps(Localize("Interactions", "IK_Escape", "Localization\\HUD"));
+				break;
+			case 3: // Enter
+				ButtonName = Caps(Localize("Interactions", "IK_Enter", "Localization\\HUD"));
+				break;
+		}
+	}
+
+	return ButtonName;
+}
+
+/*-----------------------------------------------------------------------------
+ Function:      FormatPromptString
+
+ Description:   Replaces {0} in localized string with the button/key name
+-----------------------------------------------------------------------------*/
+function string FormatPromptString(string LocalizedString, string ButtonName)
+{
+	local int pos;
+	
+	pos = InStr(LocalizedString, "{0}");
+	if (pos >= 0)
+		return Left(LocalizedString, pos) $ ButtonName $ Mid(LocalizedString, pos + 3);
+	
+	return LocalizedString;
 }
 
 /*-----------------------------------------------------------------------------
@@ -282,26 +566,175 @@ state s_MissionFailed
 {
 	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_MissionFailed(Key, Action, Delta);}
 
-	function PostRender(ECanvas Canvas)	{PostRender_s_MissionFailed(Canvas);}
-    
-    function BeginState() {BeginState_s_MissionFailed();}
-
-    function Tick(float DeltaTime) { Tick_s_MissionFailed(DeltaTime);}
-/*
-Begin:
-    // Joshua - Load game automatically after game over for controller mode
-    if (!EPC.eGame.bPermadeathMode)
+	function PostRender(ECanvas Canvas)
     {
-        if (EPC.eGame.bUseController)
+        local float yPos, lineHeight;
+        local float xOffset;
+        local string CurrentRes;
+        local int i, ResX, ResY;
+        local float AspectRatio;
+        local string PromptText;
+        local string ConfirmMsg;
+        local float boxWidth, boxHeight, boxX, boxY;
+
+        PostRender_s_MissionFailed(Canvas);
+
+        if (Epc.bMissionFailedQuickMenu && !Epc.eGame.bPermadeathMode && Epc.MissionQuickMenuAlpha > 0)
         {
-            Sleep(6.0);
-            if (EPC.myHUD.IsPlayerGameOver() && Epc.CheckpointLevel == GetCurrentMapName())
-                ConsoleCommand("LOADGAME FILENAME=" $ Localize("Common", "CheckpointName", "Localization\\Enhanced") $ ".en2");
+            // Joshua - Draw controller prompt options at bottom of screen
+            lineHeight = 16;
+            yPos = 390;
+
+            // Joshua - For wider aspect ratios, we need to draw into negative X space
+            xOffset = 0;
+            CurrentRes = Epc.ConsoleCommand("GETCURRENTRES");
+            i = InStr(CurrentRes, "x");
+            if (i > 0)
+            {
+                ResX = int(Left(CurrentRes, i));
+                ResY = int(Mid(CurrentRes, i + 1));
+                AspectRatio = float(ResX) / float(ResY);
+                // Joshua - 4:3 = 1.333
+                if (AspectRatio > 1.334)
+                    xOffset = -((AspectRatio - 1.333) * 480.0 / 2.0);
+            }
+
+            Canvas.DrawLine(xOffset - 1, yPos - 3, Canvas.SizeX + 1, (lineHeight * 4) + 6, Canvas.black, int(100.0 * (Epc.MissionQuickMenuAlpha / 255.0)), eLevel.TMENU);
+
+            // Joshua - We must use the PlayStation font to display controller icons
+            Canvas.Font = Canvas.ETextFontPS2;
+            Canvas.SetDrawColor(255, 255, 255, Epc.MissionQuickMenuAlpha);
+
+            Canvas.SetPos(320, yPos);
+            if (Epc.LastSaveName == (Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "1") ||
+                Epc.LastSaveName == (Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "2") ||
+                Epc.LastSaveName == (Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "3"))
+                PromptText = FormatPromptString(Localize("HUD", "LoadLastCheckpoint", "Localization\\Enhanced"), GetInputPrompt(0));
             else
-                ConsoleCommand("LOADGAME FILENAME=" $ Localize("HUD", "AUTOSAVENAME", "Localization\\HUD") $ ".en2");
+                PromptText = FormatPromptString(Localize("HUD", "LoadLastSave", "Localization\\Enhanced"), GetInputPrompt(0));
+            Canvas.DrawTextAligned(PromptText, TXT_CENTER);
+
+            Canvas.SetPos(320, yPos + lineHeight);
+            PromptText = FormatPromptString(Localize("HUD", "LoadGame", "Localization\\Enhanced"), GetInputPrompt(1));
+            Canvas.DrawTextAligned(PromptText, TXT_CENTER);
+
+            Canvas.SetPos(320, yPos + (lineHeight * 2));
+            PromptText = FormatPromptString(Localize("HUD", "RestartMission", "Localization\\Enhanced"), GetInputPrompt(3));
+            Canvas.DrawTextAligned(PromptText, TXT_CENTER);
+
+            Canvas.SetPos(320, yPos + (lineHeight * 3));
+            PromptText = FormatPromptString(Localize("HUD", "Quit", "Localization\\Enhanced"), GetInputPrompt(2));
+            Canvas.DrawTextAligned(PromptText, TXT_CENTER);
+
+            // Joshua - Draw confirmation overlay if needed
+            if (Epc.bMissionFailedShowConfirmation)
+            {
+                // Joshua - Dim background
+                Canvas.DrawLine(xOffset - 1, 0, Canvas.SizeX + 1, 480, Canvas.black, 150, eLevel.TMENU);
+
+                if (Epc.iMissionFailedConfirmAction == 1)
+                    ConfirmMsg = Localize("HUD", "ConfirmRestart", "Localization\\Enhanced");
+                else if (Epc.iMissionFailedConfirmAction == 2)
+                    ConfirmMsg = Localize("HUD", "ConfirmQuit", "Localization\\Enhanced");
+
+                // Joshua - Draw the custom confirmation box with Yes/No options
+                DrawConfirmationBox(Canvas, ConfirmMsg);
+            }
         }
     }
-*/
+    
+    function BeginState() 
+    {
+        Epc.MissionQuickMenuTimer = 0.0;
+        Epc.MissionQuickMenuAlpha = 0;
+        BeginState_s_MissionFailed();
+    }
+
+    function Tick(float DeltaTime) 
+    {
+        local int buttonRegion;
+        local ECanvas Canvas;
+        
+        Canvas = ECanvas(class'Actor'.static.GetCanvas());
+        
+        // Joshua - Update quick menu timer and alpha for fade-in effect
+        if (Epc.bMissionFailedQuickMenu)
+        {
+            Epc.MissionQuickMenuTimer += DeltaTime;
+            
+            if (Epc.MissionQuickMenuTimer < 2.0)
+            {
+                // Joshua - Still in the 2 second delay, keep alpha at 0
+                Epc.MissionQuickMenuAlpha = 0;
+            }
+            else if (Epc.MissionQuickMenuTimer < 2.5)
+            {
+                // Joshua - Fade in over 0.5 seconds (from 2.0 to 2.5)
+                Epc.MissionQuickMenuAlpha = int(((Epc.MissionQuickMenuTimer - 2.0) / 0.5) * 255.0);
+            }
+            else
+            {
+                Epc.MissionQuickMenuAlpha = 255;
+            }
+        }
+                
+        // Joshua - Handle mouse clicks in confirmation dialog
+        if (Epc.bMissionFailedShowConfirmation && Epc.m_FakeMouseClicked)
+        {
+            // Joshua - Check which button the mouse is actually clicking on
+            buttonRegion = IsMouseInConfirmButton(Canvas);
+            
+            if (buttonRegion == 1)
+            {
+                // Clicked Yes button
+                Epc.FakeMouseToggle(false);
+                Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
+                
+                if (Epc.iMissionFailedConfirmAction == 1)
+                {
+                    Epc.bMissionFailedQuickMenu = false;
+                    Epc.RestartMission();
+                }
+                else if (Epc.iMissionFailedConfirmAction == 2)
+                {
+                    Epc.bMissionFailedQuickMenu = false;
+                    Epc.QuitToMainMenu();
+                }
+            }
+            else if (buttonRegion == 2)
+            {
+                // Clicked No button
+                Epc.FakeMouseToggle(false);
+                Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
+                Epc.bMissionFailedShowConfirmation = false;
+                Epc.iMissionFailedConfirmAction = 0;
+            }
+            
+            Epc.m_FakeMouseClicked = false;
+        }
+        
+        Tick_s_MissionFailed(DeltaTime);
+    }
+
+// Joshua - s_MissionFailed is handled in C++, so its behavior can't be changed in UnrealScript.
+// The game transitions to the menus after 13 seconds, so we reset the timer to allow the player to make a choice.
+Begin:
+    if (Epc.bMissionFailedQuickMenu && !Epc.eGame.bPermadeathMode)
+    {
+        while (true)
+        {
+            Sleep(12.9);
+            missionFilterTimer = 0;
+        }
+    }
+    Stop;
+
+// Joshua - Load last save
+LoadLastSave:
+    Epc.bLoadingTraining = true; // Display QuickLoad box
+    Sleep(0.1);
+    Epc.LoadLastSave();
+    Stop;
 }
 
 /*=============================================================================

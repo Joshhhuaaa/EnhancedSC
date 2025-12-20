@@ -13,6 +13,171 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 
 	if (Epc.Level.Pauser != None)
 		return false;
+
+	//=============================================================================
+	// Joshua - Automatically toggle controller mode
+	//=============================================================================
+	if (Epc.InputMode == IM_Auto)
+	{
+		if (Key == IK_Joy1  || Key == IK_Joy2  || Key == IK_Joy3  || Key == IK_Joy4  ||
+			Key == IK_Joy5  || Key == IK_Joy6  || Key == IK_Joy7  || Key == IK_Joy8  ||
+			Key == IK_Joy9  || Key == IK_Joy10 || Key == IK_Joy11 || Key == IK_Joy12 ||
+			Key == IK_Joy13 || Key == IK_Joy14 || Key == IK_Joy15 || Key == IK_Joy16 ||
+			Key == IK_JoyX  || Key == IK_JoyY  || Key == IK_JoyZ  || Key == IK_JoyR  ||
+			Key == IK_JoyU  || Key == IK_JoyV  || Key == IK_AnalogUp || Key == IK_AnalogDown ||
+			Key == IK_AnalogLeft || Key == IK_AnalogRight)
+		{
+			if (!Epc.eGame.bUseController &&
+				!Epc.IsInQuickInv() &&
+				Epc.GetStateName() != 's_KeyPadInteract' &&
+				Epc.GetStateName() != 's_PickLock') 
+			{
+				Epc.eGame.bUseController = true;
+				Epc.m_curWalkSpeed = 5;
+			}
+		}
+		else if (Key != IK_MouseX && Key != IK_MouseY)
+		{
+			if (Epc.eGame.bUseController &&
+				!Epc.IsInQuickInv() &&
+				Epc.GetStateName() != 's_KeyPadInteract' &&
+				Epc.GetStateName() != 's_PickLock')
+			{
+				Epc.eGame.bUseController = false;
+			}
+		}
+	}
+	else if (Epc.InputMode == IM_Keyboard)
+		Epc.eGame.bUseController = false;
+	else if (Epc.InputMode == IM_Controller)
+		Epc.eGame.bUseController = true;
+
+	// Joshua - Block all input when in mission failed state, only allow specific keys
+	if (Epc.bMissionFailedQuickMenu && !Epc.eGame.bPermaDeathMode && Epc.myHUD.IsPlayerGameOver())
+	{
+		// Joshua - Allow camera movement
+		if (Key == IK_MouseX || Key == IK_MouseY || Key == IK_JoyZ || Key == IK_JoyV)
+			return false;
+
+		if (Action == IST_Press)
+		{
+			// Joshua - Block all quick menu actions until 2 seconds have passed
+			if (Epc.MissionQuickMenuTimer < 2.0)
+			{
+				return true;
+			}
+
+			// Joshua - Handle confirmation dialog if active
+			if (Epc.bMissionFailedShowConfirmation)
+			{
+				// Joshua - Enable fake mouse if we switched from controller to keyboard during confirmation
+				if (!Epc.eGame.bUseController)
+				{
+					Epc.FakeMouseToggle(true);
+				}
+				else
+				{
+					Epc.FakeMouseToggle(false);
+				}
+				
+				// Joshua - Toggle Yes/No selecton
+				if (actionName == "StrafeLeft" || actionName== "StrafeRight" || actionName == "DPadLeft" || actionName == "DPadRight") 
+				{
+					Epc.bMissionFailedConfirmYes = !Epc.bMissionFailedConfirmYes;
+					return true;
+				}
+
+				// Joshua - Confirm selection
+				else if (Key == IK_Space || Key == IK_Enter || Key == IK_Joy1)
+				{
+					Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
+										
+					if (Epc.bMissionFailedConfirmYes)
+					{
+						// Joshua - Turn off fake mouse before restarting or quitting
+						Epc.FakeMouseToggle(false);
+						
+						if (Epc.iMissionFailedConfirmAction == 1)
+						{
+							Epc.bMissionFailedQuickMenu = false;
+							Epc.RestartMission();
+							return true;
+						}
+						else if (Epc.iMissionFailedConfirmAction == 2)
+						{
+							Epc.bMissionFailedQuickMenu = false;
+							Epc.QuitToMainMenu();
+							return true;
+						}
+					}
+					else
+					{
+						Epc.FakeMouseToggle(false);
+						Epc.bMissionFailedShowConfirmation = false;
+						Epc.iMissionFailedConfirmAction = 0;
+					}
+					
+					return true;
+				}
+				// Joshua - Cancel confirmation
+				else if (Key == IK_Escape || Key == IK_Joy2)
+				{
+					Epc.FakeMouseToggle(false);
+					Epc.bMissionFailedShowConfirmation = false;
+					Epc.iMissionFailedConfirmAction = 0;
+					return true;
+				}
+				// Joshua - Allow left mouse clicks to pass through for mouse handling in EGameMenuHUD Tick
+				else if (Key == IK_LeftMouse)
+				{
+					return false;
+				}
+				
+				return true;
+			}
+
+			// Joshua - Normal menu
+			if (Key == IK_Space || Key == IK_Joy1)
+			{
+				Epc.myHUD.GotoState('s_Mission', 'BeginLoadLastSave');
+				return true;
+			}
+			else if (Key == IK_LeftMouse || Key == IK_Joy4)
+			{
+				ViewportOwner.Console.ShowGameMenu(true);
+				return true;
+			}
+			else if (Key == IK_Enter || Key == IK_Joy3)
+			{
+				// Show restart confirmation
+				Epc.bMissionFailedShowConfirmation = true;
+				Epc.iMissionFailedConfirmAction = 1;
+				Epc.bMissionFailedConfirmYes = false;
+
+				Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
+
+				if (!Epc.eGame.bUseController)
+					Epc.FakeMouseToggle(true);
+
+				return true;
+			}
+			else if (Key == IK_Escape || Key == IK_Joy2)
+			{
+				// Show quit confirmation
+				Epc.bMissionFailedShowConfirmation = true;
+				Epc.iMissionFailedConfirmAction = 2;
+				Epc.bMissionFailedConfirmYes = false;
+
+				Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
+
+				if (!Epc.eGame.bUseController)
+					Epc.FakeMouseToggle(true);
+
+				return true;
+			}
+		}
+		return true;
+	}
 	
 	// Joshua - Adding NumPad support for keypads
 	if (Action == IST_Press)
@@ -281,53 +446,13 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 //=============================================================================
 
 	// Joshua - Workaround to prevent controller from interrupting mission failed state before it reloads the last save
-	//if (Epc.myHUD.IsPlayerGameOver())
-	//{
-	//	Epc.SetKey("Joy1 None", "");
-	//	Epc.SetKey("Joy8 None", "");
-	//	Epc.SetKey("Joy10 None", "");
-	//}
-
-//=============================================================================
-// Joshua - Automatically toggle controller mode
-//=============================================================================
-
-	if (Epc.InputMode == IM_Auto)
+	/*if (Epc.myHUD.IsPlayerGameOver())
 	{
-		if (
-			Key == IK_Joy1  || Key == IK_Joy2  || Key == IK_Joy3  || Key == IK_Joy4  ||
-			Key == IK_Joy5  || Key == IK_Joy6  || Key == IK_Joy7  || Key == IK_Joy8  ||
-			Key == IK_Joy9  || Key == IK_Joy10 || Key == IK_Joy11 || Key == IK_Joy12 ||
-			Key == IK_Joy13 || Key == IK_Joy14 || Key == IK_Joy15 || Key == IK_Joy16 ||
-			Key == IK_JoyX  || Key == IK_JoyY  || Key == IK_JoyZ  || Key == IK_JoyR  ||
-			Key == IK_JoyU  || Key == IK_JoyV  || Key == IK_AnalogUp || Key == IK_AnalogDown ||
-			Key == IK_AnalogLeft || Key == IK_AnalogRight
-)
-		{
-			if (!Epc.eGame.bUseController &&
-				!Epc.IsInQuickInv() &&
-				Epc.GetStateName() != 's_KeyPadInteract' &&
-				Epc.GetStateName() != 's_PickLock') 
-			{
-				Epc.eGame.bUseController = true;
-				Epc.m_curWalkSpeed = 5;
-			}
-		}
-		else if (Key != IK_MouseX && Key != IK_MouseY)
-		{
-			if (Epc.eGame.bUseController &&
-				!Epc.IsInQuickInv() &&
-				Epc.GetStateName() != 's_KeyPadInteract' &&
-				Epc.GetStateName() != 's_PickLock')
-			{
-				Epc.eGame.bUseController = false;
-			}
-		}
-	}
-	else if (Epc.InputMode == IM_Keyboard)
-		Epc.eGame.bUseController = false;
-	else if (Epc.InputMode == IM_Controller)
-		Epc.eGame.bUseController = true;
+		Epc.SetKey("Joy1 LoadLastSave", "");
+		Epc.SetKey("Joy2 QuitToMainMenu", "");
+		Epc.SetKey("Joy4 Interaction", "");
+		
+	}*/
 
 	BindSnipe();
 	BindWhistle();
