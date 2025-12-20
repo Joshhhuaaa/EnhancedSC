@@ -22,6 +22,9 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
         case AI_DEAD:
             EventJump('WilkesDied');
             break;
+        case AI_TAKE_DAMAGE:
+            EventJump('WilkesDied');
+            break;
         case AI_UNCONSCIOUS:
             EventJump('WilkesDied');
             break;
@@ -94,11 +97,13 @@ IntroConversation:
     Talk(Sound'S2_2_1Voice.Play_22_02_04', 0, , TRUE, 0);
     Close();
     SetFlags(PlayIntroOnce,TRUE);
+    EndConversation(); // Joshua - EndConversation added to remove the NPC conversation interaction
 WilkesTeleport:
     Goal_Set(1,GOAL_MoveTo,9,,,,'WilkesLeavingTeleport',,TRUE,,MOVE_WalkRelaxed,,MOVE_WalkRelaxed);
     WaitForGoal(1,GOAL_MoveTo,);
     Teleport(1, 'WilkesTeleport');
     SendUnrealEvent('WilkesAI');
+    End();
 DontPlayIntro:
     End();
 WilkesDied:
@@ -106,8 +111,8 @@ WilkesDied:
     SetProfileDeletion();
     DisableMessages(TRUE, TRUE);
     PlayerMove(false);
-    Speech(Localize("P_2_2_1_Ktech_IntroCinematic", "Speech_0013L", "Localization\\P_2_2_1_Kalinatek"), Sound'Lambert.Play_41_95_01', 0, 0, TR_HEADQUARTER, 0, true);
-    Sleep(2);
+    Speech(Localize("P_2_2_1_Ktech_IntroCinematic", "Speech_0013L", "Localization\\P_2_2_1_Kalinatek"), Sound'Lambert.Play_41_95_01', 2, 0, TR_HEADQUARTER, 0, true);
+    Sleep(GetSoundDuration(Sound'Lambert.Play_41_95_01')); // Joshua - The speech isn't behaving as a latent function for some reason
     Close();
     GameOver(false, 0);
     End();

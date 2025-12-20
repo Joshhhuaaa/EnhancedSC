@@ -15,6 +15,9 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
     {
         switch (Event.EventType)
         {
+        case AI_DEAD:
+            EventJump('DeadRinger');
+            break;
         case AI_TAKE_DAMAGE:
             EventJump('DeadRinger');
             break;
