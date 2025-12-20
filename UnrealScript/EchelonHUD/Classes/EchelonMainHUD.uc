@@ -88,8 +88,7 @@ var bool bStockInMemory;
 // Joshua - This is a native class. New variables must be added only after all original ones have been declared.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
-
-var EQInvHUDXbox		QuickInvAndCurrentItemsXbox; // Joshua - Xbox quick inventory
+var bool bPreserveHudMaster; // Joshua - Workaround to preserve crosshair during inventory transition
 var EPlayerStatsHUD     PlayerStatsHUD; // Joshua - Player statistics display
 
 // Joshua - New HUD toggles
@@ -1041,7 +1040,12 @@ state s_Slavery
 	function EndState()
 	{
 		hud_master.HudView(false);
-		hud_master = None;
+
+		// Joshua - Workaround to preserve crosshair during inventory transition
+		if (!bPreserveHudMaster)
+			hud_master = None;
+
+		bPreserveHudMaster = false;
 	}
 
 	function Slave(EGameplayObject NewMaster)
@@ -1132,6 +1136,7 @@ state s_Slavery
 					 Epc.GetStateName() == 's_SplitTargeting'))
 				{
 					SaveState();
+					bPreserveHudMaster = true; // Joshua - Workaround to preserve crosshair during inventory transition
 					GotoState('QuickInventory');
 					return true;
 				}
