@@ -70,12 +70,20 @@ state s_Microiing
 		// Joshua - Zoom functionality
 		if (Epc.bLaserMicZoomLevels)
 		{
-			Epc.SetCameraFOV(self, (MaxFov + MinFov) / 2);
+			// Joshua - Vision functionality
+			if (Epc.bLaserMicVisions)
+				Epc.SetCameraFOV(Epc, (MaxFov + MinFov) / 2);
+			else
+				Epc.SetCameraFOV(self, (MaxFov + MinFov) / 2);
 			current_fov = (MaxFov + MinFov) / 2;
 		}
 		else
 		{
-			Epc.SetCameraFOV(self, 30.0);
+			// Joshua - Vision functionality
+			if (Epc.bLaserMicVisions)
+				Epc.SetCameraFOV(Epc, 30.0);
+			else
+				Epc.SetCameraFOV(self, 30.0);
 			current_fov = 30.0;
 		}
 		Epc.iRenderMask = 3;
@@ -84,6 +92,7 @@ state s_Microiing
 	function EndState()
 	{
 		Micro.SetCollision(false);
+		Epc.SetCameraFOV(Epc, (Epc.DesiredFov)); // Joshua - Necessary to reset FOV when using Laser Mic visions
 		Epc.PopCamera(self);
 		Epc.iRenderMask = 0;
 		
@@ -153,13 +162,16 @@ state s_Microiing
 				PlaySound(Sound'FisherEquipement.Play_StickyCamZoom', SLOT_SFX);
 		}
 
-		// Clamp fov and calculate zoom factor
-		current_fov = FClamp(current_fov, MinFov, MaxFov);
+			// Clamp fov and calculate zoom factor
+			current_fov = FClamp(current_fov, MinFov, MaxFov);
 		//		MaxDamping = Damping;
 		//		MaxDamping /= (MaxFov) / current_fov;
 
-		// Modify vision fov
-		Epc.SetCameraFOV(self, current_fov);
+			// Modify vision fov
+			if (Epc.bLaserMicVisions)
+				Epc.SetCameraFOV(Epc, current_fov);
+			else
+				Epc.SetCameraFOV(self, current_fov);
 
 	//	Super.Tick(DeltaTime);
 	}		

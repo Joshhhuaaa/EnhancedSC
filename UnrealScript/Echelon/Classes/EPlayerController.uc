@@ -291,6 +291,7 @@ var(Enhanced) config bool bF2000ZoomLevels; // Joshua - Enables 2x/4x/6x zoom fo
 var int LastSniperFOVIndex; // Joshua - Remember the last FOV index so we can restore it after reloading
 
 var(Enhanced) config bool bLaserMicZoomLevels; // Joshua - Enables zoom functionality for the Laser Mic
+var(Enhanced) config bool bLaserMicVisions; // Joshua - Allows the Laser Mic use all vision modes like PS2 version
 
 var bool bPressSnip;
 var bool m_ChoosePreviousGadget;
@@ -300,11 +301,12 @@ var bool bUsingAirCamera; // Joshua - True when the player is using a camera, pr
 
 // Joshua - Adding the option to use Camera Jammer camera behavior from Pandora Tomorrow
 var(Enhanced) config bool bCameraJammerAutoLock;
-var Actor JammedCam; 
+var Actor JammedCam;
 
 var(Enhanced) bool bToggleBTWTargeting; // Joshua - Used to toggle BTW targeting instead of holding direction
 
 var EInventoryItem OpticCableItem; // Joshua - Optic Cable interaction
+var(Enhanced) config bool bOpticCableVisions; // Joshua - Allows the Optic Cable use all vision modes like Pandora Tomorrow
 
 // Joshua - Show keypad as goal
 var(Enhanced) config bool bShowKeypadGoal; 
@@ -5476,7 +5478,7 @@ Begin:
 // ----------------------------------------------------------------------
 state s_LaserMicTargeting extends s_Targeting
 {
-	Ignores ProcessHeadSet;
+	//Ignores ProcessHeadSet;
 
 	event bool CanSaveGame()
 	{
@@ -5499,6 +5501,12 @@ state s_LaserMicTargeting extends s_Targeting
 		ePawn.HandItem.GotoState('s_Selected');
 	}
 
+	// Joshua - Sheath support
+	function bool CanAccessQuick()
+	{
+		return false;
+	}
+
 	function ProcessScope()
 	{
 		if (!bInTransition)
@@ -5512,7 +5520,19 @@ state s_LaserMicTargeting extends s_Targeting
 
 	event ReduceCameraSpeed(out float turnMul)
 	{
-		turnMul = 0.3f; //(FovAngle from Laser mic / DesiredFOV) * 0.5;
+		if (bLaserMicZoomLevels)
+			turnMul = (FovAngle / DesiredFOV) * 0.5;
+		else
+			turnMul = 0.3f; // (FovAngle from Laser mic / DesiredFOV) * 0.5;
+		
+	}
+
+	function ProcessHeadSet(float i)
+	{
+		if (!bLaserMicVisions)
+			return;
+
+		Global.ProcessHeadSet(i);
 	}
 
 Begin:
@@ -6627,7 +6647,8 @@ DoInteract:
 // ----------------------------------------------------------------------
 state s_OpticCable extends s_InteractWithObject
 {
-	Ignores ProcessHeadset;
+	// Joshua - Adding support for switching visions in Optic Cable
+	//Ignores ProcessHeadset;
 
 	function PlayerMove(float DeltaTime)
 	{
@@ -6680,7 +6701,15 @@ state s_OpticCable extends s_InteractWithObject
 		}
 	}
 
-begin:
+	function ProcessHeadSet(float i)
+	{
+		if (!bOpticCableVisions)
+			return;
+
+		Global.ProcessHeadSet(i);
+	}
+
+Begin:
 	bInTransition = true;
 	
 	if (!eGame.bNewDoorInteraction)

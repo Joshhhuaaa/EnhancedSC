@@ -2,17 +2,11 @@ class EOpticCable extends EInventoryItem;
 
 #exec OBJ LOAD FILE=..\Sounds\Interface.uax
 
-// Joshua - Constants for rendering modes
-const REN_DynLight		= 5;
-const REN_ThermalVision = 10;
-const REN_NightVision	= 11;
-
 var()   float		    Damping;
 var	    rotator		    camera_rotation;
 var     int			    start_yaw;
 var		vector			start_location;
 var     ESwingingDoor   Door;
-var		int				RenderingMode; 		  // Joshua - New variable needed for vision modes in Optic Cables
 
 const valid_range = 13000;
 
@@ -137,24 +131,9 @@ function HudView(bool bIn)
 		Epc.SetLocation(start_location);
 		// Camera rotation
 		Epc.SetRotation(camera_rotation);
-
-		// Joshua - Determine the starting render mode
-		if (Epc.Goggle.CurrentMode == REN_NightVision || Epc.Goggle.CurrentMode == REN_ThermalVision)
-		{
-			// If goggles are active, use their mode
-			RenderingMode = Epc.Goggle.CurrentMode;
-		}
-		else
-		{
-			// Otherwise start with dynamic light
-			RenderingMode = REN_DynLight;
-		}
-		Epc.SetCameraMode(self, RenderingMode);
-
-		// Joshua - If optic cable visions not allowed, force night vision
-		if (!Epc.eGame.bOpticCableVisions)
+		
+		if (!Epc.bOpticCableVisions)
 			Epc.SetCameraMode(self, REN_NightVision);
-			
 		Epc.iRenderMask = 2;
 
 		Enable('Tick');
@@ -165,33 +144,6 @@ function HudView(bool bIn)
 
 		// Joshua - Xbox was playing this sound upon leaving, so I added it to PC
 		PlaySound(Sound'Interface.Play_FisherEquipEspionCam', SLOT_Interface);
-
-		// Joshua - Update Goggle state based on current optic cable render mode
-		if (RenderingMode == REN_NightVision || RenderingMode == REN_ThermalVision)
-		{
-			// Force the goggle state to match our current vision mode
-			Epc.Goggle.CurrentMode = RenderingMode;
-			
-			// Make sure goggles are down if we're using vision modes
-			if (Epc.Goggle.IsInState('GoggleUp'))
-			{
-				Epc.Goggle.GotoState('GoggleDown');
-			}
-			
-			Epc.SetCameraMode(Epc, RenderingMode);
-		}
-		else
-		{
-			// If we're returning to normal view, reset to dynamic light
-			Epc.Goggle.CurrentMode = REN_DynLight;
-			Epc.SetCameraMode(Epc, REN_DynLight);
-			
-			// Make sure goggles are up if we're not using vision modes
-			if (Epc.Goggle.IsInState('GoggleDown'))
-			{
-				Epc.Goggle.GotoState('GoggleUp');
-			}
-		}
 
 		Epc.PopCamera(self);
 		Epc.iRenderMask = 0;
@@ -299,69 +251,6 @@ state s_Sneaking
 		local EPlayerController Epc;
 		Epc = EPlayerController(Controller);
 
-	// Joshua - Adding support for switching visions in optic cable
-	if (Epc.eGame.bOpticCableVisions)
-	{
-		// Night vision
-		if (Epc.bDPadLeft != 0)
-		{
-			if (RenderingMode != REN_NightVision)
-			{
-				// Play the correct sound effect when switching between modes
-				if (RenderingMode == REN_ThermalVision)
-					PlaySound(Sound'Interface.Play_FisherSwitchGoggle', SLOT_Interface);
-				else
-					PlaySound(Sound'FisherEquipement.Play_GoggleRun', SLOT_SFX);
-
-				RenderingMode = REN_NightVision;
-				
-				// Update goggle's current mode to keep them in sync
-				Epc.Goggle.CurrentMode = RenderingMode;
-			}
-			else
-			{
-				RenderingMode = REN_DynLight;
-				Epc.Goggle.CurrentMode = RenderingMode;
-			}
-
-			Epc.SetCameraMode(self, RenderingMode);
-			Epc.bDPadLeft = 0;
-		}
-		// Thermal vision
-		else if (Epc.bDPadRight != 0)
-		{
-			if (!Epc.Goggle.bNoThermalAvailable)
-			{
-				if (RenderingMode != REN_ThermalVision)
-				{
-					// Play the correct sound effect when switching between modes
-					if (RenderingMode == REN_NightVision)
-						PlaySound(Sound'Interface.Play_FisherSwitchGoggle', SLOT_Interface);
-					else
-						PlaySound(Sound'FisherEquipement.Play_GoggleRun', SLOT_SFX);
-
-					RenderingMode = REN_ThermalVision;
-					Epc.Goggle.CurrentMode = RenderingMode;
-
-					Epc.SetCameraMode(self, RenderingMode);
-				}
-				else
-				{
-					RenderingMode = REN_DynLight;
-					Epc.Goggle.CurrentMode = RenderingMode;
-					Epc.SetCameraMode(self, RenderingMode);
-				}
-			}
-			else if (RenderingMode == REN_NightVision)
-			{
-				RenderingMode = REN_DynLight;
-				Epc.Goggle.CurrentMode = RenderingMode;
-				Epc.SetCameraMode(self, RenderingMode);
-			}
-			Epc.bDPadRight = 0;
-		}
-	}
-
 		// give rotationnary cable movement
 		delta_damping	= Epc.aTurn * Damping;
 		clamped_yaw		= camera_rotation.Yaw;
@@ -397,5 +286,5 @@ defaultproperties
     Damping=1000.000000
     Category=CAT_GADGETS
     ObjectHudClass=Class'EOpticCableView'
-    StaticMesh=none
+    StaticMesh=None
 }
