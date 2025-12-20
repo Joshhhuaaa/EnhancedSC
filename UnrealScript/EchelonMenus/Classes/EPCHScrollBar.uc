@@ -31,3 +31,45 @@ function Paint(Canvas C, float X, float Y)
 {
 	Render(C , X, Y);    
 }
+
+// Joshua - Allow page scrolling when mouse is over the scrollbar
+function MouseWheelDown(FLOAT X, FLOAT Y)
+{
+	local UWindowWindow W;
+	
+	// Joshua - Find the listbox in our owner window and pass the scroll event to it
+	if (NotifyWindow != None)
+	{
+		W = NotifyWindow.FirstChildWindow;
+		while (W != None)
+		{
+			if (UWindowListBox(W) != None)
+			{
+				W.MouseWheelDown(X, Y);
+				return;
+			}
+			W = W.NextSiblingWindow;
+		}
+	}
+}
+
+// Joshua - Allow page scrolling when mouse is over the scrollbar
+function MouseWheelUp(FLOAT X, FLOAT Y)
+{
+	local UWindowWindow W;
+	
+	// Joshua - Find the listbox in our owner window and pass the scroll event to it
+	if (NotifyWindow != None)
+	{
+		W = NotifyWindow.FirstChildWindow;
+		while (W != None)
+		{
+			if (UWindowListBox(W) != None)
+			{
+				W.MouseWheelUp(X, Y);
+				return;
+			}
+			W = W.NextSiblingWindow;
+		}
+	}
+}

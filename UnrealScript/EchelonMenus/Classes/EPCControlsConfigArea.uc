@@ -22,6 +22,7 @@ var EPCCheckBox          m_bCrouchDrop; // Joshua - Enhanced setting
 var EPCCheckBox          m_bToggleBTWTargeting; // Joshua - Enhanced setting
 var EPCCheckBox          m_bCameraJammerAutoLock; // Joshua - Enhanced setting
 var EPCCheckBox          m_bToggleInventory; // Joshua - Enhanced setting
+var EPCCheckBox          m_bHideInactiveCategories; // Joshua - Enhanced setting
 var EPCCheckBox          m_bEnableRumble; // Joshua - Enhanced setting
 var EPCComboControl      m_InputMode; // Joshua - Enhanced setting
 var EPCComboControl      m_ControllerScheme; // Joshua - Enhnaced setting
@@ -66,11 +67,12 @@ function InitOptionControls()
     AddKeyItem(Localize("Keys","K_Decell","Localization\\HUD"),"DecSpeed");
     AddKeyItem(Localize("Keys","k_BackToWall","Localization\\HUD"),"BackToWall");
     
-    AddLineItem();
+    //AddLineItem();
+    AddCompactLineItem();
     AddInitialSpeedControls();
     AddEnhancedCheckBoxControl("NormalizedMovement", m_bNormalizeMovement);
     AddEnhancedCheckBoxControl("CrouchDrop", m_bCrouchDrop);
-    AddLineItem();
+    //AddLineItem();
 	
     // Actions
 	AddLineItem();
@@ -95,11 +97,12 @@ function InitOptionControls()
     AddKeyItem(Localize("Keys","K_ToggleHUD","Localization\\Enhanced"), "ToggleHUD");
     AddKeyItem(Localize("Keys","K_PlayerStats","Localization\\Enhanced"), "PlayerStats");
 
-    AddLineItem();
+    //AddLineItem();
+    AddCompactLineItem();
 	AddFireEquipControls();
     AddEnhancedCheckBoxControl("ToggleBTWTargeting", m_bToggleBTWTargeting);
     AddEnhancedCheckBoxControl("CameraJammerAutoLock", m_bCameraJammerAutoLock);
-    AddLineItem();
+    //AddLineItem();
     
     // Gadgets
 	AddLineItem();
@@ -111,10 +114,10 @@ function InitOptionControls()
     AddKeyItem(Localize("Keys","K_NextGadget","Localization\\Enhanced"), "NextGadget");
     //AddKeyItem(Localize("Keys","K_FullInventory","Localization\\HUD"), "FullInventory");
 
-    AddLineItem();
+    //AddLineItem();
+    AddCompactLineItem();
     AddEnhancedCheckBoxControl("ToggleInventory", m_bToggleInventory);
-    AddLineItem();
-
+    AddEnhancedCheckBoxControl("HideInactiveCategories", m_bHideInactiveCategories);
 
     // Mouse
     AddLineItem();
@@ -122,7 +125,6 @@ function InitOptionControls()
     AddLineItem();
 
     AddControls();
-    AddLineItem();
 
     // Enhanced
     AddLineItem();
@@ -130,11 +132,11 @@ function InitOptionControls()
     AddLineItem();
 
     AddInputModeControls();
-    AddLineItem();
+    AddCompactLineItem();
     AddControllerSchemeControls();
-    AddLineItem();
+    AddCompactLineItem();
     AddControllerIconControls();
-    AddLineItem();
+    AddCompactLineItem();
     AddEnhancedCheckBoxControl("EnableRumble", m_bEnableRumble);
 }
 
@@ -160,6 +162,7 @@ function SaveOptions()
     EPC.bToggleBTWTargeting = m_bToggleBTWTargeting.m_bSelected;
     EPC.bCameraJammerAutoLock = m_bCameraJammerAutoLock.m_bSelected;
     EPC.bToggleInventory = m_bToggleInventory.m_bSelected;
+    EPC.bHideInactiveCategories = m_bHideInactiveCategories.m_bSelected;
     switch (m_InputMode.GetSelectedIndex())
     {
         case 0:
@@ -181,7 +184,7 @@ function SaveOptions()
             EPC.ControllerScheme = CS_Default;
             break;
         case 1:
-            EPC.ControllerScheme = CS_Pandora;
+            EPC.ControllerScheme = CS_Xbox;
             break;
         case 2:
             EPC.ControllerScheme = CS_PlayStation;
@@ -196,18 +199,43 @@ function SaveOptions()
     {
         case 0:
             EPC.ControllerIcon = CI_Xbox;
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[28].TextureOwner = Texture'HUD.HUD.ETMENU'; // Y
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[29].TextureOwner = Texture'HUD.HUD.ETMENU'; // B
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[30].TextureOwner = Texture'HUD.HUD.ETMENU'; // X
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[31].TextureOwner = Texture'HUD.HUD.ETMENU'; // A
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[32].TextureOwner = Texture'HUD.HUD.ETMENU'; // Start
             break;
         case 1:
             EPC.ControllerIcon = CI_PlayStation;
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[28].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Triangle
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[29].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Circle
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[30].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Square
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[31].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Cross
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[32].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Start
             break;
         case 2:
             EPC.ControllerIcon = CI_GameCube;
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[28].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // Y
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[29].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // X
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[30].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // B
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[31].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // A
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[32].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // Start
             break;
         case 3:
             EPC.ControllerIcon = CI_None;
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[28].TextureOwner = Texture'HUD.HUD.ETMENU'; // Y
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[29].TextureOwner = Texture'HUD.HUD.ETMENU'; // B
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[30].TextureOwner = Texture'HUD.HUD.ETMENU'; // X
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[31].TextureOwner = Texture'HUD.HUD.ETMENU'; // A
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[32].TextureOwner = Texture'HUD.HUD.ETMENU'; // Start
             break;
         default:
             EPC.ControllerIcon = CI_Xbox;
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[28].TextureOwner = Texture'HUD.HUD.ETMENU'; // Y
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[29].TextureOwner = Texture'HUD.HUD.ETMENU'; // B
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[30].TextureOwner = Texture'HUD.HUD.ETMENU'; // X
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[31].TextureOwner = Texture'HUD.HUD.ETMENU'; // A
+            EchelonLevelInfo(EPC.Level).TMENU.ArrayTexture[32].TextureOwner = Texture'HUD.HUD.ETMENU'; // Start
             break;
     }
     EPC.eGame.bEnableRumble = m_bEnableRumble.m_bSelected;
@@ -249,6 +277,9 @@ function Refresh()
 
     if (m_bToggleInventory != None)
         m_bToggleInventory.m_bSelected = EPC.bToggleInventory;
+
+    if (m_bHideInactiveCategories != None)
+        m_bHideInactiveCategories.m_bSelected = EPC.bHideInactiveCategories;
 
     if (m_InputMode != None)
         m_InputMode.SetSelectedIndex(Clamp(EPC.InputMode, 0, m_InputMode.List.Items.Count() - 1));
@@ -305,6 +336,7 @@ function ResetToDefault()
     m_bToggleBTWTargeting.m_bSelected = true;
     m_bCameraJammerAutoLock.m_bSelected = false;
     m_bToggleInventory.m_bSelected = false;
+    m_bHideInactiveCategories.m_bSelected = false;
     m_InputMode.SetSelectedIndex(0);
     m_ControllerScheme.SetSelectedIndex(0);
     m_ControllerIcon.SetSelectedIndex(0);
@@ -412,7 +444,7 @@ function AddControllerSchemeControls()
     m_ControllerScheme.SetFont(F_Normal);
 	m_ControllerScheme.SetEditable(False);
     m_ControllerScheme.AddItem(Localize("Controls","CS_Default","Localization\\Enhanced"));
-	m_ControllerScheme.AddItem(Localize("Controls","CS_Pandora","Localization\\Enhanced"));
+	m_ControllerScheme.AddItem(Localize("Controls","CS_Xbox","Localization\\Enhanced"));
     m_ControllerScheme.AddItem(Localize("Controls","CS_PlayStation","Localization\\Enhanced"));
 	m_ControllerScheme.SetSelectedIndex(0);
 
@@ -540,6 +572,7 @@ function RefreshKeyList(bool bKeysOnly) // MClarke - Patch 1 Beta 2 - Added bool
         m_bToggleBTWTargeting.m_bSelected = EPC.bToggleBTWTargeting;
         m_bCameraJammerAutoLock.m_bSelected = EPC.bCameraJammerAutoLock;
         m_bToggleInventory.m_bSelected = EPC.bToggleInventory;
+        m_bHideInactiveCategories.m_bSelected = EPC.bHideInactiveCategories;
         m_InputMode.SetSelectedIndex(Clamp(EPC.InputMode,0,m_InputMode.List.Items.Count()));
         m_ControllerScheme.SetSelectedIndex(Clamp(EPC.ControllerScheme,0,m_ControllerScheme.List.Items.Count()));
         m_ControllerIcon.SetSelectedIndex(Clamp(EPC.ControllerIcon,0,m_ControllerScheme.List.Items.Count()));
@@ -570,6 +603,18 @@ function AddLineItem()
 	local EPCOptionsKeyListBoxItem NewItem;
 
     NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
+    NewItem.m_bIsNotSelectable  = true;
+}
+
+//===============================================================================
+// AddCompactLineItem: add a compact line item in the list
+//===============================================================================
+function AddCompactLineItem()
+{
+	local EPCOptionsKeyListBoxItem NewItem;
+
+    NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
+    NewItem.bIsCompactLine = true;
     NewItem.m_bIsNotSelectable  = true;
 }
 
@@ -785,6 +830,10 @@ function Notify(UWindowDialogControl C, byte E)
         m_bModified = true;
     }
     else if (E == DE_Click && C == m_bToggleInventory)
+    {
+        m_bModified = true;
+    }
+    else if (E == DE_Click && C == m_bHideInactiveCategories)
     {
         m_bModified = true;
     }

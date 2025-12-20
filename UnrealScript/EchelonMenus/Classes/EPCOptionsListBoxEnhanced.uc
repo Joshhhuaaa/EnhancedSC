@@ -11,6 +11,68 @@ var INT m_ILineItemHeight;      // Height for line items (spacing)
 var INT m_ICompactLineItemHeight;
 var INT m_ITitleLineItemHeight; // Height for title line items (smaller spacing)
 
+function BeforePaint(Canvas C, float MouseX, float MouseY)
+{
+    local UWindowList CurItem;
+    local EPCEnhancedListBoxItem EnhancedItem;
+    local float TotalHeight;
+    local int ItemCount;
+    local int VisibleItems;
+    local float CurrentHeight;
+    local float HeightAccum;
+    
+    // Calculate total content height and count items
+    TotalHeight = 0;
+    ItemCount = 0;
+    for (CurItem = Items.Next; CurItem != None; CurItem = CurItem.Next)
+    {
+        if (CurItem.ShowThisItem())
+        {
+            EnhancedItem = EPCEnhancedListBoxItem(CurItem);
+            if (EnhancedItem != None && EnhancedItem.bIsTitleLine)
+                CurrentHeight = m_ITitleLineItemHeight;
+            else if (EnhancedItem != None && EnhancedItem.bIsLine)
+                CurrentHeight = m_ILineItemHeight;
+            else if (EnhancedItem != None && EnhancedItem.bIsCompactLine)
+                CurrentHeight = m_ICompactLineItemHeight;
+            else
+                CurrentHeight = ItemHeight;
+            
+            TotalHeight += CurrentHeight;
+            ItemCount++;
+        }
+    }
+    
+    // Count how many items actually fit in the visible window
+    VisibleItems = 0;
+    HeightAccum = m_IFirstItemYOffset;
+    for (CurItem = Items.Next; CurItem != None; CurItem = CurItem.Next)
+    {
+        if (CurItem.ShowThisItem())
+        {
+            EnhancedItem = EPCEnhancedListBoxItem(CurItem);
+            if (EnhancedItem != None && EnhancedItem.bIsTitleLine)
+                CurrentHeight = m_ITitleLineItemHeight;
+            else if (EnhancedItem != None && EnhancedItem.bIsLine)
+                CurrentHeight = m_ILineItemHeight;
+            else if (EnhancedItem != None && EnhancedItem.bIsCompactLine)
+                CurrentHeight = m_ICompactLineItemHeight;
+            else
+                CurrentHeight = ItemHeight;
+            
+            if (HeightAccum + CurrentHeight <= WinHeight)
+            {
+                VisibleItems++;
+                HeightAccum += CurrentHeight;
+            }
+            else
+                break;
+        }
+    }
+        
+    VertSB.SetRange(0, ItemCount, VisibleItems);
+}
+
 function SetSelectedItem(UWindowListBoxItem NewSelected)
 {
     local EPCEnhancedListBoxItem EnhancedItem;

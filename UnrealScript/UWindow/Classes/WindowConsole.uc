@@ -54,9 +54,9 @@ function ResetUWindow()
 	if (Root != None)
 		Root.Close();
 	Root = None;
-	bCreatedRoot = False;
+	bCreatedRoot = false;
 //ORIGINAL UNREAL CONSOLE	ConsoleWindow = None;
-	bShowConsole = False;
+	bShowConsole = false;
 	CloseUWindow();
 }
 
@@ -74,14 +74,14 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			if (bLocked)
 				return true;
 
-			bQuickKeyEnable = False;
+			bQuickKeyEnable = false;
 			LaunchUWindow();
 			return true;
 		case ConsoleKey:
 			if (bLocked)
 				return true;
 
-			bQuickKeyEnable = True;
+			bQuickKeyEnable = true;
 			LaunchUWindow();
 			if (!bShowConsole)
 				ShowConsole();
@@ -119,7 +119,7 @@ event Tick(float Delta)
 		OldLevel = string(ViewportOwner.Actor.Level);
 		// if this is Entry, we could be falling through to another level...
 		if (ViewportOwner.Actor.Level != ViewportOwner.Actor.GetEntryLevel())
-			bLevelChange = False;
+			bLevelChange = false;
 		Root.NotifyAfterLevelChange();
 	}
 }
@@ -136,7 +136,7 @@ state UWindow
 	function PostRender(Canvas Canvas)
 	{
 		if (Root != None)
-			Root.bUWindowActive = True;
+			Root.bUWindowActive = true;
 		RenderUWindow(Canvas);
 	}
 
@@ -249,12 +249,12 @@ function ToggleUWindow()
 function LaunchUWindow()
 {
 
-	ViewportOwner.bSuspendPrecaching = True;
+	ViewportOwner.bSuspendPrecaching = true;
 	bUWindowActive = !bQuickKeyEnable;
-	ViewportOwner.bShowWindowsMouse = True;
+	ViewportOwner.bShowWindowsMouse = true;
 
 	if (Root != None)
-		Root.bWindowVisible = True;
+		Root.bWindowVisible = true;
 
 	GotoState('UWindow');
 }
@@ -264,14 +264,14 @@ function CloseUWindow()
 	if (!bQuickKeyEnable && ViewportOwner.Actor != None)
 		ViewportOwner.Actor.SetPause(False);
 
-	bQuickKeyEnable = False;
-	bUWindowActive = False;
-	ViewportOwner.bShowWindowsMouse = False;
+	bQuickKeyEnable = false;
+	bUWindowActive = false;
+	ViewportOwner.bShowWindowsMouse = false;
 
 	if (Root != None)
-		Root.bWindowVisible = False;
+		Root.bWindowVisible = false;
 	GotoState('');
-	ViewportOwner.bSuspendPrecaching = False;
+	ViewportOwner.bSuspendPrecaching = false;
 }
 
 function CreateRootWindow(Canvas Canvas)
@@ -322,7 +322,7 @@ function CreateRootWindow(Canvas Canvas)
 	Root.bUWindowActive = bUWindowActive;
 
 	Root.Created();
-	bCreatedRoot = True;
+	bCreatedRoot = true;
 
 	// Create the console window.
 //ORIGINAL UNREAL CONSOLE	ConsoleWindow = UWindowConsoleWindow(Root.CreateWindow(ConsoleClass, 100, 100, 200, 200));
@@ -341,7 +341,7 @@ function RenderUWindow(Canvas Canvas)
 	local int i, ResX, ResY;
 	local float AspectRatio, MaxMouseX, MinMouseX;
 
-	Canvas.bNoSmooth = False;
+	Canvas.bNoSmooth = false;
 	Canvas.Z = 1;
 	Canvas.Style = 1;
 	Canvas.DrawColor.r = 255;
@@ -361,7 +361,7 @@ function RenderUWindow(Canvas Canvas)
 	if (!bCreatedRoot) 
 		CreateRootWindow(Canvas);
 
-	Root.bWindowVisible = True;
+	Root.bWindowVisible = true;
 	Root.bUWindowActive = bUWindowActive;
 	Root.bQuickKeyEnable = bQuickKeyEnable;
 
@@ -476,7 +476,7 @@ function NotifyLevelChange()
 {
 //	Super.NotifyLevelChange();
     log("WindowConsole NotifyLevelChange");
-	bLevelChange = True;
+	bLevelChange = true;
 	if (Root != None)
 		Root.NotifyBeforeLevelChange();
 }
@@ -486,7 +486,7 @@ function NotifyAfterLevelChange()
     log("WindowConsole NotifyAfterLevelChange");
 	if (bLevelChange && Root != None)
 	{	
-	    bLevelChange = False;
+	    bLevelChange = false;
 		Root.NotifyAfterLevelChange();
 	}
 }

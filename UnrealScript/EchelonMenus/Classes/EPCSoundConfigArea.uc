@@ -60,9 +60,9 @@ function Created()
     // ***********************************************************************************************
 		
 	// Set color values (YM)
-	m_TextColor.R = 71;
-	m_TextColor.G = 71;
-	m_TextColor.B = 71;
+	m_TextColor.R = 51; //71
+	m_TextColor.G = 51; //71
+	m_TextColor.B = 51; //71
 	m_TextColor.A = 255;
 
     m_DisabledTextColor.R = 128;
@@ -379,7 +379,7 @@ defaultproperties
     m_ILabel3DAccXPos=280
     m_IButtonLabelWidth=150
     m_IEaxYPos=123
-    m_TextColor=(R=71,G=71,B=71,A=255)
+    m_TextColor=(R=51,G=51,B=51,A=255) //(R=71,G=71,B=71,A=255)
     m_oEAXTexture=Texture'HUD.HUD.EAX'
     m_oEAXDisabledTexture=Texture'HUD.HUD.eax_dis'
 }

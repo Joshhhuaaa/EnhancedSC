@@ -5,16 +5,20 @@ class EPCEnhancedConfigArea extends UWindowDialogClientWindow;
 
 var EPCEnhancedListBox      m_ListBox;
 
-var EPCCheckBox             m_bEnablePlayerStats,
-                            m_bInteractionPause,
+var EPCCheckBox             m_bInteractionPause,
                             m_bEnableCheckpoints,
                             m_bXboxDifficulty,
+                            m_bMissionFailedQuickMenu,
                             m_bLetterBoxCinematics,
                             m_bWhistle,
+                            m_bBinoculars,
                             m_bF2000ZoomLevels,
                             m_bLaserMicZoomLevels,
+                            m_bLaserMicVisions,
                             m_bBurstFire,
                             m_bPS2FN7Accuracy,
+                            m_bHorizontalLifeBar,
+                            m_bInvertInteractionList,
                             m_bNewDoorInteraction,
                             m_bRandomizeLockpick,
                             m_bOpticCableVisions,
@@ -22,6 +26,7 @@ var EPCCheckBox             m_bEnablePlayerStats,
                             m_bScaleGadgetDamage;
 
 var EPCCheckBox             m_bShowHUD,
+                            m_bPersistentHUD,
                             m_bShowLifeBar,
                             m_bShowInteractionBox,
                             m_bShowCommunicationBox,
@@ -30,6 +35,7 @@ var EPCCheckBox             m_bShowHUD,
                             m_bShowStealthMeter,
                             m_bShowCurrentGoal,
                             m_bShowKeypadGoal,
+                            m_bShowCurrentGadget,
                             m_bShowMissionInformation,
                             m_bShowCrosshair,
                             m_bShowScope,
@@ -39,6 +45,9 @@ var EPCCheckBox             m_bShowHUD,
 var EPCCheckBox             m_bCheckForUpdates,
                             m_bSkipIntroVideos,
                             m_bDisableMenuIdleTimer;
+
+
+var EPCComboControl         m_PlayerStatsMode;
 
 // Native
 var EPCComboControl         m_FontType;
@@ -85,48 +94,63 @@ function InitEnhancedSettings()
     AddCheckBoxItem("CheckForUpdates", m_bCheckForUpdates);
     AddCheckBoxItem("SkipIntroVideos", m_bSkipIntroVideos);
     AddCheckBoxItem("DisableMenuIdleTimer", m_bDisableMenuIdleTimer);
-
-    AddCheckBoxItem("EnablePlayerStats", m_bEnablePlayerStats);
-    AddCheckBoxItem("InteractionPause", m_bInteractionPause);
-    AddCheckBoxItem("EnableCheckpoints", m_bEnableCheckpoints);
-    AddCheckBoxItem("XboxDifficulty", m_bXboxDifficulty);
-
-    AddCheckBoxItem("LetterBoxCinematics", m_bLetterBoxCinematics);
-
     AddCompactLineItem();
-
-    AddComboBoxItem("FontType", m_FontType);
-    AddFontTypeCombo(m_FontType);
-
-    AddCompactLineItem();
-
     AddComboBoxItem("LevelUnlock", m_LevelUnlock);
     AddLevelUnlockCombo(m_LevelUnlock);
+
+    AddLineItem();
+    AddTitleItem(Caps(Localize("Enhanced", "Title_Gameplay", "Localization\\Enhanced")));
+    AddLineItem();
+
+    AddCheckBoxItem("Whistle", m_bWhistle);
+    AddCheckBoxItem("NewDoorInteraction", m_bNewDoorInteraction);
+    AddCheckBoxItem("InteractionPause", m_bInteractionPause);
+    AddCheckBoxItem("EnableCheckpoints", m_bEnableCheckpoints);
+    AddCheckBoxItem("MissionFailedQuickMenu", m_bMissionFailedQuickMenu);
+    AddCheckBoxItem("XboxDifficulty", m_bXboxDifficulty);
+
+    AddCompactLineItem();
+    AddComboBoxItem("PlayerStatsMode", m_PlayerStatsMode);
+    AddPlayerStatsModeCombo(m_PlayerStatsMode);
 
     AddLineItem();
     AddTitleItem(Caps(Localize("Enhanced", "Title_Equipment", "Localization\\Enhanced")));
     AddLineItem();
 
-    AddCheckBoxItem("Whistle", m_bWhistle);
-    AddCheckBoxItem("F2000ZoomLevels", m_bF2000ZoomLevels);
-    AddCheckBoxItem("LaserMicZoomLevels", m_bLaserMicZoomLevels);
+    
+    AddCheckBoxItem("Binoculars", m_bBinoculars);
     AddCheckBoxItem("BurstFire", m_bBurstFire);
     AddCheckBoxItem("PS2FN7Accuracy", m_bPS2FN7Accuracy);
-    AddCheckBoxItem("NewDoorInteraction", m_bNewDoorInteraction);
-    AddCheckBoxItem("RandomizeLockpick", m_bRandomizeLockpick);
+    AddCheckBoxItem("F2000ZoomLevels", m_bF2000ZoomLevels);
+    AddCheckBoxItem("LaserMicZoomLevels", m_bLaserMicZoomLevels);
+    AddCheckBoxItem("LaserMicVisions", m_bLaserMicVisions);
     AddCheckBoxItem("OpticCableVisions", m_bOpticCableVisions);
     AddCheckBoxItem("ThermalOverride", m_bThermalOverride);
+    AddCheckBoxItem("RandomizeLockpick", m_bRandomizeLockpick);
     AddCheckBoxItem("ScaleGadgetDamage", m_bScaleGadgetDamage);
-
+    
     AddCompactLineItem();
     AddComboBoxItem("MineDelay", m_MineDelay);
     AddMineDelayCombo(m_MineDelay);
 
     AddLineItem();
-    AddTitleItem(Caps(Localize("Enhanced", "Title_HUD", "Localization\\Enhanced")));
+    AddTitleItem(Caps(Localize("Enhanced", "Title_HUDSettings", "Localization\\Enhanced")));
+    AddLineItem();
+
+    AddCheckBoxItem("HorizontalLifeBar", m_bHorizontalLifeBar);
+    AddCheckBoxItem("InvertInteractionList", m_bInvertInteractionList);
+    AddCheckBoxItem("LetterBoxCinematics", m_bLetterBoxCinematics);
+
+    AddCompactLineItem();
+    AddComboBoxItem("FontType", m_FontType);
+    AddFontTypeCombo(m_FontType);
+
+    AddLineItem();
+    AddTitleItem(Caps(Localize("Enhanced", "Title_HUDVisibility", "Localization\\Enhanced")));
     AddLineItem();
 
     AddCheckBoxItem("ShowHUD", m_bShowHUD);
+    AddCheckBoxItem("PersistentHUD", m_bPersistentHUD);
     AddCheckBoxItem("ShowLifeBar", m_bShowLifeBar);
     AddCheckBoxItem("ShowInteractionBox", m_bShowInteractionBox);
     AddCheckBoxItem("ShowCommunicationBox", m_bShowCommunicationBox);
@@ -135,6 +159,7 @@ function InitEnhancedSettings()
     AddCheckBoxItem("ShowStealthMeter", m_bShowStealthMeter);
     AddCheckBoxItem("ShowCurrentGoal", m_bShowCurrentGoal);
     AddCheckBoxItem("ShowKeypadGoal", m_bShowKeypadGoal);
+    AddCheckBoxItem("ShowCurrentGadget", m_bShowCurrentGadget);
     AddCheckBoxItem("ShowMissionInformation", m_bShowMissionInformation);
     AddCheckBoxItem("ShowCrosshair", m_bShowCrosshair);
     AddCheckBoxItem("ShowScope", m_bShowScope);
@@ -146,60 +171,59 @@ function InitEnhancedSettings()
     AddLineItem();
 
     AddComboBoxItem("TrainingSamMesh", m_TrainingSamMesh); 
-    AddSamMeshCombo(m_TrainingSamMesh);
+    AddSamMeshCombo(m_TrainingSamMesh, 0);
     AddCompactLineItem();
 
     AddComboBoxItem("TbilisiSamMesh", m_TbilisiSamMesh);
-    AddSamMeshCombo(m_TbilisiSamMesh);
+    AddSamMeshCombo(m_TbilisiSamMesh, 0);
     AddCompactLineItem();
 
     AddComboBoxItem("DefenseMinistrySamMesh", m_DefenseMinistrySamMesh);
-    AddSamMeshCombo(m_DefenseMinistrySamMesh);
+    AddSamMeshCombo(m_DefenseMinistrySamMesh, 0);
     AddCompactLineItem();    
 
     AddComboBoxItem("CaspianOilRefinerySamMesh", m_CaspianOilRefinerySamMesh);
-    AddSamMeshCombo(m_CaspianOilRefinerySamMesh);
+    AddSamMeshCombo(m_CaspianOilRefinerySamMesh, 2);
     AddCompactLineItem();
 
     AddComboBoxItem("CIASamMesh", m_CIASamMesh);
-    AddSamMeshCombo(m_CIASamMesh);
+    AddSamMeshCombo(m_CIASamMesh, 1);
     AddCompactLineItem();
 
     AddComboBoxItem("KalinatekSamMesh", m_KalinatekSamMesh);
-    AddSamMeshCombo(m_KalinatekSamMesh);
+    AddSamMeshCombo(m_KalinatekSamMesh, 0);
     AddCompactLineItem();
 
     AddComboBoxItem("ChineseEmbassySamMesh", m_ChineseEmbassySamMesh);
-    AddSamMeshCombo(m_ChineseEmbassySamMesh);
+    AddSamMeshCombo(m_ChineseEmbassySamMesh, 2);
     AddCompactLineItem();
 
     AddComboBoxItem("AbattoirSamMesh", m_AbattoirSamMesh);
-    AddSamMeshCombo(m_AbattoirSamMesh);
+    AddSamMeshCombo(m_AbattoirSamMesh, 2);
     AddCompactLineItem();
 
     AddComboBoxItem("ChineseEmbassy2SamMesh", m_ChineseEmbassy2SamMesh);
-    AddSamMeshCombo(m_ChineseEmbassy2SamMesh);
+    AddSamMeshCombo(m_ChineseEmbassy2SamMesh, 2);
     AddCompactLineItem();
 
     AddComboBoxItem("PresidentialPalaceSamMesh", m_PresidentialPalaceSamMesh);
-    AddSamMeshCombo(m_PresidentialPalaceSamMesh);
+    AddSamMeshCombo(m_PresidentialPalaceSamMesh, 1);
     AddCompactLineItem();
 
     AddComboBoxItem("KolaCellSamMesh", m_KolaCellSamMesh);
-    AddSamMeshCombo(m_KolaCellSamMesh);
+    AddSamMeshCombo(m_KolaCellSamMesh, 0);
     AddCompactLineItem();
 
     AddComboBoxItem("VselkaSamMesh", m_VselkaSamMesh);
-    AddSamMeshCombo(m_VselkaSamMesh);
+    AddSamMeshCombo(m_VselkaSamMesh, 1);
     AddCompactLineItem();
 
     AddComboBoxItem("PowerPlantSamMesh", m_PowerPlantSamMesh);
-    AddSamMeshCombo(m_PowerPlantSamMesh);
+    AddSamMeshCombo(m_PowerPlantSamMesh, 0);
     AddCompactLineItem();
 
     AddComboBoxItem("SeveronickelSamMesh", m_SeveronickelSamMesh);
-    AddSamMeshCombo(m_SeveronickelSamMesh);
-    AddCompactLineItem();
+    AddSamMeshCombo(m_SeveronickelSamMesh, 0);
 }
 
 function AddCheckBoxItem(string LocalizationKey, out EPCCheckBox CheckBox)
@@ -262,6 +286,14 @@ function AddCompactLineItem()
     NewItem.m_bIsNotSelectable = true;
 }
 
+function AddPlayerStatsModeCombo(EPCComboControl ComboBox)
+{
+    ComboBox.AddItem(Localize("Enhanced", "PlayerStatsMode_Disabled", "Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced", "PlayerStatsMode_Ghost", "Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced", "PlayerStatsMode_Stealth", "Localization\\Enhanced"));
+    ComboBox.SetSelectedIndex(1); // Default to Ghost
+}
+
 function AddLevelUnlockCombo(EPCComboControl ComboBox)
 {
     ComboBox.AddItem(Localize("Enhanced","LevelUnlock_Disabled","Localization\\Enhanced"));
@@ -278,13 +310,59 @@ function AddMineDelayCombo(EPCComboControl ComboBox)
     ComboBox.SetSelectedIndex(0);
 }
 
-function AddSamMeshCombo(EPCComboControl ComboBox)
+function AddSamMeshCombo(EPCComboControl ComboBox, int SamMeshType)
 {
     ComboBox.AddItem(Localize("Enhanced", "SamMesh_Default", "Localization\\Enhanced"));
-    ComboBox.AddItem(Localize("Enhanced", "SamMesh_Standard", "Localization\\Enhanced"));
-    ComboBox.AddItem(Localize("Enhanced", "SamMesh_Balaclava", "Localization\\Enhanced")); 
-    ComboBox.AddItem(Localize("Enhanced", "SamMesh_PartialSleeves", "Localization\\Enhanced"));
+    if (SamMeshType != 0)
+        ComboBox.AddItem(Localize("Enhanced", "SamMesh_Standard", "Localization\\Enhanced"));
+    if (SamMeshType != 1)
+        ComboBox.AddItem(Localize("Enhanced", "SamMesh_Balaclava", "Localization\\Enhanced")); 
+    if (SamMeshType != 2)
+        ComboBox.AddItem(Localize("Enhanced", "SamMesh_PartialSleeves", "Localization\\Enhanced"));
+    if (SamMeshType != 3)
+        ComboBox.AddItem(Localize("Enhanced", "SamMesh_BetaStandard", "Localization\\Enhanced"));
+    if (SamMeshType != 4)
+        ComboBox.AddItem(Localize("Enhanced", "SamMesh_WhiteBalaclava", "Localization\\Enhanced"));
+    if (SamMeshType != 5)
+        ComboBox.AddItem(Localize("Enhanced", "SamMesh_BetaSleeves", "Localization\\Enhanced"));
     ComboBox.SetSelectedIndex(0);
+}
+
+// Converts combo box index to SamMeshType enum, accounting for the skipped default suit
+function int GetSamMeshEnumFromIndex(int ComboIndex, int SamMeshType)
+{
+    local int EnumValue;
+    
+    // Index 0 is always SMT_Default
+    if (ComboIndex == 0)
+        return 0;
+    
+    // The combo skips the item matching SamMeshType, so indices shift
+    EnumValue = ComboIndex;
+    
+    // If we're at or past the skipped enum value, add 1 to compensate
+    if (EnumValue >= SamMeshType)
+        EnumValue += 1;
+    
+    return EnumValue;
+}
+
+// Converts SamMeshType enum value to combo box index, accounting for the skipped default suit
+function int GetIndexFromSamMeshEnum(int EnumValue, int SamMeshType)
+{
+    // Index 0 is always SMT_Default
+    if (EnumValue == 0)
+        return 0;
+    
+    // If the enum value is greater than the skipped type, subtract 1
+    if (EnumValue > SamMeshType)
+        return EnumValue - 1;
+    
+    // If enum value equals the skipped type, it shouldn't happen but return 0 (default)
+    if (EnumValue == SamMeshType)
+        return 0;
+    
+    return EnumValue;
 }
 
 function AddFontTypeCombo(EPCComboControl ComboBox)
@@ -304,43 +382,51 @@ function Notify(UWindowDialogControl C, byte E)
             case m_bCheckForUpdates:
             case m_bSkipIntroVideos:
             case m_bDisableMenuIdleTimer:
-            case m_bEnablePlayerStats:
             case m_bInteractionPause:
             case m_bEnableCheckpoints:
+            case m_bMissionFailedQuickMenu:
             case m_bXboxDifficulty:
             case m_bLetterBoxCinematics:
             case m_bWhistle:
+            case m_bBinoculars:
             case m_bF2000ZoomLevels:
             case m_bLaserMicZoomLevels:
+            case m_bLaserMicVisions:
             case m_bBurstFire:
             case m_bPS2FN7Accuracy:
+            case m_bHorizontalLifeBar:
+            case m_bInvertInteractionList:
             case m_bNewDoorInteraction:
             case m_bRandomizeLockpick:
             case m_bOpticCableVisions:
             case m_bThermalOverride:            
             case m_bScaleGadgetDamage:
             case m_bShowHUD:
+            case m_bPersistentHUD:
             case m_bShowLifeBar:
             case m_bShowInteractionBox:
             case m_bShowCommunicationBox:
             case m_bShowTimer:
             case m_bShowInventory:
             case m_bShowStealthMeter:
-            case m_bShowCurrentGoal: // If current goal is disabled, disable keypad goal
+            case m_bShowCurrentGoal: // If current goal is disabled, disable keypad goal and current gadget
                 if (C == m_bShowCurrentGoal)
                 {
                     if (!m_bShowCurrentGoal.m_bSelected)
                     {
                         m_bShowKeypadGoal.bDisabled = true;
+                        m_bShowCurrentGadget.bDisabled = true;
                     }
                     else
                     {
                         m_bShowKeypadGoal.bDisabled = false;
+                        m_bShowCurrentGadget.bDisabled = false;
                     }
                 }
                 m_bModified = true;
                 break;
             case m_bShowKeypadGoal:
+            case m_bShowCurrentGadget:
             case m_bShowMissionInformation:
             case m_bShowCrosshair:
             case m_bShowScope:
@@ -353,6 +439,7 @@ function Notify(UWindowDialogControl C, byte E)
     {
         switch (C)
         {
+            case m_PlayerStatsMode:
             case m_FontType:
             case m_LevelUnlock:
             case m_MineDelay:
@@ -384,17 +471,23 @@ function SaveOptions()
     local EF2000 F2000;
     local bool bPreviousF2000ZoomLevels;
     local bool bPreviousLaserMicZoomLevels;
+    local bool bPreviousLaserMicVisions;
     local bool bPreviousBurstFire;
     local bool bPreviousNewDoorInteraction;
+    local bool bPreviousOpticCableVisions;
 
     local EGoggle Goggle;
+    local ELaserMic LaserMic;
+    local Actor CamController;
     
     EPC = EPlayerController(GetPlayerOwner());
     HUD = EchelonMainHUD(EPC.myHUD);
     bPreviousF2000ZoomLevels = EPC.bF2000ZoomLevels;
     bPreviousLaserMicZoomLevels = EPC.bLaserMicZoomLevels;
+    bPreviousLaserMicVisions = EPC.bLaserMicVisions;
     bPreviousBurstFire = EPC.bBurstFire;
     bPreviousNewDoorInteraction = EPC.eGame.bNewDoorInteraction;
+    bPreviousOpticCableVisions = EPC.bOpticCableVisions;
     
     EPC.eGame.bCheckForUpdates = m_bCheckForUpdates.m_bSelected;
     EPC.eGame.bSkipIntroVideos = m_bSkipIntroVideos.m_bSelected;
@@ -407,12 +500,32 @@ function SaveOptions()
         case 2: EPC.eGame.FontType = Font_GameCube; break;
         default: EPC.eGame.FontType = Font_Xbox; break;
     }
-    EPC.bEnablePlayerStats = m_bEnablePlayerStats.m_bSelected;
+
+    // Update canvas font immediately
+    log("UpdateCanvasFont called with FontType:" @ EPC.eGame.FontType);
+    UpdateCanvasFont(EPC.eGame.FontType);
+    
+    // Update menu fonts
+    if (Root != None)
+    {
+        EPCMainMenuRootWindow(Root).SetupFonts();
+    }
+
+    switch (m_PlayerStatsMode.GetSelectedIndex())
+    {
+        case 0: EPC.PlayerStatsMode = SM_Disabled; break;
+        case 1: EPC.PlayerStatsMode = SM_Ghost; break;
+        case 2: EPC.PlayerStatsMode = SM_Stealth; break;
+        default: EPC.PlayerStatsMode = SM_Ghost; break;
+    }
+
     EPC.bInteractionPause = m_bInteractionPause.m_bSelected;
     EPC.eGame.bEnableCheckpoints = m_bEnableCheckpoints.m_bSelected;
+    EPC.bMissionFailedQuickMenu = m_bMissionFailedQuickMenu.m_bSelected;
     EPC.eGame.bXboxDifficulty = m_bXboxDifficulty.m_bSelected;
     HUD.bLetterBoxCinematics = m_bLetterBoxCinematics.m_bSelected;
     EPC.bWhistle = m_bWhistle.m_bSelected;
+    EPC.bBinoculars = m_bBinoculars.m_bSelected;
     EPC.bF2000ZoomLevels = m_bF2000ZoomLevels.m_bSelected;
     if (bPreviousF2000ZoomLevels && !EPC.bF2000ZoomLevels)
     {
@@ -432,12 +545,41 @@ function SaveOptions()
     }
 
     EPC.bLaserMicZoomLevels = m_bLaserMicZoomLevels.m_bSelected;
-    if (bPreviousLaserMicZoomLevels && !Epc.bLaserMicZoomLevels && Epc.GetStateName() == 's_LaserMicTargeting')
-    {
-        EPC.SetCameraFOV(ELaserMic(EPC.ePawn.HandItem), 30.0);
-        ELaserMic(EPC.ePawn.HandItem).current_fov = 30.0;
-    }
+    EPC.bLaserMicVisions = m_bLaserMicVisions.m_bSelected;
 
+    // Handle laser mic settings changes while actively using it
+    if (EPC.GetStateName() == 's_LaserMicTargeting' && EPC.ePawn.HandItem != None && EPC.ePawn.HandItem.IsA('ELaserMic'))
+    {
+        LaserMic = ELaserMic(EPC.ePawn.HandItem);
+        
+        // Determine the camera controller based on vision setting
+        if (EPC.bLaserMicVisions)
+            CamController = EPC;
+        else
+            CamController = LaserMic;
+        
+        // Handle vision mode toggle
+        if (bPreviousLaserMicVisions != EPC.bLaserMicVisions)
+        {
+            if (bPreviousLaserMicVisions)
+            {
+                EPC.SetCameraFOV(LaserMic, LaserMic.current_fov);
+            }
+            else
+            {
+                EPC.PopCamera(LaserMic);
+                EPC.SetCameraFOV(EPC, LaserMic.current_fov);
+            }
+        }
+        
+        // Handle zoom levels being disabled, reset to 30 FOV if needed
+        if (bPreviousLaserMicZoomLevels && !EPC.bLaserMicZoomLevels)
+        {
+            LaserMic.current_fov = 30.0;
+            EPC.SetCameraFOV(CamController, 30.0);
+        }
+    }
+    
     EPC.bBurstFire = m_bBurstFire.m_bSelected;
     if (bPreviousBurstFire && !EPC.bBurstFire)
     {
@@ -465,7 +607,8 @@ function SaveOptions()
             EPC.HandGun.AccuracyBase = EPC.HandGun.default.AccuracyBase; 
         }
     }
-    
+    EPC.bHorizontalLifeBar = m_bHorizontalLifeBar.m_bSelected;
+    EPC.bInvertInteractionList = m_bInvertInteractionList.m_bSelected;
     EPC.eGame.bNewDoorInteraction = m_bNewDoorInteraction.m_bSelected;
     if (bPreviousNewDoorInteraction != EPC.eGame.bNewDoorInteraction)
     {
@@ -473,7 +616,17 @@ function SaveOptions()
     }
     
     EPC.eGame.bRandomizeLockpick = m_bRandomizeLockpick.m_bSelected;
-    EPC.eGame.bOpticCableVisions = m_bOpticCableVisions.m_bSelected;
+    EPC.bOpticCableVisions = m_bOpticCableVisions.m_bSelected;
+    if (EPC.GetStateName() == 's_OpticCable' && (bPreviousOpticCableVisions != EPC.bOpticCableVisions))
+    {
+        if (EPC.OpticCableItem != None)
+        {
+            if (bPreviousOpticCableVisions)
+                Epc.SetCameraMode(Epc.OpticCableItem, 11); // REN_NightVision = 11
+            else
+                Epc.PopCamera(Epc.OpticCableItem);
+        }
+    }
     EPC.eGame.bThermalOverride = m_bThermalOverride.m_bSelected;
     if (EPC.Goggle != None && !EPC.eGame.bEliteMode)
     {
@@ -501,6 +654,7 @@ function SaveOptions()
     }
 
     EPC.bShowHUD = m_bShowHUD.m_bSelected;
+    EPC.bPersistentHUD = m_bPersistentHUD.m_bSelected;
     HUD.bShowLifeBar = m_bShowLifeBar.m_bSelected;
     HUD.bShowInteractionBox = m_bShowInteractionBox.m_bSelected;
     HUD.bShowCommunicationBox = m_bShowCommunicationBox.m_bSelected;
@@ -509,6 +663,7 @@ function SaveOptions()
     EPC.bShowStealthMeter = m_bShowStealthMeter.m_bSelected;
     EPC.bShowCurrentGoal = m_bShowCurrentGoal.m_bSelected;
     EPC.bShowKeyPadGoal = m_bShowKeypadGoal.m_bSelected;
+    EPC.bShowCurrentGadget = m_bShowCurrentGadget.m_bSelected;
     EPC.bShowMissionInformation = m_bShowMissionInformation.m_bSelected;
     EPC.bShowCrosshair = m_bShowCrosshair.m_bSelected;
     EPC.bShowScope = m_bShowScope.m_bSelected;
@@ -517,27 +672,33 @@ function SaveOptions()
     switch (m_TrainingSamMesh.GetSelectedIndex())
     {
         case 0: EPC.eGame.ESam_Training = SMT_Default; break;
-        case 1: EPC.eGame.ESam_Training = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_Training = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_Training = SMT_PartialSleeves; break;
+        case 1: EPC.eGame.ESam_Training = SMT_Balaclava; break;
+        case 2: EPC.eGame.ESam_Training = SMT_PartialSleeves; break;
+        case 3: EPC.eGame.ESam_Training = SMT_BetaStandard; break;
+        case 4: EPC.eGame.ESam_Training = SMT_WhiteBalaclava; break;
+        case 5: EPC.eGame.ESam_Training = SMT_BetaSleeves; break;
         default: EPC.eGame.ESam_Training = SMT_Default; break;
     }
 
     switch (m_TbilisiSamMesh.GetSelectedIndex())
     {
         case 0: EPC.eGame.ESam_Tbilisi = SMT_Default; break;
-        case 1: EPC.eGame.ESam_Tbilisi = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_Tbilisi = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_Tbilisi = SMT_PartialSleeves; break;
+        case 1: EPC.eGame.ESam_Tbilisi = SMT_Balaclava; break;
+        case 2: EPC.eGame.ESam_Tbilisi = SMT_PartialSleeves; break;
+        case 3: EPC.eGame.ESam_Tbilisi = SMT_BetaStandard; break;
+        case 4: EPC.eGame.ESam_Tbilisi = SMT_WhiteBalaclava; break;
+        case 5: EPC.eGame.ESam_Tbilisi = SMT_BetaSleeves; break;
         default: EPC.eGame.ESam_Tbilisi = SMT_Default; break;
     }
 
     switch (m_DefenseMinistrySamMesh.GetSelectedIndex())
     {
         case 0: EPC.eGame.ESam_DefenseMinistry = SMT_Default; break;
-        case 1: EPC.eGame.ESam_DefenseMinistry = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_DefenseMinistry = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_DefenseMinistry = SMT_PartialSleeves; break;
+        case 1: EPC.eGame.ESam_DefenseMinistry = SMT_Balaclava; break;
+        case 2: EPC.eGame.ESam_DefenseMinistry = SMT_PartialSleeves; break;
+        case 3: EPC.eGame.ESam_DefenseMinistry = SMT_BetaStandard; break;
+        case 4: EPC.eGame.ESam_DefenseMinistry = SMT_WhiteBalaclava; break;
+        case 5: EPC.eGame.ESam_DefenseMinistry = SMT_BetaSleeves; break;
         default: EPC.eGame.ESam_DefenseMinistry = SMT_Default; break;
     }
 
@@ -546,7 +707,9 @@ function SaveOptions()
         case 0: EPC.eGame.ESam_CaspianOilRefinery = SMT_Default; break;
         case 1: EPC.eGame.ESam_CaspianOilRefinery = SMT_Standard; break;
         case 2: EPC.eGame.ESam_CaspianOilRefinery = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_CaspianOilRefinery = SMT_PartialSleeves; break;
+        case 3: EPC.eGame.ESam_CaspianOilRefinery = SMT_BetaStandard; break;
+        case 4: EPC.eGame.ESam_CaspianOilRefinery = SMT_WhiteBalaclava; break;
+        case 5: EPC.eGame.ESam_CaspianOilRefinery = SMT_BetaSleeves; break;
         default: EPC.eGame.ESam_CaspianOilRefinery = SMT_Default; break;
     }
 
@@ -554,17 +717,21 @@ function SaveOptions()
     {
         case 0: EPC.eGame.ESam_CIA = SMT_Default; break;
         case 1: EPC.eGame.ESam_CIA = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_CIA = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_CIA = SMT_PartialSleeves; break;
+        case 2: EPC.eGame.ESam_CIA = SMT_PartialSleeves; break;
+        case 3: EPC.eGame.ESam_CIA = SMT_BetaStandard; break;
+        case 4: EPC.eGame.ESam_CIA = SMT_WhiteBalaclava; break;
+        case 5: EPC.eGame.ESam_CIA = SMT_BetaSleeves; break;
         default: EPC.eGame.ESam_CIA = SMT_Default; break;
     }
 
     switch (m_KalinatekSamMesh.GetSelectedIndex())
     {
         case 0: EPC.eGame.ESam_Kalinatek = SMT_Default; break;
-        case 1: EPC.eGame.ESam_Kalinatek = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_Kalinatek = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_Kalinatek = SMT_PartialSleeves; break;
+        case 1: EPC.eGame.ESam_Kalinatek = SMT_Balaclava; break;
+        case 2: EPC.eGame.ESam_Kalinatek = SMT_PartialSleeves; break;
+        case 3: EPC.eGame.ESam_Kalinatek = SMT_BetaStandard; break;
+        case 4: EPC.eGame.ESam_Kalinatek = SMT_WhiteBalaclava; break;
+        case 5: EPC.eGame.ESam_Kalinatek = SMT_BetaSleeves; break;
         default: EPC.eGame.ESam_Kalinatek = SMT_Default; break;
     }
 
@@ -573,7 +740,9 @@ function SaveOptions()
         case 0: EPC.eGame.ESam_ChineseEmbassy = SMT_Default; break;
         case 1: EPC.eGame.ESam_ChineseEmbassy = SMT_Standard; break;
         case 2: EPC.eGame.ESam_ChineseEmbassy = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_ChineseEmbassy = SMT_PartialSleeves; break;
+        case 3: EPC.eGame.ESam_ChineseEmbassy = SMT_BetaStandard; break;
+        case 4: EPC.eGame.ESam_ChineseEmbassy = SMT_WhiteBalaclava; break;
+        case 5: EPC.eGame.ESam_ChineseEmbassy = SMT_BetaSleeves; break;
         default: EPC.eGame.ESam_ChineseEmbassy = SMT_Default; break;
     }
 
@@ -582,7 +751,9 @@ function SaveOptions()
         case 0: EPC.eGame.ESam_Abattoir = SMT_Default; break;
         case 1: EPC.eGame.ESam_Abattoir = SMT_Standard; break;
         case 2: EPC.eGame.ESam_Abattoir = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_Abattoir = SMT_PartialSleeves; break;
+        case 3: EPC.eGame.ESam_Abattoir = SMT_BetaStandard; break;
+        case 4: EPC.eGame.ESam_Abattoir = SMT_WhiteBalaclava; break;
+        case 5: EPC.eGame.ESam_Abattoir = SMT_BetaSleeves; break;
         default: EPC.eGame.ESam_Abattoir = SMT_Default; break;
     }
 
@@ -591,7 +762,9 @@ function SaveOptions()
         case 0: EPC.eGame.ESam_ChineseEmbassy2 = SMT_Default; break;
         case 1: EPC.eGame.ESam_ChineseEmbassy2 = SMT_Standard; break;
         case 2: EPC.eGame.ESam_ChineseEmbassy2 = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_ChineseEmbassy2 = SMT_PartialSleeves; break;
+        case 3: EPC.eGame.ESam_ChineseEmbassy2 = SMT_BetaStandard; break;
+        case 4: EPC.eGame.ESam_ChineseEmbassy2 = SMT_WhiteBalaclava; break;
+        case 5: EPC.eGame.ESam_ChineseEmbassy2 = SMT_BetaSleeves; break;
         default: EPC.eGame.ESam_ChineseEmbassy2 = SMT_Default; break;
     }
 
@@ -599,17 +772,21 @@ function SaveOptions()
     {
         case 0: EPC.eGame.ESam_PresidentialPalace = SMT_Default; break;
         case 1: EPC.eGame.ESam_PresidentialPalace = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_PresidentialPalace = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_PresidentialPalace = SMT_PartialSleeves; break;
+        case 2: EPC.eGame.ESam_PresidentialPalace = SMT_PartialSleeves; break;
+        case 3: EPC.eGame.ESam_PresidentialPalace = SMT_BetaStandard; break;
+        case 4: EPC.eGame.ESam_PresidentialPalace = SMT_WhiteBalaclava; break;
+        case 5: EPC.eGame.ESam_PresidentialPalace = SMT_BetaSleeves; break;
         default: EPC.eGame.ESam_PresidentialPalace = SMT_Default; break;
     }
 
     switch (m_KolaCellSamMesh.GetSelectedIndex())
     {
         case 0: EPC.eGame.ESam_KolaCell = SMT_Default; break;
-        case 1: EPC.eGame.ESam_KolaCell = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_KolaCell = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_KolaCell = SMT_PartialSleeves; break;
+        case 1: EPC.eGame.ESam_KolaCell = SMT_Balaclava; break;
+        case 2: EPC.eGame.ESam_KolaCell = SMT_PartialSleeves; break;
+        case 3: EPC.eGame.ESam_KolaCell = SMT_BetaStandard; break;
+        case 4: EPC.eGame.ESam_KolaCell = SMT_WhiteBalaclava; break;
+        case 5: EPC.eGame.ESam_KolaCell = SMT_BetaSleeves; break;
         default: EPC.eGame.ESam_KolaCell = SMT_Default; break;
     }
 
@@ -617,32 +794,66 @@ function SaveOptions()
     {
         case 0: EPC.eGame.ESam_Vselka = SMT_Default; break;
         case 1: EPC.eGame.ESam_Vselka = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_Vselka = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_Vselka = SMT_PartialSleeves; break;
+        case 2: EPC.eGame.ESam_Vselka = SMT_PartialSleeves; break;
+        case 3: EPC.eGame.ESam_Vselka = SMT_BetaStandard; break;
+        case 4: EPC.eGame.ESam_Vselka = SMT_WhiteBalaclava; break;
+        case 5: EPC.eGame.ESam_Vselka = SMT_BetaSleeves; break;
         default: EPC.eGame.ESam_Vselka = SMT_Default; break;
     }
 
     switch (m_PowerPlantSamMesh.GetSelectedIndex())
     {
         case 0: EPC.eGame.ESam_PowerPlant = SMT_Default; break;
-        case 1: EPC.eGame.ESam_PowerPlant = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_PowerPlant = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_PowerPlant = SMT_PartialSleeves; break;
+        case 1: EPC.eGame.ESam_PowerPlant = SMT_Balaclava; break;
+        case 2: EPC.eGame.ESam_PowerPlant = SMT_PartialSleeves; break;
+        case 3: EPC.eGame.ESam_PowerPlant = SMT_BetaStandard; break;
+        case 4: EPC.eGame.ESam_PowerPlant = SMT_WhiteBalaclava; break;
+        case 5: EPC.eGame.ESam_PowerPlant = SMT_BetaSleeves; break;
         default: EPC.eGame.ESam_PowerPlant = SMT_Default; break;
     }
 
     switch (m_SeveronickelSamMesh.GetSelectedIndex())
     {
         case 0: EPC.eGame.ESam_Severonickel = SMT_Default; break;
-        case 1: EPC.eGame.ESam_Severonickel = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_Severonickel = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_Severonickel = SMT_PartialSleeves; break;
+        case 1: EPC.eGame.ESam_Severonickel = SMT_Balaclava; break;
+        case 2: EPC.eGame.ESam_Severonickel = SMT_PartialSleeves; break;
+        case 3: EPC.eGame.ESam_Severonickel = SMT_BetaStandard; break;
+        case 4: EPC.eGame.ESam_Severonickel = SMT_WhiteBalaclava; break;
+        case 5: EPC.eGame.ESam_Severonickel = SMT_BetaSleeves; break;
         default: EPC.eGame.ESam_Severonickel = SMT_Default; break;
     }
+
     EPC.SaveEnhancedOptions();
     EPC.eGame.SaveEnhancedOptions();
     HUD.SaveEnhancedOptions();
     EPC.playerInfo.SaveEnhancedOptions();
+}
+
+// Function to update the canvas font immediately
+function UpdateCanvasFont(EchelonGameInfo.EFontType FontType)
+{
+    local ECanvas C;
+    
+    C = ECanvas(class'Actor'.static.GetCanvas());
+    
+    if (C == None)
+        return;
+    
+    switch(FontType)
+    {
+        case Font_PC:
+            C.ETextFont = Font'Engine.ETextFont';
+            break;
+        case Font_Xbox:
+            C.ETextFont = Font'Engine.ETextFontXbox';
+            break;
+        case Font_GameCube:
+            C.ETextFont = Font'Engine.ETextFontGameCube';
+            break;
+        default:
+            C.ETextFont = Font'Engine.ETextFontXbox';
+            break;
+    }
 }
 
 // Function to refresh the current door interaction the player is touching
@@ -668,18 +879,23 @@ function ResetToDefault()
     m_bSkipIntroVideos.m_bSelected = false;
     m_bDisableMenuIdleTimer.m_bSelected = false;
     m_FontType.SetSelectedIndex(1); // Default to Xbox
-    m_bEnablePlayerStats.m_bSelected = true;
+    m_PlayerStatsMode.SetSelectedIndex(1); // Default to Ghost
     m_bInteractionPause.m_bSelected = false;
     m_bEnableCheckpoints.m_bSelected = true;
+    m_bMissionFailedQuickMenu.m_bSelected = true;
     m_bXboxDifficulty.m_bSelected = false;
     m_bLetterBoxCinematics.m_bSelected = true;
     m_LevelUnlock.SetSelectedIndex(0);
 
     m_bWhistle.m_bSelected = true;
+    m_bBinoculars.m_bSelected = true;
     m_bF2000ZoomLevels.m_bSelected = true;
     m_bLaserMicZoomLevels.m_bSelected = true;
+    m_bLaserMicVisions.m_bSelected = true;
     m_bBurstFire.m_bSelected = true;
     m_bPS2FN7Accuracy.m_bSelected = false;
+    m_bHorizontalLifeBar.m_bSelected = false;
+    m_bInvertInteractionList.m_bSelected = true;
     m_bNewDoorInteraction.m_bSelected = true;
     m_bRandomizeLockpick.m_bSelected = true;
     m_bOpticCableVisions.m_bSelected = true;
@@ -688,6 +904,7 @@ function ResetToDefault()
     m_MineDelay.SetSelectedIndex(0);
 
     m_bShowHUD.m_bSelected = true;
+    m_bPersistentHUD.m_bSelected = false;
     m_bShowLifeBar.m_bSelected = true;
     m_bShowInteractionBox.m_bSelected = true;
     m_bShowCommunicationBox.m_bSelected = true;
@@ -697,6 +914,8 @@ function ResetToDefault()
     m_bShowCurrentGoal.m_bSelected = true;
     m_bShowKeypadGoal.m_bSelected = true;
     m_bShowKeypadGoal.bDisabled = false; // Allow if current goal had disabled it
+    m_bShowCurrentGadget.m_bSelected = false;
+    m_bShowCurrentGadget.bDisabled = false; // Allow if current goal had disabled it
     m_bShowMissionInformation.m_bSelected = true;
     m_bShowCrosshair.m_bSelected = true;
     m_bShowScope.m_bSelected = true;
@@ -738,14 +957,17 @@ function Refresh()
     if (m_bDisableMenuIdleTimer != None)
         m_bDisableMenuIdleTimer.m_bSelected = EPC.eGame.bDisableMenuIdleTimer;
 
-    if (m_bEnablePlayerStats != None)
-        m_bEnablePlayerStats.m_bSelected = EPC.bEnablePlayerStats;
+    if (m_PlayerStatsMode != None && EPC != None)
+        m_PlayerStatsMode.SetSelectedIndex(Clamp(EPC.PlayerStatsMode, 0, m_PlayerStatsMode.List.Items.Count() - 1));
 
     if (m_bInteractionPause != None)
         m_bInteractionPause.m_bSelected = EPC.bInteractionPause;
 
     if (m_bEnableCheckpoints != None)
         m_bEnableCheckpoints.m_bSelected = EPC.eGame.bEnableCheckpoints;
+
+    if (m_bMissionFailedQuickMenu != None)
+        m_bMissionFailedQuickMenu.m_bSelected = EPC.bMissionFailedQuickMenu;
 
     if (m_bXboxDifficulty != None)
         m_bXboxDifficulty.m_bSelected = EPC.eGame.bXboxDifficulty;
@@ -759,17 +981,29 @@ function Refresh()
     if (m_bWhistle != None)
         m_bWhistle.m_bSelected = EPC.bWhistle;
 
+    if (m_bBinoculars != None)
+        m_bBinoculars.m_bSelected = EPC.bBinoculars;
+
     if (m_bF2000ZoomLevels != None)
         m_bF2000ZoomLevels.m_bSelected = EPC.bF2000ZoomLevels;
 
     if (m_bLaserMicZoomLevels != None)
         m_bLaserMicZoomLevels.m_bSelected = EPC.bLaserMicZoomLevels;
 
+    if (m_bLaserMicVisions != None)
+        m_bLaserMicVisions.m_bSelected = EPC.bLaserMicVisions;
+
     if (m_bBurstFire != None)
         m_bBurstFire.m_bSelected = EPC.bBurstFire;
 
     if (m_bPS2FN7Accuracy != None)
         m_bPS2FN7Accuracy.m_bSelected = EPC.eGame.bPS2FN7Accuracy;
+
+    if (m_bHorizontalLifeBar != None)
+        m_bHorizontalLifeBar.m_bSelected = EPC.bHorizontalLifeBar;
+
+    if (m_bInvertInteractionList != None)
+        m_bInvertInteractionList.m_bSelected = EPC.bInvertInteractionList;
 
     if (m_bNewDoorInteraction != None)
         m_bNewDoorInteraction.m_bSelected = EPC.eGame.bNewDoorInteraction;
@@ -778,7 +1012,7 @@ function Refresh()
         m_bRandomizeLockpick.m_bSelected = EPC.eGame.bRandomizeLockpick;
 
     if (m_bOpticCableVisions != None)
-        m_bOpticCableVisions.m_bSelected = EPC.eGame.bOpticCableVisions;
+        m_bOpticCableVisions.m_bSelected = EPC.bOpticCableVisions;
 
     if (m_bThermalOverride != None)
         m_bThermalOverride.m_bSelected = EPC.eGame.bThermalOverride;
@@ -791,6 +1025,9 @@ function Refresh()
 
     if (m_bShowHUD != None)
         m_bShowHUD.m_bSelected = EPC.bShowHUD;
+
+    if (m_bPersistentHUD != None)
+        m_bPersistentHUD.m_bSelected = EPC.bPersistentHUD;
 
     if (m_bShowLifeBar != None)
         m_bShowLifeBar.m_bSelected = HUD.bShowLifeBar;
@@ -816,13 +1053,17 @@ function Refresh()
         
         if (m_bShowKeypadGoal != None)
         {
-            // Gray out keypad goal if current goal is disabled
+            // Gray out keypad goal and current gadget if current goal is disabled
             m_bShowKeypadGoal.bDisabled = !EPC.bShowCurrentGoal;
+            m_bShowCurrentGadget.bDisabled = !EPC.bShowCurrentGoal;
         }
     }
-
+    
     if (m_bShowKeypadGoal != None)
         m_bShowKeypadGoal.m_bSelected = EPC.bShowKeyPadGoal;
+
+    if (m_bShowCurrentGadget != None)
+        m_bShowCurrentGadget.m_bSelected = EPC.bShowCurrentGadget;
 
     if (m_bShowMissionInformation != None)
         m_bShowMissionInformation.m_bSelected = EPC.bShowMissionInformation;
@@ -837,46 +1078,46 @@ function Refresh()
         m_bShowAlarms.m_bSelected = EPC.bShowAlarms;
 
     if (m_TrainingSamMesh != None)
-        m_TrainingSamMesh.SetSelectedIndex(Clamp(EPC.eGame.ESam_Training, 0, m_TrainingSamMesh.List.Items.Count() - 1));
+        m_TrainingSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_Training, 0));
         
     if (m_TbilisiSamMesh != None)
-        m_TbilisiSamMesh.SetSelectedIndex(Clamp(EPC.eGame.ESam_Tbilisi, 0, m_TbilisiSamMesh.List.Items.Count() - 1));
+        m_TbilisiSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_Tbilisi, 0));
 
     if (m_DefenseMinistrySamMesh != None)
-        m_DefenseMinistrySamMesh.SetSelectedIndex(Clamp(EPC.eGame.ESam_DefenseMinistry, 0, m_DefenseMinistrySamMesh.List.Items.Count() - 1));
+        m_DefenseMinistrySamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_DefenseMinistry, 0));
 
     if (m_CaspianOilRefinerySamMesh != None)
-        m_CaspianOilRefinerySamMesh.SetSelectedIndex(Clamp(EPC.eGame.ESam_CaspianOilRefinery, 0, m_CaspianOilRefinerySamMesh.List.Items.Count() - 1));
+        m_CaspianOilRefinerySamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_CaspianOilRefinery, 2));
         
     if (m_CIASamMesh != None)
-        m_CIASamMesh.SetSelectedIndex(Clamp(EPC.eGame.ESam_CIA, 0, m_CIASamMesh.List.Items.Count() - 1));
+        m_CIASamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_CIA, 1));
 
     if (m_KalinatekSamMesh != None)
-        m_KalinatekSamMesh.SetSelectedIndex(Clamp(EPC.eGame.ESam_Kalinatek, 0, m_KalinatekSamMesh.List.Items.Count() - 1));
+        m_KalinatekSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_Kalinatek, 0));
 
     if (m_ChineseEmbassySamMesh != None)
-        m_ChineseEmbassySamMesh.SetSelectedIndex(Clamp(EPC.eGame.ESam_ChineseEmbassy, 0, m_ChineseEmbassySamMesh.List.Items.Count() - 1));
+        m_ChineseEmbassySamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_ChineseEmbassy, 2));
 
     if (m_AbattoirSamMesh != None)
-        m_AbattoirSamMesh.SetSelectedIndex(Clamp(EPC.eGame.ESam_Abattoir, 0, m_AbattoirSamMesh.List.Items.Count() - 1));
+        m_AbattoirSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_Abattoir, 2));
         
     if (m_ChineseEmbassy2SamMesh != None)
-        m_ChineseEmbassy2SamMesh.SetSelectedIndex(Clamp(EPC.eGame.ESam_ChineseEmbassy2, 0, m_ChineseEmbassy2SamMesh.List.Items.Count() - 1));
+        m_ChineseEmbassy2SamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_ChineseEmbassy2, 2));
 
     if (m_PresidentialPalaceSamMesh != None)
-        m_PresidentialPalaceSamMesh.SetSelectedIndex(Clamp(EPC.eGame.ESam_PresidentialPalace, 0, m_PresidentialPalaceSamMesh.List.Items.Count() - 1));
+        m_PresidentialPalaceSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_PresidentialPalace, 1));
 
     if (m_KolaCellSamMesh != None)
-        m_KolaCellSamMesh.SetSelectedIndex(Clamp(EPC.eGame.ESam_KolaCell, 0, m_KolaCellSamMesh.List.Items.Count() - 1));
+        m_KolaCellSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_KolaCell, 0));
         
     if (m_VselkaSamMesh != None)
-        m_VselkaSamMesh.SetSelectedIndex(Clamp(EPC.eGame.ESam_Vselka, 0, m_VselkaSamMesh.List.Items.Count() - 1));
+        m_VselkaSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_Vselka, 1));
 
     if (m_PowerPlantSamMesh != None)
-        m_PowerPlantSamMesh.SetSelectedIndex(Clamp(EPC.eGame.ESam_PowerPlant, 0, m_PowerPlantSamMesh.List.Items.Count() - 1));
+        m_PowerPlantSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_PowerPlant, 0));
         
     if (m_SeveronickelSamMesh != None)
-        m_SeveronickelSamMesh.SetSelectedIndex(Clamp(EPC.eGame.ESam_Severonickel, 0, m_SeveronickelSamMesh.List.Items.Count() - 1));
+        m_SeveronickelSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_Severonickel, 0));
     
 	m_bModified = false;
 	m_bFirstRefresh = false;

@@ -245,14 +245,14 @@ defaultproperties
     ResumePatrolTime=3.000000
     ProjPatrolSpeed=-1
     ProjAlertSpeed=-1
-    FollowUponDetection=true
-    bDestroyWhenDestructed=false
+    FollowUponDetection=True
+    bDestroyWhenDestructed=False
     AlarmLinkType=EAlarm_Trigger
     Physics=PHYS_Rotating
     DrawType=DT_StaticMesh
     StaticMesh=StaticMesh'LightGenOBJ.UnbreakableLight.ABA_spot_aba00B'
-    bBlockActors=false
-    bBlockNPCVision=false
+    bBlockActors=False
+    bBlockNPCVision=False
     LightType=LT_Steady
     LightEffect=LE_ESpotShadow
     LightBrightness=255
@@ -265,5 +265,5 @@ defaultproperties
     SpotHeight=40.000000
     SpotWidth=40.000000
     RotationRate=(Pitch=5000,Yaw=5000,Roll=5000)
-    bRotateToDesired=true
+    bRotateToDesired=True
 }

@@ -33,6 +33,8 @@ var InteractionMaster Master;	// Pointer to the Interaction Master
 // Joshua - This is a native class. New variables must be added only after all original ones have been declared.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
+var string  PendingLoadSaveName; // Joshua - Used for mission failed screen to load last save
+
 // Joshua - Player stats persistence between levels
 var string StatsMissionName;
 var float StatsMissionTime;
@@ -179,6 +181,8 @@ function SetFocus()
 // ====================================================================
 
 function Tick(float DeltaTime);
+
+function string GetOldestCheckpointName(); // Joshua - Implemented in EPCConsole, needs to be called by EPlayerController so declared here
 
 defaultproperties
 {
