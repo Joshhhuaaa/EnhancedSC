@@ -19,8 +19,9 @@ var()  Name				 GroupTag;
 var()  Name				 JumpLabel;
 var()  bool			     bTriggerOnlyOnce;
 var()  bool				 bAffectLastZone;
-var()  bool				 bForceJump;   //override disable messages of the pattern
+var()  bool				 bForceJump; 			// Override disable messages of the pattern
 var()  bool				 ConversationTrigger;
+var()  bool				 bNPCMustBeConscious;	// Joshua - If true, NPCProximity only triggers for conscious NPCs
 
 /*-----------------------------------------------------------*\
 |															 |
@@ -34,7 +35,15 @@ function bool IsRelevant(actor Other)
 		case PlayerProximity:
 			return Other.bIsPawn && Pawn(Other).IsPlayerPawn();
 		case NPCProximity:
-			return Other.bIsPawn && (EAIController(Pawn(Other).controller) != None) ;
+			if (!Other.bIsPawn || EAIController(Pawn(Other).controller) == None)
+				return false;
+			// Joshua - Reject unconscious, carried, or dead NPCs
+			if (bNPCMustBeConscious && 
+				!((EAIController(Pawn(Other).controller).GetStateName() != 's_Unconscious') && 
+				  (EAIController(Pawn(Other).controller).GetStateName() != 's_Carried') && 
+				  (Pawn(Other).Health > 0)))
+				return false;
+			return true;
 		case PawnProximity:
 			return Other.bIsPawn;
 	}
@@ -78,9 +87,9 @@ function Touch(actor Other)
 
 defaultproperties
 {
-    bAffectLastZone=true
-    bHidden=true
+    bAffectLastZone=True
+    bHidden=True
     CollisionRadius=40.000000
     CollisionHeight=40.000000
-    bCollideActors=true
+    bCollideActors=True
 }
