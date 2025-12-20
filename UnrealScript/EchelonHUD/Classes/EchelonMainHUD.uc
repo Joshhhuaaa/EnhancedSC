@@ -97,7 +97,6 @@ var(Enhanced) config bool bShowInteractionBox;
 var(Enhanced) config bool bShowCommunicationBox;
 var(Enhanced) config bool bShowTimer;
 var(Enhanced) config bool bLetterBoxCinematics;
-var(Enhanced) config ECanvas.ETextAligned CurrentGoalAlignment;
 
 exec function SaveEnhancedOptions()
 {
@@ -169,7 +168,6 @@ function PostBeginPlay()
 		Log("ERROR: invalid PlayerController for EchelonMainHud");
 
     QuickInvAndCurrentItems 	= spawn(class'EQInvHUD',self);
-	QuickInvAndCurrentItemsXbox = spawn(class'EQInvHUDXbox',self); // Joshua - Xbox quick inventory
     GameMenuHUD             	= spawn(class'EGameMenuHUD',self);
     PlayerStatsHUD         		= spawn(class'EPlayerStatsHUD',self); // Joshua - Player statistics screen
     
@@ -844,13 +842,11 @@ function DrawMainHUD(ECanvas Canvas)
 	// Quick Inventory
 	if ((Epc.bShowHUD) || GetStateName() == 'QuickInventory')
 	{
-		if (!eGame.bUseController) // Joshua - Check if they're using a controller
-			QuickInvAndCurrentItems.PostRender(Canvas);
-		else
-			QuickInvAndCurrentItemsXbox.PostRender(Canvas); // Joshua - Xbox quick inventory
+		QuickInvAndCurrentItems.PostRender(Canvas);
 	}
 
-	if ((Epc.bShowHUD && bShowInteractionBox) || (!Epc.egi.bInteracting && (Epc.IManager.GetNbInteractions() > 1)) || (Epc.egi.bInteracting && (Epc.IManager.GetNbInteractions() > 2)))
+	// Joshua - Don't draw interaction box if player is dead
+	if (Epc.GetStateName() != 's_Dead' && ((Epc.bShowHUD && bShowInteractionBox) || (!Epc.egi.bInteracting && (Epc.IManager.GetNbInteractions() > 1)) || (Epc.egi.bInteracting && (Epc.IManager.GetNbInteractions() > 2))))
 	{
 		// Interaction manager
 		DisplayInteractIcons(Canvas, false);
@@ -894,10 +890,7 @@ function DrawConfigMainHUD(ECanvas Canvas)
 	DrawLifeBar(Canvas);
 
     // Quick Inventory
-	if (!eGame.bUseController)
-		QuickInvAndCurrentItems.PostRender(Canvas); // Joshua - Check if they're using a controller
-	else
-		QuickInvAndCurrentItemsXbox.PostRender(Canvas); // Joshua - Xbox quick inventory
+	QuickInvAndCurrentItems.PostRender(Canvas);
 
 	// Interactions    
 	DisplayInteractIcons(Canvas, true);
@@ -1137,8 +1130,6 @@ state s_Slavery
 					// Quick Inventory
 					if (!eGame.bUseController) // Joshua - Check if they're using a controller
 						QuickInvAndCurrentItems.PostRender(Canvas);
-					else
-						QuickInvAndCurrentItemsXbox.PostRender(Canvas); // Joshua - Xbox quick inventory			
 				}
 			}
 
@@ -1518,32 +1509,18 @@ state QuickInventory
 
 	function BeginState()
 	{
-		if (!eGame.bUseController) // Joshua - Check if they're using a controller
-			QuickInvAndCurrentItems.GotoState('s_QDisplay');
-		else
-			QuickInvAndCurrentItemsXbox.GotoState('s_QDisplayXbox'); // Joshua - Xbox quick inventory
+		QuickInvAndCurrentItems.GotoState('s_QDisplay');
 	}
 
 	function EndState()
 	{
-		if (!eGame.bUseController) // Joshua - Check if they're using a controller
-		{
-			if (QuickInvAndCurrentItems.GetStateName() == 's_QDisplay')
-				QuickInvAndCurrentItems.GotoState('');
-		}
-		else
-		{
-			if (QuickInvAndCurrentItemsXbox.GetStateName() == 's_QDisplayXbox') // Joshua - Xbox quick inventory
-				QuickInvAndCurrentItems.GotoState('');
-		}
+		if (QuickInvAndCurrentItems.GetStateName() == 's_QDisplay')
+			QuickInvAndCurrentItems.GotoState('');
 	}
 
 	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
-		if (!eGame.bUseController) // Joshua - Check if they're using a controller
-			return QuickInvAndCurrentItems.KeyEvent(Key, Action, Delta);
-		else
-			return QuickInvAndCurrentItemsXbox.KeyEvent(Key, Action, Delta); // Joshua - Xbox quick inventory
+		return QuickInvAndCurrentItems.KeyEvent(Key, Action, Delta);
 	}
 
        function PostRender(Canvas C)
@@ -1844,11 +1821,13 @@ state s_FinalMapStats
 
 defaultproperties
 {
-    bAlwaysTick=true
-	bShowLifeBar=true
-	bShowInteractionBox=true
-	bShowCommunicationBox=true
-	bShowTimer=true
-	bLetterBoxCinematics=true
-	CurrentGoalAlignment=TXT_RIGHT
+    bAlwaysTick=True
+	//=============================================================================
+	// Enhanced Variables
+	//=============================================================================
+	bShowLifeBar=True
+	bShowInteractionBox=True
+	bShowCommunicationBox=True
+	bShowTimer=True
+	bLetterBoxCinematics=True
 }
