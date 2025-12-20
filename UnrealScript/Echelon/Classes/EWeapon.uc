@@ -164,6 +164,10 @@ function bool CanAddThisItem(EInventoryItem ItemToAdd)
 //------------------------------------------------------------------------
 event Fire()
 {
+	// Joshua - Prevent AI from firing during GameOver
+	if (Controller != none && !Controller.bIsPlayer && EchelonLevelInfo(Level).bGameOver)
+		return;
+
 	if (ClipAmmo == 0)
 	{
 		// Joshua - Moved the EmptySound playback only if we're out of ammo in the clip
@@ -729,7 +733,7 @@ defaultproperties
     ShootingRange=15000
     NPCPreferredDistance=2000
     EjectedVel=(X=0.000000,Y=80.000000,Z=60.000000)
-    bPickable=false
+    bPickable=False
     ObjectHudClass=Class'EWeaponReticle'
     SoundRadiusSaturation=1000.000000
     CollisionRadius=5.000000

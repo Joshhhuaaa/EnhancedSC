@@ -2915,6 +2915,17 @@ function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector Hi
 	local bool bAlreadyDead;
 	local class<DamageType> backUpdamageType;
 
+	// Joshua - Prevent this NPC from taking damage
+	if (EAIController(Controller).bDontTakeDamage)
+		return;
+
+	// Joshua - Prevent Wilkes and Frances from dying on EndMission
+	if (EchelonLevelInfo(Level).bGameOver)
+	{
+		if (EAIController(Controller).Pawn.IsA('EWilkes') || EAIController(Controller).Pawn.IsA('EFrances'))
+			return;
+	}
+
 	bAlreadyDead = (Health <= 0);
 	flatMomentum = momentum;
 
@@ -4408,6 +4419,17 @@ state s_Transition
 	function TakeDamage(int Damage, Pawn InstigatedBy, vector HitLocation, vector HitNormal, vector momentum, class<DamageType> damageType, OPTIONAL int pillTag)
 	{
 		// todo : is there a better way to abort a root motion transition??
+
+		// Joshua - Prevent this NPC from taking damage
+		if (EAIController(Controller).bDontTakeDamage)
+			return;
+
+		// Joshua - Prevent Wilkes and Frances from dying on EndMission
+		if (EchelonLevelInfo(Level).bGameOver)
+		{
+			if (EAIController(Controller).Pawn.IsA('EWilkes') || EAIController(Controller).Pawn.IsA('EFrances'))
+				return;
+		}
 		
 		// don't play animations or go back to default state if in root motion animation
         if (TransitionQueue.Length > 0)
@@ -4476,14 +4498,26 @@ state s_Sitting
 	{
 		local Controller Killer;
 		local bool bAlreadyDead;
-		bAlreadyDead	= (Health <= 0);
+
+		// Joshua - Prevent this NPC from taking damage
+		if (EAIController(Controller).bDontTakeDamage)
+			return;
+
+		// Joshua - Prevent Wilkes and Frances from dying on EndMission
+		if (EchelonLevelInfo(Level).bGameOver)
+		{
+			if (EAIController(Controller).Pawn.IsA('EWilkes') || EAIController(Controller).Pawn.IsA('EFrances'))
+				return;
+		}
+
+		bAlreadyDead = (Health <= 0);
 		
 		//log("SIT TAKE DAMAGE : " $ Damage @ instigatedBy @ Hitlocation @ "**MOMENTUM** : " @ momentum @ " type: " @ damageType @ " pilltag: " @ PillTag);
 
 		// Blood effect
 		if ((damageType == None) && (!bNoBlood))
 		{
-				Spawn(class'EBloodSplat', self,, HitLocation, Rotator(Normal(momentum)));
+			Spawn(class'EBloodSplat', self,, HitLocation, Rotator(Normal(momentum)));
 		}
 		
 
@@ -5235,11 +5269,12 @@ state s_Grabbed
 		local Controller Killer;
 		local EPlayerController EPC;
 		local bool bAlreadyDead;
-		bAlreadyDead	= (Health <= 0);
+
+		bAlreadyDead = (Health <= 0);
 
 		if ((damageType == None) && (!bNoBlood))
 		{
-				Spawn(class'EBloodSplat', self,, HitLocation, Rotator(Normal(momentum)));
+			Spawn(class'EBloodSplat', self,, HitLocation, Rotator(Normal(momentum)));
 		}
 
 		if (PillTag == 0)
@@ -5394,7 +5429,18 @@ state s_Carried
 		local Controller Killer;
 		local bool bAlreadyDead;
 
-		bAlreadyDead	= (Health <= 0);
+		// Joshua - Prevent this NPC from taking damage
+		if (EAIController(Controller).bDontTakeDamage)
+			return;
+
+		// Joshua - Prevent Wilkes and Frances from dying on EndMission
+		if (EchelonLevelInfo(Level).bGameOver)
+		{
+			if (EAIController(Controller).Pawn.IsA('EWilkes') || EAIController(Controller).Pawn.IsA('EFrances'))
+				return;
+		}
+
+		bAlreadyDead = (Health <= 0);
 
 		// Blood effect
 		if ((damageType == None) && (!bNoBlood))
@@ -5508,18 +5554,18 @@ defaultproperties
     ExpiredTime=30.000000
     FocusDistanceMin=150.000000
     FocusDistanceMax=2000.000000
-    bSendAIEvents=true
-    bCanBeGrabbed=true
-    bKnockedByPlayer=true
-    bIsHotBlooded=true
-    bCanWhistle=true
+    bSendAIEvents=True
+    bCanBeGrabbed=True
+    bKnockedByPlayer=True
+    bIsHotBlooded=True
+    bCanWhistle=True
     RandomizedAnimRate=1.000000
     fHideTime=30.000000
     m_VisibilityConeAngle=60.000000
     m_VisibilityMaxDistance=1800.000000
     m_VisibilityAngleVertical=35.000000
     m_MaxPeripheralVisionDistance=200.000000
-    bUseTransitionTable=true
+    bUseTransitionTable=True
     VisTable_Alert(1)=400.000000
     VisTable_Alert(2)=700.000000
     VisTable_Alert(3)=1000.000000
@@ -5539,7 +5585,7 @@ defaultproperties
     PrsoUpdate_AwareMax=15.000000
     PrsoUpdate_AlertMin=9.000000
     PrsoUpdate_AlertMax=16.000000
-    PlayGearSound=true
+    PlayGearSound=True
     YawTurnSpeed=52000
     TurnSpeed_Default=16384
     TurnSpeed_Aware=16384
@@ -5563,13 +5609,13 @@ defaultproperties
 	DamageLookupTable(13)=20.000000
 	DamageLookupTable(14)=10.000000
     RollSpeed=12000.000000
-    bCanCrouch=true
-    bCanFallWalk=true
+    bCanCrouch=True
+    bCanFallWalk=True
     ControllerClass=Class'EAIController'
-    bCanClimbLadders=true
-    bCanOpenDoors=true
+    bCanClimbLadders=True
+    bCanOpenDoors=True
     HearingThreshold=15000.000000
-    StopSoundsWhenKilled=true
+    StopSoundsWhenKilled=True
     CollisionRadius=35.000000
     CollisionHeight=87.500000
 }

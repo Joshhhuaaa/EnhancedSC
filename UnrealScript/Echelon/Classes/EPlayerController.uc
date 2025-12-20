@@ -2264,7 +2264,11 @@ function ProcessToggleCinematic()
 //------------------------------------------------------------------------
 function EndMission(bool bMissionComplete, int iFailureType)
 {
-	// Joshua - Prevents player from dying during GameOver and prevents NPC barks
+	// Joshua - Prevents player from dying during Mission Complete
+	if (bMissionComplete)
+		bInvincible = true;
+	
+	// Joshua - Prevents NPC from firing weapon and barking during GameOver
 	EchelonLevelInfo(Level).GameOver();
 
 	// Stop player input

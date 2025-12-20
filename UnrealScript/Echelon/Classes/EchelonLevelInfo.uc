@@ -53,7 +53,6 @@ var ETICON TICON; // Super Texture - Put here to be accessible everywhere
 // Joshua - This is a native class. New variables must be added only after all original ones have been declared.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
-
 var(AI)	bool bOneAlarmLevel; // Joshua - New flag for one alarm levels like Defense Ministry, replaces SetAlarmStage(3) hack
 var bool bAlarmStageChanged;
 var bool bGameOver; // Joshua - Prevents player from dying during GameOver and prevents NPC barks
@@ -798,7 +797,6 @@ function RumbleVibrate(float Duration, float Strenth)
 // Joshua - Prevents player from dying during GameOver and prevents NPC barks
 function GameOver()
 {
-	EchelonGameInfo(Level.Game).pPlayer.bInvincible = true;
 	bGameOver = true;
 }
 
