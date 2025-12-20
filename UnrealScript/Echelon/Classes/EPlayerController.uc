@@ -5260,6 +5260,8 @@ state s_Targeting
 // ----------------------------------------------------------------------
 state s_FirstPersonTargeting extends s_Targeting
 {
+	Ignores ReturnFromInteraction; // Joshua - Added trigger interaction in targeting modes
+
 	function BeginState()
 	{
 		Super.BeginState();
@@ -5284,7 +5286,7 @@ state s_FirstPersonTargeting extends s_Targeting
 
 	function bool CanAddInteract(EInteractObject IntObj)
 	{
-		if (IntObj.class.name == 'EDoorInteraction')
+		if(IntObj.class.name == 'EDoorInteraction' || IntObj.class.name == 'ETriggerInteraction') // Joshua - Added trigger interaction in targeting modes
 			return true;
 	}
 
