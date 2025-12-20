@@ -63,7 +63,7 @@ function bool IsAvailable()
 	// Joshua - While carrying a body, hide the lockpick interaction
 	if (MyDoor.Locked)
 	{
-		if (EchelonGameInfo(Level.Game).pPlayer.m_AttackTarget != None && EchelonGameInfo(Level.Game).pPlayer.m_AttackTarget.GetStateName()=='s_Carried')
+		if (EchelonGameInfo(Level.Game).pPlayer.m_AttackTarget != None && EchelonGameInfo(Level.Game).pPlayer.m_AttackTarget.GetStateName() == 's_Carried')
 		{
 			return false;
 		}
@@ -80,7 +80,7 @@ function bool IsAvailable()
             InteractionPlayerController.IManager.RemoveInteractionObj(Self);
     }
 	// Joshua - When carrying a body, remove Break Lock, Optic Cable, and Open Door Stealth
-    else if (EchelonGameInfo(Level.Game).pPlayer.m_AttackTarget != None && EchelonGameInfo(Level.Game).pPlayer.m_AttackTarget.GetStateName()=='s_Carried')
+    else if (EchelonGameInfo(Level.Game).pPlayer.m_AttackTarget != None && EchelonGameInfo(Level.Game).pPlayer.m_AttackTarget.GetStateName() == 's_Carried')
     {
         InteractionPlayerController.IManager.RemoveInteractionObj(BreakLockInteraction);
         InteractionPlayerController.IManager.RemoveInteractionObj(OpticalInteraction);
@@ -179,8 +179,9 @@ function InitInteract(Controller Instigator)
 		}
 		else
 		{
-			if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
-				EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
+			// Joshua - Replaced below with holster
+			//if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
+			//	EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
 
 			// If door is not locked, open it (no animation)
 			if (MyDoor.Locked || !MyDoor.Usable)
@@ -190,6 +191,62 @@ function InitInteract(Controller Instigator)
 					Instigator.GotoState('s_OpenDoor', 'LockedLt');
 				else
 					Instigator.GotoState('s_OpenDoor', 'LockedRt');
+			}
+			else
+			{
+				if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
+				{
+					EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
+					
+					// Joshua - Holstering weapon before opening door
+					if (LeftSideInteraction)
+						Instigator.GotoState('s_OpenDoor', 'HolsterThenOpenLt');
+					else
+						Instigator.GotoState('s_OpenDoor', 'HolsterThenOpenRt');
+				}
+				else
+				{
+					if (LeftSideInteraction)
+					{
+						//Log("		Open left");
+						Instigator.GotoState('s_OpenDoor', 'UnLockedLt');
+					}
+					// Interact right
+					else
+					{
+						//Log("		Open right");
+						Instigator.GotoState('s_OpenDoor', 'UnLockedRt');
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		// Joshua - Replaced below with holster
+		//if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
+		//	EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
+
+		// If door is not locked, open it (no animation)
+		if (MyDoor.Locked || !MyDoor.Usable)
+		{
+			//Log("		Locked");
+			if (LeftSideInteraction)
+				Instigator.GotoState('s_OpenDoor', 'LockedLt');
+			else
+				Instigator.GotoState('s_OpenDoor', 'LockedRt');
+		}
+		else
+		{
+			if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
+			{
+				EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
+
+				// Joshua - Holstering weapon before opening door
+				if (LeftSideInteraction)
+					Instigator.GotoState('s_OpenDoor', 'HolsterThenOpenLt');
+				else
+					Instigator.GotoState('s_OpenDoor', 'HolsterThenOpenRt');
 			}
 			else
 			{
@@ -204,35 +261,6 @@ function InitInteract(Controller Instigator)
 					//Log("		Open right");
 					Instigator.GotoState('s_OpenDoor', 'UnLockedRt');
 				}
-			}
-		}
-	}
-	else
-	{
-		if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
-			EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
-
-		// If door is not locked, open it (no animation)
-		if (MyDoor.Locked || !MyDoor.Usable)
-		{
-			//Log("		Locked");
-			if (LeftSideInteraction)
-				Instigator.GotoState('s_OpenDoor', 'LockedLt');
-			else
-				Instigator.GotoState('s_OpenDoor', 'LockedRt');
-		}
-		else
-		{
-			if (LeftSideInteraction)
-			{
-				//Log("		Open left");
-				Instigator.GotoState('s_OpenDoor', 'UnLockedLt');
-			}
-			// Interact right
-			else
-			{
-				//Log("		Open right");
-				Instigator.GotoState('s_OpenDoor', 'UnLockedRt');
 			}
 		}
 	}

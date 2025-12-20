@@ -80,5 +80,5 @@ function SetInteractLocation(Pawn InteractPawn)
 
 defaultproperties
 {
-    bCollideActors=false
+    bCollideActors=False
 }

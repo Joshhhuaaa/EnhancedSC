@@ -45,8 +45,9 @@ function InitInteract(Controller Instigator)
     ActiveController = Instigator;
     LeftSideInteraction = MyDoor.GetPawnSide(EPawn(Instigator.Pawn)) == ESide_Front;
 
-    if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
-        EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
+	// Joshua - Replaced below with holster
+    //if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
+    //    EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
 
     if (MyDoor.Locked || !MyDoor.Usable)
     {
@@ -58,10 +59,20 @@ function InitInteract(Controller Instigator)
     }
     else
     {
-        // Only do stealth open if door is unlocked and usable
-        MyDoor.bInUse = true;
-        EPlayerController(Instigator).m_BTWSide = !LeftSideInteraction;
-        Instigator.GotoState('s_OpenDoorStealth', 'BeginStealth');
+		MyDoor.bInUse = true;
+		EPlayerController(Instigator).m_BTWSide = !LeftSideInteraction;
+		// Joshua - Holstering weapon before opening door
+        if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
+        {
+			// Joshua - Disable re-drawing weapon after Open Door Stealth
+            //EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
+            Instigator.GotoState('s_OpenDoorStealth', 'HolsterThenStealth');
+        }
+		else
+		{
+			// Only do stealth open if door is unlocked and usable
+			Instigator.GotoState('s_OpenDoorStealth', 'BeginStealth');
+		}
     }
 }
 

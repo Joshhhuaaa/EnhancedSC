@@ -7316,9 +7316,16 @@ DoDoor:
 	bInTransition = true;
 	Interaction.SetInteractLocation(EPawn);
 	ePawn.SetPhysics(PHYS_Linear);
-	ePawn.PlayMoveTo(Rotation);
-	MoveToDestination(300, true);
 
+	
+	//ePawn.PlayMoveTo(Rotation);
+	// Joshua - Not using PlayMoveTo because crouch functionality is commented out
+	if (!ePawn.bIsCrouched)
+		ePawn.LoopAnimOnly(ePawn.AWalk,,0.2);
+	else
+		ePawn.LoopAnimOnly(ePawn.AWalkCrouch,,0.2);
+
+	MoveToDestination(300, true);
 	// Joshua - Adding Pandora animations for door interactions
 	//if (ePawn.bIsCrouched)
 	//{
@@ -7328,11 +7335,11 @@ DoDoor:
 	Goto(JumpLabelPrivate);
 
 JmpLockedLt:
-//	ePawn.PlayAnimOnly('DoorStAlBgl');
-//	FinishAnim();
-//	ePawn.PlayAnimOnly('DoorStAlBgl',,, true);
-//
-//	Goto('EndState');
+	//ePawn.PlayAnimOnly('DoorStAlBgl');
+	//FinishAnim();
+	//ePawn.PlayAnimOnly('DoorStAlBgl',,, true);
+	//
+	//Goto('EndState');
 
 	// Joshua - Adding Pandora animations for door interactions
 	if (!ePawn.bIsCrouched)
@@ -7351,12 +7358,12 @@ JmpLockedLt:
 	}
 
 JmpLockedRt:
-//	ePawn.PlayAnimOnly('DoorStAlBgr');
-//	FinishAnim();
-//	NotifyAction();
-//	ePawn.PlayAnimOnly('DoorStAlBgr',,, true);
-//
-//	Goto('EndState');
+	//ePawn.PlayAnimOnly('DoorStAlBgr');
+	//FinishAnim();
+	//NotifyAction();
+	//ePawn.PlayAnimOnly('DoorStAlBgr',,, true);
+	//
+	//Goto('EndState');
 
 	// Joshua - Adding Pandora animations for door interactions
 	if (!ePawn.bIsCrouched)
@@ -7377,15 +7384,15 @@ JmpLockedRt:
 	Goto('EndState');
 
 JmpUnLockedLt:
-//	ePawn.PlayAnimOnly('DoorStAlBgl');
-//	FinishAnim();
-//	NotifyAction();
-//	ePawn.PlayAnimOnly('DoorStAlEdl');
-//
-//	Goto('EndState');
+	//ePawn.PlayAnimOnly('DoorStAlBgl');
+	//FinishAnim();
+	//NotifyAction();
+	//ePawn.PlayAnimOnly('DoorStAlEdl');
+	//
+	//Goto('EndState');
 
 	// Joshua - Adding Pandora animations for door interactions
-	if (m_AttackTarget != None && m_AttackTarget.GetStateName()=='s_Carried')
+	if (m_AttackTarget != None && m_AttackTarget.GetStateName() == 's_Carried')
 	{
 		if (!ePawn.bIsCrouched)
 		{
@@ -7425,15 +7432,15 @@ JmpUnLockedLt:
 	}
 
 JmpUnLockedRt:
-//	ePawn.PlayAnimOnly('DoorStAlBgr');
-//	FinishAnim();
-//	NotifyAction();
-//	ePawn.PlayAnimOnly('DoorStAlEdr');
-//
-//	Goto('EndState');
+	//ePawn.PlayAnimOnly('DoorStAlBgr');
+	//FinishAnim();
+	//NotifyAction();
+	//ePawn.PlayAnimOnly('DoorStAlEdr');
+	//
+	//Goto('EndState');
 
 	// Joshua - Adding Pandora animations for door interactions
-	if (m_AttackTarget != None && m_AttackTarget.GetStateName()=='s_Carried')
+	if (m_AttackTarget != None && m_AttackTarget.GetStateName() == 's_Carried')
 	{
 		if (!ePawn.bIsCrouched)
 		{
@@ -7472,6 +7479,23 @@ JmpUnLockedRt:
 		}
 	}
 
+// Joshua - Holstering weapon before opening door
+HolsterThenOpenRt:
+	JumpLabelPrivate = 'JmpUnLockedRt';
+	Goto('HolsterThenDoDoor');
+
+HolsterThenOpenLt:
+	JumpLabelPrivate = 'JmpUnLockedLt';
+	Goto('HolsterThenDoDoor');
+
+HolsterThenDoDoor:
+	if (ePawn.WeaponStance > 0)
+	{
+		ePawn.Transition_WeaponAway();
+		FinishAnim(EPawn.ACTIONCHANNEL);
+	}
+	Goto('DoDoor');
+
 EndState:
 	JumpLabelPrivate = '';
 	FinishAnim();
@@ -7489,11 +7513,11 @@ GetOut:
 	{
 		JumpLabel = '';
 		//bInTransition = true;
-		bInTransition = false; // Joshua - PT carry interaction
+		bInTransition = false; // Joshua - SCPT carry interaction
 		GotoState('s_FirstPersonTargeting');
 	}
-	// Joshua - PT carry interaction
-	else if (m_AttackTarget != None && m_AttackTarget.GetStateName()=='s_Carried')
+	// Joshua - SCPT carry interaction
+	else if (m_AttackTarget != None && m_AttackTarget.GetStateName() == 's_Carried')
 	{
 		GotoState('s_Carry','OpenDoorBack');
 	}
@@ -7573,7 +7597,14 @@ BeginStealth:
 	bInTransition = true;
 	Interaction.SetInteractLocation(EPawn);
 	ePawn.SetPhysics(PHYS_Linear);
-	ePawn.PlayMoveTo(Rotation);
+
+	//ePawn.PlayMoveTo(Rotation);
+	// Joshua -  Not using PlayMoveTo because crouch functionality is commented out
+	if (!ePawn.bIsCrouched)
+		ePawn.LoopAnimOnly(ePawn.AWalk,,0.2);
+	else
+		ePawn.LoopAnimOnly(ePawn.AWalkCrouch,,0.2);
+
 	MoveToDestination(300, true);
 
 	// force uncrouch
@@ -7603,7 +7634,7 @@ BeginStealth:
 
 // Push door open
 OpenDoor:
-	bIntransition = true;
+	bInTransition = true;
 	m_SMInTrans = true;
 	m_camera.SetMode(ECM_Walking);
 	m_camera.SetFixeTarget(ePawn.ToWorld(2 * ePawn.CollisionRadius * Vect(1,0,0)), (2 * ePawn.CollisionRadius) / ePawn.GetAnimTime('doorstpkedr'));
@@ -7622,7 +7653,7 @@ OpenDoor:
 
 // Interrupted while opening (bump object / bump pawn)
 InterruptOpening:
-	bIntransition = true;
+	bInTransition = true;
 	m_camera.StopFixeTarget();
 	m_camera.SetMode(ECM_Walking);
 	if (m_BTWSide)
@@ -7646,6 +7677,15 @@ CloseDoor:
 	bInTransition = false;
 	ePawn.SetPhysics(PHYS_Walking);
 	Goto('GetOut');
+
+// Joshua - Holstering weapon before opening door
+HolsterThenStealth:
+	if (ePawn.WeaponStance > 0)
+	{
+		ePawn.Transition_WeaponAway();
+		FinishAnim(EPawn.ACTIONCHANNEL);
+	}
+	Goto('BeginStealth');
 }
 
 // ----------------------------------------------------------------------

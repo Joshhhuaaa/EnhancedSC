@@ -28,13 +28,18 @@ function InitInteract(Controller Instigator)
         if (OpticCableItem != None)
         {
             // Unequip current weapon if any
-			if (EPawn(Instigator.Pawn).WeaponStance > 0)
-	            EPawn(Instigator.Pawn).Transition_WeaponAway();
+            if (EPawn(Instigator.Pawn).WeaponStance > 0)
+                EPawn(Instigator.Pawn).Transition_WeaponAway();
                 
-			OpticCableItem.Door = MyDoor;
-			OpticCableItem.GotoState('s_InteractSelected','AutoUse');
+            OpticCableItem.Door = MyDoor;
+            OpticCableItem.GotoState('s_InteractSelected','AutoUse');
         }
     }
+}
+
+function PostInteract(Controller Instigator)
+{
+    Instigator.Interaction = None;
 }
 
 function SetInteractLocation(Pawn InteractPawn)
