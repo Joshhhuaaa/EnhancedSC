@@ -8928,8 +8928,12 @@ state s_RappellingSniping extends s_PlayerSniping
 	// Reload in Sniper mode stuff
 	function NotifyReloading()
 	{
+		// Joshua - Save the current FOV index before reloading
+		if (ESniperGun(ActiveGun) != None)
+			LastSniperFOVIndex = ESniperGun(ActiveGun).FOVIndex;
+		
 		ZoomLevel = 0.0f;
-		SetCameraFOV(self, DesiredFov);			// restore Fov that may have changed in sniping mode
+		SetCameraFOV(self, DesiredFov); // Restore Fov that may have changed in sniping mode
 		ESniperGun(ActiveGun).SetSniperMode(false);
 		bHideSam = false;
 
@@ -9381,6 +9385,22 @@ state s_SplitSniping extends s_RappellingSniping
 	}
 
 	function CheckFeet();
+
+	function NotifyReloading()
+	{
+		// Joshua - Save the current FOV index before reloading
+		if (ESniperGun(ActiveGun) != None)
+			LastSniperFOVIndex = ESniperGun(ActiveGun).FOVIndex;
+
+		ZoomLevel = 0.0f;
+		SetCameraFOV(self, DesiredFov);	// Restore Fov that may have changed in sniping mode
+		ESniperGun(ActiveGun).SetSniperMode(false);
+		bHideSam = false;
+
+		m_camera.SetMode(ECM_SplitJumpFP); // Joshua - Adjust to proper camera state in SplitSniping
+		Global.NotifyReloading();
+		GotoState(,'Reload');
+	}
 
 BackToFirstPerson:
 	GotoState('s_SplitTargeting', JumpLabelPrivate);
