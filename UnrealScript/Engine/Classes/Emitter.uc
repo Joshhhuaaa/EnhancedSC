@@ -57,9 +57,9 @@ function Trigger(Actor Other, Pawn EventInstigator, optional name InTag) // UBI 
 
 defaultproperties
 {
-    AutoDestroy=true
+    AutoDestroy=True
     DrawType=DT_Particle
     Texture=Texture'S_Emitter'
     Style=STY_Particle
-    bUnlit=true
+    bUnlit=True
 }

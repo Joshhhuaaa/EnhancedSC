@@ -38,9 +38,9 @@ var color TextGreen;
 // Joshua - This is a native class. New variables must be added only after all original ones have been declared.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
-
-var Font ETextFontPC; // Joshua - Xbox font support
+var Font ETextFontXbox; // Joshua - Xbox font support
 var Font ETextFontGameCube; // Joshua - GameCube font support
+var Font ETextFontPS2; // Joshua - PS2 font to be able to access the button icons
 
 native(3000) final function BeginScene(int X, int Y, int Width, int Height,float RWidth, float RHeight, optional int ClearFlags);
 native(3001) final function DrawPlayerPortal(PlayerController Player, optional int ClearFlags ,optional float blur_coef);
@@ -105,6 +105,10 @@ defaultproperties
     TextBlack=(R=51,G=51,B=51,A=255)
     TextGreen=(R=77,G=77,B=77,A=255)
     MedFont=Font'Engine.SmallFont'
-	ETextFontPC=Font'Engine.ETextFontPC' // Joshua - Xbox font support
+	//=============================================================================
+	// Enhanced Variables
+	//=============================================================================
+	ETextFontXbox=Font'Engine.ETextFontXbox' // Joshua - Xbox font support
 	ETextFontGameCube=Font'Engine.ETextFontGameCube' // Joshua - GameCube font support
+	ETextFontPS2=Font'Engine.ETextFontPS2' // Joshua - PS2 font to be able to access the button icons
 }

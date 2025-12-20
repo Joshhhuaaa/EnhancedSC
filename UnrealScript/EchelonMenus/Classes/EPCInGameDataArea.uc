@@ -10,34 +10,14 @@
 class EPCInGameDataArea extends UWindowDialogClientWindow
             native;
 
-var EPCReconListBox              m_ListBox;
+var EPCReconListBox         m_ListBox;
 var INT                     m_IListBoxXPos, m_IListBoxYPos, m_IListBoxWidth, m_IListBoxHeight;
 
 function Created()
 {
-    // Joshua - Font support
-    local EPlayerController EPC;
-    EPC = EPlayerController(GetPlayerOwner());
-
     m_ListBox           = EPCReconListBox(CreateControl(class'EPCReconListBox', m_IListBoxXPos, m_IListBoxYPos, m_IListBoxWidth, m_IListBoxHeight, self));        
-
-    // Joshua - Font support
-    switch (EPlayerController(GetPlayerOwner()).eGame.FontType)
-    {
-        case Font_Xbox:
-            m_ListBox.Font = 4;
-            break;
-        case Font_GameCube:
-            m_ListBox.Font = 5;
-            break;
-        case Font_PC:
-        default:
-            m_ListBox.Font = F_Normal;
-            break;
-    }
-
-    m_ListBox.Align     = TXT_LEFT;
-    
+    m_ListBox.Font      = F_Normal;
+    m_ListBox.Align     = TXT_LEFT;    
 }
 
 function FillListBox()

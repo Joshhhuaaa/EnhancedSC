@@ -107,7 +107,7 @@ event PrepareForMove(NavigationPoint Goal, ReachSpec Path);
 
 defaultproperties
 {
-    bCanOpenDoors=true
-    bCanDoSpecial=true
+    bCanOpenDoors=True
+    bCanDoSpecial=True
     MinHitWall=-0.500000
 }

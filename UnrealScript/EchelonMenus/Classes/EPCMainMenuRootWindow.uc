@@ -268,6 +268,8 @@ function AfterPaint(Canvas C, float X, float Y)
 
 function SetupFonts()
 {
+	local EchelonGameInfo GameInfo;
+	
 	//
 	// NORMAL FONT
 	//
@@ -280,14 +282,34 @@ function SetupFonts()
     }
     else
     {
-        Fonts[F_Normal]     = Font'ETextFont';
+		// Joshua - Check font type from game info
+		GameInfo = EchelonGameInfo(GetPlayerOwner().Level.Game);
+		if (GameInfo != None)
+		{
+			switch(GameInfo.FontType)
+			{
+				case Font_PC:
+				case Font_Xbox: // Joshua - Xbox font remains the PC font in PC menus due to the Xbox font being too large
+					Fonts[F_Normal] = Font'ETextFont';
+					break;
+				case Font_GameCube:
+					Fonts[F_Normal] = Font'ETextFontGameCube';
+					break;
+				default:
+					Fonts[F_Normal] = Font'ETextFont';
+					break;
+			}
+		}
+		else
+		{
+			Fonts[F_Normal] = Font'ETextFont';
+		}
+		
 	    Fonts[F_Bold]       = Font'EMissionFont';
 	    Fonts[F_Large]      = Font'ETitleFont';
 	    Fonts[F_LargeBold]  = Font'ETitleBoldFont';
-		// Joshua - Xbox Font support
-		Fonts[4]			= Font'ETextFontXbox';
-		// Joshua - GameCube Font support
-		Fonts[5]			= Font'ETextFontGameCube';
+		//Fonts[4]			= Font'ETextFontXbox'; // Joshua - Xbox Font support		
+		//Fonts[5]			= Font'ETextFontGameCube'; // Joshua - GameCube Font support
     }
 
 	//

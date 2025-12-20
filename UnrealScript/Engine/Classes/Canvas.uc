@@ -14,9 +14,10 @@ class Canvas extends Object
 // * BEGIN UBI MODIF 
 // * fschelling (23 mar 2002)
 // ***********************************************************************************************
-#exec Font IMPORT NAME=ETextFont        	FILE="..\Textures\Font\txt_integration_xbox.pcx"
-#exec Font IMPORT NAME=ETextFontPC      	FILE="..\Textures\Font\txt_integration.pcx"
+#exec Font IMPORT NAME=ETextFont        	FILE="..\Textures\Font\txt_integration.pcx"
+#exec Font IMPORT NAME=ETextFontXbox      	FILE="..\Textures\Font\txt_integration_xbox.pcx"
 #exec Font IMPORT NAME=ETextFontGameCube	FILE="..\Textures\Font\txt_integration_gamecube.pcx"
+#exec Font IMPORT NAME=ETextFontPS2			FILE="..\Textures\Font\txt_integration_ps2.pcx"
 #exec Font IMPORT NAME=ETitleFont       	FILE="..\Textures\Font\titre_regular_integration.pcx"
 #exec Font IMPORT NAME=ETitleBoldFont   	FILE="..\Textures\Font\titre_bold_integration.pcx"
 #exec Font IMPORT NAME=EHUDFont         	FILE="..\Textures\Font\txt_hud.pcx"
@@ -228,7 +229,7 @@ defaultproperties
     EHUDFont=Font'EHUDFont'
     Verdana=Font'Verdana'
     EMissionFont=Font'EMissionFont'
-    bDrawTile=true
+    bDrawTile=True
     Z=1.000000
     Style=1 // Joshua - Canvas.Style is a byte, not a proper ERenderStyle enum
     DrawColor=(R=127,G=127,B=127,A=255)
