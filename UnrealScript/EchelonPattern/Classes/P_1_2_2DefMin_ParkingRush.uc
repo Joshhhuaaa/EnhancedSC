@@ -24,6 +24,9 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
         case AI_UNCONSCIOUS:
             EventJump('DeadFlag');
             break;
+        case AI_GRABBED: // Joshua - If player grabs the guard, Wilkes can stop shooting
+            EventJump('DeadFlag');
+            break;
         default:
             break;
         }
