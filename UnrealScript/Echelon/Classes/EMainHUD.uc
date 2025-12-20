@@ -66,7 +66,11 @@ function Slave(EGameplayObject NewMaster)
 
 function NormalView()
 {
-	GotoState('MainHUD');
+	// Joshua - If normal view is called during a cinematic, go to s_Cinematic instead
+	if (EPlayerController(Owner).bInCinematic)
+		GotoState('s_Cinematic');
+	else
+		GotoState('MainHUD');
 }
 
 //------------------------------------------------------------------------

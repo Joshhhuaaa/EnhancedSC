@@ -2184,12 +2184,75 @@ function bool ToggleCinematic(EPattern CinematicPattern, bool bStart)
 		CurrentPattern	= None;
 		
 		m_camera.GoToState('s_Following');
-        myHUD.GotoState(EMainHUD(myHUD).RestoreState());
+		// Joshua - Restore HUD state, but validate it matches current player state
+		//myHUD.GotoState(EMainHUD(myHUD).RestoreState());
+		RestoreHUDStateAfterCinematic();
 	}
 
 	bStopInput = bInCinematic;
 	return true;
 }
+
+//---------------------------------------[Joshua - 10 Dec 2025]-----
+// Description		
+//		Restores HUD state after cinematic, but validates it matches 
+//		the current player state to prevent mismatches
+//------------------------------------------------------------------------
+function RestoreHUDStateAfterCinematic()
+{
+	local name SavedState;
+	local name CurrentPlayerState;
+	local EGameplayObject SavedMaster;
+	local bool bCanRestoreSlavery;
+	
+	SavedState = EMainHUD(myHUD).RestoreState();
+	CurrentPlayerState = GetStateName();
+	SavedMaster = EMainHUD(myHUD).hud_master;
+	
+	// If player was in targeting but changed state during cinematic, we need to correct the HUD state
+	if (SavedState == 's_Slavery')
+	{
+		bCanRestoreSlavery = false;
+		
+		if (CurrentPlayerState == 's_FirstPersonTargeting' ||
+			CurrentPlayerState == 's_GrabTargeting' ||
+			CurrentPlayerState == 's_HOHTargeting' ||
+			CurrentPlayerState == 's_PlayerBTWTargeting' ||
+			CurrentPlayerState == 's_SplitTargeting' ||			
+			CurrentPlayerState == 's_RappellingTargeting' ||
+			CurrentPlayerState == 's_PlayerSniping' ||
+			CurrentPlayerState == 's_SplitSniping' ||
+			CurrentPlayerState == 's_RappellingSniping' ||
+			CurrentPlayerState == 's_CameraJammerTargeting' ||
+			CurrentPlayerState == 's_LaserMicTargeting' ||
+			CurrentPlayerState == 's_Zooming' ||
+			CurrentPlayerState == 's_SplitZooming')
+		{
+			// Still in a targeting state, verify the master item is valid
+			if (SavedMaster != None &&
+				(SavedMaster == ActiveGun || SavedMaster == ePawn.HandItem ||
+				(SavedMaster == GoggleItem && (CurrentPlayerState == 's_Zooming' || CurrentPlayerState == 's_SplitZooming'))))
+			{
+				bCanRestoreSlavery = true;
+			}
+		}
+		
+		if (bCanRestoreSlavery)
+		{
+			myHUD.GotoState('s_Slavery');
+		}
+		else
+		{
+			EMainHUD(myHUD).hud_master = None;
+			myHUD.GotoState('MainHUD');
+		}
+	}
+	else
+	{
+		myHUD.GotoState(SavedState);
+	}
+}
+
 function ProcessToggleCinematic()
 {
 	bFire = 0;
