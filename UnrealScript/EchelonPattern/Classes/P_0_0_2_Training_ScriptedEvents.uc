@@ -69,6 +69,7 @@ Begin:
     Log("This pattern controls all of the events between NPC Sam, Player Sam, Lambert and Grimsdottir.");
 StartGame:
     Log("Lambert and Sam talk in a cutscene.");
+    IgnoreAlarmStage(TRUE); // Joshua - Level has no alarms, added to hide alarm HUD icon
     PlayerMove(false);
     Log("SetUp One. lambert appraoches from down the hall. Low Angle Wide");
     CinCamera(0, 'SetUpOneCam', 'SetUpOneFocus',);
@@ -164,7 +165,7 @@ GrimDown:
     GameOver(false, 0);
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

@@ -43,8 +43,8 @@ function InitPattern()
     {
         ForEach DynamicActors(class'Pawn', P)
         {
-            if (P.name == 'EGeorgianSoldier0' || P.name == 'EGeorgianSoldier5' || P.name == 'EGeorgianSoldier16'
-            || P.name == 'EGeorgianSoldier10' || P.name == 'EGeorgianSoldier9' || P.name == 'EGeorgianSoldier6')
+            if (P.name == 'EGeorgianSoldier0' || P.name == 'EGeorgianSoldier5' || P.name == 'EGeorgianSoldier16' ||
+                P.name == 'EGeorgianSoldier10' || P.name == 'EGeorgianSoldier9' || P.name == 'EGeorgianSoldier6')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.GESoldier.GESoldierA", class'Texture'));
             }
@@ -68,6 +68,7 @@ state Pattern
 
 Begin:
     Log("Lamberto speaketh prophecy.");
+    IgnoreAlarmStage(TRUE); // Joshua - Level has no alarms, added to hide alarm HUD icon
 Hurry:
     Log("If Sam is dilly-dallying.");
     Speech(Localize("P_1_3_3OilRig_LambertComm", "Speech_0015L", "Localization\\P_1_3_3CaspianOilRefinery"), Sound'S1_3_3Voice.Play_13_26_01', 1, 0, TR_NPCS, 0, false);

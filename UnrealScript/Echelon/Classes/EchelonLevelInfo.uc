@@ -155,29 +155,6 @@ function PostBeginPlay()
 		}
 	}
 
-	// Joshua - Training never had alarms, enabling this to hide their HUD counter
-	if (GetCurrentMapName() == "0_0_2_Training" || GetCurrentMapName() == "0_0_3_Training")
-        bIgnoreAlarmStage = true;
-
-	// Joshua - Cleaner method for one alarm levels like Defense Ministry
-	if (GetCurrentMapName() == "1_2_1DefenseMinistry")
-		bOneAlarmLevel = true;
-
-	// Joshua - Oil Rig never had alarms, enabling this to hide their HUD counter
-	if (GetCurrentMapName() == "1_3_2CaspianOilRefinery" || GetCurrentMapName() == "1_3_3CaspianOilRefinery")
-        bIgnoreAlarmStage = true;
-
-	// Joshua - Enhanced change: CIA HQ is a one alarm level until accessing the central server (Elite difficulty)
-	if (GetCurrentMapName() == "2_1_0CIA" || GetCurrentMapName() == "2_1_1CIA")
-	{
-		if (EchelonGameInfo(Level.Game).bEliteMode)
-			bOneAlarmLevel = true;
-	}
-
-	// Joshua - Enhanced change: Enabling alarm stages for Vselka
-	if (GetCurrentMapName() == "1_7_1_1VselkaInfiltration")
-        bIgnoreAlarmStage = false;
-
     TGAME = spawn(class'ETGAME', self);
     TMENU = spawn(class'ETMENU', self);
     TICON = spawn(class'ETICON', self);

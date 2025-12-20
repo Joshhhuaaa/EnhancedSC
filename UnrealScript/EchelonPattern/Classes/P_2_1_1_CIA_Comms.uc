@@ -59,6 +59,9 @@ state Pattern
 
 Begin:
 Start:
+    // Joshua - Enhanced change: CIA HQ is a one alarm level until accessing the central server (Elite difficulty)
+    if (IsEliteMode())
+        EchelonLevelInfo(Level).bOneAlarmLevel = true;
     Log("");
     Sleep(1);
 FGun:

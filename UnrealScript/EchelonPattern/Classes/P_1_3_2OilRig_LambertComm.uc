@@ -63,6 +63,7 @@ state Pattern
 Begin:
 Insertion:
     Log("Headquarters communications, initiating map 1.3.");
+    IgnoreAlarmStage(TRUE); // Joshua - Level has no alarms, added to hide alarm HUD icon
     Speech(Localize("P_1_3_2OilRig_LambertComm", "Speech_0007L", "Localization\\P_1_3_2CaspianOilRefinery"), Sound'S1_3_2Voice.Play_13_10_01', 1, 0, TR_HEADQUARTER, 0, false);
     Speech(Localize("P_1_3_2OilRig_LambertComm", "Speech_0008L", "Localization\\P_1_3_2CaspianOilRefinery"), Sound'S1_3_2Voice.Play_13_10_02', 0, 0, TR_HEADQUARTER, 0, false);
     Speech(Localize("P_1_3_2OilRig_LambertComm", "Speech_0009L", "Localization\\P_1_3_2CaspianOilRefinery"), Sound'S1_3_2Voice.Play_13_10_03', 1, 0, TR_HEADQUARTER, 0, false);
