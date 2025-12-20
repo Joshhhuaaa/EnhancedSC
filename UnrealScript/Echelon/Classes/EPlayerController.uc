@@ -9181,8 +9181,10 @@ state s_Split
 			return;
 		}
 
-		if (bPressedJump)
+		if ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) // Joshua - Crouch drop
 		{
+			if (bCrouchDrop) // Joshua - Crouch drop
+				bDuck = 0;
 			testExt.X = ePawn.CollisionRadius;
 			testExt.Y = ePawn.CollisionRadius;
 			testExt.Z = ePawn.default.CollisionHeight;
@@ -9547,9 +9549,9 @@ state s_Fence
 		ePawn.Acceleration   = NewAccel;
 		ePawn.Acceleration *= eGame.m_onGroundAccel;
 
-		if (((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) || !ePawn.m_validFence)
+		if (((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) || !ePawn.m_validFence) // Joshua - Crouch drop
 		{
-			if (bCrouchDrop)
+			if (bCrouchDrop) // Joshua - Crouch drop
 				bDuck = 0;
 			ePawn.Velocity = X * -200.0;
 			if (ePawn.Base.SurfaceType == SURFACE_FenceMetal)
@@ -9824,10 +9826,12 @@ state s_Ledge
 
         GetAxes(ePawn.Rotation,X,Y,Z);
 
-		if (aForward < eGame.m_backwardFull || ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0))) // Joshua - PT controls
+		if (aForward < eGame.m_backwardFull || ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump))) // Joshua - Crouch drop
 		{
 			ePawn.SetPhysics(PHYS_Falling);
 			GoToState('s_PlayerJumping');
+			if (bCrouchDrop)
+				bDuck = 0; // Joshua - Crouch drop
 		}
 		else if ((aForward > eGame.m_forwardFull) &&
 				m_GECanHoist &&
@@ -10139,16 +10143,17 @@ state s_HandOverHand
 
         GetAxes(ePawn.Rotation, X, Y, Z);
 
-		if ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) // Joshua - PT controls
+		if ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) // Joshua - Crouch drop
 		{
 			GoToState(,'FallDown');
-		}
-		else if ((bCrouchDrop && bPressedJump) || (!bCrouchDrop && bDuck > 0)) // PT controls
-		{
 			if (bCrouchDrop)
-				bPressedJump = False;
-			else
+				bDuck = 0; // Joshua - Crouch drop
+		}
+		else if ((bCrouchDrop && bPressedJump) || (!bCrouchDrop && bDuck > 0)) // Joshua - Crouch drop
+		{
+			if (!bCrouchDrop)  // Joshua - Crouch drop
 				bDuck = 0;
+
 			hohDir = Normal(ePawn.m_geoTopPoint - ePawn.m_geoBottomPoint);
 			if ((hohDir dot X)  > 0.0)
 			{
@@ -10283,7 +10288,7 @@ state s_HandOverHandFeetUp
 
 		ePawn.LookAt(LAHOH, Vector(Rotation), Vector(ePawn.Rotation), 0, 0, -70, 70);
 
-		if (bDuck > 0 || bPressedJump)
+		if ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && (bDuck > 0 || bPressedJump))) // Joshua - Crouch drop (also preventing Jump from lowering legs)
 		{
 			bDuck = 0;
 			testPos = ePawn.Location;
@@ -10293,10 +10298,12 @@ state s_HandOverHandFeetUp
 			testExtent.Z = ePawn.default.CollisionHeight;
 			if (ePawn.FastPointCheck(testPos, testExtent, true, true))
 			{
-				if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+				if ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) // Joshua - Crouch drop
 					JumpLabelPrivate = 'FallDown';
 				else
 					JumpLabelPrivate = '';
+				if (bCrouchDrop)
+					bDuck = 0; // Joshua - Crouch drop
 				GoToState(, 'FeetDown');
 			}
 		}
@@ -10416,9 +10423,11 @@ state s_HOHTargeting extends s_FirstPersonTargeting
 
 		ePawn.AimAt(AAHOH, Vector(Rotation), Vector(ePawn.Rotation), -80, 50, -80, 80);
 
-		if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		if ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) // Joshua - Crouch drop
 		{
 			JumpLabelPrivate = 'FallDown';
+			if (bCrouchDrop)
+				bDuck = 0; // Joshua - Crouch drop
 			GoToState(,'PutGunBack');
 		}
 	}
@@ -10840,8 +10849,10 @@ state s_NarrowLadder
 		if (aForward > eGame.m_backwardFull)
 			m_LPSlideStartTime = Level.TimeSeconds;
 
-		if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		if ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) // Joshua - Crouch drop
 		{
+			if (bCrouchDrop)
+				bDuck = 0; // Joshua - Crouch drop
 			JumpRelease();
 		}
 		else if (bInTransition)
@@ -11142,8 +11153,10 @@ state s_NarrowLadderSlideDown extends s_SlideDownBase
 		{
 			return;
 		}
-		else if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		else if ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) // Joshua - Crouch drop
 		{
+			if (bCrouchDrop)
+				bDuck = 0; // Joshua - Crouch drop
 			JumpRelease();
 		}
 		else if (aForward < eGame.m_backwardFull)
@@ -11390,8 +11403,10 @@ state s_Pipe
 			ePawn.Acceleration = vect(0, 0, 0);
 		}
 
-		if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		if ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) // Joshua - Crouch drop
 		{
+			if (bCrouchDrop)
+				bDuck = 0; // Joshua - Crouch drop
 			JumpRelease();
 		}
 		else if (bInTransition)
@@ -11546,8 +11561,10 @@ state s_PipeSlideDown extends s_SlideDownBase
 		{
 			return;
 		}
-		else if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		else if ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) // Joshua - Crouch drop
 		{
+			if (bCrouchDrop)
+				bDuck = 0; // Joshua - Crouch drop
 			JumpRelease();
 		}
 		else if (!m_GECanGoBackward)
@@ -11740,7 +11757,7 @@ state s_ZipLine
 				m_ZipLineDropTimer = 0.75;
 			}
 			
-			if (!bCrouchDrop) // Joshua - PT controls
+			if (!bCrouchDrop) // Joshua - Crouch drop
 				bDuck = 0;
 		}
 	}
@@ -11766,9 +11783,9 @@ state s_ZipLine
 			minSpeed *= 2.0;
 		}
 
-		if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		if ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) // Joshua - Crouch drop
 		{
-			if (bCrouchDrop) // Joshua - PT controls
+			if (bCrouchDrop) // Joshua - Crouch drop
 				bDuck = 0;
 			ePawn.SetPhysics(PHYS_Falling);
 			GoToState('s_PlayerJumping');
@@ -11960,8 +11977,10 @@ state s_Pole
 			}
 		}
 
-		if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		if ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) // Joshua - Crouch drop
 		{
+			if (bCrouchDrop)
+				bDuck = 0; // Joshua - Crouch drop
 			JumpRelease();
 		}
 		else if (m_GEgoingUp)
@@ -12073,8 +12092,10 @@ state s_PoleSlideDown extends s_SlideDownBase
 			ePawn.SetRotation(Rotator(forwardDir));
 		}
 
-		if ((!bCrouchDrop && bPressedJump) || (bCrouchDrop && bDuck > 0)) // Joshua - PT controls
+		if ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)) // Joshua - Crouch drop
 		{
+			if (bCrouchDrop)
+				bDuck = 0; // Joshua - Crouch drop
 			JumpRelease();
 		}
 		else if (aForward < eGame.m_backwardGentle)
