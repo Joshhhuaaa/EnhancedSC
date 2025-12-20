@@ -41,6 +41,9 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
         case AI_UNCONSCIOUS:
             EventJump('OffDamage');
             break;
+        case AI_GRABBED: // Joshua - Fail for grabbing the CIA security
+            EventJump('OffGrabbed');
+            break;
         default:
             break;
         }
@@ -127,6 +130,15 @@ OffDamage:
 OffDamage2:
     Log("OffDamage2");
     DisableMessages(TRUE, TRUE);
+    Speech(Localize("P_0_0_3_TrainingT3_Hidebody06", "Speech_0006L", "Localization\\P_0_0_3_Training"), Sound'S0_0_3Voice.Play_00_99_14', 3, 0, TR_HEADQUARTER, 0, false);
+    Jump('Failed');
+OffGrabbed: // Joshua - Fail for grabbing the CIA security
+    Log("OffGrabbed");
+    // Joshua - Do not fail if you grab the opponent
+    if (EchelonGameInfo(Level.Game).pPlayer.m_AttackTarget == Characters[2].Pawn)
+        Jump('End');
+    DisableMessages(TRUE, TRUE);
+    Sleep(1);
     Speech(Localize("P_0_0_3_TrainingT3_Hidebody06", "Speech_0006L", "Localization\\P_0_0_3_Training"), Sound'S0_0_3Voice.Play_00_99_14', 3, 0, TR_HEADQUARTER, 0, false);
     Jump('Failed');
 Failed:
@@ -240,7 +252,7 @@ ManDown:
 Murder:
     SendPatternEvent('T3CommsGroup','BloodyMurder');
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }
