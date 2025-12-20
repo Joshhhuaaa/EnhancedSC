@@ -70,6 +70,7 @@ ConversationWithCIAContact:
     WaitForGoal(1,GOAL_Action,);
     Goal_Default(1,GOAL_Guard,9,,'PLAYER','PLAYER',,,FALSE,,,,);
     GoalCompleted('4_1_1');
+    SetFlags(V4_1_1ChineseEmbassy(Level.VarObject).GoalAgencyContact,TRUE);
     Talk(Sound'S4_1_1Voice.Play_41_17_03', 1, , TRUE, 0);
     Talk(Sound'S4_1_1Voice.Play_41_17_04', 0, , TRUE, 0);
     Talk(Sound'S4_1_1Voice.Play_41_17_05', 1, , TRUE, 0);

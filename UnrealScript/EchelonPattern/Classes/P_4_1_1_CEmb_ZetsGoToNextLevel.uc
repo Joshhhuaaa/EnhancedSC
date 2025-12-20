@@ -44,7 +44,11 @@ Begin:
 Milestone:
     Log("Milestone");
     Sleep(1);
+    CheckFlags(V4_1_1ChineseEmbassy(Level.VarObject).GoalAgencyContact,FALSE,'DoNothing');
     LevelChange("4_1_2ChineseEmbassy");
+    End();
+DoNothing:
+    Log("Doing nothing");
     End();
 
 }
