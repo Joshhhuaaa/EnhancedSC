@@ -55,6 +55,11 @@ var int 		iMaxAlarmFlashNbr;
 var FLOAT		fAlarmFlashTime;
 var FLOAT 		fAlarmFlashMaxTimePer;
 
+// Joshua - Briefly displays the gadget name after selection (GameCube feature)
+var bool  bDisplayGadget;
+var FLOAT fGadgetNameTimer;
+var bool  bGoalAnimInitialized; // Joshua - Tracks if the goal display animation has been initialized at least once
+
 // Joshua - Sheath support
 var bool bNeedSheath;
 var bool bIsFirstPerson;
@@ -208,6 +213,18 @@ function Tick(float Delta)
     	fAlarmFlashTime = 0;
 	}
 
+	// Joshua - Briefly displays the gadget name after selection (GameCube feature)
+	if (bDisplayGadget)
+    {
+        fGadgetNameTimer += Delta;
+        if (fGadgetNameTimer > 3.0)
+        {
+            fGadgetNameTimer = 0;
+            bDisplayGadget = false;
+            bStopDrawing = true;
+        }
+    }
+
 	CheckPreviousWeapon();
 	CheckNextWeapon();
 }
@@ -237,14 +254,32 @@ function PostRender(Canvas C, optional bool bMinimal)
 	}*/
 
 	// Display current goal
-	if (Epc.bShowCurrentGoal && Epc.bShowHUD)
+	if (Epc.bShowCurrentGoal && Epc.bShowHUD && !bMinimal)
 	{
 		bHasCurrentGoal = false;
 
-		// Joshua - Show keypad as goal
-		if (Epc.bShowKeyNum && Epc.bShowKeyPadGoal)
+		if (Epc.bShowKeyNum && Epc.bShowKeyPadGoal) // Joshua - Show keypad as goal
 		{
 			sCurrentGoal = Epc.CurrentGoal;
+			DisplayCurrentGoal(Canvas);
+			bHasCurrentGoal = true;
+		}
+		else if (Epc.bShowCurrentGadget && bDisplayGadget) // Joshua - Briefly displays the gadget name after selection (GameCube feature)
+		{
+			// Joshua - Only update sCurrentGoal when actually displaying a new gadget
+			if (Epc.ePawn.WeaponStance > 0 &&
+				Epc.ePawn.FullInventory.GetSelectedItem(1) != None &&
+				Epc.ePawn.FullInventory.GetSelectedItem().IsA('EMainGun') &&
+				Epc.ePawn.FullInventory.GetSelectedItem() == PCInventory.GetSelectedItem())
+				sCurrentGoal = Localize("InventoryItem", Epc.ePawn.FullInventory.GetSelectedItem(1).ItemName, "Localization\\HUD");
+			else if (Epc.ePawn.FullInventory.GetSelectedItem() != None)
+				sCurrentGoal = Localize("InventoryItem", Epc.ePawn.FullInventory.GetSelectedItem().ItemName, "Localization\\HUD");
+			DisplayCurrentGoal(Canvas);
+			bHasCurrentGoal = true;
+		}
+		else if (Epc.bShowCurrentGadget && !bDisplayGadget && iCurrentPos > 0 && iCurrentPos < 100) // Joshua - Keep rendering during slide-down animation
+		{
+			// Keep displaying the last gadget name while sliding down
 			DisplayCurrentGoal(Canvas);
 			bHasCurrentGoal = true;
 		}
@@ -256,6 +291,13 @@ function PostRender(Canvas C, optional bool bMinimal)
 			sCurrentGoal = Localize(Epc.CurrentGoalSection, Epc.CurrentGoalKey, Epc.CurrentGoalPackage);
 			if (sCurrentGoal != "(null)")
 			{
+				// Joshua - Initialize animation on first goal
+				if (!bGoalAnimInitialized)
+				{
+					iCurrentPos = 100;
+					fCurrentPosAccum = 0.0;
+					bGoalAnimInitialized = true;
+				}
 				DisplayCurrentGoal(Canvas);
 				bHasCurrentGoal = true;
 			}
@@ -831,6 +873,7 @@ function PostBeginPlay()
 	bStopDrawing = false;
 	iCurrentPos = 0;
 	fCurrentPosAccum = 0.0; // Joshua - Accumulates fractional progress for smooth animation at all framerates
+	bGoalAnimInitialized = false; // Joshua - Tracks if the goal display animation has been initialized at least once
 	fTimerValue = 0.0f;
 	bStartTimer = false;
 	iAlarmIndex = 0;
@@ -1662,8 +1705,8 @@ function DisplayCurrentGoal(ECanvas Canvas)
     yPos = SCREEN_END_Y - eGame.HUD_OFFSET_Y + 1 - ITEMBOX_HEIGHT_L - SPACE_EXTRA_GOAL;    
 
 
-	// Joshua - Bypass velocity check for keypad interactions
-	if (VSize(Epc.ePawn.Velocity) != 0.0 && !(Epc.bShowKeyNum && Epc.bShowKeyPadGoal)) 	
+	// Joshua - Bypass velocity check for keypad interactions and current gadget
+	if (VSize(Epc.ePawn.Velocity) != 0.0 && !(Epc.bShowKeyNum && Epc.bShowKeyPadGoal) && !(Epc.bShowCurrentGadget && bDisplayGadget)) 	
 	{
 		fTimerValue = 0.0;
 		bStopDrawing = true;									
@@ -1675,9 +1718,17 @@ function DisplayCurrentGoal(ECanvas Canvas)
 			bStopDrawing = false;	
 			bStartTimer = false;							
 		}	
-		// Joshua - Immediately show keypad code when in keypad interaction
-		if (Epc.bShowKeyNum && Epc.bShowKeyPadGoal)
+		// Joshua - Immediately show keypad code when in keypad interaction and current gadget
+		if ((Epc.bShowKeyNum && Epc.bShowKeyPadGoal) || (Epc.bShowCurrentGadget && bDisplayGadget))
 		{
+			// Joshua - Tracks if the goal display animation has been initialized at least once
+			if (!bGoalAnimInitialized)
+			{
+				// Joshua - If this is the first time showing anything, initialize from hidden position
+				iCurrentPos = 100;
+				fCurrentPosAccum = 0.0;
+				bGoalAnimInitialized = true;
+			}
 			bStopDrawing = false;
 			bStartTimer = false;
 		}
@@ -2052,7 +2103,12 @@ function CheckNextWeapon()
 		Item = MySecItem;
 
 	if (Item !=None && MyItem != Item)
+	{
 		PCInventory.SetSelectedItem(Item);
+		// Joshua - Briefly displays the gadget name after selection (GameCube feature)
+		bDisplayGadget = true;
+		fGadgetNameTimer = 0;
+	}
 }
 
 function CheckPreviousWeapon()
@@ -2201,7 +2257,12 @@ function CheckPreviousWeapon()
 		Item = MySecItem;
 
 	if (Item != None && MyItem != Item)
+	{
 		PCInventory.SetSelectedItem(Item);
+		// Joshua - Briefly displays the gadget name after selection (GameCube feature)
+		bDisplayGadget = true;
+		fGadgetNameTimer = 0;
+	}
 }
 // Joshua - End of quick switch gadgets
 
