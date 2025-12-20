@@ -1450,8 +1450,25 @@ function DrawBoxBorders(ECanvas Canvas, int xPos, int yPos, int width, int heigh
 function DrawCategory(ECanvas Canvas)
 {
     local int xPos, yPos, xLightPos, yLightPos, i, nbItems, height, CatIndex;
+	local int startCat, EndCat; // Joshua - Option to hide inactive categories on controller
 
-	for (CatIndex = 0; CatIndex < PCInventory.GetNumberOfCategories()/*-1*/; CatIndex++)
+	// Joshua - Option to hide inactive categories on controller
+	if (Epc.bHideInactiveCategories && eGame.bUseController)
+	{
+        if (CurrentCategory == -1)
+            return;
+
+        StartCat = CurrentCategory;
+        EndCat = CurrentCategory;
+	}
+    else
+    {
+        StartCat = 0;
+        EndCat = PCInventory.GetNumberOfCategories() /*-1*/;
+    }
+
+	//for (CatIndex = 0; CatIndex < PCInventory.GetNumberOfCategories()/*-1*/; CatIndex++)
+	for (CatIndex = StartCat; CatIndex <= EndCat; CatIndex++)
 	{
 		// Filter not-available categories
 		if (!IsCategoryAvailable(GetCategory(CatIndex)))

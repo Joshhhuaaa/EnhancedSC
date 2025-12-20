@@ -277,7 +277,9 @@ var float m_LastCrouchTime; // Joshua - // Joshua - Anti-spam crouch timer
 var float m_ZipLineDropTimer; // Joshua - Anti-spam stance change on zipline
 
 var(Enhanced) config bool bToggleInventory;	// Joshua - Option to use toggle inventory instead of hold
+var(Enhanced) config bool bHideInactiveCategories; // Joshua - Hide categories that aren't selected (Xbox behavior)
 var(Enhanced) config bool bInteractionPause; // Joshua - If the interaction box or inventory is active, pause the game
+var(Enhanced) config bool bInvertInteractionList; // Joshua - Reverses the interaction list order (top to bottom instead of bottom to top)
 
 var(Enhanced) config bool bBurstFire; // Joshua - Restoring burst fire from early Splinter Cell builds
 
@@ -339,7 +341,7 @@ var(Enhanced) config bool bShowCurrentGoal;
 var(Enhanced) config bool bShowMissionInformation;
 var(Enhanced) config bool bShowCrosshair;
 var(Enhanced) config bool bShowScope;
-var(Enhanced) config bool bShowAlarms;
+var(Enhanced) config bool bShowAlarms; // Joshua - Alarm stages like the Shanghai version
 
 native(1290) final function SetCameraFOV(actor Owner, float NewFOV);
 native(1291) final function SetCameraMode(actor Owner, int NewRendMap);
