@@ -144,7 +144,7 @@ function ObjectHudTick(float DeltaTime)
         {
 			if (Epc.m_targetActor != None)
 			{
-				fDistDistance = VSize(Epc.m_targetLocation-Epc.Location);
+				fDistDistance = VSize(Epc.m_targetLocation - Epc.Location);
 
 				if (Epc.m_targetActor.bIsPawn && !EPawn(Epc.m_targetActor).bHostile)
 					chStyle = CH_NONHOSTILE;
@@ -218,7 +218,7 @@ function DrawView(HUD Hud, ECanvas Canvas)
 function DrawFatigueMeter(ECanvas Canvas, float fatigueLevel)
 {			
     // Fill
-    Canvas.SetDrawColor(128,128,128);
+    Canvas.SetDrawColor(128, 128, 128);
 	Canvas.Style = ERenderStyle.STY_Alpha;
 
 	DrawLine(0 + DIST_METER_END + 1, SCREEN_HALF_Y - DIST_METER_VERT_SIZE + 1,
@@ -230,7 +230,7 @@ function DrawFatigueMeter(ECanvas Canvas, float fatigueLevel)
     DrawRectangle(0 + DIST_METER_END    , SCREEN_HALF_Y - DIST_METER_VERT_SIZE    , 0 + DIST_METER_START    , SCREEN_HALF_Y + 1 + DIST_METER_VERT_SIZE, 1, EHC_GREEN, Canvas);
     DrawRectangle(0 + DIST_METER_END - 1, SCREEN_HALF_Y - DIST_METER_VERT_SIZE + 1, 0 + DIST_METER_START + 1, SCREEN_HALF_Y + DIST_METER_VERT_SIZE    , 1, EHC_BLACK, Canvas);	
         
-	Canvas.SetDrawColor(128,128,128);
+	Canvas.SetDrawColor(128, 128, 128);
 	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
@@ -244,7 +244,7 @@ function DrawGreenRing(ECanvas Canvas)
 	// (Yanick Mimee) July-04-2002	
 	// Green border
 	Canvas.Style = ERenderStyle.STY_Alpha;
-	Canvas.SetDrawColor(128,128,128);
+	Canvas.SetDrawColor(128, 128, 128);
 
     Canvas.SetPos(0,0);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_border, GREEN_BORDER_TEXURE_SIZE_X ,GREEN_BORDER_TEXURE_SIZE_Y, 0, 0, GREEN_BORDER_TEXURE_SIZE_X, GREEN_BORDER_TEXURE_SIZE_Y);
@@ -309,7 +309,7 @@ function DrawGreenRing(ECanvas Canvas)
 //------------------------------------------------------------------------
 function DrawStems(ECanvas Canvas)
 {
-    Canvas.SetDrawColor(128,128,128);
+    Canvas.SetDrawColor(128, 128, 128);
 	Canvas.Style = ERenderStyle.STY_Alpha;
 
     // North Stem //
@@ -404,7 +404,7 @@ function DrawDistanceMeter(ECanvas Canvas)
     local   int     iDecimal;
 
     // Fill
-    Canvas.SetDrawColor(128,128,128);
+    Canvas.SetDrawColor(128, 128, 128);
 	Canvas.Style = ERenderStyle.STY_Alpha;
 
     DrawLine(SCREEN_END_X - DIST_METER_START + 1, SCREEN_HALF_Y - DIST_METER_VERT_SIZE + 1,
@@ -414,7 +414,7 @@ function DrawDistanceMeter(ECanvas Canvas)
     DrawRectangle(SCREEN_END_X - DIST_METER_START + 1, SCREEN_HALF_Y - DIST_METER_VERT_SIZE + 1, SCREEN_END_X - DIST_METER_END - 1, SCREEN_HALF_Y + DIST_METER_VERT_SIZE    , 1, EHC_BLACK, Canvas);
     
     // Draw Distance
-    Canvas.Font = font'EHUDFont';     
+    Canvas.Font = Font'EHUDFont';     
     Canvas.DrawColor = Green;
 
     // Only keep 4 numbers + '.'   
@@ -446,7 +446,7 @@ function DrawQuickInv(ECanvas Canvas)
 	local ESecondaryAmmo	SecAmmo;
     local float             xLen, yLen; // Joshua - Display zoom level in SC-20K scope
 
-    Canvas.SetDrawColor(128,128,128); 
+    Canvas.SetDrawColor(128, 128, 128); 
     Canvas.Style = ERenderStyle.STY_Alpha;
     // Fond Vert Transparent
     DrawLine(QUICK_INV_LEFT + 2, QUICK_INV_TOP + 2, QUICK_INV_RIGHT - 2, QUICK_INV_BOTTOM - 2, EHC_ALPHA_GREEN, Canvas);
@@ -464,17 +464,17 @@ function DrawQuickInv(ECanvas Canvas)
     // Gun Icon
     Canvas.SetPos(QUICK_INV_LEFT - 14, QUICK_INV_TOP + 2);
 
-    Canvas.SetDrawColor(64,64,64);
+    Canvas.SetDrawColor(64, 64, 64);
     Canvas.Style = ERenderStyle.STY_Modulated;
     eLevel.TICON.DrawTileFromManager(Canvas, Weapon.HUDTex, eLevel.TICON.GetWidth(Weapon.HUDTex), eLevel.TICON.GetHeight(Weapon.HUDTex), 0, 0, eLevel.TICON.GetWidth(Weapon.HUDTex), eLevel.TICON.GetHeight(Weapon.HUDTex));
     Canvas.Style = ERenderStyle.STY_Normal;
 
-    Canvas.SetDrawColor(128,128,128);
+    Canvas.SetDrawColor(128, 128, 128);
 	Canvas.Style = ERenderStyle.STY_Alpha;
 
     // Primary ammo qty
     Canvas.SetPos(QUICK_INV_LEFT + 50, QUICK_INV_TOP + 27);
-    Canvas.Font = font'EHUDFont'; 
+    Canvas.Font = Font'EHUDFont'; 
     Canvas.DrawColor = Green;
     strPrimAmmoNb = String(Weapon.Ammo);
     iPrimAmmoClipNb = Weapon.Ammo / Weapon.ClipMaxAmmo;
@@ -498,8 +498,8 @@ function DrawQuickInv(ECanvas Canvas)
             break;
         }
 
-        Canvas.Font = font'EHUDFont';
-        Canvas.SetDrawColor(128,128,128);
+        Canvas.Font = Font'EHUDFont';
+        Canvas.SetDrawColor(128, 128, 128);
         Canvas.DrawColor = Green;
         Canvas.Style = ERenderStyle.STY_Alpha;
         
@@ -520,7 +520,7 @@ function DrawQuickInv(ECanvas Canvas)
     {
         // Secondary Ammo Icon
         Canvas.SetPos(QUICK_INV_LEFT + 62, QUICK_INV_TOP + 2);
-        Canvas.SetDrawColor(64,64,64);
+        Canvas.SetDrawColor(64, 64, 64);
         Canvas.Style = ERenderStyle.STY_Modulated;
         eLevel.TICON.DrawTileFromManager(Canvas, SecAmmo.HUDTexSD, eLevel.TICON.GetWidth(SecAmmo.HUDTexSD), eLevel.TICON.GetHeight(SecAmmo.HUDTexSD), 0, 0, eLevel.TICON.GetWidth(SecAmmo.HUDTexSD), eLevel.TICON.GetHeight(SecAmmo.HUDTexSD));
         Canvas.Style = ERenderStyle.STY_Normal;
@@ -551,6 +551,13 @@ function DrawNoiseBars(ECanvas Canvas)
     local int p1, p2;
 
     pRotation = float(F2000.SniperNoisedRotation.Yaw & 65535) / 65535.0f;
+
+    // Hack for Defense Ministry
+    // Joshua - This shifts the compass by 90 degrees so the East Wing of the map point towards East on the binoculars
+	if (left(GetCurrentMapName(), 3) == "1_2")
+		pRotation += 0.25;
+	if (pRotation >= 1.0)
+		pRotation -= 1.0;
 
     position = pRotation * 5040;
 
@@ -612,8 +619,8 @@ function DrawNoiseBars(ECanvas Canvas)
 	Canvas.Style = ERenderStyle.STY_Alpha;	
 
     // Draw Compas Coordinates //
-    Canvas.Font = font'EHUDFont';
-    Canvas.SetDrawColor(38,81,50);
+    Canvas.Font = Font'EHUDFont';
+    Canvas.SetDrawColor(38, 81, 50);
 
     Canvas.SetPos(SCREEN_HALF_X - rPos, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST + 4);
     Canvas.DrawText("["$szFirstDir$"]");

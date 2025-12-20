@@ -31,22 +31,22 @@ state s_Use
 {
 	function DrawView(HUD Hud, ECanvas Canvas)
 	{
-		local EPlayerController epc;
-		epc = EPlayerController(Mic.Controller);
+		local EPlayerController Epc;
+		Epc = EPlayerController(Mic.Controller);
 
 		Canvas.Style = ERenderStyle.STY_Alpha;
 
-        if (epc.bShowScope && Epc.bShowHUD) // Joshua - Show scope toggle
+        if (Epc.bShowScope && Epc.bShowHUD) // Joshua - Show scope toggle
         {
             DrawNoiseBars(Canvas);
             DrawSideBars(Canvas);
             DrawTopBar(Canvas);
             DrawBottomBar(Canvas);
         }
-        if (epc.bShowCrosshair && Epc.bShowHUD) // Joshua - Show crosshair toggle
+        if (Epc.bShowCrosshair && Epc.bShowHUD) // Joshua - Show crosshair toggle
             DrawCrosshair(Canvas);
 
-        if (epc.bShowScope && Epc.bShowHUD) // Joshua - Show scope toggle
+        if (Epc.bShowScope && Epc.bShowHUD) // Joshua - Show scope toggle
             DrawBlackMask(Canvas);	
 
 		Canvas.Style = ERenderStyle.STY_Normal;
@@ -171,12 +171,12 @@ function DrawBottomBar(ECanvas Canvas)
     DrawLine(SCREEN_X + SIDEBAR_WIDTH + 1, SCREEN_END_Y - BOTTOM_SCREEN_Y - BOTTOMBAR_HEIGHT + 2, SCREEN_END_X - SCREEN_X - SIDEBAR_WIDTH - 1, SCREEN_END_Y - BOTTOM_SCREEN_Y - 2, 
 		     EHC_ALPHA_GREEN, Canvas);
 
-    Canvas.Font = font'EHUDFont';
+    Canvas.Font = Font'EHUDFont';
     Canvas.DrawColor = Black;	
 
 	// ZOOM
     // Joshua - Zoom functionality
-    epc = EPlayerController(Mic.Controller);
+    Epc = EPlayerController(Mic.Controller);
     if (Epc.bLaserMicZoomLevels)
     {
         RADCurr = (Mic.current_fov / 180.0) * 3.1416;
@@ -264,6 +264,13 @@ function DrawNoiseBars(ECanvas Canvas)
 
     pRotation = float(Mic.Controller.Rotation.Yaw & 65535) / 65535.0;
 
+    // Hack for Defense Ministry
+    // Joshua - This shifts the compass by 90 degrees so the East Wing of the map point towards East on the binoculars
+	if (left(GetCurrentMapName(), 3) == "1_2")
+		pRotation += 0.25;
+	if (pRotation >= 1.0)
+		pRotation -= 1.0;
+
     position = pRotation * 5040;
 
     qPos = position / 630;
@@ -323,7 +330,7 @@ function DrawNoiseBars(ECanvas Canvas)
 
     // Draw Compass Coordinates //
     Canvas.DrawColor = Green;	
-    Canvas.Font = font'EHUDFont';
+    Canvas.Font = Font'EHUDFont';
 
     Canvas.SetPos(SCREEN_HALF_X - rPos, yPos - 16);
     Canvas.DrawText("["$szFirstDir$"]");
