@@ -51,6 +51,11 @@ function InitPattern()
                 EPawn(P).Hat = None;
                 EPawn(P).HatMesh = None;
             }
+            if (P.name == 'EUSPrisoner5')
+            {
+                P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.Prisoner.PrisonerB", class'Texture'));
+            }
+        }
         }
 
         ForEach AllActors(Class'EHat', Hat)
