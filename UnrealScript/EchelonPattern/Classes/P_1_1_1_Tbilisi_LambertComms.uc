@@ -42,6 +42,12 @@ function InitPattern()
             Characters[2] = P.controller;
     }
 
+    // Joshua - No longer necessary to jam this door, will fail mission when reaching streets without black box instead
+    if (!bInit)
+    {
+        EDoorMover(GetMatchingActor('BlausteinsBalcony')).SetUsable(True);
+    }
+
     if (!bInit)
     {
     bInit=TRUE;
@@ -71,7 +77,8 @@ FindBox:
 BoxFound:
     Log("Sam finds Blausteins black box");
     Sleep(3);
-    LockDoor('BlausteinsBalcony', FALSE, TRUE);
+    // Joshua - No longer necessary to jam this door, will fail mission when reaching streets without black box instead
+    //LockDoor('BlausteinsBalcony', FALSE, TRUE);
     GoalCompleted('BLACKBOX');
     SetFlags(V1_1_1Tbilisi(Level.VarObject).GoalBlackBox,TRUE);
     AddGoal('DEADDROP', "", 6, "", "P_1_1_1_Tbilisi_LambertComms", "Goal_0079L", "Localization\\P_1_1_1Tbilisi", "P_1_1_1_Tbilisi_LambertComms", "Goal_0092L", "Localization\\P_1_1_1Tbilisi");
@@ -86,6 +93,8 @@ BoxFound:
     End();
 SafeStreets:
     Log("Lambert tells Sam its okay to go down to street level.");
+    // Joshua - Player hasn't gotten black box, so the streets are still restricted
+    CheckFlags(V1_1_1Tbilisi(Level.VarObject).GoalBlackBox,FALSE,'SamOnStreets');
     SetFlags(V1_1_1Tbilisi(Level.VarObject).GoalStreets,TRUE);
     GoalCompleted('STREETS');
     SendUnrealEvent('BackStreetColWall');
@@ -129,7 +138,7 @@ StrikeTwo:
     GameOver(false, 2);
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 LevelChange:
     Log("Going to 1_1_2");
