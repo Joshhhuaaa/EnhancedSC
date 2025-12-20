@@ -28,6 +28,7 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
 function InitPattern()
 {
     local Pawn P;
+    local ELaptop Laptop;
 
     Super.InitPattern();
 
@@ -42,12 +43,21 @@ function InitPattern()
     {
         ForEach DynamicActors(class'Pawn', P)
         {
-            if (P.name == 'EGeorgianSoldier2' || P.name == 'EGeorgianSoldier3' || P.name == 'EGeorgianSoldier6'
-            || P.name == 'EGeorgianSoldier13' || P.name == 'EGeorgianSoldier14' || P.name == 'EGeorgianSoldier16'
-            || P.name == 'EGeorgianSoldier21' || P.name == 'EGeorgianSoldier31' || P.name == 'EGeorgianSoldier33'
-            || P.name == 'EGeorgianSoldier37')
+            if (P.name == 'EGeorgianSoldier2' || P.name == 'EGeorgianSoldier3' || P.name == 'EGeorgianSoldier6' || 
+                P.name == 'EGeorgianSoldier13' || P.name == 'EGeorgianSoldier14' || P.name == 'EGeorgianSoldier16' || 
+                P.name == 'EGeorgianSoldier21' || P.name == 'EGeorgianSoldier31' || P.name == 'EGeorgianSoldier33' ||
+                P.name == 'EGeorgianSoldier37')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.GESoldier.GESoldierA", class'Texture'));
+            }
+        }
+
+        // Joshua - Make laptop destructible on Xbox version of Abattoir
+        ForEach AllActors(class'ELaptop', Laptop)
+        {
+            if (Laptop.name == 'ELaptop0')
+            {
+                Laptop.bDamageable = true;
             }
         }
     }
