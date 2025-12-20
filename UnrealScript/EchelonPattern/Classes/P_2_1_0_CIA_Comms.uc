@@ -10,6 +10,7 @@ class P_2_1_0_CIA_Comms extends EPattern;
 
 var int AlreadyRestarted;
 var int FanSuccess;
+var int TimerStarted;
 
 
 // EVENTS //////////////////////////////////////////////////////////////////////
@@ -46,6 +47,19 @@ function InitPattern()
             SoundActors[0] = A;
     }
 
+    if (!bInit)
+    {
+        // Joshua - Prevent both checkpoints from being triggered
+        EVolume(GetMatchingActor('FromFirst')).bIsAnEventtrigger = true;
+        EVolume(GetMatchingActor('FromFirst')).bTriggerOnlyOnce = true;
+        EVolume(GetMatchingActor('FromFirst')).GroupTag = 'Comms';
+        EVolume(GetMatchingActor('FromFirst')).JumpLabel = 'FanSave';
+        EVolume(GetMatchingActor('FromSecond')).bIsAnEventtrigger = true;
+        EVolume(GetMatchingActor('FromSecond')).bTriggerOnlyOnce = true;
+        EVolume(GetMatchingActor('FromSecond')).GroupTag = 'Comms';
+        EVolume(GetMatchingActor('FromSecond')).JumpLabel = 'TrapSave';
+    
+
         // Joshua - Adjusting timer for Elite mode
         if (IsEliteMode())
         {
@@ -70,6 +84,7 @@ function InitPattern()
     bInit=TRUE;
     AlreadyRestarted=0;
     FanSuccess=0;
+    TimerStarted=0;
     }
 
 }
@@ -106,6 +121,7 @@ FanStop:
     Log("");
     Sleep(3);
 BeginFanTimer:
+    SetFlags(TimerStarted,TRUE);
     SendUnrealEvent('FanStop');
     SendUnrealEvent('FanReStart');
     Sleep(1);
@@ -121,15 +137,26 @@ FanReStart:
     CheckFlags(AlreadyRestarted,TRUE,'FanMissEnd');
     SetFlags(AlreadyRestarted,TRUE);
     SendUnrealEvent('VentFan1');
-	SoundActors[0].    PlaySound(Sound'Machine.Play_BigFanStart', SLOT_SFX);
-	SoundActors[0].    PlaySound(Sound'Machine.Play_BigFan', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Machine.Play_BigFanStart', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Machine.Play_BigFan', SLOT_SFX);
     End();
 FanSuccess:
     Log("Sam gets past the fan");
     SetFlags(FanSuccess,TRUE);
     Sleep(0.25);
+    CheckFlags(TimerStarted,FALSE,'FanSuccessEarly'); // Joshua - If player has entered before timer has started, handle differently
     SendUnrealEvent('FanStop');
     Jump('FanReStart');
+    End();
+FanSuccessEarly:
+    Log("Fan success before timer started");
+    CheckFlags(AlreadyRestarted,TRUE,'FanMissEnd');
+    SetFlags(AlreadyRestarted,TRUE);
+    SendUnrealEvent('VentFan1');
+    SoundActors[0].PlaySound(Sound'Machine.Play_BigFanStart', SLOT_SFX);
+    SoundActors[0].PlaySound(Sound'Machine.Play_BigFan', SLOT_SFX);
+    Sleep(1);
+    Jump('blam3');
     End();
 FanMiss:
     Log("");
@@ -144,6 +171,11 @@ StopItsOver:
     Close();
     DisableMessages(TRUE, TRUE);
     End();
-
+FanSave: // Joshua - Prevent both checkpoints from being triggered
+    EVolume(GetMatchingActor('FromSecond')).bSavegame = false;
+    End();
+TrapSave: // Joshua - Prevent both checkpoints from being triggered
+    EVolume(GetMatchingActor('FromFirst')).bSavegame = false;
+    End();
 }
 
