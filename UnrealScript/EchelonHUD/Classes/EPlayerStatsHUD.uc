@@ -48,18 +48,18 @@ state s_StandardDisplay
 {   
 	function BeginState()
 	{
-        Epc.bStopInput = true;
+        Epc.PlayerInput.bStopInputAlternate = true;
     }
 
 	function EndState()
 	{
         if (!Epc.playerStats.bMissionComplete)
-            Epc.bStopInput = false;
+            Epc.PlayerInput.bStopInputAlternate = false;
 	}
 
     function Tick(float DeltaTime)
     {
-        if (Epc != None && Epc.GetStateName() == 's_Dead')
+        if (Epc.GetStateName() == 's_Dead' || Epc.bStopInput)
         {
             GotoState('');
             Owner.GotoState(EchelonMainHud(Owner).RestoreState());
@@ -118,7 +118,7 @@ state s_FinalMapStats
 {
     function BeginState()
     {
-        Epc.bStopInput = true;
+        Epc.PlayerInput.bStopInputAlternate = true;
     }
 
     function Tick(float DeltaTime)

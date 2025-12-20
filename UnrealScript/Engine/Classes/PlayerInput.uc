@@ -14,7 +14,7 @@ var float shouldMouseInvert; // fake name for CD protection
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
 const simDeltaTime = 0.033333f; // Joshua - Made mouse sensitivity frame rate independent by using a consistent DeltaTime
-
+var bool bStopInputAlternate; // Joshua - alternate bStopInput flag needed for inventory and player stats
 //=============================================================================
 // Input related functions.
 
@@ -32,11 +32,16 @@ event PlayerInput(float simDeltaTime)
 	if (bInvertMouse)
 		aLookUp = -aLookUp;
 
-	if (bStopInput)
+	if (bStopInput || bStopInputAlternate)
 	{
 		AStrafe = 0;
 		AForward = 0;
 		bFire = 0;
+	}
+
+	if (bStopInputAlternate)
+	{
+		bDuck = 0;
 	}
 
 	// Handle walking.

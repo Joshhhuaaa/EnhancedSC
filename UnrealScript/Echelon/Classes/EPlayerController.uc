@@ -334,7 +334,8 @@ function bool IsInXboxGameMenu()
 
 event bool CanSaveGame()
 {
-	return (Pawn != None && Pawn.Health > 0 && !bStopInput && !Level.bIsStartMenu && !IsInQuickInv() && !IsInXboxGameMenu() && (!eGame.bEliteMode || bAutoSaveLoad || bSavingTraining)); // Joshua - No quick saving in Elite mode
+	// Joshua - Allow checkpoints during bStopInput, but not manual saves (necessary for Kalinatek hostages)
+	return (Pawn != None && Pawn.Health > 0 && (!bStopInput || bCheckpoint) && !PlayerInput.bStopInputAlternate && !Level.bIsStartMenu && !IsInQuickInv() && !IsInXboxGameMenu() && ((!eGame.bEliteMode || bDebugMode) || bAutoSaveLoad || bSavingTraining));
 }
 
 event bool CanLoadGame()
@@ -1366,7 +1367,7 @@ exec function Snipe()
 		bMustZoomOut = false;
 	}
 */
-	if (Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 
 	if (ActiveGun != None && ActiveGun == MainGun && ePawn.HandItem == ActiveGun && !bInGunTransition)
@@ -1379,7 +1380,7 @@ exec function Snipe()
 //------------------------------------------------------------------------
 exec function SnipeZoomIn()
 {
-	if (Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 
 	if (bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && (GetStateName() == 's_PlayerSniping' || GetStateName() == 's_RappellingSniping'))
@@ -1392,7 +1393,7 @@ exec function SnipeZoomIn()
 //------------------------------------------------------------------------
 exec function SnipeZoomOut()
 {
-	if (Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 
 	if (bF2000ZoomLevels && ActiveGun != None && ePawn.HandItem == ActiveGun && ESniperGun(ActiveGun) != None && (GetStateName() == 's_PlayerSniping' || GetStateName() == 's_RappellingSniping'))
@@ -1405,7 +1406,7 @@ exec function SnipeZoomOut()
 //------------------------------------------------------------------------
 exec function ResetCamera()
 {
-	if (Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 
 	bResetCamera = 1;
@@ -2003,7 +2004,7 @@ function AdjustView(float DeltaTime);
 
 exec function Fire(optional float F)
 {
-	if (Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 	ProcessFire();
 }
@@ -2037,7 +2038,7 @@ function ProcessFire()
 
 exec function AltFire(optional float F)
 {
-	if (Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 	ProcessAltFire();
 }
@@ -2051,7 +2052,7 @@ function ProcessAltFire()
 
 exec function Scope()
 {
-	if (Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 	ProcessScope();
 }
@@ -2064,7 +2065,7 @@ function bool MayReload()
 
 exec function Interact()
 {
-	if (Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 
 	bInteraction = true;
@@ -2076,7 +2077,7 @@ function ProcessInteract();
 //clauzon process the back to Wall alone
 exec function BackToWall()
 {
-	if (Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 
 	ProcessBackToWall();
@@ -2087,7 +2088,7 @@ function ProcessBackToWall();
 //clauzon process the Reload Gun alone
 exec function ReloadGun()
 {
-	if (Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 
 	ProcessReloadGun();
@@ -2118,7 +2119,7 @@ function NotifyReloading()
 
 exec function SwitchROF()
 {
-	if (Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 	if (ePawn.HandItem != ActiveGun || bInGunTransition || bInTransition) 
 		return;
@@ -2130,7 +2131,7 @@ exec function SwitchROF()
 }
 exec function SwitchHeadset(optional float i)
 {
-	if (Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 	ProcessHeadset(i);
 }
@@ -2144,7 +2145,7 @@ function ProcessHeadSet(float i)
 
 exec function Jump(optional float F)
 {
-	if (Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 	bPressedJump = true;
 }
@@ -2720,8 +2721,7 @@ exec function ToggleHUD()
 // Joshua - New function to whistle
 exec function Whistle()
 {
-	if (Level.Pauser != None || bStopInput || bDisableWhistle)
-	{
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate || bDisableWhistle)
 		return;
 	}
 
@@ -2742,7 +2742,7 @@ exec function Whistle()
 
 exec function PreviousGadget()
 {
-	if (Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 
 	// Joshua - If the player is in sniping mode, don't change gadget
@@ -2760,7 +2760,7 @@ exec function PreviousGadget()
 
 exec function NextGadget()
 {
-	if (Level.Pauser != None || bStopInput)
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 
 	// Joshua - If the player is in sniping mode, don't change gadget
@@ -4366,7 +4366,7 @@ function PlayOnGround(float waitTween)
 		m_RunStartTime = Level.TimeSeconds;
 
 	// Reset time when moving, turning or when you're frozen
-	if (speed > 0 || aTurn != 0 || bStopInput)
+	if (speed > 0 || aTurn != 0 || bStopInput || PlayerInput.bStopInputAlternate)
 	{
 		ePawn.IdleTime = 0;
 	}

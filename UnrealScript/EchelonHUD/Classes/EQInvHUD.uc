@@ -381,7 +381,7 @@ state s_QDisplay
 			Epc.ResumeSound();
 		}
 		else
-			Epc.bStopInput = false;
+			Epc.PlayerInput.bStopInputAlternate = false;
 
 		CurrentItem		= -1;
 		CurrentCategory = -1;
@@ -552,7 +552,7 @@ function bool KeyEvent(string Key, EInputAction Action, float Delta)
             Epc.PauseSound(); // Joshua - Pausing sounds here to prevent looping ones from constantly playing when opening inventory, like in Pandora Tomorrow
         }
 		else
-			Epc.bStopInput = true;
+			Epc.PlayerInput.bStopInputAlternate = true;
 
 		bPreviousConfig = false;
 
