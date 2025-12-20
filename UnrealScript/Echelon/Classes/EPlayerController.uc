@@ -548,7 +548,8 @@ function UpdateCameraRotation(actor ViewActor)
 	snipeGun = ESniperGun(ePawn.HandItem);
 
 	// Joshua - Continue sniper noise even when the player's input is being blocked
-	if (snipeGun != None && snipeGun.bSniperMode /*&& !bStopInput*/)
+	// Joshua - Prevent sniper noise when player is in a cinematic
+	if (snipeGun != None && snipeGun.bSniperMode && !bInCinematic /*&& !bStopInput*/)
 		ViewRotation = snipeGun.SniperNoisedRotation;
 	else
 		ViewRotation = Rotation;
@@ -2204,7 +2205,8 @@ event PlayerCalcView(out actor ViewActor, out vector CameraLocation, out rotator
 	}
 
 	// Joshua - Continue sniper noise even when the player's input is being blocked
-	if (snipeGun != None && snipeGun.bSniperMode /*&& !bStopInput*/)
+	// Joshua - Prevent sniper noise when player is in a cinematic
+	if (snipeGun != None && snipeGun.bSniperMode && !bInCinematic /*&& !bStopInput*/)
 		CameraRotation = snipeGun.SniperNoisedRotation;
 }
 
