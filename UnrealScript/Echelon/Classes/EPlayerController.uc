@@ -8239,8 +8239,14 @@ state s_PlayerBTWTargeting extends s_PlayerBTWBase
 
 	function ProcessBackToWall()
 	{
-		Global.ProcessBackToWall();
+		// Joshua - Pressing BackToWall unequips gun and leaves the wall
+		if (!bInTransition && !bInGunTransition)
+		{
+			JumpLabelPrivate = 'Release';
+			GotoState(, 'GoBack');
+		}
 	}
+
 
 	function ProcessReloadGun()
 	{
