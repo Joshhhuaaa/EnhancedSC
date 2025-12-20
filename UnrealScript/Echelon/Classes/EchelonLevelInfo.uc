@@ -159,6 +159,33 @@ function PostBeginPlay()
     TMENU = spawn(class'ETMENU', self);
     TICON = spawn(class'ETICON', self);
 
+	// Joshua - Apply controller icon for Xbox pause screen
+    switch (EchelonGameInfo(Level.Game).pPlayer.ControllerIcon)
+    {
+		case CI_None:
+        case CI_Xbox:
+            TMENU.ArrayTexture[28].TextureOwner = Texture'HUD.HUD.ETMENU'; // Y
+            TMENU.ArrayTexture[29].TextureOwner = Texture'HUD.HUD.ETMENU'; // B
+            TMENU.ArrayTexture[30].TextureOwner = Texture'HUD.HUD.ETMENU'; // X
+            TMENU.ArrayTexture[31].TextureOwner = Texture'HUD.HUD.ETMENU'; // A
+            TMENU.ArrayTexture[32].TextureOwner = Texture'HUD.HUD.ETMENU'; // Start
+            break;
+        case CI_PlayStation:
+            TMENU.ArrayTexture[28].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Triangle
+            TMENU.ArrayTexture[29].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Circle
+            TMENU.ArrayTexture[30].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Square
+            TMENU.ArrayTexture[31].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Cross
+            TMENU.ArrayTexture[32].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Start
+            break;
+        case CI_GameCube:
+            TMENU.ArrayTexture[28].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // Y
+            TMENU.ArrayTexture[29].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // X
+            TMENU.ArrayTexture[30].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // B
+            TMENU.ArrayTexture[31].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // A
+            TMENU.ArrayTexture[32].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // Start
+            break;
+    }
+
 	// Add all the memoryStick in the map in the bank
 	ForEach DynamicActors(class'EMemoryStick', Ms)
 	{
@@ -333,7 +360,7 @@ function Timer()
         return;
     }
 
-	// Joshua - Prevents player from dying during GameOver and prevents NPC barks
+	// Joshua - Prevents NPC barks during GameOver
 	if (EchelonLevelInfo(Level).bGameOver)
 		return;
 
@@ -778,7 +805,7 @@ function GameOver()
 defaultproperties
 {
     AlarmPatternClass=Class'LambertWarnings'
-    bMusicEnabled=true
+    bMusicEnabled=True
     AlarmModifier(0)=1.000000
     AlarmModifier(1)=0.660000
     AlarmModifier(2)=0.330000
