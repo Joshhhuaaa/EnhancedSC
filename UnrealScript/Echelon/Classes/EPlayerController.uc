@@ -225,6 +225,10 @@ const MAX_REGULAR_MAP = 13;
 // Joshua - This is a native class. New variables must be added only after all original ones have been declared.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
+var(EnhancedDebug) bool bDebugMode;
+var(EnhancedDebug) string sDebugString1;
+var(EnhancedDebug) string sDebugString2;
+var(EnhancedDebug) string sDebugString3;
 var(EnhancedDebug) bool bEnableBTWThrow;
 var bool bBTWThrow; // Joshua - Player is using BTW throw, swap animations
 var(EnhancedDebug) bool bEnableHOHFUTargeting;
@@ -347,7 +351,9 @@ event bool CanSaveGame()
 
 event bool CanLoadGame()
 {
-	return !IsInQuickInv() && !IsInXboxGameMenu() && (!eGame.bEliteMode || bLoadingTraining); // Joshua - No quick loading in Elite mode
+	return !IsInQuickInv() && !IsInXboxGameMenu() && ((!eGame.bEliteMode || bDebugMode) || bLoadingTraining); // Joshua - No quick loading in Elite mode
+}
+
 }
 
 event bool CanGoBackToGame()
@@ -1184,14 +1190,74 @@ function EnterStartState()
 //	DDDD    EEEEE   BBBB    UUUUU    GGGG           AA  A   N   N   DDDD             CCCC   HH  H   EEEEE   AA  A    TT     
 //
 
+// Joshua - Enhanced debug
+function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
+{
+	Super.DisplayDebug(Canvas, YL, YPos);
+
+	if (bDebugMode)
+	{
+		Canvas.SetDrawColor(255, 0, 255);
+		Canvas.SetPos(4, YPos);
+		Canvas.DrawText("Debug 1:" @ sDebugString1);
+
+		YPos += YL;
+		Canvas.SetPos(4, YPos);
+		Canvas.DrawText("Debug 2:" @ sDebugString2);
+
+		YPos += YL;
+		Canvas.SetPos(4, YPos);
+		Canvas.DrawText("Debug 3:" @ sDebugString3);
+	}
+	else
+	{
+		Canvas.SetDrawColor(255, 0, 255);
+		Canvas.SetPos(4, YPos);
+		Canvas.DrawText("JumpLabel:" @ JumpLabel @
+			"JumpLabelPrivate:" @ JumpLabelPrivate);
+
+		YPos += YL;
+		Canvas.SetPos(4, YPos);
+		Canvas.DrawText("Camera State:" @ m_camera.GetStateName() @ "Mode:" @ GetEnum(enum'ECamMode', m_camera.m_camMode));
+
+		YPos += YL;
+		Canvas.SetPos(4, YPos);
+		Canvas.DrawText("HUD State:" @ myHUD.GetStateName());
+
+		YPos += YL;
+		Canvas.SetPos(4, YPos);
+		Canvas.DrawText("Target:" @ m_TargetActor);
+
+		//YPos += YL;
+		//Canvas.SetPos(4, YPos);
+		//Canvas.DrawText("Location:" @ Location @ "Diff:" @ Location - EPawn.Location);
+
+		YPos += YL;
+		Canvas.SetPos(4, YPos);
+		Canvas.DrawText("LastSaveName=" $ LastSaveName);
+
+		YPos += YL;
+		Canvas.SetPos(4, YPos);
+		Canvas.DrawText("bInTransition:" @ bInTransition @
+			"bInGunTransition:" @ bInGunTransition @
+			"Interaction:" @ Interaction);
+
+		YPos += YL;
+		Canvas.SetPos(4, YPos);
+		Canvas.DrawText("MainGun:" @ MainGun @
+						"HandGun:" @ HandGun @
+						"ActiveGun:" @ ActiveGun);
+	}
+}
+
 // Joshua - Refactored for clearer formatting
 function ShowDebugInput(Canvas Canvas, out float YL, out float YPos)
 {
     local string T;
     local float XL;
     
-    Canvas.SetDrawColor(255,255,255);
-    Canvas.SetPos(4,YPos);
+    Canvas.SetDrawColor(255, 255, 255);
+    Canvas.SetPos(4, YPos);
     Canvas.Style = ERenderStyle.STY_Normal;
     
     Canvas.StrLen("TEST", XL, YL);
@@ -1199,54 +1265,62 @@ function ShowDebugInput(Canvas Canvas, out float YL, out float YPos)
     T = "[DebugInput]";
     Canvas.DrawText(T, false);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
-    T = "aMouseX: " @ aMouseX @ " aMouseY: " @ aMouseY;
+    //T = "aMouseX: " @ aMouseX @ " aMouseY: " @ aMouseY;
+    //Canvas.DrawText(T, false);
+    //YPos += YL;
+    //Canvas.SetPos(4, YPos);
+    
+    T = "aForward:" @ aForward;
     Canvas.DrawText(T, false);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
-    T = "aForward: " @ aForward;
+    T = "aStrafe:" @ aStrafe;
     Canvas.DrawText(T, false);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
-    T = "aStrafe: " @ aStrafe;
+    T = "aTurn:" @ aTurn;
     Canvas.DrawText(T, false);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
-    T = "aTurn: " @ aTurn;
+    T = "aLookUp:" @ aLookUp;
     Canvas.DrawText(T, false);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
-    T = "aLookUp: " @ aLookUp;
+    T = "bPressedJump:" @ bPressedJump;
     Canvas.DrawText(T, false);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
+
+	T = "bFire:" @ bFire @ 
+		"aFire:" @ aFire @ 
+		"bAltFire:" @ bAltFire @ 
+		"aAltFire:" @ aAltFire;
+	Canvas.DrawText(T, false);
+	YPos += YL;
+	Canvas.SetPos(4, YPos);
     
-    T = "bPressedJump: " @ bPressedJump;
+    T = "bInterpolating:" @ bInterpolating;
     Canvas.DrawText(T, false);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
-    T = "bInterpolating: " @ bInterpolating;
+    T = "ePawn.bInterpolating:" @ ePawn.bInterpolating;
     Canvas.DrawText(T, false);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
-    
-    T = "ePawn.bInterpolating: " @ ePawn.bInterpolating;
-    Canvas.DrawText(T, false);
-    YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
 }
 
 exec function FreezePawns()
 {
 	local EPawn P;
 
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 	
 	playerStats.bCheatsActive = true;
@@ -1273,7 +1347,7 @@ exec function Reverse()
 	local EGoal goal;
 	local EAIController AI;
 
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 	return;
 
 	playerStats.bCheatsActive = true;
@@ -1426,7 +1500,7 @@ exec function ResetCamera()
 //------------------------------------------------------------------------
 exec function Noise(float volume, optional NoiseType ntype, optional float zthreshold)
 {
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	playerStats.bCheatsActive = true;
@@ -1446,7 +1520,7 @@ exec function ShowNavPoints()
 	local NavigationPoint nav;
 	local EInfoPoint key;
 
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	playerStats.bCheatsActive = true;
@@ -1463,7 +1537,7 @@ exec function ShowNavPoints()
 
 exec function Invincible()
 {
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	playerStats.bCheatsActive = true;
@@ -1472,12 +1546,12 @@ exec function Invincible()
 	if (bInvincible)
 		Pawn.Style = STY_Translucent;
 	else
-		Pawn.style = STY_Normal;
+		Pawn.Style = STY_Normal;
 }
 
 exec function Health()
 {
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	playerStats.bCheatsActive = true;
@@ -1488,7 +1562,7 @@ exec function Health()
 
 exec function StopTimer()
 {
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	playerStats.bCheatsActive = true;
@@ -1499,7 +1573,7 @@ exec function StopTimer()
 
 exec function Ammo()
 {
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	playerStats.bCheatsActive = true;
@@ -1512,7 +1586,7 @@ exec function Ammo()
 
 exec function KillSam()
 {
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	playerStats.bCheatsActive = true;
@@ -1522,7 +1596,7 @@ exec function KillSam()
 
 exec function KillTarget()
 {
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	playerStats.bCheatsActive = true;
@@ -1534,7 +1608,7 @@ exec function KillAll(class<actor> aClass)
 {
 	local Actor A;
 
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	playerStats.bCheatsActive = true;
@@ -1554,7 +1628,7 @@ function KillAllPawns(class<Pawn> aClass)
 {
 	local Pawn P;
 
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	playerStats.bCheatsActive = true;
@@ -1573,7 +1647,7 @@ function KillAllPawns(class<Pawn> aClass)
 
 exec function KillPawns()
 {
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	playerStats.bCheatsActive = true;
@@ -1583,21 +1657,23 @@ exec function KillPawns()
 
 exec function Stealth()
 {
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	bDebugStealth = !bDebugStealth;
 }
+
 exec function ShowInput()
 {
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
     bDebugInput = !bDebugInput;
 }
+
 exec function ToggleCamShot()
 {
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	bVideoMode = !bVideoMode;
@@ -1607,7 +1683,7 @@ exec function IM()
 {
 	local int i;
 
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	Log("* IM ["$IManager.Interactions.Length$"]");
@@ -1617,7 +1693,7 @@ exec function IM()
 
 exec function Mission(optional float i)
 {
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	EndMission(i == 0, 4);
@@ -1706,7 +1782,7 @@ exec function SamF()
 
 exec function FixCam()
 {
-	if (eGame.bEliteMode || eGame.bPermadeathMode)
+	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
 
 	playerStats.bCheatsActive = true;
@@ -1727,31 +1803,31 @@ exec function Stat(string Stat)
 {
 	switch (Stat)
 	{
-	case "A": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("PlayerIdentified"); break;
-	case "B": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BodyFound"); break;
-	case "C": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("AlarmTriggered"); break;
+	case "A": playerStats.AddStat("PlayerIdentified"); break;
+	case "B": playerStats.AddStat("BodyFound"); break;
+	case "C": playerStats.AddStat("AlarmTriggered"); break;
 
-	case "D": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKnockedOut"); break;
-	case "E": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKnockedOutRequired"); break;
-	case "F": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyInjured"); break;
-	case "G": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKilled"); break;
-	case "H": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKilledRequired"); break;
+	case "D": playerStats.AddStat("EnemyKnockedOut"); break;
+	case "E": playerStats.AddStat("EnemyKnockedOutRequired"); break;
+	case "F": playerStats.AddStat("EnemyInjured"); break;
+	case "G": playerStats.AddStat("EnemyKilled"); break;
+	case "H": playerStats.AddStat("EnemyKilledRequired"); break;
 
-	case "I": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKnockedOut"); break;
-	case "J": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKnockedOutRequired"); break;
-	case "K": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianInjured"); break;
-	case "L": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKilled"); break;
-	case "M": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKilledRequired"); break;
+	case "I": playerStats.AddStat("CivilianKnockedOut"); break;
+	case "J": playerStats.AddStat("CivilianKnockedOutRequired"); break;
+	case "K": playerStats.AddStat("CivilianInjured"); break;
+	case "L": playerStats.AddStat("CivilianKilled"); break;
+	case "M": playerStats.AddStat("CivilianKilledRequired"); break;
 
-	case "N": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BulletFired"); break;
-	case "O": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("LightDestroyed"); break;
-	case "P": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("ObjectDestroyed"); break;
-	case "Q": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("LockPicked"); break;
-	case "R": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("LockDestroyed"); break;
-	case "S": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("MedkitUsed"); break;
-	case "T": EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("NPCsInterrogated"); break;
+	case "N": playerStats.AddStat("BulletFired"); break;
+	case "O": playerStats.AddStat("LightDestroyed"); break;
+	case "P": playerStats.AddStat("ObjectDestroyed"); break;
+	case "Q": playerStats.AddStat("LockPicked"); break;
+	case "R": playerStats.AddStat("LockDestroyed"); break;
+	case "S": playerStats.AddStat("MedkitUsed"); break;
+	case "T": playerStats.AddStat("NPCsInterrogated"); break;
 
-	case "U": EchelonGameInfo(Level.Game).pPlayer.playerStats.bCheatsActive = !EchelonGameInfo(Level.Game).pPlayer.playerStats.bCheatsActive; break;
+	case "U": playerStats.bCheatsActive = !playerStats.bCheatsActive; break;
 
 	default: break;
 	}
@@ -1759,67 +1835,67 @@ exec function Stat(string Stat)
 
 exec function RandStat()
 {
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.PlayerIdentified = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("PlayerIdentified", 1 + rand(9999));
+    playerStats.PlayerIdentified = 0;
+    playerStats.AddStat("PlayerIdentified", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.BodyFound = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BodyFound", 1 + rand(9999));
+    playerStats.BodyFound = 0;
+    playerStats.AddStat("BodyFound", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AlarmTriggered = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("AlarmTriggered", 1 + rand(9999));
+    playerStats.AlarmTriggered = 0;
+    playerStats.AddStat("AlarmTriggered", 1 + rand(9999));
 
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.EnemyKnockedOut = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKnockedOut", 1 + rand(9999));
+    playerStats.EnemyKnockedOut = 0;
+    playerStats.AddStat("EnemyKnockedOut", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.EnemyKnockedOutRequired = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKnockedOutRequired", 1 + rand(9999));
+    playerStats.EnemyKnockedOutRequired = 0;
+    playerStats.AddStat("EnemyKnockedOutRequired", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.EnemyInjured = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyInjured", 1 + rand(9999));
+    playerStats.EnemyInjured = 0;
+    playerStats.AddStat("EnemyInjured", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.EnemyKilled = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKilled", 1 + rand(9999));
+    playerStats.EnemyKilled = 0;
+    playerStats.AddStat("EnemyKilled", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.EnemyKilledRequired = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("EnemyKilledRequired", 1 + rand(9999));
+    playerStats.EnemyKilledRequired = 0;
+    playerStats.AddStat("EnemyKilledRequired", 1 + rand(9999));
 
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.CivilianKnockedOut = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKnockedOut", 1 + rand(9999));
+    playerStats.CivilianKnockedOut = 0;
+    playerStats.AddStat("CivilianKnockedOut", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.CivilianKnockedOutRequired = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKnockedOutRequired", 1 + rand(9999));
+    playerStats.CivilianKnockedOutRequired = 0;
+    playerStats.AddStat("CivilianKnockedOutRequired", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.CivilianInjured = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianInjured", 1 + rand(9999));
+    playerStats.CivilianInjured = 0;
+    playerStats.AddStat("CivilianInjured", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.CivilianKilled = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKilled", 1 + rand(9999));
+    playerStats.CivilianKilled = 0;
+    playerStats.AddStat("CivilianKilled", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.CivilianKilledRequired = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("CivilianKilledRequired", 1 + rand(9999));
+    playerStats.CivilianKilledRequired = 0;
+    playerStats.AddStat("CivilianKilledRequired", 1 + rand(9999));
 
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.BulletFired = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BulletFired", 1 + rand(9999));
+    playerStats.BulletFired = 0;
+    playerStats.AddStat("BulletFired", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.LightDestroyed = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("LightDestroyed", 1 + rand(9999));
+    playerStats.LightDestroyed = 0;
+    playerStats.AddStat("LightDestroyed", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.ObjectDestroyed = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("ObjectDestroyed", 1 + rand(9999));
+    playerStats.ObjectDestroyed = 0;
+    playerStats.AddStat("ObjectDestroyed", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.LockPicked = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("LockPicked", 1 + rand(9999));
+    playerStats.LockPicked = 0;
+    playerStats.AddStat("LockPicked", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.LockDestroyed = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("LockDestroyed", 1 + rand(9999));
+    playerStats.LockDestroyed = 0;
+    playerStats.AddStat("LockDestroyed", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.MedkitUsed = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("MedkitUsed", 1 + rand(9999));
+    playerStats.MedkitUsed = 0;
+    playerStats.AddStat("MedkitUsed", 1 + rand(9999));
     
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.NPCsInterrogated = 0;
-    EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("NPCsInterrogated", 1 + rand(9999));
+    playerStats.NPCsInterrogated = 0;
+    playerStats.AddStat("NPCsInterrogated", 1 + rand(9999));
 
-	EchelonGameInfo(Level.Game).pPlayer.playerStats.bCheatsActive = !EchelonGameInfo(Level.Game).pPlayer.playerStats.bCheatsActive;
+	playerStats.bCheatsActive = !playerStats.bCheatsActive;
 }
 
 exec function ShowStat()
@@ -1832,135 +1908,135 @@ function ShowDebugStats(Canvas Canvas, out float YL, out float YPos)
     local string T;
     local float XL;
     
-    Canvas.SetDrawColor(255,255,255);
-    Canvas.SetPos(4,YPos);
+    Canvas.SetDrawColor(255, 255, 255);
+    Canvas.SetPos(4, YPos);
     Canvas.Style = ERenderStyle.STY_Normal;
     
     Canvas.StrLen("TEST", XL, YL);
     
-    T = "[]";
+    T = "[EPlayerStats]";
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
 
-	T = "SoundWalkingRatio: "$EPawn.SoundWalkingRatio;
+	T = "MissionName: "$playerStats.MissionName;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
 
-	T = "WalkingRatio: "$EPawn.WalkingRatio;
+	T = "MissionTime: "$playerStats.MissionTime;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
 
 	T = "bCheatsActive: "$playerStats.bCheatsActive;
     Canvas.DrawText(T);
     YPos += YL * 1.5;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
-    Canvas.SetDrawColor(255,100,100);
+    Canvas.SetDrawColor(255, 100, 100);
     T = "PlayerIdentified: "$playerStats.PlayerIdentified;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "BodyFound: "$playerStats.BodyFound;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "AlarmTriggered: "$playerStats.AlarmTriggered;
     Canvas.DrawText(T);
     YPos += YL * 1.5;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
-    Canvas.SetDrawColor(255,255,100);
+    Canvas.SetDrawColor(255, 255, 100);
     T = "EnemyKnockedOut: "$playerStats.EnemyKnockedOut;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "EnemyKnockedOutRequired: "$playerStats.EnemyKnockedOutRequired;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "EnemyInjured: "$playerStats.EnemyInjured;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "EnemyKilled: "$playerStats.EnemyKilled;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "EnemyKilledRequired: "$playerStats.EnemyKilledRequired;
     Canvas.DrawText(T);
     YPos += YL * 1.5;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
-    Canvas.SetDrawColor(100,255,100);
+    Canvas.SetDrawColor(100, 255, 100);
     T = "CivilianKnockedOut: "$playerStats.CivilianKnockedOut;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "CivilianKnockedOutRequired: "$playerStats.CivilianKnockedOutRequired;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "CivilianInjured: "$playerStats.CivilianInjured;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "CivilianKilled: "$playerStats.CivilianKilled;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "CivilianKilledRequired: "$playerStats.CivilianKilledRequired;
     Canvas.DrawText(T);
     YPos += YL * 1.5;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
-    Canvas.SetDrawColor(100,255,255);
+    Canvas.SetDrawColor(100, 255, 255);
     T = "BulletFired: "$playerStats.BulletFired;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "LightDestroyed: "$playerStats.LightDestroyed;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "ObjectDestroyed: "$playerStats.ObjectDestroyed;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "LockPicked: "$playerStats.LockPicked;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "LockDestroyed: "$playerStats.LockDestroyed;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "MedkitUsed: "$playerStats.MedkitUsed;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
     
     T = "NPCsInterrogated: "$playerStats.NPCsInterrogated;
     Canvas.DrawText(T);
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
 }
 
 //	                                                        
@@ -2846,6 +2922,14 @@ function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 exec function ToggleHUD()
 {
 	bShowHUD = !bShowHUD;
+}
+
+// Joshua - New function to toggle debug
+exec function Debug()
+{
+	bDebugMode = true;
+	CheatManager = new CheatClass;
+	playerStats.bCheatsActive = true;
 }
 
 // Joshua - New function to whistle

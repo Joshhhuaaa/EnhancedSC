@@ -329,6 +329,26 @@ function DrawSaveLoadBox(ECanvas Canvas)
 }
 
 /*-----------------------------------------------------------------------------
+ Function:      DrawDebugModeIndicator
+
+ Description:   -
+-----------------------------------------------------------------------------*/
+function DrawDebugModeIndicator(ECanvas Canvas)
+{
+    local float xLen, yLen;
+
+    if (Epc != None && Epc.bDebugMode)
+    {
+        Canvas.Font = Canvas.ETextFont;
+        Canvas.TextSize("Debug Mode", xLen, yLen);
+        Canvas.SetDrawColor(0, 255, 0, 255);
+        Canvas.Style = ERenderStyle.STY_Normal;
+		Canvas.SetPos(eGame.HUD_OFFSET_X + 16, 480 - eGame.HUD_OFFSET_Y - yLen - 60);
+        Canvas.DrawText("Debug Mode");
+    }
+}
+
+/*-----------------------------------------------------------------------------
  Function:      DrawDebugInfo
 
  Description:   -
@@ -349,7 +369,7 @@ function DrawDebugInfo(ECanvas Canvas)
 
 	if (Epc.bDebugStealth)
 	{
-		if (Epc.ePawn !=None)
+		if (Epc.ePawn != None)
 		{
 			Epc.ePawn.show_lighting_debug_info(Canvas);
 		}
@@ -838,6 +858,7 @@ function DrawMainHUD(ECanvas Canvas)
 
 	// Debug information
 	DrawDebugInfo(Canvas);
+	DrawDebugModeIndicator(Canvas);
 
     // Timer //
 	if (Epc.bShowHUD && bShowTimer)
@@ -880,6 +901,8 @@ function DrawConfigMainHUD(ECanvas Canvas)
 
 	// Interactions    
 	DisplayInteractIcons(Canvas, true);
+
+	DrawDebugModeIndicator(Canvas);
 }
 
 event DrawErrorMsgBox(ECanvas Canvas, String sErrorMsg)
@@ -909,7 +932,7 @@ event DrawErrorMsgBox(ECanvas Canvas, String sErrorMsg)
 					 iErrorBoxHeight - 4,
 					 Canvas.white, -1, eLevel.TGAME);
 
-    Canvas.SetDrawColor(128,128,128);
+    Canvas.SetDrawColor(128, 128, 128);
 	
     // CORNERS //
     // TOP LEFT CORNER //
@@ -949,7 +972,7 @@ event DrawErrorMsgBox(ECanvas Canvas, String sErrorMsg)
     // INSIDE BORDERS //	
     Canvas.DrawRectangle(xPos + 5, yPos + 6, ERROR_BOX_WIDTH - 10, iErrorBoxHeight - 12, 1, Canvas.black, 77, eLevel.TGAME);	
 
-	Canvas.SetDrawColor(64,64,64,255);
+	Canvas.SetDrawColor(64, 64, 64, 255);
     Canvas.Style = ERenderStyle.STY_Modulated;
 
     Canvas.SetPos(xPos + 5, yPos + 6);
@@ -959,7 +982,7 @@ event DrawErrorMsgBox(ECanvas Canvas, String sErrorMsg)
 	// Draw error message text			
 	
 	
-	Canvas.SetDrawColor(128,128,128,255);
+	Canvas.SetDrawColor(128, 128, 128, 255);
 	Canvas.DrawColor = Canvas.TextBlack;
 	Canvas.SetClip(ERROR_BOX_WIDTH - 100, yLen);
 	Canvas.SetPos(xPos + (ERROR_BOX_WIDTH / 2), yPos + (iErrorBoxHeight / 2) - ((yLen * iNbrOfLine) / 2));			
@@ -1040,6 +1063,8 @@ state MainHUD
 			DrawInventoryItemInfo(Canvas);
 
 		DrawSaveLoadBox(Canvas);
+
+		DrawDebugModeIndicator(Canvas);
 		
 		Super.PostRender(Canvas);
 		
@@ -1133,6 +1158,7 @@ state s_Slavery
 		DrawSaveLoadBox(Canvas);
 
         DrawDebugInfo(Canvas);
+		DrawDebugModeIndicator(Canvas);
 
 		CheckError(Canvas, Epc.GetPause());
 
@@ -1210,6 +1236,7 @@ state s_MainMenu
 		MainMenuHUD.PostRender(Canvas);         		
         
         DrawDebugInfo(Canvas);
+		DrawDebugModeIndicator(Canvas);
 
 		CheckError(Canvas, Epc.GetPause());
 
@@ -1277,6 +1304,7 @@ state s_GameMenu
 	    CommunicationBox.DrawMenuSpeech(Canvas);		
 
         DrawDebugInfo(Canvas);
+		DrawDebugModeIndicator(Canvas);
 
 		CheckError(Canvas, Epc.GetPause());
 
@@ -1503,13 +1531,21 @@ state QuickInventory
 			return QuickInvAndCurrentItemsXbox.KeyEvent(Key, Action, Delta); // Joshua - Xbox quick inventory
 	}
 
-	function PostRender(Canvas C)
-	{
-		DrawMainHUD(ECanvas(C));
-		
-		CheckError(ECanvas(C), Epc.GetPause());
-		Super.PostRender(C);
-	}
+       function PostRender(Canvas C)
+       {
+	       local ECanvas Canvas;
+	       Canvas = ECanvas(C);
+
+	       // Joshua - Keeps weapon crosshair active during inventory
+	       if (hud_master != None)
+		       hud_master.DrawView(self, Canvas);
+	       DrawInventoryItemInfo(Canvas);
+		   
+	       DrawMainHUD(Canvas);
+	       CheckError(Canvas, Epc.GetPause());
+		   DrawDebugModeIndicator(Canvas);
+	       Super.PostRender(C);
+       }
 }
 
 /*=============================================================================
@@ -1530,13 +1566,12 @@ state s_Training
 		Canvas = ECanvas(C);
 		Canvas.Style = ERenderStyle.STY_Normal;
 
-		
-			GameMenuHUD.PostRender(Canvas);
-
+		GameMenuHUD.PostRender(Canvas);
 
 		CheckError(Canvas, Epc.GetPause());
 
         DrawDebugInfo(Canvas);
+		DrawDebugModeIndicator(Canvas);
 
 		Super.PostRender(Canvas);
 	}
@@ -1568,9 +1603,11 @@ state s_Loading
 		local ECanvas Canvas;
 		Canvas = ECanvas(C);
 
-		Canvas.Style     = ERenderStyle.STY_Normal;
+		Canvas.Style = ERenderStyle.STY_Normal;
         
         MainMenuHUD.DrawLoading(Canvas);
+
+		DrawDebugModeIndicator(Canvas);
 
 		Super.PostRender(Canvas);
 	}
@@ -1608,6 +1645,8 @@ state s_Mission
 		CheckError(Canvas, Epc.GetPause());
 
         DrawDebugInfo(Canvas);
+		DrawDebugModeIndicator(Canvas);
+
 		if (IsPlayerGameOver())
 			DrawSaveLoadBox(Canvas);
 
@@ -1671,6 +1710,7 @@ state s_Cinematic
 		}
 
 		DrawDebugInfo(Canvas);
+		DrawDebugModeIndicator(Canvas);
         
 		if (Epc.bShowHUD && bShowCommunicationBox)
 		{
@@ -1742,6 +1782,9 @@ state PlayerStats
 		PlayerStatsHUD.PostRender(C);
 		
 		CheckError(Canvas, Epc.GetPause());
+
+		DrawDebugModeIndicator(Canvas);
+
 		Super.PostRender(C);
 	}
 }
@@ -1778,6 +1821,7 @@ state s_FinalMapStats
         CheckError(Canvas, Epc.GetPause());
 
         DrawDebugInfo(Canvas);
+		DrawDebugModeIndicator(Canvas);
 
         Super.PostRender(Canvas);
     }

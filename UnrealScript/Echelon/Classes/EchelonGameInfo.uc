@@ -265,6 +265,7 @@ event PlayerController Login(string Portal,
 					         out string Error)
 {
 	local PlayerController NewPlayer;
+    local ECanvas C;
 
 	NewPlayer = Super.Login(Portal, Options, Error);
 	Log("Echelon -- New Player super login");

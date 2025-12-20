@@ -5545,6 +5545,36 @@ Begin:
 	GotoState('s_Unconscious');
 }
 
+// Joshua - Enhanced debug
+function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
+{
+	local string T;
+	local ZoneInfo ZI;
+
+	Super.DisplayDebug(Canvas, YL, YPos);
+
+	if (Controller != None)
+	{
+		ZI = Controller.Region.Zone;
+		if (ZI != None)
+		{
+			YPos += YL;
+			Canvas.SetPos(4, YPos);
+			Canvas.SetDrawColor(255, 255, 0);
+			Canvas.DrawText("ZoneInfo:" @ ZI @"("$ZI.Tag$")");
+		}
+	}
+
+	YPos += YL;
+	Canvas.SetPos(4, YPos);
+	Canvas.SetDrawColor(0, 255, 0);
+
+	if (HandItem == None)
+		Canvas.DrawText("No HandItem");
+	else
+		Canvas.DrawText("HandItem:" @ HandItem.Name @ "State:" @ HandItem.GetStateName());
+}
+
 defaultproperties
 {
     PlayerFarDistance=2000.000000
