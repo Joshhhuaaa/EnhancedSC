@@ -68,16 +68,18 @@ SecondHack:
     DisableMessages(TRUE, TRUE);
     LockDoor('ESwingingDoorToGangway', FALSE, TRUE);
     SendUnrealEvent('ExitNiko');
-    Speech(Localize("P_1_2_2DefMin_NikoFilesDownload", "Speech_0006L", "Localization\\P_1_2_2DefenseMinistry"), Sound'S1_2_2Voice.Play_12_55_01', 1, 0, TR_HEADQUARTER, 0, false);
+    // Joshua - Complete goal and disable alarms before first speech
     GoalCompleted('1_2_8');
     IgnoreAlarmStage(TRUE);
+    // Joshua - Add Extraction goal before speech so goals aren't empty
+    AddGoal('1_2_7', "", 1, "", "P_1_2_2DefMin_NikoFilesDownload", "Goal_0022L", "Localization\\P_1_2_2DefenseMinistry", "P_1_2_2DefMin_NikoFilesDownload", "Goal_0023L", "Localization\\P_1_2_2DefenseMinistry");
+    Speech(Localize("P_1_2_2DefMin_NikoFilesDownload", "Speech_0006L", "Localization\\P_1_2_2DefenseMinistry"), Sound'S1_2_2Voice.Play_12_55_01', 1, 0, TR_HEADQUARTER, 0, false);
     Speech(Localize("P_1_2_2DefMin_NikoFilesDownload", "Speech_0007L", "Localization\\P_1_2_2DefenseMinistry"), Sound'S1_2_2Voice.Play_12_55_02', 0, 0, TR_CONVERSATION, 0, false);
     Speech(Localize("P_1_2_2DefMin_NikoFilesDownload", "Speech_0008L", "Localization\\P_1_2_2DefenseMinistry"), Sound'S1_2_2Voice.Play_12_55_03', 1, 0, TR_HEADQUARTER, 0, false);
     Speech(Localize("P_1_2_2DefMin_NikoFilesDownload", "Speech_0009L", "Localization\\P_1_2_2DefenseMinistry"), Sound'S1_2_2Voice.Play_12_55_04', 0, 0, TR_CONVERSATION, 0, false);
     Speech(Localize("P_1_2_2DefMin_NikoFilesDownload", "Speech_0010L", "Localization\\P_1_2_2DefenseMinistry"), Sound'S1_2_2Voice.Play_12_55_05', 1, 0, TR_HEADQUARTER, 0, false);
     Speech(Localize("P_1_2_2DefMin_NikoFilesDownload", "Speech_0011L", "Localization\\P_1_2_2DefenseMinistry"), Sound'S1_2_2Voice.Play_12_55_06', 0, 0, TR_CONVERSATION, 0, false);
     Speech(Localize("P_1_2_2DefMin_NikoFilesDownload", "Speech_0012L", "Localization\\P_1_2_2DefenseMinistry"), Sound'S1_2_2Voice.Play_12_55_07', 1, 2, TR_HEADQUARTER, 0, false);
-    AddGoal('1_2_7', "", 1, "", "P_1_2_2DefMin_NikoFilesDownload", "Goal_0022L", "Localization\\P_1_2_2DefenseMinistry", "P_1_2_2DefMin_NikoFilesDownload", "Goal_0023L", "Localization\\P_1_2_2DefenseMinistry");
     Close();
 End:
     End();

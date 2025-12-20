@@ -44,26 +44,26 @@ function InitPattern()
             Characters[2] = P.controller;
     }
 
-    // Joshua - Replace NPC skins for variety
     if (!bInit)
     {
+        // Joshua - Replace NPC skins for variety
         ForEach DynamicActors(class'Pawn', P)
         {
-            if (P.name == 'EGeorgianSoldier8' || P.name == 'EGeorgianSoldier13' || P.name == 'EGeorgianSoldier9'
-            || P.name == 'EGeorgianSoldier3' || P.name == 'EGeorgianSoldier5')
+            if (P.name == 'EGeorgianSoldier8' || P.name == 'EGeorgianSoldier13' || P.name == 'EGeorgianSoldier9' ||
+                P.name == 'EGeorgianSoldier3' || P.name == 'EGeorgianSoldier5')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.GESoldier.GESoldierA", class'Texture'));
             }
         }
-    }
-
-    // Joshua - Defense Ministry requires 1 bullet to shoot a unavoidable camera for Elite mode
-    if (!bInit && EchelonGameInfo(Level.Game).bEliteMode && EPlayerController(Characters[0]) != None && EPlayerController(Characters[0]).HandGun != None)
-    {
-        if (EPlayerController(Characters[0]).HandGun.Ammo == 0 && EPlayerController(Characters[0]).HandGun.ClipAmmo == 0 && EPlayerController(Characters[0]).playerStats.BulletFired == 0)
+    
+        // Joshua - Defense Ministry requires 1 bullet to shoot a unavoidable camera for Elite mode
+        if (EchelonGameInfo(Level.Game).bEliteMode && EPlayerController(Characters[0]) != None && EPlayerController(Characters[0]).HandGun != None)
         {
-            EPlayerController(Characters[0]).HandGun.Ammo = 1;
-            EPlayerController(Characters[0]).HandGun.ClipAmmo = 1;
+            if (EPlayerController(Characters[0]).HandGun.Ammo == 0 && EPlayerController(Characters[0]).HandGun.ClipAmmo == 0 && EPlayerController(Characters[0]).playerStats.BulletFired == 0)
+            {
+                EPlayerController(Characters[0]).HandGun.Ammo = 1;
+                EPlayerController(Characters[0]).HandGun.ClipAmmo = 1;
+            }
         }
     }
 

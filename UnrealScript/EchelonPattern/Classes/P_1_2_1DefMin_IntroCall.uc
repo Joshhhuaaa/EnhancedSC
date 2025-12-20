@@ -36,26 +36,26 @@ function InitPattern()
             Characters[1] = P.controller;
     }
 
-    // Joshua - Defense Ministry requires 1 bullet to shoot a unavoidable camera for Elite mode
-    if (!bInit && EchelonGameInfo(Level.Game).bEliteMode && EPlayerController(Characters[0]) != None && EPlayerController(Characters[0]).HandGun != None)
-    {
-        if (EPlayerController(Characters[0]).HandGun.Ammo == 0 && EPlayerController(Characters[0]).HandGun.ClipAmmo == 0 && EPlayerController(Characters[0]).playerStats.BulletFired == 0)
-        {
-            EPlayerController(Characters[0]).HandGun.Ammo = 1;
-            EPlayerController(Characters[0]).HandGun.ClipAmmo = 1;
-        }
-    }
-
-    // Joshua - Fixes sound volume that has incorrect sound slot assigned
     if (!bInit)
     {
+        // Joshua - Defense Ministry requires 1 bullet to shoot a unavoidable camera for Elite mode
+        if (EchelonGameInfo(Level.Game).bEliteMode && EPlayerController(Characters[0]) != None && EPlayerController(Characters[0]).HandGun != None)
+        {
+            if (EPlayerController(Characters[0]).HandGun.Ammo == 0 && EPlayerController(Characters[0]).HandGun.ClipAmmo == 0 && EPlayerController(Characters[0]).playerStats.BulletFired == 0)
+            {
+                EPlayerController(Characters[0]).HandGun.Ammo = 1;
+                EPlayerController(Characters[0]).HandGun.ClipAmmo = 1;
+            }
+        }
+
+        // Joshua - Fixes sound volume that has incorrect sound slot assigned
         ForEach AllActors(class'ESoundVolume', SoundVolume)
         {
             if (SoundVolume.name == 'ESoundVolume4')
                 SoundVolume.m_eSoundSlot = SLOT_SFX;
         }
     }
-
+    
     if (!bInit)
     {
     bInit=TRUE;
@@ -73,6 +73,7 @@ Begin:
 Milestone:
     Log("MilestoneIntroCall");
     //SetAlarmStage(3); // Joshua - Using new bOneAlarmLevel flag instead
+    EchelonLevelInfo(Level).bOneAlarmLevel = true;
     Sleep(0.50);
     AddRecon(class 'EReconMapMinistry');
     AddRecon(class 'EReconPicGrinko');
