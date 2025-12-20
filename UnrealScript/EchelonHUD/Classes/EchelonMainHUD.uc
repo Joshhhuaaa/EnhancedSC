@@ -1269,6 +1269,9 @@ state s_GameMenu
 		// Player just poped up game menu
         Epc.SetPause(true);
 
+		// Joshua - Necessary to reset keybind if pausing in weapon mode
+		Epc.SetKey("Joy1 Interaction", "");
+
 		Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
 		
 		// (Yanick Mimee) June-17-2002
@@ -1522,6 +1525,7 @@ state s_Training
 	function BeginState()
 	{
         Epc.SetPause(true);
+		Epc.SetKey("Joy1 Interaction", ""); // Joshua - Necessary to reset keybind if pausing in weapon mode
         GameMenuHUD.GoToState('s_Training');
     }
 
