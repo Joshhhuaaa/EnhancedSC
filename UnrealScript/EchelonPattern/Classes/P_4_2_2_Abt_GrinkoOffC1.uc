@@ -90,6 +90,7 @@ DeadAll:
     SetExclusivity(TRUE);
     SetFlags(V4_2_2_Abattoir(Level.VarObject).DeadC1,TRUE);
     SendPatternEvent('EGroupAI24','SquadCount');
+    CheckFlags(V4_2_2_Abattoir(Level.VarObject).GrinkoSpeechTriggered,TRUE,'JumpFin'); // Joshua - Keep track if Grinko already did his speech
     SendPatternEvent('EGroupAI27','GrinkoSpeach2'); // Joshua - Colonel Bagrat fix
     Sleep(1);
     End();
