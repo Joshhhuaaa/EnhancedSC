@@ -173,6 +173,7 @@ LambertLastCall:
     Speech(Localize("P_4_2_2_Abt_LambertNote", "Speech_0051L", "Localization\\P_4_2_2_Abattoir"), Sound'S4_2_2Voice.Play_42_75_03', 1, 0, TR_HEADQUARTER, 0, false);
     Speech(Localize("P_4_2_2_Abt_LambertNote", "Speech_0052L", "Localization\\P_4_2_2_Abattoir"), Sound'S4_2_2Voice.Play_42_75_04', 0, 0, TR_HEADQUARTER, 0, false);
     Close();
+    CheckIfPlayerDead('Fin'); // Joshua - If player dies during this dialogue, fail the mission
     GameOver(true, 0);
     End();
 

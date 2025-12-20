@@ -83,6 +83,7 @@ GrinkoSpeach1:
     End();
 GrinkoSpeach2:
     Log("");
+    SetFlags(V4_2_2_Abattoir(Level.VarObject).GrinkoSpeechTriggered,TRUE); // Joshua - Keep track if Grinko already did his speech
     CheckFlags(V4_2_2_Abattoir(Level.VarObject).GDstopLambertGoal,TRUE,'GrinkoGO');
     Speech(Localize("P_4_2_2_Abt_Studio", "Speech_0010L", "Localization\\P_4_2_2_Abattoir"), Sound'S4_2_2Voice.Play_42_60_01', 2, 0, TR_NPCS, 0, false);
     Close();
