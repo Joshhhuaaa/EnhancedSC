@@ -62,12 +62,14 @@ state Pattern
 Begin:
 Setup:
     Log("Setup - Camera05B");
+    // Joshua - Send event sooner to prevent a softlock if you shoot camera before training popup
+    SendUnrealEvent('SecondCamSafeWall');
     CinCamera(0, 'Cam2Cam', 'Cam2Foc',);
     Sleep(5);
     CinCamera(1, , ,);
     Sleep(1);
     PlayerMove(true);
-    SendUnrealEvent('SecondCamSafeWall');
+    //SendUnrealEvent('SecondCamSafeWall');
     SendPatternEvent('T3DescGroup','SetSaveTrue');
     SendPatternEvent('T3DescGroup','CameraB05');
     SendPatternEvent('GroupTicker','Start05B');
