@@ -26,7 +26,8 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
 function InitPattern()
 {
     local Pawn P;
-    local Actor A;
+    local StaticMeshActor SM;
+    local ELaptop Laptop;
 
     Super.InitPattern();
 
@@ -46,13 +47,27 @@ function InitPattern()
         }
     }
 
-    // Joshua - Fixing collision on some pipes that were not set correctly
-    ForEach AllActors(class'Actor', A)
+    if (!bInit)
     {
-        if (A.name == 'StaticMeshActor128')
-            A.SetCollisionPrim(StaticMesh(DynamicLoadObject("6_1_1KolaMesh.Collision.pipes_sk2_COL", class'StaticMesh')));
-        if (A.name == 'StaticMeshActor180')
-            A.SetCollisionPrim(StaticMesh(DynamicLoadObject("6_1_1KolaMesh.Collision.pipes_sk2_COL", class'StaticMesh')));
+        // Joshua - Fixing collision on some pipes that were not set correctly
+        ForEach AllActors(class'StaticMeshActor', SM)
+        {
+            if (SM.name == 'StaticMeshActor128')
+                SM.SetCollisionPrim(StaticMesh(DynamicLoadObject("6_1_1KolaMesh.Collision.pipes_sk2_COL", class'StaticMesh')));
+            if (SM.name == 'StaticMeshActor180')
+                SM.SetCollisionPrim(StaticMesh(DynamicLoadObject("6_1_1KolaMesh.Collision.pipes_sk2_COL", class'StaticMesh')));
+        }
+
+        // Joshua - Laptops should have 400 hitpoints
+        ForEach AllActors(class'ELaptop', Laptop)
+        {
+            
+            if (Laptop.name == 'ELaptop0')
+            {
+                Laptop.InitialHitPoints = 400;
+                Laptop.HitPoints = 400;
+            }
+        }
     }
 
     if (!bInit)
