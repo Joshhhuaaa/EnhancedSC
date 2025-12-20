@@ -142,21 +142,18 @@ var(SurfaceNoise) SurfaceNoiseInfo VeryLoudSurface;
 // Joshua - This is a native class. New variables must be added only after all original ones have been declared.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
-
 var bool bUseController; // Joshua - Adjusts HUD, inventory, lockpicking, keypad, turrets for controller
 var(Enhanced) config bool bEnableCheckpoints; // Joshua - Restores the checkpoints from the Xbox version
-
-var(Enhanced) config bool bThermalOverride; // Joshua - Enables thermal vision to be available for all levels, regardless of their original settings
-var(Enhanced) config bool bOpticCableVisions; // Joshua - Allows the Optic Cable use all vision modes like Pandora Tomorrow
-var(Enhanced) config bool bScaleGadgetDamage; // Joshua - Scales gadget damage on Hard difficulty (Pandora Tomorrow applied this fix: NPCs have 1.5x health on Hard, so 1.5x damage)
-var(Enhanced) config bool bPS2FN7Accuracy; // Joshua - Uses the FN7's accuracy values from the PS2 version
-var(Enhanced) config bool bNewDoorInteraction; // Joshua - Uses new door interaction system that adds Lock Pick, Disposable Pick, and Optic Cable like Chaos Theory
-var(Enhanced) config bool bRandomizeLockpick; // Joshua - Randomizes all the lockpick combinations on doors
-
 
 var(Enhanced) config bool bXboxDifficulty; // Joshua - Xbox difficulty, Sam has more health on Xbox
 var(Enhanced) config bool bEliteMode; // Joshua - Elite mode, no starting ammo, lower health, no saving, 3 alarms
 var(Enhanced) config bool bPermadeathMode; // Joshua - Permadeath mode, profile deletion upon mission failure
+
+var(Enhanced) config bool bThermalOverride; // Joshua - Enables thermal vision to be available for all levels, regardless of their original settings
+var(Enhanced) config bool bScaleGadgetDamage; // Joshua - Scales gadget damage on Hard difficulty (Pandora Tomorrow applied this fix: NPCs have 1.5x health on Hard, so 1.5x damage)
+var(Enhanced) config bool bPS2FN7Accuracy; // Joshua - Uses the FN7's accuracy values from the PS2 version
+var(Enhanced) config bool bNewDoorInteraction; // Joshua - Uses new door interaction system that adds Lock Pick, Disposable Pick, and Optic Cable like Chaos Theory
+var(Enhanced) config bool bRandomizeLockpick; // Joshua - Randomizes all the lockpick combinations on doors
 
 // Joshua - Option to reduce delay to prevent running past the wallmine before it explodes
 enum EWallMineDelay
@@ -173,7 +170,10 @@ enum ESamMeshType
     SMT_Default,        // Default mesh assigned by level
     SMT_Standard,       // SamAMesh
     SMT_Balaclava,      // SamBMesh
-    SMT_PartialSleeves  // SamCMesh
+    SMT_PartialSleeves, // SamCMesh
+    SMT_BetaStandard,   // SamAMesh, modified with SamD textures
+    SMT_WhiteBalaclava, // SamBMesh, modified with SamE textures
+    SMT_BetaSleeves     // SamAMesh, modified with SamF textures
 };
 var config ESamMeshType ESam_Training; 
 var config ESamMeshType ESam_Tbilisi;
@@ -382,7 +382,7 @@ defaultproperties
     HUD_OFFSET_Y=39
     DemoMap="3_4_3Severonickel"
     TrainingMap="0_0_2_Training"
-    bStartGame=true
+    bStartGame=True
     m_minInterpolSpeed=200.000000
     m_grabbingDelay=0.200000
     m_blinkDelay=3.000000
@@ -477,11 +477,13 @@ defaultproperties
     VeryLoudSurface=(WalkRadius=500.000000,JogRadius=1500.000000,CrouchWalkRadius=100.000000,CrouchJogRadius=840.000000,LandingRadius=1600.000000,QuietLandingRadius=200.000000)
     GameName="Echelon"
     PlayerControllerClassName="Echelon.EPlayerController"
-    bOpticCableVisions=true
-    bEnableCheckpoints=true
-    bScaleGadgetDamage=true
-    bNewDoorInteraction=true
-    bRandomizeLockpick=true
+	//=============================================================================
+	// Enhanced Variables
+	//=============================================================================
+    bEnableCheckpoints=True
+    bScaleGadgetDamage=True
+    bNewDoorInteraction=True
+    bRandomizeLockpick=True
     WallMineDelay=WMD_Default
     ESam_Training=SMT_Default
     ESam_Tbilisi=SMT_Default
@@ -500,7 +502,7 @@ defaultproperties
     TurnOffDistanceScale=TurnOffDistance_4x
     bEnableRumble=True
     FontType=Font_Xbox
-    bLODDistance=true
-    bPauseOnFocusLoss=true
-    bCheckForUpdates=true
+    bLODDistance=True
+    bPauseOnFocusLoss=True
+    bCheckForUpdates=True
 }

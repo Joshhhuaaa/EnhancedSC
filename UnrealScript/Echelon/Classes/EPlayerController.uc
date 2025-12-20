@@ -1647,6 +1647,56 @@ exec function XBLB()
 	ConsoleCommand("Open XBLTestB");	
 }
 
+exec function SamA()
+{
+	ePawn.Mesh = SkeletalMesh'ESam.samAMesh';
+	ePawn.Skins.Length = 0;
+}
+
+exec function SamB()
+{
+	ePawn.Mesh = SkeletalMesh'ESam.samBMesh';
+	ePawn.Skins.Length = 0;
+}
+
+exec function SamC()
+{
+	ePawn.Mesh = SkeletalMesh'ESam.samCMesh';
+	ePawn.Skins.Length = 0;
+}
+
+exec function SamD()
+{
+	ePawn.Mesh = SkeletalMesh'ESam.samAMesh';
+	ePawn.Skins.Length = 0;
+	ePawn.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamDBody", class'Texture'));
+	ePawn.Skins[1] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamDBody", class'Texture'));
+	ePawn.Skins[2] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamDFace", class'Texture'));
+}
+
+exec function SamE()
+{
+	ePawn.Mesh = SkeletalMesh'ESam.samBMesh';
+	ePawn.Skins.Length = 0;
+	ePawn.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamEFace", class'Texture'));
+	ePawn.Skins[1] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamEBody", class'Texture'));
+	ePawn.Skins[2] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamEBody", class'Texture'));
+	ePawn.Skins[3] = EGlow(DynamicLoadObject("ETexCharacter.Sam.pda_GLW_SamB", class'EGlow'));
+	ePawn.Skins[4] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamEFace", class'Texture'));
+}
+
+exec function SamF()
+{
+	ePawn.Mesh = SkeletalMesh'ESam.samAMesh';
+	ePawn.Skins.Length = 0;
+	ePawn.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamFBody", class'Texture'));
+	ePawn.Skins[1] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamFBody", class'Texture'));
+	ePawn.Skins[2] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamFFace", class'Texture'));
+	//ePawn.Skins[3] = Shader(DynamicLoadObject("ETexCharacter.Sam.SamAfaceHeat", class'Shader'));
+	//ePawn.Skins[4] = EGlow(DynamicLoadObject("ETexCharacter.Sam.Sam.goggles_GLW", class'EGlow'));
+	//ePawn.Skins[5] = EGlow(DynamicLoadObject("ETexCharacter.Sam.pda_glw", class'EGlow'));
+}
+
 exec function FixCam()
 {
 	if (eGame.bEliteMode || eGame.bPermadeathMode)
