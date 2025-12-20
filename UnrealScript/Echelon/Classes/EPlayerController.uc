@@ -7945,6 +7945,12 @@ state s_PlayerBTWBase
 			GotoState(, 'Release');
 		}
 	}
+
+	// Joshua - Allow quick inventory during Back to Wall
+	function bool CanAccessQuick()
+	{
+		return !bInTransition && !bInGunTransition;
+	}
 }
 
 function StickBTW()
@@ -8337,6 +8343,12 @@ state s_PlayerBTWTargeting extends s_PlayerBTWBase
 			ePawn.BlendAnimOverCurrent('BackStSpFrR', 1, ePawn.UpperBodyBoneName);
 		else
 			ePawn.BlendAnimOverCurrent('BackStSpFrL', 1, ePawn.UpperBodyBoneName);
+	}
+
+	// Joshua - Allow quick inventory during Back to Wall
+	function bool CanAccessQuick()
+	{
+		return ePawn.FullInventory.GetSelectedItem() == MainGun && !bInTransition && !bInGunTransition && !bLockedCamera;
 	}
 
 	// Joshua - Mission failed to bring back in 3rd person
