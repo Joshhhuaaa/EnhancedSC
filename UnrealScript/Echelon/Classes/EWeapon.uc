@@ -417,6 +417,11 @@ function TraceFire()
 			EchelonGameInfo(Level.Game).pPlayer.EPawn.PlaySound(Sound'GunCommon.Play_Random_BulletWhistle', SLOT_SFX);
 		}
 	}
+	// Joshua - Check if player's bullet passes close to any NPC's head (near miss detection)
+	else if (Controller.bIsPlayer)
+	{
+		CheckBulletNearMiss(StartTrace, EndTrace, HitActor);
+	}
 
 	if (HitActor == None)
 		return;
@@ -431,6 +436,55 @@ function TraceFire()
 	{
 		//Log("["$Controller.Pawn$"] deals damage["$InflictedDamage$"] to ["$HitActor$"]");
 		HitActor.TakeDamage(InflictedDamage, Controller.Pawn, HitLocation, HitNormal, Normal(HitLocation - GetFireStart()) * BaseMomentum, None, PillTag);
+	}
+}
+
+//------------------------------------------------------------------------
+// Description
+//		Joshua - Check if the bullet passed dangerously close to any NPC
+//		similar to SCCT near miss detection
+//------------------------------------------------------------------------
+function CheckBulletNearMiss(vector StartTrace, vector EndTrace, Actor HitActor)
+{
+	local EPawn CheckPawn;
+	local float Distance;
+	local vector HeadLocation;
+	local EchelonGameInfo eGame;
+	
+	eGame = EchelonGameInfo(Level.Game);
+
+	if (eGame == None)
+		return;
+	
+	foreach DynamicActors(class'EPawn', CheckPawn)
+	{
+		// Skip if this is the player, a dead NPC, or if the bullet actually hit them
+		if (CheckPawn.bIsPlayerPawn || CheckPawn.Health <= 0 || CheckPawn == HitActor)
+			continue;
+			
+		// Skip if NPC has no controller
+		if (CheckPawn.Controller == None || !CheckPawn.Controller.IsA('EAIController'))
+			continue;
+		
+		// Get the NPC's head/eye position for accurate near-miss detection
+		HeadLocation = CheckPawn.GetBoneCoords(CheckPawn.EyeBoneName).Origin;
+		
+		// If bone coords fail, use approximate head position
+		if (HeadLocation == vect(0,0,0))
+			HeadLocation = CheckPawn.Location + vect(0,0,1) * CheckPawn.CollisionHeight * 0.85;
+		
+		// Calculate distance from head to bullet trajectory
+		Distance = DistancePointToLine(HeadLocation, StartTrace, EndTrace);
+		
+		// Close enough to be threatening but not a direct hit
+		if (Distance < 50.0)
+		{
+			// Make sure the bullet actually passed by them (not behind the shooter)
+			if (VSize(HeadLocation - StartTrace) < VSize(EndTrace - StartTrace))
+			{
+				EAIController(CheckPawn.Controller).NotifyShotJustMissed(Controller.Pawn);
+			}
+		}
 	}
 }
 
