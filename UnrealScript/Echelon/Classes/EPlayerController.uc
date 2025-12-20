@@ -5071,10 +5071,25 @@ state s_UsingPalm
 		EMainHUD(myHud).NormalView();
 	}
 
+	// Joshua - Mission failed to bring back in 3rd person
+	function ProcessEndMission()
+	{
+		OnGroundScope();
+	}
+
 	function bool OnGroundScope()
 	{
 		JumpLabelPrivate = 'BackToTargeting';
 		return Global.OnGroundScope();
+	}
+
+	function PlayerMove(float DeltaTime)
+	{
+		// Joshua - When falling, return to 3rd person to handle it
+		if (ePawn.Physics == PHYS_Falling)
+		{
+			OnGroundScope();
+		}
 	}
 
 BackToTargeting:
