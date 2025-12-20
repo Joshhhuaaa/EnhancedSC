@@ -69,7 +69,9 @@ talk:
     Talk(Sound'S3_4_2Voice.Play_34_33_07', 1, , TRUE, 0);
     Talk(Sound'S3_4_2Voice.Play_34_33_08', 0, , TRUE, 0);
     Talk(Sound'S3_4_2Voice.Play_34_33_09', 1, , TRUE, 0);
-    AddNote("", "P_3_4_2_Sev_SAMTechnician", "Note_0014L", "Localization\\P_3_4_2Severonickel");
+    //AddNote("", "P_3_4_2_Sev_SAMTechnician", "Note_0014L", "Localization\\P_3_4_2Severonickel");
+    // Joshua - Fixing incorrect note assigned
+    AddNote("", "P_3_4_2_Sev_SAMTechnician", "Note_0005L", "Localization\\P_3_4_2Severonickel");
     Talk(Sound'S3_4_2Voice.Play_34_33_10', 0, , TRUE, 0);
     Close();
     End();

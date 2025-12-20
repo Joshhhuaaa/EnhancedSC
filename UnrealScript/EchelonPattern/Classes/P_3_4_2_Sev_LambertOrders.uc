@@ -28,6 +28,8 @@ function InitPattern()
 {
     local Pawn P;
     local Actor A;
+    local ECamera Camera;
+    local Rotator RealNeutralRot;
 
     Super.InitPattern();
 
@@ -39,24 +41,55 @@ function InitPattern()
             Characters[2] = P.controller;
     }
 
-    // Joshua - Adding textures to staticmeshes without any assigned
-    ForEach AllActors(class'Actor', A)
+    if (!bInit)
     {
-        if (A.name == 'StaticMeshActor69')
-            A.Skins[0] = Texture(DynamicLoadObject("EGO_Tex.GO_doorexplode", class'Texture'));
-        if (A.name == 'StaticMeshActor306')
-            A.Skins[0] = Texture(DynamicLoadObject("3_4_Severo_tex.Bathroom.Cabinet02_sev", class'Texture'));
-        if (A.name == 'StaticMeshActor322')
-            A.Skins[0] = Texture(DynamicLoadObject("3_4_Severo_tex.Bathroom.toilette_sev", class'Texture'));
-    }
-
-    // Joshua - Hiding staticmeshes that are clipping through the floor
+        // Joshua - Adding textures to staticmeshes without any assigned
         ForEach AllActors(class'Actor', A)
-    {
-        if (A.name == 'StaticMeshActor590' || A.name == 'StaticMeshActor591')
         {
-            A.bHidden = true;
-            A.SetCollision(false);
+            if (A.name == 'StaticMeshActor69')
+                A.Skins[0] = Texture(DynamicLoadObject("EGO_Tex.GO_doorexplode", class'Texture'));
+            if (A.name == 'StaticMeshActor306')
+                A.Skins[0] = Texture(DynamicLoadObject("3_4_Severo_tex.Bathroom.Cabinet02_sev", class'Texture'));
+            if (A.name == 'StaticMeshActor322')
+                A.Skins[0] = Texture(DynamicLoadObject("3_4_Severo_tex.Bathroom.toilette_sev", class'Texture'));
+        }
+
+        // Joshua - Hiding staticmeshes that are clipping through the floor
+        ForEach AllActors(class'Actor', A)
+        {
+            if (A.name == 'StaticMeshActor590' || A.name == 'StaticMeshActor591')
+            {
+                A.bHidden = true;
+                A.SetCollision(false);
+            }
+        }
+
+        // Joshua - Adjust Camera's neutral rotation to detect player easier
+        ForEach AllActors(class'ECamera', Camera)
+        {
+            if (Camera.name == 'ECamera0')
+            {
+                Camera.NeutralRotation.PitchDegreeModifier = -20;
+                Camera.NeutralRotation.YawDegreeModifier = 0;
+                Camera.NeutralRotation.RollDegreeModifier = 0;
+
+                // Apply NeutralRotation modifier
+                if (Camera.NeutralRotation.PitchDegreeModifier != 0)
+                    RealNeutralRot.Pitch = 65535 / (360 / float(Camera.NeutralRotation.PitchDegreeModifier));
+
+                if (Camera.NeutralRotation.YawDegreeModifier != 0)
+                    RealNeutralRot.Yaw = 65535 / (360 / float(Camera.NeutralRotation.YawDegreeModifier));
+
+                if (Camera.NeutralRotation.RollDegreeModifier != 0)
+                    RealNeutralRot.Roll = 65535 / (360 / float(Camera.NeutralRotation.RollDegreeModifier));
+
+                // Keep starting rotation
+                Camera.InitialRotation = Camera.Rotation + RealNeutralRot;
+                Camera.CurrentRotation = Camera.InitialRotation;
+
+                // Place head at neutral rotation
+                Camera.SetSensorRotation(Camera.InitialRotation);
+            }
         }
     }
 
@@ -181,7 +214,7 @@ LevelEnd:
     LevelChange("3_4_3Severonickel.unr");
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }
