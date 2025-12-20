@@ -56,6 +56,18 @@ function InitPattern()
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.Prisoner.PrisonerB", class'Texture'));
             }
         }
+
+        ForEach DynamicActors(class'EChair', Chair)
+        {
+            if (Chair.name == 'EChair0')
+            {
+                Chair.SetLocation(Chair.Location + vect(0, -20, 0));
+            }
+
+            if (Chair.name == 'EChair1')
+            {
+                Chair.SetLocation(Chair.Location + vect(0, 20, 0));
+            }
         }
 
         ForEach AllActors(Class'EHat', Hat)
