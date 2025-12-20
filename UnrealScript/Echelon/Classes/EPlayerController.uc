@@ -6397,6 +6397,19 @@ state s_Turret extends s_InteractWithObject
 		return false;
 	}
 
+	// Joshua - Crouching will exit the turret
+	function PlayerMove(float DeltaTime)
+	{
+		if (bDuck > 0)
+		{
+			bDuck = 0;
+			if (!bInTransition && Interaction != None)
+			{
+				Interaction.PostInteract(self);
+			}
+		}
+	}
+
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
 		if (!bInTransition)
@@ -6432,7 +6445,8 @@ Begin:
 	EMainHUD(myHud).hud_master.BeginEvent();
 
 	ePawn.PlaySound(Sound'Electronic.Play_Sq_ComputerKeyBoard', SLOT_SFX);
-	ePawn.AddSoundRequest(Sound'Electronic.Stop_Sq_ComputerKeyBoard', SLOT_SFX, 2.0f);
+	// Joshua - Keep the keyboard typing sound until the player leaves the turret
+	//ePawn.AddSoundRequest(Sound'Electronic.Stop_Sq_ComputerKeyBoard', SLOT_SFX, 2.0f);
 
 	// Loop
 	ePawn.LoopAnimOnly('kbrdcralnt0',,0.05);
