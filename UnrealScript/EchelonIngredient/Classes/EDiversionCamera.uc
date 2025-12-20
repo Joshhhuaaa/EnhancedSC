@@ -28,6 +28,7 @@ state s_Camera
 	function BeginState()
 	{
 		Epc.bAltFire = 0;
+		Epc.bInteraction = false; // Joshua - Set the interaction to false when entering the camera
 		Super.BeginState();
 	}
 
