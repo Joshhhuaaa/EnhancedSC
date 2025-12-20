@@ -266,5 +266,6 @@ defaultproperties
     Mesh=SkeletalMesh'ESkelIngredients.lockMesh'
     AmbientGlow=64
     SoundRadiusSaturation=500.000000
-    bSpecialLit=true
+    bSpecialLit=True
+	bDontAffectEchelonLighting=True // Joshua - Prevent lockpick shadow from appearing
 }
