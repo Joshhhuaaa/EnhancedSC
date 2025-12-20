@@ -516,6 +516,10 @@ state s_GameInteractionMenu
 		local string actionName;
 		actionName = FindAction(Key);
 
+		// Joshua - Allow mouse movement to pass through for camera control
+		if (Key == IK_MouseX || Key == IK_MouseY)
+			return false;
+
 		// Joshua - If only the Exit option remains, autoamtically exit Interaction Menu
 		if (!Epc.bInteractionPause && Epc.IManager.GetNbInteractions() <= 1)
 		{
@@ -526,9 +530,10 @@ state s_GameInteractionMenu
 		if (Action == IST_Press)
 		{
 			//clauzon 9/17/2002 replaced a switch checking the key pressed by the mapped action test.
-			if (actionName=="MoveForward" || Key == IK_MouseWheelUp || actionName == "DPadUp") // Joshua - Adding controller support for interaction box
+			if (actionName == "MoveForward" || Key == IK_MouseWheelUp || actionName == "DPadUp") // Joshua - Adding controller support for interaction box
 			{
-				if (Epc.IManager.SelectNextItem())
+				// Joshua - Invert interaction list support
+				if ((Epc.bInvertInteractionList && Epc.IManager.SelectPreviousItem()) || (!Epc.bInvertInteractionList && Epc.IManager.SelectNextItem()))
 				{
 					//Log("Interaction menu UP");
 					Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
@@ -536,7 +541,8 @@ state s_GameInteractionMenu
 			}
 			else if (actionName == "MoveBackward" || Key == IK_MouseWheelDown || actionName == "DPadDown") // Joshua - Adding controller support for interaction box
 			{
-				if (Epc.IManager.SelectPreviousItem())
+				// Joshua - Invert interaction list support
+				if ((Epc.bInvertInteractionList && Epc.IManager.SelectNextItem()) || (!Epc.bInvertInteractionList && Epc.IManager.SelectPreviousItem()))
 				{
 					//Log("Interaction menu DOWN");
 					Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
@@ -545,7 +551,7 @@ state s_GameInteractionMenu
 		}
 		else if (Action == IST_Release)
 		{
-			if (actionName=="Interaction")
+			if (actionName == "Interaction")
 			{
 				bInteracting = false;
 				// Exit GameInteraction menu

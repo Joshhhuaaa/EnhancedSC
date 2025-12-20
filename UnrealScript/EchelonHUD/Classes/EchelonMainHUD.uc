@@ -574,7 +574,16 @@ function DisplayInteractBox(ECanvas Canvas, int iNbrOfInter, int iCurrentInter)
 			}
 			else
 			{
-				Canvas.SetPos(xPos + 2, yPos + 2 + ((iNbrOfInter - 1) * yLen) - (iCurrentInter * yLen));
+				// Joshua - Invert interaction list support
+				if (Epc.bInvertInteractionList)
+				{
+					if (Epc.egi.bInteracting)
+						Canvas.SetPos(xPos + 2, yPos + 2 + ((iCurrentInter - 1) * yLen) + 2);
+					else
+						Canvas.SetPos(xPos + 2, yPos + 2 + (iCurrentInter * yLen) + 2);
+				}
+				else
+					Canvas.SetPos(xPos + 2, yPos + 2 + ((iNbrOfInter - 1) * yLen) - (iCurrentInter * yLen) + 2);
 				// Joshua - Fixing bug with Interaction Box selector not extending fully
 				Canvas.Style = ERenderStyle.STY_Alpha;			
 				eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_selecteur, INTER_OPT_BOX_WIDTH - 4, yLen + 2, 0, 0, 1, 1);
@@ -598,8 +607,16 @@ function DisplayInteractBox(ECanvas Canvas, int iNbrOfInter, int iCurrentInter)
 		}
 		else
 		{
-			// Joshua - xPos + 5 changed from + 8 to lineup interaction text
-			Canvas.SetPos(xPos + 5, yPos + 2 + ((iNbrOfInter - 1) * yLen) - (iCurrentInter * yLen));		
+			// Joshua - Invert interaction list support
+			if (Epc.bInvertInteractionList)
+			{
+				if (Epc.egi.bInteracting)
+					Canvas.SetPos(xPos + 5, yPos + 2 + ((iCurrentInter - 1) * yLen));
+				else
+					Canvas.SetPos(xPos + 5, yPos + 2 + (iCurrentInter * yLen));
+			}
+			else
+				Canvas.SetPos(xPos + 5, yPos + 2 + ((iNbrOfInter - 1) * yLen) - (iCurrentInter * yLen));
 			Canvas.DrawTextAligned(Caps(IO.GetDescription()));		
 		}
 	}		
