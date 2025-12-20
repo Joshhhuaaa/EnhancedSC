@@ -2,7 +2,7 @@ class EComputerExplodeTour extends EGameplayObject;
 
 defaultproperties
 {
-    bShatterable=true
+    bShatterable=True
     DamagedMeshes(0)=(StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_OFF_computerB2',Percent=100.000000)
     SpawnableObjects(0)=(SpawnClass=Class'EchelonEffect.EcameraEclats',SpawnAtDamagePercent=100.000000)
     SpawnableObjects(1)=(SpawnClass=Class'EchelonEffect.ElightDarkSmoke',SpawnAtDamagePercent=100.000000)

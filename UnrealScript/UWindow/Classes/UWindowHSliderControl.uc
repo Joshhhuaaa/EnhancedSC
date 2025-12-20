@@ -117,7 +117,7 @@ function Paint(Canvas C, float X, float Y)
 	{
 		C.DrawColor = TextColor;
 		ClipText(C, TextX, TextY, Text);
-		C.SetDrawColor(255,255,255);
+		C.SetDrawColor(255, 255, 255);
 	}
 	
 	R = LookAndFeel.HLine;
@@ -138,7 +138,7 @@ function LMouseDown(float X, float Y)
 {
 	Super.LMouseDown(X, Y);
 	if ((X >= TrackStart) && (X <= TrackStart + TrackWidth)) {
-		bSliding = True;
+		bSliding = true;
 		Root.CaptureMouse();
 	}
 
@@ -168,7 +168,7 @@ function MouseMove(float X, float Y)
 		SetValue((((X - SliderDrawX) / (SliderWidth - TrackWidth)) * (MaxValue - MinValue)) + MinValue, bNoSlidingNotify);
 	}
 	else
-		bSliding = False;
+		bSliding = false;
 }
 
 

@@ -40,8 +40,8 @@ defaultproperties
     SensorType=DETECT_Heat
     SensorThreshold=0.010000
     SensorDetectionType=SCAN_AllChangedActors
-    FollowUponDetection=true
-    ShootUponDetection=true
+    FollowUponDetection=True
+    ShootUponDetection=True
     BulletsPerMinute=180.000000
     BulletDamage=100
     SoundAlert=Sound'Gun.Play_TurretDetection'
@@ -49,11 +49,11 @@ defaultproperties
     SoundFire_End=Sound'Gun.StopGo_TurretShotEnd'
     SoundReverse=Sound'Gun.Play_TurretScanSwitch'
     SoundDisable=Sound'Gun.StopGo_TurretDisable'
-    bDamageable=false
+    bDamageable=False
     Mesh=SkeletalMesh'ESkelIngredients.m249Mesh'
     CollisionRadius=30.000000
     CollisionHeight=60.000000
-    bBlockProj=false
-    bBlockBullet=false
-    bBlockNPCVision=false
+    bBlockProj=False
+    bBlockBullet=False
+    bBlockNPCVision=False
 }

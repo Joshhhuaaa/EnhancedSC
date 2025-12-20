@@ -147,6 +147,6 @@ defaultproperties
     Texture=Texture'S_Camera'
     CollisionRadius=0.000000
     CollisionHeight=0.000000
-    bCollideActors=true
-    bCollideWorld=true
+    bCollideActors=True
+    bCollideWorld=True
 }

@@ -13,7 +13,7 @@ function Created()
 	
 	EditBox = UWindowEditBox(CreateWindow(class'UWindowEditBox', 0, 0, WinWidth, WinHeight)); 
 	EditBox.NotifyOwner = Self;
-	EditBox.bSelectOnFocus = True;
+	EditBox.bSelectOnFocus = true;
 
 	EditBoxWidth = WinWidth / 2;
 

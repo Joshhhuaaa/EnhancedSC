@@ -30,5 +30,5 @@ defaultproperties
         Name="Mirrorspark"
     End Object
     Emitters(0)=SpriteEmitter'Mirrorspark'
-    bUnlit=false
+    bUnlit=False
 }

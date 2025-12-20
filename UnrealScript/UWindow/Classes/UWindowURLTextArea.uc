@@ -11,7 +11,7 @@ function BeforePaint(Canvas C, float X, float Y)
 function Paint(Canvas C, float X, float Y)
 {
 	Super.Paint(C, X, Y);
-	bReleased = False;
+	bReleased = false;
 }
 
 function TextAreaClipText(Canvas C, float DrawX, float DrawY, coerce string S, optional bool bCheckHotkey)
@@ -30,11 +30,11 @@ function TextAreaClipText(Canvas C, float DrawX, float DrawY, coerce string S, o
 		ProcessText(C, Text, NextBlock, W, H, bLink);
 		if (bLink != 0)
 		{
-			C.SetDrawColor(0,0,255);
+			C.SetDrawColor(0, 0, 255);
 		}
 		else
 		{
-			C.SetDrawColor(255,255,255);
+			C.SetDrawColor(255, 255, 255);
 		}		
 
 		GetMouseXY(ClickX, ClickY);
@@ -66,10 +66,10 @@ function TextAreaClipText(Canvas C, float DrawX, float DrawY, coerce string S, o
 			}
 			else
 			{
-				C.SetDrawColor(255,0,0);
+				C.SetDrawColor(255, 0, 0);
 			}
 			if (bReleased)
-				bReleased = False;
+				bReleased = false;
 		}
 
 		if (bLink != 0)
@@ -87,7 +87,7 @@ function LaunchUnrealURL(string URL)
 function Click(float X, float Y)
 {
 	Super.Click(X, Y);
-	bReleased = True;
+	bReleased = true;
 }
 
 function ProcessText(Canvas C, out string Text, out string NextBlock, out float W, out float H, out byte bLink)
@@ -168,5 +168,5 @@ function ProcessText(Canvas C, out string Text, out string NextBlock, out float 
 
 defaultproperties
 {
-    bIgnoreLDoubleClick=true
+    bIgnoreLDoubleClick=True
 }

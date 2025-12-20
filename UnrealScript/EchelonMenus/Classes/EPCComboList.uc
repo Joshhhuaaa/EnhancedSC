@@ -17,7 +17,7 @@ function Paint(Canvas C, float X, float Y)
 	local UWindowComboListItem I;    
 
     
-    C.SetDrawColor(255,255,255);
+    C.SetDrawColor(255, 255, 255);
     C.Style = GetLevel().ERenderStyle.STY_Normal;
     DrawStretchedTexture(C, 0, 0, WinWidth, WinHeight, Texture'WhiteTexture');
 	Render(C, X, Y);

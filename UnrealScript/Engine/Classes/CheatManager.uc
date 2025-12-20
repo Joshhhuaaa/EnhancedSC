@@ -128,7 +128,7 @@ exec function PlayersOnly()
 
 exec function CheatView(class<actor> aClass, optional bool bQuiet)
 {
-	ViewClass(aClass,bQuiet, true);
+	ViewClass(aClass, bQuiet, true);
 }
 
 // ***********************************************************

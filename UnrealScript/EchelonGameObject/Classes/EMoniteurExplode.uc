@@ -2,7 +2,7 @@ class EMoniteurExplode extends EGameplayObject;
 
 defaultproperties
 {
-    bShatterable=true
+    bShatterable=True
     HitPoints=200
     DamagedMeshes(0)=(StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_OFF_comp_screenB1',Percent=50.000000)
     DamagedMeshes(1)=(StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_OFF_comp_screenB2',Percent=100.000000)

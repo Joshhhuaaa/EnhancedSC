@@ -14,7 +14,7 @@ var EAIEvent			AIEvent;
 var Controller			TriggerActor;
 var Actor				InstigatorActor;
 var array<Actor>		AlarmTriggers;			// Objects that may trigger the alarm on & off
-var array<Actor>		AlarmObjects;			// Objects that will react to the alarm state changes (lights,doors,etc...)
+var array<Actor>		AlarmObjects;			// Objects that will react to the alarm state changes (lights, doors, etc...)
 
 var() array<EGroupAI>	PrimaryGroups;
 var() array<EGroupAI>	SecondaryGroups;
@@ -103,12 +103,12 @@ function DisableAlarm(Actor Instigator)
 
 state() s_On
 {
-	function EnableAlarm(Actor Instigator, Controller Triggerer,optional bool _bForceUpdatePos);
+	function EnableAlarm(Actor Instigator, Controller Triggerer, optional bool _bForceUpdatePos);
 
 	function BeginState()
 	{
 		local int i;
-		local vector OffSet,Pos;
+		local vector OffSet, Pos;
 		local bool bUseObjectLocation;
 
 		bUseObjectLocation = true;
@@ -130,7 +130,7 @@ state() s_On
 		for (i = 0; i < AlarmObjects.Length; i++)
 		{
 			//Log("   "@i@AlarmObjects[i]);
-			AlarmObjects[i].Trigger(self,None);
+			AlarmObjects[i].Trigger(self, None);
 		}
 
 		//send message to primary group
@@ -159,7 +159,7 @@ state() s_On
 			
 			if (bUseObjectLocation)
 			{
-			OffSet = (vect(50,0,0) >> InstigatorActor.Rotation);
+			OffSet = (vect(50, 0, 0) >> InstigatorActor.Rotation);
 			OffSet.Z = 0;
 
 			Pos = InstigatorActor.Location;
@@ -194,13 +194,13 @@ state() s_On
 					//don't send message to the trigger group
 					if ((EAIController(TriggerActor).Group != PrimaryGroups[i]) || (bForceCallToInstigatorGroup))
 					{
-						PrimaryGroups[i].AIAlarmCallBack(self, AIEvent,bForceUpdatePos);
+						PrimaryGroups[i].AIAlarmCallBack(self, AIEvent, bForceUpdatePos);
 					}
 				}
 				else
 				{
 
-					PrimaryGroups[i].AIAlarmCallBack(self, AIEvent,bForceUpdatePos);
+					PrimaryGroups[i].AIAlarmCallBack(self, AIEvent, bForceUpdatePos);
 				}
 			}
 		}
@@ -217,7 +217,7 @@ state() s_On
 		}
 
 		//We want to disable the sound of the alarm
-		SetTimer(DelayBeforeAlarmOff,false);
+		SetTimer(DelayBeforeAlarmOff, false);
 
 		// reset vars
 		InstigatorActor = None;
@@ -243,7 +243,7 @@ state s_Off
 
 		//go through the object list
 		for (i = 0; i < AlarmObjects.Length; i++)
-			AlarmObjects[i].Trigger(self,None);
+			AlarmObjects[i].Trigger(self, None);
 
 		//send message to all groups
 		AIEvent.Reset();
@@ -274,5 +274,5 @@ state s_Off
 defaultproperties
 {
     DelayBeforeAlarmOff=15.000000
-    bHidden=true
+    bHidden=True
 }

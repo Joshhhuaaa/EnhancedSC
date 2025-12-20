@@ -417,8 +417,8 @@ defaultproperties
     MovementThreshold=200
     TickNoiseRadius=500.000000
     MaxQuantity=3
-    bDamageable=true
-    bExplodeWhenDestructed=true
+    bDamageable=True
+    bExplodeWhenDestructed=True
     ExplosionSound=Sound'FisherEquipement.Play_WallMineExplosion'
     StaticMesh=StaticMesh'EMeshIngredient.Item.wallmine'
     CollisionRadius=4.500000

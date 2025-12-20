@@ -78,12 +78,12 @@ defaultproperties
         Name="SpriteEmitter0"
     End Object
     Emitters(1)=SpriteEmitter'SpriteEmitter0'
-    bDynamicLight=true
-    bTrailerSameRotation=true
-    bTrailerPrePivot=true
+    bDynamicLight=True
+    bTrailerSameRotation=True
+    bTrailerPrePivot=True
     Physics=PHYS_Trailer
     LightType=LT_SubtlePulse
-    LightEffect=LE_EOmniAtten
+    LightEffect=LE_None //LE_EOmniAtten // Joshua - Xbox used LE_EOmniAtten, but it seems to cause rendering issues on PC
     LightBrightness=255
     LightHue=31
     LightRadius=15

@@ -136,7 +136,7 @@ RemoveLiveOnes:
     KillNPC(2, FALSE, TRUE);
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

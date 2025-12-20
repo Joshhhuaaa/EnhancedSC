@@ -32,9 +32,9 @@ function PhysicsVolumeChange(PhysicsVolume NewVolume)
 defaultproperties
 {
     ObjectName="Briefcase"
-    bPickable=true
-    bDamageable=false
+    bPickable=True
+    bDamageable=False
     StaticMesh=StaticMesh'EMeshIngredient.Object.Briefcase'
     CollisionHeight=6.000000
-    bCollideActors=false
+    bCollideActors=False
 }

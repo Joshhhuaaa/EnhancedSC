@@ -8,8 +8,8 @@ class Triggers extends Actor
 
 defaultproperties
 {
-    bHidden=true
+    bHidden=True
     CollisionRadius=40.000000
     CollisionHeight=40.000000
-    bCollideActors=true
+    bCollideActors=True
 }

@@ -3,7 +3,7 @@ class UDebugMapListWindow extends UWindowFramedWindow;
 
 function Created() 
 {
-	bSizable = True;
+	bSizable = true;
 	MinWinWidth = 200;
 	Super.Created();
 }

@@ -159,10 +159,10 @@ defaultproperties
     HitBeforeShatter=2
     Physics=PHYS_None
     InitialState="None"
-    bNPCBulletGoTru=true
-    bPlayerBulletGoTru=true
+    bNPCBulletGoTru=True
+    bPlayerBulletGoTru=True
     SoundRadiusSaturation=500.000000
-    bBlockNPCShot=false
-    bBlockNPCVision=false
+    bBlockNPCShot=False
+    bBlockNPCVision=False
     HeatOpacity=0.300000
 }

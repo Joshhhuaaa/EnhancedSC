@@ -22,5 +22,5 @@ defaultproperties
         Name="ImpactGrass"
     End Object
     Emitters(0)=SpriteEmitter'ImpactGrass'
-    bUnlit=false
+    bUnlit=False
 }

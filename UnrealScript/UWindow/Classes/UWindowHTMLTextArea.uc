@@ -69,13 +69,13 @@ function Paint(Canvas C, float X, float Y)
 	C.DrawColor = BGColor;
 	DrawStretchedTexture(C, 0, 0, WinWidth, WinHeight, Texture'WhiteTexture');
 	Super.Paint(C, X, Y);
-	bReleased = False;
+	bReleased = false;
 }
 
 function Click(float X, float Y)
 {
 	Super.Click(X, Y);
-	bReleased = True;
+	bReleased = true;
 }
 
 function ProcessURL(string URL)
@@ -229,7 +229,7 @@ function float DrawTextLine(Canvas C, UWindowDynamicTextRow L, float Y)
 						if (bReleased)
 						{
 							ProcessURL(CurrentStyle.LinkDestination);
-							bReleased = False;
+							bReleased = false;
 						}
 						else
 							C.DrawColor = ALinkColor;
@@ -339,15 +339,15 @@ function RemoveNextWord(out string Text, out string NextWord)
 	local bool bInsideTag;
 	local string Ch;
 	
-	bInsideTag = False;
+	bInsideTag = false;
 
 	for (i = 0; i < Len(Text); i++)
 	{
 		Ch = Mid(Text, i, 1);
 		if (Ch == ">")
-			bInsideTag = False;
+			bInsideTag = false;
 		if (Ch == "<")
-			bInsideTag = True;
+			bInsideTag = true;
 		if (Ch == " " && !bInsideTag)
 			break;
 	}
@@ -371,12 +371,12 @@ function UWindowDynamicTextRow AddText(string NewLine)
 		CurrentStyle.TextColor = TextColor;
 		CurrentStyle.BGColor = BGColor;
 		CurrentStyle.bCenter = bHCenter;
-		CurrentStyle.bLink = False;
-		CurrentStyle.bUnderline = False;
-		CurrentStyle.bNoBR = False;
-		CurrentStyle.bHeading = False;
-		CurrentStyle.bBold = False;
-		CurrentStyle.bBlink = False;
+		CurrentStyle.bLink = false;
+		CurrentStyle.bUnderline = false;
+		CurrentStyle.bNoBR = false;
+		CurrentStyle.bHeading = false;
+		CurrentStyle.bBold = false;
+		CurrentStyle.bBlink = false;
 	}
 	else
 		CurrentStyle = UWindowHTMLTextRow(List.Last).EndStyle;
@@ -452,7 +452,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 				UWindowHTMLTextRow(L).StartStyle = StartStyle;
 				UWindowHTMLTextRow(L).EndStyle = CurrentStyle;
 			}
-			CurrentStyle.bCenter = True;
+			CurrentStyle.bCenter = true;
 			StartStyle = CurrentStyle;
 			break;
 		case "/CENTER":
@@ -460,7 +460,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 			Output = "";
 			UWindowHTMLTextRow(L).StartStyle = StartStyle;
 			UWindowHTMLTextRow(L).EndStyle = CurrentStyle;
-			CurrentStyle.bCenter = False;
+			CurrentStyle.bCenter = false;
 			StartStyle = CurrentStyle;
 			break;			
 		// Inline HTML tags
@@ -472,7 +472,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 				UWindowHTMLTextRow(L).StartStyle = StartStyle;
 				UWindowHTMLTextRow(L).EndStyle = CurrentStyle;
 			}
-			CurrentStyle.bHeading = True;
+			CurrentStyle.bHeading = true;
 			StartStyle = CurrentStyle;
 			break;
 		case "/H1":
@@ -480,7 +480,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 			Output = "";
 			UWindowHTMLTextRow(L).StartStyle = StartStyle;
 			UWindowHTMLTextRow(L).EndStyle = CurrentStyle;
-			CurrentStyle.bHeading = False;
+			CurrentStyle.bHeading = false;
 			StartStyle = CurrentStyle;
 			break;			
 		case "FONT":
@@ -499,45 +499,45 @@ function UWindowDynamicTextRow AddText(string NewLine)
 			break;
 		case "B":
 			Output = Output $ LeftText $ HTML;
-			CurrentStyle.bBold = True;
+			CurrentStyle.bBold = true;
 			break;
 		case "/B":
 			Output = Output $ LeftText $ HTML;
-			CurrentStyle.bBold = False;
+			CurrentStyle.bBold = false;
 			break;
 		case "U":
 			Output = Output $ LeftText $ HTML;
-			CurrentStyle.bUnderline = True;
+			CurrentStyle.bUnderline = true;
 			break;
 		case "/U":
 			Output = Output $ LeftText $ HTML;
-			CurrentStyle.bUnderline = False;
+			CurrentStyle.bUnderline = false;
 			break;
 		case "A":
 			Output = Output $ LeftText $ HTML;
-			CurrentStyle.bLink = True;
+			CurrentStyle.bLink = true;
 			CurrentStyle.LinkDestination = GetOption(HTML, "HREF=");
 			break;
 		case "/A":
 			Output = Output $ LeftText $ HTML;
-			CurrentStyle.bLink = False;
+			CurrentStyle.bLink = false;
 			CurrentStyle.LinkDestination = "";
 			break;
 		case "NOBR":
 			Output = Output $ LeftText $ HTML;
-			CurrentStyle.bNoBR = True;
+			CurrentStyle.bNoBR = true;
 			break;
 		case "/NOBR":
 			Output = Output $ LeftText $ HTML;
-			CurrentStyle.bNoBR = False;
+			CurrentStyle.bNoBR = false;
 			break;
 		case "BLINK":
 			Output = Output $ LeftText $ HTML;
-			CurrentStyle.bBlink = True;
+			CurrentStyle.bBlink = true;
 			break;
 		case "/BLINK":
 			Output = Output $ LeftText $ HTML;
-			CurrentStyle.bBlink = False;
+			CurrentStyle.bBlink = false;
 			break;
 		default:
 			Output = Output $ LeftText;
@@ -619,10 +619,10 @@ function ProcessInlineHTML(string HTML, out HTMLStyle CurrentStyle)
 	switch (GetTag(HTML))
 	{
 	case "H1":
-		CurrentStyle.bHeading = True;
+		CurrentStyle.bHeading = true;
 		break;
 	case "/H1":
-		CurrentStyle.bHeading = False;
+		CurrentStyle.bHeading = false;
 		break;			
 	case "FONT":
 		Temp = GetOption(HTML, "COLOR=");
@@ -637,36 +637,36 @@ function ProcessInlineHTML(string HTML, out HTMLStyle CurrentStyle)
 		CurrentStyle.BGColor = BGColor;
 		break;
 	case "B":
-		CurrentStyle.bBold = True;
+		CurrentStyle.bBold = true;
 		break;
 	case "/B":
-		CurrentStyle.bBold = False;
+		CurrentStyle.bBold = false;
 		break;
 	case "U":
-		CurrentStyle.bUnderline = True;
+		CurrentStyle.bUnderline = true;
 		break;
 	case "/U":
-		CurrentStyle.bUnderline = False;
+		CurrentStyle.bUnderline = false;
 		break;
 	case "A":
-		CurrentStyle.bLink = True;
+		CurrentStyle.bLink = true;
 		CurrentStyle.LinkDestination = GetOption(HTML, "HREF=");
 		break;
 	case "/A":
-		CurrentStyle.bLink = False;
+		CurrentStyle.bLink = false;
 		CurrentStyle.LinkDestination = "";
 		break;
 	case "NOBR":
-		CurrentStyle.bNoBR = True;
+		CurrentStyle.bNoBR = true;
 		break;
 	case "/NOBR":
-		CurrentStyle.bNoBR = False;
+		CurrentStyle.bNoBR = false;
 		break;
 	case "BLINK":
-		CurrentStyle.bBlink = True;
+		CurrentStyle.bBlink = true;
 		break;
 	case "/BLINK":
-		CurrentStyle.bBlink = False;
+		CurrentStyle.bBlink = false;
 		break;
 	}
 }
@@ -902,9 +902,9 @@ defaultproperties
     BGColor=(R=0,G=0,B=0,A=255)
     LinkColor=(R=0,G=0,B=255,A=255)
     ALinkColor=(R=255,G=0,B=0,A=255)
-    bTopCentric=true
-    bAutoScrollbar=true
-    bVariableRowHeight=true
+    bTopCentric=True
+    bAutoScrollbar=True
+    bVariableRowHeight=True
     RowClass=Class'UWindowHTMLTextRow'
-    bIgnoreLDoubleClick=true
+    bIgnoreLDoubleClick=True
 }

@@ -46,7 +46,7 @@ function Click(float X, float Y)
 defaultproperties
 {
     m_BackGroundTexture=Texture'UWindow.WhiteTexture'
-    bUseRegion=true
-    m_bDrawButtonBorders=true
+    bUseRegion=True
+    m_bDrawButtonBorders=True
     m_BorderColor=(R=51,G=51,B=51,A=255)
 }

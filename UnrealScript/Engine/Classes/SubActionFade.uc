@@ -11,7 +11,7 @@ var(Fade)	bool	bFadeOut;		// If TRUE, the screen is fading out (towards the colo
 
 defaultproperties
 {
-    bFadeOut=true
+    bFadeOut=True
     Icon=Texture'SubActionFade'
     Desc="Fade"
 }

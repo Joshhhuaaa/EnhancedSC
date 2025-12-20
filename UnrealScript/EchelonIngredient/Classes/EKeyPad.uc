@@ -287,6 +287,7 @@ state s_Use
 		// No special display if not player
 		if (Epc != None)
 		{
+			// Joshua - Adding controller support for keypad
 			if (!Epc.eGame.bUseController)
 				Epc.FakeMouseToggle(true);
 			bRenderAtEndOfFrame = true;
@@ -504,9 +505,9 @@ defaultproperties
     CodeIntensity(5)=1.000000
     FadeOutTimer=15.000000
     CONST_TextStart=(X=-0.400000,Y=1.000000,Z=2.785000)
-    bIsKeypad=true
+    bIsKeypad=True
     AlarmLinkType=EAlarm_Trigger
-    bAcceptsProjectors=false
+    bAcceptsProjectors=False
     StaticMesh=StaticMesh'EMeshIngredient.KeyPadTech.keypadt'
     AmbientGlow=64
     CollisionRadius=4.000000

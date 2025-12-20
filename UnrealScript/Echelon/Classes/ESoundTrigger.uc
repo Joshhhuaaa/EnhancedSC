@@ -122,10 +122,10 @@ event Trigger(Actor other, Pawn EventInstigator, optional name InTag)
 
 defaultproperties
 {
-    NPCTrigger=true
-    bHidden=true
+    NPCTrigger=True
+    bHidden=True
     Texture=Texture'S_SoundTrigger'
     CollisionRadius=40.000000
     CollisionHeight=40.000000
-    bCollideActors=true
+    bCollideActors=True
 }

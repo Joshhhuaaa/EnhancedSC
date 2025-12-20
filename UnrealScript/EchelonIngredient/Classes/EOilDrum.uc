@@ -63,17 +63,17 @@ defaultproperties
     FlaskEmitterClass=Class'EchelonEffect.EFlaskEmitter'
     SpillTexture=Texture'ETexSFX.water.SFX_oilspark'
     FlaskTexture=Texture'ETexSFX.water.SFX_oil'
-    IsFlammable=true
+    IsFlammable=True
     iDirtynessFactor=5
-    bPushable=true
-    bExplodeWhenDestructed=true
+    bPushable=True
+    bExplodeWhenDestructed=True
     HitPoints=300
     ExplosionClass=Class'EchelonEffect.EDrumExplosionParticle'
     StaticMesh=StaticMesh'EMeshIngredient.Object.oildrum'
     DrawScale=0.800000
     CollisionRadius=28.000000
     CollisionHeight=46.000000
-    bCollideWorld=true
-    bBlockPlayers=true
-    bBlockActors=true
+    bCollideWorld=True
+    bBlockPlayers=True
+    bBlockActors=True
 }

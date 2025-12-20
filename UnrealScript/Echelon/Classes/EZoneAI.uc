@@ -186,6 +186,6 @@ event Trigger(Actor other, Pawn EventInstigator, optional name InTag)
 
 defaultproperties
 {
-    bHidden=true
-    bCollideActors=true
+    bHidden=True
+    bCollideActors=True
 }

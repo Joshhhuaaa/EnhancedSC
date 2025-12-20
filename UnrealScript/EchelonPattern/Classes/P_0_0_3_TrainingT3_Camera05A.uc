@@ -146,7 +146,7 @@ CamOff:
 	SoundActors[0].PlaySound(Sound'Electronic.Stop_CameraScan', SLOT_SFX);
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

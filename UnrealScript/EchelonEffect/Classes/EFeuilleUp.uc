@@ -23,5 +23,5 @@ defaultproperties
         Name="FeuilleUp"
     End Object
     Emitters(0)=MeshEmitter'EchelonEffect.FeuilleUp'
-    bUnlit=false
+    bUnlit=False
 }

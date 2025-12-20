@@ -156,7 +156,7 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 	local string Underline;
 
 
-	C.SetDrawColor(255,255,255);
+	C.SetDrawColor(255, 255, 255);
 	
 	UWindowMenuBarItem(Item).ItemLeft = X;
 	UWindowMenuBarItem(Item).ItemWidth = W;
@@ -194,7 +194,7 @@ function bool HotKeyDown(int Key, float X, float Y)
 	local UWindowMenuBarItem I;
 
 	if (Key == 0x12)
-		bAltDown = True;
+		bAltDown = true;
 
 	if (bAltDown)
 	{
@@ -208,7 +208,7 @@ function bool HotKeyDown(int Key, float X, float Y)
 				Selected = I;
 				Selected.Select();
 				Select(Selected);
-				bAltDown = False;
+				bAltDown = false;
 				return True;
 			}
 		}
@@ -219,7 +219,7 @@ function bool HotKeyDown(int Key, float X, float Y)
 function bool HotKeyUp(int Key, float X, float Y)
 {
 	if (Key == 0x12)
-		bAltDown = False;
+		bAltDown = false;
 
 	return False;
 }

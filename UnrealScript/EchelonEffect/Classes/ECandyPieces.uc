@@ -30,5 +30,5 @@ defaultproperties
         Name="CandyPieces"
     End Object
     Emitters(0)=SpriteEmitter'CandyPieces'
-    bUnlit=false
+    bUnlit=False
 }

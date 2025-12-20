@@ -39,8 +39,8 @@ function Setup()
 function Created()
 {
 	ListClass = class'UWindowComboListItem';
-	bAlwaysOnTop = True;
-	bTransient = True;	
+	bAlwaysOnTop = true;
+	bTransient = true;	
 	ItemHeight = 15;
 	VBorder = 3;
 	HBorder = 3;

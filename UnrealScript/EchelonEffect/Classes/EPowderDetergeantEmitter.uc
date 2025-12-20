@@ -32,5 +32,5 @@ defaultproperties
         Name="PowderDetergeantEmitter1"
     End Object
     Emitters(1)=SpriteEmitter'PowderDetergeantEmitter1'
-    bUnlit=false
+    bUnlit=False
 }

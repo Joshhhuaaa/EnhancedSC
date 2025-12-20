@@ -86,7 +86,7 @@ event PostRender(Canvas Canvas)
 	{
 		YPos = 5;
 		UseSmallFont(Canvas);
-		PlayerOwner.ViewTarget.DisplayDebug(Canvas,YL,YPos);
+		PlayerOwner.ViewTarget.DisplayDebug(Canvas, YL, YPos);
 	}
 	else for (H = self; H != None; H = H.NextHUD)
 		H.DrawHUD(Canvas);
@@ -193,5 +193,5 @@ defaultproperties
     MedFont=Font'SmallFont'
     BigFont=Font'SmallFont'
     LargeFont=Font'SmallFont'
-    bHidden=true
+    bHidden=True
 }

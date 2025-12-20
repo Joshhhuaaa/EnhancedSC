@@ -12,9 +12,9 @@ var() string Text;
 
 defaultproperties
 {
-    bStatic=true
-    bHidden=true
-    bNoDelete=true
+    bStatic=True
+    bHidden=True
+    bNoDelete=True
     Texture=Texture'S_Note'
-    bMovable=false
+    bMovable=False
 }

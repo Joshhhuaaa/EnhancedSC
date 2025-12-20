@@ -140,7 +140,7 @@ function LMouseDown(float X, float Y)
 	if ((X >= ThumbStart) && (X <= ThumbStart + ThumbWidth))
 	{
 		DragX = X - ThumbStart;
-		bDragging = True;
+		bDragging = true;
 		Root.CaptureMouse();
 		return;
 	}
@@ -154,8 +154,8 @@ function Tick(float Delta)
 
 	if (bDragging) return;
 
-	bLeft = False;
-	bRight = False;
+	bLeft = false;
+	bRight = false;
 
 	if (bMouseDown)
 	{
@@ -197,5 +197,5 @@ function MouseMove(float X, float Y)
 		}	
 	}
 	else
-		bDragging = False;
+		bDragging = false;
 }

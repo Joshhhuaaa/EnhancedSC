@@ -35,6 +35,6 @@ function Paint(Canvas C, float X, float Y)
 
 defaultproperties
 {
-    bNoKeyboard=true
+    bNoKeyboard=True
     m_BorderColor=(R=51,G=51,B=51,A=255)
 }

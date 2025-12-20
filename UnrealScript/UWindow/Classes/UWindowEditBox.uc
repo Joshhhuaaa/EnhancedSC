@@ -100,9 +100,9 @@ function Clear()
 	CaretOffset = 0;
 	Value="";
 	Value2="";
-	bAllSelected = False;
+	bAllSelected = false;
 	if (bDelayedNotify)
-		bChangePending = True;
+		bChangePending = true;
 	else
 		Notify(DE_Change);
 }
@@ -166,7 +166,7 @@ function bool Insert(byte C)
 
 	Value = NewValue;
 	if (bDelayedNotify)
-		bChangePending = True;
+		bChangePending = true;
 	else
 		Notify(DE_Change);
 	return True;
@@ -183,7 +183,7 @@ function bool Backspace()
 
 	Value = NewValue;
 	if (bDelayedNotify)
-		bChangePending = True;
+		bChangePending = true;
 	else
 		Notify(DE_Change);
 	return True;
@@ -210,7 +210,7 @@ function bool WordLeft()
 		CaretOffset--;
 
 	LastDrawTime = GetTime();
-	bShowCaret = True;
+	bShowCaret = true;
 
 	return True;	
 }
@@ -221,7 +221,7 @@ function bool MoveLeft()
 	CaretOffset--;
 
 	LastDrawTime = GetTime();
-	bShowCaret = True;
+	bShowCaret = true;
 
 	return True;	
 }
@@ -232,7 +232,7 @@ function bool MoveRight()
 	CaretOffset++;
 
 	LastDrawTime = GetTime();
-	bShowCaret = True;
+	bShowCaret = true;
 
 	return True;	
 }
@@ -245,7 +245,7 @@ function bool WordRight()
 		CaretOffset++;
 
 	LastDrawTime = GetTime();
-	bShowCaret = True;
+	bShowCaret = true;
 
 	return True;	
 }
@@ -255,7 +255,7 @@ function bool MoveHome()
 	CaretOffset = 0;
 
 	LastDrawTime = GetTime();
-	bShowCaret = True;
+	bShowCaret = true;
 
 	return True;	
 }
@@ -265,7 +265,7 @@ function bool MoveEnd()
 	CaretOffset = Len(Value);
 
 	LastDrawTime = GetTime();
-	bShowCaret = True;
+	bShowCaret = true;
 
 	return True;	
 }
@@ -293,7 +293,7 @@ function EditCut()
 		if (bAllSelected)
 		{
 			GetPlayerOwner().CopyToClipboard(Value);
-			bAllSelected = False;
+			bAllSelected = false;
 			Clear();
 		}
 	}
@@ -316,7 +316,7 @@ function KeyType(int Key, float MouseX, float MouseY)
 			if (bAllSelected)
 				Clear();
 
-			bAllSelected = False;
+			bAllSelected = false;
 
 			if (bNumericOnly)
 			{
@@ -341,15 +341,15 @@ function KeyType(int Key, float MouseX, float MouseY)
 
 function KeyUp(int Key, float X, float Y)
 {
-	bKeyDown = False;
+	bKeyDown = false;
 
 	switch (Key)
 	{
 	case Root.Console.EInputKey.IK_Ctrl:
-		bControlDown = False;
+		bControlDown = false;
 		break;
 	case Root.Console.EInputKey.IK_Shift:
-		bShiftDown = False;
+		bShiftDown = false;
 		break;
 	}
 }
@@ -358,15 +358,15 @@ function KeyDown(int Key, float X, float Y)
 {
 
 	
-	bKeyDown = True;
+	bKeyDown = true;
 	
 	switch (Key)
 	{
 	case Root.Console.EInputKey.IK_Ctrl:
-		bControlDown = True;
+		bControlDown = true;
 		break;
 	case Root.Console.EInputKey.IK_Shift:
-		bShiftDown = True;
+		bShiftDown = true;
 		break;
 	case Root.Console.EInputKey.IK_Escape:
         if (bCanEdit && m_CurrentlyEditing)
@@ -428,7 +428,7 @@ function KeyDown(int Key, float X, float Y)
 				MoveRight();
             
 
-            bAllSelected = False;
+            bAllSelected = false;
 		}
 		
 		break;
@@ -441,14 +441,14 @@ function KeyDown(int Key, float X, float Y)
 				MoveLeft();
 
 
-            bAllSelected = False;
+            bAllSelected = false;
 		}
 
 		break;
 	case Root.Console.EInputKey.IK_Up:
 		if (bCanEdit && bHistory && m_CurrentlyEditing)
 		{
-			bAllSelected = False;
+			bAllSelected = false;
 			if (CurrentHistory != None && CurrentHistory.Next != None)
 			{
 				CurrentHistory = UWindowEditBoxHistory(CurrentHistory.Next);
@@ -460,7 +460,7 @@ function KeyDown(int Key, float X, float Y)
 	case Root.Console.EInputKey.IK_Down:
 		if (bCanEdit && bHistory && m_CurrentlyEditing)
 		{
-			bAllSelected = False;
+			bAllSelected = false;
 			if (CurrentHistory != None && CurrentHistory.Prev != None)
 			{
 				CurrentHistory = UWindowEditBoxHistory(CurrentHistory.Prev);
@@ -473,14 +473,14 @@ function KeyDown(int Key, float X, float Y)
 		if (bCanEdit && m_CurrentlyEditing)
         {
 			MoveHome();
-		bAllSelected = False;
+		bAllSelected = false;
         }			
 		break;
 	case Root.Console.EInputKey.IK_End:
 		if (bCanEdit && m_CurrentlyEditing)
         {
 			MoveEnd();
-		bAllSelected = False;
+		bAllSelected = false;
         }			
 		break;
 	case Root.Console.EInputKey.IK_Backspace:
@@ -491,7 +491,7 @@ function KeyDown(int Key, float X, float Y)
 			else
 				Backspace();
 
-            bAllSelected = False;
+            bAllSelected = false;
 		}
 
 		break;
@@ -504,7 +504,7 @@ function KeyDown(int Key, float X, float Y)
 				Delete();
 
 
-            bAllSelected = False;
+            bAllSelected = false;
 		}
 
 		break;
@@ -627,7 +627,7 @@ function Paint(Canvas C, float X, float Y)
 	// show the caret
 	if ((!m_CurrentlyEditing) || (!bHasKeyboardFocus) || (!bCanEdit))
     {        
-        bShowCaret = False;
+        bShowCaret = false;
     }		
 	else
 	{       
@@ -713,13 +713,13 @@ function DropSelection()
     {
         if (bChangePending)
 {
-		    bChangePending = False;
+		    bChangePending = false;
 		    Notify(DE_Change);
 	    }     
     }   
-	bAllSelected = False;
-    m_CurrentlyEditing = False;
-    bKeyDown = False;
+	bAllSelected = false;
+    m_CurrentlyEditing = false;
+    bKeyDown = false;
 }
 
 function MouseEnter()
@@ -737,7 +737,7 @@ function MouseLeave()
 defaultproperties
 {
     MaxLength=255
-    bCanEdit=true
+    bCanEdit=True
     m_ILeftBorderOffset=2
     TextColor=(R=255,G=255,B=255,A=255)
 }

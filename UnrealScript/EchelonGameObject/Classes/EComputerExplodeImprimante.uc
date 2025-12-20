@@ -2,7 +2,7 @@ class EComputerExplodeImprimante extends EGameplayObject;
 
 defaultproperties
 {
-    bShatterable=true
+    bShatterable=True
     HitPoints=200
     DamagedMeshes(0)=(StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_OFF_comp_printB1',Percent=50.000000)
     DamagedMeshes(1)=(StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_OFF_comp_printB2',Percent=100.000000)

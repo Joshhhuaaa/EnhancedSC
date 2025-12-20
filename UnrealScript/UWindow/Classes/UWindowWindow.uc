@@ -303,9 +303,9 @@ function Deactivated()
 
 function MouseLeave()
 {
-	bMouseDown = False;
-	bMMouseDown = False;
-	bRMouseDown = False;
+	bMouseDown = false;
+	bMMouseDown = false;
+	bRMouseDown = false;
 	if (ToolTipString != "") ToolTip("");
 }
 
@@ -368,7 +368,7 @@ function KeyFocusExit()
 function RMouseDown(float X, float Y) 
 {
 	ActivateWindow(0, False);
-	bRMouseDown = True;
+	bRMouseDown = true;
 }
 
 function RMouseUp(float X, float Y) 
@@ -388,7 +388,7 @@ function RMouseUp(float X, float Y)
 			RClick(X, Y);
 		}
 	}
-	bRMouseDown = False;
+	bRMouseDown = false;
 
 }
 
@@ -398,7 +398,7 @@ function MMouseDown(float X, float Y)
 	/* DEBUG
 	HideWindow();
 	*/
-	bMMouseDown = True;
+	bMMouseDown = true;
 }
 
 function MMouseUp(float X, float Y) 
@@ -418,7 +418,7 @@ function MMouseUp(float X, float Y)
 			MClick(X, Y);
 		}
 	}
-	bMMouseDown = False;
+	bMMouseDown = false;
 }
 
 function MouseWheelDown(FLOAT X, FLOAT Y)
@@ -435,7 +435,7 @@ function MouseWheelUp(FLOAT X, FLOAT Y)
 function LMouseDown(float X, float Y)
 {
 	ActivateWindow(0, False);
-	bMouseDown = True;
+	bMouseDown = true;
 }
 
 function LMouseUp(float X, float Y)
@@ -455,7 +455,7 @@ function LMouseUp(float X, float Y)
 			Click(X, Y);
 		}
 	}
-	bMouseDown = False;
+	bMouseDown = false;
 }
 
 function FocusWindow()
@@ -516,7 +516,7 @@ final function DoTick(float Delta)
 		Child.bUWindowActive = bUWindowActive;
 
 		if (bLeaveOnScreen)
-			Child.bLeaveOnscreen = True;
+			Child.bLeaveOnscreen = true;
 
 		if (bUWindowActive || Child.bLeaveOnscreen)
 		{
@@ -546,14 +546,14 @@ final function PaintClients(Canvas C, float X, float Y)
 
 		C.SetPos(0,0);
 		C.Style = GetPlayerOwner().ERenderStyle.STY_Normal;
-		C.SetDrawColor(255,255,255);
+		C.SetDrawColor(255, 255, 255);
 		C.SpaceX = 0;
 		C.SpaceY = 0;
 
 		Child.BeforePaint(C, X - Child.WinLeft, Y - Child.WinTop);
 
 		if (bLeaveOnScreen)
-			Child.bLeaveOnscreen = True;
+			Child.bLeaveOnscreen = true;
 
 		if (bUWindowActive || Child.bLeaveOnscreen)
 		{
@@ -625,7 +625,7 @@ final function UWindowWindow FindWindowUnder(float X, float Y)
 		Child.bUWindowActive = bUWindowActive;
 
 		if (bLeaveOnScreen)
-			Child.bLeaveOnscreen = True;
+			Child.bLeaveOnscreen = true;
 
 		if (bUWindowActive || Child.bLeaveOnscreen)
 		{
@@ -663,7 +663,7 @@ function bool PropagateKey(WinMessage Msg, Canvas C, float X, float Y, int Key)
 		Child.bUWindowActive = bUWindowActive;
 
 		if (bLeaveOnScreen)
-			Child.bLeaveOnscreen = True;
+			Child.bLeaveOnscreen = true;
 
 		if ((bUWindowActive || Child.bLeaveOnscreen) && Child.bAcceptsFocus)
 		{
@@ -698,7 +698,7 @@ final function UWindowWindow CheckKeyFocusWindow()
 		Child.bUWindowActive = bUWindowActive;
 
 		if (bLeaveOnScreen)
-			Child.bLeaveOnscreen = True;
+			Child.bLeaveOnscreen = true;
 
 		if (bUWindowActive || Child.bLeaveOnscreen)
 		{
@@ -725,7 +725,7 @@ final function bool MessageClients(WinMessage Msg, Canvas C, float X, float Y, i
 		Child.bUWindowActive = bUWindowActive;
 
 		if (bLeaveOnScreen)
-			Child.bLeaveOnscreen = True;
+			Child.bLeaveOnscreen = true;
 
 		if ((bUWindowActive || Child.bLeaveOnscreen) && Child.bAcceptsMouseFocus)
 		{
@@ -812,7 +812,7 @@ final function HideChildWindow(UWindowWindow Child)
 	local UWindowWindow Window;
 
 	if (!Child.bWindowVisible) return;
-	Child.bWindowVisible = False;
+	Child.bWindowVisible = false;
 
 	if (Child.bAcceptsHotKeys)
 		Root.RemoveHotkeyWindow(Child);
@@ -877,7 +877,7 @@ final function HideChildWindow(UWindowWindow Child)
 final function SetAcceptsFocus()
 {
 	if (bAcceptsFocus) return;
-	bAcceptsFocus = True;
+	bAcceptsFocus = true;
 
 	if (Self != Root)
 		ParentWindow.SetAcceptsFocus();
@@ -890,7 +890,7 @@ final function CancelAcceptsFocus()
 	for (Child = LastChildWindow; Child != None; Child = Child.PrevSiblingWindow)
 		Child.CancelAcceptsFocus();
 
-	bAcceptsFocus = False;
+	bAcceptsFocus = false;
 }
 
 final function GetMouseXY(out float X, out float Y)
@@ -949,7 +949,7 @@ final function ShowChildWindow(UWindowWindow Child, optional bool bAtBack)
 	if (!Child.bTransient) ActiveWindow = Child;
 
 	if (Child.bWindowVisible) return;
-	Child.bWindowVisible = True;
+	Child.bWindowVisible = true;
 
 	if (Child.bAcceptsHotKeys)
 		Root.AddHotkeyWindow(Child);
@@ -1070,7 +1070,7 @@ final function UWindowWindow CreateWindow(class<UWindowWindow> WndClass, float X
 		Child.OwnerWindow = Self;
 		
 	Child.Cursor = Cursor;
-	Child.bAlwaysBehind = False;
+	Child.bAlwaysBehind = false;
     Child.LookAndFeel = LookAndFeel;
 	//log("BeforeCreate()");
 	Child.BeforeCreate();
@@ -1244,7 +1244,7 @@ final function int WrapClipText(Canvas C, float X, float Y, coerce string S, opt
 	}
 
 	i = 0;
-	bSentry = True;
+	bSentry = true;
 	Out = "";
 	NumLines = 1;
 	while (bSentry && Y < WinHeight)
@@ -1263,11 +1263,11 @@ final function int WrapClipText(Canvas C, float X, float Y, coerce string S, opt
 		SpacePos = InStr(Out, " ");
 		CRPos = InStr(Out, Chr(13));
 		
-		bCR = False;
+		bCR = false;
 		if (CRPos != -1 && (CRPos < SpacePos || SpacePos == -1))
 		{
 			WordPos = CRPos;
-			bCR = True;
+			bCR = true;
 		}
 		else
 		{
@@ -1320,7 +1320,7 @@ final function int WrapClipText(Canvas C, float X, float Y, coerce string S, opt
 		}
 		Out = Mid(Out, Len(Temp));
 		if ((Out == "") && (i > 0))
-			bSentry = False;
+			bSentry = false;
 	}
 	return NumLines;
 }
@@ -1792,7 +1792,7 @@ function StripCRLF(out string Text)
 
 defaultproperties
 {
-    bAcceptsMouseFocus=true
+    bAcceptsMouseFocus=True
     m_BorderTextureRegion=(X=0,Y=0,W=1,H=1)
     m_BorderTexture=Texture'WhiteTexture'
     m_BorderColor=(R=255,G=255,B=255,A=0)

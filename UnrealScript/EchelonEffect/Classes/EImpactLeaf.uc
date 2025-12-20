@@ -29,5 +29,5 @@ defaultproperties
         Name="ImpactLeaf"
     End Object
     Emitters(0)=SpriteEmitter'ImpactLeaf'
-    bUnlit=false
+    bUnlit=False
 }

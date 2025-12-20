@@ -17,5 +17,5 @@ function bool IsAvailable()
 defaultproperties
 {
     iPriority=-1
-    bCollideActors=false
+    bCollideActors=False
 }

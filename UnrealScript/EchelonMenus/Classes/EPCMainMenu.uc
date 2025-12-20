@@ -29,7 +29,6 @@ var EPCMessageBox        m_MessageBox;
 // Joshua - This is a native class. New variables must be added only after all original ones have been declared.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
-
 var UWindowLabelControl m_VersionLabel; // Enhanced version label
 var INT             m_IVersionLabelXPos, m_IVersionLabelYPos; // Joshua - Enhanced version label
 
@@ -64,7 +63,7 @@ function Created()
     // Joshua - Replaced website with Enhanced
     //m_GoOnline.SetButtonText(Localize("HUD","WEBSITE","Localization\\HUD") ,TXT_CENTER);
     m_GoOnline.SetButtonText(Localize("Common","Website","Localization\\Enhanced") ,TXT_CENTER);
-    m_VersionLabel.SetLabelText("Enhanced v1.4", TXT_CENTER); // Joshua - Enhanced version label
+    m_VersionLabel.SetLabelText("Enhanced v1.4 Beta", TXT_RIGHT); // Joshua - Enhanced version label
     m_DiscordLabel.SetLabelText("Discord", TXT_LEFT); // Joshua - Discord label
     
     m_StarGame.Font = F_Large;
@@ -183,10 +182,13 @@ defaultproperties
     m_IGoOnlineYPos=295
     m_IGoOnlineWidth=300
     m_IGoOnlineXPos=180
-    m_IVersionLabelXPos=435 //435 //429
+	//=============================================================================
+	// Enhanced Variables
+	//=============================================================================
+    m_IVersionLabelXPos=381
     m_IVersionLabelYPos=393
-    m_IDiscordLabelXPos=85
+    m_IDiscordLabelXPos=80
     m_IDiscordLabelYPos=393
-    m_IDiscordLogoXPos=65
+    m_IDiscordLogoXPos=60
     m_IDiscordLogoYPos=398
 }

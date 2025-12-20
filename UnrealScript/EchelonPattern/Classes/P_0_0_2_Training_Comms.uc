@@ -112,7 +112,7 @@ T2LevelEnd:
     LevelChange("0_0_3_Training.unr");
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

@@ -10,5 +10,5 @@ class InterpolationPoint extends Keypoint
 defaultproperties
 {
     Texture=Texture'S_Interp'
-    bDirectional=true
+    bDirectional=True
 }

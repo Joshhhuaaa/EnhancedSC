@@ -19,12 +19,12 @@ function Created()
 {
 	ClientArea = UWindowGridClient(CreateWindow(class'UWindowGridClient', 0, 0, WinWidth - 12, WinHeight));
 	VertSB = UWindowVScrollbar(CreateWindow(class'UWindowVScrollbar', WinWidth - 12, 0, 12, WinHeight));
-	VertSB.bAlwaysOnTop = True;
+	VertSB.bAlwaysOnTop = true;
 
 	HorizSB = UWindowHScrollbar(CreateWindow(class'UWindowHScrollbar', 0, WinHeight - 12, WinWidth, 12));
-	HorizSB.bAlwaysOnTop = True;
+	HorizSB.bAlwaysOnTop = true;
 	HorizSB.HideWindow();
-	bShowHorizSB = False;
+	bShowHorizSB = false;
 
 	if (!bNoKeyboard)
 		SetAcceptsFocus();
@@ -61,12 +61,12 @@ function Resized()
 	{
 		// Need a horizontal scrollbar
 		HorizSB.ShowWindow();
-		bShowHorizSB = True;
+		bShowHorizSB = true;
 	}
 	else
 	{
 		HorizSB.HideWindow();
-		bShowHorizSB = False;
+		bShowHorizSB = false;
 		HorizSB.Pos = 0;
 	}
 

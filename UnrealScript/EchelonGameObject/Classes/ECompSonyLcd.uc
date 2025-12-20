@@ -15,6 +15,6 @@ defaultproperties
     HitSound(0)=Sound'DestroyableObjet.Play_ScreenDestroyed'
     StaticMesh=StaticMesh'EGO_OBJ.Langley_ObjGO.GO_CompSonyLcd'
     CollisionPrimitive=StaticMesh'EGO_OBJ.Langley_ObjGO.GO_compsonyLCD_col'
-    bStaticMeshCylColl=false
-    bCPBlockPlayers=true
+    bStaticMeshCylColl=False
+    bCPBlockPlayers=True
 }

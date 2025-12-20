@@ -97,6 +97,6 @@ defaultproperties
     SprayDistance=150.000000
     SprayDamage=2
     DamageType=Class'ESleepingGas'
-    bCollideActors=true
-    bDirectional=true
+    bCollideActors=True
+    bDirectional=True
 }

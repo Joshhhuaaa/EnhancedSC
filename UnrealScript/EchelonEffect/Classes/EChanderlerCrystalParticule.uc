@@ -21,5 +21,5 @@ defaultproperties
         Name="ChanderlerCrystalParticule"
     End Object
     Emitters(0)=MeshEmitter'EchelonEffect.ChanderlerCrystalParticule'
-    bUnlit=false
+    bUnlit=False
 }

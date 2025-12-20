@@ -156,7 +156,7 @@ StrikeTwo:
     GameOver(false, 2);
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 LevelChange:
     Log("Going to 1_1_1");

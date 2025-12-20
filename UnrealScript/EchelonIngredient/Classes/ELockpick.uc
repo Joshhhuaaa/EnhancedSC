@@ -76,5 +76,5 @@ defaultproperties
     TryLockPick=Sound'FisherFoley.Play_Random_FisherTryLockPick'
     OpenLock=Sound'FisherFoley.Play_FisherOPenLock'
     Category=CAT_GADGETS
-    StaticMesh=none
+    StaticMesh=None
 }

@@ -41,7 +41,7 @@ state s_Destructed
 defaultproperties
 {
     RotationSpeed=100000
-    bDestroyWhenDestructed=false
+    bDestroyWhenDestructed=False
     StaticMesh=StaticMesh'EMeshIngredient.Object.ceillingfan'
     CollisionRadius=8.000000
     CollisionHeight=2.000000

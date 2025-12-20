@@ -2,7 +2,7 @@ class ELgtkolalantern extends EGameplayObjectLight;
 
 defaultproperties
 {
-    bDestroyWhenDestructed=false
+    bDestroyWhenDestructed=False
     HitPoints=60
     DamagedMeshes(0)=(StaticMesh=StaticMesh'LightGenOBJ.breakablelight.LIG_kolalanternB')
     SpawnableObjects(0)=(SpawnClass=Class'EchelonEffect.EGlassSmallParticle')

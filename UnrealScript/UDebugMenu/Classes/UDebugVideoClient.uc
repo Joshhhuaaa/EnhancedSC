@@ -52,7 +52,7 @@ function Created()
 
 	// Brightness
 	BrightnessSlider = UWindowHSliderControl(CreateControl(class'UWindowHSliderControl', CenterPos, ControlOffset, CenterWidth, 1));
-	BrightnessSlider.bNoSlidingNotify = True;
+	BrightnessSlider.bNoSlidingNotify = true;
 	BrightnessSlider.SetRange(2, 10, 1);
 	BrightnessSlider.SetText(BrightnessText);
 	BrightnessSlider.SetHelpText(BrightnessHelp);
@@ -76,7 +76,7 @@ function LoadAvailableSettings()
 	local string CurrentDepth;
 	local string ParseString;
 
-	bInitialized = False;
+	bInitialized = false;
 
 	// Load available video drivers and current video driver here.
 
@@ -106,7 +106,7 @@ function LoadAvailableSettings()
 	Brightness = int(float(GetPlayerOwner().ConsoleCommand("get ini:Engine.Engine.ViewportManager Brightness")) * 10);
 	BrightnessSlider.SetValue(Brightness);
 
-	bInitialized = True;
+	bInitialized = true;
 }
 
 function ResolutionChanged(float W, float H)

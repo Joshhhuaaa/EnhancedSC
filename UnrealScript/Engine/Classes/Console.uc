@@ -69,8 +69,9 @@ state Typing
 	function Type()
 	{
 		TypedStr="";
-		gotoState('');
+		GotoState('');
 	}
+
 	function bool KeyType(EInputKey Key)
 	{
 		if (Key >= 0x20 && Key < 0x100 && Key != Asc("~") && Key != Asc("`"))
@@ -79,6 +80,7 @@ state Typing
 			return true;
 		}
 	}
+	
 	function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 	{
 		local string Temp;
@@ -201,16 +203,16 @@ state Typing
 			Canvas.Strlen(OutStr,xl,yl);
 
 			Canvas.SetPos(10,436);
-			Canvas.SetDrawColor(0,0,0);
+			Canvas.SetDrawColor(0, 0, 0);
 			Canvas.DrawTile(Texture'ConsoleBK', 600, yl + 6, 0, 0, 32, 32);
 
 			Canvas.SetPos(10,436);	
-			Canvas.SetDrawColor(0,255,0);
+			Canvas.SetDrawColor(0, 255, 0);
 			Canvas.DrawTile(Texture'ConsoleBdr', 600, 2, 0, 0, 32, 32);
 
 			Canvas.SetPos(10,440);
-		    Canvas.bCenter = False;
-			Canvas.SetDrawColor(128,128,128);
+		    Canvas.bCenter = false;
+			Canvas.SetDrawColor(128, 128, 128);
 			Canvas.DrawText(OutStr, false);
 	}
 	
@@ -255,6 +257,6 @@ state Typing
 defaultproperties
 {
     HistoryBot=-1
-    bRequiresTick=true
+    bRequiresTick=True
 	BackspaceRepeatRate=0.050000
 }

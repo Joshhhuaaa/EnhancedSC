@@ -348,14 +348,14 @@ function untouch(actor other)
 
 defaultproperties
 {
-    bPropagatesSound=true
-    bFindBaseOnBuild=true
-    bStatic=true
-    bHidden=true
+    bPropagatesSound=True
+    bFindBaseOnBuild=True
+    bStatic=True
+    bHidden=True
     Texture=Texture'S_NavP'
-    bCollideWhenPlacing=true
+    bCollideWhenPlacing=True
     CollisionRadius=80.000000
     CollisionHeight=100.000000
-    bCollideWorld=true
-    bIsNavPoint=true
+    bCollideWorld=True
+    bIsNavPoint=True
 }

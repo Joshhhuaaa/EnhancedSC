@@ -19,7 +19,7 @@ function Created()
 						- LookAndFeel.Size_ScrollbarWidth - 10,
 					 LookAndFeel.Size_TabAreaHeight + LookAndFeel.Size_TabAreaOverhangHeight));
 
-	TabArea.bAlwaysOnTop = True;
+	TabArea.bAlwaysOnTop = true;
 
 	LeftButton = UWindowTabControlLeftButton(CreateWindow(class'UWindowTabControlLeftButton', WinWidth - 20, 0, 10, 12));
 	RightButton = UWindowTabControlRightButton(CreateWindow(class'UWindowTabControlRightButton', WinWidth - 10, 0, 10, 12));
@@ -103,7 +103,7 @@ function GotoTab(UWindowTabControlItem NewSelected, optional bool bByUser)
 	if (SelectedTab != NewSelected && bByUser)
 		LookAndFeel.PlayMenuSound(Self, MS_ChangeTab);
 	SelectedTab = NewSelected;
-	TabArea.bShowSelected = True;
+	TabArea.bShowSelected = true;
 }
 
 function UWindowTabControlItem GetTab(string Caption)

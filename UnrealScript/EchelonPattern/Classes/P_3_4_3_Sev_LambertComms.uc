@@ -77,7 +77,7 @@ function InitPattern()
         Osprey = Spawn(class'EAnimatedObject', , , vect(-6111, 590, 266), rot(0, -0, 0));
         Osprey.SetDrawType(DT_Mesh);
         Osprey.Mesh = SkeletalMesh'EOSP.Osprey';
-        Osprey.bLoopNeutral = True;
+        Osprey.bLoopNeutral = true;
     
         OspreyAnimation = '2260osp3';
         Osprey.NeutralPoseAnim =  OspreyAnimation;
@@ -108,35 +108,38 @@ function InitPattern()
             Characters[2] = P.controller;
     }
 
-    // Joshua - Adding texture to several meshes, disabling a trigger that caused game to crash
-   ForEach AllActors(class'Actor', A)
+    if (!bInit)
     {
-        if (A.name == 'EEventTrigger8')
-            A.SetCollision(False);
-        if (A.name == 'ESwingingDoor18')
-            A.Skins[0] = Texture(DynamicLoadObject("3_4_Severo_tex.Door07_SEV", class'Texture'));
-        if (A.name == 'StaticMeshActor946')
-            A.Skins[0] = Texture(DynamicLoadObject("3_4_Severo_tex.Door07_SEV", class'Texture'));
-        if (A.name == 'StaticMeshActor237') // Joshua - Hiding the placeholder Osprey
-            A.bHidden = True;
-        if (A.name == 'ESBPatchActor2') 
-            A.Texture = Shader(DynamicLoadObject("3_4_Severo_tex.Objects.plasticshd", class'Shader'));
-        if (A.name == 'StaticMeshActor273')
-            A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
-        if (A.name == 'StaticMeshActor393')
-            A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
-        if (A.name == 'StaticMeshActor1037')
-            A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
-        if (A.name == 'StaticMeshActor1318')
-            A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
-        if (A.name == 'StaticMeshActor1319')
-            A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
-        if (A.name == 'StaticMeshActor1343')
-            A.Skins[0] = Texture(DynamicLoadObject("EGO_Tex.GenTexGO.GO_laptop", class'Texture'));
-        if (A.name == 'StaticMeshActor1344')
-            A.Skins[0] = Texture(DynamicLoadObject("EGO_Tex.GenTexGO.GO_laptop", class'Texture'));
-        if (A.name == 'EChair0') // Joshua - Hiding placeholder chair
-            A.bHidden = True;
+        // Joshua - Adding texture to several meshes, disabling a trigger that caused game to crash
+        ForEach AllActors(class'Actor', A)
+        {
+            if (A.name == 'EEventTrigger8')
+                A.SetCollision(False);
+            if (A.name == 'ESwingingDoor18')
+                A.Skins[0] = Texture(DynamicLoadObject("3_4_Severo_tex.Door07_SEV", class'Texture'));
+            if (A.name == 'StaticMeshActor946')
+                A.Skins[0] = Texture(DynamicLoadObject("3_4_Severo_tex.Door07_SEV", class'Texture'));
+            if (A.name == 'StaticMeshActor237') // Joshua - Hiding the placeholder Osprey
+                A.bHidden = true;
+            if (A.name == 'ESBPatchActor2') 
+                A.Texture = Shader(DynamicLoadObject("3_4_Severo_tex.Objects.plasticshd", class'Shader'));
+            if (A.name == 'StaticMeshActor273')
+                A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
+            if (A.name == 'StaticMeshActor393')
+                A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
+            if (A.name == 'StaticMeshActor1037')
+                A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
+            if (A.name == 'StaticMeshActor1318')
+                A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
+            if (A.name == 'StaticMeshActor1319')
+                A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
+            if (A.name == 'StaticMeshActor1343')
+                A.Skins[0] = Texture(DynamicLoadObject("EGO_Tex.GenTexGO.GO_laptop", class'Texture'));
+            if (A.name == 'StaticMeshActor1344')
+                A.Skins[0] = Texture(DynamicLoadObject("EGO_Tex.GenTexGO.GO_laptop", class'Texture'));
+            if (A.name == 'EChair0') // Joshua - Hiding placeholder chair
+                A.bHidden = true;
+        }
     }
 
     if (!bInit)

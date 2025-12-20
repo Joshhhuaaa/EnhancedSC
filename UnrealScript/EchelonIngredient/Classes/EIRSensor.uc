@@ -143,11 +143,11 @@ state s_RayTracing
 defaultproperties
 {
     DamagedMeshes(0)=(StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_LaserSystemA01B',Percent=100.000000)
-    TriggerPatternJustOnce=false
+    TriggerPatternJustOnce=False
     StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_LaserSystemA00B'
     DrawScale=2.000000
-    bBlockProj=false
-    bBlockBullet=false
-    bBlockNPCVision=false
-    bIsTouchable=true
+    bBlockProj=False
+    bBlockBullet=False
+    bBlockNPCVision=False
+    bIsTouchable=True
 }

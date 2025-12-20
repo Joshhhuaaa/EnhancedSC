@@ -27,5 +27,5 @@ defaultproperties
         Name="PaperPilePiece"
     End Object
     Emitters(0)=SpriteEmitter'PaperPilePiece'
-    bUnlit=false
+    bUnlit=False
 }

@@ -121,7 +121,7 @@ function BeforePaint(Canvas C, float X, float Y)
 
 function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H)
 {
-	C.SetDrawColor(255,255,255);	
+	C.SetDrawColor(255, 255, 255);	
 	if (UWindowMenuBarItem(Item).bHelp) W = W - 16;
 
 	UWindowMenuBarItem(Item).ItemLeft = X;
@@ -138,7 +138,7 @@ function DrawMenuBar(Canvas C)
 
 	C.Font = Root.Fonts[F_Normal];
 
-	C.SetDrawColor(0,0,0);
+	C.SetDrawColor(0, 0, 0);
 
 	TextSize(C, VersionText, W, H);
 	ClipText(C, WinWidth - W - 20, 3, VersionText);

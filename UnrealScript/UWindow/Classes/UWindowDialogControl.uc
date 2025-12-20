@@ -30,13 +30,13 @@ function Created()
 function KeyFocusEnter()
 {
 	Super.KeyFocusEnter();
-	bHasKeyboardFocus = True;
+	bHasKeyboardFocus = true;
 }
 
 function KeyFocusExit()
 {
 	Super.KeyFocusExit();
-	bHasKeyboardFocus = False;
+	bHasKeyboardFocus = false;
 }
 
 function SetHelpText(string NewHelpText)

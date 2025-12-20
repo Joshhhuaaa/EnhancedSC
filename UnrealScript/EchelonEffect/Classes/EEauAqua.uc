@@ -21,5 +21,5 @@ defaultproperties
         Name="EauAqua"
     End Object
     Emitters(0)=MeshEmitter'EchelonEffect.EauAqua'
-    bUnlit=false
+    bUnlit=False
 }

@@ -96,7 +96,7 @@ MasseBPart:
     Teleport(1, 'MasseTeleportDestination');
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 SomeoneDOA:
     Log("Someone has been killed or knocked out.");

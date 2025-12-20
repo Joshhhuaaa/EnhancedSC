@@ -28,7 +28,7 @@ function Created()
 	Super.Created();
 
 	VertSB = UWindowVScrollbar(CreateWindow(class'UWindowVScrollbar', WinWidth - 12, 0, 12, WinHeight));
-	VertSB.bAlwaysOnTop = True;
+	VertSB.bAlwaysOnTop = true;
 	Cursor = Root.NormalCursor;
 
 	Clear();
@@ -36,7 +36,7 @@ function Created()
 
 function Clear()
 {
-	bDirty = True;
+	bDirty = true;
 
 	if (List != None)
 	{
@@ -104,13 +104,13 @@ function Paint(Canvas C, float MouseX, float MouseY)
 		WordWrap(C, True);
 		OldW = WinWidth;
 		OldH = WinHeight;
-		bWrapped = True;
+		bWrapped = true;
 	}
 	else
 	if (bDirty)
 	{
 		WordWrap(C, False);
-		bWrapped = True;
+		bWrapped = true;
 	}
 
 	if (bWrapped)
@@ -203,7 +203,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 	local string Temp;
 	local int i;
 
-	bDirty = True;
+	bDirty = true;
 	
 	i = InStr(NewLine, "\\n");
 	if (i != -1)
@@ -225,7 +225,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 
 	L.Text = NewLine;
 	L.WrapParent = None;
-	L.bRowDirty = True;
+	L.bRowDirty = true;
 
 	if (Temp != "")
 		AddText(Temp);
@@ -254,7 +254,7 @@ function WordWrap(Canvas C, bool bForce)
 		if (L.WrapParent == None && (L.bRowDirty || bForce))
 			WrapRow(C, L);
 
-	bDirty = False;
+	bDirty = false;
 }
 
 function WrapRow(Canvas C, UWindowDynamicTextRow L)
@@ -273,7 +273,7 @@ function WrapRow(Canvas C, UWindowDynamicTextRow L)
 	else
 		MaxWidth = WrapWidth;
 
-	L.bRowDirty = False;
+	L.bRowDirty = false;
 
 	// fast check - single line?
 	N = UWindowDynamicTextRow(L.Next);
@@ -413,8 +413,8 @@ function RemoveWrap(UWindowDynamicTextRow L)
 
 defaultproperties
 {
-    bScrollOnResize=true
+    bScrollOnResize=True
     TextColor=(R=255,G=255,B=255,A=255)
     RowClass=Class'UWindowDynamicTextRow'
-    bNoKeyboard=true
+    bNoKeyboard=True
 }

@@ -63,5 +63,5 @@ defaultproperties
         Name="SpriteEmitter123"
     End Object
     Emitters(1)=SpriteEmitter'SpriteEmitter123'
-    bUnlit=false
+    bUnlit=False
 }

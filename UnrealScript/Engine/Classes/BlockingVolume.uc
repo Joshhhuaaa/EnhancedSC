@@ -9,9 +9,9 @@ class BlockingVolume extends Volume;
 
 defaultproperties
 {
-    bWorldGeometry=true
-    bBlockPlayers=true
-    bBlockActors=true
-    bBlockProj=true
-    bBlockCamera=true
+    bWorldGeometry=True
+    bBlockPlayers=True
+    bBlockActors=True
+    bBlockProj=True
+    bBlockCamera=True
 }

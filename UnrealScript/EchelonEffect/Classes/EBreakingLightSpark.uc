@@ -49,5 +49,5 @@ defaultproperties
         Name="Glass"
     End Object
     Emitters(1)=SpriteEmitter'Glass'
-    bUnlit=false
+    bUnlit=False
 }

@@ -383,5 +383,5 @@ function MenuCmd(int Item)
 
 defaultproperties
 {
-    bAlwaysOnTop=true
+    bAlwaysOnTop=True
 }

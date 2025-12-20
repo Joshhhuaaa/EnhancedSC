@@ -2,7 +2,7 @@ class EVase_C extends EGamePlayObject;
 
 defaultproperties
 {
-    bShatterable=true
+    bShatterable=True
     HitPoints=300
     DamagedMeshes(0)=(StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_vase02b_chi',Percent=33.000000)
     DamagedMeshes(1)=(StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_vase02c_chi',Percent=66.000000)

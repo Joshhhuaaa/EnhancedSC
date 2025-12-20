@@ -69,7 +69,7 @@ defaultproperties
     InnerRadius=384.000000
     Sides=8
     GroupName="Cylinder"
-    AlignToSide=true
+    AlignToSide=True
     BitmapFilename="BBCylinder"
     ToolTip="Cylinder"
 }

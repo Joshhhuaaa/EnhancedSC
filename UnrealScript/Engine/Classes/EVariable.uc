@@ -2,5 +2,5 @@ class EVariable extends actor;
 
 defaultproperties
 {
-    bHidden=true
+    bHidden=True
 }

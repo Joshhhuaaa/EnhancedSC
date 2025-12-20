@@ -15,5 +15,5 @@ class PolyMarker extends Keypoint
 defaultproperties
 {
     Texture=Texture'S_PolyMarker'
-    bEdShouldSnap=true
+    bEdShouldSnap=True
 }

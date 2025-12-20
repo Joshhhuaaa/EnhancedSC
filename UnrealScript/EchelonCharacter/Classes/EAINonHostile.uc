@@ -448,7 +448,7 @@ class EAINonHostile extends EAIPawn;
 
 defaultproperties
 {
-    bNoAiming=true
+    bNoAiming=True
     BasicPatternClass=Class'Echelon.EBureaucratPattern'
     AnimSequence="waitstnmfd0"
 }

@@ -24,7 +24,7 @@ function Created()
 	EditBox = UWindowEditBox(CreateWindow(class'UWindowEditBox', 0, 0, WinWidth - LookAndFeel.Size_ComboButtonWidth, WinHeight, self)); 
 	EditBox.NotifyOwner = Self;
 	EditBoxWidth = WinWidth / 2;
-	EditBox.bTransient = True;
+	EditBox.bTransient = true;
 
 	Button = UWindowComboButton(CreateWindow(class'UWindowComboButton', WinWidth - LookAndFeel.Size_ComboButtonWidth, 0, LookAndFeel.Size_ComboButtonWidth, WinHeight, self)); 
 	Button.Owner = Self;
@@ -35,7 +35,7 @@ function Created()
 	List.Setup();
 	
 	List.HideWindow();
-	bListVisible = False;
+	bListVisible = false;
 
 	SetEditTextColor(LookAndFeel.EditBoxTextColor);
 
@@ -190,7 +190,7 @@ function BeforePaint(Canvas C, float X, float Y)
 
 function CloseUp()
 {
-	bListVisible = False;
+	bListVisible = false;
 	EditBox.SetEditable(bCanEdit);
 	EditBox.SelectAll();
 	List.HideWindow();
@@ -198,7 +198,7 @@ function CloseUp()
 
 function DropDown()
 {
-	bListVisible = True;
+	bListVisible = true;
 	EditBox.SetEditable(False);
 	List.ShowWindow();
 }
@@ -230,6 +230,6 @@ function FocusOtherWindow(UWindowWindow W)
 defaultproperties
 {
     ListClass=Class'UWindowComboList'
-    bNoKeyboard=true
+    bNoKeyboard=True
     m_BorderColor=(R=51,G=51,B=51,A=255)
 }

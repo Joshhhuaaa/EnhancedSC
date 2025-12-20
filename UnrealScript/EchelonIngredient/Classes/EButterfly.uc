@@ -22,11 +22,11 @@ auto state s_Butterlfying
 
 defaultproperties
 {
-    bFly360=true
+    bFly360=True
     Physics=PHYS_RootMotion
     DrawType=DT_Mesh
     Mesh=SkeletalMesh'ESkelIngredients.mothMesh'
-    bCollideActors=false
+    bCollideActors=False
     HeatIntensity=0.200000
-    bIsSoftBody=true
+    bIsSoftBody=True
 }

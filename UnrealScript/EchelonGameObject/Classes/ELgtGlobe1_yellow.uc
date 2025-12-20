@@ -3,7 +3,7 @@ class ELgtGlobe1_yellow extends EGameplayObjectLight;
 defaultproperties
 {
     OffMesh=StaticMesh'LightGenOBJ.breakablelight.LIG_globe1_OFF'
-    bDestroyWhenDestructed=false
+    bDestroyWhenDestructed=False
     HitPoints=8
     DamagedMeshes(0)=(StaticMesh=StaticMesh'LightGenOBJ.breakablelight.LIG_globe1B')
     SpawnableObjects(0)=(SpawnClass=Class'EchelonEffect.EGlobeLightSpark')

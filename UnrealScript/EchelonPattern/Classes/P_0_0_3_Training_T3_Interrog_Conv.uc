@@ -99,7 +99,7 @@ ManDown:
 Murder:
     SendPatternEvent('T3CommsGroup','BloodyMurder');
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

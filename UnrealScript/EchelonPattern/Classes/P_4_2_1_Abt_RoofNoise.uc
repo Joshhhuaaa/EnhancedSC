@@ -147,7 +147,7 @@ TeleportSafe:
     SetExclusivity(FALSE);
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

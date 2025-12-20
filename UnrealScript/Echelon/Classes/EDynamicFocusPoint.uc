@@ -16,6 +16,6 @@ function PostBeginPlay()
 
 defaultproperties
 {
-    bStatic=false
-    bCollideWhenPlacing=false
+    bStatic=False
+    bCollideWhenPlacing=False
 }

@@ -21,7 +21,7 @@ function float GetHeight(Canvas C)
 function Paint(Canvas C, float X, float Y)
 {
 	C.Font = Root.Fonts[F_Normal];
-	C.SetDrawColor(0,0,0);
+	C.SetDrawColor(0, 0, 0);
 	WrapClipText(C, 0, 0, Message);
-	C.SetDrawColor(255,255,255);
+	C.SetDrawColor(255, 255, 255);
 }

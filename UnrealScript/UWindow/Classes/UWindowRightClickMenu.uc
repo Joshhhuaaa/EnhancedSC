@@ -2,7 +2,7 @@ class UWindowRightClickMenu extends UWindowPulldownMenu;
 
 function Created()
 {
-	bTransient = True;
+	bTransient = true;
 	Super.Created();
 }
 

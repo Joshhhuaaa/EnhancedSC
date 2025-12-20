@@ -71,24 +71,24 @@ function DrawLine(int AX, int AY, int BX, int BY, EHUD_COLOR eColor, ECanvas Can
 		Canvas.DrawColor = GreenPale;		
 		break;
 	case EHC_RED:
-		Canvas.SetDrawColor(128,0,0);
+		Canvas.SetDrawColor(128, 0, 0);
 		break;
 	case EHC_BLACK:
 		Canvas.DrawColor = Black;
 		break;
 	case EHC_GRAY:
-		Canvas.SetDrawColor(80,80,80);
+		Canvas.SetDrawColor(80, 80, 80);
 		break;
 	case EHC_ALPHA_BLACK:
 		Canvas.DrawColor = Black;
 		Canvas.DrawColor.A = 128;
 		break;
 	case EHC_ALPHA_WHITE:
-		Canvas.SetDrawColor(128,128,128);
+		Canvas.SetDrawColor(128, 128, 128);
 		Canvas.DrawColor.A = 128;
 		break;
 	case EHC_ALPHA_RED:
-		Canvas.SetDrawColor(90,0,0);
+		Canvas.SetDrawColor(90, 0, 0);
 		Canvas.DrawColor.A = 128;
 		break;
 	case EHC_ALPHA_GREEN:
@@ -138,7 +138,7 @@ function DrawSniperMask(ECanvas Canvas)
     width = eLevel.TGAME.GetWidth(eLevel.TGAME.svf2_bordernoir);
     height = eLevel.TGAME.GetHeight(eLevel.TGAME.svf2_bordernoir);
 
-    Canvas.SetDrawColor(128,128,128);
+    Canvas.SetDrawColor(128, 128, 128);
 	Canvas.Style = ERenderStyle.STY_Alpha;
     // Black Mask
     Canvas.SetPos(0,0);
@@ -161,5 +161,5 @@ defaultproperties
     White=(R=128,G=128,B=128,A=255)
     Green=(R=38,G=81,B=50,A=255)
     GreenPale=(R=47,G=83,B=62,A=255)
-    bHidden=true
+    bHidden=True
 }

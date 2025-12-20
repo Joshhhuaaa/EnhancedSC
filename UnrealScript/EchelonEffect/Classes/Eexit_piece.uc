@@ -31,5 +31,5 @@ defaultproperties
         Name="exit_piece"
     End Object
     Emitters(0)=SpriteEmitter'exit_piece'
-    bUnlit=false
+    bUnlit=False
 }

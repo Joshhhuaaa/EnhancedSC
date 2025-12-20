@@ -444,7 +444,8 @@ state s_Use
 		// No special display if not player
 		if (Epc != None)
 		{
-			if (!Epc.eGame.bUseController) // Joshua - Adding controller support for elevators
+			// Joshua - Adding controller support for elevators
+			if (!Epc.eGame.bUseController)
 				Epc.FakeMouseToggle(true);
 			bRenderAtEndOfFrame = true;
 			bSpecialLit = true;
@@ -517,9 +518,9 @@ state s_Use
 
 defaultproperties
 {
-    bPowered=true
-    bDamageable=false
-    bAcceptsProjectors=false
+    bPowered=True
+    bDamageable=False
+    bAcceptsProjectors=False
     StaticMesh=StaticMesh'EMeshIngredient.Elevator.elevatorpanel'
     AmbientGlow=64
     HeatIntensity=0.800000

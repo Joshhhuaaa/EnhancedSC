@@ -19,7 +19,7 @@ function Created()
 	if (FixedAreaClass != None)
 	{
 		FixedArea = UWindowDialogClientWindow(CreateWindow(FixedAreaClass, 0, 0, 100, 100, OwnerWindow));
-		FixedArea.bAlwaysOnTop = True;
+		FixedArea.bAlwaysOnTop = true;
 	}
 	else
 		FixedArea = None;
@@ -27,17 +27,17 @@ function Created()
 	ClientArea = UWindowDialogClientWindow(CreateWindow(ClientClass, 0, 0, WinWidth, WinHeight, OwnerWindow));
 
 	VertSB = UWindowVScrollbar(CreateWindow(class'UWindowVScrollbar', WinWidth - LookAndFeel.Size_ScrollbarWidth, 0, LookAndFeel.Size_ScrollbarWidth, WinHeight));
-	VertSB.bAlwaysOnTop = True;
+	VertSB.bAlwaysOnTop = true;
 	VertSB.HideWindow();
 
 	HorizSB = UWindowHScrollbar(CreateWindow(class'UWindowHScrollbar', 0, WinHeight - LookAndFeel.Size_ScrollbarWidth, WinWidth, LookAndFeel.Size_ScrollbarWidth));
-	HorizSB.bAlwaysOnTop = True;
+	HorizSB.bAlwaysOnTop = true;
 	HorizSB.HideWindow();
 
 	BRBitmap = UWindowBitmap(CreateWindow(class'UWindowBitmap', WinWidth - LookAndFeel.Size_ScrollbarWidth, WinHeight - LookAndFeel.Size_ScrollbarWidth, LookAndFeel.Size_ScrollbarWidth, LookAndFeel.Size_ScrollbarWidth));
-	BRBitmap.bAlwaysOnTop = True;
+	BRBitmap.bAlwaysOnTop = true;
 	BRBitmap.HideWindow();
-	BRBitmap.bStretch = True;
+	BRBitmap.bStretch = true;
 }
 
 function BeforePaint(Canvas C, float X, float Y)

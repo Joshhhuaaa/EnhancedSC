@@ -25,5 +25,5 @@ defaultproperties
         Name="DetergeantSprayB0"
     End Object
     Emitters(0)=MeshEmitter'EchelonEffect.DetergeantSprayB0'
-    bUnlit=false
+    bUnlit=False
 }

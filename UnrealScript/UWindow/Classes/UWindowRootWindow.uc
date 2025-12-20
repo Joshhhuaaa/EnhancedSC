@@ -204,7 +204,7 @@ function DrawMouse(Canvas C)
 	}
 	else
 	{		
-		C.SetDrawColor(255,255,255);
+		C.SetDrawColor(255, 255, 255);
 		
 		C.SetPos(MouseX * GUIScale - MouseWindow.Cursor.HotX, MouseY * GUIScale - MouseWindow.Cursor.HotY);
 		C.DrawIcon(MouseWindow.Cursor.tex, 1.0);
@@ -220,7 +220,7 @@ function bool CheckCaptureMouseUp()
 	if (bMouseCapture) {
 		MouseWindow.GetMouseXY(X, Y);
 		MouseWindow.LMouseUp(X, Y);
-		bMouseCapture = False;
+		bMouseCapture = false;
 		return True;
 	}
 	return False;
@@ -233,7 +233,7 @@ function bool CheckCaptureMouseDown()
 	if (bMouseCapture) {
 		MouseWindow.GetMouseXY(X, Y);
 		MouseWindow.LMouseDown(X, Y);
-		bMouseCapture = False;
+		bMouseCapture = false;
 		return True;
 	}
 	return False;
@@ -242,13 +242,13 @@ function bool CheckCaptureMouseDown()
 
 function CancelCapture()
 {
-	bMouseCapture = False;
+	bMouseCapture = false;
 }
 
 
 function CaptureMouse(optional UWindowWindow W)
 {
-	bMouseCapture = True;
+	bMouseCapture = true;
 	if (W != None)
 		MouseWindow = W;	
 }
@@ -439,7 +439,7 @@ function SetMousePos(float X, float Y)
 
 function QuitGame()
 {
-	bRequestQuit = True;
+	bRequestQuit = true;
 	QuitTime = 0;
 	NotifyQuitUnreal();
 }
@@ -469,5 +469,5 @@ function Tick(float Delta)
 defaultproperties
 {
     GUIScale=1.000000
-    bAllowConsole=true
+    bAllowConsole=True
 }

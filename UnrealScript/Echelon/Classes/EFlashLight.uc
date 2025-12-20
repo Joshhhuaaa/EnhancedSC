@@ -30,10 +30,10 @@ function ToggleLight(bool bOn)
 defaultproperties
 {
     StaticMesh=StaticMesh'EMeshCharacter.spetsnaz.headset'
-    bDontAffectEchelonLighting=true
+    bDontAffectEchelonLighting=True
     CollisionRadius=16.000000
     CollisionHeight=2.000000
-    bCollideActors=false
+    bCollideActors=False
     LightType=LT_Steady
     LightEffect=LE_ESpotShadowDistAtten
     LightBrightness=255
@@ -41,8 +41,8 @@ defaultproperties
     LightSaturation=232
     LightRadius=80
     LightCone=20
-    bInvalidateLightCachingIfMoved=true
-    UsesSpotLightBeam=true
+    bInvalidateLightCachingIfMoved=True
+    UsesSpotLightBeam=True
     VolumeInitialAlpha=10
     MinDistance=4.000000
     MaxDistance=1500.000000

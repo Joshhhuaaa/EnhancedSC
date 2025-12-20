@@ -39,10 +39,10 @@ defaultproperties
     MainScale=(Scale=(X=1.000000,Y=1.000000,Z=1.000000))
     PostScale=(Scale=(X=1.000000,Y=1.000000,Z=1.000000))
     TempScale=(Scale=(X=1.000000,Y=1.000000,Z=1.000000))
-    bStatic=true
-    bHidden=true
-    bNoDelete=true
+    bStatic=True
+    bHidden=True
+    bNoDelete=True
     DrawType=DT_Brush
-    bFixedRotationDir=true
-    bEdShouldSnap=true
+    bFixedRotationDir=True
+    bEdShouldSnap=True
 }

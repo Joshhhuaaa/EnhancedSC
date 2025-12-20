@@ -70,5 +70,5 @@ defaultproperties
         Name="BreakableGlass"
     End Object
     Emitters(0)=SpriteEmitter'BreakableGlass'
-    bUnlit=false
+    bUnlit=False
 }

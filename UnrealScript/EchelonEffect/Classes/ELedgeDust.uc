@@ -69,5 +69,5 @@ defaultproperties
         Name="Dust1"
     End Object
     Emitters(1)=SpriteEmitter'Dust1'
-    bUnlit=false
+    bUnlit=False
 }

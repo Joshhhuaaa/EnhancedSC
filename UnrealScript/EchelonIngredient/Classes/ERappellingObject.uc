@@ -6,13 +6,13 @@ var		ERapelRopeActor	Rope;
 defaultproperties
 {
     RappellingHeight=2000.000000
-    bDamageable=false
+    bDamageable=False
     StaticMesh=StaticMesh'EMeshIngredient.Object.VentExit'
     DrawScale=0.500000
     CollisionRadius=13.000000
     CollisionHeight=37.000000
-    bBlockPlayers=true
-    bBlockActors=true
+    bBlockPlayers=True
+    bBlockActors=True
     InteractionClass=Class'ERappellingInteraction'
-    bDirectional=true
+    bDirectional=True
 }

@@ -52,7 +52,7 @@ function OpenURL()
 	for (i = 0; i < 10; i++)
 	{
 		if (OpenHistory[i] ~= URL)
-			HistoryItem = True;
+			HistoryItem = true;
 	}
 	if (!HistoryItem)
 	{

@@ -124,7 +124,7 @@ FinaleStart:
     GameOver(true, 0);
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

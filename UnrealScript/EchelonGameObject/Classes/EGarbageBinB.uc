@@ -2,6 +2,6 @@ class EGarbageBinB extends EGameplayObject;
 
 defaultproperties
 {
-    bDamageable=false
+    bDamageable=False
     StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_trashcan_TRA00B'
 }

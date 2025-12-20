@@ -23,5 +23,5 @@ defaultproperties
         Name="LaundryDetergeantEmitter"
     End Object
     Emitters(0)=MeshEmitter'EchelonEffect.LaundryDetergeantEmitter'
-    bUnlit=false
+    bUnlit=False
 }

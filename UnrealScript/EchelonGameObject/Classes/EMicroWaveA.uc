@@ -4,7 +4,7 @@ class EMicroWaveA extends EGameplayObject;
 
 defaultproperties
 {
-    bShatterable=true
+    bShatterable=True
     HitPoints=400
     DamagedMeshes(0)=(StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_MicroWave01B',Percent=25.000000)
     DamagedMeshes(1)=(StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_MicroWave02B',Percent=50.000000)

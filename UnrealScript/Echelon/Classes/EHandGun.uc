@@ -88,5 +88,5 @@ defaultproperties
 {
     SliderOffset=(X=5.139000,Y=0.000000,Z=6.578000)
     Category=CAT_GADGETS
-    bPickable=true
+    bPickable=True
 }

@@ -111,8 +111,8 @@ defaultproperties
     m_SelectedTextColor=(R=0,G=0,B=0,A=255)
     m_DisabledTextColor=(R=0,G=0,B=0,A=255)
     m_OverTextColor=(R=0,G=0,B=0,A=255)
-    bNoKeyboard=true
-    bIgnoreLDoubleClick=true
-    bIgnoreMDoubleClick=true
-    bIgnoreRDoubleClick=true
+    bNoKeyboard=True
+    bIgnoreLDoubleClick=True
+    bIgnoreMDoubleClick=True
+    bIgnoreRDoubleClick=True
 }

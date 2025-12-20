@@ -14,7 +14,7 @@ function Paint(Canvas C, float X, float Y)
 
 	DrawMiscBevel(C, 0, 0, WinWidth, WinHeight, LookAndFeel.Misc, 2);
 
-	C.SetDrawColor(192,192,192);
+	C.SetDrawColor(192, 192, 192);
 
 	DrawStretchedTextureSegment(
 							C, 
@@ -29,7 +29,7 @@ function Paint(Canvas C, float X, float Y)
 							Texture'WhiteTexture'
 );
 
-	C.SetDrawColor(0,0,255);
+	C.SetDrawColor(0, 0, 255);
 
 	BlockX = LookAndFeel.MiscBevelL[2].W + 1;
 	while (BlockX < 1 + LookAndFeel.MiscBevelL[2].W + Percent * (WinWidth - LookAndFeel.MiscBevelL[2].W - LookAndFeel.MiscBevelR[2].W - 2) / 100)
@@ -54,5 +54,5 @@ function Paint(Canvas C, float X, float Y)
 		BlockX += BlockWidth + 1;
 	}
 
-	C.SetDrawColor(255,255,255);
+	C.SetDrawColor(255, 255, 255);
 }

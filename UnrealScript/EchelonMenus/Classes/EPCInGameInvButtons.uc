@@ -81,6 +81,6 @@ defaultproperties
 {
     m_BackGroundTexture=Texture'UWindow.WhiteTexture'
     m_CoordModifier=1
-    bUseRegion=true
+    bUseRegion=True
     m_BorderColor=(R=51,G=51,B=51,A=255)
 }

@@ -2,7 +2,7 @@ class EKolaExit extends EGameplayObject;
 
 defaultproperties
 {
-    bDestroyWhenDestructed=false
+    bDestroyWhenDestructed=False
     HitSound(0)=Sound'DestroyableObjet.Play_LittleWindowDestroyed'
     StaticMesh=StaticMesh'EGO_OBJ.Kola_ObjGO.GO_KolaExit'
     LightType=LT_Steady

@@ -29,5 +29,5 @@ defaultproperties
         Name="AquariumWaterSpill"
     End Object
     Emitters(0)=SpriteEmitter'AquariumWaterSpill'
-    bUnlit=false
+    bUnlit=False
 }

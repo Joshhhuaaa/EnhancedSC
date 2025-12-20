@@ -79,8 +79,8 @@ defaultproperties
     m_cFresnelColor=(R=34,G=34,B=120,A=255)
     m_fUpdateTime=0.033333
     m_fFresnelScale=1.000000
-    bHidden=false
-    bWorldGeometry=true
-    bUnlit=true
-    bStaticLighting=true
+    bHidden=False
+    bWorldGeometry=True
+    bUnlit=True
+    bStaticLighting=True
 }

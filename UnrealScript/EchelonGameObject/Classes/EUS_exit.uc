@@ -2,7 +2,7 @@ class EUS_exit extends EGameplayObjectLight;
 
 defaultproperties
 {
-    bDestroyWhenDestructed=false
+    bDestroyWhenDestructed=False
     HitPoints=60
     DamagedMeshes(0)=(StaticMesh=StaticMesh'EGO_OBJ.Langley_ObjGO.GO_exitBRK')
     SpawnableObjects(0)=(SpawnClass=Class'EchelonEffect.Eexit_piece')

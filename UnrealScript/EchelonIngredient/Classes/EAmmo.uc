@@ -48,5 +48,5 @@ function ProcessUseItem();
 
 defaultproperties
 {
-    bStaticMeshCylColl=false
+    bStaticMeshCylColl=False
 }

@@ -65,7 +65,7 @@ state Pushed
 
 defaultproperties
 {
-    bDamageable=false
-    bCollideActors=false
-    bSideFadeEffect=false
+    bDamageable=False
+    bCollideActors=False
+    bSideFadeEffect=False
 }

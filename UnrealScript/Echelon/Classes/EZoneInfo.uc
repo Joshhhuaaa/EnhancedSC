@@ -8,5 +8,5 @@ var() bool                      bUseAlarmIfPlayerIsInZone;
 
 defaultproperties
 {
-    bUseAlarmIfPlayerIsInZone=true
+    bUseAlarmIfPlayerIsInZone=True
 }

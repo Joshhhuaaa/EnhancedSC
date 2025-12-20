@@ -2,8 +2,6 @@
 // EGoal
 //		Information representing Goal used by EAIControllers
 //=============================================================================
-
-
 class EGoal extends Actor
 	native;
 
@@ -43,7 +41,6 @@ var		byte					Priority;				// goal priority (0 = lowest, 10 = highest, can chang
 //		Clears / Re-initalizes a Goal by resetting its data
 // 
 //------------------------------------------------------------------------
-
 function Clear()
 {
 	GoalLocation	= vect(0,0,0);
@@ -63,5 +60,5 @@ function Clear()
 
 defaultproperties
 {
-    bHidden=true
+    bHidden=True
 }

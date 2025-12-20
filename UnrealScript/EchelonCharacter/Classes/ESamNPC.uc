@@ -11,40 +11,6 @@ class ESamNPC extends EAIPawn
 //		Set randomized animation rate for AI pawns.
 // 
 //------------------------------------------------------------------------
-
-function SetSamMesh(int SamMeshType)
-{
-    switch (SamMeshType)
-    {
-		case 0:
-			Mesh = EchelonLevelInfo(Level).SamMesh;
-			if (Mesh == none)
-			{
-				// JFP: Temp hack, following the Oct-30-2002 merge some maps didn't have the SamMesh set.
-				// Added this for backward compatibility.
-				Mesh=SkeletalMesh'ESam.samAMesh';
-				log("JFPDEBUG: Hardcoding the default Sam mesh, since no mesh appeared to be set in the Level. Fix this in UnrealEd. New mesh:"@Mesh);
-			}
-			break;
-        case 1:
-            Mesh = SkeletalMesh'ESam.samAMesh';
-            break;
-        case 2:
-            Mesh = SkeletalMesh'ESam.samBMesh';
-            break;
-        case 3:
-            Mesh = SkeletalMesh'ESam.samCMesh';
-            break;
-        default:
-			Mesh = EchelonLevelInfo(Level).SamMesh;
-			if (Mesh == none)
-			{
-				Mesh=SkeletalMesh'ESam.samAMesh';
-			}
-            break;
-    }
-}
-
 function PostBeginPlay()
 {
 	local EWeapon Weapon;
@@ -364,10 +330,67 @@ function SwitchAnims()
 	}
 }
 
+// Joshua - New Sam mesh function
+function SetSamMesh(int SamMeshType)
+{
+    switch (SamMeshType)
+    {
+		case 0:
+			Mesh = EchelonLevelInfo(Level).SamMesh;
+			if (Mesh == none)
+			{
+				// JFP: Temp hack, following the Oct-30-2002 merge some maps didn't have the SamMesh set.
+				// Added this for backward compatibility.
+				Mesh = SkeletalMesh'ESam.samAMesh';
+				log("JFPDEBUG: Hardcoding the default Sam mesh, since no mesh appeared to be set in the Level. Fix this in UnrealEd. New mesh:"@Mesh);
+			}
+			break;
+        case 1:
+            Mesh = SkeletalMesh'ESam.samAMesh';
+            break;
+        case 2:
+            Mesh = SkeletalMesh'ESam.samBMesh';
+            break;
+        case 3:
+            Mesh = SkeletalMesh'ESam.samCMesh';
+            break;
+        case 4:
+            Mesh = SkeletalMesh'ESam.samAMesh';
+			Skins.Length = 0;
+			Skins[0] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamDBody", class'Texture'));
+			Skins[1] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamDBody", class'Texture'));
+			Skins[2] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamDFace", class'Texture'));
+            break;
+        case 5:
+            Mesh = SkeletalMesh'ESam.samBMesh';
+			Skins.Length = 0;
+			Skins[0] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamEFace", class'Texture'));
+			Skins[1] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamEBody", class'Texture'));
+			Skins[2] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamEBody", class'Texture'));
+			Skins[3] = EGlow(DynamicLoadObject("ETexCharacter.Sam.pda_GLW_SamB", class'EGlow'));
+			Skins[4] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamEFace", class'Texture'));
+            break;
+        case 6:
+            Mesh = SkeletalMesh'ESam.samAMesh';
+			Skins.Length = 0;
+			Skins[0] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamFBody", class'Texture'));
+			Skins[1] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamFBody", class'Texture'));
+			Skins[2] = Texture(DynamicLoadObject("ETexCharacter.Sam.SamFFace", class'Texture'));
+            break;
+        default:
+			Mesh = EchelonLevelInfo(Level).SamMesh;
+			if (Mesh == none)
+			{
+				Mesh=SkeletalMesh'ESam.samAMesh';
+			}
+            break;
+    }
+}
+
 defaultproperties
 {
-    bNoBlending=true
-    bDontCheckChangedActor=true
+    bNoBlending=True
+    bDontCheckChangedActor=True
     m_VisibilityConeAngle=0.000000
     m_VisibilityMaxDistance=0.000000
     m_VisibilityAngleVertical=0.000000

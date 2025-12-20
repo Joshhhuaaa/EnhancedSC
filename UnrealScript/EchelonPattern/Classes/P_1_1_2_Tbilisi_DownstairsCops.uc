@@ -81,7 +81,7 @@ OneDown:
     SendPatternEvent('Basement','FreeAlex');
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

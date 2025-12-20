@@ -22,5 +22,5 @@ defaultproperties
         Name="ImpactStone"
     End Object
     Emitters(0)=SpriteEmitter'ImpactStone'
-    bUnlit=false
+    bUnlit=False
 }

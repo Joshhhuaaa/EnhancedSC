@@ -53,7 +53,7 @@ ComputerActivity:
     SendPatternEvent('LambertAI','InSecurityRoom');
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

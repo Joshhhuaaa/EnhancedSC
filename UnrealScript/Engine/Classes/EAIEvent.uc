@@ -36,5 +36,5 @@ function Set(EAIEvent source)
 
 defaultproperties
 {
-    bHidden=true
+    bHidden=True
 }

@@ -36,17 +36,17 @@ event BulletWentTru(Actor Instigator, vector HitLocation, vector HitNormal, vect
 
 defaultproperties
 {
-    Electrified=true
+    Electrified=True
     Damage=5
-    bDamageable=false
-    bClimbable=true
-    bNPCBulletGoTru=true
-    bPlayerBulletGoTru=true
+    bDamageable=False
+    bClimbable=True
+    bNPCBulletGoTru=True
+    bPlayerBulletGoTru=True
     SurfaceType=SURFACE_FenceMetal
-    bStaticMeshCylColl=false
-    bBlockProj=false
-    bBlockNPCVision=false
-    bCPBlockPlayers=true
-    bCPBlockActors=true
-    bCPBlockProj=true
+    bStaticMeshCylColl=False
+    bBlockProj=False
+    bBlockNPCVision=False
+    bCPBlockPlayers=True
+    bCPBlockActors=True
+    bCPBlockProj=True
 }

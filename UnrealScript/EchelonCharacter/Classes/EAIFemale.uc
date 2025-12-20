@@ -271,8 +271,8 @@ function bool IsExtraWaiting(optional int f) { return false; }
 
 defaultproperties
 {
-    bNoBlending=true
-    bNoAiming=true
+    bNoBlending=True
+    bNoAiming=True
     BasicPatternClass=Class'Echelon.EBureaucratPattern'
     AnimSequence="waitstnmfd0"
 }

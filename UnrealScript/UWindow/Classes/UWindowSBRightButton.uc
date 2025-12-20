@@ -8,7 +8,7 @@ var float NextClickTime;
 
 function Created()
 {
-	bNoKeyboard = True;
+	bNoKeyboard = true;
 	Super.Created();
     LookAndFeel.SB_SetupRightButton(Self);
 }

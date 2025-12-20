@@ -2,6 +2,6 @@ class ETrapMover extends Mover;
 
 defaultproperties
 {
-    bTriggerOnceOnly=true
-    bIsTrapMover=true
+    bTriggerOnceOnly=True
+    bIsTrapMover=True
 }

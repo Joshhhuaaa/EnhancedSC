@@ -128,7 +128,7 @@ Panic:
     Goal_Default(1,GOAL_Guard,0,,,,'CivilPostAttackPoint',,FALSE,,MOVE_CrouchJog,,MOVE_CrouchJog);
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

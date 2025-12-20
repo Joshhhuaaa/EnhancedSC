@@ -58,7 +58,7 @@ NotifyLambert:
     Log("a jump to lable Checking was here and has been removed because I think its unnecessary as there is onyl one prisoner. If this causes bugs, put the jump back in.");
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 Checking:
     Log("demo checking every two seconds");

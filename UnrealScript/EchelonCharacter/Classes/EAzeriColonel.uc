@@ -19,5 +19,5 @@ defaultproperties
     AccuracyDeviation=1.250000
     GearSoundFall=Sound'GearCommon.Play_LightGearFall'
     HatMesh=StaticMesh'EMeshCharacter.FalseSoldier.Ushanka'
-    bCanUseRetinalScanner=true
+    bCanUseRetinalScanner=True
 }

@@ -120,13 +120,13 @@ state s_Flying
 defaultproperties
 {
     ObjectName="Satchel"
-    bDamageable=false
-    bAcceptsProjectors=false
+    bDamageable=False
+    bAcceptsProjectors=False
     StaticMesh=StaticMesh'EMeshIngredient.Object.Satchel'
-    bNPCBulletGoTru=true
+    bNPCBulletGoTru=True
     CollisionRadius=5.000000
     CollisionHeight=7.000000
-    bStaticMeshCylColl=false
-    bBlockProj=false
-    bBlockNPCVision=false
+    bStaticMeshCylColl=False
+    bBlockProj=False
+    bBlockNPCVision=False
 }

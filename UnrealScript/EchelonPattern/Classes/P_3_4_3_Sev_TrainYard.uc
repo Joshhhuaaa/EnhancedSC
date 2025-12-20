@@ -69,7 +69,7 @@ AleksDies:
 	PlaySound(Sound'Gun.Play_M16ASingleShot', SLOT_SFX);
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

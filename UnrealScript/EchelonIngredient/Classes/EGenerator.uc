@@ -29,7 +29,7 @@ function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector
 
 defaultproperties
 {
-    bDamageable=true
+    bDamageable=True
     StaticMesh=StaticMesh'EMeshIngredient.Object.Generator'
     CollisionRadius=115.000000
     CollisionHeight=66.000000

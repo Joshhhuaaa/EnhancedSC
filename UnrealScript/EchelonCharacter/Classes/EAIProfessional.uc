@@ -523,5 +523,5 @@ class EAIProfessional extends EAIPawn
 defaultproperties
 {
     BasicPatternClass=Class'Echelon.SpetsnazPattern'
-    bHostile=true
+    bHostile=True
 }

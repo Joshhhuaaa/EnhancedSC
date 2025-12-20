@@ -54,9 +54,9 @@ defaultproperties
 {
     HealthPointRecover=0.250000
     MaxQuantity=5
-    bEquipable=false
+    bEquipable=False
     StaticMesh=StaticMesh'EMeshIngredient.Item.MedKit'
     CollisionRadius=16.000000
     CollisionHeight=5.000000
-    bBlockPlayers=true
+    bBlockPlayers=True
 }

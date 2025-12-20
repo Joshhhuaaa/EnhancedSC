@@ -15,6 +15,6 @@ class LookTarget extends KeyPoint
 
 defaultproperties
 {
-    bStatic=false
+    bStatic=False
     Texture=Texture'S_LookTarget'
 }

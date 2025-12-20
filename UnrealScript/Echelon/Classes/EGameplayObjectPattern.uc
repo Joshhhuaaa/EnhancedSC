@@ -19,5 +19,5 @@ function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector
 
 defaultproperties
 {
-    ChangeListWhenDamaged=false
+    ChangeListWhenDamaged=False
 }

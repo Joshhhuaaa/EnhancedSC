@@ -8,5 +8,5 @@ class Info extends Actor
 
 defaultproperties
 {
-    bHidden=true
+    bHidden=True
 }

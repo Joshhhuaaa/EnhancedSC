@@ -9,5 +9,5 @@ class EMovableFocusPoint extends EFocusPoint
 
 defaultproperties
 {
-    bStatic=false
+    bStatic=False
 }

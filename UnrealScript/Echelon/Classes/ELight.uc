@@ -120,8 +120,8 @@ state s_Destrocuted
 
 defaultproperties
 {
-    bStatic=false
+    bStatic=False
     VolumeLightMesh=StaticMesh'LightGenOBJ.LightCubebeam.lightcubebeamB'
     SpotProjectedMaterial=ELightBeamMaterial'ETexRenderer.Dev.SpotLightBeam_Default'
-    bIsEchelonLight=true
+    bIsEchelonLight=True
 }

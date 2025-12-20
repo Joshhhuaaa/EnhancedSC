@@ -25,5 +25,5 @@ defaultproperties
         Name="PowderDetergeantEmitterB0"
     End Object
     Emitters(0)=MeshEmitter'EchelonEffect.PowderDetergeantEmitterB0'
-    bUnlit=false
+    bUnlit=False
 }

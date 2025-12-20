@@ -41,7 +41,7 @@ function SetScrollable(bool newScrollable)
 	if (newScrollable)
 	{
 		VertSB = UWindowVScrollbar(CreateWindow(SBVClass, WinWidth - LookAndFeel.Size_ScrollbarWidth, 0, LookAndFeel.Size_ScrollbarWidth, WinHeight));
-		VertSB.bAlwaysOnTop = True;
+		VertSB.bAlwaysOnTop = true;
 	}
 	else
 	{
@@ -84,7 +84,7 @@ function Paint(Canvas C, float X, float Y)
 		C.Font = Root.Fonts[Font];
 
 
-	C.SetDrawColor(255,255,255);
+	C.SetDrawColor(255, 255, 255);
 
 	TextSize(C, "TEST", XL, YL);
 	VisibleRows = WinHeight / YL;
@@ -117,7 +117,7 @@ function Paint(Canvas C, float X, float Y)
 
 	if (!bCursor)
 	{
-		bShowCaret = False;
+		bShowCaret = false;
 	}
 	else
 	{
@@ -237,7 +237,7 @@ function AddTextWithCanvas(Canvas C, FLOAT _fXOffSet, FLOAT _fYOffset, string Ne
 	//========================================================================
 
 	Out = "";
-   	bSentry = True;
+   	bSentry = true;
     iNbLineTemp = 0;
     XWordPos= _fXOffSet;		// at the beginning of the window + X
 
@@ -301,7 +301,7 @@ function AddTextWithCanvas(Canvas C, FLOAT _fXOffSet, FLOAT _fYOffset, string Ne
 
 		if ((Out == "") && (i > 0))
         {
-   			bSentry = False;
+   			bSentry = false;
         }
 
 
@@ -333,7 +333,7 @@ function AddTextWithCanvas(Canvas C, FLOAT _fXOffSet, FLOAT _fYOffset, string Ne
                 {
                     iNbLineTemp += 1;
             	    Out = "";
-                	bSentry = True;
+                	bSentry = true;
                     XWordPos = _fXOffSet;
                 }
             }
@@ -437,8 +437,8 @@ native(237) static final function int    Asc    (string S);
 defaultproperties
 {
     BufSize=200
-    bScrollOnResize=true
-    m_bWrapClipText=true
+    bScrollOnResize=True
+    m_bWrapClipText=True
     SBVClass=Class'UWindowVScrollbar'
-    bNoKeyboard=true
+    bNoKeyboard=True
 }

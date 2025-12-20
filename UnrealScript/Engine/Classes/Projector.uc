@@ -110,13 +110,13 @@ defaultproperties
     SPShadowIntensity=84
     SPShadowBlurFactor=252
     MaxTraceDistance=1000
-    bProjectBSP=true
-    bProjectTerrain=true
-    bProjectStaticMesh=true
+    bProjectBSP=True
+    bProjectTerrain=True
+    bProjectStaticMesh=True
     DistanceToNearestStaticMesh=1000000
-    DisableDistanceCheck=true
-    bHidden=true
+    DisableDistanceCheck=True
+    bHidden=True
     Texture=Texture'Proj_Icon'
-    bIsProjector=true
-    bDirectional=true
+    bIsProjector=True
+    bDirectional=True
 }

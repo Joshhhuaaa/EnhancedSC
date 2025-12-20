@@ -393,22 +393,22 @@ state TriggerToggle
 
 defaultproperties
 {
-    Usable=true
+    Usable=True
     DoorWidth=128.000000
     DoorRadius=160.000000
     DoorPathExtraCost=500.000000
-    bOpenTriggerOnceOnly=true
-    bCloseTriggerOnceOnly=true
-    bUseTriggered=true
+    bOpenTriggerOnceOnly=True
+    bCloseTriggerOnceOnly=True
+    bUseTriggered=True
     InitialState="TriggerOpenTimed"
     CollisionRadius=10.000000
     CollisionHeight=10.000000
     CollisionPrimitive=StaticMesh'Generic_Mesh.Door.door_gen'
-    bBlockPlayers=false
-    bBlockActors=false
-    bBlockCamera=false
-    bCPBlockPlayers=true
-    bCPBlockActors=true
-    bCPBlockCamera=true
-    bDirectional=true
+    bBlockPlayers=False
+    bBlockActors=False
+    bBlockCamera=False
+    bCPBlockPlayers=True
+    bCPBlockActors=True
+    bCPBlockCamera=True
+    bDirectional=True
 }

@@ -9,8 +9,8 @@ defaultproperties
 {
     GearSoundWalk=Sound'GearCommon.Play_Random_CivilGearWalk'
     GearSoundRun=Sound'GearCommon.Play_Random_CivilGearRun'
-    bCanWhistle=false
-    bDontCheckChangedActor=true
+    bCanWhistle=False
+    bDontCheckChangedActor=True
     GearSoundFall=Sound'GearCommon.Play_CivilGearFall'
     Health=10
     Mesh=SkeletalMesh'EFemale.FranceCoen'

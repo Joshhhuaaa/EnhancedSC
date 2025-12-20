@@ -194,9 +194,10 @@ list important controller attributes on canvas
 */
 function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 {
+	Canvas.SetDrawColor(255, 0, 0);
 	Canvas.DrawText("PAWN "$Pawn);
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 	if (Pawn == None)
 	{
 		Super.DisplayDebug(Canvas,YL,YPos);
@@ -204,7 +205,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 	}
 	Canvas.DrawText("CONTROLLER "$GetItemName(string(self)) $ "   STATE: " $ GetStateName());
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 }
 
 /* Reset() 
@@ -405,6 +406,6 @@ defaultproperties
     FovAngle=90.000000
     MinHitWall=-0.600000
     AttitudeToPlayer=ATTITUDE_Hate
-    bHidden=true
-    bHiddenEd=true
+    bHidden=True
+    bHiddenEd=True
 }

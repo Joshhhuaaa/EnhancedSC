@@ -70,7 +70,7 @@ KillListeners:
     SendUnrealEvent('RoofListenEnd');
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

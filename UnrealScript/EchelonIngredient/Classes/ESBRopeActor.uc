@@ -26,7 +26,7 @@ defaultproperties
     windUPan=0.200000
     windVPan=0.110000
     nbNormalizeIter=8
-    pillsTest=true
+    pillsTest=True
     Texture=Texture'ETexIngredient.Object.Rope'
     CollisionRadius=2.000000
 }

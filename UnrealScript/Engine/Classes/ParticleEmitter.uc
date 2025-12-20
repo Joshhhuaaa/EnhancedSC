@@ -266,16 +266,16 @@ defaultproperties
     FadeOutFactor=(W=1.000000,X=1.000000,Y=1.000000,Z=1.000000)
     FadeInFactor=(W=1.000000,X=1.000000,Y=1.000000,Z=1.000000)
     MaxParticles=10
-    RespawnDeadParticles=true
-    AutoDestroy=true
+    RespawnDeadParticles=True
+    AutoDestroy=True
     AddLocationFromOtherEmitter=-1
     StartMassRange=(Min=1.000000,Max=1.000000)
-    AlphaTest=true
-    ZTest=true
+    AlphaTest=True
+    ZTest=True
     SpinCCWorCW=(X=0.500000,Y=0.500000,Z=0.500000)
-    UseRegularSizeScale=true
+    UseRegularSizeScale=True
     StartSizeRange=(X=(Min=1.000000,Max=1.000000),Y=(Min=1.000000,Max=1.000000),Z=(Min=1.000000,Max=1.000000))
-    AutomaticInitialSpawning=true
+    AutomaticInitialSpawning=True
     DrawStyle=PTDS_Translucent
     Texture=Texture'S_Emitter'
     LifetimeRange=(Min=4.000000,Max=4.000000)

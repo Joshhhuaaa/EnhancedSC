@@ -155,5 +155,5 @@ defaultproperties
 {
     BulletsAccuracy=-1
     Category=CAT_MAINGUN
-    bPickable=true
+    bPickable=True
 }

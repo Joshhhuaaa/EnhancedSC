@@ -79,7 +79,7 @@ function SendInitialPattern()
 
 defaultproperties
 {
-    bFindBaseOnBuild=false
-    bStatic=false
-    bCollideActors=true
+    bFindBaseOnBuild=False
+    bStatic=False
+    bCollideActors=True
 }

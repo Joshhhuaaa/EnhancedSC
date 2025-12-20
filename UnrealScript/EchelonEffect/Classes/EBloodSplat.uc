@@ -26,5 +26,5 @@ defaultproperties
         Name="SpriteEmitter27"
     End Object
     Emitters(0)=SpriteEmitter'SpriteEmitter27'
-    bUnlit=false
+    bUnlit=False
 }

@@ -463,5 +463,5 @@ defaultproperties
     FisherB=Sound'CommonMusic.Play_theme_FisherPartB'
     FisherC=Sound'CommonMusic.Play_theme_FisherPartC'
     FisherD=Sound'CommonMusic.Play_theme_FisherPartD'
-    bHidden=true
+    bHidden=True
 }

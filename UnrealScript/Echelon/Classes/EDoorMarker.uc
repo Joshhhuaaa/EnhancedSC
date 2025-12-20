@@ -163,12 +163,12 @@ state s_Touched
 
 defaultproperties
 {
-    bAutoPlaced=true
-    bDoNotUseAsHidePoint=true
-    bStatic=false
-    bCollideWhenPlacing=false
+    bAutoPlaced=True
+    bDoNotUseAsHidePoint=True
+    bStatic=False
+    bCollideWhenPlacing=False
     CollisionRadius=200.000000
-    bCollideActors=true
-    bCollideWorld=false
-    bIsNavMarker=true
+    bCollideActors=True
+    bCollideWorld=False
+    bIsNavMarker=True
 }

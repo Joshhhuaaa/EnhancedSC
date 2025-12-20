@@ -112,7 +112,7 @@ defaultproperties
     NumStepsPer360=8
     NumSteps=8
     GroupName="Spiral"
-    SlopedCeiling=true
+    SlopedCeiling=True
     BitmapFilename="BBSpiralStair"
     ToolTip="Spiral Staircase"
 }

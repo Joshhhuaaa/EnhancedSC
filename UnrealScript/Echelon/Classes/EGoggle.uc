@@ -184,5 +184,5 @@ state GoggleDown
 
 defaultproperties
 {
-    bHidden=true
+    bHidden=True
 }

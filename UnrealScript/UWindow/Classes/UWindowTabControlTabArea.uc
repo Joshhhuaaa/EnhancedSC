@@ -62,7 +62,7 @@ function SizeTabsSingleLine(Canvas C)
 			{
 				if (FirstShown == None) FirstShown = I;
 				I.TabLeft = ItemX;
-				if (I.TabLeft + I.TabWidth >= WinWidth + 5) bHaveMore = True;
+				if (I.TabLeft + I.TabWidth >= WinWidth + 5) bHaveMore = true;
 				ItemX += I.TabWidth;
 			}
 			Count++;
@@ -80,7 +80,7 @@ function SizeTabsSingleLine(Canvas C)
 		else				
 			break;
 	}
-	bShowSelected = False;
+	bShowSelected = false;
 
 	UWindowTabControl(ParentWindow).LeftButton.bDisabled = TabOffset <= 0;
 	UWindowTabControl(ParentWindow).RightButton.bDisabled = !bHaveMore;
@@ -101,11 +101,11 @@ function SizeTabsMultiLine(Canvas C)
 	FirstShown = None;
 
 	TabRows = 1;
-	bTryAnotherRow = True;
+	bTryAnotherRow = true;
 
 	while (bTryAnotherRow && TabRows <= 10)
 	{	
-		bTryAnotherRow = False;
+		bTryAnotherRow = false;
 		for (j = 0; j < TabRows; j++)
 		{
 			RowWidths[j] = 0;
@@ -131,7 +131,7 @@ function SizeTabsMultiLine(Canvas C)
 			if (RowWidths[MinRow] + W > WinWidth)
 			{
 				TabRows++;
-				bTryAnotherRow = True;
+				bTryAnotherRow = true;
 				break;
 			}
 			else
@@ -247,7 +247,7 @@ function LMouseDown(float X, float Y)
 		{
 			if (!UWindowTabControl(ParentWindow).bMultiLine)
 			{
-				bDragging = True;
+				bDragging = true;
 				DragTab = I;
 				Root.CaptureMouse();
 			}
@@ -267,7 +267,7 @@ function MouseMove(float X, float Y)
 			TabOffset--;	
 	}
 	else
-		bDragging = False;
+		bDragging = false;
 }
 
 function RMouseDown(float X, float Y)

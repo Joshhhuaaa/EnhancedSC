@@ -41,7 +41,7 @@ function Trigger(actor Other, Pawn EventInstigator, optional name InTag) // UBI 
 defaultproperties
 {
     MaxViewDist=3000.000000
-    bEnabled=true
+    bEnabled=True
     MaxViewAngle=15
-    bCollideActors=false
+    bCollideActors=False
 }

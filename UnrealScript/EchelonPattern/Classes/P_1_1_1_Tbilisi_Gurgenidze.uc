@@ -72,7 +72,7 @@ Begin:
     EndConversation();
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

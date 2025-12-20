@@ -5,9 +5,9 @@ var float OldParentWidth, OldParentHeight;
 function Created() 
 {
 	Super.Created();
-	bSizable = True;
-	bStatusBar = True;
-	bLeaveOnScreen = True;
+	bSizable = true;
+	bStatusBar = true;
+	bLeaveOnScreen = true;
 
 	OldParentWidth = ParentWindow.WinWidth;
 	OldParentHeight = ParentWindow.WinHeight;

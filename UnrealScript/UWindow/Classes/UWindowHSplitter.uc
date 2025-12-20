@@ -16,7 +16,7 @@ var bool					bSizable;
 function Created() 
 {
 	Super.Created();
-	bAlwaysBehind = True;
+	bAlwaysBehind = true;
 	SplitPos = WinWidth / 2;
 	MinWinWidth = 24;
 
@@ -75,7 +75,7 @@ function LMouseDown(float X, float Y)
 
 	if (bSizable && (X >= SplitPos) && (X <= SplitPos + 7)) 
 	{
-		bSizing = True;
+		bSizing = true;
 		Root.CaptureMouse();
 	}
 }
@@ -91,10 +91,10 @@ function MouseMove(float X, float Y)
 	if (bSizing && bMouseDown)
 	{
 		SplitPos = X;
-	} else bSizing = False;
+	} else bSizing = false;
 }
 
 defaultproperties
 {
-    bSizable=true
+    bSizable=True
 }

@@ -148,6 +148,6 @@ defaultproperties
 {
     GearSoundWalk=Sound'GearCommon.Play_Random_CivilGearWalk'
     GearSoundRun=Sound'GearCommon.Play_Random_CivilGearRun'
-    bCanWhistle=false
+    bCanWhistle=False
     Mesh=SkeletalMesh'ENPC.FeirongMesh'
 }

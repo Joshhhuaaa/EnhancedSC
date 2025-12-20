@@ -68,12 +68,12 @@ defaultproperties
     nbNormalizeIter=1
     CollisionRadius=1.000000
     CollisionHeight=1.000000
-    bCollideActors=true
-    bBlockProj=true
-    bBlockBullet=true
-    bIsSoftBody=true
-    bIsTouchable=false
-    bIsNPCRelevant=false
-    bIsPlayerRelevant=false
-    bEdShouldSnap=true
+    bCollideActors=True
+    bBlockProj=True
+    bBlockBullet=True
+    bIsSoftBody=True
+    bIsTouchable=False
+    bIsNPCRelevant=False
+    bIsPlayerRelevant=False
+    bEdShouldSnap=True
 }

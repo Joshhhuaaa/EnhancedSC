@@ -25,7 +25,7 @@ function Trigger(Actor Other, Pawn EventInstigator, name InTag)
 	Super.Trigger(Other, EventInstigator, InTag);
 
 	// light up the button
-	if (!ControllerPanel.bPowered && EventInstigator == EchelonGameInfo(Level.game).pPlayer.ePawn)
+	if (!ControllerPanel.bPowered && EventInstigator == EchelonGameInfo(Level.Game).pPlayer.ePawn)
 		EchelonGameInfo(Level.Game).pPlayer.SendTransmissionMessage(Localize("Transmission", "ElevatorPower", "Localization\\HUD"), TR_CONSOLE);
 
 	// call elevator on this floor
@@ -48,7 +48,7 @@ function UnTrigger(Actor Other, Pawn EventInstigator, optional name InTag)
 
 defaultproperties
 {
-    bDamageable=false
+    bDamageable=False
     StaticMesh=StaticMesh'EMeshIngredient.Elevator.ElevatorButton'
     DrawScale=0.500000
     InteractionClass=Class'ETriggerInteraction'

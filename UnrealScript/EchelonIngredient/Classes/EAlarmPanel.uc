@@ -45,7 +45,7 @@ state s_Deactivate
 
 defaultproperties
 {
-    bDamageable=false
+    bDamageable=False
     AlarmLinkType=EAlarm_Trigger
     StaticMesh=StaticMesh'EMeshIngredient.Object.AlarmBox'
     InteractionClass=Class'EAlarmInteraction'

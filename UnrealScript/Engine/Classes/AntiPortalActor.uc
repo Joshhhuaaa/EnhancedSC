@@ -11,5 +11,5 @@ class AntiPortalActor extends Actor
 defaultproperties
 {
     DrawType=DT_AntiPortal
-    bEdShouldSnap=true
+    bEdShouldSnap=True
 }

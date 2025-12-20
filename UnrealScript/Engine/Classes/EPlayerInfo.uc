@@ -43,7 +43,6 @@ var config bool   bValidProfile;
 // Joshua - This is a native class. New variables must be added only after all original ones have been declared.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
-
 // Joshua - New variable for mission unlocks
 enum ELevelUnlock
 {
@@ -74,6 +73,9 @@ defaultproperties
     UnlockedMap(10)="1_6_1_1KolaCell"
     UnlockedMap(11)="1_7_1_1VselkaInfiltration"
     UnlockedMap(12)="1_7_1_2Vselka"
-    bHidden=true
+    bHidden=True
+    //=============================================================================
+    // Enhanced Variables
+    //=============================================================================
     LevelUnlock=LU_Disabled
 }

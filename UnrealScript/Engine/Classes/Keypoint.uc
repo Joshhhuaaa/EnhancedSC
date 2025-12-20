@@ -11,8 +11,8 @@ class Keypoint extends Actor
 
 defaultproperties
 {
-    bStatic=true
-    bHidden=true
+    bStatic=True
+    bHidden=True
     Texture=Texture'S_Keypoint'
     CollisionRadius=10.000000
     CollisionHeight=10.000000

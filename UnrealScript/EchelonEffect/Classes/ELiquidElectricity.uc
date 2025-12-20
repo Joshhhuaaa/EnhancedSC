@@ -18,5 +18,5 @@ defaultproperties
         Name="MeshEmitter1"
     End Object
     Emitters(0)=MeshEmitter'EchelonEffect.MeshEmitter1'
-    bUnlit=false
+    bUnlit=False
 }

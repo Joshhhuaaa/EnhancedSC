@@ -81,21 +81,21 @@ event BulletWentTru(Actor Instigator, vector HitLocation, vector HitNormal, vect
 
 defaultproperties
 {
-    NPCTrigger=true
-    bStatic=true
-    bAcceptsProjectors=true
+    NPCTrigger=True
+    bStatic=True
+    bAcceptsProjectors=True
     DrawType=DT_StaticMesh
-    bShadowCast=true
+    bShadowCast=True
     CollisionRadius=1.000000
     CollisionHeight=1.000000
-    bCollideActors=true
-    bBlockProj=true
-    bBlockBullet=true
-    bBlockNPCShot=true
-    bBlockNPCVision=true
-    bCPBlockPlayers=true
-    bCPBlockActors=true
-    bCPBlockCamera=true
-    bIsTouchable=false
-    bEdShouldSnap=true
+    bCollideActors=True
+    bBlockProj=True
+    bBlockBullet=True
+    bBlockNPCShot=True
+    bBlockNPCVision=True
+    bCPBlockPlayers=True
+    bCPBlockActors=True
+    bCPBlockCamera=True
+    bIsTouchable=False
+    bEdShouldSnap=True
 }

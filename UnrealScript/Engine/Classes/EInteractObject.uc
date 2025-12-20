@@ -124,7 +124,7 @@ function UnTouch(actor Other)
 defaultproperties
 {
     iPriority=999999
-    bHidden=true
-    bCollideActors=true
-    bIsNPCRelevant=false
+    bHidden=True
+    bCollideActors=True
+    bIsNPCRelevant=False
 }

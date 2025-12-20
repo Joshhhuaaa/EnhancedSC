@@ -21,5 +21,5 @@ defaultproperties
         Name="ImpactWood"
     End Object
     Emitters(0)=SpriteEmitter'ImpactWood'
-    bUnlit=false
+    bUnlit=False
 }

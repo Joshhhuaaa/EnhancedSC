@@ -25,8 +25,8 @@ function LMouseDown(float X, float Y)
 
 	if (X > Min(WinWidth - 5, ParentWindow.WinWidth - WinLeft - 5) && Y < 12)
 	{
-		bSizing = True;
-		UWindowGrid(ParentWindow.ParentWindow).bSizingColumn = True;
+		bSizing = true;
+		UWindowGrid(ParentWindow.ParentWindow).bSizingColumn = true;
 		Root.CaptureMouse();
 	}
 
@@ -36,7 +36,7 @@ function LMouseUp(float X, float Y)
 {
 	Super.LMouseUp(X, Y);
 
-	UWindowGrid(ParentWindow.ParentWindow).bSizingColumn = False;
+	UWindowGrid(ParentWindow.ParentWindow).bSizingColumn = false;
 }
 
 function MouseMove(float X, float Y)
@@ -58,8 +58,8 @@ function MouseMove(float X, float Y)
 	}
 	else
 	{
-		bSizing = False;
-		UWindowGrid(ParentWindow.ParentWindow).bSizingColumn = False;
+		bSizing = false;
+		UWindowGrid(ParentWindow.ParentWindow).bSizingColumn = false;
 	}
 }
 
@@ -82,7 +82,7 @@ function Paint(Canvas C, float X, float Y)
 		FC = LookAndFeel.HeadingInactiveTitleColor;
 	}
 
-	C.SetDrawColor(255,255,255);
+	C.SetDrawColor(255, 255, 255);
 
 	DrawUpBevel(C, 0, 0, WinWidth, LookAndFeel.ColumnHeadingHeight, T);
 
@@ -90,7 +90,7 @@ function Paint(Canvas C, float X, float Y)
 
 	ClipText(C, 2, 1, ColumnHeading);
 
-	C.SetDrawColor(255,255,255);
+	C.SetDrawColor(255, 255, 255);
 }
 
 function Click(float X, float Y)

@@ -74,7 +74,7 @@ FreezeGameOver:
     SendPatternEvent('LambertAI','SamOnStreets');
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
 
 }
 

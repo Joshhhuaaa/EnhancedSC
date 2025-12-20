@@ -9,6 +9,6 @@ var() bool	AlphaBlend;
 defaultproperties
 {
     Color=(R=255,G=255,B=255,A=255)
-    RenderTwoSided=true
-    AlphaBlend=true
+    RenderTwoSided=True
+    AlphaBlend=True
 }

@@ -337,7 +337,7 @@ state s_RestoreSaveGame
  State :        s_MainMenuState
 =============================================================================*/
 state s_MainMenu
-{		
+{
 	function PostRender(ECanvas Canvas) {PostRender_s_MainMenu(Canvas);}
 
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_MainMenu(Key, Action, Delta);}    

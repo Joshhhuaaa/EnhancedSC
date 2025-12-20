@@ -34,6 +34,8 @@ function InitPattern()
     local Rotator RealNeutralRot;
     local EAlarm Alarm;
     local EAlarmLight AlarmLight;
+
+    Super.InitPattern();
     
     // Joshua - Adding the camera that is missing in the PC version
     if (!bInit)
@@ -103,8 +105,6 @@ function InitPattern()
         }
     }
 
-    Super.InitPattern();
-
     ForEach DynamicActors(class'Pawn', P)
     {
         if (P.name == 'ELambert0')
@@ -127,6 +127,7 @@ state Pattern
 Begin:
 MilestoneLambertGoals:
     Log("MilestoneLambertGoals");
+    IgnoreAlarmStage(FALSE); // Joshua - Enhanced change: Enabling alarm stages for Vselka
     Sleep(1);
     SendUnrealEvent('ControlRoomDoors');
     AddGoal('BOB', "", 10, "", "P_1_7_1_1_LambertGoals", "Goal_0001L", "Localization\\P_1_7_1_1VselkaInfiltration", "P_1_7_1_1_LambertGoals", "Goal_0002L", "Localization\\P_1_7_1_1VselkaInfiltration");

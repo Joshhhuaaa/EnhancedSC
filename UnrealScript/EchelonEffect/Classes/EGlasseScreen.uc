@@ -28,5 +28,5 @@ defaultproperties
         Name="GlasseScreen2"
     End Object
     Emitters(0)=SpriteEmitter'GlasseScreen2'
-    bUnlit=false
+    bUnlit=False
 }

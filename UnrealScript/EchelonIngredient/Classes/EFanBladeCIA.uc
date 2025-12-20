@@ -41,10 +41,10 @@ defaultproperties
 {
     DeltaSpeed=1000
     MaxSpeed=50000
-    bDamageable=false
+    bDamageable=False
     Physics=PHYS_Rotating
     StaticMesh=StaticMesh'2-1_cia_obj.2_1_objects_obj.CIA_fanblade'
-    bStaticMeshCylColl=false
-    bBlockPlayers=true
-    bFixedRotationDir=true
+    bStaticMeshCylColl=False
+    bBlockPlayers=True
+    bFixedRotationDir=True
 }

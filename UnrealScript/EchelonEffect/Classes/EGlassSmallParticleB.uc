@@ -33,5 +33,5 @@ defaultproperties
         Name="GlassSmallParticleB"
     End Object
     Emitters(0)=SpriteEmitter'GlassSmallParticleB'
-    bUnlit=false
+    bUnlit=False
 }

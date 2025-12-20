@@ -6,7 +6,7 @@ function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, vector Hi
 
 defaultproperties
 {
-    StaticMesh=none
-    bCollideActors=false
+    StaticMesh=None
+    bCollideActors=False
     InteractionClass=Class'EDoorInteraction'
 }

@@ -9,7 +9,7 @@ defaultproperties
 {
     GearSoundWalk=Sound'GearCommon.Play_Random_CivilGearWalk'
     GearSoundRun=Sound'GearCommon.Play_Random_CivilGearRun'
-    bFollowTarget=true
-    bCanWhistle=false
+    bFollowTarget=True
+    bCanWhistle=False
     Mesh=SkeletalMesh'ENPC.GrinkoMesh'
 }

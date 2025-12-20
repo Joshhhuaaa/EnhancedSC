@@ -66,5 +66,5 @@ event Actor GetNextTarget()
 
 defaultproperties
 {
-    bHidden=true
+    bHidden=True
 }

@@ -2,7 +2,7 @@ class ELgtSquare extends EGameplayObjectLight;
 
 defaultproperties
 {
-    bDestroyWhenDestructed=false
+    bDestroyWhenDestructed=False
     HitPoints=60
     DamagedMeshes(0)=(StaticMesh=StaticMesh'LightGenOBJ.breakablelight.LIG_Spot_SQ_B')
     SpawnableObjects(0)=(SpawnClass=Class'EchelonEffect.EBreakingLightSpark')

@@ -141,7 +141,7 @@ function Remove()
 		}
 
 		Sentinel.InternalCount--;
-		Sentinel.bItemOrderChanged = True;
+		Sentinel.bItemOrderChanged = true;
 
 		if (Sentinel.Last == Self)
 			Sentinel.Last = Prev;
@@ -203,7 +203,7 @@ function InsertItemBefore(UWindowList NewElement)
 		Sentinel.Next = NewElement;
 
 	Sentinel.InternalCount++;
-	Sentinel.bItemOrderChanged = True;
+	Sentinel.bItemOrderChanged = true;
 }
 
 function InsertItemAfter(UWindowList NewElement, optional bool bCheckShowItem)
@@ -219,7 +219,7 @@ function InsertItemAfter(UWindowList NewElement, optional bool bCheckShowItem)
 		N.InsertItemBefore(NewElement);
 	else
 		Sentinel.DoAppendItem(NewElement);
-	Sentinel.bItemOrderChanged = True;
+	Sentinel.bItemOrderChanged = true;
 }
 
 function ContinueSort()
@@ -227,7 +227,7 @@ function ContinueSort()
 	local UWindowList N;
 
 	CompareCount = 0;
-	bSortSuspended = False;
+	bSortSuspended = false;
 
 	while (CurrentSortItem != None)
 	{
@@ -238,7 +238,7 @@ function ContinueSort()
 		// split sort over multiple frames, if it's BIG
 		if (CompareCount >= 10000 && bSuspendableSort)
 		{
-			bSortSuspended = True;
+			bSortSuspended = true;
 			return;
 		}
 	}		
@@ -331,7 +331,7 @@ function DisconnectList()
 	BranchRight = None;
 	ParentNode = None;
 	InternalCount = 0;
-	Sentinel.bItemOrderChanged = True;
+	Sentinel.bItemOrderChanged = true;
 }
 
 function DestroyList() 
@@ -341,7 +341,7 @@ function DestroyList()
 
 	InternalCount = 0;
 	if (Sentinel != None)
-		Sentinel.bItemOrderChanged = True;
+		Sentinel.bItemOrderChanged = true;
 
 	while (L != None)
 	{
@@ -380,7 +380,7 @@ function UWindowList CopyExistingListItem(Class<UWindowList> ItemClass, UWindowL
 	local UWindowList I;
 
 	I = Append(ItemClass);
-	Sentinel.bItemOrderChanged = True;
+	Sentinel.bItemOrderChanged = true;
 
 	return I;
 }
@@ -432,7 +432,7 @@ function SetupSentinel(optional bool bInTreeSort)
 	ParentNode = None;
 	Sentinel = Self;
 	InternalCount = 0;
-	bItemOrderChanged = True;
+	bItemOrderChanged = true;
 	bTreeSort = bInTreeSort;
 }
 
@@ -577,7 +577,7 @@ function DoAppendItem(UWindowList NewElement)
 	NewElement.ParentNode = None;
 	Last = NewElement;
 	Sentinel.InternalCount++;
-	Sentinel.bItemOrderChanged = True;
+	Sentinel.bItemOrderChanged = true;
 }
 
 
@@ -606,7 +606,7 @@ function InsertItem(UWindowList NewElement)
 	NewElement.BranchRight = None;
 	NewElement.ParentNode = None;
 	Sentinel.InternalCount++;
-	Sentinel.bItemOrderChanged = True;
+	Sentinel.bItemOrderChanged = true;
 }
 
 // For sentinel only
@@ -639,7 +639,7 @@ function Clear()
 	ParentNode = None;
 	BranchLeft = None;
 	BranchRight = None;
-	bItemOrderChanged = True;
+	bItemOrderChanged = true;
 	Next = None;	
 	Last = Self;
 }

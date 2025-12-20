@@ -141,8 +141,8 @@ event ActorLeaving(actor Other)
 
 defaultproperties
 {
-    PlayFightMusic=true
-    PlayStressMusic=true
+    PlayFightMusic=True
+    PlayStressMusic=True
     AmbientSaturation=255
     DistanceFogColor=(R=128,G=128,B=128,A=0)
     DistanceFogStart=3000.000000
@@ -150,9 +150,9 @@ defaultproperties
     TexUPanSpeed=1.000000
     TexVPanSpeed=1.000000
     Sound_type=SLOT_Ambient
-    InteriorZone=true
-    PlayExplorationMusic=true
-    bStatic=true
-    bNoDelete=true
+    InteriorZone=True
+    PlayExplorationMusic=True
+    bStatic=True
+    bNoDelete=True
     Texture=Texture'S_ZoneInfo'
 }

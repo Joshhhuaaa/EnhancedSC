@@ -71,7 +71,7 @@ defaultproperties
     InnerRadius=384.000000
     Sides=8
     GroupName="Cone"
-    AlignToSide=true
+    AlignToSide=True
     BitmapFilename="BBCone"
     ToolTip="Cone"
 }

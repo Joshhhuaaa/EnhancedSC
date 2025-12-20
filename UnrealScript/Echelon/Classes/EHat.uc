@@ -57,13 +57,13 @@ state s_Flying
 
 defaultproperties
 {
-    bDamageable=false
-    bNPCBulletGoTru=true
-    bPlayerBulletGoTru=true
+    bDamageable=False
+    bNPCBulletGoTru=True
+    bPlayerBulletGoTru=True
     CollisionRadius=10.000000
     CollisionHeight=15.000000
-    bStaticMeshCylColl=false
-    bBlockProj=false
-    bBlockNPCVision=false
+    bStaticMeshCylColl=False
+    bBlockProj=False
+    bBlockNPCVision=False
     HeatOpacity=0.200000
 }

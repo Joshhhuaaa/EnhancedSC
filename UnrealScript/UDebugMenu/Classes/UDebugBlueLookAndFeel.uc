@@ -74,7 +74,7 @@ function FW_DrawWindowFrame(UWindowFramedWindow W, Canvas C)
 	local Texture T;
 	local Region R, Temp;
 
-	C.SetDrawColor(255,255,255);
+	C.SetDrawColor(255, 255, 255);
 	
 	T = W.GetLookAndFeelTexture();
 
@@ -160,11 +160,11 @@ function FW_DrawWindowFrame(UWindowFramedWindow W, Canvas C)
 	if (W.bStatusBar) 
 	{
 		C.Font = W.Root.Fonts[W.F_Normal];
-		C.SetDrawColor(0,0,0);
+		C.SetDrawColor(0, 0, 0);
 
 		W.ClipTextWidth(C, 6, W.WinHeight - 13, W.StatusBarText, W.WinWidth - 22);
 
-		C.SetDrawColor(255,255,255);
+		C.SetDrawColor(255, 255, 255);
 	}
 }
 
@@ -178,7 +178,7 @@ function FW_SetupFrameButtons(UWindowFramedWindow W, Canvas C)
 	W.CloseBox.WinTop = CloseBoxOffsetY;
 
 	W.CloseBox.SetSize(CloseBoxUp.W, CloseBoxUp.H);
-	W.CloseBox.bUseRegion = True;
+	W.CloseBox.bUseRegion = true;
 
 	W.CloseBox.UpTexture = T;
 	W.CloseBox.DownTexture = T;
@@ -318,7 +318,7 @@ function Combo_Draw(UWindowComboControl W, Canvas C)
 	{
 		C.DrawColor = W.TextColor;
 		W.ClipText(C, W.TextX, W.TextY, W.Text);
-		C.SetDrawColor(255,255,255);
+		C.SetDrawColor(255, 255, 255);
 	}
 }
 
@@ -340,18 +340,18 @@ function ComboList_DrawBackground(UWindowComboList W, Canvas C)
 
 function ComboList_DrawItem(UWindowComboList Combo, Canvas C, float X, float Y, float W, float H, string Text, bool bSelected)
 {
-	C.SetDrawColor(255,255,255);
+	C.SetDrawColor(255, 255, 255);
 
 	if (bSelected)
 	{
 		Combo.DrawClippedTexture(C, X, Y, Texture'BlueMenuHL');
 		Combo.DrawStretchedTexture(C, X + 4, Y, W - 8, 16, Texture'BlueMenuHM');
 		Combo.DrawClippedTexture(C, X + W - 4, Y, Texture'BlueMenuHR');
-		C.SetDrawColor(0,0,0); 
+		C.SetDrawColor(0, 0, 0); 
 	}
 	else
 	{
-		C.SetDrawColor(0,0,0);
+		C.SetDrawColor(0, 0, 0);
 	}
 
 	Combo.ClipText(C, X + Combo.TextBorder + 2, Y + 3, Text);
@@ -365,7 +365,7 @@ function Combo_GetButtonBitmaps(UWindowComboButton W)
 
 	T = W.GetLookAndFeelTexture();
 	
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;
@@ -384,7 +384,7 @@ function Combo_SetupLeftButton(UWindowComboLeftButton W)
 
 	T = W.GetLookAndFeelTexture();
 
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;
@@ -403,7 +403,7 @@ function Combo_SetupRightButton(UWindowComboRightButton W)
 
 	T = W.GetLookAndFeelTexture();
 
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;
@@ -463,7 +463,7 @@ function Editbox_Draw(UWindowEditControl W, Canvas C)
 	{
 		C.DrawColor = W.TextColor;
 		W.ClipText(C, W.TextX, W.TextY, W.Text);
-		C.SetDrawColor(255,255,255);
+		C.SetDrawColor(255, 255, 255);
 	}
 }
 
@@ -480,7 +480,7 @@ function ControlFrame_SetupSizes(UWindowControlFrame W, Canvas C)
 
 function ControlFrame_Draw(UWindowControlFrame W, Canvas C)
 {
-	C.SetDrawColor(255,255,255);
+	C.SetDrawColor(255, 255, 255);
 	
 	W.DrawStretchedTexture(C, 0, 0, W.WinWidth, W.WinHeight, Texture'WhiteTexture');
 	W.DrawMiscBevel(C, 0, 0, W.WinWidth, W.WinHeight, Misc, EditBoxBevel);
@@ -492,7 +492,7 @@ function Tab_DrawTab(UWindowTabControlTabArea Tab, Canvas C, bool bActiveTab, bo
 	local Texture T;
 	local float TW, TH;
 
-	C.SetDrawColor(255,255,255);
+	C.SetDrawColor(255, 255, 255);
 	
 	T = Tab.GetLookAndFeelTexture();
 	
@@ -511,7 +511,7 @@ function Tab_DrawTab(UWindowTabControlTabArea Tab, Canvas C, bool bActiveTab, bo
 		Tab.DrawStretchedTextureSegment(C, X + W - R.W, Y, R.W, R.H, R.X, R.Y, R.W, R.H, T);
 
 		C.Font = Tab.Root.Fonts[Tab.F_Bold];
-		C.SetDrawColor(0,0,0);
+		C.SetDrawColor(0, 0, 0);
 
 		if (bShowText)
 		{
@@ -534,7 +534,7 @@ function Tab_DrawTab(UWindowTabControlTabArea Tab, Canvas C, bool bActiveTab, bo
 		Tab.DrawStretchedTextureSegment(C, X + W - R.W, Y, R.W, R.H, R.X, R.Y, R.W, R.H, T);
 
 		C.Font = Tab.Root.Fonts[Tab.F_Normal];
-		C.SetDrawColor(0,0,0);
+		C.SetDrawColor(0, 0, 0);
 
 		if (bShowText)
 		{
@@ -550,7 +550,7 @@ function SB_SetupUpButton(UWindowSBUpButton W)
 
 	T = W.GetLookAndFeelTexture();
 
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;
@@ -569,7 +569,7 @@ function SB_SetupDownButton(UWindowSBDownButton W)
 
 	T = W.GetLookAndFeelTexture();
 
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;
@@ -590,7 +590,7 @@ function SB_SetupLeftButton(UWindowSBLeftButton W)
 
 	T = W.GetLookAndFeelTexture();
 
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;
@@ -609,7 +609,7 @@ function SB_SetupRightButton(UWindowSBRightButton W)
 
 	T = W.GetLookAndFeelTexture();
 
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;
@@ -666,7 +666,7 @@ function Tab_SetupLeftButton(UWindowTabControlLeftButton W)
 	W.WinTop = Size_TabAreaHeight - W.WinHeight;
 	W.WinLeft = W.ParentWindow.WinWidth - 2 * W.WinWidth;
 
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;
@@ -690,7 +690,7 @@ function Tab_SetupRightButton(UWindowTabControlRightButton W)
 	W.WinTop = Size_TabAreaHeight - W.WinHeight;
 	W.WinLeft = W.ParentWindow.WinWidth - W.WinWidth;
 
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;
@@ -750,7 +750,7 @@ function Menu_DrawMenuBarItem(UWindowMenuBar B, UWindowMenuBarItem I, float X, f
 	}
 
 	C.Font = B.Root.Fonts[F_Normal];
-	C.SetDrawColor(0,0,0);
+	C.SetDrawColor(0, 0, 0);
 
 	B.ClipText(C, X + B.SPACING / 2, 3, I.Caption, True);
 }
@@ -772,7 +772,7 @@ function Menu_DrawPulldownMenuBackground(UWindowPulldownMenu W, Canvas C)
 
 function Menu_DrawPulldownMenuItem(UWindowPulldownMenu M, UWindowPulldownMenuItem Item, Canvas C, float X, float Y, float W, float H, bool bSelected)
 {
-	C.SetDrawColor(255,255,255);
+	C.SetDrawColor(255, 255, 255);
 	Item.ItemTop = Y + M.WinTop;
 
 	if (Item.Caption == "-")
@@ -793,11 +793,11 @@ function Menu_DrawPulldownMenuItem(UWindowPulldownMenu M, UWindowPulldownMenuIte
 	if (Item.bDisabled) 
 	{
 		// Black Shadow
-		C.SetDrawColor(96,96,96);
+		C.SetDrawColor(96, 96, 96);
 	}
 	else
 	{
-		C.SetDrawColor(0,0,0);
+		C.SetDrawColor(0, 0, 0);
 	}
 
 	// DrawColor will render the tick black white or gray.

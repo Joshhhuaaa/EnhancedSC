@@ -39,5 +39,5 @@ var				Mover					m_pPassThroughMover;			// If patrol next tag passes through a m
 
 defaultproperties
 {
-    m_bWasANavPoint=true
+    m_bWasANavPoint=True
 }

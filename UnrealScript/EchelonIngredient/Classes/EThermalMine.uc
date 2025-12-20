@@ -79,14 +79,14 @@ defaultproperties
 {
     GrowModifier=0.350000
     DetectionRadius=250.000000
-    bExplodeWhenDestructed=true
+    bExplodeWhenDestructed=True
     ExplosionClass=Class'EchelonEffect.EMineExplosion'
     ExplosionDamageClass=Class'Engine.Crushed'
-    bHidden=true
+    bHidden=True
     StaticMesh=StaticMesh'EMeshIngredient.Item.FragGrenade'
     DrawScale3D=(X=3.000000,Y=3.000000,Z=0.500000)
-    bBlockProj=false
+    bBlockProj=False
     LightType=LT_Steady
     HeatIntensity=1.000000
-    bIsTouchable=true
+    bIsTouchable=True
 }

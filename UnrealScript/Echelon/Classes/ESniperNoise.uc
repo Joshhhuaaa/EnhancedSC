@@ -139,5 +139,5 @@ defaultproperties
     recoilYawAdd=200
     holdMax=3.000000
     tiredMax=3.000000
-    bHidden=true
+    bHidden=True
 }

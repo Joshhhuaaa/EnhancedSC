@@ -17,14 +17,14 @@ defaultproperties
     SpillTexture=Texture'ETexSFX.water.SFX_Water_Jets'
     LiquidLevel=80.000000
     LiquidDrainSpeed=2.000000
-    bShatterable=true
+    bShatterable=True
     HitPoints=200
     SpawnableObjects(0)=(SpawnClass=Class'EchelonEffect.EEauAqua',SpawnOffset=(Z=-100.000000),SpawnAtDamagePercent=100.000000)
     SpawnableObjects(1)=(SpawnClass=Class'EchelonEffect.EGlasseAqua',SpawnAtDamagePercent=100.000000)
     SpawnableObjects(2)=(SpawnClass=Class'EchelonEffect.EAquariumWaterSpill',SpawnOffset=(Z=-162.000000),SpawnAtDamagePercent=100.000000)
     ExplosionSound=Sound'DestroyableObjet.Play_AquariumDestroyed'
     StaticMesh=StaticMesh'EGO_OBJ.Langley_ObjGO.GO_Aquawindow'
-    bStaticMeshCylColl=false
-    bBlockNPCShot=true
-    bBlockNPCVision=false
+    bStaticMeshCylColl=False
+    bBlockNPCShot=True
+    bBlockNPCVision=False
 }

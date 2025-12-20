@@ -70,12 +70,12 @@ state s_Violation
 defaultproperties
 {
     AlarmShutDownTime=5.000000
-    bDamageable=false
+    bDamageable=False
     AlarmLinkType=EAlarm_Trigger
     StaticMesh=StaticMesh'EMeshIngredient.Object.MetalDetector'
     CollisionRadius=10.000000
     CollisionHeight=125.000000
-    bStaticMeshCylColl=false
-    bBlockPlayers=true
-    bBlockActors=true
+    bStaticMeshCylColl=False
+    bBlockPlayers=True
+    bBlockActors=True
 }

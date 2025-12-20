@@ -2,7 +2,7 @@ class EDoorOpener extends EGameplayObject
 	abstract
 	native;
 
-var	array<EDoorMover>	LinkedActors;		// Actors to be triggered (Light, DoorMover, EGameplayObject, etc ..)
+var	array<EDoorMover> LinkedActors;		// Actors to be triggered (Light, DoorMover, EGameplayObject, etc ..)
 var bool			bIsRetinalScanner;	// flags for quickly checking type of door opener
 var bool			bIsKeypad;
 
@@ -38,5 +38,5 @@ function ToggleInteraction(bool bOn)
 
 defaultproperties
 {
-    bDamageable=false
+    bDamageable=False
 }

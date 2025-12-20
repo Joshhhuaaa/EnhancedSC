@@ -42,7 +42,7 @@ function HitWall(vector HitNormal, actor Wall)
 		HitNormal *= -0.5; 
 	Velocity = 0.5 * (Velocity - 2 * HitNormal * (Velocity Dot HitNormal));
 	RandSpin(100000);
-	bHasBounced = True;
+	bHasBounced = true;
 }
 
 function Landed(vector HitNormal)
@@ -80,10 +80,10 @@ defaultproperties
     MaxSpeed=1000.000000
     DrawType=DT_StaticMesh
     LifeSpan=30.000000 // Joshua - Incrased from 3.0 to 30.0 before despawning
-    StopSoundsWhenKilled=true
-    bCollideActors=false
+    StopSoundsWhenKilled=True
+    bCollideActors=False
     HeatIntensity=0.800000
     Mass=1.000000
-    bBounce=true
-    bFixedRotationDir=true
+    bBounce=True
+    bFixedRotationDir=True
 }

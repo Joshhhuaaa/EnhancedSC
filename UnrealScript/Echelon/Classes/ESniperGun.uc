@@ -15,7 +15,6 @@ var			float			LastSniperModeTime;
 // Joshua - This is a native class. New variables must be added only after all original ones have been declared.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
-
 var			ERateOfFireMode	eROFMode_old; // Joshua - QoL improvement: Switch back to previous RoF when leaving sniper mode
 
 function PostBeginPlay()
@@ -268,5 +267,3 @@ function SetSniperMode(bool bIsSniping)
 		EPlayerController(Controller).iRenderMask = 0;
 	}
 }
-
-

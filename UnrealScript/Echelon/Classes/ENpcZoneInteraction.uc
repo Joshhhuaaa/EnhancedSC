@@ -539,5 +539,5 @@ state s_NpcInert
 
 defaultproperties
 {
-    bIsNPCRelevant=true
+    bIsNPCRelevant=True
 }

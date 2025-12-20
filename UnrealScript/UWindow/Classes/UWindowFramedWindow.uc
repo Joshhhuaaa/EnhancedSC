@@ -70,7 +70,7 @@ function LMouseDown(float X, float Y)
 	{
 		MoveX = X;
 		MoveY = Y;
-		bMoving = True;
+		bMoving = true;
 		Root.CaptureMouse();
 
 		return;
@@ -81,35 +81,35 @@ function LMouseDown(float X, float Y)
 		switch (H)
 		{
 		case HT_NW:
-			bTLSizing = True;
+			bTLSizing = true;
 			Root.CaptureMouse();
 			return;
 		case HT_NE:
-			bTRSizing = True;
+			bTRSizing = true;
 			Root.CaptureMouse();
 			return;
 		case HT_SW:
-			bBLSizing = True;
+			bBLSizing = true;
 			Root.CaptureMouse();
 			return;		
 		case HT_SE:
-			bBRSizing = True;
+			bBRSizing = true;
 			Root.CaptureMouse();
 			return;
 		case HT_N:
-			bTSizing = True;
+			bTSizing = true;
 			Root.CaptureMouse();
 			return;
 		case HT_S:
-			bBSizing = True;
+			bBSizing = true;
 			Root.CaptureMouse();
 			return;
 		case HT_W:
-			bLSizing = True;
+			bLSizing = true;
 			Root.CaptureMouse();
 			return;
 		case HT_E:
-			bRSizing = True;
+			bRSizing = true;
 			Root.CaptureMouse();
 			return;
 		}
@@ -151,7 +151,7 @@ function MouseMove(float X, float Y)
 		WinTop = Int(WinTop + Y - MoveY);
 	}
 	else
-		bMoving = False;
+		bMoving = false;
 
 
 	Cursor = Root.NormalCursor;
@@ -190,7 +190,7 @@ function MouseMove(float X, float Y)
 		WinTop = Int(WinTop + OldH - WinHeight);
 	}
 	else 
-		bTLSizing = False;
+		bTLSizing = false;
 
 
 	// Top
@@ -202,7 +202,7 @@ function MouseMove(float X, float Y)
 		WinTop = Int(WinTop + OldH - WinHeight);
 	}
 	else 
-		bTSizing = False;
+		bTSizing = false;
 
 	// Top Right
 	if (bTRSizing && bMouseDown)
@@ -213,7 +213,7 @@ function MouseMove(float X, float Y)
 		WinTop = Int(WinTop + OldH - WinHeight);
 	}
 	else 
-		bTRSizing = False;
+		bTRSizing = false;
 
 
 	// Left
@@ -225,7 +225,7 @@ function MouseMove(float X, float Y)
 		WinLeft = Int(WinLeft + OldW - WinWidth);
 	}
 	else 
-		bLSizing = False;
+		bLSizing = false;
 
 	// Right
 	if (bRSizing && bMouseDown)
@@ -234,7 +234,7 @@ function MouseMove(float X, float Y)
 		SetSize(Max(MinWinWidth, X), WinHeight);
 	}
 	else 
-		bRSizing = False;
+		bRSizing = false;
 
 	// Bottom Left
 	if (bBLSizing && bMouseDown)
@@ -245,7 +245,7 @@ function MouseMove(float X, float Y)
 		WinLeft = Int(WinLeft + OldW - WinWidth);
 	}
 	else 
-		bBLSizing = False;
+		bBLSizing = false;
 
 	// Bottom
 	if (bBSizing && bMouseDown)
@@ -254,7 +254,7 @@ function MouseMove(float X, float Y)
 		SetSize(WinWidth, Max(MinWinHeight, Y));
 	}
 	else 
-		bBSizing = False;
+		bBSizing = false;
 
 	// Bottom Right
 	if (bBRSizing && bMouseDown)
@@ -263,7 +263,7 @@ function MouseMove(float X, float Y)
 		SetSize(Max(MinWinWidth, X), Max(MinWinHeight, Y));
 	}
 	else
-		bBRSizing = False;
+		bBRSizing = false;
 
 }
 

@@ -1525,21 +1525,21 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 	local int i;
 	local Actor A;
 	local name anim;
-	local float frame,rate;
+	local float frame, rate;
 
 	Canvas.Style = ERenderStyle.STY_Normal;
 	Canvas.StrLen("TEST", XL, YL);
 	YPos = YPos + YL;
-	Canvas.SetPos(4,YPos);
-	Canvas.SetDrawColor(255,0,0);
+	Canvas.SetPos(4, YPos);
+	Canvas.SetDrawColor(255, 0, 0);
 	T = GetItemName(string(self));
 	if (bDeleteMe)
 		T = T$" DELETED (bDeleteMe == true)";
 
 	Canvas.DrawText(T, false);
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
-	Canvas.SetDrawColor(255,255,255);
+	Canvas.SetPos(4, YPos);
+	Canvas.SetDrawColor(255, 255, 255);
 
 	T = "Physics ";
 	Switch (PHYSICS)
@@ -1571,34 +1571,34 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 		T = T$" - will bounce";
 	Canvas.DrawText(T, false);
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 
 	Canvas.DrawText("Location: "$Location, false);
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 	Canvas.DrawText("Rotation: "$Rotation, false);
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 	Canvas.DrawText("Velocity: "$Velocity$" Speed "$VSize(Velocity), false);
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 	Canvas.DrawText("Acceleration: "$Acceleration, false);
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 	
-	Canvas.DrawColor.B = 0;
+	Canvas.SetDrawColor(255, 255, 0);
 	Canvas.DrawText("Collision Radius "$CollisionRadius$" Height "$CollisionHeight);
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 
 	Canvas.DrawText("Collides with Actors "$bCollideActors$", world "$bCollideWorld$", and target "$bBlockProj);
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 // UBI MODIF
 	Canvas.DrawText("Blocks Actors "$bBlockActors$", players "$bBlockPlayers$", camera "$bBlockCamera);
 // END UBI MODIF
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 
 	T = "Touching ";
 	ForEach TouchingActors(class'Actor', A)
@@ -1607,9 +1607,9 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 		T = "Touching nothing";
 	Canvas.DrawText(T, false);
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 
-	Canvas.DrawColor.R = 0;
+	Canvas.SetDrawColor(0, 255, 0);
 	T = "Rendered: ";
 	Switch (Style)
 	{
@@ -1651,7 +1651,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 
 		Canvas.DrawText(T, false);
 		YPos += YL;
-		Canvas.SetPos(4,YPos);
+		Canvas.SetPos(4, YPos);
 		
 		// mesh animation
 		GetAnimParams(0,Anim,frame,rate);
@@ -1664,24 +1664,24 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 		
 	Canvas.DrawText(T, false);
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 	
-	Canvas.DrawColor.B = 255;	
+	Canvas.SetDrawColor(0, 255, 255);
 	Canvas.DrawText("Tag: "$Tag$" Event: "$Event$" STATE: "$GetStateName(), false);
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 
 	Canvas.DrawText("Instigator "$GetItemName(string(Instigator))$" Owner "$GetItemName(string(Owner)));
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 
 	Canvas.DrawText("Timer: "$TimerCounter$" LifeSpan "$LifeSpan);
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 
 	Canvas.DrawText("AmbientSound "$AmbientPlaySound);
 	YPos += YL;
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 }
 
 // NearSpot() returns true is spot is within collision cylinder
@@ -1734,7 +1734,7 @@ function StartInterpolation()
 {
 	GotoState('');
 	SetCollision(True,false,false);
-	bCollideWorld = False;
+	bCollideWorld = false;
 	bInterpolating = true;
 	SetPhysics(PHYS_None);
 }
@@ -2005,14 +2005,14 @@ defaultproperties
     DrawScale=1.000000
     DrawScale3D=(X=1.000000,Y=1.000000,Z=1.000000)
     Style=STY_Normal
-    bMovable=true
+    bMovable=True
     SoundRadiusSaturation=200.000000
     SoundRadiusBackground=-1.000000
     CollisionRadius=22.000000
     CollisionHeight=22.000000
-    bBlockPeeking=true
-    RestoreInitialLightType=true
-    bGlowDisplay=true
+    bBlockPeeking=True
+    RestoreInitialLightType=True
+    bGlowDisplay=True
     VolumeTotalFalloffScale=1.000000
     VolumeInitialAlpha=255
     TurnOffDistance=5000.000000
@@ -2023,10 +2023,10 @@ defaultproperties
     SpotHeight=45.000000
     SpotWidth=45.000000
     HeatOpacity=1.000000
-    bIsTouchable=true
-    bIsNPCRelevant=true
-    bIsPlayerRelevant=true
+    bIsTouchable=True
+    bIsNPCRelevant=True
+    bIsPlayerRelevant=True
     Mass=100.000000
-    bJustTeleported=true
+    bJustTeleported=True
     iRenderPriority=64
 }

@@ -8,13 +8,13 @@ function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 
 defaultproperties
 {
-    bExplodeWhenDestructed=true
+    bExplodeWhenDestructed=True
     DamagedMeshes(0)=(StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_DoorexplodeB',Percent=100.000000)
     SpawnableObjects(0)=(SpawnClass=Class'EchelonEffect.EDoubleDoorsSevEmitter',SpawnAtDamagePercent=100.000000)
     SpawnableObjects(3)=(SpawnClass=Class'EchelonEffect.EDarkSmoke',SpawnAtDamagePercent=100.000000)
     ExplosionSound=Sound'DestroyableObjet.Play_DoorExplosion343'
     StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_doorexplode'
-    bStaticMeshCylColl=false
-    bBlockPlayers=true
-    bBlockActors=true
+    bStaticMeshCylColl=False
+    bBlockPlayers=True
+    bBlockActors=True
 }

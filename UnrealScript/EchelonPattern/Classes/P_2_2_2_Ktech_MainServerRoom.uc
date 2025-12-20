@@ -122,7 +122,7 @@ ComputerDestroyed:
     GameOver(false, 6);
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

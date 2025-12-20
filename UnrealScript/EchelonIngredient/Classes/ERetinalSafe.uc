@@ -56,13 +56,13 @@ Validate:
 
 defaultproperties
 {
-    bDamageable=false
+    bDamageable=False
     AlarmLinkType=EAlarm_Trigger
     DrawType=DT_Mesh
     Mesh=SkeletalMesh'ESkelIngredients.safeMesh'
     CollisionRadius=60.000000
     CollisionHeight=140.000000
-    bBlockPlayers=true
-    bBlockActors=true
+    bBlockPlayers=True
+    bBlockActors=True
     InteractionClass=Class'ERetinalSafeInteraction'
 }

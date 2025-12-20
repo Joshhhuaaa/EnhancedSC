@@ -17,6 +17,6 @@ var	EDoorMover Door;		// pointer to the door mover which we refer to
 
 defaultproperties
 {
-    bDoorPoint=true
-    bDoNotUseAsHidePoint=true
+    bDoorPoint=True
+    bDoNotUseAsHidePoint=True
 }

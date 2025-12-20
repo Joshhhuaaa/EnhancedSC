@@ -66,7 +66,7 @@ event VisibilityRating GetActorVisibility()
 defaultproperties
 {
     MaxQuantity=10
-    ChangeListWhenThrown=false
+    ChangeListWhenThrown=False
     StaticMesh=StaticMesh'EMeshIngredient.weapon.FoamGrenade'
     CollisionRadius=4.000000
     CollisionHeight=4.000000

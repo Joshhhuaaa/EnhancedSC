@@ -25,5 +25,5 @@ defaultproperties
         Name="FlaskEmitter"
     End Object
     Emitters(0)=SpriteEmitter'FlaskEmitter'
-    bUnlit=false
+    bUnlit=False
 }

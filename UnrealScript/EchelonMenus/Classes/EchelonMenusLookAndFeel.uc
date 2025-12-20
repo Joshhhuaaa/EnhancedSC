@@ -161,7 +161,7 @@ function FW_SetupFrameButtons(UWindowFramedWindow W, Canvas C)
 	W.CloseBox.WinTop = CloseBoxOffsetY;
 
 	W.CloseBox.SetSize(CloseBoxUp.W, CloseBoxUp.H);
-	W.CloseBox.bUseRegion = True;
+	W.CloseBox.bUseRegion = true;
 
 	W.CloseBox.UpTexture = T;
 	W.CloseBox.DownTexture = T;

@@ -134,7 +134,7 @@ defaultproperties
 {
     RicochetNoiseRadius=1500.000000
     clampTexture=Texture'ETexSFX.WallImpact.DecalClamp'
-    bHidden=true
+    bHidden=True
     LifeSpan=3.000000
     SoundRadiusSaturation=300.000000
 }

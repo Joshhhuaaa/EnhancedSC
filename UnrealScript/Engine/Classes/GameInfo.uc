@@ -433,12 +433,12 @@ function float RatePlayerStart(NavigationPoint N, byte Team, Controller Player)
 
 defaultproperties
 {
-    bRestartLevel=true
-    bPauseable=true
-    bWaitingToStartMatch=true
-    bChangeLevels=true
+    bRestartLevel=True
+    bPauseable=True
+    bWaitingToStartMatch=True
+    bChangeLevels=True
     DefaultPlayerName="Player"
     GameName="Game"
     PlayerControllerClassName="Engine.PlayerController"
-	UseRumble=true // Joshua - Always set to true, Rumble is now toggled via bEnableRumble in EchelonGameInfo
+	UseRumble=True // Joshua - Always set to true, Rumble is now toggled via bEnableRumble in EchelonGameInfo
 }

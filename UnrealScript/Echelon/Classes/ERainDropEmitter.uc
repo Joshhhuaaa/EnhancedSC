@@ -108,6 +108,6 @@ defaultproperties
         Name="MeshEmitter0"
     End Object
     Emitters(0)=MeshEmitter'MeshEmitter0'
-    bDynamicLight=true
+    bDynamicLight=True
     AmbientGlow=102
 }

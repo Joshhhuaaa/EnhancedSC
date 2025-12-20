@@ -72,7 +72,7 @@ DocumentFire:
     Close();
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

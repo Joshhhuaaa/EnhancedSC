@@ -2,7 +2,7 @@ class UWindowFrameCloseBox extends UWindowButton;
 
 function Created()
 {
-	bNoKeyboard = True;
+	bNoKeyboard = true;
 	Super.Created();
 }
 

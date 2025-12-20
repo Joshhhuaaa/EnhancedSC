@@ -89,7 +89,7 @@ var(Colors) config color
 defaultproperties
 {
     CacheSizeMegs=2
-    UseSound=true
+    UseSound=True
     C_WorldBox=(R=0,G=0,B=107,A=255)
     C_GroundPlane=(R=0,G=0,B=63,A=255)
     C_GroundHighlight=(R=0,G=0,B=127,A=255)

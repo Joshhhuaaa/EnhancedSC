@@ -13,6 +13,6 @@ function Destroyed()
 
 defaultproperties
 {
-    bStatic=false
-    bNoDelete=false
+    bStatic=False
+    bNoDelete=False
 }

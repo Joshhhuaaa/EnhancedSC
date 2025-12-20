@@ -684,6 +684,6 @@ defaultproperties
     BulletDamage=1
     HeadBone="Head"
     DrawType=DT_Mesh
-    bBlockPlayers=true
-    bBlockActors=true
+    bBlockPlayers=True
+    bBlockActors=True
 }

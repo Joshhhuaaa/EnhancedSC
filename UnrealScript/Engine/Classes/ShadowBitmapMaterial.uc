@@ -20,7 +20,7 @@ var Material	SpotTexture;
 
 defaultproperties
 {
-    Dirty=true
+    Dirty=True
     Format=TEXF_RGBA8
     UClampMode=TC_Clamp
     VClampMode=TC_Clamp

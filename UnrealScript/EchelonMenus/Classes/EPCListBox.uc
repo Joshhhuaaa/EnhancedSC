@@ -38,6 +38,6 @@ defaultproperties
     ListClass=Class'EPCListBoxItem'
     TextColor=(R=51,G=51,B=51,A=255)
     Align=2
-    bNoKeyboard=true
+    bNoKeyboard=True
     m_BorderColor=(R=51,G=51,B=51,A=255)
 }

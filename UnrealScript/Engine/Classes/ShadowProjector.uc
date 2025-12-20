@@ -232,11 +232,11 @@ state s_Destrocuted
 
 defaultproperties
 {
-    bProjectorEnable=true
-    bTreatAsStatic=true
-    bUseModulate2X=true
+    bProjectorEnable=True
+    bTreatAsStatic=True
+    bUseModulate2X=True
     MaterialBlendingOp=PB_Modulate
     FrameBufferBlendingOp=PB_Add
     MaxTraceDistance=400
-    bIsEchelonLight=true
+    bIsEchelonLight=True
 }

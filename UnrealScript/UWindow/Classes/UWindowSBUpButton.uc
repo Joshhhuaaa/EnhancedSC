@@ -9,7 +9,7 @@ var bool  m_bHideSBWhenDisable;
 
 function Created()
 {
-	bNoKeyboard = True;
+	bNoKeyboard = true;
 	Super.Created();
     LookAndFeel.SB_SetupUpButton(Self);
 }

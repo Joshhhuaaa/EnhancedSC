@@ -215,24 +215,25 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 	local string T;
 	Super.DisplayDebug(Canvas, YL, YPos);
 
-	Canvas.SetDrawColor(255,255,255);
+	Canvas.SetDrawColor(255, 255, 255);
 
-	Canvas.SetPos(4,YPos);
+	Canvas.SetPos(4, YPos);
 
-	T = "Floor "$Floor$" DesiredSpeed "$DesiredSpeed$" Crouched "$bIsCrouched$" Try to uncrouch "$UncrouchTime;
-	Canvas.DrawText(T);
-	YPos += YL;
-	Canvas.SetPos(4,YPos);
-	Canvas.DrawText("EyeHeight "$Eyeheight$" BaseEyeHeight "$BaseEyeHeight$" Physics Anim "$bPhysicsAnimUpdate);
-	YPos += YL;
-	Canvas.SetPos(4,YPos);
-	Canvas.SetDrawColor(255,0,0);
+	// Joshua - Debug cleanup
+	//T = "Floor "$Floor$" DesiredSpeed "$DesiredSpeed$" Crouched "$bIsCrouched$" Try to uncrouch "$UncrouchTime;
+	//Canvas.DrawText(T);
+	//YPos += YL;
+	//Canvas.SetPos(4, YPos);
+	//Canvas.DrawText("EyeHeight "$Eyeheight$" BaseEyeHeight "$BaseEyeHeight$" Physics Anim "$bPhysicsAnimUpdate);
+	//YPos += YL;
+	//Canvas.SetPos(4, YPos);
+	//Canvas.SetDrawColor(255, 0, 0);
 
 	if (Controller == None)
 	{
 		Canvas.DrawText("NO CONTROLLER");
 		YPos += YL;
-		Canvas.SetPos(4,YPos);
+		Canvas.SetPos(4, YPos);
 	}
 	else
 		Controller.DisplayDebug(Canvas,YL,YPos);
@@ -542,7 +543,7 @@ native(1121) final function bool IsCrouch();
 
 defaultproperties
 {
-    bCanWalk=true
+    bCanWalk=True
     Visibility=128
     DesiredSpeed=1.000000
     MaxDesiredSpeed=1.000000
@@ -559,27 +560,27 @@ defaultproperties
     CrouchRadius=34.000000
     Health=100
     ControllerClass=Class'AIController'
-    bSameZoneHearing=true
+    bSameZoneHearing=True
     HearingThreshold=2800.000000
-    bAcceptsProjectors=true
+    bAcceptsProjectors=True
     DrawType=DT_Mesh
     Texture=Texture'S_Pawn'
     SoundRadiusSaturation=350.000000
     CollisionRadius=34.000000
     CollisionHeight=78.000000
-    bCollideActors=true
-    bCollideWorld=true
-    bCollideSB=true
-    bBlockPlayers=true
-    bBlockActors=true
-    bBlockProj=true
-    bBlockBullet=true
-    bBlockNPCShot=true
-    bBlockNPCVision=true
-    bSideFadeEffect=true
+    bCollideActors=True
+    bCollideWorld=True
+    bCollideSB=True
+    bBlockPlayers=True
+    bBlockActors=True
+    bBlockProj=True
+    bBlockBullet=True
+    bBlockNPCShot=True
+    bBlockNPCVision=True
+    bSideFadeEffect=True
     HeatIntensity=1.000000
-    bIsPawn=true
+    bIsPawn=True
     RotationRate=(Pitch=4096,Yaw=50000,Roll=3072)
-    bRotateToDesired=true
-    bDirectional=true
+    bRotateToDesired=True
+    bDirectional=True
 }

@@ -37,7 +37,7 @@ function PostBeginPlay()
 
 defaultproperties
 {
-    bStatic=false
-    bCollideWhenPlacing=false
-    bCollideWorld=false
+    bStatic=False
+    bCollideWhenPlacing=False
+    bCollideWorld=False
 }

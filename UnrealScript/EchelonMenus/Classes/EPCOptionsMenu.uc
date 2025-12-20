@@ -34,7 +34,6 @@ var EPCMessageBox        m_MessageBox;
 // Joshua - This is a native class. New variables must be added only after all original ones have been declared.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
-
 var EPCTextButton   m_Enhanced; // Joshua - Enhanced settings
 var EPCEnhancedConfigArea   m_EnhancedArea; // Joshua - Enhanced settings
 

@@ -120,14 +120,14 @@ function SwitchAnims()
 
 function PlayDogBark()
 {
-	// Joshua - Prevents player from dying during GameOver and prevents NPC barks
+	// Joshua - Prevents NPC barks during GameOver
 	if (!EchelonLevelInfo(Level).bGameOver)
 		PlaySound(DogBark, SLOT_SFX);
 }
 
 function PlayDogAttack()
 {
-	// Joshua - Prevents player from dying during GameOver and prevents NPC barks
+	// Joshua - Prevents NPC barks during GameOver
 	if (!EchelonLevelInfo(Level).bGameOver)
 		PlaySound(DogAttack, SLOT_SFX);
 }
@@ -381,8 +381,8 @@ defaultproperties
 {
     BoneFadeIn=0.100000
     BoneFadeOut=0.200000
-    bNoBlending=true
-    bNoPersonality=true
+    bNoBlending=True
+    bNoPersonality=True
     BasicPatternClass=Class'EDogPattern'
     m_VisibilityConeAngle=100.000000
     m_VisibilityMaxDistance=2500.000000
@@ -398,9 +398,9 @@ defaultproperties
     VisTable_Investigate(4)=2500.000000
     SmellRadius=350.000000
     TurnSpeed_Alert=16384
-    bIsDog=true
+    bIsDog=True
     DrawType=DT_Sprite
     SoundRadiusSaturation=50.000000
     CollisionHeight=50.000000
-    bIsNPCPawn=true
+    bIsNPCPawn=True
 }

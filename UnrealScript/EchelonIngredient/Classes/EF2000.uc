@@ -128,7 +128,7 @@ defaultproperties
     RecoilAngle=0.250000
     RecoilFadeIn=20.000000
     RecoilFadeOut=6.000000
-    UseAccuracy=true
+    UseAccuracy=True
     AccuracyMovementModifier=5.000000
     AccuracyReturnModifier=13.000000
     AccuracyBase=0.200000

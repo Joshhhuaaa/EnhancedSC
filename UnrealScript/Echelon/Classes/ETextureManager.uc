@@ -55,5 +55,5 @@ native(1310) final function int GetOriginY(int TextureIndex);
 
 defaultproperties
 {
-    bHidden=true
+    bHidden=True
 }

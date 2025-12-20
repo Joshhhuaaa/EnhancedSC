@@ -98,9 +98,9 @@ function UploadDataToPDA()
 
 defaultproperties
 {
-    DestroyUponRead=true
+    DestroyUponRead=True
     ObjectName="DataStick"
-    bDamageable=false
+    bDamageable=False
     StaticMesh=StaticMesh'EMeshIngredient.Item.MemoryStick'
     CollisionRadius=2.000000
     CollisionHeight=2.000000

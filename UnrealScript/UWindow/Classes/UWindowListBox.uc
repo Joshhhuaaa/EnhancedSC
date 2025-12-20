@@ -186,12 +186,12 @@ function SetSelectedItem(UWindowListBoxItem NewSelected)
 	if (NewSelected != None && SelectedItem != NewSelected)
 	{
 		if (SelectedItem != None)
-			SelectedItem.bSelected = False;
+			SelectedItem.bSelected = false;
 
 		SelectedItem = NewSelected;
 
 		if (SelectedItem != None)
-			SelectedItem.bSelected = True;
+			SelectedItem.bSelected = true;
 		
 		Notify(DE_Click);
 	}
@@ -213,7 +213,7 @@ function LMouseDown(float X, float Y)
 
 	if (bCanDrag || bCanDragExternal)
 	{
-		bDragging = True;
+		bDragging = true;
 		Root.CaptureMouse();
 		DragY = Y;
 	}
@@ -272,11 +272,11 @@ function MouseMove(float X, float Y)
 		else
 		{
 			if (bCanDragExternal && CheckExternalDrag(X, Y) != None)
-				bDragging = False;
+				bDragging = false;
 		}
 	}
 	else
-		bDragging = False;
+		bDragging = false;
 
 //	if (bHotTrack)
 //	{
@@ -313,8 +313,8 @@ function bool ExternalDragOver(UWindowDialogControl ExternalControl, float X, fl
 		if (bCanDrag || bCanDragExternal)
 		{
 			Root.CancelCapture();
-			bDragging = True;
-			bMouseDown = True;
+			bDragging = true;
+			bMouseDown = true;
 			Root.CaptureMouse(Self);
 			DragY = Y;	
 		}

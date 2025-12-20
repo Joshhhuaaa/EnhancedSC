@@ -46,6 +46,6 @@ function UpdateDisplays(StaticMesh NewDigit0, StaticMesh NewDigit1)
 
 defaultproperties
 {
-    bDamageable=false
+    bDamageable=False
     StaticMesh=StaticMesh'EMeshIngredient.Elevator.ElevatorDisplay'
 }

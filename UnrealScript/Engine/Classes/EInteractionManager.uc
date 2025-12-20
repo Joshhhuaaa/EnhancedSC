@@ -193,5 +193,5 @@ function RemoveInteractionObj(EInteractObject Object)
 
 defaultproperties
 {
-    bHidden=true
+    bHidden=True
 }

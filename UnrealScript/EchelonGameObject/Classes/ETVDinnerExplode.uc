@@ -2,7 +2,7 @@ class ETVDinnerExplode extends EGameplayObject;
 
 defaultproperties
 {
-    bShatterable=true
+    bShatterable=True
     HitPoints=200
     DamagedMeshes(0)=(StaticMesh=StaticMesh'EMeshIngredient.Obj_Kalinatek.GO_TV_Dinnerb1',Percent=50.000000)
     DamagedMeshes(1)=(StaticMesh=StaticMesh'EMeshIngredient.Obj_Kalinatek.GO_TV_Dinnerb2',Percent=100.000000)

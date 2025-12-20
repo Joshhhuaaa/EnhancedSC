@@ -2,6 +2,6 @@ class EWeaponMagazine extends EGameplayObject;
 
 defaultproperties
 {
-    bDamageable=false
-    bCollideActors=false
+    bDamageable=False
+    bCollideActors=False
 }

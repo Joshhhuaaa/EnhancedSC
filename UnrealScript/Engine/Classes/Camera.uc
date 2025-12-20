@@ -15,5 +15,5 @@ defaultproperties
     CollisionHeight=39.000000
     LightBrightness=100
     LightRadius=16
-    bDirectional=true
+    bDirectional=True
 }

@@ -14,5 +14,5 @@ var	notextexport vector			MeshExtent;
 
 defaultproperties
 {
-    UseMeshBlendMode=true
+    UseMeshBlendMode=True
 }

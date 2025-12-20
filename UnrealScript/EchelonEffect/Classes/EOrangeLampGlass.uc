@@ -36,5 +36,5 @@ defaultproperties
         Name="orangelampGlass"
     End Object
     Emitters(0)=SpriteEmitter'orangelampGlass'
-    bUnlit=false
+    bUnlit=False
 }

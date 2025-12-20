@@ -9,11 +9,11 @@ class Light extends Actor
 
 defaultproperties
 {
-    bStatic=true
-    bHidden=true
-    bNoDelete=true
+    bStatic=True
+    bHidden=True
+    bNoDelete=True
     Texture=Texture'S_Light'
-    bMovable=false
+    bMovable=False
     CollisionRadius=24.000000
     CollisionHeight=24.000000
     LightType=LT_Steady

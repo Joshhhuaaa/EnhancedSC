@@ -38,5 +38,5 @@ defaultproperties
         Name="Cystalevase"
     End Object
     Emitters(0)=SpriteEmitter'Cystalevase'
-    bUnlit=false
+    bUnlit=False
 }

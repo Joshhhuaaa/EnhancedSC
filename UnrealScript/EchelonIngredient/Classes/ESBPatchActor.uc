@@ -35,7 +35,7 @@ defaultproperties
     nbV=3
     Ulength=10.000000
     Vlength=10.000000
-    TopFixed=true
+    TopFixed=True
     prevNbU=3
     prevNbV=3
     prevUlength=10.000000
@@ -50,6 +50,6 @@ defaultproperties
     nbIter=3
     nbNormalizeIter=2
     collSubDiv=1
-    bNPCBulletGoTru=true
-    bPlayerBulletGoTru=true
+    bNPCBulletGoTru=True
+    bPlayerBulletGoTru=True
 }

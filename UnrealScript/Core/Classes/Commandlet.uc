@@ -77,10 +77,10 @@ native event int Main(string Parms);
 
 defaultproperties
 {
-    LogToStdout=true
-    IsServer=true
-    IsClient=true
-    IsEditor=true
-    LazyLoad=true
-    ShowBanner=true
+    LogToStdout=True
+    IsServer=True
+    IsClient=True
+    IsEditor=True
+    LazyLoad=True
+    ShowBanner=True
 }

@@ -70,8 +70,8 @@ defaultproperties
 {
     MaxQuantity=6
     HitNoiseRadius=750.000000
-    bDamageable=true
-    bExplodeWhenDestructed=true
+    bDamageable=True
+    bExplodeWhenDestructed=True
     ExplosionClass=Class'EchelonEffect.EGrenadeExplosion'
     ExplosionDamageClass=Class'Engine.Crushed'
     ExplosionDamage=100.000000
@@ -82,6 +82,6 @@ defaultproperties
     DrawScale=0.500000
     CollisionRadius=4.000000
     CollisionHeight=4.000000
-    bIsProjectile=true
+    bIsProjectile=True
     Mass=60.000000
 }

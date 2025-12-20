@@ -160,10 +160,10 @@ Begin:
 
 defaultproperties
 {
-    bDamageable=false
+    bDamageable=False
     StaticMesh=StaticMesh'EGO_OBJ.Langley_ObjGO.GO_aquarium'
     CollisionRadius=64.000000
     CollisionHeight=32.000000
-    bStaticMeshCylColl=false
-    bBlockPlayers=true
+    bStaticMeshCylColl=False
+    bBlockPlayers=True
 }

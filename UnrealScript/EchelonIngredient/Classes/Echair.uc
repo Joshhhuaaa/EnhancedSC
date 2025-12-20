@@ -7,14 +7,14 @@ function BaseChange();
 
 defaultproperties
 {
-    bTableChair=true
-    bDamageable=false
+    bTableChair=True
+    bDamageable=False
     StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_WheelChair'
     CollisionRadius=25.000000
     CollisionHeight=30.000000
-    bCollideWorld=true
-    bBlockPlayers=true
-    bBlockActors=true
+    bCollideWorld=True
+    bBlockPlayers=True
+    bBlockActors=True
     InteractionClass=Class'EChairInteraction'
-    bPathColliding=true
+    bPathColliding=True
 }

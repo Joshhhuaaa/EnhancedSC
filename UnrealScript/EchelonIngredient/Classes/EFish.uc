@@ -71,10 +71,10 @@ defaultproperties
     Mesh=SkeletalMesh'ESkelIngredients.fishMesh'
     CollisionRadius=2.000000
     CollisionHeight=5.000000
-    bCollideWorld=true
-    bBlockProj=false
-    bBlockNPCVision=false
-    bBlockPeeking=false
+    bCollideWorld=True
+    bBlockProj=False
+    bBlockNPCVision=False
+    bBlockPeeking=False
     HeatIntensity=0.800000
-    bIsSoftBody=true
+    bIsSoftBody=True
 }

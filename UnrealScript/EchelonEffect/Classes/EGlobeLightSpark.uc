@@ -33,5 +33,5 @@ defaultproperties
         Name="GlobeGlass"
     End Object
     Emitters(1)=SpriteEmitter'GlobeGlass'
-    bUnlit=false
+    bUnlit=False
 }

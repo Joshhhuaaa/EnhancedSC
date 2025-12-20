@@ -228,7 +228,7 @@ defaultproperties
     RunSpeed=325.000000
     GearSoundWalk=Sound'GearCommon.Play_Random_CivilGearWalk'
     GearSoundRun=Sound'GearCommon.Play_Random_CivilGearRun'
-    bNoBlending=true
+    bNoBlending=True
     GroundSpeed=200.000000
     Mesh=SkeletalMesh'ENPC.mitchMesh'
 }

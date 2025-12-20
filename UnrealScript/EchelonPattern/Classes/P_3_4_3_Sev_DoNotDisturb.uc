@@ -71,7 +71,7 @@ OnisimGo:
     Goal_Default(2,GOAL_Patrol,0,,,,'Onisim_500',,FALSE,,MOVE_WalkNormal,,MOVE_WalkNormal);
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

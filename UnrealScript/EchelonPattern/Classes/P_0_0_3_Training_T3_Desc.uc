@@ -207,7 +207,7 @@ NVTip:
     FreezeTraining();
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 Save:
     Log("");

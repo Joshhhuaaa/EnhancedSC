@@ -174,5 +174,5 @@ state s_Finished
 
 defaultproperties
 {
-    StaticMesh=none
+    StaticMesh=None
 }

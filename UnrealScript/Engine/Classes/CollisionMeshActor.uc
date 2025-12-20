@@ -9,16 +9,16 @@ class CollisionMeshActor extends StaticMeshActor
 
 defaultproperties
 {
-    bHidden=true
-    bWorldGeometry=true
-    bAcceptsProjectors=false
-    bUnlit=true
-    bShadowCast=false
-    bBlockPlayers=true
-    bBlockActors=true
-    bBlockBullet=false
-    bBlockCamera=true
-    bBlockNPCShot=false
-    bBlockNPCVision=false
-    bIsCollisionMesh=true
+    bHidden=True
+    bWorldGeometry=True
+    bAcceptsProjectors=False
+    bUnlit=True
+    bShadowCast=False
+    bBlockPlayers=True
+    bBlockActors=True
+    bBlockBullet=False
+    bBlockCamera=True
+    bBlockNPCShot=False
+    bBlockNPCVision=False
+    bIsCollisionMesh=True
 }

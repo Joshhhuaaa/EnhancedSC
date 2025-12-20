@@ -2,15 +2,15 @@ class ECancoke extends EGamePlayObject;
 
 defaultproperties
 {
-    bPickable=true
-    bPushable=true
+    bPickable=True
+    bPushable=True
     HitNoiseRadius=500.000000
-    bDestroyWhenDestructed=false
+    bDestroyWhenDestructed=False
     DamagedMeshes(0)=(StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.Go_CokeCan01B')
     BounceSound=Sound'ThrowObject.Play_Random_CanImpact'
     StaticMesh=StaticMesh'EGO_OBJ.GenObjGO.GO_cancoke'
     CollisionRadius=3.000000
     CollisionHeight=3.000000
-    bIsProjectile=true
+    bIsProjectile=True
     Mass=8.000000
 }

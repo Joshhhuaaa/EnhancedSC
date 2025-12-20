@@ -495,5 +495,5 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 
 defaultproperties
 {
-    bHidden=true
+    bHidden=True
 }

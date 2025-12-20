@@ -89,5 +89,5 @@ defaultproperties
 {
     ViewRelativeLocation=(X=40.000000,Y=10.000000,Z=2.000000)
     ViewRelativeRotation=(Pitch=-1000,Yaw=28000,Roll=0)
-    bCollideActors=false
+    bCollideActors=False
 }

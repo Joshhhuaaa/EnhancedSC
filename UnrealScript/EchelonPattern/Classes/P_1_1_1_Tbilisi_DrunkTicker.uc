@@ -87,7 +87,7 @@ Murder:
     SendPatternEvent('LambertAI','BloodyMurder');
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

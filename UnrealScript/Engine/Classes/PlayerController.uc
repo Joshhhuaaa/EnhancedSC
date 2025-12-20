@@ -360,11 +360,11 @@ event PlayerCalcEye(out vector EyeLocation, out rotator EyeRotation)
 
 defaultproperties
 {
-    bStopRenderWorld=true
-    ShadowOnActor=true
-    ShadowOnStaticMesh=true
-    StaticMeshCastShadow=true
-    ShadowFiltering=true
+    bStopRenderWorld=True
+    ShadowOnActor=True
+    ShadowOnStaticMesh=True
+    StaticMeshCastShadow=True
+    ShadowFiltering=True
     FadeOutNearPlane=707
     FadeOutFarPlane=1000
     OrthoZoom=40000.000000
@@ -373,6 +373,6 @@ defaultproperties
     CheatClass=Class'CheatManager'
     InputClass=Class'PlayerInput'
     FovAngle=85.000000
-    bIsPlayer=true
-    bTravel=true
+    bIsPlayer=True
+    bTravel=True
 }

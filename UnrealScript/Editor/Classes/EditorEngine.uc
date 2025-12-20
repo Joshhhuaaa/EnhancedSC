@@ -97,5 +97,5 @@ defaultproperties
     TexPropCube=StaticMesh'TexPropCube'
     TexPropSphere=StaticMesh'TexPropSphere'
     GridSize=(X=16.000000,Y=16.000000,Z=16.000000)
-    ShowNavMarkers=true
+    ShowNavMarkers=True
 }

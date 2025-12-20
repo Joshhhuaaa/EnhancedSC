@@ -101,10 +101,10 @@ function Touch(actor Other)
 
 defaultproperties
 {
-    bTriggerOnlyOnce=true
-    bEventExclusivity=true
-    bHidden=true
+    bTriggerOnlyOnce=True
+    bEventExclusivity=True
+    bHidden=True
     CollisionRadius=40.000000
     CollisionHeight=40.000000
-    bCollideActors=true
+    bCollideActors=True
 }

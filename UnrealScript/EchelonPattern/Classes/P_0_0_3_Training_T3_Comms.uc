@@ -175,7 +175,7 @@ BloodyMurder:
     Close();
     GameOver(false, 0);
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

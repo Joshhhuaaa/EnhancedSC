@@ -56,6 +56,6 @@ State AssociatedTouch
 defaultproperties
 {
     LocationName="unspecified"
-    bCollideActors=true
-    bIsVolume=true
+    bCollideActors=True
+    bIsVolume=True
 }

@@ -68,7 +68,7 @@ NextStep:
     SendPatternEvent('LambertAI','ContactDies');
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

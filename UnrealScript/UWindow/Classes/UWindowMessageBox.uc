@@ -27,7 +27,7 @@ function BeforePaint(Canvas C, float X, float Y)
 		SetSize(200, (WinHeight - R.H) + UWindowMessageBoxCW(ClientArea).GetHeight(C));
 		WinLeft = int((Root.WinWidth - WinWidth) / 2);
 		WinTop = int((Root.WinHeight - WinHeight) / 2);
-		bSetupSize = True;
+		bSetupSize = true;
 	}
 
 	Super.BeforePaint(C, X, Y);

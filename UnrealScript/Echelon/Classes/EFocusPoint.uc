@@ -19,5 +19,5 @@ var(AI) float GrenadeTime; //used by default behavior in grenade zones
 
 defaultproperties
 {
-    bFocusPoint=true
+    bFocusPoint=True
 }

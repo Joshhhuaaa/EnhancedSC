@@ -56,7 +56,7 @@ state s_Online
 -----------------------------------------------------------------------------*/
 function DrawIcon(ECanvas Canvas)
 {
-    Canvas.SetDrawColor(128,128,128);
+    Canvas.SetDrawColor(128, 128, 128);
 
     Canvas.SetPos(DIVERSION_ICON_LEFT, DIVERSION_ICON_TOP);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_ic_diversion, 75, 72, 0, 0, 75, 72);
@@ -75,7 +75,7 @@ function DrawButtons(ECanvas Canvas)
     Super.DrawButtons(Canvas);
 	
     //// Text Stuff //
-	Canvas.Font = font'EHUDFont';
+	Canvas.Font = Font'EHUDFont';
 	yPos = SCREEN_END_Y - BOTTOM_CAM_Y - (BUTTONBAR_HEIGHT - BUTTON_BOX_HEIGHT) / 2;
 	xPos = CAM_X + SIDEBAR_WIDTH;
 

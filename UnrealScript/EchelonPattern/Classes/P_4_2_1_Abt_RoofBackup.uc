@@ -89,7 +89,7 @@ ManDown:
     CheckIfIsUnconscious(1,'LookBack');
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

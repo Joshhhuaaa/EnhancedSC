@@ -136,7 +136,7 @@ LevelEnd:
     LevelChange("3_4_3Severonickel.unr");
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

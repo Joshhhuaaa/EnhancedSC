@@ -1,4 +1,4 @@
- /*=============================================================================
+/*=============================================================================
 
  Class:         EStickyView
 
@@ -78,7 +78,7 @@ function DrawButtons(ECanvas Canvas)
     //// TODO : Used Canvas.TextSize() instead of const for the button position.  It will avoid prob with localisation //
 
         // Text Stuff //
-        Canvas.Font = font'EHUDFont';
+        Canvas.Font = Font'EHUDFont';
         Canvas.DrawColor = Black;
 
 
@@ -220,7 +220,7 @@ function DrawZoomMeter(ECanvas Canvas)
 
     strZoom = (int(fZoomRatio)$"X");
     
-    Canvas.Font = font'EHUDFont';
+    Canvas.Font = Font'EHUDFont';
     Canvas.DrawColor = Green;
 
     Canvas.SetPos(CAM_X + SIDEBAR_WIDTH + 8, TOP_CAM_Y + 8);
@@ -244,7 +244,7 @@ function DrawDistanceMeter(ECanvas Canvas)
     local string strFormattedDistance;
     local int    iDecimal;
 
-    Canvas.Font = font'EHUDFont';
+    Canvas.Font = Font'EHUDFont';
     Canvas.DrawColor = Green;
 
     // Only keep 2 numbers after '.'

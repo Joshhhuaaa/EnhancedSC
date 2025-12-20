@@ -90,15 +90,15 @@ function Destructed()
 defaultproperties
 {
     NeutralPoseAnim="4330trk5"
-    bLoopNeutral=true
+    bLoopNeutral=True
     NeutralAnims(0)="4330trk7"
     TriggeredAnimations(0)="4330trk6"
     TriggeredAnimations(1)="4330trk8"
-    bExplodeWhenDestructed=true
-    bDestroyWhenDestructed=false
+    bExplodeWhenDestructed=True
+    bDestroyWhenDestructed=False
     ExplosionClass=Class'EchelonEffect.EDrumExplosionParticle'
     DrawType=DT_Mesh
     Mesh=SkeletalMesh'ETrk.Trk'
     CollisionHeight=45.000000
-    bCollideActors=false
+    bCollideActors=False
 }

@@ -26,7 +26,7 @@ function Touch(actor Other)
 
 defaultproperties
 {
-    bTravel=true
-    bHidden=true
-    bCollideActors=true
+    bTravel=True
+    bHidden=True
+    bCollideActors=True
 }

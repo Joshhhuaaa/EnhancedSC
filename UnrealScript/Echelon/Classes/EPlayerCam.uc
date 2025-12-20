@@ -40,11 +40,11 @@ var			int					m_shakeFadeOut;
 // Rotation
 var() float	m_yawSpeed;
 var() float	m_pitchSpeed;
-var() int		m_minPitch;
-var() int		m_maxPitch;
+var() int	m_minPitch;
+var() int	m_maxPitch;
 var() float	m_pitchCurveBias;
 var() float	m_constraintSpeed;
-var	  rotator	m_resettingRotation;
+var rotator m_resettingRotation;
 var() float	m_resetPitchSpeed;
 var() float	m_resetYawSpeed;
 
@@ -208,6 +208,7 @@ state s_Fixed
 	{
 		UpdateView(m_EPC.Rotation, false);
 	}
+	
 	function CalcView(actor ViewActor, out vector CameraLocation, out rotator CameraRotation)
 	{
 	}
@@ -231,5 +232,5 @@ defaultproperties
     m_closeupDist=200.000000
     m_closeupHeight=20.000000
     m_closeupDamping=0.600000
-    bHidden=true
+    bHidden=True
 }

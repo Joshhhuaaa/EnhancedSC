@@ -36,5 +36,5 @@ defaultproperties
         Name="RedLamo_PAL"
     End Object
     Emitters(0)=SpriteEmitter'RedLamo_PAL'
-    bUnlit=false
+    bUnlit=False
 }

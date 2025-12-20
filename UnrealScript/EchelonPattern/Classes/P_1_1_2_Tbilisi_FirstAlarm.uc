@@ -126,7 +126,7 @@ AlarmResponse:
     Goal_Default(2,GOAL_Guard,0,,'PLAYER','PLAYER','PostSearchb',,FALSE,,MOVE_WalkAlert,,MOVE_WalkAlert);
     End();
 DoNothing:
-    Log("Doing Nothing");
+    Log("Doing nothing");
     End();
 
 }

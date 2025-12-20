@@ -9,8 +9,8 @@ defaultproperties
 {
     GearSoundWalk=Sound'GearCommon.Play_Random_HeavyGearWalk'
     GearSoundRun=Sound'GearCommon.Play_Random_HeavyGearRun'
-    bIsHotBlooded=false
-    bCanWhistle=false
+    bIsHotBlooded=False
+    bCanWhistle=False
     GearSoundFall=Sound'GearCommon.Play_HeavyGearFall'
     Mesh=SkeletalMesh'ENPC.RookieAMesh'
 }

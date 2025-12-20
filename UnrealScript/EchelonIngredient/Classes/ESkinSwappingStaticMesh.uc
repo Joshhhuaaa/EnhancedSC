@@ -13,7 +13,7 @@ function Tick(float DeltaTime)
 
 defaultproperties
 {
-    bStatic=false
+    bStatic=False
     StaticMesh=StaticMesh'EGO_OBJ.Langley_ObjGO.GO_aquarium'
     CollisionRadius=64.000000
     CollisionHeight=32.000000

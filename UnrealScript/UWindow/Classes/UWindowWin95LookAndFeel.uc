@@ -168,7 +168,7 @@ function FW_SetupFrameButtons(UWindowFramedWindow W, Canvas C)
 	W.CloseBox.WinTop = CloseBoxOffsetY;
 
 	W.CloseBox.SetSize(CloseBoxUp.W, CloseBoxUp.H);
-	W.CloseBox.bUseRegion = True;
+	W.CloseBox.bUseRegion = true;
 
 	W.CloseBox.UpTexture = T;
 	W.CloseBox.DownTexture = T;
@@ -348,7 +348,7 @@ function Combo_GetButtonBitmaps(UWindowComboButton W)
 
 	T = W.GetLookAndFeelTexture();
 	
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;
@@ -482,7 +482,7 @@ function SB_SetupUpButton(UWindowSBUpButton W)
 
 	T = W.GetLookAndFeelTexture();
 
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;
@@ -501,7 +501,7 @@ function SB_SetupDownButton(UWindowSBDownButton W)
 
 	T = W.GetLookAndFeelTexture();
 
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;
@@ -522,7 +522,7 @@ function SB_SetupLeftButton(UWindowSBLeftButton W)
 
 	T = W.GetLookAndFeelTexture();
 
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;
@@ -541,7 +541,7 @@ function SB_SetupRightButton(UWindowSBRightButton W)
 
 	T = W.GetLookAndFeelTexture();
 
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;
@@ -598,7 +598,7 @@ function Tab_SetupLeftButton(UWindowTabControlLeftButton W)
 	W.WinTop = Size_TabAreaHeight - W.WinHeight;
 	W.WinLeft = W.ParentWindow.WinWidth - 2 * W.WinWidth;
 
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;
@@ -622,7 +622,7 @@ function Tab_SetupRightButton(UWindowTabControlRightButton W)
 	W.WinTop = Size_TabAreaHeight - W.WinHeight;
 	W.WinLeft = W.ParentWindow.WinWidth - W.WinWidth;
 
-	W.bUseRegion = True;
+	W.bUseRegion = true;
 
 	W.UpTexture = T;
 	W.DownTexture = T;

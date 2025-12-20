@@ -40,10 +40,10 @@ function DrawCrosshair(ECanvas Canvas)
     switch (chStyle)
     {
         case CH_NONE:
-            Canvas.SetDrawColor(38,81,50);
+            Canvas.SetDrawColor(38, 81, 50);
             break;
         case CH_NONHOSTILE:
-            Canvas.SetDrawColor(27,70,122);
+            Canvas.SetDrawColor(27, 70, 122);
             break;
     }
 
@@ -92,7 +92,7 @@ state s_Reloading
     function DrawView(HUD Hud,ECanvas Canvas)
     {
 		Super.DrawView(Hud, Canvas);
-        Canvas.SetDrawColor(128,128,128);
+        Canvas.SetDrawColor(128, 128, 128);
 
 	    if (bDrawCrosshair && Epc.bShowCrosshair && Epc.bShowHUD) // Joshua - Show crosshair toggle
 	        DrawCrosshair(Canvas);

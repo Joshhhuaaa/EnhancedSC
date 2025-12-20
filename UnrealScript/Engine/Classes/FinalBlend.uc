@@ -38,6 +38,6 @@ var() byte AlphaRef;
 
 defaultproperties
 {
-    ZWrite=true
+    ZWrite=True
     ZTest=ZT_LessEqual
 }

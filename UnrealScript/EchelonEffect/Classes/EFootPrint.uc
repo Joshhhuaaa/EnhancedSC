@@ -8,6 +8,6 @@ defaultproperties
 {
     FrameBufferBlendingOp=PB_Modulate
     MaxTraceDistance=2
-    bClipBSP=true
+    bClipBSP=True
     DrawScale=0.400000
 }

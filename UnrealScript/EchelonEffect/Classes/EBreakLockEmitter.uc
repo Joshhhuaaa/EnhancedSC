@@ -66,5 +66,5 @@ defaultproperties
         Name="SparkEmitter7"
     End Object
     Emitters(2)=SparkEmitter'SparkEmitter7'
-    bUnlit=false
+    bUnlit=False
 }

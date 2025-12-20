@@ -93,7 +93,7 @@ defaultproperties
 {
     AmmoVelocity=3000
     Category=CAT_MAINGUN
-    bEquipable=false
-    bIsProjectile=true
+    bEquipable=False
+    bIsProjectile=True
     Mass=60.000000
 }

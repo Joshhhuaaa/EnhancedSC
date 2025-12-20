@@ -24,7 +24,7 @@ var		transient float	PctDuration;
 
 defaultproperties
 {
-    bSmoothCorner=true
+    bSmoothCorner=True
     StartControlPoint=(X=800.000000,Y=800.000000,Z=0.000000)
     EndControlPoint=(X=-800.000000,Y=-800.000000,Z=0.000000)
 }

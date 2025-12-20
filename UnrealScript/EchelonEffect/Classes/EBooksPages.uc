@@ -24,5 +24,5 @@ defaultproperties
         Name="BooksPages"
     End Object
     Emitters(0)=MeshEmitter'EchelonEffect.BooksPages'
-    bUnlit=false
+    bUnlit=False
 }
