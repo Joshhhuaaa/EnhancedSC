@@ -227,6 +227,7 @@ Released:
     AddNote("", "P_5_2_NikoBehavior", "Note_0033L", "Localization\\P_5_1_2_PresidentialPalace");
 	PlaySound(Sound'FisherVoice.Play_Sq_FisherHeartBeat', SLOT_Ambient);
     CheckFlags(GuysAreHere,FALSE,'End');
+    EchelonGameInfo(Level.Game).pPlayer.bDisableWhistle = true; // Joshua - Prevent the whistle while surrounded
     SetFlags(V5_1_2_PresidentialPalace(Level.VarObject).NowSurrounded,TRUE);
     ResetGoals(1);
     ChangeState(1,'s_default');
@@ -282,6 +283,7 @@ lightsOFF:
     SendPatternEvent('BeAsIce','End');
     SetFlags(DontMove,FALSE);
     SetFlags(V5_1_2_PresidentialPalace(Level.VarObject).DarknessVault,TRUE);
+    EchelonGameInfo(Level.Game).pPlayer.bDisableWhistle = false; // Joshua - Prevent the whistle while surrounded
     DisableMessages(TRUE, FALSE);
     ePawn(Characters[3].Pawn).Bark_Type = BARK_LightsOut;
     Talk(ePawn(Characters[3].Pawn).Sounds_Barks, 3, 0, false);

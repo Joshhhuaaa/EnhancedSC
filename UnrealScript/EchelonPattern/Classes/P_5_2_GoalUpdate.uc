@@ -73,13 +73,13 @@ NikoKillOrder:
 PureMadness:
     Log("PureMadness");
     CheckFlags(V5_1_2_PresidentialPalace(Level.VarObject).NikoDEAD,TRUE,'End');
+    SetProfileDeletion();
     DisableMessages(TRUE, TRUE);
     IgnoreAlarmStage(TRUE);
     PlayerMove(false);
     Speech(Localize("P_5_2_GoalUpdate", "Speech_0014L", "Localization\\P_5_1_2_PresidentialPalace"), Sound'S5_1_Voice.Play_51_95_01', 1, 0, TR_HEADQUARTER, 0, true);
     Close();
 fallingMissedJump:
-    SetProfileDeletion();
     GameOver(false, 0);
 End:
     End();
