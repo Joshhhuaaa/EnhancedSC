@@ -64,6 +64,7 @@ Milestone:
     Speech(Localize("P_5_1_LambertComments", "Speech_0003L", "Localization\\P_5_1_1_PresidentialPalace"), Sound'S5_1_1Voice.Play_51_10_03', 0, 0, TR_CONVERSATION, 0, false);
     Speech(Localize("P_5_1_LambertComments", "Speech_0004L", "Localization\\P_5_1_1_PresidentialPalace"), Sound'S5_1_1Voice.Play_51_10_04', 1, 0, TR_HEADQUARTER, 0, false);
     Close();
+    SendPatternEvent('Lounge','Milestone'); // Joshua - Begin guard dialogue instead of using EEventTrigger5
 End:
     End();
 

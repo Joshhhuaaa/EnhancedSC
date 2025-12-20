@@ -64,7 +64,7 @@ Milestone:
     Log("Milestone");
     CheckFlags(Triggered,TRUE,'End');
     SetFlags(Triggered,TRUE);
-    Sleep(6);
+    Sleep(3); // Joshua - Making the guards speak sooner after Lambert's dialogue (originally 6)
     Talk(Sound'S5_1_1Voice.Play_51_15_01', 1, , TRUE, 0);
     Talk(Sound'S5_1_1Voice.Play_51_15_02', 2, , TRUE, 0);
     Talk(Sound'S5_1_1Voice.Play_51_15_03', 1, , TRUE, 0);
