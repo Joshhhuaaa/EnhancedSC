@@ -1027,7 +1027,7 @@ state MainHUD
 				}
 				break;
 			case "PlayerStats" :
-				if (Level.Pauser == None && Epc.CanAccessPlayerStats() && Epc.bEnablePlayerStats && !Epc.bStopInput)
+				if (Level.Pauser == None && Epc.CanAccessPlayerStats() && Epc.PlayerStatsMode != SM_Disabled && !Epc.bStopInput)
 				{
 					SaveState();
 					GotoState('PlayerStats');
@@ -1179,10 +1179,10 @@ state s_Slavery
 				break;
 			case "PlayerStats" :
 				if (Epc.CanAccessPlayerStats() &&
-					Epc.bEnablePlayerStats &&
+					Epc.PlayerStatsMode != SM_Disabled &&
 					!Epc.bStopInput && 
 					Level.Pauser == None && 
-					(Epc.GetStateName() == 's_FirstPersonTargeting'	 ||
+					(Epc.GetStateName() == 's_FirstPersonTargeting'	||
 					 Epc.GetStateName() == 's_CameraJammerTargeting' ||
 					 Epc.GetStateName() == 's_RappellingTargeting'	 ||
 					 Epc.GetStateName() == 's_SplitTargeting'))
@@ -1659,9 +1659,15 @@ Complete:
 	if (!GameMenuHUD.bFinalMap)
 		PlaySound(Sound'CommonMusic.Play_theme_MissionSuccess', SLOT_Fisher);
 	GameMenuHUD.GotoState('s_MissionComplete');
-	Sleep(6);
-	if (Epc.bEnablePlayerStats)
+	Sleep(5);
+	// Joshua - Player stats
+	if (Epc.PlayerStatsMode != SM_Disabled)
+	{
+		Sleep(1);
 		PlayerStatsHUD.GoToState('s_MissionComplete');
+	}
+	Stop;
+
 // Joshua - Load last save from mission failed
 BeginLoadLastSave:
 	GameMenuHUD.GotoState('s_MissionFailed', 'LoadLastSave');

@@ -745,7 +745,7 @@ state s_MissionComplete
 // Joshua - s_MissionComplete is handled in C++, so its behavior can't be changed in UnrealScript.
 // The game transitions to the next level after 13 seconds, so we reset the timer to allow the player to view their Player Statistics until a key press.
 Begin:
-    if (Epc.bEnablePlayerStats)
+    if (Epc.PlayerStatsMode != SM_Disabled)
     {
         while (true)
         {

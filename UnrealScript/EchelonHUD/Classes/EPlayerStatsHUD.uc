@@ -178,11 +178,11 @@ function DrawPlayerStats(ECanvas Canvas)
         
     playerStats = Epc.playerStats;
 
-    // Xbox font is too large to display here, using either PC or GameCube
-    if (Epc.eGame.FontType == Font_GameCube)
-        Canvas.Font = Canvas.ETextFontGameCube;
+    // Xbox font is too large to display here
+    if (Epc.eGame.FontType == Font_Xbox)
+        Canvas.Font = Font'Engine.ETextFont';
     else
-        Canvas.Font = Canvas.ETextFontPC;
+        Canvas.Font = Canvas.ETextFont;
     Canvas.TextSize("T", xLen, yLen);
     
     TitleColor.R = 96;
@@ -491,6 +491,11 @@ function DrawPlayerStats(ECanvas Canvas)
     Canvas.DrawText(playerStats.MedkitUsed);
     yPos += spacing * 1.5;
 
+    // NPCs Interrogated
+    //Canvas.SetPos(xPos + leftMargin, yPos);
+    //Canvas.DrawText(Localize("PlayerStats", "NPCsInterrogated", "Localization\\Enhanced") @ playerStats.NPCsInterrogated);
+
+    // Cheats Active
     Canvas.SetDrawColor(255, 50, 50, PlayerStatsAlpha);
     statString = Caps(Localize("PlayerStats", "CheatsActive", "Localization\\Enhanced"));
     Canvas.TextSize(statString, xLen, yLen);
@@ -499,22 +504,23 @@ function DrawPlayerStats(ECanvas Canvas)
         Canvas.DrawText(statString);
     yPos += spacing;
     
-    // Stealth Rating bar
+    // Rating bar
     Canvas.Style = ERenderStyle.STY_Alpha;
     Canvas.SetPos(xPos + 5, yPos);
     Canvas.SetDrawColor(30, 35, 30, PlayerStatsAlpha);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_selecteur, boxWidth - 10, headerHeight, 0, 0, 1, 1);
     Canvas.Style = ERenderStyle.STY_Normal;
 
-    // Stealth Rating text
+    // Rating text
     Canvas.SetDrawColor(TitleColor.R, TitleColor.G, TitleColor.B, TitleColor.A);
-    statString = Caps(Localize("PlayerStats", "StealthRating", "Localization\\Enhanced")) @ int(playerStats.StealthRating) $ "%";
+    if (Epc.PlayerStatsMode == 1) // SM_Ghost
+        statString = Caps(Localize("PlayerStats", "GhostRating", "Localization\\Enhanced")) @ int(playerStats.GhostRating) $ "%";
+    else if (Epc.PlayerStatsMode == 2) // SM_Stealth
+        statString = Caps(Localize("PlayerStats", "StealthRating", "Localization\\Enhanced")) @ int(playerStats.StealthRating) $ "%";
     Canvas.TextSize(statString, xLen, yLen);
     Canvas.SetPos(xPos + (boxWidth / 2) - (xLen / 2), yPos + 2);
-    Canvas.DrawText(statString);
-    
-    //Canvas.SetPos(xPos + leftMargin, yPos);
-    //Canvas.DrawText(Localize("PlayerStats", "NPCsInterrogated", "Localization\\Enhanced") @ playerStats.NPCsInterrogated);
+    if (Epc.PlayerStatsMode != 0) // SM_Disabled
+        Canvas.DrawText(statString);
 }
 
 defaultproperties
@@ -522,6 +528,6 @@ defaultproperties
     TextColor=(R=75,G=83,B=60,A=255)
     TitleColor=(R=96,G=101,B=79,A=255)
     SectionColor=(R=51,G=56,B=41,A=255)
-    bAlwaysTick=true
-    bHidden=true
+    bAlwaysTick=True
+    bHidden=True
 }

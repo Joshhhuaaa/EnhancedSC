@@ -256,7 +256,7 @@ var(Enhanced) config EInputMode InputMode;
 enum EControllerScheme
 {
     CS_Default,
-    CS_Pandora,
+    CS_Xbox,
     CS_PlayStation,
 	CS_User
 };
@@ -321,6 +321,13 @@ var bool bShowKeyNum;
 var EPlayerStats playerStats;
 var bool bConfirmStats;
 var bool bDebugStats;
+enum EPlayerStatsMode
+{
+	SM_Disabled,
+	SM_Ghost,
+	SM_Stealth,
+};
+var(Enhanced) config EPlayerStatsMode PlayerStatsMode;
 
 // Joshua - Global HUD variables
 var(Enhanced) config bool bShowHUD;
@@ -2517,7 +2524,7 @@ function EndMission(bool bMissionComplete, int iFailureType)
 		return;
 
 	// Joshua - Hack for Presidential Palace to display player statistics before ending cutscene
-	if (bEnablePlayerStats && GetCurrentMapName() == "5_1_2_PresidentialPalace" && bMissionComplete && iFailureType == 0)
+	if (PlayerStatsMode != SM_Disabled && GetCurrentMapName() == "5_1_2_PresidentialPalace" && bMissionComplete && iFailureType == 0)
 	{
 		playerStats.OnMissionComplete(); // Joshua - For player statistics, pauses the mission time
 		myHUD.GoToState('s_FinalMapStats');
@@ -12101,6 +12108,29 @@ defaultproperties
 	//=============================================================================
 	bMissionFailedQuickMenu=True
 	LastSaveName=""
+	InputMode=IM_Auto
+	ControllerScheme=CS_Default
+	ControllerIcon=CI_Xbox
+	bNormalizeMovement=True
+	bToggleBTWTargeting=True
+	bWhistle=True
+	m_WhistleTime=-10.00
 	bBinoculars=True
+	bOpticCableVisions=True
+	bLaserMicZoomLevels=True
+	bF2000ZoomLevels=True
+	bLaserMicZoomLevels=True
+	bBurstFire=True
+	bInvertInteractionList=True
+	PlayerStatsMode=SM_Ghost
+	bShowHUD=True
+	bShowInventory=True
+	bShowStealthMeter=True
+	bShowCurrentGoal=True
+	bShowKeypadGoal=True
+	bShowMissionInformation=True
+	bShowCrosshair=True
+	bShowScope=True
+	bShowAlarms=True
 	CheatClass=Class'ECheatManager'
 }
