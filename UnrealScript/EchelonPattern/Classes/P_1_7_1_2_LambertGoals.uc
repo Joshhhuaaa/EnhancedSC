@@ -50,13 +50,19 @@ function InitPattern()
             SoundActors[1] = A;
     }
 
-    // Joshua - Adjusting timer for Elite mode
-    if (IsEliteMode())
+    if (!bInit)
     {
-        ForEach AllActors(class'ETimer', Timer)
+        // Joshua - Adjusting timer for Elite mode
+        if (IsEliteMode())
         {
-            if (Timer.Name == 'ETimer0')
-                Timer.TimerDelay = 120.0; // 150.0
+            ForEach AllActors(class'ETimer', Timer)
+            {
+                if (Timer.Name == 'ETimer0')
+                {
+                    Timer.TimerDelay = 120.0; // 150.0
+                    Timer.CriticalDelay = 10.0; // Timer goes red if under 10 seconds
+                }
+            }
         }
     }
 

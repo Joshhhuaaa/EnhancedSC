@@ -105,9 +105,9 @@ function PostRender(ECanvas Canvas)
     Canvas.Font = Canvas.ETitleBoldFont;
 
     if (TimerDelay > CriticalDelay)
-        Canvas.SetDrawColor(64,64,64);
+        Canvas.SetDrawColor(64, 64, 64);
     else
-        Canvas.SetDrawColor(64,0,0);
+        Canvas.SetDrawColor(64, 0, 0);
 
     // Set timer value //
     min = TimerDelay / 60.0f;
@@ -155,7 +155,7 @@ function DrawBox(ECanvas Canvas, int xPos, int yPos, int width, int height)
     // FILL BACKGROUND //
     Canvas.DrawLine(xPos + 5, yPos + 6, width - 10, height - 12, Canvas.black, -1, eLevel.TGAME);
 
-    Canvas.SetDrawColor(128,128,128);
+    Canvas.SetDrawColor(128, 128, 128);
 
     // CORNERS //
 
@@ -196,8 +196,8 @@ function DrawBox(ECanvas Canvas, int xPos, int yPos, int width, int height)
 
 defaultproperties
 {
-    CriticalDelay=-1.000000
-    bDisplayInterface=true
-    bHidden=true
+    CriticalDelay=10.00000 //-1.000000 // Joshua - Restore CriticalDelay (timer turns red) if under 10 seconds
+    bDisplayInterface=True
+    bHidden=True
     Texture=Texture'ETimer'
 }

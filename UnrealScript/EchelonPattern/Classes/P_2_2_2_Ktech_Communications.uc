@@ -38,19 +38,10 @@ function InitPattern()
             Characters[2] = P.controller;
     }
 
-    // Joshua - Adjusting timer for Elite mode
-    if (IsEliteMode())
-    {
-        ForEach AllActors(class'ETimer', Timer)
-        {
-            if (Timer.Name == 'ETimer0')
-                Timer.TimerDelay = 120.0; // 150.0
-        }
-    }
-
-    // Joshua - Replace NPC skins for variety
+    
     if (!bInit)
     {
+        // Joshua - Replace NPC skins for variety
         ForEach DynamicActors(class'Pawn', P)
         {
             if (P.name == 'EMafiaMuscle5' || P.name == 'EMafiaMuscle11' || P.name =='EMafiaMuscle13')
@@ -64,6 +55,19 @@ function InitPattern()
             if (P.name == 'EMercenaryTechnician7')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.MercTech.MercTechB", class'Texture'));
+            }
+        }
+
+        // Joshua - Adjusting timer for Elite mode
+        if (IsEliteMode())
+        {
+            ForEach AllActors(class'ETimer', Timer)
+            {
+                if (Timer.Name == 'ETimer0')
+                {
+                    Timer.TimerDelay = 120.0; // 150.0
+                    Timer.CriticalDelay = 10.0; // Timer goes red if under 10 seconds
+                }
             }
         }
     }
