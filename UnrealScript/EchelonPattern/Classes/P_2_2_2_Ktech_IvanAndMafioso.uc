@@ -62,9 +62,13 @@ function InitPattern()
         {
             Characters[1] = P.controller;
             EAIController(Characters[1]).bAllowKnockout = true;
+            EPawn(P).bNoPickupInteraction = false; // Joshua - The player should be able to pick up their body
         }
         if (P.name == 'EIvan0')
+        {
             Characters[2] = P.controller;
+            EPawn(P).bNoPickupInteraction = false; // Joshua - The player should be able to pick up their body
+        }
     }
 
     if (!bInit)
