@@ -13,6 +13,7 @@ var float ZoomSpeed;
 var float ZoomSpeedController; // Joshua - Console versions used a lower ZoomSpeed
 var float Damping;
 var float current_fov;
+var float ZoomAccumulator; // Joshua - Accumulates deltaTime to ensure 30fps zoom rate regardless of actual framerate
 
 function PostBeginPlay()
 {
@@ -68,6 +69,7 @@ state s_Microiing
 
 		// Micro
 		Micro.SetCollision(true);
+		ZoomAccumulator = 0.0; // Joshua - Reset accumulator when entering laser mic state
 		// Joshua - Zoom functionality
 		if (Epc.bLaserMicZoomLevels)
 		{
@@ -111,11 +113,27 @@ state s_Microiing
 	// Joshua - Zoom functionality
 	function Zoom(float DeltaTime)
 	{
-		local bool Zoomed;
+		local bool zoomed;
 		local float simDeltaTime;
+		local int numUpdates;
+		local int i;
 
-		// Joshua - Made zooming frame rate independent by using a consistent DeltaTime
+		// Accumulate actual deltaTime and only update zoom at 30fps intervals
+		ZoomAccumulator += DeltaTime;
 		simDeltaTime = 1.0f / 30.0f;
+		
+		// Calculate how many 30fps frames have passed
+		numUpdates = int(ZoomAccumulator / simDeltaTime);
+		
+		// Only process zoom if at least one 30fps frame has passed
+		if (numUpdates > 0)
+		{
+			// Subtract the time we're about to process
+			ZoomAccumulator -= numUpdates * simDeltaTime;
+			
+			// Apply zoom updates (usually just 1, but could be more if frame rate drops)
+			for (i = 0; i < numUpdates; i++)
+			{
 				// Zoom in
 				if (Epc.bIncSpeedPressed == true)
 				{
@@ -155,25 +173,24 @@ state s_Microiing
 						zoomed = true;
 					}
 				}
+			}
 
-		if (Zoomed)
-		{
-			if (!IsPlaying(Sound'FisherEquipement.Play_StickyCamZoom'))
-				PlaySound(Sound'FisherEquipement.Play_StickyCamZoom', SLOT_SFX);
-		}
+			if (zoomed)
+			{
+				// Attached the sound to the PlayerController to fix an issue where the sound position wasn't updating in real time
+				if (!Epc.IsPlaying(Sound'FisherEquipement.Play_StickyCamZoom'))
+					Epc.PlaySound(Sound'FisherEquipement.Play_StickyCamZoom', SLOT_SFX);
+			}
 
 			// Clamp fov and calculate zoom factor
 			current_fov = FClamp(current_fov, MinFov, MaxFov);
-		//		MaxDamping = Damping;
-		//		MaxDamping /= (MaxFov) / current_fov;
 
 			// Modify vision fov
 			if (Epc.bLaserMicVisions)
 				Epc.SetCameraFOV(Epc, current_fov);
 			else
 				Epc.SetCameraFOV(self, current_fov);
-
-	//	Super.Tick(DeltaTime);
+		}
 	}		
 
 	function Tick(float DeltaTime)

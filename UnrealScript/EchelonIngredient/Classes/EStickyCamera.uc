@@ -9,6 +9,7 @@ var(StickyCamera) float ZoomSpeedController; // Joshua - Console versions used a
 var(StickyCamera) float Damping;
 
 var float current_fov;
+var float ZoomAccumulator; // Joshua - Accumulates deltaTime to ensure 30fps zoom rate regardless of actual framerate
 
 function PostBeginPlay()
 {
@@ -31,15 +32,19 @@ state s_Camera
 	{
 		Super.BeginState();
 
-		current_fov			= MaxFov;
+		current_fov = MaxFov;
+		ZoomAccumulator = 0.0; // Joshua - Reset accumulator when entering camera state
 	}
 
 	function Tick(float DeltaTime)
 	{
 		local bool zoomed;
 		local float simDeltaTime;
+		local int numUpdates;
+		local int i;
 
-		// Joshua - Made zooming frame rate independent by using a consistent DeltaTime
+		// Joshua - Accumulate actual deltaTime and only update zoom at 30fps intervals
+		ZoomAccumulator += DeltaTime;
 		simDeltaTime = 1.0f / 30.0f;
 
         // Night vision
@@ -76,6 +81,18 @@ state s_Camera
 			Epc.bDPadRight		= 0;
 		}
 
+		// Joshua - Calculate how many 30fps frames have passed
+		numUpdates = int(ZoomAccumulator / simDeltaTime);
+		
+		// Joshua - Only process zoom if at least one 30fps frame has passed
+		if (numUpdates > 0)
+		{
+			// Joshua -  Subtract the time we're about to process
+			ZoomAccumulator -= numUpdates * simDeltaTime;
+			
+			// Joshua -  Apply zoom updates (usually just 1, but could be more if frame rate drops)
+			for (i = 0; i < numUpdates; i++)
+			{
 				// Joshua - Adding controller support for Sticky Camera (zoom in)
 				if (Epc.bDPadUp != 0)
 				{
@@ -115,26 +132,27 @@ state s_Camera
 						zoomed = true;
 					}
 				}
+			}
+
+			if (zoomed)
+			{
+				if (!IsPlaying(Sound'FisherEquipement.Play_StickyCamZoom'))
+					PlaySound(Sound'FisherEquipement.Play_StickyCamZoom', SLOT_SFX);
+				Level.RumbleVibrate(0.07f, 0.5);
+				if (FRand() > 0.5)
+					Epc.m_camera.Hit(60, 20000, true);
+				else
+					Epc.m_camera.Hit(-60, 20000, true);
+			}
+
+			// Clamp fov and calculate zoom factor
+			current_fov = FClamp(current_fov, MinFov, MaxFov);
+			MaxDamping = Damping;
+			MaxDamping /= (MaxFov) / current_fov;
+
+			// Modify vision fov
+			Epc.SetCameraFOV(self, current_fov);
 		}
-
-		if (zoomed)
-		{
-			if (!IsPlaying(Sound'FisherEquipement.Play_StickyCamZoom'))
-				PlaySound(Sound'FisherEquipement.Play_StickyCamZoom', SLOT_SFX);
-			Level.RumbleVibrate(0.07f, 0.5);
-			if (FRand() > 0.5)
-				Epc.m_camera.Hit(60, 20000, true);
-			else
-				Epc.m_camera.Hit(-60, 20000, true);
-		}
-
-		// Clamp fov and calculate zoom factor
-        current_fov = FClamp(current_fov, MinFov, MaxFov);
-		MaxDamping = Damping;
-		MaxDamping /= (MaxFov) / current_fov;
-
-		// Modify vision fov
-		Epc.SetCameraFOV(self, current_fov);
 
         Super.Tick(DeltaTime);
 	}
