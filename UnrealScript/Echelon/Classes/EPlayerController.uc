@@ -273,7 +273,7 @@ var(Enhanced) config EControllerIcon ControllerIcon;
 
 var(Enhanced) config bool bNormalizeMovement; // Joshua - Option to normalize movement
 var(Enhanced) config bool bCrouchDrop; // Joshua - When hanging or using a zipline, crouch drops and jump raises legs
-var float m_CrouchTimer; // Joshua - // Joshua - Anti-spam crouch timer
+var float m_LastCrouchTime; // Joshua - // Joshua - Anti-spam crouch timer
 var float m_ZipLineDropTimer; // Joshua - Anti-spam stance change on zipline
 
 var(Enhanced) config bool bToggleInventory;	// Joshua - Option to use toggle inventory instead of hold
@@ -2558,11 +2558,18 @@ function vector GetTargetPosition()
 //------------------------------------------------------------------------
 function CheckForCrouch()
 {
-    if (bDuck > 0)
-    {
+	// Joshua - Anti-spam crouch timer
+	if (bDuck > 0 && ReadyForCrouch())
+	{
+		m_LastCrouchTime = Level.TimeSeconds;
 		ePawn.bWantsToCrouch = !ePawn.bWantsToCrouch;
 		bDuck = 0;
-    }
+	}
+}
+
+function bool ReadyForCrouch() // Joshua - Anti-spam crouch timer
+{
+    return (Level.TimeSeconds - m_LastCrouchTime > 0.5);
 }
 
 function bool SlowGunBack();
@@ -4324,10 +4331,10 @@ state s_PlayerWalking
 		// Must be going forward (Over a certain speed?)
 		//
 
-		if (bDuck > 0 &&  IsPushingFull() && (VSize(ePawn.Velocity) > (m_speedRunCr - 1.0)) && m_CrouchTimer <= 0.0)
+		if (bDuck > 0 &&  IsPushingFull() && (VSize(ePawn.Velocity) > (m_speedRunCr - 1.0)) && ReadyForCrouch())
 		{
-			//Log("playermove walking"@bIntransition);
-			m_CrouchTimer = 0.35; // Joshua - Anti-spam crouch timer
+			//Log("playermove walking"@bInTransition);
+			m_LastCrouchTime = Level.TimeSeconds; // Joshua - Anti-spam crouch timer
 			GotoState('s_Roll', 'FromWalking');
 			return;
 		}
