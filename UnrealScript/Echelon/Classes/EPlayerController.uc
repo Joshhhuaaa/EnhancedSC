@@ -227,6 +227,7 @@ const MAX_REGULAR_MAP = 13;
 //=============================================================================
 var(EnhancedDebug) bool bEnableBTWThrow;
 var bool bBTWThrow; // Joshua - Player is using BTW throw, swap animations
+var(EnhancedDebug) bool bEnableHOHFUTargeting;
 
 enum EInputMode 
 {
@@ -2606,7 +2607,8 @@ function DrawWeapon(optional Name AnimName, optional bool bFullSkel, optional bo
 //------------------------------------------------------------------------
 //		Send in hand weapon in pawn's back
 //------------------------------------------------------------------------
-function SheathWeapon(optional name AnimName, optional name BoneStart, optional bool bFullSkel)
+// Joshua - Added bNoPlayBack parameter for HOHFUTargeting support
+function SheathWeapon(optional name AnimName, optional name BoneStart, optional bool bFullSkel, optional bool bNoPlayBack)
 {
 	//Log("* * * SheathWeapon handitem["$ePawn.HandItem$"] activeGun["$ActiveGun$"] in state["$GetStateName()$"]");
 
@@ -2636,7 +2638,12 @@ function SheathWeapon(optional name AnimName, optional name BoneStart, optional 
 		BoneStart = '';
 	else if (BoneStart == '' || ePawn.bIsCrouched)
 		BoneStart = ePawn.UpperBodyBoneName;
-	ePawn.BlendAnimOverCurrent(AnimName, 1, BoneStart,,,,true);
+	
+	// Joshua - Added bNoPlayBack parameter for HOHFUTargeting support
+	if (bNoPlayBack)
+		ePawn.BlendAnimOverCurrent(AnimName, 1, BoneStart);
+	else
+		ePawn.BlendAnimOverCurrent(AnimName, 1, BoneStart,,,,true);
 }
 
 // called from anim notify
@@ -5252,6 +5259,7 @@ state s_PlayerJumping
 		m_LastZipLineTime = 0;
 		m_LPSlideStartTime = 0;
 		m_FallGrabDir = vect(0,0,0);
+		//JumpLabelPrivate = ''; // Joshua - HOHFUTargeting support
 	}
 
     function PlayerMove(float deltaTime)
@@ -9363,8 +9371,12 @@ state s_HandOverHandFeetUp
 
 	function EndState()
 	{
-		ePawn.SetCollisionSize(ePawn.default.CollisionRadius, ePawn.default.CollisionHeight);
-		ePawn.ResetZones();
+		// Joshua - Don't reset collision/zones when coming back from targeting mode
+		if (JumpLabelPrivate != 'FromTarget')
+		{
+			ePawn.SetCollisionSize(ePawn.default.CollisionRadius, ePawn.default.CollisionHeight);
+			ePawn.ResetZones();
+		}
 		bInTransition = false;
 		ElapsedTime = 0.0f;
 		if (bIsPlaying)
@@ -9387,6 +9399,23 @@ state s_HandOverHandFeetUp
 			ePawn.SetRotation(orientationEnd);
 		}
 		return false;
+	}
+
+	// Joshua - HOHFUTargeting support
+	function ProcessScope()
+	{
+		local vector checkPos, extent;
+
+		if (!bEnableHOHFUTargeting)
+			return;
+
+		if (bInTransition || HandGun == None)
+			return;
+
+		checkPos = ePawn.ToWorld(vect(0, 0, -60.0));
+		extent = vect(40.0, 40.0, 40.0);
+		if (ePawn.FastPointCheck(checkPos, extent, true, true))
+			GotoState('s_HOHFUTargeting', 'TakeGunOut');
 	}
 
 	function PlayerTick(float deltaTime)
@@ -9555,6 +9584,222 @@ TakeGunOut:
 	FinishAnim(EPawn.ACTIONCHANNEL);
 	EMainHUD(myHud).Slave(ActiveGun);
 	bInTransition = false;
+}
+
+// Joshua - HOHFU support
+// ----------------------------------------------------------------------
+// state s_HOHFUTargeting
+// ----------------------------------------------------------------------
+state s_HOHFUTargeting extends s_FirstPersonTargeting
+{
+	/*
+	[ECM_HOHFPHangedEd]
+	parent=					ECM_HOHFU
+	minPitch=				v=-5000
+	maxPitch=				v=5000
+
+	[ECM_HOHFPHangedBg]
+	parent=					ECM_HOHFU
+	offset=					nx=10.0 ny=15.0 nz=-50.0 sx=10.0 sy=15.0 sz=-50.0 tx=10.0 ty=15.0 tz=-50.0
+	minYaw=					v=-5000
+	maxYaw=					v=9000
+	minPitch=				v=0
+	maxPitch=				v=0
+	//targetXYSpeed=		v=200.0
+	//targetZSpeed=			v=2000.0
+	//interSpeed=			v=200.0
+	//collInterSpeed=		v=200.0
+	//offsetSpeed=			v=200.0
+
+	[ECM_HOHFPHanged]
+	offset=					nx=10.0 ny=30.0 nz=-90.0 sx=10.0 sy=30.0 sz=-90.0 tx=10.0 ty=30.0 tz=-90.0
+	distance=				n=65.0 s=65.0 t=65.0
+	minYaw=					v=-5000
+	maxYaw=					v=9000
+	minPitch=				v=-11000
+	maxPitch=				v=9000
+	useAngles=				v=1
+	interSpeed=				v=800.0
+	targetXYSpeed=			v=400.0
+	targetZSpeed=			v=250.0
+	useTwig=				v=1
+	twigX=					v=30.0
+	twigZ=					v=30.0
+	damping=				v=5.0
+	biasCut=				v=0.75
+	biasSlope=				v=0.2
+	useAimTuning=			v=0
+	AimSpeedAdjust=			v=0.7
+	offsetSpeed=			v=400.0
+	useCamFlag=				v=1
+	useColl=				v=1
+	useCollTarget=			v=1
+	*/
+
+	//Ignores MayReload, CanSwitchGoggleManually;
+
+	event ReduceCameraSpeed(out float turnMul)
+	{
+		turnMul = m_turnMul;
+	}
+
+	function BeginState()
+	{
+		bInTransition = true;
+		ePawn.WalkingRatio = 0;
+		ePawn.SoundWalkingRatio = 0;
+		m_useTarget = true;
+	}
+
+	function EndState()
+	{
+		m_useTarget = false;
+
+		// If gun is still in hands, remove view
+		if (EMainHUD(myHud).hud_master == ActiveGun)
+			EMainHUD(myHud).NormalView();
+
+		// If sam is shot dead
+		if (JumpLabelPrivate != 'HOHFallDown' && JumpLabelPrivate != 'FromTarget' && JumpLabelPrivate != 'TakeGunOut')
+		{
+			ePawn.SetCollisionSize(ePawn.default.CollisionRadius, ePawn.default.CollisionHeight);
+			ePawn.ResetZones();
+		}
+		
+		ePawn.ResetZones();
+		m_LastHOHTime = Level.TimeSeconds;
+		ElapsedTime = 0.0f;
+	}
+
+	function ProcessScope()
+	{
+		if( !bInTransition )
+		{
+			GoToState( ,'PutGunBack');
+		}
+	}
+
+	function SwitchCameraMode()
+	{
+		bInGunTransition = false;
+	}
+
+	function Timer()
+	{
+		if(JumpLabelPrivate == 'FromTarget')
+			m_camera.SetMode(ECM_HOHFU);
+		else
+			m_camera.SetMode(ECM_HOHFU);
+			//m_camera.SetMode(ECM_HOHFPHanged);
+	}
+
+	function bool CanAccessQuick()
+	{
+		return false;
+	}
+
+	function PlayerMove( float DeltaTime )
+	{
+		local vector checkPos, extent;
+
+		if (JumpLabelPrivate != 'HOHFallDown')
+			ePawn.LoopAnim('PT_PipHStSpNt2', , 0.2);
+
+		if (!bInTransition || (!bInGunTransition && JumpLabelPrivate == 'TakeGunOut'))
+			ePawn.AimAt(AAHOH, Normal(m_targetLocation - Location), Vector(ePawn.Rotation + rot(0, 32768, 0)), -80, 50, -80, 80);
+
+		if(!bInTransition && ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)))
+		{
+			if (bCrouchDrop)
+				bDuck = 0;
+
+			checkPos = ePawn.ToWorld(vect(0, 0,-120.0));
+			extent = vect(40.0, 40.0, 40.0);
+
+			if (ePawn.FastPointCheck(checkPos, extent, true, true))
+				GotoState( ,'FallDown');
+		}
+	}
+
+	event bool NotifyLanded(vector HitNormal, Actor HitActor)
+	{
+		if (JumpLabelPrivate == 'HOHFallDown')
+		{
+			KillPawnSpeed();
+			bInTransition = false;
+			GoToState('s_PlayerJumping');
+			NotifyLanded(HitNormal, HitActor);
+			return true;
+		}
+	}
+
+	event bool ZipLine(vector locationEnd, rotator orientationEnd, int ZLType)
+	{
+		local vector HitLocation, HitNormal;
+
+		if (JumpLabelPrivate != 'HOHFallDown')
+			return false;
+
+		bInTransition = false;
+		JumpLabelPrivate = '';
+		KillPawnSpeed();
+		GoToState('s_GrabbingZipLine', 'FromAir');
+		return true;
+	}
+	
+	function NotifyFiring()
+	{
+		playerStats.AddStat("BulletFired");
+		Level.RumbleVibrate(0.07, 0.75);
+		ePawn.BlendAnimOverCurrent('PT_piphstspfr2', 1, ePawn.UpperBodyBoneName);
+	}
+
+PutGunBack:
+	bInTransition = true;
+	JumpLabelPrivate = 'FromTarget';
+	//m_camera.SetMode(ECM_HOHFPHangedEd);
+	m_camera.SetMode(ECM_HOHFU);
+	EMainHUD(myHud).NormalView();
+	ePawn.SetCollisionSize(ePawn.CollisionRadius, eGame.m_HOHFeetUpColHeight);
+	SetTimer(0.3, false);
+	SheathWeapon('PT_PipHStSpEd2',,true,true);
+	FinishAnim(EPawn.ACTIONCHANNEL);
+	ePawn.LoopAnimOnly('PT_piphpralnt0');
+	bInTransition = false;
+	GoToState('s_HandOverHandFeetUp', JumpLabelPrivate);
+
+FallDown:
+	EMainHUD(myHud).NormalView();
+	m_camera.SetMode(ECM_Walking);
+	ePawn.SetPhysics(PHYS_Falling);
+	ePawn.bWantsToCrouch = true;
+	bInTransition = true;
+	ePawn.m_CurrentArmsZone.Z += eGame.m_HOHFeetUpColVertOffset;
+	JumpLabelPrivate = 'HOHFallDown';
+	ePawn.SetCollisionSize(ePawn.CollisionRadius, ePawn.default.CollisionHeight);
+	SheathWeapon('PipHStSpFl2',,true,true);
+	FinishAnim(EPawn.ACTIONCHANNEL);
+	bInTransition = false;
+	//ePawn.Velocity=Vect(0, 0, -50.0);
+	//ePawn.LoopAnimOnly(ePawn.AFall, , 0.3);
+	GoToState('s_PlayerJumping');
+
+TakeGunOut:
+	KillPawnSpeed();
+	bInTransition = true;
+	bInGunTransition = true;
+	JumpLabelPrivate = 'TakeGunOut';
+	//m_camera.SetMode(ECM_HOHFPHangedBg);
+	m_camera.SetMode(ECM_HOHFU);
+	JumpLabelPrivate = 'TakeGunOut';
+	ePawn.SetCollisionSize(ePawn.CollisionRadius, ePawn.default.CollisionHeight - 40);
+	SetTimer(0.6, false);
+	DrawWeapon('PT_PipHStSpBg2', true, true);
+	FinishAnim(EPawn.ACTIONCHANNEL);
+	EMainHUD(myHud).Slave(ActiveGun);
+	JumpLabelPrivate = '';
+	bInTransition = false;
+	Stop;
 }
 
 // ----------------------------------------------------------------------
