@@ -25,20 +25,29 @@ function InitPattern()
 {
     local Pawn P;
     local EVolume V;
+    local EEventTrigger EventTrigger;
     local EHat Hat;
+    local EChair Chair;
 
     Super.InitPattern();
 
-    ForEach AllActors(class'EVolume', V)
-    {
-        // Joshua - Disabling the volume after it triggers once, as the player could infinitely retrigger it to add the same objective
-        if (V.name == 'EVolume9')
-            V.bTriggerOnlyOnce = true;
-    }
-
-    // Joshua - Replace NPC skins for variety
     if (!bInit)
     {
+        // Joshua - Disabling the volume after it triggers once, as the player could infinitely retrigger it to add the same objective
+        ForEach AllActors(class'EVolume', V)
+        {
+            if (V.name == 'EVolume9')
+                V.bTriggerOnlyOnce = true;
+        }
+
+        // Joshua - Fixes a bug where unconscious NPCs trigger the hostages to bark
+        ForEach AllActors(class'EEventTrigger', EventTrigger)
+        {
+            if (EventTrigger.name == 'EEventTrigger4' || EventTrigger.name == 'EEventTrigger19' )
+                EventTrigger.bNPCMustBeconscious = true;
+        }
+
+        // Joshua - Replace NPC skins for variety
         ForEach DynamicActors(class'Pawn', P)
         {
             if (P.name == 'EGeorgianSoldier23' || P.name == 'EGeorgianSoldier25' || P.name == 'EGeorgianSoldier27')
