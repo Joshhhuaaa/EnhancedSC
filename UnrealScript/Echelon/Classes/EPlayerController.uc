@@ -6712,11 +6712,17 @@ state s_OpticCable extends s_InteractWithObject
 Begin:
 	bInTransition = true;
 	
+	// Joshua - Store initial crouch state to restore on exit
+	m_rollCrouch = ePawn.bIsCrouched;
+	
 	if (!eGame.bNewDoorInteraction)
 	{
 		// Original method
 		if (!ePawn.bIsCrouched)
 		{
+			// Joshua - Crouch the player to adjust camera and collision
+			ePawn.bWantsToCrouch = true;
+			ePawn.Crouch(false);
 			ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, , 0.1);
 			FinishAnim();
 		}
@@ -6742,18 +6748,23 @@ Begin:
 			Interaction.SetInteractLocation(EPawn);
 			ePawn.SetPhysics(PHYS_Linear);
 			ePawn.PlayMoveTo(Rotation);
-			ePawn.m_locationEnd = ePawn.Location;
-			MoveToDestination(300, false);
+			MoveToDestination(300, true);
+			
 			if (!ePawn.bIsCrouched)
 			{
+				// Joshua - Crouch the player to adjust camera and collision
+				ePawn.bWantsToCrouch = true;
+				ePawn.Crouch(false);
 				ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, , 0.1);
 				FinishAnim();
 			}
 			ePawn.LoopAnimOnly(ePawn.AWaitCrouch, , 0.1);
+
 			ePawn.BlendAnimOverCurrent('LockStAlNt0',1,ePawn.UpperBodyBoneName,1,0.2);
 			Sleep(ePawn.GetAnimtime('LockStAlNt0') * 0.5);
 			bLockedCamera	= true;
 			bInTransition	= false;
+
 			OpticCableItem.GotoState('s_Sneaking');
 		}
 		else
@@ -6761,6 +6772,9 @@ Begin:
 			// Original method
 			if (!ePawn.bIsCrouched)
 			{
+				// Joshua - Crouch the player to adjust camera and collision
+				ePawn.bWantsToCrouch = true;
+				ePawn.Crouch(false);
 				ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, , 0.1);
 				FinishAnim();
 			}
@@ -6783,11 +6797,19 @@ End:
 
 	ePawn.BlendAnimOverCurrent('LockStAlNt0',1,ePawn.UpperBodyBoneName,1,0.2);
 	Sleep(ePawn.GetAnimtime('LockStAlNt0') * 0.5);
-	if (!ePawn.bIsCrouched)
+	
+	// Joshua - Restore original crouch state
+	if (!m_rollCrouch)
 	{
+		ePawn.bWantsToCrouch = false;
+		ePawn.UnCrouch(false);
 		ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn,,,true);
 		FinishAnim();
 	}
+	
+	// Set physics back to walking after finishing
+	ePawn.SetPhysics(PHYS_Walking);
+	
 	bInTransition = false;
 	GotoState('s_PlayerWalking');
 }
