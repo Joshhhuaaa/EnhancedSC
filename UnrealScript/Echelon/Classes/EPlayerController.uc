@@ -332,6 +332,7 @@ var(Enhanced) config EPlayerStatsMode PlayerStatsMode;
 // Joshua - Global HUD variables
 var(Enhanced) config bool bHorizontalLifeBar;
 var(Enhanced) config bool bShowHUD;
+var(Enhanced) config bool bPersistentHUD;
 var(Enhanced) config bool bShowInventory;
 var(Enhanced) config bool bShowStealthMeter;
 var(Enhanced) config bool bShowCurrentGoal;

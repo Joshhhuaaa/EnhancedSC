@@ -1137,13 +1137,44 @@ state s_Slavery
 		if (hud_master != None)
 			hud_master.DrawView(self, Canvas);
 
-		if (!Epc.bLockedCamera)
+		// Joshua - Persistent HUD
+		if (Epc.bPersistentHUD && 
+			(Epc.GetStateName() == 's_OpticCable' ||
+			Epc.GetStateName() == 's_Zooming' ||
+			Epc.GetStateName() == 's_SplitZooming' ||
+			Epc.GetStateName() == 's_Grab' || // Using a retinal scanner with a NPC
+			Epc.GetStateName() == 's_RetinalScanner' ||
+			Epc.GetStateName() == 's_LaserMicTargeting' ||
+			Epc.GetStateName() == 's_UsingPalm'))
+		{
+			if (Epc.bShowHUD)
+			{
+				if (bShowCommunicationBox)
+				{
+					// Transmissions
+					CommunicationBox.Draw(Canvas);
+				}
+
+				if (bShowLifeBar && Epc.GetStateName() != 's_RetinalScanner' && Epc.GetStateName() != 's_Grab')
+				{
+					// Life Bar
+					DrawLifeBar(Canvas);
+				}
+
+				//Quick Inventory
+				if (Epc.GetStateName() != 's_RetinalScanner' && Epc.GetStateName() != 's_Grab')
+					QuickInvAndCurrentItems.PostRender(Canvas, true);
+			}
+		}
+
+		if (!Epc.bLockedCamera || Epc.bPersistentHUD)
 		{
 			if (Epc.GetStateName() == 's_FirstPersonTargeting'	|| 
 				Epc.GetStateName() == 's_CameraJammerTargeting'	||
 				Epc.GetStateName() == 's_RappellingTargeting'	||
 				Epc.GetStateName() == 's_PlayerBTWTargeting'	||
 				Epc.GetStateName() == 's_HOHTargeting'			||
+				Epc.GetStateName() == 's_HOHFUTargeting'		||
 				Epc.GetStateName() == 's_SplitTargeting'		||
 				Epc.GetStateName() == 's_GrabTargeting'			||
 				Epc.GetStateName() == 's_PlayerSniping')
@@ -1162,17 +1193,21 @@ state s_Slavery
 						DrawLifeBar(Canvas);
 					}
 				}
-
-				if (Epc.GetStateName() != 's_PlayerSniping' && (Epc.bShowHUD || GetStateName() == 'QuickInventory'))
+				
+				if (Epc.bShowHUD || GetStateName() == 'QuickInventory')
 				{
 					// Quick Inventory
-					if (!eGame.bUseController) // Joshua - Check if they're using a controller
+					// Joshua - If persistent HUD, use minimal version while sniping or locked camera
+					if (Epc.bPersistentHUD && (Epc.GetStateName() == 's_PlayerSniping' || Epc.bLockedCamera))
+						QuickInvAndCurrentItems.PostRender(Canvas, true);
+					else if (Epc.GetStateName() != 's_PlayerSniping')
 						QuickInvAndCurrentItems.PostRender(Canvas);
 				}
 			}
 
-			//Interactions
-			if (Epc.GetStateName() == 's_FirstPersonTargeting' && ((Epc.bShowHUD && bShowInteractionBox) || (!Epc.egi.bInteracting && (Epc.IManager.GetNbInteractions() > 1)) || (Epc.egi.bInteracting && (Epc.IManager.GetNbInteractions() > 2))))
+			// Interactions
+			// Joshua - Don't draw interaction box if player is dead
+			if (Epc.GetStateName() != 's_Dead' && Epc.GetStateName() == 's_FirstPersonTargeting' && ((Epc.bShowHUD && bShowInteractionBox) || (!Epc.egi.bInteracting && (Epc.IManager.GetNbInteractions() > 1)) || (Epc.egi.bInteracting && (Epc.IManager.GetNbInteractions() > 2))))
 				DisplayInteractIcons(Canvas, false);
 		}
 
@@ -1207,7 +1242,8 @@ state s_Slavery
 					Level.Pauser == None && 
 					(Epc.GetStateName() == 's_FirstPersonTargeting'	||
 					 Epc.GetStateName() == 's_RappellingTargeting'	||
-					 Epc.GetStateName() == 's_SplitTargeting'))
+					 Epc.GetStateName() == 's_SplitTargeting'		||
+					 Epc.GetStateName() == 's_CameraJammerTargeting')) // Joshua - Allow Camera Jammer to use inventory
 				{
 					SaveState();
 					bPreserveHudMaster = true; // Joshua - Workaround to preserve crosshair during inventory transition
@@ -1221,9 +1257,9 @@ state s_Slavery
 					!Epc.bStopInput && 
 					Level.Pauser == None && 
 					(Epc.GetStateName() == 's_FirstPersonTargeting'	||
-					 Epc.GetStateName() == 's_CameraJammerTargeting' ||
-					 Epc.GetStateName() == 's_RappellingTargeting'	 ||
-					 Epc.GetStateName() == 's_SplitTargeting'))
+					 Epc.GetStateName() == 's_RappellingTargeting'	||
+					 Epc.GetStateName() == 's_SplitTargeting'		||
+					 Epc.GetStateName() == 's_CameraJammerTargeting')) // Joshua - Allow Camera Jammer to use inventory
 				{
 					SaveState();
 					GotoState('PlayerStats');
@@ -1738,7 +1774,7 @@ state s_Cinematic
 
 		Canvas = ECanvas(C);
 
-		if (bLetterBoxCinematics)
+		if (Epc.bShowHUD && bLetterBoxCinematics)
 		{
 			// Draw Black Line //
 			Canvas.DrawLine(0, 0, 640, 60, Canvas.black, -1, eLevel.TMENU);

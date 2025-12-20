@@ -212,12 +212,13 @@ function Tick(float Delta)
 	CheckNextWeapon();
 }
 
-function PostRender(Canvas C)
+// Joshua - Added bMinimal flag
+function PostRender(Canvas C, optional bool bMinimal)
 {
 	local ECanvas Canvas;
 	Canvas = ECanvas(C);
 
-	if (Epc.bShowInventory && Epc.bShowHUD)
+	if (Epc.bShowInventory && Epc.bShowHUD && !bMinimal)
 	{
     	DrawHandItem(Canvas, SCREEN_END_Y - eGame.HUD_OFFSET_Y - ITEMBOX_HEIGHT_L - ITEMBOX_HEIGHT_B - SPACE_BETWEEN_BOX - SPACE_EXTRA_GOAL, false);
     	DrawRateOfFire(Canvas);
@@ -262,13 +263,13 @@ function PostRender(Canvas C)
 	}
 
 	// Display icon 
-	if ((Epc.bNewGoal || Epc.bNewNote || Epc.bNewRecon) && Epc.bShowMissionInformation && Epc.bShowHUD)
+	if ((Epc.bNewGoal || Epc.bNewNote || Epc.bNewRecon) && Epc.bShowMissionInformation && Epc.bShowHUD && !bMinimal)
 	{		
 		DisplayIconsGoalNoteRecon(Canvas);
 	}
 
 	// Joshua - Display alarms
-	if (Epc.bShowHUD && Epc.bShowAlarms && !eLevel.bIgnoreAlarmStage)
+	if (Epc.bShowHUD && Epc.bShowAlarms && !eLevel.bIgnoreAlarmStage && !bMinimal)
 		DrawAlarmBox(Canvas);
 }
 
@@ -767,9 +768,11 @@ function bool KeyEvent(string Key, EInputAction Action, float Delta)
 			Epc.EPawn.PlaySound(Sound'Interface.Play_OpenPackSac', SLOT_Interface);
 	}
 
-    function PostRender(Canvas C)
+	// Joshua - Added bMinimal flag
+    function PostRender(Canvas C, optional bool bMinimal)
 	{
-        local ECanvas			Canvas;
+        local ECanvas Canvas;
+
 		// draw normal view until timer expired
 		if (bPreviousConfig)
 		{
