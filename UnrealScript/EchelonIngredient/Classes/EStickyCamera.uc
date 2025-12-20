@@ -5,6 +5,7 @@ class EStickyCamera extends EAirCamera;
 var(StickyCamera) float MinFov;
 var(StickyCamera) float MaxFov;
 var(StickyCamera) float ZoomSpeed;
+var(StickyCamera) float ZoomSpeedController; // Joshua - Console versions used a lower ZoomSpeed
 var(StickyCamera) float Damping;
 
 var float current_fov;
@@ -75,46 +76,45 @@ state s_Camera
 			Epc.bDPadRight		= 0;
 		}
 
-		// Joshua - Adding controller support for Sticky Camera (zoom in)
-        if (Epc.bDPadUp != 0)
-		{
-			current_fov -= simDeltaTime * ZoomSpeed;
-			if (current_fov >= MinFov)
-			{
-				zoomed = true;
+				// Joshua - Adding controller support for Sticky Camera (zoom in)
+				if (Epc.bDPadUp != 0)
+				{
+					current_fov -= simDeltaTime * ZoomSpeedController;
+					if (current_fov >= MinFov)
+					{
+						zoomed = true;
+					}
+				}
+				// Joshua - Adding controller support for Sticky Camera (zoom out)
+				else if (Epc.bDPadDown != 0)
+				{
+					current_fov += simDeltaTime * ZoomSpeedController;	    
+					if (current_fov <= MaxFov)
+					{
+						zoomed = true;
+					}
+				}
 
-			}
-		}
-		// Joshua - Adding controller support for Sticky Camera (zoom out)
-		else if (Epc.bDPadDown != 0)
-		{
-			current_fov += simDeltaTime * ZoomSpeed;	    
-			if (current_fov <= MaxFov)
-			{
-				zoomed = true;
-			}
-		}
-
-		// Zoom in
-        if (Epc.bIncSpeedPressed == true)
-		{
-			Epc.bIncSpeedPressed = false;
-			current_fov -= simDeltaTime * ZoomSpeed;
-			if (current_fov >= MinFov)
-			{
-				zoomed = true;
-
-			}
-		}
-		// Zoom out
-		else if (Epc.bDecSpeedPressed == true)
-		{
-			Epc.bDecSpeedPressed = false;
-			current_fov += simDeltaTime * ZoomSpeed;	    
-			if (current_fov <= MaxFov)
-			{
-				zoomed = true;
-			}
+				// Zoom in
+				if (Epc.bIncSpeedPressed == true)
+				{
+					Epc.bIncSpeedPressed = false;
+					current_fov -= simDeltaTime * ZoomSpeed;
+					if (current_fov >= MinFov)
+					{
+						zoomed = true;
+					}
+				}
+				// Zoom out
+				else if (Epc.bDecSpeedPressed == true)
+				{
+					Epc.bDecSpeedPressed = false;
+					current_fov += simDeltaTime * ZoomSpeed;	    
+					if (current_fov <= MaxFov)
+					{
+						zoomed = true;
+					}
+				}
 		}
 
 		if (zoomed)
@@ -145,6 +145,7 @@ defaultproperties
     MinFov=10.000000
     MaxFov=90.000000
     ZoomSpeed=95.000000
+	ZoomSpeedController=30.000000 // Joshua - Console versions used a lower ZoomSpeed
     Damping=400.000000
     MaxQuantity=20
     ObjectHudClass=Class'EStickyView'

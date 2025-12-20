@@ -10,6 +10,7 @@ var	ELaserMicMover		LaserMicTarget;
 var float MinFov;
 var float MaxFov;
 var float ZoomSpeed;
+var float ZoomSpeedController; // Joshua - Console versions used a lower ZoomSpeed
 var float Damping;
 var float current_fov;
 
@@ -115,46 +116,45 @@ state s_Microiing
 
 		// Joshua - Made zooming frame rate independent by using a consistent DeltaTime
 		simDeltaTime = 1.0f / 30.0f;
+				// Zoom in
+				if (Epc.bIncSpeedPressed == true)
+				{
+					Epc.bIncSpeedPressed = false;
+					current_fov -= simDeltaTime * ZoomSpeed;
+					if (current_fov >= MinFov)
+					{
+						zoomed = true;
+					}
+				}
+				// Zoom out
+				else if (Epc.bDecSpeedPressed == true)
+				{
+					Epc.bDecSpeedPressed = false;
+					current_fov += simDeltaTime * ZoomSpeed;	    
+					if (current_fov <= MaxFov)
+					{
+						zoomed = true;
+					}
+				}
 
-		// Zoom in
-		if (Epc.bIncSpeedPressed == true)
-		{
-			Epc.bIncSpeedPressed = false;
-			current_fov -= simDeltaTime * ZoomSpeed;
-			if (current_fov >= MinFov)
-			{
-				Zoomed = true;
-			}
-		}
-		// Zoom out
-		else if (Epc.bDecSpeedPressed == true)
-		{
-			Epc.bDecSpeedPressed = false;
-			current_fov += simDeltaTime * ZoomSpeed;	    
-			if (current_fov <= MaxFov)
-			{
-				Zoomed = true;
-			}
-		}
-
-		// Zoom in
-		if (Epc.bDPadUp != 0)
-		{
-			current_fov -= simDeltaTime * ZoomSpeed;
-			if (current_fov >= MinFov)
-			{
-				Zoomed = true;
-			}
-		}
-		// Zoom out
-		else if (Epc.bDPadDown != 0)
-		{
-			current_fov += simDeltaTime * ZoomSpeed;	    
-			if (current_fov <= MaxFov)
-			{
-				Zoomed = true;
-			}
-		}
+				// Zoom in
+				if (Epc.bDPadUp != 0)
+				{
+					current_fov -= simDeltaTime * ZoomSpeedController;
+					if (current_fov >= MinFov)
+					{
+						zoomed = true;
+					}
+				}
+				// Zoom out
+				else if (Epc.bDPadDown != 0)
+				{
+					current_fov += simDeltaTime * ZoomSpeedController;	    
+					if (current_fov <= MaxFov)
+					{
+						zoomed = true;
+					}
+				}
 
 		if (Zoomed)
 		{
@@ -227,11 +227,12 @@ defaultproperties
 {
     MinFov=14.000000
     MaxFov=70.000000
-    ZoomSpeed=30.000000
+    ZoomSpeed=95.000000
+	ZoomSpeedController=30.000000 // Joshua - Console versions used a lower ZoomSpeed
     Damping=200.000000
     Category=CAT_GADGETS
     ObjectHudClass=Class'ELaserMicView'
-    StaticMesh=none
+    StaticMesh=None
     CollisionRadius=4.000000
     CollisionHeight=4.000000
 }
