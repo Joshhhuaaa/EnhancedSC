@@ -1922,6 +1922,87 @@ function vector GetCrouchExtent()
 	return Extent;
 }
 
+//---------------------------------------[Joshua - 4 Dec 2025]------------
+// 
+// Description
+//		Returns the sort priority for an inventory item class.
+//		Lower values appear at the bottom of the inventory list.
+//		Items are grouped by category and sorted within each category.
+// 
+//------------------------------------------------------------------------
+function int GetInventorySortPriority(class<EInventoryItem> ItemClass)
+{
+	local Name ClassName;
+	ClassName = ItemClass.Name;
+
+	// CAT_MAINGUN
+	if (ClassName == 'EF2000')              return 0;
+	if (ClassName == 'ERingAirfoilRound')   return 1;
+	if (ClassName == 'EStickyShocker')      return 2;
+	if (ClassName == 'ESmokeGrenade')       return 3;
+	if (ClassName == 'EDiversionCamera')    return 4;
+	if (ClassName == 'EStickyCamera')       return 5;
+
+	// CAT_GADGETS
+	if (ClassName == 'EFn7')                return 100;
+	if (ClassName == 'ELockpick')           return 101;
+	if (ClassName == 'EDisposablePick')     return 102;
+	if (ClassName == 'EOpticCable')         return 103;
+	if (ClassName == 'ELaserMic')           return 104;
+	if (ClassName == 'ECameraJammer')       return 105;
+
+	// CAT_ITEMS
+	if (ClassName == 'EMedKit')             return 200;
+	if (ClassName == 'EFlare')              return 201;
+	if (ClassName == 'EChemFlare')          return 202;
+	if (ClassName == 'EFragGrenade')        return 203;
+	if (ClassName == 'EConcussionGrenade')  return 204;
+	if (ClassName == 'EWallMine')           return 205;
+
+	// Unknown items get sorted to end of their category
+	return 999;
+}
+
+//---------------------------------------[Joshua - 4 Dec 2025]------------
+// 
+// Description
+//		Sorts the DynInitialInventory array so items appear in a consistent
+//		order in the inventory.
+// 
+//------------------------------------------------------------------------
+function SortDynInitialInventory()
+{
+	local int i, j;
+	local class<EInventoryItem> Temp;
+	local int PriorityI, PriorityJ;
+	local bool bSwapped;
+
+	for (i = 0; i < DynInitialInventory.Length - 1; i++)
+	{
+		bSwapped = false;
+		for (j = 0; j < DynInitialInventory.Length - i - 1; j++)
+		{
+			if (DynInitialInventory[j] == none || DynInitialInventory[j+1] == none)
+				continue;
+
+			PriorityI = GetInventorySortPriority(DynInitialInventory[j]);
+			PriorityJ = GetInventorySortPriority(DynInitialInventory[j+1]);
+
+			// Swap if current item has higher priority (should come later)
+			if (PriorityI > PriorityJ)
+			{
+				Temp = DynInitialInventory[j];
+				DynInitialInventory[j] = DynInitialInventory[j+1];
+				DynInitialInventory[j+1] = Temp;
+				bSwapped = true;
+			}
+		}
+		// If no swaps occurred, array is sorted
+		if (!bSwapped)
+			break;
+	}
+}
+
 //----------------------------------------[David Kalina - 9 Apr 2001]-----
 // 
 // Description
@@ -1939,6 +2020,9 @@ function PossessedBy(Controller C)
 
 	if (C != none)
 	{
+		// Joshua - Sort inventory before adding items so they appear in consistent order
+		SortDynInitialInventory();
+
 		// spawn & add inventory items to our controller
 		for (i = 0; i < DynInitialInventory.Length; i++)
 		{
