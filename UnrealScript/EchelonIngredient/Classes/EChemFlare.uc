@@ -118,7 +118,7 @@ defaultproperties
     StaticMesh=StaticMesh'EMeshIngredient.Item.GreenStick'
     CollisionRadius=1.000000
     CollisionHeight=1.000000
-    LightEffect=LE_EOmniAtten
+    LightEffect=LE_None //LE_EOmniAtten // Joshua - Xbox used LE_EOmniAtten, but it seems to cause rendering issues on PC
     LightBrightness=153
     LightHue=26
     LightSaturation=59

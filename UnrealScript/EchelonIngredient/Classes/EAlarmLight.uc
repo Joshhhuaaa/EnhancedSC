@@ -111,13 +111,13 @@ state s_Alert
 defaultproperties
 {
     AlertSound=Sound'Electronic.Play_AlarmSeveronickel'
-    bDamageable=false
+    bDamageable=False
     AlarmLinkType=EAlarm_Object
     StaticMesh=StaticMesh'LightGenOBJ.UnbreakableLight.LIG_Alarm_red'
     SoundRadiusSaturation=1000.000000
     LightType=LT_Steady
-    LightEffect=LE_EOmniAtten // Joshua - Restoring Xbox light effect, PC originally just used LE_None
-    bGlowDisplay=false
+    LightEffect=LE_None //LE_EOmniAtten // Joshua - Xbox used LE_EOmniAtten, but it seems to cause rendering issues on PC
+    bGlowDisplay=False
     MaxDistance=250.000000
-    bAffectOwnZoneOnly=true
+    bAffectOwnZoneOnly=True
 }
