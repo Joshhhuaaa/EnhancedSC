@@ -278,7 +278,49 @@ event PlayerController Login(string Portal,
 		Log("WARNING!!!!!!   EchelonGameInfo.pPlayer is NOT an EPlayerController.  This is bad.");
 
     pPlayer.m_curWalkSpeed = m_defautSpeed;
-    
+
+    C = ECanvas(class'Actor'.static.GetCanvas());
+
+    switch(FontType)
+	{
+		case Font_PC:
+			C.ETextFont = Font'Engine.ETextFont';
+			break;
+		case Font_Xbox:
+			C.ETextFont = Font'Engine.ETextFontXbox';
+			break;
+		case Font_GameCube:
+			C.ETextFont = Font'Engine.ETextFontGameCube';
+			break;
+	}
+
+    // Joshua - Set controller prompts for menus
+    switch (pPlayer.ControllerIcon)
+    {
+        case CI_None:
+        case CI_Xbox:
+            EchelonLevelInfo(Level).TMENU.ArrayTexture[28].TextureOwner = Texture'HUD.HUD.ETMENU'; // Y
+            EchelonLevelInfo(Level).TMENU.ArrayTexture[29].TextureOwner = Texture'HUD.HUD.ETMENU'; // B
+            EchelonLevelInfo(Level).TMENU.ArrayTexture[30].TextureOwner = Texture'HUD.HUD.ETMENU'; // X
+            EchelonLevelInfo(Level).TMENU.ArrayTexture[31].TextureOwner = Texture'HUD.HUD.ETMENU'; // A
+            EchelonLevelInfo(Level).TMENU.ArrayTexture[32].TextureOwner = Texture'HUD.HUD.ETMENU'; // Start
+            break;
+        case CI_PlayStation:
+            EchelonLevelInfo(Level).TMENU.ArrayTexture[28].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Triangle
+            EchelonLevelInfo(Level).TMENU.ArrayTexture[29].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Circle
+            EchelonLevelInfo(Level).TMENU.ArrayTexture[30].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Square
+            EchelonLevelInfo(Level).TMENU.ArrayTexture[31].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Cross
+            EchelonLevelInfo(Level).TMENU.ArrayTexture[32].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Start
+            break;
+        case CI_GameCube:
+            EchelonLevelInfo(Level).TMENU.ArrayTexture[28].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // Y
+            EchelonLevelInfo(Level).TMENU.ArrayTexture[29].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // X
+            EchelonLevelInfo(Level).TMENU.ArrayTexture[30].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // B
+            EchelonLevelInfo(Level).TMENU.ArrayTexture[31].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // A
+            EchelonLevelInfo(Level).TMENU.ArrayTexture[32].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // Start
+            break;
+    }
+
     if (bPermadeathMode)
         pPlayer.CheatManager = None;
 
