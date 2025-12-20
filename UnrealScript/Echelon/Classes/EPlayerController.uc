@@ -9272,6 +9272,48 @@ state s_SplitTargeting extends s_RappellingTargeting
 		return ePawn.ASplitWait;
 	}
 
+	function PlayerMove(float DeltaTime)
+	{
+		local vector testExt, moveDir;
+
+		if (bInTransition)
+			return;
+
+		ePawn.LoopAnimOnly(StateWaitLoopingAnim(),,0.2);
+		ePawn.AimAt(AAFULL, Vector(Rotation), Vector(ePawn.Rotation), -90, 90, -90, 90);
+
+		// Joshua - Check for crouch/jump to drop out of split
+		if (!bInGunTransition && ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)))
+		{
+			if (bCrouchDrop)
+				bDuck = 0;
+
+			// Test for problematic collision above
+			testExt.X = ePawn.CollisionRadius;
+			testExt.Y = ePawn.CollisionRadius;
+			testExt.Z = ePawn.Default.CollisionHeight;
+
+			if (!ePawn.FastPointCheck(ePawn.Location, testExt, true, true, true))
+			{
+				moveDir = vect(0, 0, -1);
+				moveDir *= ePawn.CollisionHeight;
+				ePawn.Move(moveDir);
+			}
+
+			ePawn.SetCollisionSize(ePawn.CollisionRadius, ePawn.Default.CollisionHeight);
+			m_camera.SetMode(ECM_Walking);
+			GotoState('s_PlayerJumping');
+			return;
+		}
+
+		if (bPressSnip && ActiveGun == MainGun && !bInGunTransition)
+		{
+			bPressSnip = false;
+			bInTransition = true;
+			GotoState(,'BeginSniping');
+		}
+	}
+
 	function NotifyFiring()
 	{
 		if (ePawn.WeaponStance == 1)
