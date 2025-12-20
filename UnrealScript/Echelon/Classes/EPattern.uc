@@ -140,7 +140,7 @@ function Timer()
     EPC = EPlayerController(Characters[0]);	
 
 	if (EPC != None && EPC.bSavingTraining)
-	{		
+	{	
 		ConsoleCommand("SAVEGAME FILENAME=TEMP OVERWRITE=TRUE");
 	}
 	else if (EPC != None && EPC.bLoadingTraining)
@@ -149,8 +149,8 @@ function Timer()
 	}
 	else
 	{
-	CommTarget.Pattern.CommunicationCallBack(eCommType);
-}
+		CommTarget.Pattern.CommunicationCallBack(eCommType);
+	}
 }
 
 
@@ -4250,8 +4250,8 @@ function QuickSaveLoad(bool bSave, bool bFade)
 		}
 		else
 		{
-        ConsoleCommand("SAVEGAME FILENAME=TEMP OVERWRITE=TRUE");
-    }
+        	ConsoleCommand("SAVEGAME FILENAME=TEMP OVERWRITE=TRUE");
+    	}
     }
     else
     {
@@ -4275,13 +4275,13 @@ function QuickSaveLoad(bool bSave, bool bFade)
 //------------------------------------------------------------------------
 function SetAlarmStage(int iNewStage)
 {
-	// Joshua - Clamp to 2 in Elite mode as 3 alarms and the mission's over
-	if (IsEliteMode() && iNewStage <= 3)
-    {
-        iNewStage = 2;
-    }
     if ((iNewStage >= 0) && (iNewStage <= 3))
     {
+		// Joshua - Clamp to 2 in Elite mode as 3 alarms and the mission's over
+		if (IsEliteMode() && iNewStage == 3)
+		{
+			iNewStage = 2;
+		}
         EchelonLevelInfo(Level).AlarmStage = iNewStage;
     }
     else
@@ -4341,15 +4341,19 @@ function CheckPlayerPlan(Name JumpLabel)
 {
     local EPlayerController EPC;
 
-    EPC = EPlayerController(Characters[0]);	
+    EPC = EPlayerController(Characters[0]);
 
-    if ((EPC.EPawn.bIsCrouched) 
-     || (EPC.GetStateName() == 's_PlayerJumping') 
-     || (EPC.GetStateName() == 's_FirstPersonTargeting') 
+    if ((EPC.EPawn.bIsCrouched)
+     || (EPC.GetStateName() == 's_PlayerJumping')
+     || (EPC.GetStateName() == 's_FirstPersonTargeting')
+	 || (EPC.GetStateName() == 's_CameraJammerTargeting') // Joshua - Added Camera Jammer
+	 || (EPC.GetStateName() == 's_LaserMicTargeting') // Joshua - Added Laser Mic
      || (EPC.GetStateName() == 's_PlayerSniping')
-     || (EPC.GetStateName() == 's_Throw'))
+     || (EPC.GetStateName() == 's_Throw')
+	 || (EPC.GetStateName() == 's_ShortRangeAttack') // Joshua - Added short range attack
+	 || (EPC.GetStateName() == 's_Zooming')) // Joshua - Added binoculars
     {
-        GotoPatternLabel(JumpLabel);    
+        GotoPatternLabel(JumpLabel);
     }
 }
 
@@ -4585,7 +4589,7 @@ state Pattern{}
 defaultproperties
 {
     LaserMicSound=Sound'FisherEquipement.Play_LaserMicTargetOK'
-    bEventExclusivity=true
+    bEventExclusivity=True
     SatelliteCom=Sound'Interface.Play_SatelitteCom'
-    bHidden=true
+    bHidden=True
 }
