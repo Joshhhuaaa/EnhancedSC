@@ -283,6 +283,9 @@ var(Enhanced) config bool bBurstFire; // Joshua - Restoring burst fire from earl
 
 var(Enhanced) bool bProfileDeletionPending; // Joshua - Player has failed a mission in Permadeath mode, profile is pending to be deleted
 
+var(Enhanced) config bool bBinoculars; // Joshua - Option to use binoculars
+var EAbstractGoggle	GoggleItem; // Joshua - Binoculars item
+
 var(Enhanced) config bool bWhistle; // Joshua - Option to enable whistling
 var float m_WhistleTime; // Joshua - New variable to keep track of last whistle
 var bool bDisableWhistle; // Joshua - Used to disable whistle while in Diversion Camera
@@ -1549,7 +1552,7 @@ exec function Snipe()
 	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 
-	if (ActiveGun != None && ActiveGun == MainGun && ePawn.HandItem == ActiveGun && !bInGunTransition)
+	if (!bInGunTransition && (((GetStateName() == 's_PlayerWalking' || GetStateName() == 's_Split') && bBinoculars) || GetStateName() == 's_Zooming' || GetStateName() == 's_SplitZooming' || (ActiveGun != None && ActiveGun == MainGun && ePawn.HandItem == ActiveGun && !bInGunTransition)
 		bPressSnip = true;
 }
 
@@ -4352,6 +4355,14 @@ state s_PlayerWalking
 	    SetGroundSpeed();
 		PlayOnGround(0.4);
 
+		// Joshua - Binoculars support
+        if (bBinoculars && bPressSnip)
+        {
+            bPressSnip = false;
+            bInTransition = true; // prevent the SheathWeapon
+            GoggleItem.GotoState('s_Zooming');
+        }
+
 		if (m_camera.m_volSize == EVS_Minute || bInGunTransition)
 			return;
 
@@ -5470,6 +5481,126 @@ Begin:
 	SwitchCameraMode();
 	FinishAnim(EPawn.ACTIONCHANNEL);
 	EMainHUD(myHud).Slave(ePawn.HandItem);
+	bInTransition = false;
+}
+
+// Joshua - Binoculars support
+// ----------------------------------------------------------------------
+// state s_Zooming
+// ----------------------------------------------------------------------
+state s_Zooming extends s_Targeting
+{
+	/*
+	[ECM_Zooming]
+	parent=					ECM_Sniping
+	useAimTuning=			v=0
+
+	[ECM_ZoomingCr]
+	parent=					ECM_Zooming
+	offset=					mx=0.0 my=25.0 mz=0.0
+	*/
+
+	function BeginState()
+	{
+		Super.BeginState();
+		bHideSam = true;
+	}
+
+	function EndState()
+	{
+		bInTransition = true;
+		Super.EndState();
+		bHideSam = false;
+
+		GoggleItem.GotoState('');
+	}
+
+	/*function NotifyStartCrouch()
+	{
+		m_camera.SetMode(ECM_ZoomingCr);
+	}
+
+	function NotifyEndCrouch()
+	{
+		m_camera.SetMode(ECM_Zooming);
+	}*/
+
+	function bool CanAccessQuick()
+	{
+		return false;
+	}
+
+	function bool CanSwitchGoggleManually()
+	{
+		return true;
+	}
+
+	//for togle first person target
+	function PlayerTick(float deltaTime)
+	{
+		// Force exit binoculars if player disables them in settings
+		if (!bBinoculars)
+		{
+            bInTransition = true; // prevent the SheathWeapon
+            GotoState('s_PlayerWalking');
+			return;
+		}
+
+		Global.PlayerTick(DeltaTime);
+	}
+
+	function ProcessScope()
+	{
+		if (!bInTransition)
+			GoggleItem.Scope();
+	}
+
+	function SwitchCameraMode()
+	{
+		/*if(JumpLabelPrivate == 'FromSplit')
+			m_camera.SetMode(ECM_SplitJumpZoom);
+		else
+		{
+			if( ePawn.bIsCrouched )
+				m_camera.SetMode(ECM_ZoomingCr);
+			else
+				m_camera.SetMode(ECM_Zooming);
+		}*/
+		m_camera.SetMode(ECM_Sniping);
+	}
+
+	event ReduceCameraSpeed(out float turnMul)
+	{
+		//turnMul = 0.3f; //(FovAngle from Laser mic / DesiredFOV) * 0.5;
+		turnMul = (FovAngle / DesiredFOV) * 0.5;
+	}
+
+	/*
+	function ProcessInteract()
+	{
+		if (!bInTransition)
+		{
+			GoggleItem.Scope();
+			LaserMicItem.GotoState('s_Microiing');
+		}
+	}
+	*/
+
+	function PlayerMove(float DeltaTime)
+    {	
+        Super.PlayerMove(DeltaTime);
+
+        if (bPressSnip)
+        {
+            bPressSnip = false;
+            bInTransition = true; // prevent the SheathWeapon
+            GotoState('s_PlayerWalking');
+        }
+    }
+
+Begin:
+	SwitchCameraMode();
+	EMainHUD(myHud).Slave(GoggleItem);
 	bInTransition = false;
 }
 
@@ -8811,6 +8942,14 @@ state s_Split
 		GotoState('s_SplitTargeting');
 	}
 
+	// Joshua - Binoculars support in split jump
+	function ProcessBinoculars()
+	{
+		if (bInTransition || bInGunTransition)
+			return;
+		GotoState('s_SplitZooming');
+	}
+
     function PlayerMove(float deltaTime)
     {
 		local vector testPos, moveDir, testExt;
@@ -8840,6 +8979,14 @@ state s_Split
 			}
 			m_camera.SetMode(ECM_Walking);
 			GoToState('s_PlayerJumping');
+		}
+
+		// Joshua - Binoculars support in split jump
+		if (bBinoculars && bPressSnip)
+		{
+			bPressSnip = false;
+			ProcessBinoculars();
+			return;
 		}
 
 		ePawn.LoopAnimOnly(ePawn.ASplitWait, , 0.1);
@@ -8958,6 +9105,94 @@ state s_SplitSniping extends s_RappellingSniping
 
 BackToFirstPerson:
 	GotoState('s_SplitTargeting', JumpLabelPrivate);
+}
+
+// Joshua - Binoculars support
+// ----------------------------------------------------------------------
+// state s_Split
+// ----------------------------------------------------------------------
+state s_SplitZooming
+{
+	/*
+	[ECM_SplitJumpZoom]
+	parent=					ECM_RapelFP
+	offset=					nx=0.0 ny=30.0 nz=40.0 sx=0.0 sy=30.0 sz=40.0 tx=0.0 ty=30.0 tz=40.0 
+	distance=				n=40.0 s=40.0 t=40.0
+	minYaw=					v=-7000
+	maxYaw=					v=7000
+	minPitch=				v=-10000
+	maxPitch=				v=8000
+	*/
+
+	ignores Fire;
+
+	function BeginState()
+	{
+		ePawn.WalkingRatio = 0;
+		ePawn.SoundWalkingRatio = 0;
+		ePawn.Acceleration = Vect(0,0,0);
+
+		ePawn.SetCollisionSize(ePawn.CollisionRadius, ePawn.Default.CollisionHeight * 0.35);
+		bHideSam = true;
+
+		GoggleItem.GotoState('s_Zooming');
+	}
+
+	function EndState()
+	{
+		bHideSam = false;
+		ePawn.SetCollisionSize(ePawn.CollisionRadius, ePawn.Default.CollisionHeight);
+		GoggleItem.GotoState('');
+		EMainHUD(myHud).NormalView();
+	}
+
+	function bool CanSwitchGoggleManually()
+	{
+		return true;
+	}
+
+	function bool CanAccessQuick()
+	{
+		return false;
+	}
+
+	function SwitchCameraMode()
+	{
+		m_camera.SetMode(ECM_SplitJumpFP);
+	}
+
+	event ReduceCameraSpeed(out float turnMul)
+	{
+		turnMul = (FovAngle / DesiredFOV) * 0.5;
+	}
+
+	function ProcessScope()
+	{
+		if (!bInTransition)
+			GoggleItem.Scope();
+	}
+
+	function PlayerMove(float DeltaTime)
+	{
+		local vector testExt, moveDir;
+
+		if (bInTransition)
+			return;
+
+		ePawn.LoopAnimOnly(ePawn.ASplitWait,,0.2);
+		ePawn.AimAt(AAFULL, Vector(Rotation), Vector(ePawn.Rotation), -90, 90, -90, 90);
+
+		if (bPressSnip)
+		{
+			bPressSnip = false;
+			GotoState('s_Split');
+		}
+	}
+
+Begin:
+	SwitchCameraMode();
+	EMainHUD(myHud).Slave(GoggleItem);
+	bInTransition = false;
 }
 
 // ----------------------------------------------------------------------
@@ -11713,5 +11948,6 @@ defaultproperties
 	//=============================================================================
 	bMissionFailedQuickMenu=True
 	LastSaveName=""
+	bBinoculars=True
 	CheatClass=Class'ECheatManager'
 }
