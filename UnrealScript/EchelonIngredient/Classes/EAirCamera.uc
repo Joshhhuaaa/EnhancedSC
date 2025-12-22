@@ -200,8 +200,11 @@ state s_Flying
 			return;
 
 		// if player is dead, stop processing
-		if (Epc.bFire != 0 || Epc.Pawn.Health <= 0)
+		if (Epc.bFire != 0 || Epc.bDuck != 0 || Epc.Pawn.Health <= 0)
+		{
+			Epc.bDuck = 0; // Joshua - Crouching will exit the camera
 			GiveView(true);
+		}
 	}
 }
 
@@ -274,9 +277,10 @@ state s_Camera
 		Epc.m_camera.UpdateView(camera_rotation, true);
 
 		// if player is dead, stop processing
-		if (Epc.bFire != 0 || Epc.Pawn.Health <= 0)
+		if (Epc.bFire != 0 || Epc.bDuck != 0 || Epc.Pawn.Health <= 0)
 		{
 			Epc.bFire = 0;
+			Epc.bDuck = 0; // Joshua - Crouching will exit the camera
 			GiveView(true);
 		}
 	}
