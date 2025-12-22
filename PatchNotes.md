@@ -48,7 +48,6 @@
   - Alarms
 - Added an option to override Sam's suit across all levels.
 - Xbox renderer textures have been restored to bring lighting closer to the Xbox version.
-- Restored the Xbox light effect for alarm lights when they are triggered.
 - Fixed a bug where the mouse wheel changed variable speeds while a weapon was drawn or when using a Sticky Camera or Diversion Camera.
 - Fixed a bug where losing an equipped item while Back to Wall peeking now correctly holsters the item automatically.
 - Sniper sway is no longer disabled when player input is blocked.
@@ -183,6 +182,7 @@
   - The second part now starts the player with the same equipment as the first part.
   - Fixed a StaticMesh that was clipping through a ceiling.
   - Added textures for several StaticMeshes that had none assigned.
+
 
 
 
