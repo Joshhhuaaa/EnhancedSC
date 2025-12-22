@@ -620,6 +620,7 @@ function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocat
 			if (SpawnableObjects[i].SpawnClass != None)
 			{
 				spawn(SpawnableObjects[i].SpawnClass, self,, SpawnLocation, SpawnRotation);
+				bObjectModifed = true; // Joshua - Only flag as modified if there's a SpawnClass
 			}
 
 			// Trigger linked actor
@@ -627,6 +628,7 @@ function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocat
 			{
 				//Log(self$" Triggering from spawnable object"@SpawnableObjects[i].TriggerableActor);
 				SpawnableObjects[i].TriggerableActor.Trigger(self, None);
+				bObjectModifed = true; // Joshua - Only flag as modified if there's a TriggerableActor
 			}
 
 			// remove reference once spawned
@@ -636,7 +638,9 @@ function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocat
 				i--;
 			}
 
-			bObjectModifed = true;
+			// Joshua - Avoid setting this if an EGO's SpawnableObject is null, 
+			// it would disable the light even though the mesh hasn't changed
+			//bObjectModifed = true; 
 		}
 	}
 
