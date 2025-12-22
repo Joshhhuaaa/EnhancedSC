@@ -400,6 +400,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 					Epc.SetKey("Joy5 Whistle", "");
 				else
 					Epc.SetKey("Joy5 ReloadGun", "");
+				Epc.SetKey("Joy11 SwitchROF", "");
 				Epc.SetKey("Joy12 ResetCamera", "");
 			}
 
