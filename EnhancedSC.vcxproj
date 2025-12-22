@@ -71,7 +71,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\features\steam_deck_features.cpp" />
-    <ClCompile Include="src\features\use_xbox_fonts.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\warnings\check_gamesave_folder.hpp" />
@@ -104,7 +103,6 @@
     <ClInclude Include="src\resources\helper.hpp" />
     <ClInclude Include="src\resources\stdafx.h" />
     <ClInclude Include="src\features\steam_deck_features.hpp" />
-    <ClInclude Include="src\features\use_xbox_fonts.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\resources\EnhancedSC.rc" />

@@ -25,7 +25,6 @@
 #include "check_gamesave_folder.hpp"
 #include "steam_deck_features.hpp"
 #include "submodule_initiailization.hpp"
-#include "use_xbox_fonts.hpp"
 #include "version_checker.hpp"
 #include "controller_rumble.hpp"
 #include "ini_read_state.hpp"
@@ -102,7 +101,6 @@ void InitializeSubsystems()
         INITIALIZE(g_IntroSkip.Initialize());
         INITIALIZE(RestoreEAX::Initialize());
         INITIALIZE(DPadKeybinds::Initialize());
-        INITIALIZE(UseXboxFonts::Toggle());
         INITIALIZE(ControllerRumble::Fix());
         INITIALIZE(CheckINIReadPermissions::CheckStatus());
         INITIALIZE(CheckGamesaveFolderWritable::CheckStatus());

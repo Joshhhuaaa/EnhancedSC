@@ -12,7 +12,6 @@
 #include "intro_skip.hpp"
 #include "distance_culling.hpp"
 #include "idle_timers.hpp"
-#include "use_xbox_fonts.hpp"
 #include "controller_rumble.hpp"
 #include "ini_read_state.hpp"
 
@@ -171,9 +170,6 @@ void Config::Read()
 
     /*ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bPauseOnFocusLoss", g_PauseOnFocusLoss.shouldPause);
     LOG_CONFIG(ConfigKeys::EnablePauseOnFocusLoss_Section, ConfigKeys::EnablePauseOnFocusLoss_Setting, g_PauseOnFocusLoss.shouldPause);*/
-
-    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bXboxFont", g_UseXboxFonts.bXboxFont);
-    LOG_CONFIG(ConfigKeys::UseXboxFonts_Section, ConfigKeys::UseXboxFonts_Setting, g_UseXboxFonts.bXboxFont);
 
     ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bEnableRumble", g_ControllerRumble.bEnabled);
     LOG_CONFIG(ConfigKeys::EnableRumble_Section, ConfigKeys::EnableRumble_Setting, g_ControllerRumble.bEnabled);
