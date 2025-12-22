@@ -377,7 +377,8 @@ function bool IsInXboxGameMenu()
 event bool CanSaveGame()
 {
 	// Joshua - Allow checkpoints during bStopInput, but not manual saves (necessary for Kalinatek hostages)
-	return (Pawn != None && Pawn.Health > 0 && (!bStopInput || bCheckpoint) && !PlayerInput.bStopInputAlternate && !Level.bIsStartMenu && !IsInQuickInv() && !IsInXboxGameMenu() && ((!eGame.bEliteMode || bDebugMode) || bAutoSaveLoad || bSavingTraining));
+	// Joshua - Block save game during cinematic
+	return (Pawn != None && Pawn.Health > 0 && !bInCinematic && (!bStopInput || bCheckpoint) && !PlayerInput.bStopInputAlternate && !Level.bIsStartMenu && !IsInQuickInv() && !IsInXboxGameMenu() && ((!eGame.bEliteMode || bDebugMode) || bAutoSaveLoad || bSavingTraining));
 }
 
 event bool CanLoadGame()
