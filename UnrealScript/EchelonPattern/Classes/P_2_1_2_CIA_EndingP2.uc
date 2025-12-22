@@ -218,6 +218,7 @@ FinalFin:
     Talk(Sound'S2_1_2Voice.Play_21_60_05', 1, , TRUE, 0);
     Talk(Sound'S2_1_2Voice.Play_21_60_06', 0, , TRUE, 0);
     Close();
+    CheckIfPlayerDead('JumpFin'); // Joshua - If player dies during this dialogue, fail the mission
     GameOver(true, 0);
     End();
 DropMitch:
