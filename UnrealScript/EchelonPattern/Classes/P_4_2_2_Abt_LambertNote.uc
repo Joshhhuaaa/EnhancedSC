@@ -101,6 +101,7 @@ MeetLongDan:
 blam2:
     Talk(Sound'S4_2_2Voice.Play_42_50_15', 2, , TRUE, 0);
     EndConversation();
+    IgnoreAlarmStage(TRUE); // Joshua - Fight has begun, disable alarms
 SkipLD:
     AddNote("", "P_4_2_2_Abt_LambertNote", "Note_0039L", "Localization\\P_4_2_2_Abattoir");
     Sleep(0.5);
