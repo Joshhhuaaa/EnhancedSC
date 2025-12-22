@@ -118,7 +118,7 @@ FeirongStairs:
     Goal_Set(1,GOAL_MoveTo,9,,,,'StairsA',,FALSE,,MOVE_WalkNormal,,MOVE_WalkNormal);
     Goal_Set(1,GOAL_MoveTo,8,,,,'WaitForLimo',,FALSE,,MOVE_WalkNormal,,MOVE_WalkNormal);
     WaitForGoal(2,GOAL_MoveTo,);
-	SoundActors[0].    PlaySound(Sound'Vehicules.Play_ChineseVanStart', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Vehicules.Play_ChineseVanStart', SLOT_SFX);
     SendUnrealEvent('limo');
     LockDoor('EntraceDoorA', FALSE, TRUE);
     LockDoor('EntraceDoorB', FALSE, TRUE);
@@ -129,7 +129,7 @@ FeirongStairs:
     Teleport(1, 'FeirongTeleportA');
     ResetGoals(1);
     Sleep(2);
-	SoundActors[0].    PlaySound(Sound'Vehicules.Play_CadillacIdle', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Vehicules.Play_CadillacIdle', SLOT_SFX);
     End();
 FeirongConversationB:
     Log("Feirong gets in the limousine and has the second conversation on the way to the gate. Triggered by Feirong.");
@@ -141,13 +141,13 @@ FeirongConversationB:
     Teleport(1, 'FeirongTeleport');
     LockDoor('EntraceDoorB', FALSE, FALSE);
     LockDoor('EntraceDoorA', FALSE, FALSE);
-	SoundActors[0].    PlaySound(Sound'Vehicules.Stop_CadillacIdle', SLOT_SFX);
-	SoundActors[0].    PlaySound(Sound'Vehicules.Play_ChineseVanStart', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Vehicules.Stop_CadillacIdle', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Vehicules.Play_ChineseVanStart', SLOT_SFX);
     SendUnrealEvent('limo');
     Sleep(2);
     SendPatternEvent('LimoCheckLoop','LimoLoop');
     SetFlags(V4_1_2ChineseEmbassy(Level.VarObject).LimoAtFrontGate,TRUE);
-	SoundActors[0].    PlaySound(Sound'Vehicules.Play_CadillacIdle', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Vehicules.Play_CadillacIdle', SLOT_SFX);
     Sleep(3);
     LaserMicSession(0,'LaserMicLimo',0,'');
     Talk(Sound'S4_1_2Voice.Play_41_35_01', 3, , TRUE, 34);
@@ -169,8 +169,8 @@ MainGateOpen:
     SendUnrealEvent('MainGate');
     SendPatternEvent('Frances','FrancesSpawn');
     Sleep(4);
-	SoundActors[0].    PlaySound(Sound'Vehicules.Stop_CadillacIdle', SLOT_SFX);
-	SoundActors[0].    PlaySound(Sound'Vehicules.Play_ChineseVanStart', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Vehicules.Stop_CadillacIdle', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Vehicules.Play_ChineseVanStart', SLOT_SFX);
     SendUnrealEvent('limo');
     SetFlags(V4_1_2ChineseEmbassy(Level.VarObject).LimoAtFrontGate,FALSE);
     Goal_Default(4,GOAL_Patrol,9,,,,'ECS412017_0',,FALSE,,MOVE_WalkNormal,,MOVE_WalkNormal);

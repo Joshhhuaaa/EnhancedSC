@@ -128,7 +128,7 @@ HackedLambertGoals:
     Speech(Localize("P_1_7_1_2_LambertGoals", "Speech_0028L", "Localization\\P_1_7_1_2Vselka"), Sound'S3_3_2Voice.Play_33_54_03', 1, 0, TR_HEADQUARTER, 0, false);
     Close();
     ShakeCamera(380, 10700, 310);
-	SoundActors[0].    PlaySound(None, SLOT_Ambient);
+	SoundActors[0].PlaySound(None, SLOT_Ambient);
     Sleep(5);
     AddNote("", "P_1_7_1_2_LambertGoals", "Note_0032L", "Localization\\P_1_7_1_2Vselka");
     AddGoal('TORPEDO', "", 1, "", "P_1_7_1_2_LambertGoals", "Goal_0033L", "Localization\\P_1_7_1_2Vselka", "P_1_7_1_2_LambertGoals", "Goal_0034L", "Localization\\P_1_7_1_2Vselka");
@@ -138,11 +138,12 @@ HackedLambertGoals:
     End();
 TorpedoDoorLambertGoals:
     Log("TorpedoDoorLambertGoals");
+    Sleep(2.0); // Joshua - Add a delay before the cinematic to let Sam finish typing
     CheckFlags(SubWentDown,FALSE,'End');
     CheckFlags(TorpedoDoorOpen,TRUE,'End');
     CinCamera(0, 'GameOverCSpos', 'GameOverCSfoc',);
     Sleep(1);
-	SoundActors[1].    PlaySound(Sound'Door.Play_SubDoorOpen', SLOT_SFX);
+	SoundActors[1].PlaySound(Sound'Door.Play_SubDoorOpen', SLOT_SFX);
     SendUnrealEvent('TorpedoDoor');
     Sleep(4);
     CinCamera(1, , ,);

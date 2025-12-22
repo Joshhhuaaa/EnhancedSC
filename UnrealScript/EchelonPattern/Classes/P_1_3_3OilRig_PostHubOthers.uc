@@ -88,15 +88,15 @@ BreakWindow:
     CheckFlags(WindowGunfirePlayedOnce,TRUE,'Nothingness');
     SetFlags(WindowGunfirePlayedOnce,TRUE);
     SendUnrealEvent('SassyWindo');
-	SoundActors[0].    PlaySound(Sound'Gun.Play_AK47SingleShot', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Gun.Play_AK47SingleShot', SLOT_SFX);
     Sleep(0.25);
-	SoundActors[0].    PlaySound(Sound'Gun.Play_AK47SingleShot', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Gun.Play_AK47SingleShot', SLOT_SFX);
     Sleep(0.2);
-	SoundActors[0].    PlaySound(Sound'Gun.Play_A91ASingleShot', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Gun.Play_A91ASingleShot', SLOT_SFX);
     Sleep(0.25);
-	SoundActors[0].    PlaySound(Sound'Gun.Play_AK47SingleShot', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Gun.Play_AK47SingleShot', SLOT_SFX);
     Sleep(0.2);
-	SoundActors[0].    PlaySound(Sound'Gun.Play_A91ASingleShot', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Gun.Play_A91ASingleShot', SLOT_SFX);
     End();
 NotQuiteSassy:
     Log("For the window breaking AI triggered instead of EVolume triggered.");

@@ -499,7 +499,7 @@ Slam:
     SendPatternEvent('escort2AI','KitchenFlag');
     SendUnrealEvent('HubDoor1');
     ShakeCamera(1200, 17000, 3000);
-	SoundActors[0].    PlaySound(Sound'DestroyableObjet.Play_ExplosionBridge', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'DestroyableObjet.Play_ExplosionBridge', SLOT_SFX);
     Log("Energize.");
     Teleport(1, 'TexasSwitch1');
     Teleport(2, 'TexasSwitch2');
@@ -512,7 +512,7 @@ Slam:
     SendPatternEvent('escort2AI','PostHub');
     SendPatternEvent('Merctech2AI','RunAway');
     Sleep(0.2);
-	SoundActors[1].    PlaySound(Sound'DestroyableObjet.Play_BarrilExplosion', SLOT_SFX);
+	SoundActors[1].PlaySound(Sound'DestroyableObjet.Play_BarrilExplosion', SLOT_SFX);
     Sleep(2.75);
     SendPatternEvent('LambertAI','TechniCase');
     End();

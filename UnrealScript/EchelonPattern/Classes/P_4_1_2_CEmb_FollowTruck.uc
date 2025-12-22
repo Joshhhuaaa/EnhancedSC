@@ -60,7 +60,7 @@ state Pattern
 Begin:
 Events:
     Log("Events");
-	SoundActors[0].    PlaySound(Sound'Vehicules.Play_ChineseVanStart', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Vehicules.Play_ChineseVanStart', SLOT_SFX);
     SendUnrealEvent('minivi');
     SendPatternEvent('Group1112','Milestone');
     Sleep(1.50);
@@ -75,7 +75,7 @@ ClosingGate:
     Sleep(1.5);
     SendUnrealEvent('EmbassyGate');
     Sleep(2);
-	SoundActors[0].    PlaySound(Sound'Vehicules.Play_ChineseVanStart', SLOT_SFX);
+	SoundActors[0].PlaySound(Sound'Vehicules.Play_ChineseVanStart', SLOT_SFX);
     SendUnrealEvent('minivi');
     Sleep(1);
     SendPatternEvent('BogusGateAI','GateClosed');

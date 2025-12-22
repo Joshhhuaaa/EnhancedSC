@@ -124,7 +124,7 @@ Explosion:
     ChangeState(1,'s_alert');
     Goal_Set(1,GOAL_Wait,5,,'Check2FocusAdam','Check2FocusAdam',,,FALSE,,MOVE_CrouchWalk,,MOVE_CrouchWalk);
     Sleep(0.69);
-	SoundActors[0].    PlaySound(Sound'S1_3_3Voice.VolIn_BattleAmbiance', SLOT_Ambient);
+	SoundActors[0].PlaySound(Sound'S1_3_3Voice.VolIn_BattleAmbiance', SLOT_Ambient);
     End();
 Nooge:
     Log("Somebody's messing with Justin, is the group clear?");
