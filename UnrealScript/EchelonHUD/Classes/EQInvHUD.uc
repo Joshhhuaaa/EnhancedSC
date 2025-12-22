@@ -397,7 +397,10 @@ function DrawAlarmBox(ECanvas Canvas)
     Canvas.DrawColor.A = AlarmAlpha;
     Canvas.Font = Canvas.ETextFont;
     Canvas.TextSize(szText, xLen, yLen);
-	Canvas.SetPos(xPos + 22, yPos + 8);
+	if (eGame.FontType == Font_PC || eGame.FontType == Font_GameCube)
+		Canvas.SetPos(xPos + 24, yPos + 8);
+	else
+		Canvas.SetPos(xPos + 23, yPos + 8); // 22
     Canvas.DrawTextAligned(szText, TXT_LEFT);
 
     Canvas.Style = ERenderStyle.STY_Normal;
