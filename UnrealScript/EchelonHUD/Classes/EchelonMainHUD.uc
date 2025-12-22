@@ -1766,7 +1766,7 @@ Begin:
 =============================================================================*/
 state s_Cinematic
 {
-	Ignores FullInventory;
+	//Ignores FullInventory; // Joshua - Allows controller to pause game during cinematics
 
    	function PostRender(Canvas C)
 	{
