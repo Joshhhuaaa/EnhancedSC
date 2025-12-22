@@ -402,7 +402,7 @@ exec function bool LoadLastSave()
 	
 	C.Viewport.Console.PendingLoadSaveName = LastSaveName;
 
-	Error = ConsoleCommand("LOADGAME FILENAME=" $ LastSaveName $ ".en2");
+	Error = ConsoleCommand("LOADGAME FILENAME=" $ LastSaveName $ ".en3");
 	return (Error == "");
 }
 

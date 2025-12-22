@@ -63,7 +63,7 @@ function UpdateLastSaveName()
     if (FileManager == None)
         return;
 
-    Path = "..\\Save\\"$PlayerInfo.PlayerName$"\\*.en2";
+    Path = "..\\Save\\"$PlayerInfo.PlayerName$"\\*.en3";
     FileManager.DetailedFindFiles(Path);
 
     // Find the newest save by comparing FileCompletTime
@@ -75,7 +75,7 @@ function UpdateLastSaveName()
         {
             NewestTime = FileManager.m_pDetailedFileList[i].FileCompletTime;
             Name = FileManager.m_pDetailedFileList[i].Filename;
-            NewestName = Left(Name, Len(Name) - 4); // Remove .en2 extension
+            NewestName = Left(Name, Len(Name) - 4); // Remove .en3 extension
         }
     }
 
@@ -112,14 +112,14 @@ function string GetOldestCheckpointName()
     CheckpointNames[1] = class'Actor'.static.Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "2";
     CheckpointNames[2] = class'Actor'.static.Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "3";
     
-    Path = "..\\Save\\"$PlayerInfo.PlayerName$"\\*.en2";
+    Path = "..\\Save\\"$PlayerInfo.PlayerName$"\\*.en3";
     FileManager.DetailedFindFiles(Path);
     
     // Check which checkpoints exist and get their timestamps
     for (i = 0; i < FileManager.m_pDetailedFileList.Length; i++)
     {
         Name = FileManager.m_pDetailedFileList[i].Filename;
-        Name = Left(Name, Len(Name) - 4); // Remove .en2 extension
+        Name = Left(Name, Len(Name) - 4); // Remove .en3 extension
         
         if (Name == CheckpointNames[0])
         {
