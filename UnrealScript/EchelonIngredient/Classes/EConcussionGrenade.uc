@@ -104,11 +104,11 @@ state s_Flying
 					}
 				}
 				// Handle gameplay objects (destructible objects)
-				//else if (EGameplayObject(Victims) != None && EGameplayObject(Victims).bDamageable)
-				//{
-				//	dam = ExplosionDamage * damageScale;
-				//	Victims.TakeDamage(dam, Controller(Owner).Pawn, Location, dir, (damageScale * ExplosionMomentum * dir), class'Crushed', 0);
-				//}
+				else if (EGameplayObject(Victims) != None && EGameplayObject(Victims).bDamageable)
+				{
+					dam = ExplosionDamage * damageScale;
+					Victims.TakeDamage(dam, Controller(Owner).Pawn, Location, dir, (damageScale * ExplosionMomentum * dir), class'Crushed', 0);
+				}
 			}
 		}
 
