@@ -84,17 +84,19 @@ End:
     End();
 AlarmTower:
     Log("");
-    SendPatternEvent('ALStage','AlarmStageOFF');
+    // Joshua - Disabled temporary alarm toggle due to bug causing alarms to stay off permanently
+    //SendPatternEvent('ALStage','AlarmStageOFF');
     Sleep(0.5);
     StartAlarm('EAlarm3',1);
-    SendPatternEvent('ALStage','AlarmStageON');
+    //SendPatternEvent('ALStage','AlarmStageON');
     Jump('A2');
 AlarmBalcony:
     Log("");
-    SendPatternEvent('ALStage','AlarmStageOFF');
+    // Joshua - Disabled temporary alarm toggle due to bug causing alarms to stay off permanently
+    //SendPatternEvent('ALStage','AlarmStageOFF');
     Sleep(0.5);
     StartAlarm('EAlarm1',1);
-    SendPatternEvent('ALStage','AlarmStageON');
+    //SendPatternEvent('ALStage','AlarmStageON');
     Jump('End');
 TelepTower:
     Log("");
