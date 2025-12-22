@@ -6911,6 +6911,15 @@ state s_Computer extends s_InteractWithObject
 			ePawn.RotateTowardsRotator(Rotator(Interaction.Owner.Location - ePawn.Location));
 	}
 
+	function ProcessToggleCinematic()
+	{
+		// Joshua - Stop keyboard sound if playing when cinematic starts
+		if (ePawn.IsPlaying(Sound'Electronic.Play_Sq_ComputerKeyBoard'))
+			ePawn.PlaySound(Sound'Electronic.Stop_Sq_ComputerKeyBoard', SLOT_SFX);
+		
+		Global.ProcessToggleCinematic();
+	}
+
 Begin:
 	//bInTransition = true;
 	Interaction.SetInteractLocation(ePawn);
