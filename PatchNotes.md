@@ -182,7 +182,3 @@
   - The second part now starts the player with the same equipment as the first part.
   - Fixed a StaticMesh that was clipping through a ceiling.
   - Added textures for several StaticMeshes that had none assigned.
-
-
-
-
