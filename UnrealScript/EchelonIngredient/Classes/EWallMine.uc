@@ -3,7 +3,7 @@ class EWallMine extends EInventoryItem
 
 var() int	DetectionRadius,
 			DetectionHeight;
-// Joshua - ExplosionDelay, configurable in Enhanced config
+
 var() float	ExplosionDelay;			// Time left before explosion, may be set in editor .. must not be modified while playing
 var() float ActivationDelay;		// Time before wallmine activates on wall
 var() int	MovementThreshold;
@@ -12,6 +12,14 @@ var	  bool	Emitting;				// True if emitting
 var Controller Defuser;
 
 var   EVolumeTrigger	DetectionVolume;
+
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
+var Controller Planter;				// Joshua - Track who planted the mine for player stats
+var Actor PreviousBase;				// Joshua - Track the base it was planted on to check if player destroyed it
 
 function PostBeginPlay()
 {
@@ -59,6 +67,19 @@ function Deactivate(bool Success)
 	// Only send when defuse is good.
 	if (Success)
 	TriggerPattern();
+}
+
+// Joshua - When the base is destroyed, track who destroyed it for player stats
+function BaseChange()
+{
+	// Check if the previous base (that was destroyed) had an instigator
+	// Override the original planter since the person who destroyed the base is responsible
+	if (PreviousBase != None && PreviousBase.Instigator != None)
+	{
+		Planter = PreviousBase.Instigator.Controller;
+	}
+	
+	Super.BaseChange();
 }
 
 event Destroyed()
@@ -204,6 +225,8 @@ state s_PawnPlacement
 		SetLocation(HitLocation + CollisionRadius / 2.f * HitNormal);
 		SetRotation(Rotator(HitNormal));
 		SetBase(Hit);
+		// Joshua - Store the base for later tracking if it gets destroyed
+		PreviousBase = Hit;
 
 		return true;
 	}
@@ -232,6 +255,8 @@ PlaceOnWall:
 	SpawnInteraction();
 	// Remove from inventory
 	ProcessUseItem();
+	// Joshua - Store who planted the mine before removing controller
+	Planter = Controller;
 	// Remove controller here
 	Controller = None;
 	// Add to changed actor list from player only
@@ -252,6 +277,10 @@ state() s_OnWall
 		SetCollision(true, true, true);
 		// Spawn the deactivation interaction
 		SpawnInteraction();
+
+		// Joshua - Store the base for tracking if it gets destroyed
+		if (PreviousBase == None)
+			PreviousBase = Base;
 
 		// Activate detection zone
 		DetectionVolume = spawn(class'EVolumeTrigger', self);
@@ -366,8 +395,11 @@ state() s_Activated
 			Defuser.GotoState(,'Aborted');
 		}
 
+		// Joshua - Use the planter as instigator for triggered explosions
 		if (Instigator != None)
 			Super.TakeDamage(HitPoints, Instigator.Pawn, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), None);
+		else if (Planter != None && Planter.Pawn != None)
+			Super.TakeDamage(HitPoints, Planter.Pawn, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), None);
 		else
 			Super.TakeDamage(HitPoints, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), None);
 	}
