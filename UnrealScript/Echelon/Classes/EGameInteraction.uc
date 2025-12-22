@@ -308,9 +308,14 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			Epc.SetKey("JoyZ \"Axis aTurn DeadZone=0.3\"", "");
 			Epc.SetKey("JoyV \"Axis aLookUp DeadZone=0.3\"", "");
 
-			if (Epc.GetStateName() == 's_FirstPersonTargeting' ||
+			if (Epc.GetStateName() == 's_PlayerBTWTargeting')
+			{
+				Epc.SetKey("Joy1 ReloadGun", "");
+				Epc.SetKey("Joy11 BackToWall", "");
+				Epc.SetKey("Joy12 Snipe", "");
+			}
+			else if (Epc.GetStateName() == 's_FirstPersonTargeting' ||
 				Epc.GetStateName() == 's_RappellingTargeting' ||
-				Epc.GetStateName() == 's_PlayerBTWTargeting' ||
 				Epc.GetStateName() == 's_HOHFUTargeting' ||
 				Epc.GetStateName() == 's_PlayerSniping' ||
 				Epc.GetStateName() == 's_SplitSniping' ||
@@ -362,9 +367,25 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			Epc.SetKey("JoyZ \"Axis aTurn DeadZone=0.3\"", "");
 			Epc.SetKey("JoyV \"Axis aLookUp DeadZone=0.3\"", "");
 			
-			if (Epc.GetStateName() == 's_FirstPersonTargeting' ||
+			if (Epc.GetStateName() == 's_PlayerBTWTargeting')
+			{
+				if (Epc.bWhistle)
+					Epc.SetKey("Joy1 ReloadGun", "");
+				else
+					Epc.SetKey("Joy1 Interaction", "");
+				Epc.SetKey("Joy4 Snipe", "");
+				if (Epc.bWhistle)
+					Epc.SetKey("Joy5 Whistle", "");
+				else
+					Epc.SetKey("Joy5 ReloadGun", "");
+				if (Epc.bWhistle)
+					Epc.SetKey("Joy11 BackToWall", "");
+				else
+					Epc.SetKey("Joy11 None", "");
+				Epc.SetKey("Joy12 ResetCamera", "");
+			}
+			else if (Epc.GetStateName() == 's_FirstPersonTargeting' ||
 				Epc.GetStateName() == 's_RappellingTargeting' ||
-				Epc.GetStateName() == 's_PlayerBTWTargeting' ||
 				Epc.GetStateName() == 's_HOHFUTargeting' ||
 				Epc.GetStateName() == 's_PlayerSniping' ||
 				Epc.GetStateName() == 's_SplitSniping' ||
@@ -417,9 +438,14 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			Epc.SetKey("JoyZ \"Axis aTurn DeadZone=0.3\"", "");
 			Epc.SetKey("JoyV \"Axis aLookUp DeadZone=0.3\"", "");
 
-			if (Epc.GetStateName() == 's_FirstPersonTargeting' ||
+			if (Epc.GetStateName() == 's_PlayerBTWTargeting')
+			{
+				Epc.SetKey("Joy1 ReloadGun", "");
+				Epc.SetKey("Joy11 BackToWall", "");
+				Epc.SetKey("Joy12 Snipe", "");
+			}
+			else if (Epc.GetStateName() == 's_FirstPersonTargeting' ||
 				Epc.GetStateName() == 's_RappellingTargeting' ||
-				Epc.GetStateName() == 's_PlayerBTWTargeting' ||
 				Epc.GetStateName() == 's_HOHFUTargeting' ||
 				Epc.GetStateName() == 's_PlayerSniping' ||
 				Epc.GetStateName() == 's_SplitSniping' ||
