@@ -126,7 +126,7 @@ TelNPC:
     KillNPC(1, TRUE, FALSE);
     End();
 TestPlayer:
-    Log("Testing to see if th eplayer is in the elevator...");
+    Log("Testing to see if the player is in the elevator...");
     CheckFlags(PlayerIn,FALSE,'TelNPC');
     End();
 Alerted:
