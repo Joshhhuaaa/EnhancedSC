@@ -20,7 +20,7 @@ function PostBeginPlay()
 
 function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag)
 {
-	EndEvent();
+	//EndEvent(); // Joshua - Chem Flare will no longer end when taking damage
 	Super.TakeDamage(Damage, EventInstigator, HitLocation, HitNormal, Momentum, DamageType);
 }
 
@@ -77,6 +77,10 @@ state s_Selected
 
 		Used = true;
 		bGlowDisplay = true;
+		
+		// Joshua - Initialize GlowTime and ScaleGlow
+		GlowTime = default.GlowTime; 
+		ScaleGlow = default.ScaleGlow;
 		
 		HeatIntensity = default.HeatIntensity; // Joshua - Chem Flare will now generate heat
 
