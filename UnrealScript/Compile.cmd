@@ -27,7 +27,7 @@ del ".\System\Engine.u"
 del ".\System\UWindow.u"
 del ".\System\Enhanced.u"
 
-:: Not needed yet, currently using v1.4
+:: Not needed yet, currently using v1.3
 :: del ".\System\Core.u"
 :: del ".\System\EchelonEffect.u"
 :: del ".\System\Editor.u"
