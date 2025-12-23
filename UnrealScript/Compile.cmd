@@ -19,18 +19,18 @@ if not exist .\Enhanced\Inc\ mkdir .\Enhanced\Inc
 del ".\System\Echelon.u"
 del ".\System\EchelonIngredient.u"
 del ".\System\EchelonCharacter.u"
+del ".\System\EchelonGameObject.u"
 del ".\System\EchelonHUD.u"
 del ".\System\EchelonPattern.u"
 del ".\System\EchelonMenus.u"
 del ".\System\Engine.u"
+del ".\System\UWindow.u"
 del ".\System\Enhanced.u"
 
-:: Not needed yet, currently using v1.3
+:: Not needed yet, currently using v1.4
 :: del ".\System\Core.u"
 :: del ".\System\EchelonEffect.u"
-:: del ".\System\EchelonGameObject.u"
 :: del ".\System\Editor.u"
-:: del ".\System\UWindow.u"
 :: del ".\System\UDebugMenu.u"
 
 echo Compiling scripts for Enhanced SC
