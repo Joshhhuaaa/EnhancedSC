@@ -639,7 +639,7 @@ function bool KeyEvent(string Key, EInputAction Action, float Delta)
 			case "AnalogUp":
 			case "MoveForward":
 				// if over category name and not last item .. move to above item
-				// Wrap to bottom (0) if at top
+				// Joshua - Wrap to bottom (0) if at top
 				if (CurrentCategory != -1)
 				{
 					CurrentItem++;
@@ -651,7 +651,7 @@ function bool KeyEvent(string Key, EInputAction Action, float Delta)
 			case "DPadDown":
 			case "AnalogDown":
 			case "MoveBackward":
-				// Wrap to top if at bottom (first item)
+				// Joshua - Wrap to top if at bottom (first item)
 				if (CurrentCategory != -1)
 				{
 					CurrentItem--;
@@ -663,14 +663,14 @@ function bool KeyEvent(string Key, EInputAction Action, float Delta)
 			case "DPadRight":
             case "AnalogRight":
 			case "StrafeRight":
-				// Move right (lower category index), wrap to backpack (-1) if at leftmost category
+				// Joshua - Move right (lower category index), wrap to backpack (-1) if at leftmost category
                 CurrentCategory--;
 
-				// Skip unavailable categories (but not backpack -1)
+				// Joshua - Skip unavailable categories (but not backpack -1)
                 while (CurrentCategory > -1 && !IsCategoryAvailable(GetCategory(CurrentCategory)))
 	    			CurrentCategory--;
 
-				// If we went past the backpack, wrap to the rightmost available category
+				// Joshua - If we went past the backpack, wrap to the rightmost available category
 				if (CurrentCategory < -1)
 				{
 					CurrentCategory = PCInventory.GetNumberOfCategories() - 1;
@@ -684,24 +684,24 @@ function bool KeyEvent(string Key, EInputAction Action, float Delta)
 				else if (CurrentCategory != -1)
 					CurrentItem = Min(HoldItem, PCInventory.GetNbItemInCategory(GetCategory(CurrentCategory)) - 1);
 				else
-					CurrentItem = -1; // Backpack doesn't have items to select
+					CurrentItem = -1;
 
 				break;
 			
 			case "DPadLeft":
             case "AnalogLeft":
 			case "StrafeLeft":
-				// Move left (higher category index), wrap to backpack (-1) if at rightmost
+				// Joshua -  Move left (higher category index), wrap to backpack (-1) if at rightmost
 				CurrentCategory++;
 				
-				// Find next available category
+				// Joshua - Find next available category
 				while (CurrentCategory < PCInventory.GetNumberOfCategories() && !IsCategoryAvailable(GetCategory(CurrentCategory)))
 					CurrentCategory++;
 				
-				// If we went past the rightmost category, wrap to the backpack (-1)
+				// Joshua - If we went past the rightmost category, wrap to the backpack (-1)
 				if (CurrentCategory >= PCInventory.GetNumberOfCategories())
 				{
-					CurrentCategory = -1; // Wrap to backpack
+					CurrentCategory = -1;
 				}
 				
 				// Joshua - Always select first item (0) when changing category, or maintain position if it exists
@@ -710,7 +710,7 @@ function bool KeyEvent(string Key, EInputAction Action, float Delta)
 				else if (CurrentCategory != -1)
 					CurrentItem = Min(HoldItem, PCInventory.GetNbItemInCategory(GetCategory(CurrentCategory)) - 1);
 				else
-					CurrentItem = -1; // Backpack doesn't have items to select
+					CurrentItem = -1;
 
 				break;
 

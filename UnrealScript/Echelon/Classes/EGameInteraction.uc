@@ -292,7 +292,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			Epc.SetKey("Joy10 FullInventory", "");
 			Epc.SetKey("Joy11 BackToWall", "");
 			if (Epc.bBinoculars)
-				Epc.SetKey("Joy12 Snipe", "");
+				Epc.SetKey("Joy12 ZoomToggle", "");
 			else
 				Epc.SetKey("Joy12 ResetCamera", "");
 			Epc.SetKey("Joy13 DPadUp", "");
@@ -312,7 +312,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			{
 				Epc.SetKey("Joy1 ReloadGun", "");
 				Epc.SetKey("Joy11 BackToWall", "");
-				Epc.SetKey("Joy12 Snipe", "");
+				Epc.SetKey("Joy12 ZoomToggle", "");
 			}
 			else if (Epc.GetStateName() == 's_FirstPersonTargeting' ||
 				Epc.GetStateName() == 's_RappellingTargeting' ||
@@ -323,7 +323,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			{
 				Epc.SetKey("Joy1 ReloadGun", "");
 				Epc.SetKey("Joy11 SwitchROF", "");
-				Epc.SetKey("Joy12 Snipe", "");
+				Epc.SetKey("Joy12 ZoomToggle", "");
 			}
 
 			if (Epc.IManager.GetNbInteractions() > 0 && Epc.CanInteract())
@@ -351,7 +351,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			else
 				Epc.SetKey("Joy11 None", "");
 			if (Epc.bBinoculars)
-				Epc.SetKey("Joy12 Snipe", "");
+				Epc.SetKey("Joy12 ZoomToggle", "");
 			else
 				Epc.SetKey("Joy12 ResetCamera", "");
 			Epc.SetKey("Joy13 DPadUp", "");
@@ -373,7 +373,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 					Epc.SetKey("Joy1 ReloadGun", "");
 				else
 					Epc.SetKey("Joy1 Interaction", "");
-				Epc.SetKey("Joy4 Snipe", "");
+				Epc.SetKey("Joy4 ZoomToggle", "");
 				if (Epc.bWhistle)
 					Epc.SetKey("Joy5 Whistle", "");
 				else
@@ -395,7 +395,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 					Epc.SetKey("Joy1 ReloadGun", "");
 				else
 					Epc.SetKey("Joy1 Interaction", "");
-				Epc.SetKey("Joy4 Snipe", "");
+				Epc.SetKey("Joy4 ZoomToggle", "");
 				if (Epc.bWhistle)
 					Epc.SetKey("Joy5 Whistle", "");
 				else
@@ -423,7 +423,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			Epc.SetKey("Joy10 FullInventory", "");
 			Epc.SetKey("Joy11 BackToWall", "");
 			if (Epc.bBinoculars)
-				Epc.SetKey("Joy12 Snipe", "");
+				Epc.SetKey("Joy12 ZoomToggle", "");
 			else
 				Epc.SetKey("Joy12 ResetCamera", "");
 			Epc.SetKey("Joy13 DPadUp", "");
@@ -443,7 +443,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			{
 				Epc.SetKey("Joy1 ReloadGun", "");
 				Epc.SetKey("Joy11 BackToWall", "");
-				Epc.SetKey("Joy12 Snipe", "");
+				Epc.SetKey("Joy12 ZoomToggle", "");
 			}
 			else if (Epc.GetStateName() == 's_FirstPersonTargeting' ||
 				Epc.GetStateName() == 's_RappellingTargeting' ||
@@ -454,7 +454,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			{
 				Epc.SetKey("Joy1 ReloadGun", ""); // Joshua - PlayStation used Joy5 originally but added whistling
 				Epc.SetKey("Joy11 SwitchROF", "");
-				Epc.SetKey("Joy12 Snipe", "");
+				Epc.SetKey("Joy12 ZoomToggle", "");
 			}
 
 			if (Epc.IManager.GetNbInteractions() > 0 && Epc.CanInteract())
@@ -481,7 +481,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 		
 	}*/
 
-	BindSnipe();
+	BindZoomToggle();
 	BindWhistle();
 	BindToggleHUD();
 	BindPreviousGadget();
@@ -602,33 +602,33 @@ function ForceExitInteractionMenu()
 	}
 }
 
-// Joshua - Function to bind Sniper to Middle Mouse
-// Only binds if Middle Mouse is free and Sniper isn't already bound to another key
-function BindSnipe()
+// Joshua - Function to bind Sniper / Binoculars to Middle Mouse
+// Only binds if Middle Mouse is free and Sniper / Binoculars isn't already bound to another key
+function BindZoomToggle()
 {
-	local byte SnipeKeyByte;
+	local byte ZoomToggleKeyByte;
 	local byte MiddleMouseKeyByte;
 	local string BoundAction;
-	local bool bSnipeBound;
+	local bool bZoomToggleBound;
 
 	MiddleMouseKeyByte = 4; // Value for 'MiddleMouse'
 
 	// Check if already bound to a key
-	SnipeKeyByte = Epc.GetKey("Snipe", false);
+	ZoomToggleKeyByte = Epc.GetKey("ZoomToggle", false);
 
 	// Don't consider controller keys (196-215) as bindings
-	if (SnipeKeyByte != 0 && !(SnipeKeyByte >= 196 && SnipeKeyByte <= 215))
+	if (ZoomToggleKeyByte != 0 && !(ZoomToggleKeyByte >= 196 && ZoomToggleKeyByte <= 215))
 	{
-		bSnipeBound = true;
+		bZoomToggleBound = true;
 	}
 
-	if (!bSnipeBound)
+	if (!bZoomToggleBound)
 	{
 		BoundAction = Epc.GetActionKey(MiddleMouseKeyByte);
 
 		if (BoundAction == "" || BoundAction == "None")
 		{
-			Epc.SetKey("MiddleMouse Snipe", "");
+			Epc.SetKey("MiddleMouse ZoomToggle", "");
 		}
 	}
 }

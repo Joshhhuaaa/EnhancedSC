@@ -81,7 +81,7 @@ function InitOptionControls()
 
 	AddKeyItem(Localize("Keys","K_Fire","Localization\\HUD"), "Fire");
 	AddKeyItem(Localize("Keys","K_AltFire","Localization\\HUD"), "AltFire");
-    AddKeyItem(Localize("Keys","K_Snipe","Localization\\Enhanced"), "Snipe");
+    AddKeyItem(Localize("Keys","K_ZoomToggle","Localization\\Enhanced"), "ZoomToggle");
     AddKeyItem(Localize("Keys","K_Scope","Localization\\HUD"), "Scope");
     AddKeyItem(Localize("Keys","K_Jump","Localization\\HUD"), "Jump");
     AddKeyItem(Localize("Keys","K_Interaction","Localization\\HUD"), "Interaction");

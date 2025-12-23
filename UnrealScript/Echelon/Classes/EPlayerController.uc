@@ -225,6 +225,8 @@ const MAX_REGULAR_MAP = 13;
 // Joshua - This is a native class. New variables must be added only after all original ones have been declared.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
+var input byte bScope;
+
 var(EnhancedDebug) bool bDebugMode;
 var(EnhancedDebug) string sDebugString1;
 var(EnhancedDebug) string sDebugString2;
@@ -300,10 +302,8 @@ var bool bSwitchingGuns; // Joshua - True when the player is in Targeting mode a
 var(Enhanced) config bool bLaserMicZoomLevels; // Joshua - Enables zoom functionality for the Laser Mic
 var(Enhanced) config bool bLaserMicVisions; // Joshua - Allows the Laser Mic use all vision modes like PS2 version
 
-var bool bPressSnip;
 var bool m_ChoosePreviousGadget;
 var bool m_ChooseNextGadget;
-var bool bDPadUpPressed, bDPadDownPressed;
 var bool bUsingAirCamera; // Joshua - True when the player is using a camera, prevents movement speed changes with mouse wheel
 
 // Joshua - Adding the option to use Camera Jammer camera behavior from Pandora Tomorrow
@@ -1575,28 +1575,14 @@ exec function DecSpeed()
 // Description
 //		 Toggles the SC-20K's scope using a single button (Y), replicating the Xbox control scheme.
 //------------------------------------------------------------------------
-exec function Snipe()
+exec function ZoomToggle()
 {
-/*	local ESniperGun	snipeGun;
-	snipeGun = ESniperGun(ePawn.HandItem);
-
-	if (snipeGun != None && snipeGun.bSniperMode && !bStopInput)
-	{
-		bMustZoomIn = false;
-		bMustZoomOut = true;
-	}
-	else
-	{
-		bMustZoomIn = true;
-		bMustZoomOut = false;
-	}
-*/
 	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 
-	if (!bInGunTransition && (((GetStateName() == 's_PlayerWalking' || GetStateName() == 's_Split') && bBinoculars) || GetStateName() == 's_Zooming' || GetStateName() == 's_SplitZooming' || (ActiveGun != None && ActiveGun == MainGun && ePawn.HandItem == ActiveGun)))
-		bPressSnip = true;
+	ProcessZoomToggle();
 }
+function ProcessZoomToggle();
 
 //---------------------------------------[Joshua - 15 Jul 2025]-----
 // Description
@@ -4302,6 +4288,19 @@ state s_PlayerWalking
 			OnGroundScope();
 	}
 
+	// Joshua - Binoculars support
+	function ProcessZoomToggle()
+	{
+		if (!bBinoculars)
+			return;
+
+		if (!bInGunTransition)
+		{
+			bInTransition = true; // prevent the SheathWeapon
+			GoggleItem.GotoState('s_Zooming');
+		}
+	}
+
 	function ProcessFire()
 	{
         local vector X,Y,Z, HitLocation, HitNormal, Start, End, NearPawnDir;
@@ -4462,14 +4461,6 @@ state s_PlayerWalking
 
 	    SetGroundSpeed();
 		PlayOnGround(0.4);
-
-		// Joshua - Binoculars support
-        if (bBinoculars && bPressSnip)
-        {
-            bPressSnip = false;
-            bInTransition = true; // prevent the SheathWeapon
-            GoggleItem.GotoState('s_Zooming');
-        }
 
 		if (m_camera.m_volSize == EVS_Minute || bInGunTransition)
 			return;
@@ -5337,6 +5328,18 @@ state s_FirstPersonTargeting extends s_Targeting
 		}
 	}
 
+	function ProcessZoomToggle()
+	{
+		if (bLockedCamera)
+			return;
+
+		if (!bInGunTransition && ActiveGun == MainGun)
+		{
+            bInTransition = true; // prevent the SheathWeapon
+            GotoState('s_PlayerSniping');
+        }
+	}
+
 	// from cam
 	function bool OnGroundScope()
 	{
@@ -5353,18 +5356,6 @@ state s_FirstPersonTargeting extends s_Targeting
 	{
 		m_camera.SetMode(ECM_FirstPerson);
 	}
-
-	function PlayerMove(float DeltaTime)
-    {	
-        Super.PlayerMove(DeltaTime);
-
-        if (bPressSnip && ActiveGun == MainGun && !bInGunTransition && !bLockedCamera)
-        {
-            bPressSnip = false;
-            bInTransition = true; // prevent the SheathWeapon
-            GotoState('s_PlayerSniping');
-        }
-    }
 
 	// Joshua - Switch weapons in targeting mode
 	function PlayerTick(float DeltaTime)
@@ -5479,6 +5470,15 @@ state s_PlayerSniping extends s_Targeting
 			GotoState('s_PlayerWalking');
 	}
 
+	function ProcessZoomToggle()
+	{
+		if (!bInGunTransition)
+		{
+			bInTransition = true; // prevent the DrawWeapon
+			GotoState('s_FirstPersonTargeting');
+		}
+	}
+
 	function ProcessHeadSet(float i)
 	{
 		if (ePawn.HandItem == None || bInGunTransition || bInTransition) 
@@ -5497,36 +5497,22 @@ state s_PlayerSniping extends s_Targeting
 			ZoomLevel *= 0.7f;
 		}
 
-		if (bPressSnip && !bInGunTransition)
-		{
-			bPressSnip = false;
-			bInTransition = true; // prevent the DrawWeapon
-			GotoState('s_FirstPersonTargeting');
-		}
-		else if (!m_holdingBreath)
+		if (!m_holdingBreath)
    			Super.PlayerMove(DeltaTime);
 		else
 			KillPawnSpeed();
 
 		// Joshua - Controller support for zoom levels
-		if (bDPadUp != 0 && !bDPadUpPressed)
+		if (bDPadUp != 0)
 		{
-			bDPadUpPressed = true;
+			bDPadUp = 0;
 			SnipeZoomIn();
 		}
-		else if (bDPadUp == 0)
-		{
-			bDPadUpPressed = false;
-		}
 
-		if (bDPadDown != 0 && !bDPadDownPressed)
+		if (bDPadDown != 0)
 		{
-			bDPadDownPressed = true;
+			bDPadDown = 0;
 			SnipeZoomOut();
-		}
-		else if (bDPadDown == 0)
-		{
-			bDPadDownPressed = false;
 		}
 	}
 
@@ -5712,6 +5698,12 @@ state s_Zooming extends s_Targeting
 			GoggleItem.Scope();
 	}
 
+	function ProcessZoomToggle()
+	{
+		if (!bInTransition)
+			GoggleItem.Scope();
+	}
+
 	function SwitchCameraMode()
 	{
 		/*if(JumpLabelPrivate == 'FromSplit')
@@ -5742,18 +5734,6 @@ state s_Zooming extends s_Targeting
 		}
 	}
 	*/
-
-	function PlayerMove(float DeltaTime)
-    {	
-        Super.PlayerMove(DeltaTime);
-
-        if (bPressSnip)
-        {
-            bPressSnip = false;
-            bInTransition = true; // prevent the SheathWeapon
-            GotoState('s_PlayerWalking');
-        }
-    }
 
 Begin:
 	SwitchCameraMode();
@@ -8766,6 +8746,15 @@ state s_RappellingTargeting
 		}
 	}
 
+	function ProcessZoomToggle()
+	{
+		if (!bInGunTransition && ActiveGun == MainGun)
+		{
+			bInTransition = true;
+			GotoState(,'BeginSniping');
+        }
+	}
+
 	function ProcessHeadSet(float i)
 	{
 		if (bInTransition) 
@@ -8808,13 +8797,6 @@ state s_RappellingTargeting
 
 		// Check under feet
 		CheckFeet();
-
-		if (bPressSnip && ActiveGun == MainGun && !bInGunTransition)
-		{
-			bPressSnip = false;
-			bInTransition = true;
-			GotoState(,'BeginSniping');
-		}
 	}
 
 	// Joshua - PlayerTick to check for weapon switch completion (like FirstPersonTargeting)
@@ -8983,6 +8965,15 @@ state s_RappellingSniping extends s_PlayerSniping
 		GotoState(,'BackToFirstPerson');
 	}
 
+	function ProcessZoomToggle()
+	{
+		if (!bInGunTransition && JumpLabelPrivate == '') // Scope wasn't just pushed
+		{
+			bInTransition = true;
+			GotoState(,'BackToFirstPerson');
+		}
+	}
+
 	// Reload in Sniper mode stuff
 	function NotifyReloading()
 	{
@@ -9007,35 +8998,19 @@ state s_RappellingSniping extends s_PlayerSniping
 
 		CheckFeet();
 
-		if (bPressSnip &&			// Go into sniper mode
-			!bInGunTransition &&	// No drawing or sheating gun
-			JumpLabelPrivate == '')// Scope wasn't just pushed
-		{
-			bPressSnip = false;
-			bInTransition = true;
-			GotoState(,'BackToFirstPerson');
-		}
-
 		// Joshua - Controller support for zoom levels
-		if (bDPadUp != 0 && !bDPadUpPressed)
+		if (bDPadUp != 0)
 		{
-			bDPadUpPressed = true;
+			bDPadUp = 0;
 			SnipeZoomIn();
 		}
-		else if (bDPadUp == 0)
-		{
-			bDPadUpPressed = false;
-		}
 
-		if (bDPadDown != 0 && !bDPadDownPressed)
+		if (bDPadDown != 0)
 		{
-			bDPadDownPressed = true;
+			bDPadDown = 0;
 			SnipeZoomOut();
 		}
-		else if (bDPadDown == 0)
-		{
-			bDPadDownPressed = false;
-		}
+
 	}
 
 	function CheckFeet()
@@ -9220,10 +9195,15 @@ state s_Split
 	}
 
 	// Joshua - Binoculars support in split jump
-	function ProcessBinoculars()
+	function ProcessZoomToggle()
 	{
+		if (!bBinoculars)
+			return;
+
 		if (bInTransition || bInGunTransition)
 			return;
+
+		bInTransition = true; // prevent the SheathWeapon
 		GotoState('s_SplitZooming');
 	}
 
@@ -9258,14 +9238,6 @@ state s_Split
 			}
 			m_camera.SetMode(ECM_Walking);
 			GoToState('s_PlayerJumping');
-		}
-
-		// Joshua - Binoculars support in split jump
-		if (bBinoculars && bPressSnip)
-		{
-			bPressSnip = false;
-			ProcessBinoculars();
-			return;
 		}
 
 		ePawn.LoopAnimOnly(ePawn.ASplitWait, , 0.1);
@@ -9334,6 +9306,15 @@ state s_SplitTargeting extends s_RappellingTargeting
 		return ePawn.ASplitWait;
 	}
 
+	function ProcessZoomToggle()
+	{
+		if (ActiveGun == MainGun && !bInGunTransition)
+		{
+			bInTransition = true;
+			GotoState(,'BeginSniping');
+		}
+	}
+
 	function PlayerMove(float DeltaTime)
 	{
 		local vector testExt, moveDir;
@@ -9366,13 +9347,6 @@ state s_SplitTargeting extends s_RappellingTargeting
 			m_camera.SetMode(ECM_Walking);
 			GotoState('s_PlayerJumping');
 			return;
-		}
-
-		if (bPressSnip && ActiveGun == MainGun && !bInGunTransition)
-		{
-			bPressSnip = false;
-			bInTransition = true;
-			GotoState(,'BeginSniping');
 		}
 	}
 
@@ -9529,6 +9503,18 @@ state s_SplitZooming
 			GoggleItem.Scope();
 	}
 
+	function ProcessZoomToggle()
+	{
+		if (!bInTransition)
+			GoggleItem.Scope();
+	}
+
+	// Joshua - Return to s_Split after scope interaction
+	function ReturnFromInteraction()
+	{
+		GotoState('s_Split');
+	}
+
 	function PlayerMove(float DeltaTime)
 	{
 		local vector testExt, moveDir;
@@ -9538,12 +9524,6 @@ state s_SplitZooming
 
 		ePawn.LoopAnimOnly(ePawn.ASplitWait,,0.2);
 		ePawn.AimAt(AAFULL, Vector(Rotation), Vector(ePawn.Rotation), -90, 90, -90, 90);
-
-		if (bPressSnip)
-		{
-			bPressSnip = false;
-			GotoState('s_Split');
-		}
 	}
 
 Begin:
