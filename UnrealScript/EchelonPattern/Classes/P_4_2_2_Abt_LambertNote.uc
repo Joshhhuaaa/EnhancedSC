@@ -119,6 +119,8 @@ KillGrinko:
     Log("Lambert tell Sam he need to kill grinko");
     Sleep(0.5);
     CheckFlags(V4_2_2_Abattoir(Level.VarObject).GDstopLambertGoal,TRUE,'Fin');
+    CheckFlags(V4_2_2_Abattoir(Level.VarObject).GrinkoObjectiveTriggered,TRUE,'Fin'); // Joshua - Prevent Grinko objective from being added twice
+    SetFlags(V4_2_2_Abattoir(Level.VarObject).GrinkoObjectiveTriggered,TRUE);
     AddGoal('KillGrinko', "", 1, "", "P_4_2_2_Abt_LambertNote", "Goal_0054L", "Localization\\P_4_2_2_Abattoir", "P_4_2_2_Abt_LambertNote", "Goal_0055L", "Localization\\P_4_2_2_Abattoir");
     Speech(Localize("P_4_2_2_Abt_LambertNote", "Speech_0029L", "Localization\\P_4_2_2_Abattoir"), Sound'S4_2_2Voice.Play_42_56_01', 1, 2, TR_HEADQUARTER, 0, false);
     Speech(Localize("P_4_2_2_Abt_LambertNote", "Speech_0030L", "Localization\\P_4_2_2_Abattoir"), Sound'S4_2_2Voice.Play_42_56_02', 0, 0, TR_HEADQUARTER, 0, false);

@@ -37,7 +37,10 @@ function InitPattern()
         ForEach AllActors(class'EVolume', V)
         {
             if (V.name == 'EVolume9')
+            {
                 V.bTriggerOnlyOnce = true;
+                V.Tag = 'EVolume9';
+            }
         }
 
         // Joshua - Fixes a bug where unconscious NPCs trigger the hostages to bark

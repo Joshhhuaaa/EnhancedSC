@@ -12,6 +12,7 @@ var int GDstopLambertGoal;
 var int GrinkoCombatEnded; 
 var int HostageType; 
 var int Room1Pass1; 
+var int GrinkoObjectiveTriggered; // Joshua - Keep track if Grinko objective has been added
 var int GrinkoSpeechTriggered; // Joshua - Keep track if Grinko already did his speech
 
 
@@ -26,6 +27,7 @@ function PostBeginPlay()
     GrinkoCombatEnded = 0;
     HostageType = 0;
     Room1Pass1 = 0;
+    GrinkoObjectiveTriggered = 0;
     GrinkoSpeechTriggered = 0;
 }
 
