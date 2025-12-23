@@ -50,6 +50,11 @@ function InitPattern()
             Characters[5] = P.controller;
         if (P.name == 'EUSPrisoner5')
             Characters[6] = P.controller;
+        // Joshua - Two NPCs that need stats excluded once fight begins
+        if (P.name == 'EGeorgianSoldier23')
+            Characters[7] = P.Controller;
+        if (P.name == 'EGeorgianSoldier28')
+            Characters[8] = P.Controller;
     }
 
     if (!bInit)
@@ -100,6 +105,13 @@ GetCover:
     Goal_Set(6,GOAL_MoveTo,9,,,,'PathNode317',,FALSE,,MOVE_CrouchJog,,MOVE_CrouchJog);
     Goal_Default(6,GOAL_Wait,8,,,,'PathNode504','PrsoCrAlBB0',FALSE,,MOVE_CrouchWalk,,MOVE_CrouchWalk);
     SetFlags(InFight,TRUE);
+    // Joshua - Two NPCs that need stats excluded once fight begins
+    EAIController(Characters[7]).bAllowKnockout = true;
+    EAIController(Characters[7]).bBlockDetection = true;
+    EAIController(Characters[7]).bWasFound = true;
+    EAIController(Characters[8]).bAllowKnockout = true;
+    EAIController(Characters[8]).bBlockDetection = true;
+    EAIController(Characters[8]).bWasFound = true;
     End();
 GOchinese:
     Log("");
