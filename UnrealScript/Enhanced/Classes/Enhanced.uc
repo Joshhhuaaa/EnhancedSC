@@ -231,6 +231,9 @@ class Enhanced extends Actor;
 
 #exec Texture Import File="..\Textures\ETexIngredient\Weapons\ak47.tga" PACKAGE="ETexIngredient" GROUP="Weapons" NAME="ak47" MIPS=1
 
+// New AK-47 texture for Grinko
+#exec Texture Import File="..\Textures\ETexIngredient\Weapons\ak47_Grinko.tga" PACKAGE="ETexIngredient" GROUP="Weapons" NAME="ak47_Grinko" MIPS=1
+
 // Alpha textures
 #exec Texture Import File="..\Textures\ETexIngredient\Weapons\Echelon AK107.tga" PACKAGE="ETexIngredient" GROUP="Weapons" NAME="Echelon AK107" MIPS=1
 #exec Texture Import File="..\Textures\ETexIngredient\Weapons\EchelonQBZType95.tga" PACKAGE="ETexIngredient" GROUP="Weapons" NAME="EchelonQBZType95" MIPS=1
@@ -243,6 +246,7 @@ class Enhanced extends Actor;
 // Alpha textures
 #exec Texture Import File="..\Textures\ETexIngredient\Weapons\Mk23.tga" PACKAGE="ETexIngredient" GROUP="Weapons" NAME="Mk23" MIPS=1
 #exec Texture Import File="..\Textures\ETexIngredient\Weapons\P228.tga" PACKAGE="ETexIngredient" GROUP="Weapons" NAME="P228" MIPS=1
+//#exec Texture Import File="..\Textures\ETexIngredient\Weapons\Uzi.tga" PACKAGE="ETexIngredient" GROUP="Weapons" NAME="Uzi" MIPS=1
 
 #exec SAVEPACKAGE FILE=..\Textures\ETexIngredient.utx PACKAGE=ETexIngredient
 */

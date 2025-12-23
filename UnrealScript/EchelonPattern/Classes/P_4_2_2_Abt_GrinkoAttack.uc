@@ -32,6 +32,7 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
 function InitPattern()
 {
     local Pawn P;
+    local EInventoryItem Inv;
 
     Super.InitPattern();
 
@@ -40,6 +41,14 @@ function InitPattern()
         if (P.name == 'EGrinko0')
         {
             Characters[1] = P.controller;
+
+            // Joshua - Apply custom skin to Grinko's AK-47
+            Inv = EPawn(P).FullInventory.GetItemByClass('EAK_47');
+            if (Inv != None)
+            {
+                Inv.Skins[0] = Texture'ETexIngredient.Weapons.ak47_Grinko';
+            }
+            
             EAIController(Characters[1]).bAllowKill = true;
             EAIController(Characters[1]).bAllowKnockout = true;
             EAIController(Characters[1]).bWasFound = true;
