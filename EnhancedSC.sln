@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EnhancedSC", "EnhancedSC.vcxproj", "{C6644269-B721-4F94-BE7F-77BFB2343BA5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EnhancedSC Config Tool", "ConfigTool\ConfigTool.vcxproj", "{4E00FE10-D75B-4C04-A24E-E03014D1FFCB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -15,6 +17,10 @@ Global
 		{C6644269-B721-4F94-BE7F-77BFB2343BA5}.Debug|x86.Build.0 = Debug|Win32
 		{C6644269-B721-4F94-BE7F-77BFB2343BA5}.Release|x86.ActiveCfg = Release|Win32
 		{C6644269-B721-4F94-BE7F-77BFB2343BA5}.Release|x86.Build.0 = Release|Win32
+		{4E00FE10-D75B-4C04-A24E-E03014D1FFCB}.Debug|x86.ActiveCfg = Debug|Win32
+		{4E00FE10-D75B-4C04-A24E-E03014D1FFCB}.Debug|x86.Build.0 = Debug|Win32
+		{4E00FE10-D75B-4C04-A24E-E03014D1FFCB}.Release|x86.ActiveCfg = Release|Win32
+		{4E00FE10-D75B-4C04-A24E-E03014D1FFCB}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

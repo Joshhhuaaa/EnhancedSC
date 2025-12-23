@@ -86,7 +86,7 @@ void InitializeSubsystems()
 {
     INITIALIZE(g_Logging.LogSysInfo());
     INITIALIZE(Init_ASILoaderSanityChecks());
-    if (Util::iequals(sExeName, "Splintercell.exe"))
+    if (Util::iequals(sExeName, "SplinterCell.exe"))
     {
         INITIALIZE(SteamDeckFeatures::Toggle());
         INITIALIZE(g_GameDLLs.Initialize());

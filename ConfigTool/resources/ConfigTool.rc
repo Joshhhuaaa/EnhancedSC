@@ -1,0 +1,36 @@
+#include <windows.h>
+#include "version.h"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION     VERSION_MAJOR,VERSION_MINOR,VERSION_PATCH,0
+ PRODUCTVERSION  VERSION_MAJOR,VERSION_MINOR,VERSION_PATCH,0
+ FILEFLAGSMASK   0x3fL
+ FILEFLAGS       0x0L
+ FILEOS          0x4L
+ FILETYPE        0x1L
+ FILESUBTYPE     0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName",      COMPANY_NAME_CONFIG "\0"
+            VALUE "FileDescription",  FILE_DESCRIPTION_CONFIG "\0"
+            VALUE "FileVersion",      FILE_VERSION "\0"
+            VALUE "InternalName",     INTERNAL_NAME_CONFIG "\0"
+            VALUE "OriginalFilename", ORIGINAL_FILENAME_CONFIG "\0"
+            VALUE "ProductName",      PRODUCT_NAME_CONFIG "\0"
+            VALUE "ProductVersion",   PRODUCT_VERSION "\0"
+            VALUE "LegalCopyright",   LEGAL_COPYRIGHT_CONFIG "\0"
+            VALUE "LegalTrademarks",  LEGAL_TRADEMARKS "\0"
+            VALUE "Comments",         COMMENTS "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0409, 1200
+    END
+END
+
+IDI_ICON1 ICON "ConfigTool.ico"
+IDB_BANNER_SC1 PNG "banner_sc1.png"

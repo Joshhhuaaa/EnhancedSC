@@ -19,3 +19,6 @@
 [submodule "external/zydis"]
 	path = external/zydis
 	url = https://github.com/zyantific/zydis
+[submodule "external/wxWidgets"]
+	path = external/wxWidgets
+	url = https://github.com/wxWidgets/wxWidgets

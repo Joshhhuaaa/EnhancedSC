@@ -8,9 +8,9 @@
 //#define FALLBACK_REPO_URL "https://codeberg.org/Joshhhuaaa/EnhancedSC" //doesn't currently exist, but can be used in the future if needed
 #define DISCORD_URL "https://discord.com/invite/k6mZJcfjSh"
 
-#define VERSION_MAJOR     1
-#define VERSION_MINOR     4
-#define VERSION_PATCH     0
+#define VERSION_MAJOR 1
+#define VERSION_MINOR 4
+#define VERSION_PATCH 0
 
 
 #define STRINGIFY_HELPER(x) #x
@@ -40,7 +40,5 @@ inline const std::string sFixName = FIX_NAME;
 #define ORIGINAL_FILENAME_CONFIG FIX_NAME " Config Tool.exe"
 
 #define IDI_ICON1           101
-#define IDB_BANNER_MG1      102
-#define IDB_BANNER_MGS2     103
-#define IDB_BANNER_MGS3     104
+#define IDB_BANNER_SC1      102
 
