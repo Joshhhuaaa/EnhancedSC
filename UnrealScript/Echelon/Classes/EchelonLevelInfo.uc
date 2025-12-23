@@ -550,6 +550,10 @@ function IncreaseAlarmStage()
 	// Joshua - Cleaner method for one alarm levels like Defense Ministry
 	if (bOneAlarmLevel)
 	{
+		// Prevent multiple alarms from triggering in quick succession
+		if (AlarmStage > 0)
+			return;
+		
 		AlarmStage++;
 		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("AlarmTriggered");
 
