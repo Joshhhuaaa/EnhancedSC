@@ -31,9 +31,11 @@ void DPadKeybinds::Initialize()
 
     constexpr const char* Desired9 = R"(Aliases[9]=(Command="Button bDPadUp | PreviousGadget",Alias="DPadUp"))";
     constexpr const char* Desired10 = R"(Aliases[10]=(Command="Button bDPadDown | NextGadget",Alias="DPadDown"))";
+    constexpr const char* Desired14 = R"(Aliases[14]=(Command="Button bScope | Scope",Alias="Scope"))";
 
     bool found9 = false;
     bool found10 = false;
+    bool found14 = false;
     bool insideEngineInput = false;
     bool modified = false;
     size_t insertPos = lines.size(); // default to EOF if no section found
@@ -73,6 +75,15 @@ void DPadKeybinds::Initialize()
                 }
                 found10 = true;
             }
+            else if (current.find("Aliases[14]") == 0)
+            {
+                if (current != Desired14)
+                {
+                    current = Desired14;
+                    modified = true;
+                }
+                found14 = true;
+            }
         }
     }
 
@@ -85,6 +96,13 @@ void DPadKeybinds::Initialize()
     if (!found10 && insertPos < lines.size())
     {
         lines.insert(lines.begin() + insertPos, Desired10);
+        insertPos++;
+        modified = true;
+    }
+    if (!found14 && insertPos < lines.size())
+    {
+        lines.insert(lines.begin() + insertPos, Desired14);
+        insertPos++;
         modified = true;
     }
 

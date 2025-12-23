@@ -47,21 +47,24 @@ state s_Camera
 				ResetInteraction();
 
 				// gaz
-				GazCloud		= spawn(class'ECo2', self,,, Epc.Rotation);
+				GazCloud = spawn(class'ECo2', self,,, Epc.Rotation);
 
 				PlaySound(Sound'FisherEquipement.Play_StickyCamGas', SLOT_SFX);
 				AddSoundRequest(Sound'FisherEquipement.Stop_StickyCamGas', SLOT_SFX, 2.5f);
 
 				Epc.bJump = 0;
 			}
-			else if (Epc.bDuck != 0)
+			else if ((Epc.ControllerScheme == CS_Default && Epc.bScope != 0) || (Epc.ControllerScheme != CS_Default && Epc.bDuck != 0))
 			{
 				PlaySound(Sound'FisherEquipement.Play_Random_StickyCamNoise', SLOT_SFX);
 
 				if (!bWasSeen)
 					MakeNoise(1250, NOISE_Object_Falling);
 
-				Epc.bDuck = 0;
+				if (Epc.ControllerScheme == CS_Default)
+					Epc.bScope = 0;
+				else
+					Epc.bDuck = 0;
 			}
 		}
 		else
@@ -74,7 +77,7 @@ state s_Camera
 				ResetInteraction();
 
 				// gaz
-				GazCloud		= spawn(class'ECo2', self,,, Epc.Rotation);
+				GazCloud = spawn(class'ECo2', self,,, Epc.Rotation);
 
 				PlaySound(Sound'FisherEquipement.Play_StickyCamGas', SLOT_SFX);
 				AddSoundRequest(Sound'FisherEquipement.Stop_StickyCamGas', SLOT_SFX, 2.5f);

@@ -196,13 +196,19 @@ state s_Flying
 
 	function Tick(float deltaTime)
 	{
+		local bool bShouldExitOnDuck;
+		
 		if (Epc == None)
 			return;
 
+		// Joshua - Allow duck to exit camera if using keyboard or using controller with default scheme
+		bShouldExitOnDuck = !Epc.eGame.bUseController || Epc.ControllerScheme == CS_Default;
+
 		// if player is dead, stop processing
-		if (Epc.bFire != 0 || Epc.bDuck != 0 || Epc.Pawn.Health <= 0)
+		if (Epc.bFire != 0 || (bShouldExitOnDuck && Epc.bDuck != 0) || Epc.Pawn.Health <= 0)
 		{
-			Epc.bDuck = 0; // Joshua - Crouching will exit the camera
+			if (bShouldExitOnDuck)
+				Epc.bDuck = 0;
 			GiveView(true);
 		}
 	}
@@ -250,6 +256,8 @@ state s_Camera
 	{
 		local Rotator previous_rotation, delta_rotation, clamped_rotation;
 		local float deltaMov;
+		local bool bShouldExitOnDuck;
+
 		previous_rotation = camera_rotation;
 
 		// Set camera rotation from player camera movement.
@@ -276,11 +284,15 @@ state s_Camera
 		// control Camera
 		Epc.m_camera.UpdateView(camera_rotation, true);
 
+		// Joshua - Allow duck to exit camera if using keyboard or using controller with default scheme
+		bShouldExitOnDuck = !Epc.eGame.bUseController || Epc.ControllerScheme == CS_Default;
+
 		// if player is dead, stop processing
-		if (Epc.bFire != 0 || Epc.bDuck != 0 || Epc.Pawn.Health <= 0)
+		if (Epc.bFire != 0 || (bShouldExitOnDuck && Epc.bDuck != 0)|| Epc.Pawn.Health <= 0)
 		{
 			Epc.bFire = 0;
-			Epc.bDuck = 0; // Joshua - Crouching will exit the camera
+			if (bShouldExitOnDuck)
+				Epc.bDuck = 0;
 			GiveView(true);
 		}
 	}
