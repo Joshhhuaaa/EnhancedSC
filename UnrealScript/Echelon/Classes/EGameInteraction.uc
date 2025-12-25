@@ -498,7 +498,7 @@ state s_GameInteractionMenu
 		if (Epc.bInteractionPause) // Joshua - Adding interaction pause option
 			Epc.SetPause(true);
 		else
-			Epc.bStopInput = true;
+			Epc.PlayerInput.bStopInputAlternate = true;
 
 		Epc.IManager.SelectedInteractions = 1;
 		
@@ -519,7 +519,7 @@ state s_GameInteractionMenu
 		if (Epc.bInteractionPause) // Joshua - Adding interaction pause option
 			Epc.SetPause(false);
 		else
-			Epc.bStopInput = false;
+			Epc.PlayerInput.bStopInputAlternate = false;
 
 		// Joshua - Force exit the interaction menu when the player dies
 		if (!bForceExited)
