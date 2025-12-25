@@ -1299,6 +1299,10 @@ function PawnDied()
 	if (egi != None)
 		egi.ForceExitInteractionMenu();
 
+	// Joshua - Call PostInteract when player dies to clean any interactions
+	if (Interaction != None)
+		Interaction.PostInteract(self);
+
 	if (ePawn != None)
 	{
 		SetLocation(ePawn.Location);
@@ -6665,6 +6669,13 @@ state s_Turret extends s_InteractWithObject
 		return false;
 	}
 
+	// Joshua - Leave interaction on EndMission
+	function ProcessEndMission()
+	{
+		if (Interaction != None)
+			Interaction.PostInteract(self);
+	}
+
 	// Joshua - Crouching will exit the turret
 	function PlayerMove(float DeltaTime)
 	{
@@ -6841,6 +6852,13 @@ state s_KeyPadInteract extends s_InteractWithObject
 	function bool CanAccessPlayerStats()
 	{
 		return false;
+	}
+
+	// Joshua - Leave interaction on EndMission
+	function ProcessEndMission()
+	{
+		if (Interaction != None)
+			Interaction.PostInteract(self);
 	}
 
 	// Joshua - Crouching will exit the keypad
