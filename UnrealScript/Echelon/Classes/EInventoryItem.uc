@@ -188,6 +188,8 @@ function BaseChange();
 //------------------------------------------------------------------------
 function Add(Actor NewOwner, Controller NewController, EInventory Inventory)
 {
+	local EInventoryItem PreviousSecondary; // Joshua - Preserve selected item during sort
+	
 	// Set its Owner .. not necessary anymore
 	if (NewOwner != None)
 		SetOwner(NewOwner);
@@ -204,7 +206,12 @@ function Add(Actor NewOwner, Controller NewController, EInventory Inventory)
 	Inventory.AddInventoryItem(self);
 	
 	// Joshua - Sort the inventory after adding so items appear in consistent order
+	// Preserve the currently selected secondary item to restore after sorting
+	PreviousSecondary = Inventory.BackPackSecSelectedItem;
 	Inventory.SortInventory();
+	// Restore the selected secondary item if it was set
+	if (PreviousSecondary != None && Inventory.Possesses(PreviousSecondary))
+		Inventory.BackPackSecSelectedItem = PreviousSecondary;
 }
 
 // ----------------------------------------------------------------------
