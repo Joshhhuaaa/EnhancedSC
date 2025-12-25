@@ -34,6 +34,7 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
 function InitPattern()
 {
     local Pawn P;
+    local StaticMeshActor SM;
 
     Super.InitPattern();
 
@@ -43,6 +44,45 @@ function InitPattern()
             Characters[1] = P.controller;
         if (P.name == 'ERottweiler0')
             Characters[2] = P.controller;
+    }
+
+    if (!bInit)
+    {
+        ForEach AllActors(class'StaticMeshActor', SM)
+        {
+            // Joshua - Fixing StaticMeshes that are missing textures
+            if (SM.name == 'StaticMeshActor85')
+            {
+                SM.SetStaticMesh(StaticMesh(DynamicLoadObject("4_3_2_Chinese_Embassy_obj.Embassy.ferong_carpet_chi", class'StaticMesh')));
+            }
+
+            if (SM.name == 'StaticMeshActor1871')
+            {
+                SM.Skins[3] = Texture(DynamicLoadObject("EGO_Tex.CHI_TexGO.GO_hall_stairs_ramp_chi", class'Texture'));
+            }
+
+            if (SM.name == 'StaticMeshActor1987')
+            {
+                SM.Skins[0] = Texture(DynamicLoadObject("4_3_0_Chinese_Embassy_tex.Restaurant.brushedmetal_chi", class'Texture'));
+            }
+
+            if (SM.name == 'StaticMeshActor1994')
+            {
+                SM.Skins[0] = Texture(DynamicLoadObject("4_3_0_Chinese_Embassy_tex.Restaurant.brushedmetal_chi", class'Texture'));
+            }
+
+            if (SM.name == 'StaticMeshActor1997')
+            {
+                SM.Skins[0] = Texture(DynamicLoadObject("4_3_Chinese_Embassy_tex.Embassy.flagposte_CHI", class'Texture'));
+                SM.Skins[1] = Shader(DynamicLoadObject("4_3_Chinese_Embassy_tex.Embassy.Flag02_CHI_2sided", class'Shader'));
+            }
+
+            // Joshua - Replacing sofa textures
+            if (SM.name == 'StaticMeshActor586' || SM.name == 'StaticMeshActor613')
+            {
+                SM.Skins[0] = Texture(DynamicLoadObject("EGO_Tex.CHI_TexGO.GO_Leather4_CHI", class'Texture'));
+            }
+        }
     }
 
     if (!bInit)
