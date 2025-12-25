@@ -274,14 +274,22 @@ function PostRender(Canvas C, optional bool bMinimal)
 				sCurrentGoal = Localize("InventoryItem", Epc.ePawn.FullInventory.GetSelectedItem(1).ItemName, "Localization\\HUD");
 			else if (Epc.ePawn.FullInventory.GetSelectedItem() != None)
 				sCurrentGoal = Localize("InventoryItem", Epc.ePawn.FullInventory.GetSelectedItem().ItemName, "Localization\\HUD");
-			DisplayCurrentGoal(Canvas);
-			bHasCurrentGoal = true;
+			
+			// Joshua - Only display if we got a valid gadget name
+			if (sCurrentGoal != "(null)")
+			{
+				DisplayCurrentGoal(Canvas);
+				bHasCurrentGoal = true;
+			}
 		}
 		else if (Epc.bShowCurrentGadget && !bDisplayGadget && iCurrentPos > 0 && iCurrentPos < 100) // Joshua - Keep rendering during slide-down animation
 		{
-			// Keep displaying the last gadget name while sliding down
-			DisplayCurrentGoal(Canvas);
-			bHasCurrentGoal = true;
+			// Joshua - Only display if we got a valid gadget name
+			if (sCurrentGoal != "(null)")
+			{
+				DisplayCurrentGoal(Canvas);
+				bHasCurrentGoal = true;
+			}
 		}
 		else if (Epc.CurrentGoal != "" &&
 				Epc.CurrentGoalSection != "" &&
