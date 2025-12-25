@@ -129,7 +129,8 @@ function ProcessZoning()
         if (!((EchelonLevelInfo(Level)).bIgnoreAlarmStage))
         {
     	    //send NPC transmission
-		    EchelonGameInfo(Level.Game).pPlayer.SendTransmissionMessage(Localize("Transmission", "BodyFound", "Localization\\HUD"), TR_NPCS);
+			if (!EchelonLevelInfo(Level).bOneAlarmLevel) // Joshua - Don't send on OneAlarmLevel
+		    	EchelonGameInfo(Level.Game).pPlayer.SendTransmissionMessage(Localize("Transmission", "BodyFound", "Localization\\HUD"), TR_NPCS);
 
 			AddOneVoice();
 			EchelonGameInfo(Level.Game).pPlayer.EPawn.PlaySound((EchelonLevelInfo(Level)).FindCorpseSound, SLOT_Voice);

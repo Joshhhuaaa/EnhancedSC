@@ -125,9 +125,18 @@ End:
     End();
 HintRetinal:
     Log("HintRetinal");
+    // Joshua - Hack to cutoff these NPCs if an alarm has been triggered
+    if (EchelonLevelInfo(Level).AlarmStage != 0)
+        End();
     Speech(Localize("P_1_2_1DefMin_ColonelJob", "Speech_0002L", "Localization\\P_1_2_1DefenseMinistry"), Sound'S1_2_1Voice.Play_12_21_01', 1, 0, TR_NPCS, 0, false);
     AddNote("", "P_1_2_1DefMin_ColonelJob", "Note_0003L", "Localization\\P_1_2_1DefenseMinistry");
+    // Joshua - Hack to cutoff these NPCs if an alarm has been triggered
+    if (EchelonLevelInfo(Level).AlarmStage != 0)
+        End();
     Speech(Localize("P_1_2_1DefMin_ColonelJob", "Speech_0004L", "Localization\\P_1_2_1DefenseMinistry"), Sound'S1_2_1Voice.Play_12_21_02', 1, 0, TR_NPCS, 0, false);
+    // Joshua - Hack to cutoff these NPCs if an alarm has been triggered
+    if (EchelonLevelInfo(Level).AlarmStage != 0)
+        End();
     Speech(Localize("P_1_2_1DefMin_ColonelJob", "Speech_0005L", "Localization\\P_1_2_1DefenseMinistry"), Sound'S1_2_1Voice.Play_12_21_03', 1, 0, TR_NPCS, 0, false);
     Close();
     End();

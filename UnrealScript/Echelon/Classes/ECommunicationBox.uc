@@ -75,6 +75,30 @@ function Unlock()
 	CurrentOwner = None;
 }
 
+/*-----------------------------------------------------------------------------
+ Function:      ClearNPCTransmissions
+
+ Description:   Joshua - Clears all NPC transmissions. Call this before high-priority
+                communications like Lambert warnings to prevent visual glitches.
+-----------------------------------------------------------------------------*/
+function ClearNPCTransmissions()
+{
+	if (NPCList != None)
+	{
+		NPCList.Clear();
+		NPCNb = 0;
+	}
+	
+	// If currently showing NPC transmissions, reset everything so new speech can take over
+	if (CurrentTransmission == TR_NPCS)
+	{
+		CurrentTransmission = TR_NONE;
+		CurrentOwner = None;
+		bFree = true;
+		GotoState('Idle');
+	}
+}
+
 function bool bIsFree()
 {
     return bFree;
@@ -379,6 +403,10 @@ state() StandardDisplay
         local ETransmissionObj T, TT;
 		local bool bIsAGoal;
 		local String MyLine;
+		// Joshua - Fix bug causing incorrect communication box height when loading a save
+		local float calculatedHeight;
+		local EListNode TempNode;
+		local ETransmissionObj TempT;
 
 		GCanvas = Canvas;
 
@@ -395,8 +423,40 @@ state() StandardDisplay
 		}
 		else
 		{        
-			GetCurrentSize(height); 
-			height += 30; //Hack to fit the word OBJECTIVE on first line
+			// Joshua - Calculate height from text content directly
+			// This fixes a bug where GetCurrentSize/YSpace returns wrong value after loading a save
+			SetClipZone(Canvas);
+			height = 0;
+			TempNode = Node;
+			
+			// Debug - count nodes
+			iNbrOfLine = 0;
+			
+			while (TempNode != None)
+			{
+				TempT = ETransmissionObj(TempNode.Data);
+				if (TempT != None)
+				{
+					// Joshua - If YSpace is 0/invalid after a load, recalculate and store it
+					if (TempT.YSpace <= 0)
+						TempT.YSpace = Canvas.GetNbStringLines(TempT.Data, 1.0f) * yLen;
+					
+					height += TempT.YSpace;
+					iNbrOfLine += 1;
+				}
+				TempNode = TempNode.NextNode;
+			}
+			ResetClipZone(Canvas);
+			// Joshua - End of fix
+			
+			// Joshua - Add one line of padding at bottom for NPC transmissions
+			if (CurrentTransmission == TR_NPCS)
+			{
+				height += yLen;
+				// Joshua - If NPC transmission has an objective header (rare), add extra line for it
+				if (CurrentSpecialEvent == ST_GOAL)
+					height += yLen;
+			}
 			
 			if (height < MIN_COMBOX_HEIGHT)
 			    height = MIN_COMBOX_HEIGHT;
@@ -470,10 +530,38 @@ state() StandardDisplay
             yTextPos = 0;
 
             SetClipZone(Canvas);
+			
+			iNbrOfLine = 0; // Joshua - Initialize line counter
+
+			// Joshua - Draw objective header once before the loop, not for each node
+			// This fixes bug where objective would appear multiple times when multiple NPC transmissions queued
+			if (bIsAGoal)
+			{
+				// DRAW TEXT				
+				Canvas.SetDrawColor(128, 128, 128, 153);
+				Canvas.Style = ERenderStyle.STY_Alpha;
+				// Joshua - Adjusted objective bar for consistency (adding 1px to the right, subtracting 1px from the bottom)
+				Canvas.DrawLine(xTextPos, yTextPos + 1, COMBOX_WIDTH - 14 - ICON_WIDTH, 14, Canvas.black, 150, eLevel.TMENU);
+				Canvas.SetDrawColor(128, 128, 128);
+				Canvas.Style = ERenderStyle.STY_Normal;
+
+				Canvas.SetPos(xTextPos,yTextPos);
+			
+				// Display the word OBJECTIVE in a blinking way
+				if (!bBlink)
+				{
+					Canvas.DrawText(Localize("HUD", "OBJECTIVE", "Localization\\HUD"), false);						
+				}
+				
+				Canvas.DrawColor = Canvas.TextBlack;
+				yTextPos = 18; // Move text position down past the header
+			}
 
             while (Node != None)
 			{		
 				T = ETransmissionObj(Node.Data);
+				
+				iNbrOfLine += 1; // Joshua - Increment line count for each transmission node
 								
 				if (bWithVoice)
 					iNbrOfLine = Canvas.GetNbStringLines(T.Data, 1.0f);								
@@ -490,6 +578,8 @@ state() StandardDisplay
                 else
                     Canvas.DrawColor = Canvas.TextBlack;
 
+				// Joshua - OBJECTIVE header was inside loop causing duplicates
+				/*
                 // Display a blinking OBJECTIVE when it`s a goal 
 				if (bIsAGoal)
 				{
@@ -514,6 +604,7 @@ state() StandardDisplay
 					Canvas.SetPos(0,18);														
 				}
 				else
+				*/
 					Canvas.SetPos(xTextPos,yTextPos);
 				
 				if (bWithVoice)
@@ -521,7 +612,7 @@ state() StandardDisplay
 				else
 					Canvas.DrawText(T.Data,false);
 
-				yTextPos += T.YSpace;
+				yTextPos += T.YSpace; // Joshua - Use T.YSpace (already corrected in height calculation if it was 0)
 				Node = Node.NextNode;
             }			
 
@@ -652,14 +743,40 @@ state s_Menu
         local float height;
         local int xTextPos, yTextPos;
         local ETransmissionObj T;
+		// Joshua - Fix bug causing incorrect communication box height when loading a saved game
+		local float xLen, yLen;
+        local EListNode TempNode;
+        local ETransmissionObj TempT;
 
         Canvas.Font = Canvas.ETextFont;
+        Canvas.TextSize("T", xLen, yLen); // Joshua - Ensure yLen is set for accurate text height
 
         // Get Current Transmission Node //
         Node = GetCurrentNode();
 
-        // Set Communication Box height //
-        GetCurrentSize(height);
+        // Joshua - Calculate height from text content directly
+        // This fixes a bug where GetCurrentSize returns wrong value after loading a save
+        Canvas.SetOrigin(640 - COMBOX_WIDTH - eGame.HUD_OFFSET_X + 7,eGame.HUD_OFFSET_Y + 7);
+        Canvas.SetPos(0,0);
+        Canvas.SetClip(COMBOX_WIDTH - 16 - ICON_WIDTH,480);
+        
+        height = 0;
+        TempNode = Node;
+        while (TempNode != None)
+        {
+            TempT = ETransmissionObj(TempNode.Data);
+            if (TempT != None)
+            {
+                if (TempT.YSpace > 0)
+                    height += TempT.YSpace;
+                else
+                    height += Canvas.GetNbStringLines(TempT.Data, 1.0f) * yLen;
+            }
+            TempNode = TempNode.NextNode;
+        }
+        ResetClipZone(Canvas);
+		// Joshua - End of fix
+        
         if (height < MIN_COMBOX_HEIGHT)
             height = MIN_COMBOX_HEIGHT;
         
@@ -692,7 +809,13 @@ state s_Menu
                 Canvas.SetPos(xTextPos,yTextPos);
 			    Canvas.DrawText(T.Data,false);
 
-			    yTextPos += T.YSpace;
+			    // Joshua - Use T.YSpace if valid, otherwise calculate from text height
+			    // This fixes a bug where YSpace is wrong/zero after loading a save
+			    if (T.YSpace > 0)
+			        yTextPos += T.YSpace;
+			    else
+			        yTextPos += Canvas.GetNbStringLines(T.Data, 1.0f) * yLen;
+
 			    Node      = Node.NextNode;
             }
 
