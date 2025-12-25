@@ -32,6 +32,9 @@ var INT                     m_ILabelXPos, m_ILabelWidth, m_ILineItemHeight, m_IT
 var bool                    m_bModified;    //A setting has changed
 var bool					m_bFirstRefresh;
 
+// Joshua - Original value for LODDistance (requires restart)
+var int                     m_OriginalLODDistance;
+
 function Created()
 {
     SetAcceptsFocus();
@@ -299,6 +302,9 @@ function Refresh()
     if (m_ComboTurnOffDistanceScale != None && EPC != None)
         m_ComboTurnOffDistanceScale.SetSelectedIndex(Clamp(EPC.eGame.TurnOffDistanceScale, 0, m_ComboTurnOffDistanceScale.List.Items.Count() - 1));
 
+    // Joshua - Store original value for LODDistance before setting combo (requires restart)
+    m_OriginalLODDistance = int(EPC.eGame.bLODDistance);
+
     if (m_ComboLODDistance != None && EPC != None)
         m_ComboLODDistance.SetSelectedIndex(Clamp(int(EPC.eGame.bLODDistance), 0, m_ComboLODDistance.List.Items.Count() - 1));
 
@@ -329,6 +335,10 @@ function ResetToDefault()
     EPC.eGame.bLODDistance = true; // EPC.eGame.default.bLODDistance;
     //EPC.eGame.bPauseOnFocusLoss = EPC.eGame.default.bPauseOnFocusLoss;
     EPC.eGame.SaveEnhancedOptions();
+
+    // Joshua - Check if LODDistance changed from original (requires restart)
+    if (int(EPC.eGame.bLODDistance) != m_OriginalLODDistance)
+        EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "RestartRequired", "Localization\\Enhanced"), Localize("Common", "RestartRequiredWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
 
 	Refresh();
 }
@@ -389,7 +399,6 @@ function Notify(UWindowDialogControl C, byte E)
         case m_BrightnessScroll:
         case m_ComboEffectsQuality:
         case m_ComboTurnOffDistanceScale:
-        case m_ComboLODDistance:
         //case m_ComboPauseOnFocusLoss:
             m_bModified = true;
             // Joshua - Update value labels for scrollbars
@@ -397,6 +406,11 @@ function Notify(UWindowDialogControl C, byte E)
                 m_LGammaValue.SetLabelText(string(int(m_GammaScroll.Pos)), TXT_LEFT);
             if (C == m_BrightnessScroll && m_LBrightnessValue != None)
                 m_LBrightnessValue.SetLabelText(string(int(m_BrightnessScroll.Pos)), TXT_LEFT);
+            break;
+        case m_ComboLODDistance:
+            m_bModified = true;
+            if (m_ComboLODDistance.GetSelectedIndex() != m_OriginalLODDistance)
+                EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "RestartRequired", "Localization\\Enhanced"), Localize("Common", "RestartRequiredWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
             break;
         }
     }

@@ -74,6 +74,11 @@ var EPCComboControl         m_TrainingSamMesh,
 var bool    m_bModified;
 var bool	m_bFirstRefresh;
 
+// Original values for settings that require restart
+var bool    m_bOriginalCheckForUpdates;
+var bool    m_bOriginalSkipIntroVideos;
+var bool    m_bOriginalDisableMenuIdleTimer;
+
 function Created()
 {
     SetAcceptsFocus();
@@ -380,8 +385,20 @@ function Notify(UWindowDialogControl C, byte E)
         switch (C)
         {
             case m_bCheckForUpdates:
+                if (m_bCheckForUpdates.m_bSelected != m_bOriginalCheckForUpdates)
+                    EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "RestartRequired", "Localization\\Enhanced"), Localize("Common", "RestartRequiredWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
+                m_bModified = true;
+                break;
             case m_bSkipIntroVideos:
+                if (m_bSkipIntroVideos.m_bSelected != m_bOriginalSkipIntroVideos)
+                    EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "RestartRequired", "Localization\\Enhanced"), Localize("Common", "RestartRequiredWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
+                m_bModified = true;
+                break;
             case m_bDisableMenuIdleTimer:
+                if (m_bDisableMenuIdleTimer.m_bSelected != m_bOriginalDisableMenuIdleTimer)
+                    EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "RestartRequired", "Localization\\Enhanced"), Localize("Common", "RestartRequiredWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
+                m_bModified = true;
+                break;
             case m_bInteractionPause:
             case m_bEnableCheckpoints:
             case m_bMissionFailedQuickMenu:
@@ -935,6 +952,14 @@ function ResetToDefault()
     m_VselkaSamMesh.SetSelectedIndex(0);
     m_PowerPlantSamMesh.SetSelectedIndex(0);
     m_SeveronickelSamMesh.SetSelectedIndex(0);
+
+    // Check if any restart-required settings were changed from original
+    if (m_bCheckForUpdates.m_bSelected != m_bOriginalCheckForUpdates ||
+        m_bSkipIntroVideos.m_bSelected != m_bOriginalSkipIntroVideos ||
+        m_bDisableMenuIdleTimer.m_bSelected != m_bOriginalDisableMenuIdleTimer)
+    {
+        EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "RestartRequired", "Localization\\Enhanced"), Localize("Common", "RestartRequiredWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
+    }
 }
 
 function Refresh()
@@ -956,6 +981,11 @@ function Refresh()
 
     if (m_bDisableMenuIdleTimer != None)
         m_bDisableMenuIdleTimer.m_bSelected = EPC.eGame.bDisableMenuIdleTimer;
+
+    // Store original values for restart-required settings
+    m_bOriginalCheckForUpdates = EPC.eGame.bCheckForUpdates;
+    m_bOriginalSkipIntroVideos = EPC.eGame.bSkipIntroVideos;
+    m_bOriginalDisableMenuIdleTimer = EPC.eGame.bDisableMenuIdleTimer;
 
     if (m_PlayerStatsMode != None && EPC != None)
         m_PlayerStatsMode.SetSelectedIndex(Clamp(EPC.PlayerStatsMode, 0, m_PlayerStatsMode.List.Items.Count() - 1));
