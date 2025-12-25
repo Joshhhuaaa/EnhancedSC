@@ -28,6 +28,7 @@ function InitPattern()
     local EEventTrigger EventTrigger;
     local EHat Hat;
     local EChair Chair;
+    local EZoneAI ZoneAI;
 
     Super.InitPattern();
 
@@ -87,6 +88,22 @@ function InitPattern()
             if (Hat.name == 'EHat4')
             {
                 Hat.Destroy();
+            }
+        }
+
+        // Joshua - Merge EZoneAI4 DisableGroups into EZoneAI1 to prevent double alarm triggers
+        ForEach AllActors(Class'EZoneAI', ZoneAI)
+        {
+            if (ZoneAI.name == 'EZoneAI1')
+            {
+                ZoneAI.EnableGroupTags[7] = 'EGroupAI9';
+                ZoneAI.EnableGroupTags[8] = 'EGroupAI10';
+                ZoneAI.DisableGroupTags[2] = 'EGroupAI1';
+            }
+            
+            if (ZoneAI.name == 'EZoneAI4')
+            {
+                ZoneAI.DisableGroupTags.Length = 0;
             }
         }
     }
