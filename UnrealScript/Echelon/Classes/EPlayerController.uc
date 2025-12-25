@@ -2824,6 +2824,7 @@ function ChangeHeadObject(EInventoryItem HeadObj)
 	//Log("* * * * CHangeHeadObject to="$HeadObj);
 	Goggle.SwitchVisionMode(EAbstractGoggle(HeadObj).RendType);
 }
+
 event GoggleUp() // High
 {
 	Goggle.Up();
@@ -7607,11 +7608,25 @@ HolsterThenOpenLt:
 	JumpLabelPrivate = 'JmpUnLockedLt';
 	Goto('HolsterThenDoDoor');
 
+// Joshua - Holstering weapon before trying locked/jammed door
+HolsterThenLockedRt:
+	JumpLabelPrivate = 'JmpLockedRt';
+	Goto('HolsterThenDoDoor');
+
+HolsterThenLockedLt:
+	JumpLabelPrivate = 'JmpLockedLt';
+	Goto('HolsterThenDoDoor');
+
 HolsterThenDoDoor:
 	if (ePawn.WeaponStance > 0)
 	{
 		ePawn.Transition_WeaponAway();
 		FinishAnim(EPawn.ACTIONCHANNEL);
+	}
+	// If coming from a locked/jammed door, play jam sound
+	if (JumpLabelPrivate == 'JmpLockedRt' || JumpLabelPrivate == 'JmpLockedLt')
+	{
+		ePawn.AddSoundRequest(Sound'Door.Play_DoorJam', SLOT_SFX, 0.4f);
 	}
 	Goto('DoDoor');
 

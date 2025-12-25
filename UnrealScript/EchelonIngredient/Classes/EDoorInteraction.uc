@@ -187,10 +187,23 @@ function InitInteract(Controller Instigator)
 			if (MyDoor.Locked || !MyDoor.Usable)
 			{
 				//Log("		Locked");
-				if (LeftSideInteraction)
-					Instigator.GotoState('s_OpenDoor', 'LockedLt');
+				// Joshua - Holster weapon before trying to open locked/jammed door
+				if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
+				{
+					EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
+					
+					if (LeftSideInteraction)
+						Instigator.GotoState('s_OpenDoor', 'HolsterThenLockedLt');
+					else
+						Instigator.GotoState('s_OpenDoor', 'HolsterThenLockedRt');
+				}
 				else
-					Instigator.GotoState('s_OpenDoor', 'LockedRt');
+				{
+					if (LeftSideInteraction)
+						Instigator.GotoState('s_OpenDoor', 'LockedLt');
+					else
+						Instigator.GotoState('s_OpenDoor', 'LockedRt');
+				}
 			}
 			else
 			{
@@ -231,10 +244,23 @@ function InitInteract(Controller Instigator)
 		if (MyDoor.Locked || !MyDoor.Usable)
 		{
 			//Log("		Locked");
-			if (LeftSideInteraction)
-				Instigator.GotoState('s_OpenDoor', 'LockedLt');
+			// Joshua - Holster weapon before trying to open locked/jammed door
+			if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
+			{
+				EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
+				
+				if (LeftSideInteraction)
+					Instigator.GotoState('s_OpenDoor', 'HolsterThenLockedLt');
+				else
+					Instigator.GotoState('s_OpenDoor', 'HolsterThenLockedRt');
+			}
 			else
-				Instigator.GotoState('s_OpenDoor', 'LockedRt');
+			{
+				if (LeftSideInteraction)
+					Instigator.GotoState('s_OpenDoor', 'LockedLt');
+				else
+					Instigator.GotoState('s_OpenDoor', 'LockedRt');
+			}
 		}
 		else
 		{
