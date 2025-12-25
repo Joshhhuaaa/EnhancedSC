@@ -85,6 +85,7 @@ GrinkoSpeach2:
     Log("");
     SetFlags(V4_2_2_Abattoir(Level.VarObject).GrinkoSpeechTriggered,TRUE); // Joshua - Keep track if Grinko already did his speech
     CheckFlags(V4_2_2_Abattoir(Level.VarObject).GDstopLambertGoal,TRUE,'GrinkoGO');
+    EVolume(GetMatchingActor('EVolume9')).SetCollision(false, false, false); // Joshua - Prevent triggering this event twice
     Speech(Localize("P_4_2_2_Abt_Studio", "Speech_0010L", "Localization\\P_4_2_2_Abattoir"), Sound'S4_2_2Voice.Play_42_60_01', 2, 0, TR_NPCS, 0, false);
     Close();
     Sleep(1);
@@ -107,7 +108,8 @@ GDb:
     CheckFlags(GdeadPass1,TRUE,'GDc');
     SetFlags(V4_2_2_Abattoir(Level.VarObject).GDstopLambertGoal,TRUE);
     GoalCompleted('KillGrinko');
-    Speech(Localize("P_4_2_2_Abt_Studio", "Speech_0013L", "Localization\\P_4_2_2_Abattoir"), Sound'S4_2_2Voice.Play_42_70_01', 1, 2, TR_NPCS, 0, false);
+    // Joshua - Do not mark this speech as an Objective
+    Speech(Localize("P_4_2_2_Abt_Studio", "Speech_0013L", "Localization\\P_4_2_2_Abattoir"), Sound'S4_2_2Voice.Play_42_70_01', 1, 0, TR_NPCS, 0, false);
     Speech(Localize("P_4_2_2_Abt_Studio", "Speech_0014L", "Localization\\P_4_2_2_Abattoir"), Sound'S4_2_2Voice.Play_42_70_02', 1, 0, TR_NPCS, 0, false);
     Speech(Localize("P_4_2_2_Abt_Studio", "Speech_0015L", "Localization\\P_4_2_2_Abattoir"), Sound'S4_2_2Voice.Play_42_70_03', 1, 0, TR_NPCS, 0, false);
     Close();

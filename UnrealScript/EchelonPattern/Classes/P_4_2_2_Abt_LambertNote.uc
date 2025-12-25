@@ -117,6 +117,7 @@ LongDanMove:
     End();
 KillGrinko:
     Log("Lambert tell Sam he need to kill grinko");
+    EVolume(GetMatchingActor('EVolume9')).SetCollision(false, false, false); // Joshua - Prevent triggering this event twice
     Sleep(0.5);
     CheckFlags(V4_2_2_Abattoir(Level.VarObject).GDstopLambertGoal,TRUE,'Fin');
     CheckFlags(V4_2_2_Abattoir(Level.VarObject).GrinkoObjectiveTriggered,TRUE,'Fin'); // Joshua - Prevent Grinko objective from being added twice
