@@ -38,6 +38,13 @@ function AddedToInventory()
 {
 	EPlayerController(Controller).HandGun = self;
 	Super.AddedToInventory();
+
+	// Joshua - PS2 FN7 Accuracy: Apply when picking up the weapon mid-mission
+	if (EchelonGameInfo(Level.Game).bPS2FN7Accuracy)
+	{
+		AccuracyMovementModifier = 3.330000;
+		AccuracyBase = 0.330000;
+	}
 }
 
 function bool NotifyPickup(Controller Instigator)
