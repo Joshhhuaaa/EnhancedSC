@@ -2624,7 +2624,7 @@ state s_Default
 	function BeginState() {}
 
 
-	function Tick (float deltaTime)
+	function Tick(float deltaTime)
 	{
 		if (Group != none)
 		{

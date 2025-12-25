@@ -4,6 +4,7 @@
 class ESam extends EPawn;
 
 var float FireTimer;
+var bool bInitializeHealth; // Joshua - Check Health if it exceeds InitialHealth (can happen when switching Xbox difficulty mid-mission)
 
 #exec OBJ LOAD FILE=..\textures\ETexCharacter.utx
 #exec OBJ LOAD FILE=..\StaticMeshes\generic_obj.usx
@@ -512,6 +513,14 @@ function Tick(float DeltaTime)
 			if (FireTimer <= 0)
 				AttenuateFire(1.f);
 		}
+	}
+
+	// Joshua - Check Health if it exceeds InitialHealth (can happen when switching Xbox difficulty mid-mission)
+	if (!bInitializeHealth)
+	{
+		bInitializeHealth = true;
+		if (Health > InitialHealth)
+			Health = InitialHealth;
 	}
 
 	Super.Tick(DeltaTime);
