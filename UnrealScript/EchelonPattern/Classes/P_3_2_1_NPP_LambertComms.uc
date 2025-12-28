@@ -119,19 +119,19 @@ state Pattern
 Begin:
 Comm1:
     Log("Communicator 32_20- Russian Soldiers");
-    Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0001L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_20_01', 0, 0, TR_HEADQUARTER, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0001L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_20_01', 0, 0, TR_HEADQUARTER, 0, false);
     Sleep(0.1);
-    Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0002L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_20_02', 1, 0, TR_HEADQUARTER, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0002L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_20_02', 1, 0, TR_HEADQUARTER, 0, false);
     Sleep(0.1);
-    Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0003L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_20_03', 0, 0, TR_HEADQUARTER, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0003L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_20_03', 0, 0, TR_HEADQUARTER, 0, false);
     Sleep(0.1);
-    Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0004L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_20_04', 1, 0, TR_HEADQUARTER, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0004L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_20_04', 1, 0, TR_HEADQUARTER, 0, false);
     Sleep(0.1);
     Close();
     End();
 Init:
     Log("Communicator 32_10 -  Trigger meltdown alarm");
-    Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0027L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_10_01', 1, 0, TR_HEADQUARTER, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0027L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_10_01', 1, 0, TR_HEADQUARTER, 0, false);
     Sleep(0.1);
     AddGoal('1', "", 3, "", "P_3_2_1_NPP_LambertComms", "Goal_0020L", "Localization\\P_3_2_1_PowerPlant", "P_3_2_1_NPP_LambertComms", "Goal_0024L", "Localization\\P_3_2_1_PowerPlant");
     AddGoal('3', "", 8, "", "P_3_2_1_NPP_LambertComms", "Goal_0021L", "Localization\\P_3_2_1_PowerPlant", "P_3_2_1_NPP_LambertComms", "Goal_0025L", "Localization\\P_3_2_1_PowerPlant");
@@ -145,11 +145,11 @@ Init:
     End();
 Collaterals:
     Log("Communicator 32_12- No Collateral");
-    Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0007L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_12_01', 1, 0, TR_HEADQUARTER, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0007L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_12_01', 1, 0, TR_HEADQUARTER, 0, false);
     Sleep(0.1);
-    Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0008L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_12_02', 0, 0, TR_HEADQUARTER, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0008L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_12_02', 0, 0, TR_HEADQUARTER, 0, false);
     Sleep(0.1);
-    Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0009L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_12_03', 1, 0, TR_HEADQUARTER, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0009L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_12_03', 1, 0, TR_HEADQUARTER, 0, false);
     Sleep(0.1);
     Close();
     AddNote("", "P_3_2_1_NPP_LambertComms", "Note_0011L", "Localization\\P_3_2_1_PowerPlant");
@@ -157,7 +157,7 @@ Collaterals:
 EmployeeHurt:
     Log("Sam has killed a power plant employee.");
     CheckFlags(Molestered,TRUE,'SecondTime');
-    Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0006L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_90_01', 1, 0, TR_HEADQUARTER, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0006L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_90_01', 1, 0, TR_HEADQUARTER, 0, false);
     SetFlags(Molestered,TRUE);
     Sleep(0.1);
     Close();
@@ -165,7 +165,7 @@ EmployeeHurt:
 SecondTime:
     Log("2 strikes, you're out Sam.");
     SetProfileDeletion();
-    Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0005L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_90_03', 1, 0, TR_HEADQUARTER, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0005L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_90_03', 1, 0, TR_HEADQUARTER, 0, false);
     Sleep(2.5);
     Close();
     Sleep(0.5);
@@ -176,17 +176,17 @@ AlertCompleted:
     SendUnrealEvent('TheLights');
     SendUnrealEvent('MeltdownLights');
     Sleep(3);
-    Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0014L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_26_01', 1, 0, TR_HEADQUARTER, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0014L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_26_01', 1, 0, TR_HEADQUARTER, 0, false);
     Sleep(0.1);
     Close();
     Sleep(69);
 RussiansRemain:
     Log("Communicator 32_27- Russians Remain");
-    Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0015L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_27_01', 1, 0, TR_HEADQUARTER, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0015L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_27_01', 1, 0, TR_HEADQUARTER, 0, false);
     Sleep(0.1);
-    Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0016L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_27_02', 0, 0, TR_HEADQUARTER, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0016L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_27_02', 0, 0, TR_HEADQUARTER, 0, false);
     Sleep(0.1);
-    Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0017L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_27_03', 1, 0, TR_HEADQUARTER, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0017L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_27_03', 1, 0, TR_HEADQUARTER, 0, false);
     Sleep(0.1);
     Close();
     End();
@@ -197,7 +197,7 @@ Load322:
 Screwed:
     Log("Generic Mission Over.");
     SetProfileDeletion();
-    Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0018L", "Localization\\P_3_2_1_PowerPlant"), None, 1, 0, TR_HEADQUARTER, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0018L", "Localization\\P_3_2_1_PowerPlant"), None, 1, 0, TR_HEADQUARTER, 0, false);
     Sleep(4);
     Close();
     GameOver(false, 0);

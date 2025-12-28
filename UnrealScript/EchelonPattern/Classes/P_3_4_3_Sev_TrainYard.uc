@@ -59,7 +59,7 @@ AleksDies:
     Goal_Set(1,GOAL_MoveTo,9,,'Aleks02Cam',,'AleksEndPoint',,FALSE,,MOVE_WalkNormal,,MOVE_WalkNormal);
     WaitForGoal(1,GOAL_MoveTo,);
     CinCamera(0, 'Aleks02Cam', 'Aleks01Foc',);
-    Speech(Localize("P_3_4_3_Sev_TrainYard", "Speech_0001L", "Localization\\P_3_4_3Severonickel"), Sound'S3_4_3Voice.Play_34_60_01', 1, 0, TR_CONVERSATION, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_4_3_Sev_TrainYard", "Speech_0001L", "Localization\\P_3_4_3Severonickel"), Sound'S3_4_3Voice.Play_34_60_01', 1, 0, TR_CONVERSATION, 0, false);
     Sleep(0.1);
     Close();
     Goal_Set(1,GOAL_Action,9,,'Aleks02Cam',,'Aleks02Cam','CiggStNmBg0',FALSE,,MOVE_WalkNormal,,MOVE_WalkNormal);

@@ -57,13 +57,13 @@ RoofTop:
     Log("Begins the pattern when Sam reaches the roof.");
     CheckFlags(Triggered,TRUE,'Nada');
     SetFlags(Triggered,TRUE);
-    Speech(Localize("P_3_2_1_NPP_RoofTop", "Speech_0001L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_23_01', 1, 0, TR_CONVERSATION, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_RoofTop", "Speech_0001L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_23_01', 1, 0, TR_CONVERSATION, 0, false);
     Sleep(0.1);
-    Speech(Localize("P_3_2_1_NPP_RoofTop", "Speech_0002L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_23_02', 2, 0, TR_CONVERSATION, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_RoofTop", "Speech_0002L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_23_02', 2, 0, TR_CONVERSATION, 0, false);
     Sleep(0.1);
-    Speech(Localize("P_3_2_1_NPP_RoofTop", "Speech_0003L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_23_03', 1, 0, TR_CONVERSATION, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_RoofTop", "Speech_0003L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_23_03', 1, 0, TR_CONVERSATION, 0, false);
     Sleep(0.1);
-    Speech(Localize("P_3_2_1_NPP_RoofTop", "Speech_0004L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_23_04', 2, 0, TR_CONVERSATION, 0, false);
+    //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_RoofTop", "Speech_0004L", "Localization\\P_3_2_1_PowerPlant"), Sound'S3_2_1Voice.Play_32_23_04', 2, 0, TR_CONVERSATION, 0, false);
     Sleep(0.1);
     Close();
     Goal_Default(1,GOAL_Patrol,9,,,,'GeddyLee_0',,FALSE,,,,);
