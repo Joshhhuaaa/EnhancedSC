@@ -114,7 +114,7 @@ jobs:
 
     - name: Download dgVoodoo2 (Windows - 2.86.1)
       run: |
-        curl -L -o dgVoodoo2.zip https://dege.freeweb.hu/dgVoodoo2/bin/dgVoodoo2_86_1.zip
+        curl -L -o dgVoodoo2.zip https://github.com/dege-diosg/dgVoodoo2/releases/download/v2.86.4/dgVoodoo2_86_4.zip
         7z e dgVoodoo2.zip "MS\x86\D3D8.dll" -o"./_staging/system" -y
 
     - name: Create Windows zip
