@@ -31,6 +31,7 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
 function InitPattern()
 {
     local Pawn P;
+    local EEventTrigger EventTrigger;
 
     Super.InitPattern();
 
@@ -42,10 +43,17 @@ function InitPattern()
             Characters[2] = P.controller;
     }
 
-    // Joshua - No longer necessary to jam this door, will fail mission when reaching streets without black box instead
     if (!bInit)
     {
+        // Joshua - No longer necessary to jam this door, will fail mission when reaching streets without black box instead
         EDoorMover(GetMatchingActor('BlausteinsBalcony')).SetUsable(True);
+
+        // Joshua - Fixes bug where you can repeatedly restart the civilian patrols
+        ForEach AllActors(class'EEventTrigger', EventTrigger)
+        {
+            if (EventTrigger.name == 'EEventTrigger0')
+                EventTrigger.bTriggerOnlyOnce = true;
+        }
     }
 
     if (!bInit)
