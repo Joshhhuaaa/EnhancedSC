@@ -112,9 +112,9 @@ jobs:
         Move-Item .\README.md .\_staging\${{ github.event.repository.name }}_README.md
         Copy-Item .\_staging\${{ github.event.repository.name }}_README.md .\_staging\system\logs\${{ github.event.repository.name }}.log
 
-    - name: Download dgVoodoo2 (Windows - 2.86.1)
+    - name: Download dgVoodoo2 (Windows - 2.86.4)
       run: |
-        curl -L -o dgVoodoo2.zip https://dege.freeweb.hu/dgVoodoo2/bin/dgVoodoo2_86_1.zip
+        curl -L -o dgVoodoo2.zip https://github.com/dege-diosg/dgVoodoo2/releases/download/v2.86.4/dgVoodoo2_86_4.zip
         7z e dgVoodoo2.zip "MS\x86\D3D8.dll" -o"./_staging/system" -y
 
     - name: Create Windows zip
