@@ -36,7 +36,6 @@ state s_Zooming
         if (Epc.bShowHUD && Epc.bShowScope)
         {
             DrawNoiseBars(Canvas);
-            //DrawUpDownPad(Canvas);
             DrawDistanceMeter(Canvas);
             DrawZoomMeter(Canvas);
             DrawGreenRing(Canvas);
@@ -306,86 +305,12 @@ function DrawZoomMeter(ECanvas Canvas)
 	Canvas.Style = ERenderStyle.STY_Alpha;
 	Canvas.DrawLine(xPos[iZoom - 1], yPos[iZoom - 1], 3, 3, BrightGreenColor, 200, eLevel.TGAME);
 	Canvas.Style = ERenderStyle.STY_Normal;
-
-	/*
-    strZoom = (int(fZoomRatio)$"X");
-
-    Canvas.Font = Font'ETextFont';
-    Canvas.DrawColor = Green;
-
-    Canvas.TextSize(strZoom, xLen, yLen);
-    Canvas.SetPos(150 + (25.0f - xLen/2.0f), 44);
-    Canvas.DrawText(strZoom);
-	*/
 }
 
-/*
-function DrawUpDownPad(ECanvas Canvas)
+function DrawGreenRing(ECanvas Canvas)
 {
-	local float StrLen1, StrLen2, StrLen3, StrLen4, yLen, xPos, Length, yPos;
-
-	Canvas.Style = ERenderStyle.STY_Normal;
-
-	Canvas.DrawLine(50, 400, 540, 80, green, 64, eLevel.TGAME);
-	Canvas.Font = Font'ETextFont';
-	Canvas.DrawColor = ColorTextHUD;
-
-	Canvas.TextSize(Canvas.LocalizeStr("ZoomPlus"), StrLen1, yLen);
-	Canvas.TextSize(Canvas.LocalizeStr("ZoomMinus"), StrLen2, yLen);
-	Canvas.TextSize(GetLocKeyNameByActionKey("ZoomIn"), StrLen3, yLen);
-	Canvas.TextSize(GetLocKeyNameByActionKey("ZoomOut"), StrLen4, yLen);
-
-	Length = Max(StrLen1,StrLen2) + Max(StrLen3,StrLen4) + 30;
-
-	yPos = 405;
-	Canvas.SetPos(300 - StrLen1, yPos);
-	Canvas.DrawTextAligned(Canvas.LocalizeStr("ZoomPlus"), TXT_LEFT);
-	Canvas.SetPos(340, yPos);
-	Canvas.DrawTextAligned(GetLocKeyNameByActionKey("ZoomIn"), TXT_LEFT);
-
-
-	yPos += 15;
-	Canvas.SetPos(300 - StrLen1, yPos);
-	Canvas.DrawTextAligned(Canvas.LocalizeStr("ZoomMinus"), TXT_LEFT);
-	Canvas.SetPos(340, yPos);
-	Canvas.DrawTextAligned(GetLocKeyNameByActionKey("ZoomOut"), TXT_LEFT );
-}
-
-// GetLocKeyNameByActionKey: Get the localization name of the key to display
-function string GetLocKeyNameByActionKey( string _szActionKey)
-{
-	local EPlayerController	Epc;
-    local ECanvas C;
-    local string szTemp;
-	local byte Key;
-
-    Epc = EAbstractGoggle(Owner).Epc;
-    C = ECanvas(class'Actor'.static.GetCanvas());
-	Key = Epc.GetKey(_szActionKey, false);
-	szTemp = Epc.GetEnumName(Key);
-
-	//szTemp = Epc.Player.GUIController.ConvertKeyToLocalisation( Key, szTemp);
-
-    // This will not work because EPCConsole is in EchelonMenus
-    if (C.Viewport != None && C.Viewport.Console != None)
-    {
-        szTemp = EPCConsole(C.Viewport.Console).ConvertKeyToLocalisation(Key, szTemp);
-    }
-
-	return szTemp;
-}
-*/
-
-function DrawGreenRing(ECanvas Canvas, optional color textureColor)
-{
-    local color ZeroColor; // Joshua - Converted to local
-
 	Canvas.Style = ERenderStyle.STY_Alpha;
-    
-	if (textureColor != ZeroColor)
-		Canvas.DrawColor = textureColor;
-	else
-		Canvas.DrawColor = ColorObjectHUD;
+	Canvas.DrawColor = ColorObjectHUD;
 
 	Canvas.SetPos(0,0);
 	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.border_binocular, GREEN_BORDER_TEXURE_SIZE_X ,GREEN_BORDER_TEXURE_SIZE_Y, 0, 0, eLevel.TGAME.GetWidth(eLevel.TGAME.border_binocular),  eLevel.TGAME.GetHeight(eLevel.TGAME.border_binocular));
