@@ -78,6 +78,15 @@ MapStartLambertComNew:
     Speech(Localize("P_2_2_1_Ktech_Communications", "Speech_0005L", "Localization\\P_2_2_1_Kalinatek"), Sound'S2_2_1Voice.Play_22_05_05', 1, 2, TR_HEADQUARTER, 0, false);
     Close();
     End();
+WilkesDied:
+    Log("If Sam Kills Wilkes");
+    SetProfileDeletion();
+    PlayerMove(false);
+    DisableMessages(TRUE, TRUE);
+    Speech(Localize("P_2_2_1_Ktech_IntroCinematic", "Speech_0013L", "Localization\\P_2_2_1_Kalinatek"), Sound'Lambert.Play_41_95_01', 1, 0, TR_HEADQUARTER, 0, true);
+    Close();
+    GameOver(false, 0);
+    End();
 InfiltrateDone:
     Log("When Sam Infiltrates the Kalinatek");
     GoalCompleted('Infiltrate');

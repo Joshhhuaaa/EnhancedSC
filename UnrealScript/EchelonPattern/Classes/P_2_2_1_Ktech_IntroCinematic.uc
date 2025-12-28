@@ -20,13 +20,13 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
         switch (Event.EventType)
         {
         case AI_DEAD:
-            EventJump('WilkesDied');
+            EventJump('SamKilledWilkes');
             break;
         case AI_TAKE_DAMAGE:
-            EventJump('WilkesDied');
+            EventJump('SamKilledWilkes');
             break;
         case AI_UNCONSCIOUS:
-            EventJump('WilkesDied');
+            EventJump('SamKilledWilkes');
             break;
         default:
             break;
@@ -101,20 +101,17 @@ IntroConversation:
 WilkesTeleport:
     Goal_Set(1,GOAL_MoveTo,9,,,,'WilkesLeavingTeleport',,TRUE,,MOVE_WalkRelaxed,,MOVE_WalkRelaxed);
     WaitForGoal(1,GOAL_MoveTo,);
+    CheckIfIsDead(1, 'DontPlayIntro'); // Joshua - Don't teleport Wilkes if he's dead
+    CheckIfIsUnconscious(1, 'DontPlayIntro'); // Joshua - Don't teleport Wilkes if he's unconscious
     Teleport(1, 'WilkesTeleport');
     SendUnrealEvent('WilkesAI');
     End();
 DontPlayIntro:
     End();
-WilkesDied:
+SamKilledWilkes:
     Log("If Sam Kills Wilkes");
-    SetProfileDeletion();
     DisableMessages(TRUE, TRUE);
-    PlayerMove(false);
-    Speech(Localize("P_2_2_1_Ktech_IntroCinematic", "Speech_0013L", "Localization\\P_2_2_1_Kalinatek"), Sound'Lambert.Play_41_95_01', 2, 0, TR_HEADQUARTER, 0, true);
-    Sleep(GetSoundDuration(Sound'Lambert.Play_41_95_01')); // Joshua - The speech isn't behaving as a latent function for some reason
-    Close();
-    GameOver(false, 0);
+    SendPatternEvent('LambertComms','WilkesDied');
     End();
 
 }
