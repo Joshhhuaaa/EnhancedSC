@@ -188,7 +188,8 @@ function BaseChange();
 //------------------------------------------------------------------------
 function Add(Actor NewOwner, Controller NewController, EInventory Inventory)
 {
-	local EInventoryItem PreviousSecondary; // Joshua - Preserve selected item during sort
+	local EInventoryItem PrevSecondary, PrevPrimary;
+	local EInventoryItem Item;
 	
 	// Set its Owner .. not necessary anymore
 	if (NewOwner != None)
@@ -203,15 +204,33 @@ function Add(Actor NewOwner, Controller NewController, EInventory Inventory)
 	if (Inventory == None)
 		Log(self@"Problem in EInventoryItem::Add inventory == None");
 
-	Inventory.AddInventoryItem(self);
+	// Joshua - Save selected items before adding (native code may change selection)
+	PrevSecondary = Inventory.BackPackSecSelectedItem;
+	PrevPrimary = Inventory.BackPackPrimSelectedItem;
 	
-	// Joshua - Sort the inventory after adding so items appear in consistent order
-	// Preserve the currently selected secondary item to restore after sorting
-	PreviousSecondary = Inventory.BackPackSecSelectedItem;
+	Inventory.AddInventoryItem(self);
 	Inventory.SortInventory();
-	// Restore the selected secondary item if it was set
-	if (PreviousSecondary != None && Inventory.Possesses(PreviousSecondary))
-		Inventory.BackPackSecSelectedItem = PreviousSecondary;
+	
+	// Joshua - Restore selected items by class (object reference may change during add)
+	if (PrevPrimary != None)
+	{
+		Item = Inventory.GetItemByClass(PrevPrimary.class.Name);
+		if (Item != None)
+		{
+			Inventory.BackPackPrimSelectedItem = Item;
+			Item.Select(Inventory);
+		}
+	}
+	
+	if (PrevSecondary != None)
+	{
+		Item = Inventory.GetItemByClass(PrevSecondary.class.Name);
+		if (Item != None)
+		{
+			Inventory.BackPackSecSelectedItem = Item;
+			Item.Select(Inventory);
+		}
+	}
 }
 
 // ----------------------------------------------------------------------
