@@ -9230,11 +9230,6 @@ state s_Split
 		return !bInTransition && !bInGunTransition;
 	}
 
-	function bool CanAccessPlayerStats()
-	{
-		return true;
-	}
-
 	function ProcessScope()
 	{
 		if (bInTransition || bInGunTransition || ActiveGun == None)
@@ -9489,7 +9484,7 @@ BackToFirstPerson:
 
 // Joshua - Binoculars support
 // ----------------------------------------------------------------------
-// state s_Split
+// state s_SplitZooming
 // ----------------------------------------------------------------------
 state s_SplitZooming
 {
@@ -9508,6 +9503,7 @@ state s_SplitZooming
 
 	function BeginState()
 	{
+		m_useTarget = true;
 		ePawn.WalkingRatio = 0;
 		ePawn.SoundWalkingRatio = 0;
 		ePawn.Acceleration = Vect(0,0,0);
@@ -9520,6 +9516,7 @@ state s_SplitZooming
 
 	function EndState()
 	{
+		m_useTarget = false;
 		bHideSam = false;
 		ePawn.SetCollisionSize(ePawn.CollisionRadius, ePawn.Default.CollisionHeight);
 		GoggleItem.GotoState('');
@@ -9884,11 +9881,6 @@ state s_Ledge
 	function bool CanAccessQuick()
 	{
 		return !bInTransition;
-	}
-
-	function bool CanAccessPlayerStats()
-	{
-		return true;
 	}
 
 	event bool NotifyLanded(vector HitNormal, Actor HitActor)
@@ -10266,11 +10258,6 @@ state s_HandOverHand
 	function bool CanAccessQuick()
 	{
 		return !bInTransition;
-	}
-
-	function bool CanAccessPlayerStats()
-	{
-		return true;
 	}
 
 	function PlayerTick(float deltaTime)
