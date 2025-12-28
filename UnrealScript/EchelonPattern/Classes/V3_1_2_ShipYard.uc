@@ -1,7 +1,7 @@
 //=============================================================================
-// V3_1_2_ShipYard
+// V3_1_2_Shipyard
 //=============================================================================
-class V3_1_2_ShipYard extends EVariable;
+class V3_1_2_Shipyard extends EVariable;
 
 var int CRtrapPass1; 
 var int ElevCamDanger; 

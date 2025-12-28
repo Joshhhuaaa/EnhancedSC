@@ -28,6 +28,7 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
 function InitPattern()
 {
     local Pawn P;
+    local EZoneAI ZoneAI;
     local ELaptop Laptop;
 
     Super.InitPattern();
@@ -38,9 +39,9 @@ function InitPattern()
             Characters[1] = P.controller;
     }
 
-    // Joshua - Replace NPC skins for variety
     if (!bInit)
     {
+        // Joshua - Replace NPC skins for variety
         ForEach DynamicActors(class'Pawn', P)
         {
             if (P.name == 'EGeorgianSoldier2' || P.name == 'EGeorgianSoldier3' || P.name == 'EGeorgianSoldier6' || 
@@ -49,6 +50,22 @@ function InitPattern()
                 P.name == 'EGeorgianSoldier37')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.GESoldier.GESoldierA", class'Texture'));
+            }
+        }
+
+        // Joshua - Fixes some body checks
+        ForEach AllActors(Class'EZoneAI', ZoneAI)
+        {
+            if (ZoneAI.name == 'EZoneAI8')
+            {
+                ZoneAI.DisableGroupTags.Length = 0;
+            }
+            
+            if (ZoneAI.name == 'EZoneAI5')
+            {
+                ZoneAI.DisableGroupTags[6] = 'EGroupAI2';
+                ZoneAI.DisableGroupTags[7] = 'EGroupAI6';
+                ZoneAI.DisableGroupTags[8] = 'EGroupAI27';
             }
         }
 

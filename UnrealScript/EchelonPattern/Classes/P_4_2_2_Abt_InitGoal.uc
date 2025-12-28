@@ -91,7 +91,7 @@ function InitPattern()
             }
         }
 
-        // Joshua - Merge EZoneAI4 DisableGroups into EZoneAI1 to prevent double alarm triggers
+        // Joshua - Fixes some body checks
         ForEach AllActors(Class'EZoneAI', ZoneAI)
         {
             if (ZoneAI.name == 'EZoneAI1')

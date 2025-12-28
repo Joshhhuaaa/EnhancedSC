@@ -27,6 +27,7 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
 function InitPattern()
 {
     local Pawn P;
+    local EZoneAI ZoneAI;
 
     Super.InitPattern();
 
@@ -40,6 +41,23 @@ function InitPattern()
         {
             Characters[3] = P.controller;
             EAIController(Characters[3]).bAllowKnockout = true;
+        }
+    }
+
+    if (!bInit)
+    {
+        // Joshua - Fixes some body checks
+        ForEach AllActors(Class'EZoneAI', ZoneAI)
+        {
+            if (ZoneAI.name == 'EZoneAI5' || ZoneAI.name == 'EZoneAI8')
+            {
+                ZoneAI.DisableGroupTags.Length = 0;
+            }
+            
+            if (ZoneAI.name == 'EZoneAI9')
+            {
+                ZoneAI.DisableGroupTags[2] = 'twoagents';
+            }
         }
     }
 
