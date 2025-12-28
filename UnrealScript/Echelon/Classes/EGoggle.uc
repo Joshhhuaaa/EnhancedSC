@@ -57,6 +57,33 @@ function SwitchVisionMode(int NewMode)
 		SwitchGoggle(NewMode);
 }
 
+// Joshua - When you want to force the goggles up
+// Returns true if goggles were on and animation was played, false if already off
+function bool ForceGoggleUp()
+{
+	// Do nothing, goggles already off
+	if( CurrentMode == REN_DynLight )
+		return false;
+
+	// Set target mode to DynLight - will be activated when animation finishes
+	CurrentMode = REN_DynLight;
+
+	AddSoundRequest(Sound'Interface.Play_FisherEquipGoggle', SLOT_Interface, 0.5f);
+
+	if (Epc.CanSwitchGoggleManually())
+	{
+		Epc.ePawn.BlendAnimOverCurrent('Goglcraldn0',0, 'B L Clavicle',,,Epc.ePawn.PERSONALITYCHANNEL,true);
+		Epc.ePawn.AnimBlendToAlpha(Epc.ePawn.PERSONALITYCHANNEL, 1, 0.3);
+	}
+	else
+	{
+		Epc.ePawn.BlendAnimOverCurrent('Goglstaldn2',0, 'B Head',/*rate*/,/*tween*/,Epc.ePawn.PERSONALITYCHANNEL, true);
+		Epc.ePawn.AnimBlendToAlpha(Epc.ePawn.PERSONALITYCHANNEL, 1, 0.15);
+	}
+
+	return true;
+}
+
 function SwitchGoggle(int NewRenderingMode);	// Notify from equiping/unequiping goggles
 function Down();								// Animation has hand over the eyes
 function Up();									// Animation has hand over the head

@@ -1363,7 +1363,10 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 
 		YPos += YL;
 		Canvas.SetPos(4, YPos);
-		Canvas.DrawText("Target:" @ m_TargetActor);
+		if (Pawn(m_TargetActor) != None)
+			Canvas.DrawText("Target:" @ m_TargetActor @ "GroupTag:" @ Pawn(m_TargetActor).m_GroupTag);
+		else
+			Canvas.DrawText("Target:" @ m_TargetActor);
 
 		//YPos += YL;
 		//Canvas.SetPos(4, YPos);
@@ -3620,6 +3623,11 @@ state s_GrabTargeting
 			KillPawnSpeed();
 			m_AttackTarget.Controller.GotoState(,'FinishAlone');
 		}
+	}
+
+	function bool CanAccessPlayerStats()
+	{
+		return false; //!bInGunTransition && !bLockedCamera;
 	}
 
 	event ReduceCameraSpeed(out float turnMul)
@@ -7372,12 +7380,15 @@ Aborted:
 // ----------------------------------------------------------------------
 state s_RetinalScanner extends s_InteractWithObject
 {
+	Ignores ProcessHeadset;
+
 begin:
 	Interaction.SetInteractLocation(ePawn);
 	ePawn.SetPhysics(PHYS_Linear);
 	MoveToDestination(200, true);
 	KillPawnSpeed();
 	ePawn.SetPhysics(PHYS_Walking);
+	Goggle.ForceGoggleUp(); // Joshua - Force goggles up when using retinal scanner
 	ePawn.PlayAnimOnly(ePawn.ARetinalScanBegin,,0.2);
 	FinishAnim();
 	Interaction.Interact(self);
