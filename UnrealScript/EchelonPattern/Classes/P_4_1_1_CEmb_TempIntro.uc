@@ -15,9 +15,10 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
     {
         switch (Event.EventType)
         {
-        case AI_DEAD:
-            EventJump('DeadRinger');
-            break;
+        // Joshua: Let P_4_1_1_CEmb_GameOver handle the AI_DEAD case to prevent Lambert dialogue bug
+        // case AI_DEAD:
+        //     EventJump('DeadRinger');
+        //     break;
         case AI_TAKE_DAMAGE:
             EventJump('DeadRinger');
             break;
