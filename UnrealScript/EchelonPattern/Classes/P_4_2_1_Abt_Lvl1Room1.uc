@@ -29,9 +29,10 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
         case AI_SEE_PLAYER_ALERT:
             EventJump('SamDiscover');
             break;
-        case AI_SEE_PLAYER_INVESTIGATE:
-            EventJump('SamDiscover');
-            break;
+        // Joshua - Sam should not be discovered here, guard is only investigating
+        //case AI_SEE_PLAYER_INVESTIGATE:
+        //    EventJump('SamDiscover');
+        //    break;
         case AI_SEE_PLAYER_SURPRISED:
             EventJump('SamDiscover');
             break;
