@@ -300,7 +300,7 @@ function Refresh()
     m_ComboEffectsQuality.SetSelectedIndex(Clamp(GO.EffectsQuality,0,m_ComboEffectsQuality.List.Items.Count() -1));            
     
     if (m_ComboTurnOffDistanceScale != None && EPC != None)
-        m_ComboTurnOffDistanceScale.SetSelectedIndex(Clamp(EPC.eGame.TurnOffDistanceScale, 0, m_ComboTurnOffDistanceScale.List.Items.Count() - 1));
+        m_ComboTurnOffDistanceScale.SetSelectedIndex(Clamp(EchelonLevelInfo(EPC.Level).TurnOffDistanceScale, 0, m_ComboTurnOffDistanceScale.List.Items.Count() - 1));
 
     // Joshua - Store original value for LODDistance before setting combo (requires restart)
     m_OriginalLODDistance = int(EPC.eGame.bLODDistance);
@@ -331,7 +331,7 @@ function ResetToDefault()
 	GO.UpdateEngineSettings();   
 
     // Enhanced settings
-    EPC.eGame.TurnOffDistanceScale = TurnOffDistance_4x;
+    EchelonLevelInfo(EPC.Level).TurnOffDistanceScale = TurnOffDistance_4x;
     EPC.eGame.bLODDistance = true; // EPC.eGame.default.bLODDistance;
     //EPC.eGame.bPauseOnFocusLoss = EPC.eGame.default.bPauseOnFocusLoss;
     EPC.eGame.SaveEnhancedOptions();
@@ -362,11 +362,26 @@ function SaveOptions()
     // Enhanced settings
     switch (m_ComboTurnOffDistanceScale.GetSelectedIndex())
     {
-        case 0: EPC.eGame.TurnOffDistanceScale = TurnOffDistance_1x; break;
-        case 1: EPC.eGame.TurnOffDistanceScale = TurnOffDistance_2x; break;
-        case 2: EPC.eGame.TurnOffDistanceScale = TurnOffDistance_4x; break;
-        case 3: EPC.eGame.TurnOffDistanceScale = TurnOffDistance_8x; break;
-        default: EPC.eGame.TurnOffDistanceScale = TurnOffDistance_1x; break;
+        case 0:
+            EchelonLevelInfo(EPC.Level).TurnOffDistanceScale = TurnOffDistance_1x;
+            EchelonLevelInfo(EPC.Level).ApplyTurnOffDistanceScale(EchelonLevelInfo(EPC.Level).TurnOffDistanceScale); 
+            break;
+        case 1:
+            EchelonLevelInfo(EPC.Level).TurnOffDistanceScale = TurnOffDistance_2x;
+            EchelonLevelInfo(EPC.Level).ApplyTurnOffDistanceScale(EchelonLevelInfo(EPC.Level).TurnOffDistanceScale);
+            break;
+        case 2:
+            EchelonLevelInfo(EPC.Level).TurnOffDistanceScale = TurnOffDistance_4x;
+            EchelonLevelInfo(EPC.Level).ApplyTurnOffDistanceScale(EchelonLevelInfo(EPC.Level).TurnOffDistanceScale);
+            break;
+        case 3:
+            EchelonLevelInfo(EPC.Level).TurnOffDistanceScale = TurnOffDistance_8x;
+            EchelonLevelInfo(EPC.Level).ApplyTurnOffDistanceScale(EchelonLevelInfo(EPC.Level).TurnOffDistanceScale);
+            break;
+        default:
+            EchelonLevelInfo(EPC.Level).TurnOffDistanceScale = TurnOffDistance_1x;
+            EchelonLevelInfo(EPC.Level).ApplyTurnOffDistanceScale(EchelonLevelInfo(EPC.Level).TurnOffDistanceScale);
+            break;
     }
 
     switch (m_ComboLODDistance.GetSelectedIndex())

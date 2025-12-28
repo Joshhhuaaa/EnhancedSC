@@ -33,6 +33,13 @@ var EPCMessageBox        m_MessageBox;
 var EPCMessageBox        m_SavingLoadingMessageBox;
 var BOOL                 m_bSkipOne;
 
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
+var bool                    m_bPendingPrototypeMapLoad; // Joshua - For prototype map warning 
+
 function Created()
 {
     
@@ -221,11 +228,17 @@ function FillListBox()
         // Joshua - Adding cut levels to end of list
         L = EPCListBoxItem(m_ListBox.Items.Append(class'EPCListBoxItem'));
         L.Caption = "3_2_1_PowerPlant";
-        L.m_bLocked = false;
+        if (PlayerInfo.LevelUnlock == LU_Enabled && !EPC.eGame.bEliteMode && !EPC.eGame.bPermadeathMode)
+            L.m_bLocked = false;
+        else
+            L.m_bLocked = (PlayerInfo.MapCompleted < 9);
 
         L = EPCListBoxItem(m_ListBox.Items.Append(class'EPCListBoxItem'));
         L.Caption = "3_4_2Severonickel";
-        L.m_bLocked = false;
+        if (PlayerInfo.LevelUnlock == LU_Enabled && !EPC.eGame.bEliteMode && !EPC.eGame.bPermadeathMode)
+            L.m_bLocked = false;
+        else
+            L.m_bLocked = (PlayerInfo.MapCompleted < 9);
     }
 }
 
@@ -269,7 +282,37 @@ function Notify(UWindowDialogControl C, byte E)
     }
 }
 
+//------------------------------------------------------------------------
+// Joshua - Check if selected map is a prototype map
+//------------------------------------------------------------------------
+function bool IsPrototypeMap(string MapName)
+{
+    return (MapName == "3_2_1_PowerPlant" || 
+            MapName == "3_2_2_PowerPlant" || 
+            MapName == "3_4_2Severonickel" || 
+            MapName == "3_4_3Severonickel");
+}
+
 function Load()
+{
+    // Joshua - Check if this is a prototype map that needs a warning
+    if (!m_LoadGameButton.m_bSelected && 
+        EPCListBoxItem(m_ListBox.SelectedItem) != None && 
+        !EPCListBoxItem(m_ListBox.SelectedItem).m_bLocked &&
+        IsPrototypeMap(EPCListBoxItem(m_ListBox.SelectedItem).Caption))
+    {
+        m_bPendingPrototypeMapLoad = true;
+        EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "PrototypeMap", "Localization\\Enhanced"), Localize("Common", "PrototypeMapWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
+        return;
+    }
+
+    LoadSelectedMap();
+}
+
+//------------------------------------------------------------------------
+// Joshua - Converted to load selected map
+//------------------------------------------------------------------------
+function LoadSelectedMap()
 {
 	local String Error;
 	local bool noLoadMap;
@@ -436,6 +479,14 @@ function SaveGame()
 
 function MessageBoxDone(UWindowWindow W, MessageBoxResult Result)
 {
+    // Joshua - Prototype map warning
+    if (Result == MR_OK && m_bPendingPrototypeMapLoad)
+    {
+        m_bPendingPrototypeMapLoad = false;
+        LoadSelectedMap();
+        return;
+    }
+
     if (W == m_MessageBox)
     {        
         m_MessageBox = None;
