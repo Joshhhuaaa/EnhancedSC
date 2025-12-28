@@ -55,7 +55,27 @@ var ETICON TICON; // Super Texture - Put here to be accessible everywhere
 //=============================================================================
 var(AI)	bool bOneAlarmLevel; // Joshua - New flag for one alarm levels like Defense Ministry, replaces SetAlarmStage(3) hack
 var bool bAlarmStageChanged;
+
 var bool bGameOver; // Joshua - Prevents player from dying during GameOver and prevents NPC barks
+
+// Joshua - Echelon lights use TurnOffDistance to determine when to turn off
+// This setting allows users to scale that distance up to 8x, allowing Echelon lights to stay on farther away
+enum ETurnOffDistanceScale
+{
+    TurnOffDistance_1x,
+    TurnOffDistance_2x,
+    TurnOffDistance_4x,
+    TurnOffDistance_8x
+};
+var(Enhanced) config ETurnOffDistanceScale TurnOffDistanceScale;
+
+// Joshua - Store original TurnOffDistance values for runtime scaling
+struct ActorTurnOffData
+{
+    var Actor A;
+    var float OriginalTurnOffDistance;
+};
+var array<ActorTurnOffData> OriginalTurnOffDistances;
 
 //---------------------------------------[Frederic Blais - 20 Nov 2001]-----
 // 
@@ -68,47 +88,24 @@ function PostBeginPlay()
     local int i;
 	local EEventTrigger EventTrigger;
 	local Actor A;
+	local ActorTurnOffData TurnOffData;
+
+	// Joshua - Store original TurnOffDistance values for all actors (only once)
+	if (OriginalTurnOffDistances.Length == 0)
+	{
+		ForEach DynamicActors(class'Actor', A)
+		{
+			if (A.TurnOffDistance > 0)
+			{
+				TurnOffData.A = A;
+				TurnOffData.OriginalTurnOffDistance = A.TurnOffDistance;
+				OriginalTurnOffDistances[OriginalTurnOffDistances.Length] = TurnOffData;
+			}
+		}
+	}
 
 	// Joshua - Apply TurnOffDistance scaling based on user settings
-    switch (EchelonGameInfo(Level.Game).TurnOffDistanceScale)
-    {
-        case TurnOffDistance_1x:
-            // Default behavior, keep original values
-            break;
-            
-        case TurnOffDistance_2x:
-            // Multiply all actor TurnOffDistance values by 2
-            ForEach DynamicActors(class'Actor', A)
-            {
-                if (A.TurnOffDistance > 0)
-                {
-                    A.TurnOffDistance = A.TurnOffDistance * 2;
-                }
-            }
-            break;
-            
-        case TurnOffDistance_4x:
-            // Multiply all actor TurnOffDistance values by 4
-            ForEach DynamicActors(class'Actor', A)
-            {
-                if (A.TurnOffDistance > 0)
-                {
-                    A.TurnOffDistance = A.TurnOffDistance * 4;
-                }
-            }
-            break;
-            
-        case TurnOffDistance_8x:
-            // Multiply all actor TurnOffDistance values by 8
-            ForEach DynamicActors(class'Actor', A)
-            {
-                if (A.TurnOffDistance > 0)
-                {
-                    A.TurnOffDistance = A.TurnOffDistance * 8;
-                }
-            }
-            break;
-    }
+	ApplyTurnOffDistanceScale(TurnOffDistanceScale);
 
 	// Joshua - Assigning new default meshes to these levels
 	switch (GetCurrentMapName())
@@ -804,6 +801,41 @@ function GameOver()
 	bGameOver = true;
 }
 
+// Joshua - Apply TurnOffDistance scaling using stored original values
+function ApplyTurnOffDistanceScale(ETurnOffDistanceScale Scale)
+{
+	local int i;
+	local float Multiplier;
+	
+	// Determine multiplier based on scale
+	switch (Scale)
+	{
+		case TurnOffDistance_1x:
+			Multiplier = 1.0;
+			break;
+		case TurnOffDistance_2x:
+			Multiplier = 2.0;
+			break;
+		case TurnOffDistance_4x:
+			Multiplier = 4.0;
+			break;
+		case TurnOffDistance_8x:
+			Multiplier = 8.0;
+			break;
+		default:
+			Multiplier = 1.0;
+	}
+	
+	// Apply multiplier to all stored actors using their original values
+	for (i = 0; i < OriginalTurnOffDistances.Length; i++)
+	{
+		if (OriginalTurnOffDistances[i].A != None)
+		{
+			OriginalTurnOffDistances[i].A.TurnOffDistance = OriginalTurnOffDistances[i].OriginalTurnOffDistance * Multiplier;
+		}
+	}
+}
+
 defaultproperties
 {
     AlarmPatternClass=Class'LambertWarnings'
@@ -812,4 +844,5 @@ defaultproperties
     AlarmModifier(1)=0.660000
     AlarmModifier(2)=0.330000
     RandomWhistle=Sound'GenericLife.Play_GenericWhistle1'
+	TurnOffDistanceScale=TurnOffDistance_4x
 }

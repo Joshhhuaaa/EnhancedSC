@@ -190,17 +190,6 @@ var config ESamMeshType ESam_PresidentialPalace;
 var config ESamMeshType ESam_KolaCell;
 var config ESamMeshType ESam_Vselka;
 
-// Joshua - Echelon lights use TurnOffDistance to determine when to turn off
-// This setting allows users to scale that distance up to 8x, allowing Echelon lights to stay on farther away
-enum ETurnOffDistanceScale
-{
-    TurnOffDistance_1x,
-    TurnOffDistance_2x,
-    TurnOffDistance_4x,
-    TurnOffDistance_8x
-};
-var(Enhanced) config ETurnOffDistanceScale TurnOffDistanceScale;
-
 // Native Variables
 var(Enhanced) config bool bEnableRumble; // Joshua - UseRumble in Engine.GameInfo is now deprecated, this setting will now toggle rumble
 var(Enhanced) config bool bSkipIntroVideos;
@@ -500,7 +489,6 @@ defaultproperties
     ESam_PresidentialPalace=SMT_Default
     ESam_KolaCell=SMT_Default
     ESam_Vselka=SMT_Default
-    TurnOffDistanceScale=TurnOffDistance_4x
     bEnableRumble=True
     FontType=Font_Xbox
     bLODDistance=True
