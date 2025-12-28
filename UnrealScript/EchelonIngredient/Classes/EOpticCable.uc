@@ -246,18 +246,24 @@ state s_Sneaking
 	function Tick(float deltaTime)
 	{
 		local Rotator			noised_rotation;
-		local float				delta_damping;
-		local int				clamped_yaw;
+		local float				delta_damping, actual_delta;
+		local int				clamped_yaw, previous_yaw;
 		local EPlayerController Epc;
+
 		Epc = EPlayerController(Controller);
 
 		// give rotationnary cable movement
 		delta_damping	= Epc.aTurn * Damping;
-		clamped_yaw		= camera_rotation.Yaw;
+		// Joshua - Clamp max speed to prevent roll overflow from fast mouse flicks
+		delta_damping	= FClamp(delta_damping, -valid_range, valid_range);
+		previous_yaw	= camera_rotation.Yaw;
+		//clamped_yaw	= camera_rotation.Yaw;
+		clamped_yaw		= previous_yaw;
 		clamped_yaw	   += delta_damping;
 		clamped_yaw		= CenterToZero(clamped_yaw);
 		
 		//Log("start["$start_yaw$"] range["$65535/4$"] clamped_yaw["$clamped_yaw$"] IsInRange"@IsInRange(start_yaw, 65535/4, clamped_yaw));
+		/*
 		if (IsInRange(start_yaw, valid_range, clamped_yaw))
 		{
 			camera_rotation.Yaw	   =  clamped_yaw;
@@ -269,6 +275,28 @@ state s_Sneaking
 		}
 		else
 			noised_rotation			= camera_rotation;
+		 */
+		
+		// Joshua - Clamp to boundary if out of range, so fast mouse flicks still reach the edge
+		if (!IsInRange(start_yaw, valid_range, clamped_yaw))
+		{
+			if (delta_damping > 0)
+				clamped_yaw = CenterToZero(start_yaw + valid_range - 1);
+			else
+				clamped_yaw = CenterToZero(start_yaw - valid_range + 1);
+		}
+		
+		// Joshua - Use actual movement for roll
+		actual_delta = CenterToZero(clamped_yaw - previous_yaw);
+		camera_rotation.Yaw = clamped_yaw;
+		camera_rotation.Roll += actual_delta;
+
+		noised_rotation = camera_Rotation;
+		if (actual_delta != 0)
+		{
+			noised_rotation.Roll += (FRand() - 0.5) * actual_delta / 2;
+			noised_rotation.Yaw  += (FRand() - 0.5) * actual_delta / 2;
+		}
 
 		// control Camera
 		Epc.SetRotation(noised_rotation);
