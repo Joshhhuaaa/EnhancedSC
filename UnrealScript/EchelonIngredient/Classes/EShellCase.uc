@@ -9,11 +9,63 @@ var sound ShellSound;
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
+	
 	if (Level.bDropDetail)
 	{
 		bCollideWorld = false;
 		LifeSpan = 1.5;
 	}
+	else
+	{
+		// Joshua - Remove shell cases when MAX_SHELL_CASES is reached (oldest first), not by lifespan
+		AddShellCaseToLevel();
+		LifeSpan = 0;
+	}
+}
+
+// Joshua - Add shell case to level tracking
+function AddShellCaseToLevel()
+{
+	local EchelonLevelInfo eLevel;
+	local Projectile OldestShell;
+	
+	eLevel = EchelonLevelInfo(Level);
+	
+	if (eLevel != None)
+	{
+		// If we're at capacity, destroy the oldest shell case
+		if (eLevel.AllShellCases.Length >= eLevel.MAX_SHELL_CASES)
+		{
+			OldestShell = eLevel.AllShellCases[0];
+			eLevel.AllShellCases.Remove(0, 1);
+			
+			if (OldestShell != None)
+				OldestShell.Destroy();
+		}
+		
+		eLevel.AllShellCases[eLevel.AllShellCases.Length] = self;
+	}
+}
+
+// Joshua - Remove shell case from level tracking when destroyed
+function Destroyed()
+{
+	local EchelonLevelInfo eLevel;
+	local int i;
+	
+	eLevel = EchelonLevelInfo(Level);
+	
+	// Find and remove this shell case from the tracking array
+	for (i = 0; i < eLevel.AllShellCases.Length; i++)
+	{
+		if (eLevel.AllShellCases[i] == self)
+		{
+			eLevel.AllShellCases.Remove(i, 1);
+			break;
+		}
+	}
+	
+	Super.Destroyed();
 }
 
 function HitWall(vector HitNormal, actor Wall)
@@ -79,7 +131,7 @@ defaultproperties
 {
     MaxSpeed=1000.000000
     DrawType=DT_StaticMesh
-    LifeSpan=30.000000 // Joshua - Incrased from 3.0 to 30.0 before despawning
+    LifeSpan=3.000000
     StopSoundsWhenKilled=True
     bCollideActors=False
     HeatIntensity=0.800000

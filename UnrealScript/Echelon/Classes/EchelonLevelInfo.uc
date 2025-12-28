@@ -77,6 +77,10 @@ struct ActorTurnOffData
 };
 var array<ActorTurnOffData> OriginalTurnOffDistances;
 
+// Joshua - Remove shell cases when MAX_SHELL_CASES is reached (oldest first), not by lifespan
+var array<Projectile> AllShellCases;
+const MAX_SHELL_CASES = 500;
+
 //---------------------------------------[Frederic Blais - 20 Nov 2001]-----
 // 
 // PostBeginPlay
