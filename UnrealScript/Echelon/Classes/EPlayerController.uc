@@ -5551,6 +5551,11 @@ Begin:
     {
         while (ESniperGun(ActiveGun).FOVIndex < LastSniperFOVIndex)
             ESniperGun(ActiveGun).ZoomIn();
+        
+        // Joshua - Clear flash cycle flags after restoring zoom
+        ESniperGun(ActiveGun).bStartFirstFlashCycle = false;
+        ESniperGun(ActiveGun).bStartSecondFlashCycle = false;
+        ESniperGun(ActiveGun).fCycleFlashTime = 0.0;
     }
 
 	bInTransition = false;

@@ -117,6 +117,9 @@ var int qi_bord_h_hor;
 var int qi_bord_h2_hor;
 var int lf_niv_plein_hor;
 
+// Joshua - SCPT zoom flash cycle animation
+var int cycle_flash;
+
 /*-----------------------------------------------------------------------------
                      D E F A U L T   P R O P E R T I E S 
 -----------------------------------------------------------------------------*/
@@ -216,6 +219,7 @@ defaultproperties
     qi_bord_h_hor=90
     qi_bord_h2_hor=91
     lf_niv_plein_hor=92
+    cycle_flash=93
     ArrayTexture(0)=(TextureName="ic_lock",TextureOwner=Texture'HUD.HUD.ETGAME',Origin=(X=202.000000,Y=103.000000),Size=(X=12.000000,Y=15.000000))
     ArrayTexture(1)=(TextureName="ic_unlock",TextureOwner=Texture'HUD.HUD.ETGAME',Origin=(X=184.000000,Y=103.000000),Size=(X=12.000000,Y=17.000000))
     ArrayTexture(2)=(TextureName="trai_s_button",TextureOwner=Texture'HUD.HUD.ETGAME',Origin=(X=454.000000,Y=155.000000),Size=(X=13.000000,Y=13.000000))
@@ -311,5 +315,7 @@ defaultproperties
     ArrayTexture(90)=(TextureName="qi_bord_h_hor",TextureOwner=Texture'HUD_Enhanced.HUD.ETGAME_Hor',Origin=(X=382.000000,Y=14.000000),Size=(X=6.000000,Y=1.000000))
     ArrayTexture(91)=(TextureName="qi_bord_h2_hor",TextureOwner=Texture'HUD_Enhanced.HUD.ETGAME_Hor',Origin=(X=390.000000,Y=61.000000),Size=(X=4.000000,Y=1.000000))
     ArrayTexture(92)=(TextureName="lf_niv_plein_hor",TextureOwner=Texture'HUD_Enhanced.HUD.ETGAME_Hor',Origin=(X=407.000000,Y=78.000000),Size=(X=8.000000,Y=8.000000))
+    // Joshua - SCPT zoom flash cycle animation
+    ArrayTexture(93)=(TextureName="cycle_flash",TextureOwner=Texture'HUD_Enhanced.HUD.ETGAME2_SCPT',Origin=(X=131.000000,Y=84.000000),Size=(X=125.000000,Y=125.000000))
     pixel=40
 }

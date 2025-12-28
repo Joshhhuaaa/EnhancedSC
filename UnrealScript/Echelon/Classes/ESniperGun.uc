@@ -17,6 +17,10 @@ var			float			LastSniperModeTime;
 //=============================================================================
 var			ERateOfFireMode	eROFMode_old; // Joshua - QoL improvement: Switch back to previous RoF when leaving sniper mode
 
+// Joshua - SCPT zoom flash cycle animation
+var 		bool bStartFirstFlashCycle, bStartSecondFlashCycle;
+var 		float fCycleFlashTime, fCycleFlashDuration;
+
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
@@ -178,7 +182,13 @@ function ZoomIn(optional bool bInit)
         if (EPC != None && !EPC.bF2000ZoomLevels)
             FOVIndex = FOVs.Length - 1;
         else if (FOVIndex < FOVs.Length - 1)
+		{
             FOVIndex++;
+			// Joshua - SCPT zoom flash cycle animation
+			bStartFirstFlashCycle = false;
+			bStartSecondFlashCycle = true;
+			fCycleFlashTime = fCycleFlashDuration;
+		}
     }
 
     if (Controller != None && Controller.bIsPlayer)
@@ -209,6 +219,11 @@ function ZoomOut()
         return;
 
     FOVIndex--;
+	
+	// Joshua - SCPT zoom flash cycle animation
+	bStartFirstFlashCycle = true;
+	bStartSecondFlashCycle = false;
+	fCycleFlashTime = 0.0;
 
     if (Controller != None && Controller.bIsPlayer)
     {
@@ -266,4 +281,9 @@ function SetSniperMode(bool bIsSniping)
 		}
 		EPlayerController(Controller).iRenderMask = 0;
 	}
+}
+
+defaultproperties
+{
+    fCycleFlashDuration=0.200000
 }

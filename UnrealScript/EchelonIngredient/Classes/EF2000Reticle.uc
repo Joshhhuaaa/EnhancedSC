@@ -157,6 +157,26 @@ function ObjectHudTick(float DeltaTime)
 				chStyle = CH_NONE;
 			}
         }
+
+		// Joshua - SCPT zoom flash cycle animation
+		if (F2000 != None && F2000.bStartFirstFlashCycle)
+		{
+			F2000.fCycleFlashTime += DeltaTime;
+			if (F2000.fCycleFlashTime >= F2000.fCycleFlashDuration)
+			{
+				F2000.fCycleFlashTime = F2000.fCycleFlashDuration;
+				F2000.bStartFirstFlashCycle = false;
+			}
+		}
+		if (F2000 != None && F2000.bStartSecondFlashCycle)
+		{
+			F2000.fCycleFlashTime -= DeltaTime;
+			if (F2000.fCycleFlashTime <= 0.0)
+			{
+				F2000.fCycleFlashTime = 0.0;
+				F2000.bStartSecondFlashCycle = false;
+			}
+		}
     }
 }
 
@@ -205,7 +225,8 @@ function DrawView(HUD Hud, ECanvas Canvas)
 	if (F2000 != None && F2000.bSniperMode && Epc.bShowScope && Epc.bShowHUD) // Joshua - Show scope toggle
 	{			
         DrawDistanceMeter(Canvas);
-        DrawQuickInv(Canvas);		
+        DrawQuickInv(Canvas);
+        DrawFlashCycle(Canvas); // Joshua - SCPT zoom flash cycle animation
 		DrawStems(Canvas);
         DrawNoiseBars(Canvas);
         DrawGreenRing(Canvas);
@@ -837,6 +858,46 @@ function DrawNoiseBar(int AX, int AY, int BX, int BY, int OffsetX, ECanvas Canva
     Canvas.SetPos(AX, AY);
 	Canvas.Style = ERenderStyle.STY_Alpha;
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_anim_border, 630, abs(BY - AY), OffsetX, 0, 630, 4); 
+	Canvas.Style = ERenderStyle.STY_Normal;
+}
+
+// Joshua - SCPT zoom flash cycle animation
+function DrawFlashCycle(ECanvas Canvas)
+{
+	local int textureRadius, minRadius, maxRadius;
+	local float	flashRadius;
+
+	if (!F2000.bStartFirstFlashCycle && !F2000.bStartSecondFlashCycle)
+		return;
+
+	textureRadius = eLevel.TGAME.GetWidth(eLevel.TGAME.cycle_flash);
+
+	// Fill
+	Canvas.SetDrawColor(128,128,128,128);
+	Canvas.DrawColor = Green;
+	Canvas.Style = ERenderStyle.STY_Alpha;
+
+	minRadius = SCREEN_HALF_Y - STEMS_VERT_END;
+	maxRadius = textureRadius;
+
+	flashRadius = minRadius + (maxRadius-minRadius)*(F2000.fCycleFlashTime/F2000.fCycleFlashDuration);
+
+	//Canvas.SetPos(SCREEN_HALF_X - flashRadius, SCREEN_HALF_Y - flashRadius);
+	//eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.cycle_flash, flashRadius, flashRadius, 0, 0, textureRadius, textureRadius);
+
+	//flashRadius = 48;
+	Canvas.SetPos(SCREEN_HALF_X - flashRadius, SCREEN_HALF_Y - flashRadius);
+	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.cycle_flash, flashRadius, flashRadius, 0, 0, textureRadius, textureRadius);
+
+	Canvas.SetPos(SCREEN_HALF_X - flashRadius, SCREEN_HALF_Y);
+	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.cycle_flash, flashRadius, flashRadius, 0, textureRadius, textureRadius, -textureRadius);
+
+	Canvas.SetPos(SCREEN_HALF_X, SCREEN_HALF_Y - flashRadius);
+	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.cycle_flash, flashRadius, flashRadius, textureRadius, 0, -textureRadius, textureRadius);
+
+	Canvas.SetPos(SCREEN_HALF_X, SCREEN_HALF_Y);
+	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.cycle_flash, flashRadius, flashRadius, textureRadius, textureRadius, -textureRadius, -textureRadius);
+
 	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
