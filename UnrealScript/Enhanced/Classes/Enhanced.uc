@@ -22,6 +22,7 @@ class Enhanced extends Actor;
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\QR_GitHub.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="QR_GitHub" MIPS=0
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\ETGAME_PS2.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="ETGAME_PS2" MIPS=0
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\ETGAME_Hor.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="ETGAME_Hor" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\ETGAME2_SCPT.dds" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="ETGAME2_SCPT" MIPS=0
 
 // Alpha textures
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\ETMENU_PS2.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="ETMENU_PS2" MIPS=0
@@ -82,8 +83,8 @@ class Enhanced extends Actor;
 #exec Texture Import File="..\Textures\ETexCharacter\Dogs\Doberman.dds" PACKAGE="ETexCharacter" GROUP="Dogs" NAME="Doberman" MIPS=1
 #exec Texture Import File="..\Textures\ETexCharacter\Dogs\Rottweiler.dds" PACKAGE="ETexCharacter" GROUP="Dogs" NAME="Rottweiler" MIPS=1
 
-#exec Texture Import File="..\Textures\ETexCharacter\Elite\EliteAMesh.dds" PACKAGE="ETexCharacter" GROUP="Elite" NAME="EliteAMesh" MIPS=1
-#exec Texture Import File="..\Textures\ETexCharacter\Elite\EliteANightvision.dds" PACKAGE="ETexCharacter" GROUP="Elite" NAME="EliteANightvision" MIPS=1
+#exec Texture Import File="..\Textures\ETexCharacter\Elite\EliteAMesh.tga" PACKAGE="ETexCharacter" GROUP="Elite" NAME="EliteAMesh" MIPS=1
+#exec Texture Import File="..\Textures\ETexCharacter\Elite\EliteANightvision.tga" PACKAGE="ETexCharacter" GROUP="Elite" NAME="EliteANightvision" MIPS=1
 #exec Texture Import File="..\Textures\ETexCharacter\Elite\EliteB.dds" PACKAGE="ETexCharacter" GROUP="Elite" NAME="EliteB" MIPS=1
 
 #exec Texture Import File="..\Textures\ETexCharacter\ERussianCivilian\ERussianCivilianA.dds" PACKAGE="ETexCharacter" GROUP="ERussianCivilian" NAME="ERussianCivilianA" MIPS=1
@@ -95,11 +96,11 @@ class Enhanced extends Actor;
 #exec Texture Import File="..\Textures\ETexCharacter\FakeSoldier\Ushanka.dds" PACKAGE="ETexCharacter" GROUP="FakeSoldier" NAME="Ushanka" MIPS=1
 
 #exec Texture Import File="..\Textures\ETexCharacter\Feirong\Feirong.dds" PACKAGE="ETexCharacter" GROUP="Feirong" NAME="Feirong" MIPS=1
-#exec Texture Import File="..\Textures\ETexCharacter\Feirong\FeirongHat.dds" PACKAGE="ETexCharacter" GROUP="Feirong" NAME="FeirongHat" MIPS=1
+#exec Texture Import File="..\Textures\ETexCharacter\Feirong\FeirongHat.tga" PACKAGE="ETexCharacter" GROUP="Feirong" NAME="FeirongHat" MIPS=1
 
 #exec Texture Import File="..\Textures\ETexCharacter\FranceCoen\FranceCoen.dds" PACKAGE="ETexCharacter" GROUP="FranceCoen" NAME="FranceCoen" MIPS=1
 
-#exec Texture Import File="..\Textures\ETexCharacter\GEColonel\Colonel_redberet.dds" PACKAGE="ETexCharacter" GROUP="GEColonel" NAME="Colonel_redberet" MIPS=1
+#exec Texture Import File="..\Textures\ETexCharacter\GEColonel\Colonel_redberet.tga" PACKAGE="ETexCharacter" GROUP="GEColonel" NAME="Colonel_redberet" MIPS=1
 #exec Texture Import File="..\Textures\ETexCharacter\GEColonel\GEColonel.dds" PACKAGE="ETexCharacter" GROUP="GEColonel" NAME="GEColonel" MIPS=1
 #exec Texture Import File="..\Textures\ETexCharacter\GEColonel\GEColonel_winter.dds" PACKAGE="ETexCharacter" GROUP="GEColonel" NAME="GEColonel_winter" MIPS=1
 
@@ -116,8 +117,8 @@ class Enhanced extends Actor;
 
 #exec Texture Import File="..\Textures\ETexCharacter\Grinko\Grinko.dds" PACKAGE="ETexCharacter" GROUP="Grinko" NAME="Grinko" MIPS=1
 
-#exec Texture Import File="..\Textures\ETexCharacter\Grunt\GruntA.dds" PACKAGE="ETexCharacter" GROUP="Grunt" NAME="GruntA" MIPS=1
-#exec Texture Import File="..\Textures\ETexCharacter\Grunt\GruntB.dds" PACKAGE="ETexCharacter" GROUP="Grunt" NAME="GruntB" MIPS=1
+#exec Texture Import File="..\Textures\ETexCharacter\Grunt\GruntA.tga" PACKAGE="ETexCharacter" GROUP="Grunt" NAME="GruntA" MIPS=1
+#exec Texture Import File="..\Textures\ETexCharacter\Grunt\GruntB.tga" PACKAGE="ETexCharacter" GROUP="Grunt" NAME="GruntB" MIPS=1
 
 #exec Texture Import File="..\Textures\ETexCharacter\Hamlet\Hamlet.dds" PACKAGE="ETexCharacter" GROUP="Hamlet" NAME="Hamlet" MIPS=1
 
@@ -151,10 +152,10 @@ class Enhanced extends Actor;
 #exec Texture Import File="..\Textures\ETexCharacter\Mitch\Mitch.dds" PACKAGE="ETexCharacter" GROUP="Mitch" NAME="Mitch" MIPS=1
 
 #exec Texture Import File="..\Textures\ETexCharacter\model_FX\Black.dds" PACKAGE="ETexCharacter" GROUP="model_FX" NAME="Black" MIPS=1
-#exec Texture Import File="..\Textures\ETexCharacter\model_FX\specDot.dds" PACKAGE="ETexCharacter" GROUP="model_FX" NAME="specDot" MIPS=1
+#exec Texture Import File="..\Textures\ETexCharacter\model_FX\specDot.tga" PACKAGE="ETexCharacter" GROUP="model_FX" NAME="specDot" MIPS=1
 
 #exec Texture Import File="..\Textures\ETexCharacter\PalaceGuard\PalaceGuardA.dds" PACKAGE="ETexCharacter" GROUP="PalaceGuard" NAME="PalaceGuardA" MIPS=1
-#exec Texture Import File="..\Textures\ETexCharacter\PalaceGuard\PalaceGuardAHat.dds" PACKAGE="ETexCharacter" GROUP="PalaceGuard" NAME="PalaceGuardAHat" MIPS=1
+#exec Texture Import File="..\Textures\ETexCharacter\PalaceGuard\PalaceGuardAHat.tga" PACKAGE="ETexCharacter" GROUP="PalaceGuard" NAME="PalaceGuardAHat" MIPS=1
 #exec Texture Import File="..\Textures\ETexCharacter\PalaceGuard\PalaceGuardB.dds" PACKAGE="ETexCharacter" GROUP="PalaceGuard" NAME="PalaceGuardB" MIPS=1
 
 #exec Texture Import File="..\Textures\ETexCharacter\Pietr\Pietr.dds" PACKAGE="ETexCharacter" GROUP="Pietr" NAME="Pietr" MIPS=1
@@ -208,7 +209,7 @@ class Enhanced extends Actor;
 #exec Texture Import File="..\Textures\ETexCharacter\Soldier\SoldierB.dds" PACKAGE="ETexCharacter" GROUP="Soldier" NAME="SoldierB" MIPS=1
 #exec Texture Import File="..\Textures\ETexCharacter\Soldier\SoldierC.dds" PACKAGE="ETexCharacter" GROUP="Soldier" NAME="SoldierC" MIPS=1
 
-#exec Texture Import File="..\Textures\ETexCharacter\spetsnaz\headset.dds" PACKAGE="ETexCharacter" GROUP="spetsnaz" NAME="headset" MIPS=1
+#exec Texture Import File="..\Textures\ETexCharacter\spetsnaz\headset.tga" PACKAGE="ETexCharacter" GROUP="spetsnaz" NAME="headset" MIPS=1
 #exec Texture Import File="..\Textures\ETexCharacter\spetsnaz\headset_glw.dds" PACKAGE="ETexCharacter" GROUP="spetsnaz" NAME="headset_glw" MIPS=1
 #exec Texture Import File="..\Textures\ETexCharacter\spetsnaz\SpetsnazA.dds" PACKAGE="ETexCharacter" GROUP="spetsnaz" NAME="SpetsnazA" MIPS=1
 #exec Texture Import File="..\Textures\ETexCharacter\spetsnaz\SpetsnazB.dds" PACKAGE="ETexCharacter" GROUP="spetsnaz" NAME="SpetsnazB" MIPS=1
@@ -227,7 +228,8 @@ class Enhanced extends Actor;
 /*
 #exec OBJ LOAD FILE=..\Textures\ETexIngredient.utx PACKAGE=ETexIngredient
 
-#exec Texture Import File="..\Textures\ETexIngredient\KeyPadTech\keypaddigit.tga" PACKAGE="ETexIngredient" GROUP="KeyPadTech" NAME="keypaddigit" MIPS=0
+#exec Texture Import File="..\Textures\ETexIngredient\KeyPadTech\keypaddigit.tga" PACKAGE="ETexIngredient" GROUP="KeyPadTech" NAME="keypaddigit" MIPS=1
+#exec Texture Import File="..\Textures\ETexIngredient\KeyPadTech\keypad02.tga" PACKAGE="ETexIngredient" GROUP="KeyPadTech" NAME="keypad02" MIPS=1
 
 #exec Texture Import File="..\Textures\ETexIngredient\Weapons\ak47.tga" PACKAGE="ETexIngredient" GROUP="Weapons" NAME="ak47" MIPS=1
 
@@ -246,7 +248,8 @@ class Enhanced extends Actor;
 // Alpha textures
 #exec Texture Import File="..\Textures\ETexIngredient\Weapons\Mk23.tga" PACKAGE="ETexIngredient" GROUP="Weapons" NAME="Mk23" MIPS=1
 #exec Texture Import File="..\Textures\ETexIngredient\Weapons\P228.tga" PACKAGE="ETexIngredient" GROUP="Weapons" NAME="P228" MIPS=1
-//#exec Texture Import File="..\Textures\ETexIngredient\Weapons\Uzi.tga" PACKAGE="ETexIngredient" GROUP="Weapons" NAME="Uzi" MIPS=1
+//#exec Texture Import File="..\Textures\ETexIngredient\Weapons\Uzi.dds" PACKAGE="ETexIngredient" GROUP="Weapons" NAME="Uzi" MIPS=1
+//#exec Texture Import File="..\Textures\ETexIngredient\Weapons\SPAS01.dds" PACKAGE="ETexIngredient" GROUP="Weapons" NAME="SPAS01" MIPS=1
 
 #exec SAVEPACKAGE FILE=..\Textures\ETexIngredient.utx PACKAGE=ETexIngredient
 */
