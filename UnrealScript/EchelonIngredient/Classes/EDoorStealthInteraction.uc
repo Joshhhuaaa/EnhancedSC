@@ -52,10 +52,24 @@ function InitInteract(Controller Instigator)
     if (MyDoor.Locked || !MyDoor.Usable)
     {
         // Play locked/jammed animation, do not try to stealth open
-        if (LeftSideInteraction)
-            Instigator.GotoState('s_OpenDoor', 'LockedLt');
-        else
-            Instigator.GotoState('s_OpenDoor', 'LockedRt');
+		// Joshua - Holster weapon before trying to open locked/jammed door
+		if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
+		{
+			// Joshua - Disable re-drawing weapon after Open Door Stealth
+			//EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
+			
+			if (LeftSideInteraction)
+				Instigator.GotoState('s_OpenDoor', 'HolsterThenLockedLt');
+			else
+				Instigator.GotoState('s_OpenDoor', 'HolsterThenLockedRt');
+		}
+		else
+		{
+			if (LeftSideInteraction)
+				Instigator.GotoState('s_OpenDoor', 'LockedLt');
+			else
+				Instigator.GotoState('s_OpenDoor', 'LockedRt');
+		}
     }
     else
     {
