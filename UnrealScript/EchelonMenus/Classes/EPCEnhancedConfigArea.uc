@@ -669,6 +669,7 @@ function SaveOptions()
         case 2: EPC.eGame.WallMineDelay = WMD_Instant; break;
         default: EPC.eGame.WallMineDelay = WMD_Default; break;
     }
+    ApplyWallMineDelay(EPC);
 
     EPC.bShowHUD = m_bShowHUD.m_bSelected;
     EPC.bPersistentHUD = m_bPersistentHUD.m_bSelected;
@@ -887,6 +888,39 @@ function RefreshCurrentDoorInteraction(EPlayerController EPC)
         {
             DoorInteraction.RefreshInteractions();
         }
+    }
+}
+
+// Update all wall mines in the level when the delay setting is changed mid-mission
+function ApplyWallMineDelay(EPlayerController EPC)
+{
+    local EWallMine WallMine;
+    local float NewDelay;
+    
+    // Determine the new delay based on the setting
+    switch (EPC.eGame.WallMineDelay)
+    {
+        case WMD_Default:
+            NewDelay = 1.75;
+            break;
+        case WMD_Enhanced:
+            NewDelay = 0.5;
+            break;
+        case WMD_Instant:
+            NewDelay = 0.0;
+            break;
+    }
+    
+    // Elite Mode overrides if greater than 0.5
+    if (EPC.eGame.bEliteMode && NewDelay > 0.5)
+    {
+        NewDelay = 0.5;
+    }
+    
+    // Update all wall mines in the level
+    foreach EPC.AllActors(class'EWallMine', WallMine)
+    {
+        WallMine.ExplosionDelay = NewDelay;
     }
 }
 
