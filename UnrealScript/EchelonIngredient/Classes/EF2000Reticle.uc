@@ -880,7 +880,7 @@ function DrawFlashCycle(ECanvas Canvas)
 	minRadius = SCREEN_HALF_Y - STEMS_VERT_END;
 	maxRadius = textureRadius;
 
-	flashRadius = minRadius + (maxRadius-minRadius)*(F2000.fCycleFlashTime/F2000.fCycleFlashDuration);
+	flashRadius = minRadius + (maxRadius-minRadius) * (F2000.fCycleFlashTime / F2000.fCycleFlashDuration);
 
 	//Canvas.SetPos(SCREEN_HALF_X - flashRadius, SCREEN_HALF_Y - flashRadius);
 	//eLevel.TGAME.DrawTileFromManager( Canvas, eLevel.TGAME.cycle_flash, flashRadius, flashRadius, 0, 0, textureRadius, textureRadius);

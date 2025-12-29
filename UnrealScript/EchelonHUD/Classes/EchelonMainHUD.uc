@@ -1257,11 +1257,15 @@ state s_Slavery
 					!Epc.bStopInput && 
 					Level.Pauser == None && 
 					(Epc.GetStateName() == 's_FirstPersonTargeting'	||
+					 Epc.GetStateName() == 's_GrabTargeting'		||
 					 Epc.GetStateName() == 's_RappellingTargeting'	||
 					 Epc.GetStateName() == 's_SplitTargeting'		||
-					 Epc.GetStateName() == 's_CameraJammerTargeting')) // Joshua - Allow Camera Jammer to use inventory
+					 Epc.GetStateName() == 's_CameraJammerTargeting'||
+					 Epc.GetStateName() == 's_HOHTargeting'			||
+					 Epc.GetStateName() == 's_HOHFUTargeting'))
 				{
 					SaveState();
+					bPreserveHudMaster = true; // Joshua - Preserve crosshair during PlayerStats transition
 					GotoState('PlayerStats');
 					return true;
 				}
@@ -1806,7 +1810,7 @@ state s_Cinematic
     }
 
 	// If Player is drawing weapon while cinematic starts, it will pop here ..
-	// saving as if he was in slavery before cinemtic so that everything gets 
+	// saving as if he was in slavery before cinematic so that everything gets 
 	// restored properly when coming back form cinematic
 	function Slave(EGameplayObject NewMaster)
 	{

@@ -1365,6 +1365,10 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 		Canvas.SetPos(4, YPos);
 		if (Pawn(m_TargetActor) != None)
 			Canvas.DrawText("Target:" @ m_TargetActor @ "GroupTag:" @ Pawn(m_TargetActor).m_GroupTag);
+		else if (StaticMeshActor(m_TargetActor) != None)
+			Canvas.DrawText("Target:" @ m_TargetActor @ "StaticMesh:" @ StaticMeshActor(m_TargetActor).StaticMesh);
+		else if (EGameplayObject(m_TargetActor) != None)
+			Canvas.DrawText("Target:" @ m_TargetActor @ "StaticMesh:" @ EGameplayObject(m_TargetActor).StaticMesh);
 		else
 			Canvas.DrawText("Target:" @ m_TargetActor);
 
