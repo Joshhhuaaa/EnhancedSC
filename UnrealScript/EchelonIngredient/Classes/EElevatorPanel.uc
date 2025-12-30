@@ -26,6 +26,7 @@ var		int							SelectedButton;
 var		int							DoorEndEvents;
 var		bool						bCanPushButton;			// Can push as soon as it's released
 var		bool						bLocked;
+var		bool						bWasUsingController;	// Joshua - Track previous controller state
 
 // Numbering vars
 var		float						TimeBetweenEachFloor;
@@ -445,6 +446,7 @@ state s_Use
 		if (Epc != None)
 		{
 			// Joshua - Adding controller support for elevators
+			bWasUsingController = Epc.eGame.bUseController;
 			if (!Epc.eGame.bUseController)
 				Epc.FakeMouseToggle(true);
 			bRenderAtEndOfFrame = true;
@@ -461,7 +463,7 @@ state s_Use
 
 		// No special display if not player
 		if (Epc != None)
-				Epc.FakeMouseToggle(false);
+			Epc.FakeMouseToggle(false);
 	}
 
 	function Tick(float DeltaTime)
@@ -470,15 +472,39 @@ state s_Use
 		local EPlayerController Epc;
 		Epc = EPlayerController(EElevatorInteraction(Interaction).InteractionController);
 
-		if (!Epc.eGame.bUseController) // Joshua - Adding controller support for elevators
+		OldSelectedButton = SelectedButton;
+
+		Global.Tick(DeltaTime);
+
+		if (Epc == None)
+			return;
+
+		// Joshua - Detect controller state changes and toggle fake mouse
+		if (Epc.eGame.bUseController != bWasUsingController)
 		{
-			OldSelectedButton = SelectedButton;
+			bWasUsingController = Epc.eGame.bUseController;
+			if (bWasUsingController)
+			{
+				// Joshua - Switched to controller
+				Epc.FakeMouseToggle(false);
 
-			Global.Tick(DeltaTime);
+				// Joshua - If no button selected, select Open button
+				if (SelectedButton == -1)
+				{
+					SelectedButton = 0;
+					GlowSelected();
+				}
+			}
+			else
+			{
+				// Joshua - Switched to keyboard
+				Epc.FakeMouseToggle(true);
+			}
+		}
 
-			if (Epc == None)
-				return;
-
+		// Joshua - Only process mouse input when not using controller
+		if (!Epc.eGame.bUseController)
+		{
 			//
 			// Crappy button selection
 			//
