@@ -57,6 +57,7 @@ var int					TURRET_OFFSET_X;     // Offset from right side of the screen
 var int					TURRET_OFFSET_Y;     // Offset from the top of the screen
 
 var bool				bCheckMouse;
+var bool				bWasUsingController; // Joshua - Track previous controller state
 
 function PostBeginPlay()
 {
@@ -79,7 +80,9 @@ function PostBeginPlay()
 function BeginEvent()
 {
     bCheckMouse = true;
+    bWasUsingController = eGame.bUseController;	// Joshua - Track initial controller state
 }
+
 function EndEvent()
 {
     bCheckMouse = false;
@@ -113,16 +116,35 @@ function Tick(float DeltaTime)
     local EPlayerController Epc;
     Epc = EPlayerController(ETurretInteraction(Interaction).User);
 
-    if (!eGame.bUseController) // Joshua - Adding controller support for turrets
+    if (Epc == None || !bCheckMouse)
+        return;
+
+    // Joshua - Detect controller state changes and toggle fake mouse
+    if (eGame.bUseController != bWasUsingController)
+    {
+        bWasUsingController = eGame.bUseController;
+        if (bWasUsingController)
+        {
+            // Switched to controller
+            if (Epc.GetStateName() != 's_Dead')
+                Epc.FakeMouseToggle(false);
+
+            // If no valid selection, default to EXIT
+            if (CursorPos == -1 || CursorPos == OUTSIDE)
+                CursorPos = EXIT;
+        }
+        else
+        {
+            // Switched to keyboard
+            if (Epc.GetStateName() != 's_Dead')
+                Epc.FakeMouseToggle(true);
+        }
+    }
+
+    // Joshua - Only process mouse input when not using controller
+    if (!eGame.bUseController)
     {
         OldCurPos = CursorPos;
-
-        if (Epc == None || !bCheckMouse)
-            return;
-
-        // Joshua - Re-enable mouse if switching back to keyboard input
-        if (Epc.GetStateName() != 's_Dead')
-            Epc.FakeMouseToggle(true);
 
         //
         // Crappy button selection
@@ -179,8 +201,6 @@ function Tick(float DeltaTime)
         }
         Epc.m_FakeMouseClicked = false;
     }
-    else
-        Epc.FakeMouseToggle(false);
 }
 
 /*-----------------------------------------------------------------------------
