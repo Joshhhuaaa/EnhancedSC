@@ -20,6 +20,7 @@ var			bool			bNoTimer;
 var			String			InputedCode;		// Player inputed code
 var			int				SelectedButton;
 var			float			FadeElapsedTime;
+var			bool			bWasUsingController; // Joshua - Track previous controller state
 
 var const	vector			CONST_TextStart;
 
@@ -288,6 +289,7 @@ state s_Use
 		if (Epc != None)
 		{
 			// Joshua - Adding controller support for keypad
+			bWasUsingController = Epc.eGame.bUseController;
 			if (!Epc.eGame.bUseController)
 				Epc.FakeMouseToggle(true);
 			bRenderAtEndOfFrame = true;
@@ -324,6 +326,30 @@ state s_Use
 		if (Epc == None)
 			return;
 
+		// Joshua - Detect controller state changes and toggle fake mouse
+		if (Epc.eGame.bUseController != bWasUsingController)
+		{
+			bWasUsingController = Epc.eGame.bUseController;
+			if (bWasUsingController)
+			{
+				// Joshua - Switched to controller
+				Epc.FakeMouseToggle(false);
+
+				// Joshua - If no button selected, select center button (5 key)
+				if (SelectedButton == -1)
+				{
+					SelectedButton = 4;
+					GlowSelected();
+				}
+			}
+			else
+			{
+				// Joshua - Switched to keyboard
+				Epc.FakeMouseToggle(true);
+			}
+		}
+
+		// Joshua - Only process mouse input when not using controller
 		if (!Epc.eGame.bUseController)
 		{
 			//
@@ -372,16 +398,17 @@ state s_Use
 			if (OldSelectedButton != SelectedButton)
 				GlowSelected();
 		}
-			// Joshua - Keypad hint
-			Super.Tick(DeltaTime);
+		
+		// Joshua - Keypad hint
+		Super.Tick(DeltaTime);
 
-			KeyPadInteraction = EKeyPadInteraction(Interaction);
+		KeyPadInteraction = EKeyPadInteraction(Interaction);
 
-			if (KeyPadInteraction != None && KeyPadInteraction.CheckKeyCode(KeyPadInteraction.InteractionController, AccessCode))
-			{
-				EPlayerController(KeyPadInteraction.InteractionController).CurrentGoal = Localize("HUD", "Keypad_Goal", "Localization\\Enhanced")@AccessCode;
-				EPlayerController(KeyPadInteraction.InteractionController).bShowKeyNum = true;
-			}
+		if (KeyPadInteraction != None && KeyPadInteraction.CheckKeyCode(KeyPadInteraction.InteractionController, AccessCode))
+		{
+			EPlayerController(KeyPadInteraction.InteractionController).CurrentGoal = Localize("HUD", "Keypad_Goal", "Localization\\Enhanced")@AccessCode;
+			EPlayerController(KeyPadInteraction.InteractionController).bShowKeyNum = true;
+		}
 	}
 
 	function bool CoordinateWithin(EPlayerController Epc, float x, float y, int w, int h)
