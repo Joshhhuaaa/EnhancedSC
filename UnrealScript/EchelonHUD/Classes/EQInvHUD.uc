@@ -65,6 +65,8 @@ var bool bNeedSheath;
 var bool bIsFirstPerson;
 var EInventoryItem MyItem;
 
+var bool bWasUsingController;	// Joshua - Track previous controller state
+
 /*-----------------------------------------------------------------------------
                       T Y P E   D E F I N I T I O N S 
 -----------------------------------------------------------------------------*/
@@ -515,9 +517,7 @@ state s_QDisplay
 		if (!bPreviousConfig)
 			Epc.EPawn.PlaySound(Sound'Interface.Play_ClosePackSac', SLOT_Interface);
 
-		// Joshua - Only disable fake mouse for keyboard/mouse, not controller
-		if (!eGame.bUseController)
-			Epc.FakeMouseToggle(false);
+		Epc.FakeMouseToggle(false);
 		
 		if (Epc.bInteractionPause) // Joshua - Adding interaction pause option
 		{
@@ -538,7 +538,7 @@ state s_QDisplay
 	function Tick(float DeltaTime)
 	{
 		local int nbItems, HoldCategory, HoldItem;
-		local EInventoryItem	Item;
+		local EInventoryItem Item;
 
 		if (Epc.bStopInput)
 		{
@@ -546,8 +546,29 @@ state s_QDisplay
 			Owner.GotoState(EchelonMainHud(Owner).RestoreState());
 		}
 
-		// Don't process mouse input during timer period or if using controller
-		if (bPreviousConfig || eGame.bUseController)
+		// Don't process input during timer period
+		if (bPreviousConfig)
+			return;
+
+		// Joshua - Detect controller state changes and toggle fake mouse
+		if (eGame.bUseController != bWasUsingController)
+		{
+			bWasUsingController = eGame.bUseController;
+
+			if (bWasUsingController)
+			{
+				// Switched to controller
+				Epc.FakeMouseToggle(false);
+			}
+			else
+			{
+				// Switched to keyboard
+				Epc.FakeMouseToggle(true);
+			}
+		}
+
+		// Don't process mouse input if using controller
+		if (eGame.bUseController)
 			return;
 
 		HoldCategory = CurrentCategory;
@@ -813,7 +834,8 @@ function bool KeyEvent(string Key, EInputAction Action, float Delta)
 
 		bPreviousConfig = false;
 
-		// Joshua - Only enable fake mouse for keyboard/mouse, not controller
+		// Joshua - Track initial controller state and enable fake mouse for keyboard/mouse
+		bWasUsingController = eGame.bUseController;
 		if (!eGame.bUseController)
 			Epc.FakeMouseToggle(true);
 
