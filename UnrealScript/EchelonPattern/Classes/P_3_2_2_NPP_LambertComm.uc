@@ -38,6 +38,7 @@ function InitPattern()
     local EGameplayObject EGO;
     local ETurret Turret;
     local ETurretController TurretController;
+    local ELaptop Laptop;
 
     Super.InitPattern();
 
@@ -66,14 +67,11 @@ function InitPattern()
         {
             if (EGO.CollisionPrimitive == StaticMesh(DynamicLoadObject("EGO_OBJ.GenObjGO.General_GlasseB00", class'StaticMesh')))
             {
+                EGO.Hitpoints = 1;
                 EGO.DamagedMeshes[0].Percent = 0.0;
                 //EGO.DamagedMeshes[0].StaticMesh
                 //EGO.DamagedMeshes[0].CollPrimMesh = None;
             }
-
-            // Joshua - Replacing the Chemcial Flares for Flares for the turret section (possibly revert later)
-            if (EGO.name == 'EChemFlare0' || EGO.name == 'EChemFlare1' || EGO.name == 'EChemFlare2')
-                EGO.Destroy();
 
             // Joshua - Disposable pick was assigned the incorrect mesh
             if (EGO.name == 'EDisposablePick0')
@@ -89,7 +87,7 @@ function InitPattern()
             }
 
             // Joshua - Door nametag placement fix
-            if (EGO.name == 'EGameplayObject18' && !bInit)
+            if (EGO.name == 'EGameplayObject18')
             {
                 // This is not working properly yet location remains static instead attached to door
                 // EGO.SetLocation(vect(13971.016602, -6400.000000, 984.000000));
@@ -97,8 +95,20 @@ function InitPattern()
                 EGO.bHidden = true;
                 // Location = (X = 13971.016602, Y = -6315.776367, Z = 984.000000)
             }
-        }
 
+            // Joshua - Keypad sliding door glass should not be destructible
+            if (EGO.name == 'EGameplayObject20' || EGO.name == 'EGameplayObject21')
+                EGO.bDamageable = false;
+
+            // Joshua - Laptop should not be destructible, it's a required objective
+            if (EGO.name == 'ELaptop0')
+            {
+                EGO.Skins[1] = EGlow'EGO_Tex.GenTexGO.GO_LCDscreen_OBJ_glw';
+                EGO.bDamageable = false;
+                EGO.bDestroyWhenDestructed = false;
+            }
+        }
+        
         // Joshua - Fixing some broken lighting
         ForEach AllActors(class'Actor', A)
         {
@@ -158,11 +168,6 @@ function InitPattern()
             if (A.name == 'ETurret5')
                 TurretController.LinkedTurret = ETurret(A);
         }
-
-        // Joshua - Replacing the Chemcial Flares for Flares for the turret section (possibly revert later)
-        Spawn(class'EFlare', , , vect(12122.338867, -4888.167480, 400.750000), rot(16384, -8600, 0));
-        Spawn(class'EFlare', , , vect(12109.731445, -4879.166992, 400.750000), rot(16384, -16, 0));
-        Spawn(class'EFlare', , , vect(12110.436523, -4891.073730, 400.750000), rot(16384, -19344, 0));
     }
 
     if (!bInit)
