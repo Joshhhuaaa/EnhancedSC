@@ -5,28 +5,59 @@ class EPCEnhancedConfigArea extends UWindowDialogClientWindow;
 
 var EPCEnhancedListBox      m_ListBox;
 
-var EPCCheckBox             m_bInteractionPause,
+//=============================================================================
+// General
+//=============================================================================
+// Native
+var EPCCheckBox             m_bCheckForUpdates,
+                            m_bSkipIntroVideos,
+                            m_bDisableMenuIdleTimer;
+
+var EPCComboControl         m_LevelUnlock;
+
+//=============================================================================
+// Gameplay
+//=============================================================================
+var EPCCheckBox             m_bWhistle,
+                            m_bNewDoorInteraction,
+                            m_bInteractionPause,
                             m_bEnableCheckpoints,
-                            m_bXboxDifficulty,
                             m_bMissionFailedQuickMenu,
-                            m_bLetterBoxCinematics,
-                            m_bWhistle,
-                            m_bBinoculars,
+                            m_bXboxDifficulty;
+
+var EPCComboControl         m_PlayerStatsMode;
+
+//=============================================================================
+// Equipment
+//=============================================================================
+var EPCCheckBox             m_bBinoculars,
+                            m_bF2000BurstFire,
+                            m_bPS2FN7Accuracy,
                             m_bF2000ZoomLevels,
                             m_bLaserMicZoomLevels,
                             m_bLaserMicVisions,
-                            m_bBurstFire,
-                            m_bPS2FN7Accuracy,
-                            m_bHorizontalLifeBar,
-                            m_bInvertInteractionList,
-                            m_bNewDoorInteraction,
-                            m_bRandomizeLockpick,
                             m_bOpticCableVisions,
                             m_bThermalOverride,
+                            m_bRandomizeLockpick,
                             m_bScaleGadgetDamage;
 
+var EPCComboControl         m_MineDelay;
+
+//=============================================================================
+// HUD Settings
+//=============================================================================
+var EPCCheckBox             m_bPersistentHUD,
+                            m_bHorizontalLifeBar,
+                            m_bInvertInteractionList,
+                            m_bLetterBoxCinematics;
+
+// Native
+var EPCComboControl         m_FontType;
+
+//=============================================================================
+// HUD Visibility
+//=============================================================================
 var EPCCheckBox             m_bShowHUD,
-                            m_bPersistentHUD,
                             m_bShowLifeBar,
                             m_bShowInteractionBox,
                             m_bShowCommunicationBox,
@@ -41,21 +72,9 @@ var EPCCheckBox             m_bShowHUD,
                             m_bShowScope,
                             m_bShowAlarms;
 
-// Native
-var EPCCheckBox             m_bCheckForUpdates,
-                            m_bSkipIntroVideos,
-                            m_bDisableMenuIdleTimer;
-
-
-var EPCComboControl         m_PlayerStatsMode;
-
-// Native
-var EPCComboControl         m_FontType;
-
-var EPCComboControl         m_LevelUnlock;
-                            
-var EPCComboControl         m_MineDelay;
-
+//=============================================================================
+// Suits
+//=============================================================================
 var EPCComboControl         m_TrainingSamMesh,
                             m_TbilisiSamMesh,
                             m_DefenseMinistrySamMesh,
@@ -142,6 +161,7 @@ function InitEnhancedSettings()
     AddTitleItem(Caps(Localize("Enhanced", "Title_HUDSettings", "Localization\\Enhanced")));
     AddLineItem();
 
+    AddCheckBoxItem("PersistentHUD", m_bPersistentHUD);
     AddCheckBoxItem("HorizontalLifeBar", m_bHorizontalLifeBar);
     AddCheckBoxItem("InvertInteractionList", m_bInvertInteractionList);
     AddCheckBoxItem("LetterBoxCinematics", m_bLetterBoxCinematics);
@@ -155,7 +175,6 @@ function InitEnhancedSettings()
     AddLineItem();
 
     AddCheckBoxItem("ShowHUD", m_bShowHUD);
-    AddCheckBoxItem("PersistentHUD", m_bPersistentHUD);
     AddCheckBoxItem("ShowLifeBar", m_bShowLifeBar);
     AddCheckBoxItem("ShowInteractionBox", m_bShowInteractionBox);
     AddCheckBoxItem("ShowCommunicationBox", m_bShowCommunicationBox);
@@ -384,6 +403,9 @@ function Notify(UWindowDialogControl C, byte E)
     {
         switch (C)
         {
+            //=============================================================================
+            // General
+            //=============================================================================
             case m_bCheckForUpdates:
                 if (m_bCheckForUpdates.m_bSelected != m_bOriginalCheckForUpdates)
                     EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "RestartRequired", "Localization\\Enhanced"), Localize("Common", "RestartRequiredWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
@@ -399,29 +421,49 @@ function Notify(UWindowDialogControl C, byte E)
                     EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "RestartRequired", "Localization\\Enhanced"), Localize("Common", "RestartRequiredWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
                 m_bModified = true;
                 break;
+
+            //=============================================================================
+            // Gameplay
+            //=============================================================================
+            case m_bWhistle:
+            case m_bNewDoorInteraction:
             case m_bInteractionPause:
             case m_bEnableCheckpoints:
             case m_bMissionFailedQuickMenu:
             case m_bXboxDifficulty:
-            case m_bLetterBoxCinematics:
-            case m_bWhistle:
+                m_bModified = true;
+                break;
+
+            //=============================================================================
+            // Equipment
+            //=============================================================================
             case m_bBinoculars:
             case m_bF2000BurstFire:
             case m_bPS2FN7Accuracy:
             case m_bF2000ZoomLevels:
             case m_bLaserMicZoomLevels:
             case m_bLaserMicVisions:
-            case m_bBurstFire:
-            case m_bPS2FN7Accuracy:
+            case m_bOpticCableVisions:
+            case m_bThermalOverride:
+            case m_bRandomizeLockpick:
+            case m_bScaleGadgetDamage:
+                m_bModified = true;
+                break;
+
+            //=============================================================================
+            // HUD Settings
+            //=============================================================================
+            case m_bPersistentHUD:
             case m_bHorizontalLifeBar:
             case m_bInvertInteractionList:
-            case m_bNewDoorInteraction:
-            case m_bRandomizeLockpick:
-            case m_bOpticCableVisions:
-            case m_bThermalOverride:            
-            case m_bScaleGadgetDamage:
+            case m_bLetterBoxCinematics:
+                m_bModified = true;
+                break;
+
+            //=============================================================================
+            // HUD Visibility
+            //=============================================================================
             case m_bShowHUD:
-            case m_bPersistentHUD:
             case m_bShowLifeBar:
             case m_bShowInteractionBox:
             case m_bShowCommunicationBox:
@@ -458,10 +500,37 @@ function Notify(UWindowDialogControl C, byte E)
     {
         switch (C)
         {
-            case m_PlayerStatsMode:
-            case m_FontType:
+            //=============================================================================
+            // General
+            //=============================================================================
             case m_LevelUnlock:
+                m_bModified = true;
+                break;
+
+            //=============================================================================
+            // Gameplay
+            //=============================================================================
+            case m_PlayerStatsMode:
+                m_bModified = true;
+                break;
+
+            //=============================================================================
+            // Equipment
+            //=============================================================================
             case m_MineDelay:
+                m_bModified = true;
+                break;
+
+            //=============================================================================
+            // HUD Settings
+            //=============================================================================
+            case m_FontType:
+                m_bModified = true;
+                break;
+
+            //=============================================================================
+            // Suits
+            //=============================================================================
             case m_TrainingSamMesh:
             case m_TbilisiSamMesh:
             case m_DefenseMinistrySamMesh:
@@ -488,19 +557,20 @@ function SaveOptions()
     local EchelonMainHUD HUD;
 
     local EF2000 F2000;
+    local EGoggle Goggle;
+    local ELaserMic LaserMic;
+    local Actor CamController;
+
     local bool bPreviousF2000ZoomLevels;
     local bool bPreviousLaserMicZoomLevels;
     local bool bPreviousLaserMicVisions;
     local bool bPreviousBurstFire;
     local bool bPreviousNewDoorInteraction;
     local bool bPreviousOpticCableVisions;
-
-    local EGoggle Goggle;
-    local ELaserMic LaserMic;
-    local Actor CamController;
     
     EPC = EPlayerController(GetPlayerOwner());
     HUD = EchelonMainHUD(EPC.myHUD);
+
     bPreviousF2000ZoomLevels = EPC.bF2000ZoomLevels;
     bPreviousLaserMicZoomLevels = EPC.bLaserMicZoomLevels;
     bPreviousLaserMicVisions = EPC.bLaserMicVisions;
@@ -508,27 +578,36 @@ function SaveOptions()
     bPreviousNewDoorInteraction = EPC.eGame.bNewDoorInteraction;
     bPreviousOpticCableVisions = EPC.bOpticCableVisions;
     
+	//=============================================================================
+	// General
+	//=============================================================================
     EPC.eGame.bCheckForUpdates = m_bCheckForUpdates.m_bSelected;
     EPC.eGame.bSkipIntroVideos = m_bSkipIntroVideos.m_bSelected;
     EPC.eGame.bDisableMenuIdleTimer = m_bDisableMenuIdleTimer.m_bSelected;
-    
-    switch (m_FontType.GetSelectedIndex())
+
+    switch (m_LevelUnlock.GetSelectedIndex())
     {
-        case 0: EPC.eGame.FontType = Font_PC; break;
-        case 1: EPC.eGame.FontType = Font_Xbox; break;
-        case 2: EPC.eGame.FontType = Font_GameCube; break;
-        default: EPC.eGame.FontType = Font_Xbox; break;
+        case 0: EPC.playerInfo.LevelUnlock = LU_Disabled; break;
+        case 1: EPC.playerInfo.LevelUnlock = LU_Enabled; break;
+        case 2: EPC.playerInfo.LevelUnlock = LU_AllParts; break;
+        default: EPC.playerInfo.LevelUnlock = LU_Disabled; break;
     }
 
-    // Update canvas font immediately
-    log("UpdateCanvasFont called with FontType:" @ EPC.eGame.FontType);
-    UpdateCanvasFont(EPC.eGame.FontType);
-    
-    // Update menu fonts
-    if (Root != None)
+	//=============================================================================
+	// Gameplay
+	//=============================================================================
+    EPC.bWhistle = m_bWhistle.m_bSelected;
+    EPC.eGame.bNewDoorInteraction = m_bNewDoorInteraction.m_bSelected;
+
+    if (bPreviousNewDoorInteraction != EPC.eGame.bNewDoorInteraction)
     {
-        EPCMainMenuRootWindow(Root).SetupFonts();
+        RefreshCurrentDoorInteraction(EPC);
     }
+
+    EPC.bInteractionPause = m_bInteractionPause.m_bSelected;
+    EPC.eGame.bEnableCheckpoints = m_bEnableCheckpoints.m_bSelected;
+    EPC.bMissionFailedQuickMenu = m_bMissionFailedQuickMenu.m_bSelected;
+    EPC.eGame.bXboxDifficulty = m_bXboxDifficulty.m_bSelected;
 
     switch (m_PlayerStatsMode.GetSelectedIndex())
     {
@@ -538,13 +617,40 @@ function SaveOptions()
         default: EPC.PlayerStatsMode = SM_Ghost; break;
     }
 
-    EPC.bInteractionPause = m_bInteractionPause.m_bSelected;
-    EPC.eGame.bEnableCheckpoints = m_bEnableCheckpoints.m_bSelected;
-    EPC.bMissionFailedQuickMenu = m_bMissionFailedQuickMenu.m_bSelected;
-    EPC.eGame.bXboxDifficulty = m_bXboxDifficulty.m_bSelected;
-    HUD.bLetterBoxCinematics = m_bLetterBoxCinematics.m_bSelected;
-    EPC.bWhistle = m_bWhistle.m_bSelected;
+	//=============================================================================
+	// Equipment
+	//=============================================================================
     EPC.bBinoculars = m_bBinoculars.m_bSelected;
+    
+    EPC.bF2000BurstFire = m_bF2000BurstFire.m_bSelected;
+    if (bPreviousBurstFire && !EPC.bF2000BurstFire)
+    {
+        if (EPC.MainGun != None)
+        {
+            F2000 = EF2000(EPC.MainGun);
+            if (F2000 != None)
+            {
+                F2000.ValidateROFMode();
+            }
+        }
+    }
+
+
+    EPC.eGame.bPS2FN7Accuracy = m_bPS2FN7Accuracy.m_bSelected;
+    if (EPC.HandGun != None)
+    {
+        if (EPC.eGame.bPS2FN7Accuracy && !EPC.eGame.bEliteMode)
+        {
+            EPC.HandGun.AccuracyMovementModifier = 3.330000;
+            EPC.HandGun.AccuracyBase = 0.330000;
+        }
+        else
+        {
+            EPC.HandGun.AccuracyMovementModifier = EPC.HandGun.default.AccuracyMovementModifier;
+            EPC.HandGun.AccuracyBase = EPC.HandGun.default.AccuracyBase; 
+        }
+    }
+
     EPC.bF2000ZoomLevels = m_bF2000ZoomLevels.m_bSelected;
     if (bPreviousF2000ZoomLevels && !EPC.bF2000ZoomLevels)
     {
@@ -599,42 +705,6 @@ function SaveOptions()
         }
     }
     
-    EPC.bBurstFire = m_bBurstFire.m_bSelected;
-    if (bPreviousBurstFire && !EPC.bBurstFire)
-    {
-        if (EPC.MainGun != None)
-        {
-            F2000 = EF2000(EPC.MainGun);
-            if (F2000 != None)
-            {
-                F2000.ValidateROFMode();
-            }
-        }
-    }
-
-    EPC.eGame.bPS2FN7Accuracy = m_bPS2FN7Accuracy.m_bSelected;
-    if (EPC.HandGun != None)
-    {
-        if (EPC.eGame.bPS2FN7Accuracy && !EPC.eGame.bEliteMode)
-        {
-            EPC.HandGun.AccuracyMovementModifier = 3.330000;
-            EPC.HandGun.AccuracyBase = 0.330000;
-        }
-        else
-        {
-            EPC.HandGun.AccuracyMovementModifier = EPC.HandGun.default.AccuracyMovementModifier;
-            EPC.HandGun.AccuracyBase = EPC.HandGun.default.AccuracyBase; 
-        }
-    }
-    EPC.bHorizontalLifeBar = m_bHorizontalLifeBar.m_bSelected;
-    EPC.bInvertInteractionList = m_bInvertInteractionList.m_bSelected;
-    EPC.eGame.bNewDoorInteraction = m_bNewDoorInteraction.m_bSelected;
-    if (bPreviousNewDoorInteraction != EPC.eGame.bNewDoorInteraction)
-    {
-        RefreshCurrentDoorInteraction(EPC);
-    }
-    
-    EPC.eGame.bRandomizeLockpick = m_bRandomizeLockpick.m_bSelected;
     EPC.bOpticCableVisions = m_bOpticCableVisions.m_bSelected;
     if (EPC.GetStateName() == 's_OpticCable' && (bPreviousOpticCableVisions != EPC.bOpticCableVisions))
     {
@@ -646,6 +716,7 @@ function SaveOptions()
                 Epc.PopCamera(Epc.OpticCableItem);
         }
     }
+
     EPC.eGame.bThermalOverride = m_bThermalOverride.m_bSelected;
     if (EPC.Goggle != None && !EPC.eGame.bEliteMode)
     {
@@ -654,15 +725,9 @@ function SaveOptions()
         else
             EPC.Goggle.bNoThermalAvailable = false;
     }
-    EPC.eGame.bScaleGadgetDamage = m_bScaleGadgetDamage.m_bSelected;
 
-    switch (m_LevelUnlock.GetSelectedIndex())
-    {
-        case 0: EPC.playerInfo.LevelUnlock = LU_Disabled; break;
-        case 1: EPC.playerInfo.LevelUnlock = LU_Enabled; break;
-        case 2: EPC.playerInfo.LevelUnlock = LU_AllParts; break;
-        default: EPC.playerInfo.LevelUnlock = LU_Disabled; break;
-    }
+    EPC.eGame.bRandomizeLockpick = m_bRandomizeLockpick.m_bSelected;
+    EPC.eGame.bScaleGadgetDamage = m_bScaleGadgetDamage.m_bSelected;
 
     switch (m_MineDelay.GetSelectedIndex())
     {
@@ -671,10 +736,34 @@ function SaveOptions()
         case 2: EPC.eGame.WallMineDelay = WMD_Instant; break;
         default: EPC.eGame.WallMineDelay = WMD_Default; break;
     }
-    ApplyWallMineDelay(EPC);
 
-    EPC.bShowHUD = m_bShowHUD.m_bSelected;
+	//=============================================================================
+	// HUD Settings
+	//=============================================================================
     EPC.bPersistentHUD = m_bPersistentHUD.m_bSelected;
+    EPC.bHorizontalLifeBar = m_bHorizontalLifeBar.m_bSelected;
+    EPC.bInvertInteractionList = m_bInvertInteractionList.m_bSelected;
+    HUD.bLetterBoxCinematics = m_bLetterBoxCinematics.m_bSelected;
+
+    switch (m_FontType.GetSelectedIndex())
+    {
+        case 0: EPC.eGame.FontType = Font_PC; break;
+        case 1: EPC.eGame.FontType = Font_Xbox; break;
+        case 2: EPC.eGame.FontType = Font_GameCube; break;
+        default: EPC.eGame.FontType = Font_Xbox; break;
+    }
+
+    // Update canvas font immediately
+    UpdateCanvasFont(EPC.eGame.FontType);
+
+    // Update menu fonts
+    if (Root != None)
+        EPCMainMenuRootWindow(Root).SetupFonts();
+
+    //=============================================================================
+    // HUD Visibility
+    //=============================================================================
+    EPC.bShowHUD = m_bShowHUD.m_bSelected;
     HUD.bShowLifeBar = m_bShowLifeBar.m_bSelected;
     HUD.bShowInteractionBox = m_bShowInteractionBox.m_bSelected;
     HUD.bShowCommunicationBox = m_bShowCommunicationBox.m_bSelected;
@@ -688,7 +777,10 @@ function SaveOptions()
     EPC.bShowCrosshair = m_bShowCrosshair.m_bSelected;
     EPC.bShowScope = m_bShowScope.m_bSelected;
     EPC.bShowAlarms = m_bShowAlarms.m_bSelected;
-    
+
+    //=============================================================================
+    // Suits
+    //=============================================================================
     switch (m_TrainingSamMesh.GetSelectedIndex())
     {
         case 0: EPC.eGame.ESam_Training = SMT_Default; break;
@@ -930,38 +1022,53 @@ function ApplyWallMineDelay(EPlayerController EPC)
 
 function ResetToDefault()
 {
+    //=============================================================================
+    // General
+    //=============================================================================
     m_bCheckForUpdates.m_bSelected = true;
     m_bSkipIntroVideos.m_bSelected = false;
     m_bDisableMenuIdleTimer.m_bSelected = false;
-    m_FontType.SetSelectedIndex(1); // Default to Xbox
-    m_PlayerStatsMode.SetSelectedIndex(1); // Default to Ghost
+    m_LevelUnlock.SetSelectedIndex(0);
+
+    //=============================================================================
+    // Gameplay
+    //=============================================================================
+    m_bWhistle.m_bSelected = true;
+    m_bNewDoorInteraction.m_bSelected = true;
     m_bInteractionPause.m_bSelected = false;
     m_bEnableCheckpoints.m_bSelected = true;
     m_bMissionFailedQuickMenu.m_bSelected = true;
     m_bXboxDifficulty.m_bSelected = false;
-    m_bLetterBoxCinematics.m_bSelected = true;
-    m_LevelUnlock.SetSelectedIndex(0);
+    m_PlayerStatsMode.SetSelectedIndex(1); // Default to Ghost
 
-    m_bWhistle.m_bSelected = true;
+    //=============================================================================
+    // Equipment
+    //=============================================================================
     m_bBinoculars.m_bSelected = true;
     m_bF2000BurstFire.m_bSelected = true;
     m_bPS2FN7Accuracy.m_bSelected = false;
     m_bF2000ZoomLevels.m_bSelected = true;
     m_bLaserMicZoomLevels.m_bSelected = true;
     m_bLaserMicVisions.m_bSelected = true;
-    m_bBurstFire.m_bSelected = true;
-    m_bPS2FN7Accuracy.m_bSelected = false;
-    m_bHorizontalLifeBar.m_bSelected = false;
-    m_bInvertInteractionList.m_bSelected = true;
-    m_bNewDoorInteraction.m_bSelected = true;
-    m_bRandomizeLockpick.m_bSelected = true;
     m_bOpticCableVisions.m_bSelected = true;
     m_bThermalOverride.m_bSelected = false;
+    m_bRandomizeLockpick.m_bSelected = true;
     m_bScaleGadgetDamage.m_bSelected = true;
     m_MineDelay.SetSelectedIndex(0);
 
-    m_bShowHUD.m_bSelected = true;
+    //=============================================================================
+    // HUD Settings
+    //=============================================================================
     m_bPersistentHUD.m_bSelected = false;
+    m_bHorizontalLifeBar.m_bSelected = false;
+    m_bInvertInteractionList.m_bSelected = true;
+    m_bLetterBoxCinematics.m_bSelected = true;
+    m_FontType.SetSelectedIndex(1); // Default to Xbox
+
+    //=============================================================================
+    // HUD Visibility
+    //=============================================================================
+    m_bShowHUD.m_bSelected = true;
     m_bShowLifeBar.m_bSelected = true;
     m_bShowInteractionBox.m_bSelected = true;
     m_bShowCommunicationBox.m_bSelected = true;
@@ -978,6 +1085,9 @@ function ResetToDefault()
     m_bShowScope.m_bSelected = true;
     m_bShowAlarms.m_bSelected = true;
 
+    //=============================================================================
+    // Suits
+    //=============================================================================
     m_TrainingSamMesh.SetSelectedIndex(0);
     m_TbilisiSamMesh.SetSelectedIndex(0);
     m_DefenseMinistrySamMesh.SetSelectedIndex(0);
@@ -1010,9 +1120,9 @@ function Refresh()
     EPC = EPlayerController(GetPlayerOwner());
     HUD = EchelonMainHUD(EPC.myHUD);
 
-    if (m_FontType != None && EPC != None)
-        m_FontType.SetSelectedIndex(Clamp(EPC.eGame.FontType, 0, m_FontType.List.Items.Count() - 1));
-
+    //=============================================================================
+    // General
+    //=============================================================================
     if (m_bCheckForUpdates != None)
         m_bCheckForUpdates.m_bSelected = EPC.eGame.bCheckForUpdates;
 
@@ -1027,8 +1137,17 @@ function Refresh()
     m_bOriginalSkipIntroVideos = EPC.eGame.bSkipIntroVideos;
     m_bOriginalDisableMenuIdleTimer = EPC.eGame.bDisableMenuIdleTimer;
 
-    if (m_PlayerStatsMode != None && EPC != None)
-        m_PlayerStatsMode.SetSelectedIndex(Clamp(EPC.PlayerStatsMode, 0, m_PlayerStatsMode.List.Items.Count() - 1));
+    if (m_LevelUnlock != None)
+        m_LevelUnlock.SetSelectedIndex(Clamp(EPC.playerInfo.LevelUnlock, 0, m_LevelUnlock.List.Items.Count() - 1));
+
+    //=============================================================================
+    // Gameplay
+    //=============================================================================
+    if (m_bWhistle != None)
+        m_bWhistle.m_bSelected = EPC.bWhistle;
+
+    if (m_bNewDoorInteraction != None)
+        m_bNewDoorInteraction.m_bSelected = EPC.eGame.bNewDoorInteraction;
 
     if (m_bInteractionPause != None)
         m_bInteractionPause.m_bSelected = EPC.bInteractionPause;
@@ -1042,17 +1161,20 @@ function Refresh()
     if (m_bXboxDifficulty != None)
         m_bXboxDifficulty.m_bSelected = EPC.eGame.bXboxDifficulty;
 
-    if (m_bLetterBoxCinematics != None)
-        m_bLetterBoxCinematics.m_bSelected = HUD.bLetterBoxCinematics;
+    if (m_PlayerStatsMode != None && EPC != None)
+        m_PlayerStatsMode.SetSelectedIndex(Clamp(EPC.PlayerStatsMode, 0, m_PlayerStatsMode.List.Items.Count() - 1));
 
-    if (m_LevelUnlock != None)
-        m_LevelUnlock.SetSelectedIndex(Clamp(EPC.playerInfo.LevelUnlock, 0, m_LevelUnlock.List.Items.Count() - 1));
-
-    if (m_bWhistle != None)
-        m_bWhistle.m_bSelected = EPC.bWhistle;
-
+    //=============================================================================
+    // Equipment
+    //=============================================================================
     if (m_bBinoculars != None)
         m_bBinoculars.m_bSelected = EPC.bBinoculars;
+
+    if (m_bF2000BurstFire != None)
+        m_bF2000BurstFire.m_bSelected = EPC.bF2000BurstFire;
+
+    if (m_bPS2FN7Accuracy != None)
+        m_bPS2FN7Accuracy.m_bSelected = EPC.eGame.bPS2FN7Accuracy;
 
     if (m_bF2000ZoomLevels != None)
         m_bF2000ZoomLevels.m_bSelected = EPC.bF2000ZoomLevels;
@@ -1063,11 +1185,26 @@ function Refresh()
     if (m_bLaserMicVisions != None)
         m_bLaserMicVisions.m_bSelected = EPC.bLaserMicVisions;
 
-    if (m_bBurstFire != None)
-        m_bBurstFire.m_bSelected = EPC.bBurstFire;
+    if (m_bOpticCableVisions != None)
+        m_bOpticCableVisions.m_bSelected = EPC.bOpticCableVisions;
 
-    if (m_bPS2FN7Accuracy != None)
-        m_bPS2FN7Accuracy.m_bSelected = EPC.eGame.bPS2FN7Accuracy;
+    if (m_bThermalOverride != None)
+        m_bThermalOverride.m_bSelected = EPC.eGame.bThermalOverride;
+
+    if (m_bRandomizeLockpick != None)
+        m_bRandomizeLockpick.m_bSelected = EPC.eGame.bRandomizeLockpick;
+
+    if (m_bScaleGadgetDamage != None)
+        m_bScaleGadgetDamage.m_bSelected = EPC.eGame.bScaleGadgetDamage;
+
+    if (m_MineDelay != None)
+        m_MineDelay.SetSelectedIndex(Clamp(EPC.eGame.WallMineDelay, 0, m_MineDelay.List.Items.Count() - 1));
+
+    //=============================================================================
+    // HUD Settings
+    //=============================================================================
+    if (m_bPersistentHUD != None)
+        m_bPersistentHUD.m_bSelected = EPC.bPersistentHUD;
 
     if (m_bHorizontalLifeBar != None)
         m_bHorizontalLifeBar.m_bSelected = EPC.bHorizontalLifeBar;
@@ -1075,29 +1212,17 @@ function Refresh()
     if (m_bInvertInteractionList != None)
         m_bInvertInteractionList.m_bSelected = EPC.bInvertInteractionList;
 
-    if (m_bNewDoorInteraction != None)
-        m_bNewDoorInteraction.m_bSelected = EPC.eGame.bNewDoorInteraction;
+    if (m_bLetterBoxCinematics != None)
+        m_bLetterBoxCinematics.m_bSelected = HUD.bLetterBoxCinematics;
 
-    if (m_bRandomizeLockpick != None)
-        m_bRandomizeLockpick.m_bSelected = EPC.eGame.bRandomizeLockpick;
+    if (m_FontType != None && EPC != None)
+        m_FontType.SetSelectedIndex(Clamp(EPC.eGame.FontType, 0, m_FontType.List.Items.Count() - 1));
 
-    if (m_bOpticCableVisions != None)
-        m_bOpticCableVisions.m_bSelected = EPC.bOpticCableVisions;
-
-    if (m_bThermalOverride != None)
-        m_bThermalOverride.m_bSelected = EPC.eGame.bThermalOverride;
-       
-    if (m_bScaleGadgetDamage != None)
-        m_bScaleGadgetDamage.m_bSelected = EPC.eGame.bScaleGadgetDamage;
-
-    if (m_MineDelay != None)
-        m_MineDelay.SetSelectedIndex(Clamp(EPC.eGame.WallMineDelay, 0, m_MineDelay.List.Items.Count() - 1));
-
+    //=============================================================================
+    // HUD Visibility
+    //=============================================================================
     if (m_bShowHUD != None)
         m_bShowHUD.m_bSelected = EPC.bShowHUD;
-
-    if (m_bPersistentHUD != None)
-        m_bPersistentHUD.m_bSelected = EPC.bPersistentHUD;
 
     if (m_bShowLifeBar != None)
         m_bShowLifeBar.m_bSelected = HUD.bShowLifeBar;
@@ -1147,6 +1272,9 @@ function Refresh()
     if (m_bShowAlarms != None)
         m_bShowAlarms.m_bSelected = EPC.bShowAlarms;
 
+    //=============================================================================
+    // Suits
+    //=============================================================================
     if (m_TrainingSamMesh != None)
         m_TrainingSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_Training, 0));
         
