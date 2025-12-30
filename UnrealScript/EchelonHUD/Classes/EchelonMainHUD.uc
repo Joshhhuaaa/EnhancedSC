@@ -1400,6 +1400,9 @@ state s_GameMenu
 		// Player just poped up game menu
         Epc.SetPause(true);
 
+		// Joshua - Disable the FakeMouse in case its enabled
+		Epc.FakeMouseToggle(false);
+
 		// Joshua - Necessary to reset keybind if pausing in weapon mode
 		Epc.SetKey("Joy1 Interaction", "");
 

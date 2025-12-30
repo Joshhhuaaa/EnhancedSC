@@ -27,10 +27,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			Key == IK_JoyU  || Key == IK_JoyV  || Key == IK_AnalogUp || Key == IK_AnalogDown ||
 			Key == IK_AnalogLeft || Key == IK_AnalogRight)
 		{
-			if (!Epc.eGame.bUseController &&
-				!Epc.IsInQuickInv() &&
-				Epc.GetStateName() != 's_KeyPadInteract' &&
-				Epc.GetStateName() != 's_PickLock') 
+			if (!Epc.eGame.bUseController) 
 			{
 				Epc.eGame.bUseController = true;
 				Epc.m_curWalkSpeed = 5;
@@ -38,10 +35,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 		}
 		else if (Key != IK_MouseX && Key != IK_MouseY)
 		{
-			if (Epc.eGame.bUseController &&
-				!Epc.IsInQuickInv() &&
-				Epc.GetStateName() != 's_KeyPadInteract' &&
-				Epc.GetStateName() != 's_PickLock')
+			if (Epc.eGame.bUseController)
 			{
 				Epc.eGame.bUseController = false;
 			}
