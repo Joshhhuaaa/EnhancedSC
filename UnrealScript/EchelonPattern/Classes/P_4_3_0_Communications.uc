@@ -67,6 +67,12 @@ function InitPattern()
             {
                 Volume.SetLocation(Volume.Location + vect(-440, 0, 0));
             }
+
+            if (Volume.name == 'EVolume23')
+            {
+                Volume.GroupTag = 'RestaurantGroup';
+				Volume.JumpLabel = 'ReachedRooftop';
+            }
         }
     }
 
@@ -96,10 +102,19 @@ LambertMapStartCom:
     Speech(Localize("P_4_3_0_Communications", "Speech_0003L", "Localization\\P_4_3_0ChineseEmbassy"), Sound'S4_3_0Voice.Play_43_05_02', 0, 0, TR_HEADQUARTER, 0, false);
     Speech(Localize("P_4_3_0_Communications", "Speech_0004L", "Localization\\P_4_3_0ChineseEmbassy"), Sound'S4_3_0Voice.Play_43_05_03', 1, 0, TR_HEADQUARTER, 0, false);
     Close();
+    SetFlags(V4_3_0ChineseEmbassy(Level.VarObject).LambertIntroDone,TRUE); // Joshua - Set Lambert intro as done so keypad can start dialogue
+WaitForRooftop:
+    CheckFlags(V4_3_0ChineseEmbassy(Level.VarObject).LambertKeypadReady,TRUE,'ThermalKeypadExplanationA'); // Joshua - Check if player triggered keypad dialogue
+    Sleep(0.5);
+    Jump('WaitForRooftop');
 CommAlreadyDone:
     End();
 ThermalKeypadExplanationA:
     Log("Communicator 43_09");
+    // Joshua - Prevent this dialogue from repeating
+    CheckFlags(V4_3_0ChineseEmbassy(Level.VarObject).LambertKeypadStarted,TRUE,'CommAlreadyDone');
+    SetFlags(V4_3_0ChineseEmbassy(Level.VarObject).LambertKeypadStarted,TRUE);
+    Sleep(3); // Joshua - Added delay to avoid triggering immediately after initial comms
     Speech(Localize("P_4_3_0_Communications", "Speech_0023L", "Localization\\P_4_3_0ChineseEmbassy"), Sound'S4_3_0Voice.Play_43_09_01', 1, 0, TR_HEADQUARTER, 0, false);
     Close();
     End();
