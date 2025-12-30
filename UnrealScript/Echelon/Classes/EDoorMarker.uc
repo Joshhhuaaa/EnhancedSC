@@ -58,7 +58,8 @@ function PawnLeavingRadius(ePawn LeavingPawn)
 	if (bHasNoDoorPoints)
 		return;
 
-	if (LeavingPawn.Controller != none && !LeavingPawn.Controller.bIsPlayer)
+	// Joshua - Added third condition: Only clear SpecialMoveDoor in LeavingDoorRadius() when leaving the pawn's active SpecialMoveDoor
+	if (LeavingPawn.Controller != none && !LeavingPawn.Controller.bIsPlayer && EAIController(LeavingPawn.Controller).SpecialMoveDoor == Door)
 		EAIController(LeavingPawn.Controller).LeavingDoorRadius();
 }
 
@@ -74,7 +75,7 @@ auto state s_Untouched
 {
 	event Touch(Actor Other)
 	{
-		local actor A;
+		local Actor A;
 		
 		if (Other.bIsPawn /*&& !Other.bIsPlayerPawn*/)
 		{			
@@ -92,7 +93,7 @@ state s_Touched
 {
 	event Touch(Actor Other)
 	{
-		local actor A;
+		local Actor A;
 		
 		if (Other.bIsPawn)
 		{			
@@ -105,7 +106,7 @@ state s_Touched
 
 	Event UnTouch(Actor Other)
 	{
-		local actor A;
+		local Actor A;
 		
 		if (Other.bIsPawn)
 		{
