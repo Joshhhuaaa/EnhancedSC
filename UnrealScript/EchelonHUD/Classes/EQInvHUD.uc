@@ -1118,7 +1118,7 @@ function DrawRateOfFire(ECanvas Canvas)
 		Canvas.Style = ERenderStyle.STY_Normal;
 
         // Burst // Joshua - Restoring burst fire from early Splinter Cell builds
-		if (Epc.bBurstFire)
+		if (Epc.bF2000BurstFire)
 		{
 			if (!selWeapon.IsROFModeAvailable(ROF_Burst))
 				Canvas.DrawColor.A = 25;

@@ -283,7 +283,7 @@ var(Enhanced) config bool bHideInactiveCategories; // Joshua - Hide categories t
 var(Enhanced) config bool bInteractionPause; // Joshua - If the interaction box or inventory is active, pause the game
 var(Enhanced) config bool bInvertInteractionList; // Joshua - Reverses the interaction list order (top to bottom instead of bottom to top)
 
-var(Enhanced) config bool bBurstFire; // Joshua - Restoring burst fire from early Splinter Cell builds
+var(Enhanced) config bool bF2000BurstFire; // Joshua - Restoring F2000 burst fire from early Splinter Cell builds
 
 var(Enhanced) bool bProfileDeletionPending; // Joshua - Player has failed a mission in Permadeath mode, profile is pending to be deleted
 
@@ -804,6 +804,10 @@ event InitLoadGame()
 {
 	local ECanvas C;
 	local string QuickSaveName;
+
+	// Joshua - Clearing input after loading game
+	bFire = 0;
+	bAltFire = 0;
 
 	SetViewTarget(Pawn);
 
@@ -6773,8 +6777,7 @@ Begin:
 End:
 	// Remove interface
 	EMainHUD(myHud).hud_master.EndEvent();
-	if (!eGame.bUseController) // Joshua - Adding controller support for turrets
-		FakeMouseToggle(false);
+	FakeMouseToggle(false);
 	EMainHUD(myHud).hud_master = None;
 
 	ePawn.PlaySound(Sound'Electronic.Stop_Sq_ComputerKeyBoard', SLOT_SFX);
@@ -12484,7 +12487,7 @@ defaultproperties
 	bLaserMicZoomLevels=True
 	bF2000ZoomLevels=True
 	bLaserMicZoomLevels=True
-	bBurstFire=True
+	bF2000BurstFire=True
 	bInvertInteractionList=True
 	PlayerStatsMode=SM_Ghost
 	bShowHUD=True

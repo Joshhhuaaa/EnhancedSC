@@ -124,7 +124,7 @@ function InitEnhancedSettings()
 
     
     AddCheckBoxItem("Binoculars", m_bBinoculars);
-    AddCheckBoxItem("BurstFire", m_bBurstFire);
+    AddCheckBoxItem("F2000BurstFire", m_bF2000BurstFire);
     AddCheckBoxItem("PS2FN7Accuracy", m_bPS2FN7Accuracy);
     AddCheckBoxItem("F2000ZoomLevels", m_bF2000ZoomLevels);
     AddCheckBoxItem("LaserMicZoomLevels", m_bLaserMicZoomLevels);
@@ -406,6 +406,8 @@ function Notify(UWindowDialogControl C, byte E)
             case m_bLetterBoxCinematics:
             case m_bWhistle:
             case m_bBinoculars:
+            case m_bF2000BurstFire:
+            case m_bPS2FN7Accuracy:
             case m_bF2000ZoomLevels:
             case m_bLaserMicZoomLevels:
             case m_bLaserMicVisions:
@@ -502,7 +504,7 @@ function SaveOptions()
     bPreviousF2000ZoomLevels = EPC.bF2000ZoomLevels;
     bPreviousLaserMicZoomLevels = EPC.bLaserMicZoomLevels;
     bPreviousLaserMicVisions = EPC.bLaserMicVisions;
-    bPreviousBurstFire = EPC.bBurstFire;
+    bPreviousBurstFire = EPC.bF2000BurstFire;
     bPreviousNewDoorInteraction = EPC.eGame.bNewDoorInteraction;
     bPreviousOpticCableVisions = EPC.bOpticCableVisions;
     
@@ -942,6 +944,8 @@ function ResetToDefault()
 
     m_bWhistle.m_bSelected = true;
     m_bBinoculars.m_bSelected = true;
+    m_bF2000BurstFire.m_bSelected = true;
+    m_bPS2FN7Accuracy.m_bSelected = false;
     m_bF2000ZoomLevels.m_bSelected = true;
     m_bLaserMicZoomLevels.m_bSelected = true;
     m_bLaserMicVisions.m_bSelected = true;

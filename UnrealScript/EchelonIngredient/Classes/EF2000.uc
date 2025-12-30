@@ -61,7 +61,7 @@ function bool SwitchROF()
 		switch (eROFMode)
 		{
 			case ROF_Single : 
-				if (EPC.bBurstFire)  // Joshua - Restoring burst fire from early Splinter Cell builds
+				if (EPC.bF2000BurstFire)  // Joshua - Restoring burst fire from early Splinter Cell builds
 					eROFMode = ROF_Burst;
 				else
 					eROFMode = ROF_Auto;
@@ -85,7 +85,7 @@ function bool IsROFModeAvailable(ERateOfFireMode rof)
         case ROF_Single:
             return true;
         case ROF_Burst:
-            return EPC.bBurstFire; // Joshua - Restoring burst fire from early Splinter Cell builds
+            return EPC.bF2000BurstFire; // Joshua - Restoring burst fire from early Splinter Cell builds
         case ROF_Auto:
             return true;
         default:
@@ -96,7 +96,7 @@ function bool IsROFModeAvailable(ERateOfFireMode rof)
 // Joshua - Validate ROF if burst fire was disabled while in-game
 function ValidateROFMode()
 {
-    if (!EPlayerController(Controller).bBurstFire && eROFMode == ROF_Burst)
+    if (!EPlayerController(Controller).bF2000BurstFire && eROFMode == ROF_Burst)
     {
         eROFMode = ROF_Auto;
     }
