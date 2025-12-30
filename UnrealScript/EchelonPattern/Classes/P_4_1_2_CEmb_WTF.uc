@@ -44,6 +44,15 @@ function InitPattern()
             Characters[1] = P.controller;
         if (P.name == 'ERottweiler0')
             Characters[2] = P.controller;
+        // Joshua - Fix Lambert bug when killing FeirongGroup
+        if (P.name == 'EFeirong0')
+            Characters[3] = P.controller;
+        if (P.name == 'EChineseSoldier12')
+            Characters[4] = P.controller;
+        if (P.name == 'EChineseSoldier25')
+            Characters[5] = P.controller;
+        if (P.name == 'EChineseSoldier26')
+            Characters[6] = P.controller;
     }
 
     if (!bInit)
@@ -101,6 +110,10 @@ state Pattern
 
 Begin:
 WTF:
+    CheckIfIsDead(3,'End'); // Joshua - Fix Lambert bug when killing FeirongGroup
+    CheckIfIsDead(4,'End'); // Joshua - Fix Lambert bug when killing FeirongGroup
+    CheckIfIsDead(5,'End'); // Joshua - Fix Lambert bug when killing FeirongGroup
+    CheckIfIsDead(6,'End'); // Joshua - Fix Lambert bug when killing FeirongGroup
     Log("Play this event when Fisher acts like an ass and shoots someone or gets shot.");
     CheckFlags(DogAlreadyDead,TRUE,'ImportantMemberDied');
     CheckIfIsDead(2,'SetDogDead');

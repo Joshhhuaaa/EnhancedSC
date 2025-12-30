@@ -45,6 +45,9 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
         case AI_TAKE_DAMAGE:
             EventJump('FeirongGuards');
             break;
+        case AI_DEAD: // Joshua - Fix Lambert bug when killing FeirongGroup
+            EventJump('FeirongGuards');
+            break;
         case AI_UNCONSCIOUS:
             EventJump('FeirongGuards');
             break;
