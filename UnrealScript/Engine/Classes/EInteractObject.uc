@@ -121,6 +121,8 @@ function UnTouch(actor Other)
 	InteractionPlayerController = None;
 }
 
+function RefreshInteractions(); // Joshua - Implemented in EDoorinteraction, needs to be called by EPlayerController so declared here
+
 defaultproperties
 {
     iPriority=999999

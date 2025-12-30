@@ -823,6 +823,27 @@ event InitLoadGame()
 		else
 			LastSaveName = C.Viewport.Console.PendingLoadSaveName;
 	}
+
+	// Joshua - Apply settings that affect level actors
+	ApplyPostLoadSettings();
+}
+
+//------------------------------------------------------------------------
+// Joshua - Apply settings that may have changed while in the menu
+// This ensures level actors reflect the current config settings after loading
+//------------------------------------------------------------------------
+function ApplyPostLoadSettings()
+{
+	local EInteractObject InteractObj;
+
+	// Update door interactions if currently touching a door
+	if (IManager != None && IManager.IsPresent(class'EInteractObject', InteractObj))
+	{
+		if (InteractObj != None && InteractObj.IsA('EDoorInteraction'))
+		{
+			InteractObj.RefreshInteractions();
+		}
+	}
 }
 
 //---------------------------------[Francois Schelling - 24 Mar 2002]-----

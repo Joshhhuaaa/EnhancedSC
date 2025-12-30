@@ -875,6 +875,7 @@ function UpdateCanvasFont(EchelonGameInfo.EFontType FontType)
 }
 
 // Function to refresh the current door interaction the player is touching
+// When loading a save, ApplyPostLoadSettings in EPlayerController handles this instead
 function RefreshCurrentDoorInteraction(EPlayerController EPC)
 {
     local EDoorInteraction DoorInteraction;
@@ -891,7 +892,7 @@ function RefreshCurrentDoorInteraction(EPlayerController EPC)
     }
 }
 
-// Update all wall mines in the level when the delay setting is changed mid-mission
+/* Update all wall mines in the level when the delay setting is changed mid-mission
 function ApplyWallMineDelay(EPlayerController EPC)
 {
     local EWallMine WallMine;
@@ -923,6 +924,7 @@ function ApplyWallMineDelay(EPlayerController EPC)
         WallMine.ExplosionDelay = NewDelay;
     }
 }
+*/
 
 function ResetToDefault()
 {
