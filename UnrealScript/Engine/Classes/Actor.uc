@@ -1886,15 +1886,27 @@ function Interpolate(out vector _vInterpolationResult, vector _vInterpolationSou
     _vInterpolationResult.Z = Lerp(_rAlpha, _vInterpolationSource.Z, _vInterpolationTarget.Z);
 } 
 
-function Actor GetMatchingActor(Name matchTag)
+// Joshua - Added bUseName parameter
+function Actor GetMatchingActor(Name matchTag, optional bool bUseName)
 {
 	local Actor A;
 	
 	if (matchTag != '')
-		foreach AllActors(class'Actor', A)
-			if (A.Tag == matchTag)
-				return A;
-		
+	{
+		if (bUseName)
+		{
+			foreach AllActors(class'Actor', A)
+				if (A.Name == matchTag)
+					return A;
+		}
+		else
+		{
+			foreach AllActors(class'Actor', A)
+				if (A.Tag == matchTag)
+					return A;
+		}
+	}
+	
 	return none;
 }
 
