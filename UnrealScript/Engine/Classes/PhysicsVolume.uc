@@ -61,7 +61,7 @@ since PhysicsVolume is static, this function is actually called by a volumetimer
 */
 function TimerPop(VolumeTimer T)
 {
-	local actor A;
+	local Actor A;
 
 	if (T == PainTimer)
 	{
@@ -107,7 +107,7 @@ event untouch(Actor Other)
 function PlayExitSplash(Actor Other)
 {
 	local float SplashSize;
-	local actor splash;
+	local Actor splash;
 
 	splashSize = FClamp(0.003 * Other.Mass, 0.1, 1.0);
 	if (ExitSound != None)

@@ -814,7 +814,7 @@ function Goal_Search(int CharIndex,
 //function Goal_Attack(int CharIndex, int Priority, vector AttackLocation, Actor AttackTarget, optional MoveFlags _MoveFlags, optional MoveFlags WaitFlags)
 function Goal_Attack(int CharIndex, int Priority, float TimeToStop , Actor AttackTarget, optional MoveFlags WaitFlags, optional bool flag,optional Name Anim, optional vector _Location, optional bool _bForceFocusTag)
 {
-	local actor AFocus;
+	local Actor AFocus;
 
 	if (_Location != vect(0,0,0))
 	{
@@ -910,7 +910,7 @@ function  bool ChooseStrategicPoint(EPlayerController P)
 	local int i, Index;
 	local float dotproduct;
 	local float BestDistance,CurDist;
-	local actor BestPoint;
+	local Actor BestPoint;
 	local NavigationPoint CurNav;
 
 	BestDistance = 0.0f;
@@ -1188,7 +1188,7 @@ function CheckIfAllMembersDead(name JumpLabel)
 
 function CheckIfThreatNearby(int CharIndex, name JumpLabel)
 {
-	local actor TraceActor;
+	local Actor TraceActor;
 	local vector HitLocation, HitNormal;
 
 	// if event is within x meters, jump
@@ -3634,14 +3634,29 @@ function CheckIfDirectLine(int iIndex, Actor target,name JumpLabel)
 
  Description:   -
 -----------------------------------------------------------------------------*/
-function Actor GetMatchingActor(Name MatchTag)
+// Joshua - Added bUseName parameter
+function Actor GetMatchingActor(Name MatchTag, optional bool bUseName)
 {
     local Actor FoundAct; 
 
-	foreach AllActors(class'Actor', FoundAct)
+	if (MatchTag != '')
 	{
-        if (FoundAct.Tag == MatchTag)
-            return FoundAct;
+		if (bUseName)
+		{
+			foreach AllActors(class'Actor', FoundAct)
+			{
+				if (FoundAct.Name == MatchTag)
+					return FoundAct;
+			}
+		}
+		else
+		{
+			foreach AllActors(class'Actor', FoundAct)
+			{
+				if (FoundAct.Tag == MatchTag)
+					return FoundAct;
+			}
+		}
 	}
 
     return None;

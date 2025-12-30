@@ -570,7 +570,7 @@ function UpdateCameraRotation(actor ViewActor)
 	local ESniperGun	snipeGun;
 
 	// Joshua - Adding the option to use Camera Jammer camera behavior from Pandora Tomorrow
-	if(bCameraJammerAutoLock && GetStateName() == 's_CameraJammerTargeting' && JammedCam != None)
+	if (bCameraJammerAutoLock && GetStateName() == 's_CameraJammerTargeting' && JammedCam != None)
 		SetRotation(Rotator(JammedCam.Location - Location));
 
 	snipeGun = ESniperGun(ePawn.HandItem);
@@ -5295,7 +5295,7 @@ state s_FirstPersonTargeting extends s_Targeting
 
 	function bool CanAddInteract(EInteractObject IntObj)
 	{
-		if(IntObj.class.name == 'EDoorInteraction' || IntObj.class.name == 'ETriggerInteraction') // Joshua - Added trigger interaction in targeting modes
+		if (IntObj.class.name == 'EDoorInteraction' || IntObj.class.name == 'ETriggerInteraction') // Joshua - Added trigger interaction in targeting modes
 			return true;
 	}
 
@@ -5728,11 +5728,11 @@ state s_Zooming extends s_Targeting
 
 	function SwitchCameraMode()
 	{
-		/*if(JumpLabelPrivate == 'FromSplit')
+		/*if (JumpLabelPrivate == 'FromSplit')
 			m_camera.SetMode(ECM_SplitJumpZoom);
 		else
 		{
-			if( ePawn.bIsCrouched )
+			if ( ePawn.bIsCrouched )
 				m_camera.SetMode(ECM_ZoomingCr);
 			else
 				m_camera.SetMode(ECM_Zooming);
@@ -5888,7 +5888,7 @@ state s_PlayerJumping
     {
         local vector X,Y,Z, NewAccel, HitNormal;
 		local rotator flatRot;
-		local actor wall;
+		local Actor wall;
 
 		if (bInTransition)
 		{
@@ -6481,7 +6481,7 @@ state s_PlayerBTWThrow extends s_Throw
 
 Begin:
 	bInTransition = true;
-	if(m_BTWSide)
+	if (m_BTWSide)
 	{
 		if (ePawn.bIsCrouched)
 			ePawn.PlayAnimOnly('PT_BackCrThBgR', ,0.05);
@@ -6520,7 +6520,7 @@ Throw:
 	}
 	else
 	{
-		if(ePawn.bIsCrouched )
+		if (ePawn.bIsCrouched)
 			ePawn.PlayAnimOnly('PT_BackCrThEdL', 1.0 + 0.5 * ((VSize(m_ThrowSpeed) - VSize(m_ThrowMinSpeed)) / (VSize(m_ThrowMaxSpeed) - VSize(m_ThrowMinSpeed))),0.05);
 		else
 			ePawn.PlayAnimOnly('PT_BackStThEdL', 1.0 + 0.5 * ((VSize(m_ThrowSpeed) - VSize(m_ThrowMinSpeed)) / (VSize(m_ThrowMaxSpeed) - VSize(m_ThrowMinSpeed))),0.05);
@@ -8868,7 +8868,7 @@ state s_RappellingTargeting
 
 	function CheckFeet()
 	{
-		local actor HitActor;
+		local Actor HitActor;
 		local vector HitLocation, HitNormal;
 
 		if (CheckRappellingFeet(HitActor, HitLocation, HitNormal) == 0)
@@ -9068,7 +9068,7 @@ state s_RappellingSniping extends s_PlayerSniping
 
 	function CheckFeet()
 	{
-		local actor HitActor;
+		local Actor HitActor;
 		local vector HitLocation, HitNormal;
 
 		if (CheckRappellingFeet(HitActor, HitLocation, HitNormal) == 0)
@@ -9102,7 +9102,7 @@ state s_RappellingFall
 
 	function CheckWallLand()
 	{
-		local actor HitActor;
+		local Actor HitActor;
 		local vector HitLocation, HitNormal;
 
 		switch (CheckRappellingFeet(HitActor, HitLocation, HitNormal))
@@ -10684,7 +10684,7 @@ state s_HOHFUTargeting extends s_FirstPersonTargeting
 
 	function ProcessScope()
 	{
-		if( !bInTransition )
+		if (!bInTransition)
 		{
 			GoToState( ,'PutGunBack');
 		}
@@ -10697,7 +10697,7 @@ state s_HOHFUTargeting extends s_FirstPersonTargeting
 
 	function Timer()
 	{
-		if(JumpLabelPrivate == 'FromTarget')
+		if (JumpLabelPrivate == 'FromTarget')
 			m_camera.SetMode(ECM_HOHFU);
 		else
 			m_camera.SetMode(ECM_HOHFU);
@@ -10719,7 +10719,7 @@ state s_HOHFUTargeting extends s_FirstPersonTargeting
 		if (!bInTransition || (!bInGunTransition && JumpLabelPrivate == 'TakeGunOut'))
 			ePawn.AimAt(AAHOH, Normal(m_targetLocation - Location), Vector(ePawn.Rotation + rot(0, 32768, 0)), -80, 50, -80, 80);
 
-		if(!bInTransition && ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)))
+		if (!bInTransition && ((bCrouchDrop && bDuck > 0) || (!bCrouchDrop && bPressedJump)))
 		{
 			if (bCrouchDrop)
 				bDuck = 0;

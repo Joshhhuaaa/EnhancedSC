@@ -111,7 +111,7 @@ state s_Jammed
 
 	function Timer()
 	{
-		Spawn(class'ewallspark', self,,location + (FRand() * Vect(10,8,5)));
+		Spawn(class'EWallSpark', self,,location + (FRand() * Vect(10,8,5)));
 	}
 }
 

@@ -21,7 +21,7 @@ function BuildCube(int Direction, float dx, float dy, float dz, bool _tessellate
 				Vertex3f(i*dx/2, j*dy/2, k*dz/2);
 
 	// If the user wants a Tessellated cube, create the sides out of tris instead of quads.
-	if( _tessellated)
+	if ( _tessellated)
 	{
 		Poly3i(Direction,n+0,n+1,n+3);
 		Poly3i(Direction,n+0,n+3,n+2);

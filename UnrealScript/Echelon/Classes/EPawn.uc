@@ -4092,10 +4092,10 @@ state s_Waiting
 						SynchAnim(AWaitLeft, BLENDMOVEMENTCHANNEL, TweenTime, fRatio);
 				}
 				else
-					AnimBlendToAlpha(BLENDMOVEMENTCHANNEL,0,0.10);
+					AnimBlendToAlpha(BLENDMOVEMENTCHANNEL, 0, 0.10);
 			}
 			else
-				AnimBlendToAlpha(BLENDMOVEMENTCHANNEL,0,0.10);
+				AnimBlendToAlpha(BLENDMOVEMENTCHANNEL, 0, 0.10);
 		}
 	}
 }

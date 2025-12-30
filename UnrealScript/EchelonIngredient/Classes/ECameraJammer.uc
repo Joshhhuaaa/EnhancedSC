@@ -55,7 +55,7 @@ function Jam(EBaseCam Cam)
 	JammedCamera = Cam;
 
 	// Joshua - Adding the option to use Camera Jammer camera behavior from Pandora Tomorrow
-	if(EPlayerController(Controller).bCameraJammerAutoLock)
+	if (EPlayerController(Controller).bCameraJammerAutoLock)
 		EPlayerController(Controller).JammedCam = Cam;
 }
 
@@ -69,7 +69,7 @@ function UnJam()
 	JammedCamera = None;
 
 	// Joshua - Adding the option to use Camera Jammer camera behavior from Pandora Tomorrow
-	if(EPlayerController(Controller).bCameraJammerAutoLock)
+	if (EPlayerController(Controller).bCameraJammerAutoLock)
 		EPlayerController(Controller).JammedCam = None;
 }
 

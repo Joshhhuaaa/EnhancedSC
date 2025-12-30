@@ -111,7 +111,7 @@ state s_RayTracing
 	function Tick(float DeltaTime)
 	{
 		local vector	HitLocation, HitNormal;
-		local actor		HitActor;
+		local Actor		HitActor;
 		local int		PillTag, i;
 		local bool		shouldTrace;
 

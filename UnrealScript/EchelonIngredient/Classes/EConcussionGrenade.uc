@@ -55,7 +55,7 @@ state s_Flying
 	
 	function Timer()
 	{
-		local actor Victims;
+		local Actor Victims;
 		local float dist, damageScale, dam;
 		local vector dir;
 

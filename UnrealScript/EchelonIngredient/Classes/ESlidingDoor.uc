@@ -105,5 +105,3 @@ state BumpOpenTimed
 		Super.Bump(Other, Pill);
 	}
 }
-
-

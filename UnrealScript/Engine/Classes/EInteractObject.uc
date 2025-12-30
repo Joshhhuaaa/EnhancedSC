@@ -70,7 +70,7 @@ function SetPriority(int iNewPriority)
 function bool IsAvailable()
 {
 	local vector HitLocation, HitNormal;
-	local actor TraceHit;
+	local Actor TraceHit;
 
 	// Dont check pawns
 	TraceHit = Trace(HitLocation, HitNormal, InteractionPlayerController.Pawn.Location, Location, true,,,, true);

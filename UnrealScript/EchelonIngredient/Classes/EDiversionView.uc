@@ -223,7 +223,7 @@ function UpdateDistanceMeter(float DeltaTime)
     local vector            HitLocation;
     local vector            HitNormal;
     local vector            TraceEnd;
-    local actor             Traced;
+    local Actor             Traced;
     local int               iPillTag;
 
     TraceEnd = Location + (vector(Rotation) * 5000);

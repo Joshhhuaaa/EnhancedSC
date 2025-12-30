@@ -62,7 +62,7 @@ function SwitchVisionMode(int NewMode)
 function bool ForceGoggleUp()
 {
 	// Do nothing, goggles already off
-	if( CurrentMode == REN_DynLight )
+	if (CurrentMode == REN_DynLight)
 		return false;
 
 	// Set target mode to DynLight - will be activated when animation finishes

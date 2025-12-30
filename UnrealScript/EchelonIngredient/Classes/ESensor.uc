@@ -276,7 +276,7 @@ function SpawnShellCase();
 function CheckLineTrace(float DeltaTime)
 {
 	local Vector	HitLocation, HitNormal, vEndTrace, BoneDirection, BonePos;
-    local actor		Other, Muzzle;
+    local Actor		Other, Muzzle;
 	local int		PillTag;
 	local Material	HitMaterial;
 	local EWallHit	Spark;

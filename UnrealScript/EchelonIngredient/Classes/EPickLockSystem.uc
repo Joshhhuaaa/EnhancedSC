@@ -86,7 +86,7 @@ function EPickLockQuadrant FindCurrentQuadrant(float aUpDown, float aLeftRight)
 	if (!EPC.eGame.bUseController)
 	{
 		// For the PC, we want a single direction to avoid the wiggling on the keyboard.
-		// UpLeft == up, UpRigth == right, DownLeft == left, DownRight == right
+		// UpLeft == up, UpRight == right, DownLeft == left, DownRight == down
 		if (aUpDown == 1)
 			return PL_UpLeft; // up
 		else if (aLeftRight == 1)
@@ -102,18 +102,18 @@ function EPickLockQuadrant FindCurrentQuadrant(float aUpDown, float aLeftRight)
 	}
 	else
 	{
-	if (aUpDown > 0 && aLeftRight < 0)
-		return PL_UpLeft;
-	else if (aUpDown > 0 && aLeftRight > 0)
-		return PL_UpRight;
-	else if (aUpDown < 0 && aLeftRight < 0)
-		return PL_DownLeft;
-	else if (aUpDown < 0 && aLeftRight > 0)
-		return PL_DownRight;
-	else if (aUpDown == 0 && aLeftRight == 0)	// only change to None when in full center
-		return PL_None;
-	else										// no quadrant change if border lines
-		return CurrentQuadrant;
+		if (aUpDown > 0 && aLeftRight < 0)
+			return PL_UpLeft;
+		else if (aUpDown > 0 && aLeftRight > 0)
+			return PL_UpRight;
+		else if (aUpDown < 0 && aLeftRight < 0)
+			return PL_DownLeft;
+		else if (aUpDown < 0 && aLeftRight > 0)
+			return PL_DownRight;
+		else if (aUpDown == 0 && aLeftRight == 0)	// only change to None when in full center
+			return PL_None;
+		else										// no quadrant change if border lines
+			return CurrentQuadrant;
 	}
 }
 

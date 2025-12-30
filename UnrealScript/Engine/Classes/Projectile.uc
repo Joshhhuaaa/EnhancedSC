@@ -43,7 +43,7 @@ function bool EncroachingOn(actor Other)
 // Touching
 singular function Touch(Actor Other)
 {
-	local actor HitActor;
+	local Actor HitActor;
 	local vector HitLocation, HitNormal, VelDir;
 	local bool bBeyondOther;
 	local float BackDist, DirZ;

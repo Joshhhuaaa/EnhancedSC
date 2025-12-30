@@ -29,7 +29,7 @@ function Touch(actor Other)
 {
 	local Pawn P;
 	local vector HitLocation, HitNormal;
-	local actor TracedActor;
+	local Actor TracedActor;
 
 	//cast the actor in Pawn
 	P = Pawn(Other);

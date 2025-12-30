@@ -107,9 +107,9 @@ function bool GetPause()
 //
 event DetailChange()
 {
-	local actor A;
-	local zoneinfo Z;
-	local skyzoneinfo S;
+	local Actor A;
+	local ZoneInfo Z;
+	local SkyZoneInfo S;
 
 	if (!Level.bHighDetailMode)
 	{

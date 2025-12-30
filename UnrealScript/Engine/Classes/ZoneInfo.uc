@@ -14,7 +14,7 @@ class ZoneInfo extends Info
 //-----------------------------------------------------------------------------
 // Zone properties.
 
-var skyzoneinfo SkyZone; // Optional sky zone containing this zone's sky.
+var SkyZoneInfo SkyZone; // Optional sky zone containing this zone's sky.
 var() name ZoneTag;
 
 //-----------------------------------------------------------------------------
@@ -72,7 +72,7 @@ native(308) final iterator function ZoneActors(class<actor> BaseClass, out actor
 
 function LinkToSkybox()
 {
-	local skyzoneinfo TempSkyZone;
+	local SkyZoneInfo TempSkyZone;
 
 	// SkyZone.
 	foreach AllActors(class 'SkyZoneInfo', TempSkyZone, '')

@@ -1,4 +1,4 @@
-class ELapTop extends EGameplayObject;
+class ELaptop extends EGameplayObject;
 
 function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag)
 {

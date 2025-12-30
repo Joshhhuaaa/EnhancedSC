@@ -392,7 +392,7 @@ function RenderUWindow(Canvas Canvas)
 	// Joshua - Dynamic mouse bounds based on aspect ratio
 	CurrentRes = ViewportOwner.Actor.ConsoleCommand("GETCURRENTRES");
 	i = InStr(CurrentRes, "x");
-	if(i > 0)
+	if (i > 0)
 	{
 		ResX = int(Left(CurrentRes, i)  );
 		ResY = int(Mid(CurrentRes, i + 1));

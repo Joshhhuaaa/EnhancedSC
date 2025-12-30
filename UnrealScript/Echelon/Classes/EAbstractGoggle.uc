@@ -71,6 +71,10 @@ state s_Zooming
 		local int numUpdates;
 		local int i;
 
+		// Don't process input during cinematics
+		if (Epc.bInCinematic)
+			return;
+
 		// Accumulate actual deltaTime and only update zoom at 30fps intervals
 		ZoomAccumulator += DeltaTime;
 		simDeltaTime = 1.0f / 30.0f;

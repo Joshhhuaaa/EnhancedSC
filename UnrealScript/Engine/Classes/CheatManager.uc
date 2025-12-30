@@ -145,7 +145,7 @@ exec function ViewSelf(optional bool bQuiet)
 
 exec function ViewClass(class<actor> aClass, optional bool bQuiet, optional bool bCheat)
 {
-	local actor other, first;
+	local Actor other, first;
 	local bool bFound;
 
 	first = None;

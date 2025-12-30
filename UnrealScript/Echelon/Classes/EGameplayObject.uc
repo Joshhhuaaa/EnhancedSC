@@ -243,7 +243,7 @@ function name GetHandAttachTag()
 function Throw(Controller Thrower, vector ThrowVelocity)
 {	
 	local vector HitLocation, HitNormal, Extent;
-	local actor HitActor;
+	local Actor HitActor;
 
 	Velocity = ThrowVelocity;
 	
@@ -418,7 +418,7 @@ final function Shatter()
 //------------------------------------------------------------------------
 final function Explode()
 {
-	local actor		Victims;
+	local Actor		Victims;
 	local float		damageScale, dist;
 	local vector	dir;
 	local Pawn		OriginalInstigator; // Joshua - Workaround for objects destroyed
@@ -876,7 +876,7 @@ function Bump(actor Other, optional int Pill)
 //------------------------------------------------------------------------
 function SendMessage(EGOMsgEvent Event, optional EGameplayObject Sender)
 {
-	local actor SendTo;
+	local Actor SendTo;
 
 	// Send it to Owner or Base
 	SendTo = Owner;
@@ -1006,7 +1006,7 @@ state s_Flying
 		// Reflect on no-wall or pawn
 		//	Velocity += Wall.Velocity;
 		if (Wall == None || !Wall.bIsSoftBody)
-			Velocity = 0.5* ((Velocity dot HitNormal) * HitNormal * (-2.0) + Velocity);   // Reflect off Wall w/damping //1+coef
+			Velocity = 0.5 * ((Velocity dot HitNormal) * HitNormal * (-2.0) + Velocity);   // Reflect off Wall w/damping //1+coef
 
 		// Maybe not needed...
 		if (VSize(Velocity) > 2000.0)

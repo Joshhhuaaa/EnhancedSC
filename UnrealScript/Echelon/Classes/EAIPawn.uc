@@ -1995,7 +1995,7 @@ function PlayNPCGear()
 
 function bool PressingFire()
 {
-	return  EAIController(controller).bfiring;
+	return EAIController(controller).bFiring;
 }
 
 defaultproperties

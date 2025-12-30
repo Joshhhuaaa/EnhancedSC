@@ -5165,7 +5165,7 @@ state s_Carried
 
 state s_Stunned
 {
-	Ignores  SeePlayer, HearNoise, NotifyBump;
+	Ignores SeePlayer, HearNoise, NotifyBump;
 
 	function BeginState()
 	{
@@ -5178,7 +5178,7 @@ state s_Stunned
 			Pattern.bDisableMessages = false;
 
 
-		if (Pattern != None &&  Pattern.GetStateName() != 'attack' && !Pattern.bRunningAlarm)
+		if (Pattern != None && Pattern.GetStateName() != 'attack' && !Pattern.bRunningAlarm)
 		{
 			m_pGoalList.Reset();
 			bPlayerSeen = false;			// no need to call UpdatePlayerLocation, just set this to false

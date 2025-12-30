@@ -136,7 +136,7 @@ var(Object) name Group;
 // Identifies a unique convex volume in the world.
 struct PointRegion
 {
-	var zoneinfo Zone;       // Zone.
+	var ZoneInfo Zone;       // Zone.
 	var int      iLeaf;      // Bsp leaf.
 	var byte     ZoneNumber; // Zone number.
 };
@@ -1432,7 +1432,7 @@ event SetInitialState()
 */
 final function HurtRadius(float DamageAmount, float DamageRadius, class<DamageType> DamageType, float Momentum, vector HitLocation)
 {
-	local actor Victims;
+	local Actor Victims;
 	local float damageScale, dist;
 	local vector dir;
 	
