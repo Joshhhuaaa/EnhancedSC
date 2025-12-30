@@ -31,8 +31,8 @@ function InitPattern()
     local EPawn EP;
     local Actor A;
     local EGameplayObject EGO;
-    local EAlarm Alarm;
-    local int i;
+    //local EAlarm Alarm;
+    //local int i;
 
     Super.InitPattern();
 
@@ -54,13 +54,36 @@ function InitPattern()
 
     if (!bInit)
     {
-        // Joshua - Disposable pick was assigned the incorrect mesh
+        
         ForEach DynamicActors(class'EGameplayObject', EGO)
         {
+            // Joshua - Disposable pick was assigned the incorrect mesh
             if (EGO.name == 'EDisposablePick0')
             {
                 EGO.SetStaticMesh(StaticMesh'EMeshIngredient.Item.DisposablePick');
                 EGO.SetLocation(EGO.Location + vect(0, 0, -22));
+            }
+
+            // Joshua - EGameplayObjectLight missing ObjectLight
+            if (EGO.name == 'ELgt2Flurescent0')
+            {
+                EGO.ObjectLights[2] = ELight(DynamicLoadObject("3_2_1_PowerPlant.ELight51", class'ELight'));
+            }
+
+            // Joshua - EGameplayObjectLight missing ObjectLight
+            if (EGO.name == 'ELgt2Flurescent2')
+            {
+                EGO.ObjectLights[2] = ELight(DynamicLoadObject("3_2_1_PowerPlant.ELight45", class'ELight'));
+            }
+
+            // Joshua - Keypad sliding door glass should not be destructible
+            if (EGO.name == 'EGameplayObject20' || EGO.name == 'EGameplayObject21')
+                EGO.bDamageable = false;
+
+            // Joshua - Lowered ceiling camera that was sticking in the ceiling
+            if (EGO.name == 'ECeilingCamera0')
+            {
+                EGO.SetLocation(EGO.Location + vect(0, 0, -14.5));
             }
         }
 
@@ -68,10 +91,10 @@ function InitPattern()
         ForEach AllActors(class'Actor', A)
         {
             if (A.name == 'StaticMeshActor706')
-                A.SetCollision(False);
+                A.SetCollision(false);
 
             if (A.name == 'StaticMeshActor821')
-                A.SetCollision(False);
+                A.SetCollision(false);
         }
 
         // Joshua - Removing EGroupAI20 from the PrimaryGroups (killing the NPC instead for now)
