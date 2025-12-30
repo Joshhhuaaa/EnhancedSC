@@ -289,11 +289,14 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 //    
 
     if ((Key == ViewportOwner.Actor.GetKey("FullInventory", false)) && 
-    (EPlayerController(ViewportOwner.Actor).CanGoBackToGame()) && // Joshua - Prevent the PC menus during GameOver
-    (Action == IST_Press) && (Root != None))     
+        (EPlayerController(ViewportOwner.Actor).CanGoBackToGame()) && // Joshua - Prevent the PC menus during GameOver
+        (Action == IST_Press) && (Root != None))     
     {
 		if (ViewportOwner.Actor.Level.Pauser == None)
 		{
+            // Joshua - Clearing input after pausing game
+            EPlayerController(ViewportOwner.Actor).bFire = 0;
+            EPlayerController(ViewportOwner.Actor).bAltFire = 0;
 			bLaunchWasCalled = false;
 			bReturnToMenu = false;
 			GotoState('UWindow');
