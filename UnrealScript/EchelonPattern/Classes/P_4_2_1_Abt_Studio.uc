@@ -81,8 +81,7 @@ setup:
     SendPatternEvent('EGroupAI2','BeamOut');
 start:
     Log("");
-    Characters[0].Pawn.PlaySound(Sound'DestroyableObjet.Play_CameraDestroyed'); // Joshua - Add destroy sound for broadcast
-    Sleep(0.5); // Joshua - Add additional delay before cinematic
+    Sleep(0.5); // Joshua - Add additional delay before cinematic for new antenna animation
 	SoundActors[0].PlaySound(Sound'S4_2_1Voice.CineStartTrack1FadeOut', SLOT_Ambient);
 	SoundActors[0].PlaySound(Sound'S4_2_1Voice.CineStartTrack2FadeIn', SLOT_Ambient);
     Sleep(1);

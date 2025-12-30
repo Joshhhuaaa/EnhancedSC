@@ -7404,6 +7404,103 @@ Aborted:
 	GotoState('s_PlayerWalking');
 }
 
+// Joshua - New antenna switch interaction for Abattoir
+// ----------------------------------------------------------------------
+// state s_DestroyAntenna
+// ----------------------------------------------------------------------
+state s_DestroyAntenna extends s_InteractWithObject
+{
+	Ignores NotifyAction;
+
+	function BeginState()
+	{
+		bNoLedgePush = true;
+		bInTransition = true;
+		Super.BeginState();
+	}
+
+	function MoveToDestinationFailed()
+	{
+		GoToState(,'Aborted');
+	}
+
+	function PlayerMove(float DelaTime)
+	{
+		Super.PlayerMove(DelaTime);
+
+		if (bInTransition || Interaction == None)
+			return;
+
+		// Check if object wouldn't be on a moving surface
+		if (Interaction.Owner.Location != m_HoistStOffset)
+			GotoState(,'Aborted');
+	}
+
+Begin:
+	Interaction.SetInteractLocation(ePawn);
+	ePawn.SetPhysics(PHYS_Linear);
+	MoveToDestination(200, true);
+	KillPawnSpeed();
+	ePawn.SetPhysics(PHYS_Walking);
+	
+	// Keep track of object distance 
+	m_HoistStOffset = Interaction.Owner.Location;
+	bInTransition = false;
+
+	if (JumpLabel == '')
+		Log("ERROR : JumpLabel should be defined in DestroyAntenna interaction");
+	Goto(JumpLabel);
+
+DefuseCrouch:
+	// Check if needs to crouch
+	if (!ePawn.bIsCrouched)
+	{
+		ePawn.bWantsToCrouch = true;
+		ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, ,0.1);
+		FinishAnim();
+	}
+	Goto('Defuse');
+
+DefuseStand:
+	// Check if needs to uncrouch
+	if (ePawn.bIsCrouched)
+	{
+		ePawn.bWantsToCrouch = false;
+		ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn,,0.1,true);
+		FinishAnim();
+	}
+	Goto('Defuse');
+
+Defuse:
+	// Begin
+	if (!ePawn.bIsCrouched)
+		ePawn.PlayAnimOnly('minestaled0',,0.1, true);
+	else
+		ePawn.PlayAnimOnly('minecraled0',,0.1, true);
+	FinishAnim();
+
+	// Cycle
+	if (!ePawn.bIsCrouched)
+		ePawn.LoopAnimOnly('minestalnt0');
+	else
+		ePawn.LoopAnimOnly('minecralnt0');
+
+	Sleep(2.0);
+	bInTransition = true;
+	Interaction.Interact(self);
+	Stop;
+
+FinishInteraction:
+	JumpLabel = '';
+	bInTransition = false;
+	GotoState('s_PlayerWalking');
+
+Aborted:
+	JumpLabel = '';
+	bInTransition = false;
+	GotoState('s_PlayerWalking');
+}
+
 
 // ----------------------------------------------------------------------
 // state s_RetinalScanner
