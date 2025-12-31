@@ -62,8 +62,10 @@ state s_Flying
 function Select(EInventory Inv)
 {
 	Super.Select(Inv);
-	PlaySound(Sound'Interface.Play_FisherEquipFragGrenade', SLOT_Interface);
-
+	
+	// Joshua - Don't play sound during silent restore (sorting)
+	if (!Inv.bSilentRestore)
+		PlaySound(Sound'Interface.Play_FisherEquipFragGrenade', SLOT_Interface);
 }
 
 defaultproperties

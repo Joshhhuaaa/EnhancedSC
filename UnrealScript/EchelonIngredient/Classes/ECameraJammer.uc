@@ -122,7 +122,10 @@ state s_Inventory
 function Select(EInventory Inv)
 {
 	Super.Select(Inv);
-	PlaySound(Sound'Interface.Play_FisherEquipCamJammer', SLOT_Interface);
+	
+	// Joshua - Don't play sound during silent restore (sorting)
+	if (!Inv.bSilentRestore)
+		PlaySound(Sound'Interface.Play_FisherEquipCamJammer', SLOT_Interface);
 }
 
 state s_Selected

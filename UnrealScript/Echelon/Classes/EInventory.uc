@@ -23,6 +23,13 @@ var EInventoryItem		PreviousEquipedItem;		// Any of the above
 
 const NumberOfCat		= 3;
 
+//=============================================================================
+// Enhanced Variables
+// Joshua - This is a native class. New variables must be added only after all original ones have been declared.
+// Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
+//=============================================================================
+var bool				bSilentRestore;				// Joshua - Suppress sounds when restoring items after sort
+
 native(1210) final function AddInventoryItem(EInventoryItem Item);
 native(1211) final function bool CanAddItem(EInventoryItem Item);
 native(1212) final function RemoveItem(EInventoryItem Item, optional int Quantity, optional bool bRemoveAll);

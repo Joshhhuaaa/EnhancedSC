@@ -131,9 +131,11 @@ function bool CheckWallInFront()
 
 function Select(EInventory Inv)
 {
-	if (GetStateName() != 's_Selected')
-		PlaySound(Sound'Interface.Play_FisherEquipWallMine', SLOT_Interface);
 	Super.Select(Inv);
+	
+	// Joshua - Don't play sound during silent restore (sorting)
+	if (GetStateName() != 's_Selected' && !Inv.bSilentRestore)
+		PlaySound(Sound'Interface.Play_FisherEquipWallMine', SLOT_Interface);
 }
 
 state s_Inventory

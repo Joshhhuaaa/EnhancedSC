@@ -212,6 +212,9 @@ function Add(Actor NewOwner, Controller NewController, EInventory Inventory)
 	Inventory.SortInventory();
 	
 	// Joshua - Restore selected items by class (object reference may change during add)
+	// Set silent restore flag to prevent equip sounds during sort
+	Inventory.bSilentRestore = true;
+	
 	if (PrevPrimary != None)
 	{
 		Item = Inventory.GetItemByClass(PrevPrimary.class.Name);
@@ -231,6 +234,9 @@ function Add(Actor NewOwner, Controller NewController, EInventory Inventory)
 			Item.Select(Inventory);
 		}
 	}
+	
+	// Joshua - Clear silent restore flag
+	Inventory.bSilentRestore = false;
 }
 
 // ----------------------------------------------------------------------
