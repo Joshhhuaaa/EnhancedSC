@@ -148,6 +148,9 @@ void Config::Read()
 
     inipp::Ini<char> ini;
     ini.parse(iniFile);
+    // Joshua - Duplicate keys (like EditPackages=value1, EditPackages=value2 in SplinterCell.ini) are valid for array configs
+    // Commenting out error logging to avoid false warnings
+    /*
     if (!ini.errors.empty())
     {
         spdlog::error("Error parsing ini file, encountered {} errors:", ini.errors.size());
@@ -158,6 +161,7 @@ void Config::Read()
             std::cout << err << std::endl;
         }
     }
+    */
 
     ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bDisableMenuIdleTimer", g_IdleTimers.bDisableIdleTimer);
     LOG_CONFIG(ConfigKeys::DisableMenuIdleTimers_Section, ConfigKeys::DisableMenuIdleTimers_Setting, g_IdleTimers.bDisableIdleTimer);
