@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/11/27 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCFileListBox extends EPCListBox
 				native;
 

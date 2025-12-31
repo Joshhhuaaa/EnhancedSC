@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/11/06 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCInGameControlsConfigArea extends EPCControlsConfigArea;
 
 var EPCTextButton m_ResetToDefault;

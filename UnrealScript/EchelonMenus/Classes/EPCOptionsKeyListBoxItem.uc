@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/10/27 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCOptionsKeyListBoxItem extends UWindowListBoxItem
                     native;
 

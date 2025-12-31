@@ -5,7 +5,6 @@
 //  Revision history:
 //    2002/10/03 * Created by Alexandre Dionne
 //=============================================================================
-
 class EPCMainMenuRootWindow extends UWindowRootWindow
                 native;
 

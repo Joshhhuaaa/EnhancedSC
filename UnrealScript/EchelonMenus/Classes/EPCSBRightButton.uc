@@ -1,3 +1,10 @@
+//=============================================================================
+//  EPCSBUpButton.uc : Scroll Bar Button Echelon style
+//  Copyright 2002 Ubi Soft, Inc. All Rights Reserved.
+//
+//  Revision history:
+//    2002/11/13 * Created by Alexandre Dionne
+//=============================================================================
 class EPCSBRightButton extends UWindowSBRightButton
                 native;
 

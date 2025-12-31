@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/10/24 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCSoundConfigArea extends UWindowDialogClientWindow;
 
 
@@ -60,9 +58,9 @@ function Created()
     // ***********************************************************************************************
 		
 	// Set color values (YM)
-	m_TextColor.R = 51; //71
-	m_TextColor.G = 51; //71
-	m_TextColor.B = 51; //71
+	m_TextColor.R = 71;
+	m_TextColor.G = 71;
+	m_TextColor.B = 71;
 	m_TextColor.A = 255;
 
     m_DisabledTextColor.R = 128;

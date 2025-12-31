@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/11/05 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCInGameMissionInfoArea extends UWindowDialogClientWindow;
 
 var EPCTextButton   m_GoalsButton, m_NotesButton, m_DataButton;

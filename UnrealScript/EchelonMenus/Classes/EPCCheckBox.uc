@@ -5,7 +5,6 @@
 //  Revision history:
 //    2002/10/15 * Created by Alexandre Dionne
 //=============================================================================
-
 class EPCCheckBox extends UWindowButton
 				native;
 

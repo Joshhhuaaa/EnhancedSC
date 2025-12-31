@@ -116,10 +116,9 @@ function Created()
     m_ListBox.SetAcceptsFocus();
     m_ListBox.TitleFont = F_Normal;
 
-    // Initialize pulse animation - start at 0 with pause
+    // Initialize pulse animation
     InfoButtonPulseTimer = 0.0;
     bInfoButtonPulseIncreasing = true;
-    InfoButtonPauseTimer = 0.5; // Start with 0.5 second pause at 0
 
     InitEnhancedSettings();
 }
@@ -129,31 +128,22 @@ function BeforePaint(Canvas C, float X, float Y)
     Super.BeforePaint(C, X, Y);
     
     // Joshua - Update pulse animation for info buttons
-    // Handle pause at 0 or 1
-    if (InfoButtonPauseTimer > 0.0)
-    {
-        InfoButtonPauseTimer -= 0.01;
-        return; // Don't update pulse while paused
-    }
-    
     if (bInfoButtonPulseIncreasing)
     {
-        InfoButtonPulseTimer += 0.01; // 0.5 seconds from 0 to 1
+        InfoButtonPulseTimer += 0.02;
         if (InfoButtonPulseTimer >= 1.0)
         {
             InfoButtonPulseTimer = 1.0;
             bInfoButtonPulseIncreasing = false;
-            InfoButtonPauseTimer = 0.5; // Pause 0.5 seconds at full opacity
         }
     }
     else
     {
-        InfoButtonPulseTimer -= 0.01; // 0.5 seconds from 1 to 0
+        InfoButtonPulseTimer -= 0.02;
         if (InfoButtonPulseTimer <= 0.0)
         {
             InfoButtonPulseTimer = 0.0;
             bInfoButtonPulseIncreasing = true;
-            InfoButtonPauseTimer = 0.5; // Pause 0.5 seconds at 0 opacity
         }
     }
 }

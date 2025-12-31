@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/11/13 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCSBDownButton extends UWindowSBDownButton
 		native;
 

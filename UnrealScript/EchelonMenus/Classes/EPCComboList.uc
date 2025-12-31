@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/11/22 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCComboList extends UWindowComboList
 			native;
 

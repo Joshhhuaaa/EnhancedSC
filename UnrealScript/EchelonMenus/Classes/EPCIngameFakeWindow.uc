@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/11/25 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCIngameFakeWindow extends UWindowWindow;
 
 function ShowWindow()

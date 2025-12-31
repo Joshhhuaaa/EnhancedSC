@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/11/08 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCInGameSaveLoadArea extends UWindowDialogClientWindow
 			native;
 

@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/10/25 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCVideoConfigArea extends UWindowDialogClientWindow;
 
 var EPCOptionsListBoxEnhanced m_ListBox;

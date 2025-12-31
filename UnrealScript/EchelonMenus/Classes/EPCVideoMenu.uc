@@ -5,7 +5,6 @@
 //  Revision history:
 //    2002/10/03 * Created by Cyrille Lauzon
 //=============================================================================
-
 class EPCVideoMenu extends EPCMenuPage
 	  native;
 

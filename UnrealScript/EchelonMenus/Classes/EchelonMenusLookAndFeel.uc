@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/10/11 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EchelonMenusLookAndFeel extends UWindowLookAndFeel;
 
 #exec TEXTURE IMPORT NAME=ActiveFrame FILE=..\UWindow\Textures\ActiveFrame.bmp GROUP="Icons" MASKED=1 MIPS=OFF

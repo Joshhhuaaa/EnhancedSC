@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/10/18 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCVScrollBar extends UWindowVScrollBar
         native;
 

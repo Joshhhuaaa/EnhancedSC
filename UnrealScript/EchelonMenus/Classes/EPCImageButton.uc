@@ -1,5 +1,6 @@
 //=============================================================================
-// EPCImageButton - Joshua - A button that displays different textures for normal/hover/pressed states
+// EPCImageButton - A button that displays different textures for normal/hover/pressed states
+// Created by Joshua
 //=============================================================================
 
 class EPCImageButton extends UWindowButton;

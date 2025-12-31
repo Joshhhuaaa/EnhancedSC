@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/11/04 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCInGameMenu extends EPCMenuPage
 			native;
 

@@ -2,7 +2,6 @@
 //  EPCComboEditBox.uc : EditBox that passes through mouse wheel to parent
 //  Used by EPCComboControl to allow page scrolling when combo is closed
 //=============================================================================
-
 class EPCComboEditBox extends UWindowEditBox;
 
 // Override mouse wheel to pass through to parent when not editable

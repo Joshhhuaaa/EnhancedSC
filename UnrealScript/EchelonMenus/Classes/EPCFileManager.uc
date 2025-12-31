@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/10/17 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCFileManager extends Object
 			native
             noexport;

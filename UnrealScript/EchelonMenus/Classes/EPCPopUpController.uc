@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/10/29 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCPopUpController extends UWindowWindow;
 
 //Window we will send the result too

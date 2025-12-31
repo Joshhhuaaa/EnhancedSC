@@ -240,11 +240,10 @@ function MouseWheelUp(FLOAT X, FLOAT Y)
 defaultproperties
 {
     ListClass=Class'EPCEnhancedListBoxItem'
-    TextColor=(R=51,G=51,B=51,A=255)
+    TextColor=(R=71,G=71,B=71,A=255)
     m_ILabelXPos=15
     m_ILabelWidth=250
     m_ICompactLineItemHeight=2
     m_ILineItemHeight=8
     m_ITitleLineItemHeight=4
-    //SelectionColor=(R=51,G=51,B=51,A=255)
 }

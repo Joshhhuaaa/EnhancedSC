@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/10/15 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCLoadDelPlayerArea extends UWindowDialogClientWindow;
 
 var UWindowLabelControl     m_LDifficulty;      //Title

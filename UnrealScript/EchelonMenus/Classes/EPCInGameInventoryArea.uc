@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/11/11 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCInGameInventoryArea extends UWindowDialogClientWindow
                     native;
 

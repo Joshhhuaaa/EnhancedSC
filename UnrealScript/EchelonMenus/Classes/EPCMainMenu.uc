@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/10/03 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCMainMenu extends EPCMenuPage
         native;
 

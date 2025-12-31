@@ -1,5 +1,6 @@
 //=============================================================================
 //  EPCInGameEnhancedConfigArea.uc : In-game version of Enhanced settings area
+//  Created by Joshua
 //=============================================================================
 class EPCInGameEnhancedConfigArea extends EPCEnhancedConfigArea;
 

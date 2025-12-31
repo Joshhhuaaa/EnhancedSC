@@ -1,7 +1,6 @@
 class EPCComboButton extends UWindowComboButton
 				native;
 
-
 function Created(){}
 
 // Joshua - Allow page scrolling when mouse is over the combo button

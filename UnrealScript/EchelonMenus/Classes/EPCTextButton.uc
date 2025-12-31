@@ -5,7 +5,6 @@
 //  Revision history:
 //    2002/10/09 * Created by Alexandre Dionne
 //=============================================================================
-
 class EPCTextButton extends UWindowButton
                     native;
 

@@ -5,8 +5,6 @@
 //  Revision history:
 //    2002/11/06 * Created by Alexandre Dionne
 //=============================================================================
-
-
 class EPCInGameSoundConfigArea extends EPCSoundConfigArea;
 
 var EPCTextButton m_ResetToDefault;
