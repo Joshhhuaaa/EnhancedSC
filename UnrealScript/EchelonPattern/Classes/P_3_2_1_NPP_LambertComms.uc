@@ -80,11 +80,11 @@ function InitPattern()
             if (EGO.name == 'EGameplayObject20' || EGO.name == 'EGameplayObject21')
                 EGO.bDamageable = false;
 
-            // Joshua - Lowered ceiling camera that was sticking in the ceiling
-            if (EGO.name == 'ECeilingCamera0')
-            {
-                EGO.SetLocation(EGO.Location + vect(0, 0, -14.5));
-            }
+            // Joshua - Lowered ceiling camera that was sticking in the ceiling (reverted for now, detects player while crouched under the floor)
+            //if (EGO.name == 'ECeilingCamera0')
+            //{
+            //    EGO.SetLocation(EGO.Location + vect(0, 0, -14.5));
+            //}
         }
 
         // Joshua - Disabling collision on these two vent frames as it was preventing the player from progressing
