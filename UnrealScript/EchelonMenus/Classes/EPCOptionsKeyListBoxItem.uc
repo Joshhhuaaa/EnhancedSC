@@ -24,3 +24,4 @@ var bool            bIsCheckBoxLine;        // Not very clean, but will do.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
 var bool            bIsCompactLine;        // Joshua - Compact line spacing
+var UWindowWindow   m_InfoButton;          // Joshua - Optional info button for tooltips

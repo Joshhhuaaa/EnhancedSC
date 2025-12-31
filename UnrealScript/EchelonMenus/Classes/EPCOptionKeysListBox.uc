@@ -107,6 +107,7 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
     local int i;
     local EPCHScrollBar ScrollBar;
     local UWindowLabelControl ValueLabel;
+    local float TextWidth, TextHeight; // Joshua - Width and height of tooltip text
 
     listBoxItem = EPCOptionsKeyListBoxItem(Item);
 
@@ -117,6 +118,16 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
             listBoxItem.m_Control.WinTop = Y;
             listBoxItem.m_Control.WinLeft = X + W - m_IHighLightWidth - m_IHighLightRightPadding - m_IRightPadding;
             listBoxItem.m_Control.ShowWindow();
+            
+            // Joshua - Position info button if present (for combo boxes, scrollbars, etc.)
+            if (listBoxItem.m_InfoButton != None)
+            {
+                C.Font = Root.Fonts[F_Normal];
+                TextSize(C, listBoxItem.Caption, TextWidth, TextHeight);
+                listBoxItem.m_InfoButton.WinTop = Y + 1; // Align with text
+                listBoxItem.m_InfoButton.WinLeft = X + TextWidth + 5; // 5 pixels after text
+                listBoxItem.m_InfoButton.ShowWindow();
+            }
             
             // Joshua - Position value labels to the right of scrollbars
             ScrollBar = EPCHScrollBar(listBoxItem.m_Control);
@@ -144,7 +155,17 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
             // For Fire Equip line, draw the check box real far
             listBoxItem.m_Control.WinTop = Y;
             listBoxItem.m_Control.WinLeft = X + W - 32;
-            listBoxItem.m_Control.ShowWindow();           
+            listBoxItem.m_Control.ShowWindow();
+            
+            // Joshua - Position info button if present
+            if (listBoxItem.m_InfoButton != None)
+            {
+                C.Font = Root.Fonts[F_Normal];
+                TextSize(C, listBoxItem.Caption, TextWidth, TextHeight);
+                listBoxItem.m_InfoButton.WinTop = Y + 1; // Align with text
+                listBoxItem.m_InfoButton.WinLeft = X + TextWidth + 5; // 5 pixels after text
+                listBoxItem.m_InfoButton.ShowWindow();
+            }
         }
     }
 
@@ -206,11 +227,24 @@ function Paint(Canvas C, float MouseX, float MouseY)
 //==============================================================================
 function HideControls()
 {
-    local INT i;
+    local int i;
+    // Joshua - Also hide info buttons that are stored in list items
+    local UWindowList CurItem;
+    local EPCOptionsKeyListBoxItem KeyItem;
     
-    for (i =0; i < m_Controls.Length ;i++)
+    for (i = 0; i < m_Controls.Length; i++)
     {
         m_Controls[i].HideWindow();
+    }
+    
+    // Joshua - Also hide info buttons that are stored in list items
+    for (CurItem = Items.Next; CurItem != None; CurItem = CurItem.Next)
+    {
+        KeyItem = EPCOptionsKeyListBoxItem(CurItem);
+        if (KeyItem != None && KeyItem.m_InfoButton != None)
+        {
+            KeyItem.m_InfoButton.HideWindow();
+        }
     }
 }
 

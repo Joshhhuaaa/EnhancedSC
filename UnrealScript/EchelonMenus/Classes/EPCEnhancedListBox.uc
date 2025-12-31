@@ -1,5 +1,6 @@
 //=============================================================================
 //  EPCEnhancedListBox.uc : Modified list box used for Enhanced settings
+//  Created by Joshua
 //=============================================================================
 class EPCEnhancedListBox extends EPCListBox;
 
@@ -104,20 +105,42 @@ function LMouseDown(float X, float Y)
 function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H)
 {
     local EPCEnhancedListBoxItem listBoxItem;
+    local float InfoButtonSize;
+    local float TextWidth, TextHeight;
+    local Color DrawColor;
     
     listBoxItem = EPCEnhancedListBoxItem(Item);
 
     if (listBoxItem != None)
     {
+        // Draw the text manually to support per-item colors
+        C.Font = Root.Fonts[F_Normal];
+        
+        // Use item's text color (titles will be darker, regular items lighter)
+        DrawColor = listBoxItem.m_TextColor;
+        C.DrawColor = DrawColor;
+        
+        // Draw the caption text
+        TextSize(C, listBoxItem.Caption, TextWidth, TextHeight);
+        ClipText(C, X, Y + (H - TextHeight) / 2, listBoxItem.Caption);
+        
         if (listBoxItem.m_Control != None)
         {
             listBoxItem.m_Control.WinTop = Y;
             listBoxItem.m_Control.WinLeft = X + W - listBoxItem.m_Control.WinWidth - 10;
             listBoxItem.m_Control.ShowWindow();
         }
+        
+        // Show info button if present - position it right after the label text
+        if (listBoxItem.m_InfoButton != None)
+        {
+            InfoButtonSize = 16;
+            
+            listBoxItem.m_InfoButton.WinTop = Y + (H - InfoButtonSize) / 2;
+            listBoxItem.m_InfoButton.WinLeft = X + TextWidth + 5; // 5 pixels after text
+            listBoxItem.m_InfoButton.ShowWindow();
+        }
     }
-
-    RenderItem(C, UWindowListBoxItem(Item), X, Y, W - m_IRightPadding, H);
 }
 
 function Paint(Canvas C, float MouseX, float MouseY)
@@ -174,12 +197,25 @@ function Paint(Canvas C, float MouseX, float MouseY)
 function HideControls()
 {
     local int i;
+    local UWindowList CurItem;
+    local EPCEnhancedListBoxItem EnhancedItem;
     
+    // Hide main controls
     for (i = 0; i < m_Controls.Length; i++)
     {
         if (m_Controls[i] != None)
         {
             m_Controls[i].HideWindow();
+        }
+    }
+    
+    // Hide all info buttons
+    for (CurItem = Items.Next; CurItem != None; CurItem = CurItem.Next)
+    {
+        EnhancedItem = EPCEnhancedListBoxItem(CurItem);
+        if (EnhancedItem != None && EnhancedItem.m_InfoButton != None)
+        {
+            EnhancedItem.m_InfoButton.HideWindow();
         }
     }
 }

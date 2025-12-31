@@ -141,11 +141,11 @@ defaultproperties
     m_RButtonRight=(X=207,Y=128,W=100,H=20)
     m_ILabelWidth=375
     m_ILabelHeight=25
-    m_IMessageAreaXpos=40
+    m_IMessageAreaXpos=20 // Joshua - Reduced from 40, increasing message area to fit more text
     m_IMessageAreaYpos=25
-    m_IMessageAreaWidth=295
+    m_IMessageAreaWidth=335 // Joshua - Increased from 295, increasing message area to fit more text
     m_IMessageAreaHeight=100
-    m_IMessageAreaXTextOffset=10
+    m_IMessageAreaXTextOffset=5 // Joshua - Reduced from 10, increasing message area to fit more text
     m_IMessageAreaYTextOffset=10
     m_TitleTextColor=(R=51,G=51,B=51,A=255)
     m_ButtonTextColor=(R=71,G=71,B=71,A=255)

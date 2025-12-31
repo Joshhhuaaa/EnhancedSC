@@ -5,12 +5,19 @@
 //  Revision history:
 //    2002/10/27 * Created by Alexandre Dionne
 //=============================================================================
-
-
-class EPCControlsConfigArea extends UWindowDialogClientWindow;
+class EPCControlsConfigArea extends UWindowDialogClientWindow
+    config(Enhanced);
 
 var EPCOptionKeysListBox m_ListBox;
 var EPCMessageBox        m_MessageBox;
+
+// Joshua - Tooltip persistence
+var config array<string> ViewedTooltips;
+
+// Joshua - Shared info button pulse animation state
+var float InfoButtonPulseTimer;
+var bool bInfoButtonPulseIncreasing;
+var float InfoButtonPauseTimer; // Pause at 0 and 1
 
 var EPCHScrollBar        m_MouseSensitivityScroll;
 var UWindowLabelControl  m_LMouseSensitivityValue; // Joshua - Label for the mouse sensitivity scroll bar
@@ -28,7 +35,7 @@ var EPCComboControl      m_InputMode; // Joshua - Enhanced setting
 var EPCComboControl      m_ControllerScheme; // Joshua - Enhnaced setting
 var EPCComboControl      m_ControllerIcon; // Joshua - Enhnaced setting
 
-var bool                    m_bModified;    //A setting has changed
+var bool                    m_bModified;    // A setting has changed
 var bool					m_bFirstRefresh;
 
 
@@ -43,8 +50,127 @@ function Created()
 	
     m_ListBox = EPCOptionKeysListBox(CreateControl(class'EPCOptionKeysListBox', 0, 0, WinWidth, WinHeight, self));            
     m_ListBox.bAlwaysBehind = true;
+    
+    // Joshua - Initialize pulse animation - start at 0 with pause
+    InfoButtonPulseTimer = 0.0;
+    bInfoButtonPulseIncreasing = true;
+    InfoButtonPauseTimer = 0.5; // Start with 0.5 second pause at 0
+    
     InitOptionControls();
     m_ListBox.TitleFont = F_Normal;
+}
+
+//==============================================================================
+// BeforePaint - Update pulse animation for info buttons
+// Created by Joshua
+//==============================================================================
+function BeforePaint(Canvas C, float X, float Y)
+{
+    Super.BeforePaint(C, X, Y);
+    
+    // Handle pause at 0 or 1
+    if (InfoButtonPauseTimer > 0.0)
+    {
+        InfoButtonPauseTimer -= 0.01;
+        return; // Don't update pulse while paused
+    }
+    
+    // Update pulse timer for info button animation
+    if (bInfoButtonPulseIncreasing)
+    {
+        InfoButtonPulseTimer += 0.01; // 0.5 seconds from 0 to 1
+        if (InfoButtonPulseTimer >= 1.0)
+        {
+            InfoButtonPulseTimer = 1.0;
+            bInfoButtonPulseIncreasing = false;
+            InfoButtonPauseTimer = 0.5; // Pause 0.5 seconds at full opacity
+        }
+    }
+    else
+    {
+        InfoButtonPulseTimer -= 0.01; // 0.5 seconds from 1 to 0
+        if (InfoButtonPulseTimer <= 0.0)
+        {
+            InfoButtonPulseTimer = 0.0;
+            bInfoButtonPulseIncreasing = true;
+            InfoButtonPauseTimer = 0.5; // Pause 0.5 seconds at 0 opacity
+        }
+    }
+}
+
+//==============================================================================
+// HasViewedTooltip - Check if a tooltip has been viewed before
+// Created by Joshua
+//==============================================================================
+function bool HasViewedTooltip(string TooltipKey)
+{
+    local int i;
+    
+    for (i = 0; i < ViewedTooltips.Length; i++)
+    {
+        if (ViewedTooltips[i] == TooltipKey)
+            return true;
+    }
+    
+    return false;
+}
+
+//==============================================================================
+// MarkTooltipViewed - Mark a tooltip as viewed and save config
+// Created by Joshua
+//==============================================================================
+function MarkTooltipViewed(string TooltipKey)
+{
+    if (!HasViewedTooltip(TooltipKey))
+    {
+        ViewedTooltips[ViewedTooltips.Length] = TooltipKey;
+        SaveConfig();
+    }
+}
+
+//==============================================================================
+// AddCheckBoxItemWithInfo - Add checkbox with info button tooltip
+// Created by Joshua
+//==============================================================================
+function EPCCheckBox AddCheckBoxItemWithInfo(string LocalizationKey, out EPCCheckBox CheckBoxVar)
+{
+    local EPCOptionsKeyListBoxItem NewItem;
+    local EPCInfoButton InfoButton;
+    local string InfoText;
+
+    NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
+    NewItem.Caption = Localize("Controls", LocalizationKey, "Localization\\Enhanced");
+    NewItem.m_bIsNotSelectable = true;
+
+    CheckBoxVar = EPCCheckBox(CreateControl(class'EPCCheckBox', 0, 0, 20, 18, self));    
+    CheckBoxVar.ImageX = 5;
+    CheckBoxVar.ImageY = 5;
+    NewItem.m_Control = CheckBoxVar;
+    NewItem.bIsCheckBoxLine = true;
+    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = CheckBoxVar;
+    
+    // Load the info text from localization
+    InfoText = Localize("Controls", LocalizationKey $ "_Desc", "Localization\\Enhanced");
+    
+    // Only create info button if we have valid description text
+    if (InfoText != "" && InfoText != (LocalizationKey $ "_Desc"))
+    {
+        // Add info button
+        InfoButton = EPCInfoButton(CreateControl(class'EPCInfoButton', 0, 0, 16, 16, self));
+        InfoButton.InfoText = InfoText;
+        InfoButton.LocalizationKey = LocalizationKey;
+        InfoButton.SettingName = NewItem.Caption;
+        NewItem.m_InfoButton = InfoButton;
+        m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = InfoButton;
+        
+        // Check if this tooltip has been viewed before
+        if (HasViewedTooltip(LocalizationKey))
+        {
+            InfoButton.bStopPulsing = true;
+        }
+    }
+    
+    return CheckBoxVar;
 }
 
 //==============================================================================
@@ -70,7 +196,7 @@ function InitOptionControls()
     //AddLineItem();
     AddCompactLineItem();
     AddInitialSpeedControls();
-    AddEnhancedCheckBoxControl("NormalizedMovement", m_bNormalizeMovement);
+    AddCheckBoxItemWithInfo("NormalizedMovement", m_bNormalizeMovement);
     AddEnhancedCheckBoxControl("CrouchDrop", m_bCrouchDrop);
     //AddLineItem();
 	
@@ -133,7 +259,7 @@ function InitOptionControls()
 
     AddInputModeControls();
     AddCompactLineItem();
-    AddControllerSchemeControls();
+    AddControllerSchemeControlsWithInfo();
     AddCompactLineItem();
     AddControllerIconControls();
     AddCompactLineItem();
@@ -342,6 +468,7 @@ function ResetToDefault()
     m_ControllerIcon.SetSelectedIndex(0);
     m_bEnableRumble.m_bSelected = true;
 }
+
 //===============================================================================
 // AddFireEquipControls
 //===============================================================================
@@ -364,10 +491,10 @@ function AddFireEquipControls()
 
 //===============================================================================
 // AddInitialSpeedControls
+// Created by Joshua
 //===============================================================================
 function AddInitialSpeedControls()
 {
-    // Joshua - Enhanced initial speed
     local EPCOptionsKeyListBoxItem NewItem;
     
     NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
@@ -384,10 +511,10 @@ function AddInitialSpeedControls()
 
 //===============================================================================
 // AddEnhancedCheckBoxControl - Helper function for Enhanced checkbox controls
+// Created by Joshua
 //===============================================================================
 function EPCCheckBox AddEnhancedCheckBoxControl(string LocalizationKey, out EPCCheckBox CheckBoxVar)
 {
-    // Joshua - Enhanced generic checkbox
     local EPCOptionsKeyListBoxItem NewItem;
 
     NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
@@ -406,10 +533,10 @@ function EPCCheckBox AddEnhancedCheckBoxControl(string LocalizationKey, out EPCC
 
 //===============================================================================
 // AddInputModeControls
+// Created by Joshua
 //===============================================================================
 function AddInputModeControls()
 {
-    // Joshua - Enhanced input mode
     local EPCOptionsKeyListBoxItem NewItem;
 
     NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
@@ -428,13 +555,16 @@ function AddInputModeControls()
     m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_InputMode;
 }
 
+
 //===============================================================================
-// AddControllerSchemeControls
+// AddControllerSchemeControlsWithInfo
+// Created by Joshua
 //===============================================================================
-function AddControllerSchemeControls()
+function AddControllerSchemeControlsWithInfo()
 {
-    // Joshua - Enhanced input mode
     local EPCOptionsKeyListBoxItem NewItem;
+    local EPCInfoButton InfoButton;
+    local string InfoText;
 
     NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
     NewItem.Caption = Localize("Controls","ControllerScheme","Localization\\Enhanced");
@@ -450,14 +580,35 @@ function AddControllerSchemeControls()
 
     NewItem.m_Control = m_ControllerScheme;
     m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_ControllerScheme;
+    
+    // Load the info text from localization
+    InfoText = Localize("Controls", "ControllerScheme_Desc", "Localization\\Enhanced");
+    
+    // Only create info button if we have valid description text
+    if (InfoText != "" && InfoText != "ControllerScheme_Desc")
+    {
+        // Add info button
+        InfoButton = EPCInfoButton(CreateControl(class'EPCInfoButton', 0, 0, 16, 16, self));
+        InfoButton.InfoText = InfoText;
+        InfoButton.LocalizationKey = "ControllerScheme";
+        InfoButton.SettingName = NewItem.Caption;
+        NewItem.m_InfoButton = InfoButton;
+        m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = InfoButton;
+        
+        // Check if this tooltip has been viewed before
+        if (HasViewedTooltip("ControllerScheme"))
+        {
+            InfoButton.bStopPulsing = true;
+        }
+    }
 }
 
 //===============================================================================
 // AddControllerIconControls
+// Created by Joshua
 //===============================================================================
 function AddControllerIconControls()
 {
-    // Joshua - Enhanced controller icons
     local EPCOptionsKeyListBoxItem NewItem;
 
     NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));

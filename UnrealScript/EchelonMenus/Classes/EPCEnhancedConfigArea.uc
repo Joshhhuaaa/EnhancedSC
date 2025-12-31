@@ -1,7 +1,9 @@
 //=============================================================================
 //  EPCEnhancedConfigArea.uc : Area containing controls for Enhanced settings
+//  Created by Joshua
 //=============================================================================
-class EPCEnhancedConfigArea extends UWindowDialogClientWindow;
+class EPCEnhancedConfigArea extends UWindowDialogClientWindow
+    config(Enhanced);
 
 var EPCEnhancedListBox      m_ListBox;
 
@@ -93,6 +95,14 @@ var EPCComboControl         m_TrainingSamMesh,
 var bool    m_bModified;
 var bool	m_bFirstRefresh;
 
+// Tooltip persistence
+var(Enhanced) config array<string> ViewedTooltips;
+
+// Shared info button pulse animation state
+var float InfoButtonPulseTimer;
+var bool bInfoButtonPulseIncreasing;
+var float InfoButtonPauseTimer;  // Pause at 0 and 1
+
 // Original values for settings that require restart
 var bool    m_bOriginalCheckForUpdates;
 var bool    m_bOriginalSkipIntroVideos;
@@ -106,7 +116,67 @@ function Created()
     m_ListBox.SetAcceptsFocus();
     m_ListBox.TitleFont = F_Normal;
 
+    // Initialize pulse animation - start at 0 with pause
+    InfoButtonPulseTimer = 0.0;
+    bInfoButtonPulseIncreasing = true;
+    InfoButtonPauseTimer = 0.5; // Start with 0.5 second pause at 0
+
     InitEnhancedSettings();
+}
+
+function BeforePaint(Canvas C, float X, float Y)
+{
+    Super.BeforePaint(C, X, Y);
+    
+    // Joshua - Update pulse animation for info buttons
+    // Handle pause at 0 or 1
+    if (InfoButtonPauseTimer > 0.0)
+    {
+        InfoButtonPauseTimer -= 0.01;
+        return; // Don't update pulse while paused
+    }
+    
+    if (bInfoButtonPulseIncreasing)
+    {
+        InfoButtonPulseTimer += 0.01; // 0.5 seconds from 0 to 1
+        if (InfoButtonPulseTimer >= 1.0)
+        {
+            InfoButtonPulseTimer = 1.0;
+            bInfoButtonPulseIncreasing = false;
+            InfoButtonPauseTimer = 0.5; // Pause 0.5 seconds at full opacity
+        }
+    }
+    else
+    {
+        InfoButtonPulseTimer -= 0.01; // 0.5 seconds from 1 to 0
+        if (InfoButtonPulseTimer <= 0.0)
+        {
+            InfoButtonPulseTimer = 0.0;
+            bInfoButtonPulseIncreasing = true;
+            InfoButtonPauseTimer = 0.5; // Pause 0.5 seconds at 0 opacity
+        }
+    }
+}
+
+function bool HasViewedTooltip(string LocalizationKey)
+{
+    local int i;
+    
+    for (i = 0; i < ViewedTooltips.Length; i++)
+    {
+        if (ViewedTooltips[i] == LocalizationKey)
+            return true;
+    }
+    return false;
+}
+
+function MarkTooltipViewed(string LocalizationKey)
+{
+    if (!HasViewedTooltip(LocalizationKey))
+    {
+        ViewedTooltips[ViewedTooltips.Length] = LocalizationKey;
+        SaveConfig();
+    }
 }
 
 function InitEnhancedSettings()
@@ -127,14 +197,14 @@ function InitEnhancedSettings()
     AddLineItem();
 
     AddCheckBoxItem("Whistle", m_bWhistle);
-    AddCheckBoxItem("NewDoorInteraction", m_bNewDoorInteraction);
+    AddCheckBoxItemWithInfo("NewDoorInteraction", m_bNewDoorInteraction);
     AddCheckBoxItem("InteractionPause", m_bInteractionPause);
     AddCheckBoxItem("EnableCheckpoints", m_bEnableCheckpoints);
-    AddCheckBoxItem("MissionFailedQuickMenu", m_bMissionFailedQuickMenu);
-    AddCheckBoxItem("XboxDifficulty", m_bXboxDifficulty);
+    AddCheckBoxItemWithInfo("MissionFailedQuickMenu", m_bMissionFailedQuickMenu);
+    AddCheckBoxItemWithInfo("XboxDifficulty", m_bXboxDifficulty);
 
     AddCompactLineItem();
-    AddComboBoxItem("PlayerStatsMode", m_PlayerStatsMode);
+    AddComboBoxItemWithInfo("PlayerStatsMode", m_PlayerStatsMode);
     AddPlayerStatsModeCombo(m_PlayerStatsMode);
 
     AddLineItem();
@@ -144,14 +214,14 @@ function InitEnhancedSettings()
     
     AddCheckBoxItem("Binoculars", m_bBinoculars);
     AddCheckBoxItem("F2000BurstFire", m_bF2000BurstFire);
-    AddCheckBoxItem("PS2FN7Accuracy", m_bPS2FN7Accuracy);
+    AddCheckBoxItemWithInfo("PS2FN7Accuracy", m_bPS2FN7Accuracy);
     AddCheckBoxItem("F2000ZoomLevels", m_bF2000ZoomLevels);
     AddCheckBoxItem("LaserMicZoomLevels", m_bLaserMicZoomLevels);
     AddCheckBoxItem("LaserMicVisions", m_bLaserMicVisions);
     AddCheckBoxItem("OpticCableVisions", m_bOpticCableVisions);
-    AddCheckBoxItem("ThermalOverride", m_bThermalOverride);
+    AddCheckBoxItemWithInfo("ThermalOverride", m_bThermalOverride);
     AddCheckBoxItem("RandomizeLockpick", m_bRandomizeLockpick);
-    AddCheckBoxItem("ScaleGadgetDamage", m_bScaleGadgetDamage);
+    AddCheckBoxItemWithInfo("ScaleGadgetDamage", m_bScaleGadgetDamage);
     
     AddCompactLineItem();
     AddComboBoxItem("MineDelay", m_MineDelay);
@@ -161,7 +231,7 @@ function InitEnhancedSettings()
     AddTitleItem(Caps(Localize("Enhanced", "Title_HUDSettings", "Localization\\Enhanced")));
     AddLineItem();
 
-    AddCheckBoxItem("PersistentHUD", m_bPersistentHUD);
+    AddCheckBoxItemWithInfo("PersistentHUD", m_bPersistentHUD);
     AddCheckBoxItem("HorizontalLifeBar", m_bHorizontalLifeBar);
     AddCheckBoxItem("InvertInteractionList", m_bInvertInteractionList);
     AddCheckBoxItem("LetterBoxCinematics", m_bLetterBoxCinematics);
@@ -182,9 +252,9 @@ function InitEnhancedSettings()
     AddCheckBoxItem("ShowInventory", m_bShowInventory);
     AddCheckBoxItem("ShowStealthMeter", m_bShowStealthMeter);
     AddCheckBoxItem("ShowCurrentGoal", m_bShowCurrentGoal);
-    AddCheckBoxItem("ShowKeypadGoal", m_bShowKeypadGoal);
-    AddCheckBoxItem("ShowCurrentGadget", m_bShowCurrentGadget);
-    AddCheckBoxItem("ShowMissionInformation", m_bShowMissionInformation);
+    AddCheckBoxItemWithInfo("ShowKeypadGoal", m_bShowKeypadGoal);
+    AddCheckBoxItemWithInfo("ShowCurrentGadget", m_bShowCurrentGadget);
+    AddCheckBoxItemWithInfo("ShowMissionInformation", m_bShowMissionInformation);
     AddCheckBoxItem("ShowCrosshair", m_bShowCrosshair);
     AddCheckBoxItem("ShowScope", m_bShowScope);
     AddCheckBoxItem("ShowAlarms", m_bShowAlarms);
@@ -266,6 +336,36 @@ function AddCheckBoxItem(string LocalizationKey, out EPCCheckBox CheckBox)
     m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = CheckBox;
 }
 
+function AddCheckBoxItemWithInfo(string LocalizationKey, out EPCCheckBox CheckBox)
+{
+    local EPCEnhancedListBoxItem NewItem;
+    local EPCInfoButton InfoBtn;
+    local string InfoText;
+    
+    CheckBox = EPCCheckBox(CreateControl(class'EPCCheckBox', 0, 0, 20, 18));
+    CheckBox.ImageX = 5;
+    CheckBox.ImageY = 5;
+
+    NewItem = EPCEnhancedListBoxItem(m_ListBox.Items.Append(class'EPCEnhancedListBoxItem'));
+    NewItem.Caption = Localize("Enhanced", LocalizationKey, "Localization\\Enhanced");
+    NewItem.m_Control = CheckBox;
+    NewItem.m_bIsNotSelectable = true;
+
+    // Create info button
+    InfoText = Localize("Enhanced", LocalizationKey $ "_Desc", "Localization\\Enhanced");
+    if (InfoText != "" && InfoText != (LocalizationKey $ "_Desc"))
+    {
+        InfoBtn = EPCInfoButton(CreateControl(class'EPCInfoButton', 0, 0, 16, 16));
+        InfoBtn.InfoText = InfoText;
+        InfoBtn.SettingName = NewItem.Caption; // Use the localized setting name as title
+        InfoBtn.LocalizationKey = LocalizationKey; // Store key for persistence
+        InfoBtn.bStopPulsing = HasViewedTooltip(LocalizationKey); // Don't pulse if already viewed
+        NewItem.m_InfoButton = InfoBtn;
+    }
+
+    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = CheckBox;
+}
+
 function AddComboBoxItem(string LocalizationKey, out EPCComboControl ComboBox)
 {
     local EPCEnhancedListBoxItem NewItem;
@@ -282,6 +382,36 @@ function AddComboBoxItem(string LocalizationKey, out EPCComboControl ComboBox)
     m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = ComboBox;
 }
 
+function AddComboBoxItemWithInfo(string LocalizationKey, out EPCComboControl ComboBox)
+{
+    local EPCEnhancedListBoxItem NewItem;
+    local EPCInfoButton InfoBtn;
+    local string InfoText;
+    
+    ComboBox = EPCComboControl(CreateControl(class'EPCComboControl', 0, 0, 150, 18));
+    ComboBox.SetFont(F_Normal);
+    ComboBox.SetEditable(False);
+
+    NewItem = EPCEnhancedListBoxItem(m_ListBox.Items.Append(class'EPCEnhancedListBoxItem'));
+    NewItem.Caption = Localize("Enhanced", LocalizationKey, "Localization\\Enhanced");
+    NewItem.m_Control = ComboBox;
+    NewItem.m_bIsNotSelectable = true;
+
+    // Create info button
+    InfoText = Localize("Enhanced", LocalizationKey $ "_Desc", "Localization\\Enhanced");
+    if (InfoText != "" && InfoText != (LocalizationKey $ "_Desc"))
+    {
+        InfoBtn = EPCInfoButton(CreateControl(class'EPCInfoButton', 0, 0, 16, 16));
+        InfoBtn.InfoText = InfoText;
+        InfoBtn.SettingName = NewItem.Caption; // Use the localized setting name as title
+        InfoBtn.LocalizationKey = LocalizationKey; // Store key for persistence
+        InfoBtn.bStopPulsing = HasViewedTooltip(LocalizationKey); // Don't pulse if already viewed
+        NewItem.m_InfoButton = InfoBtn;
+    }
+
+    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = ComboBox;
+}
+
 function AddTitleItem(string Title)
 {
     local EPCEnhancedListBoxItem NewItem;
@@ -290,6 +420,10 @@ function AddTitleItem(string Title)
     NewItem.Caption = Title;
     NewItem.m_bIsTitle = true;
     NewItem.m_bIsNotSelectable = true;
+    NewItem.m_TextColor.R = 51; // Darker color for titles
+    NewItem.m_TextColor.G = 51;
+    NewItem.m_TextColor.B = 51;
+    NewItem.m_TextColor.A = 255;
 }
 
 function AddLineItem()
