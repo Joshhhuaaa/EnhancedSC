@@ -1464,7 +1464,12 @@ state s_GameMenu
 		GameMenuHUD.bNbrOfSpotIsFound = false;		
 		ResumeSound();
 		Epc.bStopRenderWorld = false;
-		GotoState(RestoreState());
+		// Joshua - If still in a cinematic, return to s_Cinematic instead of the saved state
+		// The saved state prior to the cinematic should be preserved for when the cinematic ends
+		if (Epc.bInCinematic)
+			GotoState('s_Cinematic');
+		else
+			GotoState(RestoreState());
 	}
 }
 
@@ -1774,6 +1779,12 @@ Begin:
 state s_Cinematic
 {
 	//Ignores FullInventory; // Joshua - Allows controller to pause game during cinematics
+
+	function SaveState()
+	{
+		// Joshua - Don't overwrite in_game_state_name, it contains the pre-cinematic state
+		// that EPlayerController.RestoreHUDStateAfterCinematic needs when the cinematic ends
+	}
 
    	function PostRender(Canvas C)
 	{
