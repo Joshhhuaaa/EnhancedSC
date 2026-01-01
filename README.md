@@ -12,9 +12,6 @@ The latest version of Enhanced SC can be found in the [Releases](https://github.
 - After downloading Enhanced SC, extract the contents to your Splinter Cell directory and overwrite all existing files when prompted.
 - You can adjust additional settings in the Enhanced tab within the in-game settings.
 
-### Mouse Polling Rate
-Many mice now offer polling rates of 1000 Hz or higher. However, in Splinter Cell, higher polling rates may cause issues with your mouse aim. If your mouse allows it, try setting the polling rate to 125 Hz through software.
-
 > [!NOTE]
 > Your original saves will not be deleted, but they will appear as missing. Enhanced intentionally hides them because they aren't compatible with this version.
 
@@ -69,19 +66,21 @@ Mission Statistics can be viewed while playing a mission by pressing `Tab` on ke
 
 The Mission Statistics key can be rebound in the Controls tab in Settings. Controllers use the `Back` button to view Mission Statistics.
 
-| Statistic                     | Penalty     |
-|-------------------------------|-------------|
-| Times Identified as Intruder  | -15%        |
-| Bodies Found                  | -15%        |
-| Alarms Triggered              | -20%        |
-| Enemies Knocked Out           | -5%         |
-| Enemies Killed                | -10%        |
-| Civilians Knocked Out         | -5%         |
-| Civilians Killed              | -30%        |
-| Locks Destroyed               | -2%         |
+Mission Statistics feature two rating systems: Ghost and Stealth. Ghost penalizes unnecessary knockouts, while Stealth allows knockouts as long as the player remains undetected.
+
+| Statistic                     | Ghost Penalty | Stealth Penalty |
+|-------------------------------|---------------|------------------
+| Times Identified as Intruder  | -15%          | -15%            |
+| Bodies Found                  | -15%          | -15%            |
+| Alarms Triggered              | -20%          | -20%            |
+| Enemies Knocked Out           | -5%           | -0%             |
+| Enemies Killed                | -10%          | -10%            |
+| Civilians Knocked Out         | -5%           | -0%             |
+| Civilians Killed              | -30%          | -30%            |
+| Locks Destroyed               | -2%           | -2%             |
 
 ### Notes
-- All missions can be completed with a 100% Stealth Rating.
+- All missions can be completed with a 100% rating.
 - NPCs involved in a forced action sequence do not penalize you for being seen, knocked out, or found.
 - If an NPC must be taken out and can be done stealthily, you must remain undetected and hide the body.
 - NPCs who carry required data such as door codes in their satchel will not penalize you for knocking them out. You are not expected to remember codes from previous playthroughs.
