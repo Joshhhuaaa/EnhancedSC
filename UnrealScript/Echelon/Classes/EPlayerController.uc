@@ -839,10 +839,24 @@ event InitLoadGame()
 function ApplyPostLoadSettings()
 {
 	local EInteractObject InteractObj;
+	local int i;
+
 	// Apply TurnOffDistance scaling from current config
 	if (eGame != None)
 	{
 		eGame.ApplyTurnOffDistanceScale(eGame.TurnOffDistanceScale);
+	}
+
+	// If new door interaction is disabled, manually remove any EDoorOpticalInteraction
+	if (IManager != None && !eGame.bNewDoorInteraction)
+	{
+		for (i = IManager.Interactions.Length - 1; i >= 0; i--)
+		{
+			if (IManager.Interactions[i] != None && IManager.Interactions[i].IsA('EDoorOpticalInteraction'))
+			{
+				IManager.Interactions.Remove(i, 1);
+			}
+		}
 	}
 
 	// Update door interactions if currently touching a door
