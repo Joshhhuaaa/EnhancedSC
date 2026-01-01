@@ -1,4 +1,5 @@
-# <img src="https://github.com/user-attachments/assets/c8734b07-3c22-4896-9bd3-bb448db80901"> Enhanced SC
+
+<img width="1440" height="480" alt="Enhanced SC Logo" src="https://github.com/user-attachments/assets/6af39e6a-6238-40bc-bc27-a84d1b428674"/>
 A major patch for the original Splinter Cell, fixing bugs and adding gameplay improvements.
 
 For a full list of patch notes, refer to the [Patch Notes](PatchNotes.md) page.
