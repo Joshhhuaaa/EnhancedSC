@@ -4208,6 +4208,11 @@ OpenDoorBack:
 
 function bool OnGroundScope()
 {
+	// Joshua - Check this first to prevent entering s_Throw during holster
+	// Do nothing if busy with weapon 
+	if (bInGunTransition)
+		return false;
+
 	if (ePawn.HandItem != None && ePawn.HandItem.bIsProjectile)
 	{
 		GotoState('s_Throw');
@@ -4215,10 +4220,6 @@ function bool OnGroundScope()
 	}
 
 	//Log("ONGROUNDSCOPE"@ePawn.HandItem@ActiveGun@bInGunTransition);
-
-	// Do Nothing if busy with weapon
-	if (bInGunTransition)
-		return false;
 
 	// May draw weapon if nothing in hand
 	if (ActiveGun != None && ePawn.HandItem == None)
@@ -4232,7 +4233,7 @@ function bool OnGroundScope()
 			GotoState('s_FirstPersonTargeting');
 	}
 
-	// Do Nothing if no weapon in inventory
+	// Do nothing if no weapon in inventory
 	else if (ActiveGun == None)
 		return false;
 
