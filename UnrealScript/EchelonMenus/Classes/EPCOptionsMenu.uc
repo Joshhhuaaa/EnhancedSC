@@ -87,12 +87,12 @@ function ChangeTopButtonSelection(EPCTextButton _SelectMe)
     m_Controls.m_bSelected      =  false;
     m_Graphics.m_bSelected      =  false;
     m_Sounds.m_bSelected        =  false;
-    m_Enhanced.m_bSelected      =  false;  // Joshua - Enhanced settings
+    m_Enhanced.m_bSelected      =  false; // Joshua - Enhanced settings
 
     m_GraphicArea.HideWindow();
     m_SoundsArea.HideWindow();    
     m_ControlsArea.HideWindow();
-    m_EnhancedArea.HideWindow();  // Joshua - Enhanced settings
+    m_EnhancedArea.HideWindow(); // Joshua - Enhanced settings
     
     switch (_SelectMe)
     {
@@ -108,7 +108,7 @@ function ChangeTopButtonSelection(EPCTextButton _SelectMe)
         m_Sounds.m_bSelected      =  true;
         m_SoundsArea.ShowWindow();
         break;
-    case m_Enhanced:  // Joshua - Enhanced settings
+    case m_Enhanced: // Joshua - Enhanced settings
         m_Enhanced.m_bSelected      =  true;
         m_EnhancedArea.ShowWindow();
         break;
@@ -131,7 +131,7 @@ function ShowWindow()
 		m_SoundsArea.Refresh();
     if (m_GraphicArea.m_bFirstRefresh)
 		m_GraphicArea.Refresh();    
-    if (m_EnhancedArea.m_bFirstRefresh)  // Joshua - Enhanced settings
+    if (m_EnhancedArea.m_bFirstRefresh) // Joshua - Enhanced settings
 		m_EnhancedArea.Refresh();    
 }
 
@@ -153,7 +153,7 @@ function Notify(UWindowDialogControl C, byte E)
         case m_Controls:
         case m_Graphics:
         case m_Sounds:
-        case m_Enhanced:  // Joshua - Enhanced settings
+        case m_Enhanced: // Joshua - Enhanced settings
             ChangeTopButtonSelection(EPCTextButton(C));
             break;
         case m_ResetToDefault:               

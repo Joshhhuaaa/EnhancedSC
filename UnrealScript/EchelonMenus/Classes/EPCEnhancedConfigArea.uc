@@ -477,38 +477,53 @@ function AddSamMeshCombo(EPCComboControl ComboBox, int SamMeshType)
 }
 
 // Converts combo box index to SamMeshType enum, accounting for the skipped default suit
-function int GetSamMeshEnumFromIndex(int ComboIndex, int SamMeshType)
+function EchelonGameInfo.ESamMeshType GetSamMeshEnumFromIndex(int ComboIndex, int SamMeshType)
 {
     local int EnumValue;
+    local int SkippedEnum;
     
     // Index 0 is always SMT_Default
     if (ComboIndex == 0)
-        return 0;
+        return SMT_Default;
     
-    // The combo skips the item matching SamMeshType, so indices shift
+    SkippedEnum = SamMeshType + 1;
+    
     EnumValue = ComboIndex;
     
     // If we're at or past the skipped enum value, add 1 to compensate
-    if (EnumValue >= SamMeshType)
+    if (EnumValue >= SkippedEnum)
         EnumValue += 1;
     
-    return EnumValue;
+    switch (EnumValue)
+    {
+        case 0: return SMT_Default;
+        case 1: return SMT_Standard;
+        case 2: return SMT_Balaclava;
+        case 3: return SMT_PartialSleeves;
+        case 4: return SMT_BetaStandard;
+        case 5: return SMT_WhiteBalaclava;
+        case 6: return SMT_BetaSleeves;
+        default: return SMT_Default;
+    }
 }
 
 // Converts SamMeshType enum value to combo box index, accounting for the skipped default suit
 function int GetIndexFromSamMeshEnum(int EnumValue, int SamMeshType)
 {
-    // Index 0 is always SMT_Default
+    local int SkippedEnum;
+    
     if (EnumValue == 0)
         return 0;
     
-    // If the enum value is greater than the skipped type, subtract 1
-    if (EnumValue > SamMeshType)
-        return EnumValue - 1;
+    SkippedEnum = SamMeshType + 1;
     
     // If enum value equals the skipped type, it shouldn't happen but return 0 (default)
-    if (EnumValue == SamMeshType)
+    if (EnumValue == SkippedEnum)
         return 0;
+    
+    // If the enum value is greater than the skipped type, subtract 1
+    if (EnumValue > SkippedEnum)
+        return EnumValue - 1;
     
     return EnumValue;
 }
@@ -905,159 +920,20 @@ function SaveOptions()
     //=============================================================================
     // Suits
     //=============================================================================
-    switch (m_TrainingSamMesh.GetSelectedIndex())
-    {
-        case 0: EPC.eGame.ESam_Training = SMT_Default; break;
-        case 1: EPC.eGame.ESam_Training = SMT_Balaclava; break;
-        case 2: EPC.eGame.ESam_Training = SMT_PartialSleeves; break;
-        case 3: EPC.eGame.ESam_Training = SMT_BetaStandard; break;
-        case 4: EPC.eGame.ESam_Training = SMT_WhiteBalaclava; break;
-        case 5: EPC.eGame.ESam_Training = SMT_BetaSleeves; break;
-        default: EPC.eGame.ESam_Training = SMT_Default; break;
-    }
-
-    switch (m_TbilisiSamMesh.GetSelectedIndex())
-    {
-        case 0: EPC.eGame.ESam_Tbilisi = SMT_Default; break;
-        case 1: EPC.eGame.ESam_Tbilisi = SMT_Balaclava; break;
-        case 2: EPC.eGame.ESam_Tbilisi = SMT_PartialSleeves; break;
-        case 3: EPC.eGame.ESam_Tbilisi = SMT_BetaStandard; break;
-        case 4: EPC.eGame.ESam_Tbilisi = SMT_WhiteBalaclava; break;
-        case 5: EPC.eGame.ESam_Tbilisi = SMT_BetaSleeves; break;
-        default: EPC.eGame.ESam_Tbilisi = SMT_Default; break;
-    }
-
-    switch (m_DefenseMinistrySamMesh.GetSelectedIndex())
-    {
-        case 0: EPC.eGame.ESam_DefenseMinistry = SMT_Default; break;
-        case 1: EPC.eGame.ESam_DefenseMinistry = SMT_Balaclava; break;
-        case 2: EPC.eGame.ESam_DefenseMinistry = SMT_PartialSleeves; break;
-        case 3: EPC.eGame.ESam_DefenseMinistry = SMT_BetaStandard; break;
-        case 4: EPC.eGame.ESam_DefenseMinistry = SMT_WhiteBalaclava; break;
-        case 5: EPC.eGame.ESam_DefenseMinistry = SMT_BetaSleeves; break;
-        default: EPC.eGame.ESam_DefenseMinistry = SMT_Default; break;
-    }
-
-    switch (m_CaspianOilRefinerySamMesh.GetSelectedIndex())
-    {
-        case 0: EPC.eGame.ESam_CaspianOilRefinery = SMT_Default; break;
-        case 1: EPC.eGame.ESam_CaspianOilRefinery = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_CaspianOilRefinery = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_CaspianOilRefinery = SMT_BetaStandard; break;
-        case 4: EPC.eGame.ESam_CaspianOilRefinery = SMT_WhiteBalaclava; break;
-        case 5: EPC.eGame.ESam_CaspianOilRefinery = SMT_BetaSleeves; break;
-        default: EPC.eGame.ESam_CaspianOilRefinery = SMT_Default; break;
-    }
-
-    switch (m_CIASamMesh.GetSelectedIndex())
-    {
-        case 0: EPC.eGame.ESam_CIA = SMT_Default; break;
-        case 1: EPC.eGame.ESam_CIA = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_CIA = SMT_PartialSleeves; break;
-        case 3: EPC.eGame.ESam_CIA = SMT_BetaStandard; break;
-        case 4: EPC.eGame.ESam_CIA = SMT_WhiteBalaclava; break;
-        case 5: EPC.eGame.ESam_CIA = SMT_BetaSleeves; break;
-        default: EPC.eGame.ESam_CIA = SMT_Default; break;
-    }
-
-    switch (m_KalinatekSamMesh.GetSelectedIndex())
-    {
-        case 0: EPC.eGame.ESam_Kalinatek = SMT_Default; break;
-        case 1: EPC.eGame.ESam_Kalinatek = SMT_Balaclava; break;
-        case 2: EPC.eGame.ESam_Kalinatek = SMT_PartialSleeves; break;
-        case 3: EPC.eGame.ESam_Kalinatek = SMT_BetaStandard; break;
-        case 4: EPC.eGame.ESam_Kalinatek = SMT_WhiteBalaclava; break;
-        case 5: EPC.eGame.ESam_Kalinatek = SMT_BetaSleeves; break;
-        default: EPC.eGame.ESam_Kalinatek = SMT_Default; break;
-    }
-
-    switch (m_ChineseEmbassySamMesh.GetSelectedIndex())
-    {
-        case 0: EPC.eGame.ESam_ChineseEmbassy = SMT_Default; break;
-        case 1: EPC.eGame.ESam_ChineseEmbassy = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_ChineseEmbassy = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_ChineseEmbassy = SMT_BetaStandard; break;
-        case 4: EPC.eGame.ESam_ChineseEmbassy = SMT_WhiteBalaclava; break;
-        case 5: EPC.eGame.ESam_ChineseEmbassy = SMT_BetaSleeves; break;
-        default: EPC.eGame.ESam_ChineseEmbassy = SMT_Default; break;
-    }
-
-    switch (m_AbattoirSamMesh.GetSelectedIndex())
-    {
-        case 0: EPC.eGame.ESam_Abattoir = SMT_Default; break;
-        case 1: EPC.eGame.ESam_Abattoir = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_Abattoir = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_Abattoir = SMT_BetaStandard; break;
-        case 4: EPC.eGame.ESam_Abattoir = SMT_WhiteBalaclava; break;
-        case 5: EPC.eGame.ESam_Abattoir = SMT_BetaSleeves; break;
-        default: EPC.eGame.ESam_Abattoir = SMT_Default; break;
-    }
-
-    switch (m_ChineseEmbassy2SamMesh.GetSelectedIndex())
-    {
-        case 0: EPC.eGame.ESam_ChineseEmbassy2 = SMT_Default; break;
-        case 1: EPC.eGame.ESam_ChineseEmbassy2 = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_ChineseEmbassy2 = SMT_Balaclava; break;
-        case 3: EPC.eGame.ESam_ChineseEmbassy2 = SMT_BetaStandard; break;
-        case 4: EPC.eGame.ESam_ChineseEmbassy2 = SMT_WhiteBalaclava; break;
-        case 5: EPC.eGame.ESam_ChineseEmbassy2 = SMT_BetaSleeves; break;
-        default: EPC.eGame.ESam_ChineseEmbassy2 = SMT_Default; break;
-    }
-
-    switch (m_PresidentialPalaceSamMesh.GetSelectedIndex())
-    {
-        case 0: EPC.eGame.ESam_PresidentialPalace = SMT_Default; break;
-        case 1: EPC.eGame.ESam_PresidentialPalace = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_PresidentialPalace = SMT_PartialSleeves; break;
-        case 3: EPC.eGame.ESam_PresidentialPalace = SMT_BetaStandard; break;
-        case 4: EPC.eGame.ESam_PresidentialPalace = SMT_WhiteBalaclava; break;
-        case 5: EPC.eGame.ESam_PresidentialPalace = SMT_BetaSleeves; break;
-        default: EPC.eGame.ESam_PresidentialPalace = SMT_Default; break;
-    }
-
-    switch (m_KolaCellSamMesh.GetSelectedIndex())
-    {
-        case 0: EPC.eGame.ESam_KolaCell = SMT_Default; break;
-        case 1: EPC.eGame.ESam_KolaCell = SMT_Balaclava; break;
-        case 2: EPC.eGame.ESam_KolaCell = SMT_PartialSleeves; break;
-        case 3: EPC.eGame.ESam_KolaCell = SMT_BetaStandard; break;
-        case 4: EPC.eGame.ESam_KolaCell = SMT_WhiteBalaclava; break;
-        case 5: EPC.eGame.ESam_KolaCell = SMT_BetaSleeves; break;
-        default: EPC.eGame.ESam_KolaCell = SMT_Default; break;
-    }
-
-    switch (m_VselkaSamMesh.GetSelectedIndex())
-    {
-        case 0: EPC.eGame.ESam_Vselka = SMT_Default; break;
-        case 1: EPC.eGame.ESam_Vselka = SMT_Standard; break;
-        case 2: EPC.eGame.ESam_Vselka = SMT_PartialSleeves; break;
-        case 3: EPC.eGame.ESam_Vselka = SMT_BetaStandard; break;
-        case 4: EPC.eGame.ESam_Vselka = SMT_WhiteBalaclava; break;
-        case 5: EPC.eGame.ESam_Vselka = SMT_BetaSleeves; break;
-        default: EPC.eGame.ESam_Vselka = SMT_Default; break;
-    }
-
-    switch (m_PowerPlantSamMesh.GetSelectedIndex())
-    {
-        case 0: EPC.eGame.ESam_PowerPlant = SMT_Default; break;
-        case 1: EPC.eGame.ESam_PowerPlant = SMT_Balaclava; break;
-        case 2: EPC.eGame.ESam_PowerPlant = SMT_PartialSleeves; break;
-        case 3: EPC.eGame.ESam_PowerPlant = SMT_BetaStandard; break;
-        case 4: EPC.eGame.ESam_PowerPlant = SMT_WhiteBalaclava; break;
-        case 5: EPC.eGame.ESam_PowerPlant = SMT_BetaSleeves; break;
-        default: EPC.eGame.ESam_PowerPlant = SMT_Default; break;
-    }
-
-    switch (m_SeveronickelSamMesh.GetSelectedIndex())
-    {
-        case 0: EPC.eGame.ESam_Severonickel = SMT_Default; break;
-        case 1: EPC.eGame.ESam_Severonickel = SMT_Balaclava; break;
-        case 2: EPC.eGame.ESam_Severonickel = SMT_PartialSleeves; break;
-        case 3: EPC.eGame.ESam_Severonickel = SMT_BetaStandard; break;
-        case 4: EPC.eGame.ESam_Severonickel = SMT_WhiteBalaclava; break;
-        case 5: EPC.eGame.ESam_Severonickel = SMT_BetaSleeves; break;
-        default: EPC.eGame.ESam_Severonickel = SMT_Default; break;
-    }
+    EPC.eGame.ESam_Training = GetSamMeshEnumFromIndex(m_TrainingSamMesh.GetSelectedIndex(), 0);
+    EPC.eGame.ESam_Tbilisi = GetSamMeshEnumFromIndex(m_TbilisiSamMesh.GetSelectedIndex(), 0);
+    EPC.eGame.ESam_DefenseMinistry = GetSamMeshEnumFromIndex(m_DefenseMinistrySamMesh.GetSelectedIndex(), 0);
+    EPC.eGame.ESam_CaspianOilRefinery = GetSamMeshEnumFromIndex(m_CaspianOilRefinerySamMesh.GetSelectedIndex(), 2);
+    EPC.eGame.ESam_CIA = GetSamMeshEnumFromIndex(m_CIASamMesh.GetSelectedIndex(), 1);
+    EPC.eGame.ESam_Kalinatek = GetSamMeshEnumFromIndex(m_KalinatekSamMesh.GetSelectedIndex(), 0);
+    EPC.eGame.ESam_ChineseEmbassy = GetSamMeshEnumFromIndex(m_ChineseEmbassySamMesh.GetSelectedIndex(), 2);
+    EPC.eGame.ESam_Abattoir = GetSamMeshEnumFromIndex(m_AbattoirSamMesh.GetSelectedIndex(), 2);
+    EPC.eGame.ESam_ChineseEmbassy2 = GetSamMeshEnumFromIndex(m_ChineseEmbassy2SamMesh.GetSelectedIndex(), 2);
+    EPC.eGame.ESam_PresidentialPalace = GetSamMeshEnumFromIndex(m_PresidentialPalaceSamMesh.GetSelectedIndex(), 1);
+    EPC.eGame.ESam_KolaCell = GetSamMeshEnumFromIndex(m_KolaCellSamMesh.GetSelectedIndex(), 0);
+    EPC.eGame.ESam_Vselka = GetSamMeshEnumFromIndex(m_VselkaSamMesh.GetSelectedIndex(), 1);
+    EPC.eGame.ESam_PowerPlant = GetSamMeshEnumFromIndex(m_PowerPlantSamMesh.GetSelectedIndex(), 0);
+    EPC.eGame.ESam_Severonickel = GetSamMeshEnumFromIndex(m_SeveronickelSamMesh.GetSelectedIndex(), 0);
 
     EPC.SaveEnhancedOptions();
     EPC.eGame.SaveEnhancedOptions();
