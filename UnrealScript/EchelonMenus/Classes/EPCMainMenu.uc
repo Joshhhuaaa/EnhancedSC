@@ -61,7 +61,7 @@ function Created()
     // Joshua - Replaced website with Enhanced
     //m_GoOnline.SetButtonText(Localize("HUD","WEBSITE","Localization\\HUD") ,TXT_CENTER);
     m_GoOnline.SetButtonText(Localize("Common","Website","Localization\\Enhanced") ,TXT_CENTER);
-    m_VersionLabel.SetLabelText("Enhanced v1.4", TXT_RIGHT); // Joshua - Enhanced version label
+    m_VersionLabel.SetLabelText("Enhanced v1.4a", TXT_RIGHT); // Joshua - Enhanced version label
     m_DiscordLabel.SetLabelText("Discord", TXT_LEFT); // Joshua - Discord label
     
     m_StarGame.Font = F_Large;
