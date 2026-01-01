@@ -58,17 +58,6 @@ var bool bAlarmStageChanged;
 
 var bool bGameOver; // Joshua - Prevents player from dying during GameOver and prevents NPC barks
 
-// Joshua - Echelon lights use TurnOffDistance to determine when to turn off
-// This setting allows users to scale that distance up to 8x, allowing Echelon lights to stay on farther away
-enum ETurnOffDistanceScale
-{
-    TurnOffDistance_1x,
-    TurnOffDistance_2x,
-    TurnOffDistance_4x,
-    TurnOffDistance_8x
-};
-var(Enhanced) config ETurnOffDistanceScale TurnOffDistanceScale;
-
 // Joshua - Store original TurnOffDistance values for runtime scaling
 struct ActorTurnOffData
 {
@@ -109,7 +98,7 @@ function PostBeginPlay()
 	}
 
 	// Joshua - Apply TurnOffDistance scaling based on user settings
-	ApplyTurnOffDistanceScale(TurnOffDistanceScale);
+	EchelonGameInfo(Level.Game).ApplyTurnOffDistanceScale(EchelonGameInfo(Level.Game).TurnOffDistanceScale);
 
 	// Joshua - Assigning new default meshes to these levels
 	switch (GetCurrentMapName())
@@ -805,41 +794,6 @@ function GameOver()
 	bGameOver = true;
 }
 
-// Joshua - Apply TurnOffDistance scaling using stored original values
-function ApplyTurnOffDistanceScale(ETurnOffDistanceScale Scale)
-{
-	local int i;
-	local float Multiplier;
-	
-	// Determine multiplier based on scale
-	switch (Scale)
-	{
-		case TurnOffDistance_1x:
-			Multiplier = 1.0;
-			break;
-		case TurnOffDistance_2x:
-			Multiplier = 2.0;
-			break;
-		case TurnOffDistance_4x:
-			Multiplier = 4.0;
-			break;
-		case TurnOffDistance_8x:
-			Multiplier = 8.0;
-			break;
-		default:
-			Multiplier = 1.0;
-	}
-	
-	// Apply multiplier to all stored actors using their original values
-	for (i = 0; i < OriginalTurnOffDistances.Length; i++)
-	{
-		if (OriginalTurnOffDistances[i].A != None)
-		{
-			OriginalTurnOffDistances[i].A.TurnOffDistance = OriginalTurnOffDistances[i].OriginalTurnOffDistance * Multiplier;
-		}
-	}
-}
-
 defaultproperties
 {
     AlarmPatternClass=Class'LambertWarnings'
@@ -848,5 +802,4 @@ defaultproperties
     AlarmModifier(1)=0.660000
     AlarmModifier(2)=0.330000
     RandomWhistle=Sound'GenericLife.Play_GenericWhistle1'
-	TurnOffDistanceScale=TurnOffDistance_4x
 }

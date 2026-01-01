@@ -143,8 +143,16 @@ var(SurfaceNoise) SurfaceNoiseInfo VeryLoudSurface;
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
 var bool bUseController; // Joshua - Adjusts HUD, inventory, lockpicking, keypad, turrets for controller
-var(Enhanced) config bool bEnableCheckpoints; // Joshua - Restores the checkpoints from the Xbox version
 
+enum EFontType
+{
+    Font_PC,
+    Font_Xbox,
+    Font_GameCube
+};
+
+var(Enhanced) config EFontType FontType; // Joshua - Font type selection for different console platforms
+var(Enhanced) config bool bEnableCheckpoints; // Joshua - Restores the checkpoints from the Xbox version
 var(Enhanced) config bool bXboxDifficulty; // Joshua - Xbox difficulty, Sam has more health on Xbox
 var(Enhanced) config bool bEliteMode; // Joshua - Elite mode, no starting ammo, lower health, no saving, 3 alarms
 var(Enhanced) config bool bPermadeathMode; // Joshua - Permadeath mode, profile deletion upon mission failure
@@ -190,17 +198,21 @@ var config ESamMeshType ESam_PresidentialPalace;
 var config ESamMeshType ESam_KolaCell;
 var config ESamMeshType ESam_Vselka;
 
+// Joshua - Echelon lights use TurnOffDistance to determine when to turn off
+// This setting allows users to scale that distance up to 8x, allowing Echelon lights to stay on farther away
+enum ETurnOffDistanceScale
+{
+    TurnOffDistance_1x,
+    TurnOffDistance_2x,
+    TurnOffDistance_4x,
+    TurnOffDistance_8x
+};
+var(Enhanced) config ETurnOffDistanceScale TurnOffDistanceScale;
+
 // Native Variables
 var(Enhanced) config bool bEnableRumble; // Joshua - UseRumble in Engine.GameInfo is now deprecated, this setting will now toggle rumble
 var(Enhanced) config bool bSkipIntroVideos;
 var(Enhanced) config bool bDisableMenuIdleTimer; // Joshua - Disables inactivity videos
-enum EFontType
-{
-    Font_PC,
-    Font_Xbox,
-    Font_GameCube
-};
-var(Enhanced) config EFontType FontType; // Joshua - Font type selection for different console platforms
 var(Enhanced) config bool bLODDistance;
 var(Enhanced) config bool bPauseOnFocusLoss;
 var(Enhanced) config bool bCheckForUpdates;
@@ -363,6 +375,46 @@ exec function SaveEnhancedOptions()
 	SaveConfig("Enhanced");
 }
 
+// Joshua - Apply TurnOffDistance scaling using stored original values in EchelonLevelInfo
+function ApplyTurnOffDistanceScale(ETurnOffDistanceScale Scale)
+{
+	local int i;
+	local float Multiplier;
+	local EchelonLevelInfo ELevel;
+	
+	ELevel = EchelonLevelInfo(Level);
+	if (ELevel == None)
+		return;
+	
+	// Determine multiplier based on scale
+	switch (Scale)
+	{
+		case TurnOffDistance_1x:
+			Multiplier = 1.0;
+			break;
+		case TurnOffDistance_2x:
+			Multiplier = 2.0;
+			break;
+		case TurnOffDistance_4x:
+			Multiplier = 4.0;
+			break;
+		case TurnOffDistance_8x:
+			Multiplier = 8.0;
+			break;
+		default:
+			Multiplier = 1.0;
+	}
+	
+	// Apply multiplier to all stored actors using their original values
+	for (i = 0; i < ELevel.OriginalTurnOffDistances.Length; i++)
+	{
+		if (ELevel.OriginalTurnOffDistances[i].A != None)
+		{
+			ELevel.OriginalTurnOffDistances[i].A.TurnOffDistance = ELevel.OriginalTurnOffDistances[i].OriginalTurnOffDistance * Multiplier;
+		}
+	}
+}
+
 native(2345) final function string GetStringBinding(EchelonEnums.eKEY_BIND Key);
 native(2346) final function EchelonEnums.eKEY_BIND GetKeyBinding(string Key);
 
@@ -491,6 +543,7 @@ defaultproperties
     ESam_Vselka=SMT_Default
     bEnableRumble=True
     FontType=Font_Xbox
+    TurnOffDistanceScale=TurnOffDistance_4x
     bLODDistance=True
     bPauseOnFocusLoss=True
     bCheckForUpdates=True

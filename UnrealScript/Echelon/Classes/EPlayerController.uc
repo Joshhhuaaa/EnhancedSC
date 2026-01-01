@@ -839,6 +839,11 @@ event InitLoadGame()
 function ApplyPostLoadSettings()
 {
 	local EInteractObject InteractObj;
+	// Apply TurnOffDistance scaling from current config
+	if (eGame != None)
+	{
+		eGame.ApplyTurnOffDistanceScale(eGame.TurnOffDistanceScale);
+	}
 
 	// Update door interactions if currently touching a door
 	if (IManager != None && IManager.IsPresent(class'EInteractObject', InteractObj))
