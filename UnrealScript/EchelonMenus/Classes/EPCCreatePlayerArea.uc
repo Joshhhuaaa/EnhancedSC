@@ -5,8 +5,8 @@
 //  Revision history:
 //    2002/10/15 * Created by Alexandre Dionne
 //=============================================================================
-class EPCCreatePlayerArea extends UWindowDialogClientWindow;
-
+class EPCCreatePlayerArea extends UWindowDialogClientWindow
+    config(Enhanced);
 
 var EPCTextButton   m_ResetAllButton;     // To return to main menu
 var INT             m_IResetAllXPos, m_IResetAllButtonsHeight, m_IResetAllButtonsWidth, m_IResetAllButtonsYPos; 
@@ -19,13 +19,21 @@ var UWindowLabelControl     m_LDifficultyHard;
 var UWindowLabelControl     m_LDifficultyElite; // Joshua - Added Elite difficulty
 var UWindowLabelControl     m_LPermadeathMode; // Joshua - Added Permadeath
 
-var EPCMessageBox           m_PermadeathWarningBox; // Joshua - Added Permadeath
-var bool                    bPermadeathPending; // Joshua - Added Permadeath
-
 var EPCEditControl          m_EPlayerName;      //Value
 
 var EPCCheckBox             m_DifficultyNormal, m_DifficultyHard, m_DifficultyElite; // Joshua - Added Elite difficulty
 var EPCCheckBox             m_PermadeathMode;
+
+// Joshua - Info buttons for tooltips
+var EPCInfoButton           m_EliteInfoButton;
+var EPCInfoButton           m_PermadeathInfoButton;
+
+// Joshua - Tooltip persistence
+var config array<string>    ViewedTooltips;
+
+// Joshua - Shared info button pulse animation state
+var float InfoButtonPulseTimer;
+var bool bInfoButtonPulseIncreasing;
 
 var INT                     m_IXLabelPos, m_ILabelHeight, m_ILabelWidth;
 var INT                     m_IPlayerNameYPos, m_IPlayerNameOffset, m_IPlayerNameWidth;
@@ -88,6 +96,7 @@ function Created()
     m_LDifficultyNormal.TextColor   = m_TextColor;
     m_LDifficultyHard.TextColor     = m_TextColor;
     m_LDifficultyElite.TextColor     = m_TextColor;
+    m_LDifficultyElite.bAcceptsMouseFocus = false; // Joshua - Don't let label interfere with info button clicks
 
     // Joshua - Permadeath
     m_LPermadeathMode = UWindowLabelControl(CreateWindow(class'UWindowLabelControl', 
@@ -107,23 +116,98 @@ function Created()
     m_LPermadeathMode.SetLabelText(Localize("Common", "PermadeathMode", "Localization\\Enhanced"), TXT_LEFT);
     m_LPermadeathMode.Font = F_Normal;
     m_LPermadeathMode.TextColor = m_TextColor;
+    m_LPermadeathMode.bAcceptsMouseFocus = false; // Joshua - Don't let label interfere with info button clicks
+
+    // Joshua - Initialize pulse animation
+    InfoButtonPulseTimer = 0.0;
+    bInfoButtonPulseIncreasing = true;
+
+    // Joshua - Create info button for Elite difficulty (position set in BeforePaint)
+    m_EliteInfoButton = EPCInfoButton(CreateControl(class'EPCInfoButton', 0, 0, 16, 16, self));
+    m_EliteInfoButton.InfoText = Localize("Common", "Elite_Desc", "Localization\\Enhanced");
+    m_EliteInfoButton.SettingName = Localize("Common", "Elite", "Localization\\Enhanced");
+    m_EliteInfoButton.LocalizationKey = "Elite";
+    m_EliteInfoButton.bStopPulsing = HasViewedTooltip("Elite");
+
+    // Joshua - Create info button for Permadeath (position set in BeforePaint)
+    m_PermadeathInfoButton = EPCInfoButton(CreateControl(class'EPCInfoButton', 0, 0, 16, 16, self));
+    m_PermadeathInfoButton.InfoText = Localize("Common", "PermadeathMode_Desc", "Localization\\Enhanced");
+    m_PermadeathInfoButton.SettingName = Localize("Common", "PermadeathMode", "Localization\\Enhanced");
+    m_PermadeathInfoButton.LocalizationKey = "PermadeathMode";
+    m_PermadeathInfoButton.bStopPulsing = HasViewedTooltip("PermadeathMode");
 }
 
-// Joshua - Permadeath warning
-function MessageBoxDone(UWindowWindow W, MessageBoxResult Result)
+//==============================================================================
+// BeforePaint - Update pulse animation for info buttons and position them
+// Created by Joshua
+//==============================================================================
+function BeforePaint(Canvas C, float X, float Y)
 {
-    if (W == m_PermadeathWarningBox)
+    local float TextWidth, TextHeight;
+    
+    Super.BeforePaint(C, X, Y);
+    
+    // Position info buttons 5 pixels after their label text
+    C.Font = Root.Fonts[F_Normal];
+    
+    // Elite info button
+    TextSize(C, m_LDifficultyElite.Text, TextWidth, TextHeight);
+    m_EliteInfoButton.WinLeft = m_LDifficultyElite.WinLeft + TextWidth + 5;
+    m_EliteInfoButton.WinTop = m_LDifficultyElite.WinTop + (m_LDifficultyElite.WinHeight - 16) / 2;
+    
+    // Permadeath info button
+    TextSize(C, m_LPermadeathMode.Text, TextWidth, TextHeight);
+    m_PermadeathInfoButton.WinLeft = m_LPermadeathMode.WinLeft + TextWidth + 5;
+    m_PermadeathInfoButton.WinTop = m_LPermadeathMode.WinTop + (m_LPermadeathMode.WinHeight - 16) / 2;
+    
+    // Update pulse timer for info button animation
+    if (bInfoButtonPulseIncreasing)
     {
-        m_PermadeathWarningBox = None;
-        if (Result == MR_Yes)
+        InfoButtonPulseTimer += 0.02;
+        if (InfoButtonPulseTimer >= 1.0)
         {
-            m_PermadeathMode.m_bSelected = true;
+            InfoButtonPulseTimer = 1.0;
+            bInfoButtonPulseIncreasing = false;
         }
-        else
+    }
+    else
+    {
+        InfoButtonPulseTimer -= 0.02;
+        if (InfoButtonPulseTimer <= 0.0)
         {
-            m_PermadeathMode.m_bSelected = false;
+            InfoButtonPulseTimer = 0.0;
+            bInfoButtonPulseIncreasing = true;
         }
-        bPermadeathPending = false;
+    }
+}
+
+//==============================================================================
+// HasViewedTooltip - Check if a tooltip has been viewed before
+// Created by Joshua
+//==============================================================================
+function bool HasViewedTooltip(string TooltipKey)
+{
+    local int i;
+    
+    for (i = 0; i < ViewedTooltips.Length; i++)
+    {
+        if (ViewedTooltips[i] == TooltipKey)
+            return true;
+    }
+    
+    return false;
+}
+
+//==============================================================================
+// MarkTooltipViewed - Mark a tooltip as viewed and save config
+// Created by Joshua
+//==============================================================================
+function MarkTooltipViewed(string TooltipKey)
+{
+    if (!HasViewedTooltip(TooltipKey))
+    {
+        ViewedTooltips[ViewedTooltips.Length] = TooltipKey;
+        SaveConfig();
     }
 }
 
@@ -187,13 +271,6 @@ function Notify(UWindowDialogControl C, byte E)
             m_PermadeathMode.bDisabled = false; // Enable permadeath option
             break;
         case m_PermadeathMode:
-                if (m_PermadeathMode.m_bSelected)
-                {
-                    bPermadeathPending = true;
-                    m_PermadeathMode.m_bSelected = true;
-                    m_PermadeathWarningBox = EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common","PermadeathMode","Localization\\Enhanced"),
-                        Localize("Common","PermadeathModeWarning","Localization\\Enhanced"), MB_YesNo, MR_No, MR_No);
-                }
                 break;
         case m_ResetAllButton:
             Reset();

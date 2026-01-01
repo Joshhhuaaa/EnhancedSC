@@ -19,10 +19,11 @@ function BeforePaint(Canvas C, float X, float Y)
 {
     local EPCEnhancedConfigArea EnhancedConfigArea;
     local EPCControlsConfigArea ControlsConfigArea;
+    local EPCCreatePlayerArea CreatePlayerArea;
     
     Super.BeforePaint(C, X, Y);
     
-    // Get parent config area to sync pulse values - try both types
+    // Get parent config area to sync pulse values - try all supported types
     EnhancedConfigArea = EPCEnhancedConfigArea(ParentWindow);
     if (EnhancedConfigArea != None)
     {
@@ -39,6 +40,16 @@ function BeforePaint(Canvas C, float X, float Y)
             PulseTimer = ControlsConfigArea.InfoButtonPulseTimer;
             bPulseIncreasing = ControlsConfigArea.bInfoButtonPulseIncreasing;
         }
+        else
+        {
+            CreatePlayerArea = EPCCreatePlayerArea(ParentWindow);
+            if (CreatePlayerArea != None)
+            {
+                // Sync pulse values from parent
+                PulseTimer = CreatePlayerArea.InfoButtonPulseTimer;
+                bPulseIncreasing = CreatePlayerArea.bInfoButtonPulseIncreasing;
+            }
+        }
     }
 }
 
@@ -46,6 +57,7 @@ function Click(float X, float Y)
 {
     local EPCEnhancedConfigArea EnhancedConfigArea;
     local EPCControlsConfigArea ControlsConfigArea;
+    local EPCCreatePlayerArea CreatePlayerArea;
     
     Super.Click(X, Y);
     
@@ -54,7 +66,7 @@ function Click(float X, float Y)
         ShowInfoMessage();
         bStopPulsing = true; // Stop pulsing for this button after showing the message
         
-        // Mark this tooltip as viewed for persistence, try both config area types
+        // Mark this tooltip as viewed for persistence, try all config area types
         EnhancedConfigArea = EPCEnhancedConfigArea(ParentWindow);
         if (EnhancedConfigArea != None && LocalizationKey != "")
         {
@@ -66,6 +78,14 @@ function Click(float X, float Y)
             if (ControlsConfigArea != None && LocalizationKey != "")
             {
                 ControlsConfigArea.MarkTooltipViewed(LocalizationKey);
+            }
+            else
+            {
+                CreatePlayerArea = EPCCreatePlayerArea(ParentWindow);
+                if (CreatePlayerArea != None && LocalizationKey != "")
+                {
+                    CreatePlayerArea.MarkTooltipViewed(LocalizationKey);
+                }
             }
         }
     }
