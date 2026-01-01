@@ -33,6 +33,31 @@ function Notify(UWindowDialogControl C, byte E)
         Super.Notify(C, E);
 }
 
+function SaveOptions()
+{
+    local EPlayerController EPC;
+    local EPlayerInfo.ELevelUnlock PreviousLevelUnlock;
+    local EPCInGameMenu InGameMenu;
+    
+    EPC = EPlayerController(GetPlayerOwner());
+    
+    // Store previous LevelUnlock value before saving
+    PreviousLevelUnlock = EPC.playerInfo.LevelUnlock;
+    
+    // Call parent SaveOptions
+    Super.SaveOptions();
+    
+    // If LevelUnlock changed, refresh the level list in SaveLoadArea
+    if (PreviousLevelUnlock != EPC.playerInfo.LevelUnlock)
+    {
+        InGameMenu = EPCMainMenuRootWindow(Root).m_InGameMenu;
+        if (InGameMenu != None && InGameMenu.m_SaveLoadArea != None)
+        {
+            InGameMenu.m_SaveLoadArea.FillListBox();
+        }
+    }
+}
+
 defaultproperties
 {
     m_IResetToDefaultXPos=100
