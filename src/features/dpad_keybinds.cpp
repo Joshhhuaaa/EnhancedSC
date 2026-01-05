@@ -129,7 +129,15 @@ void DPadKeybinds::Initialize()
 
         outFile.close();
 
-        std::filesystem::rename(tmpPath, SplinterCellUserIni);
+        try
+        {
+            std::filesystem::rename(tmpPath, SplinterCellUserIni);
+        }
+        catch (const std::filesystem::filesystem_error&)
+        {
+            std::filesystem::remove(tmpPath);
+            return;
+        }
         spdlog::info("Patched {}", SplinterCellUserIni.string());
     }
     else
