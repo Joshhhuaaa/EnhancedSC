@@ -616,12 +616,12 @@ function DrawLifeBarHorizontal(ECanvas Canvas)
 function DisplayInteractBox(ECanvas Canvas, int iNbrOfInter, int iCurrentInter)
 {
     local int xPos, yPos , INTER_BOX_WIDTH, INTER_BOX_HEIGHT, INTER_OPT_BOX_HEIGHT, INTER_OPT_BOX_WIDTH;
-	local float xLen, yLen; 
+	local float xLen, yLen;
     local EInteractObject	IO;
 
 
 	Canvas.Font = Canvas.ETextFont;
-    Canvas.SetDrawColor(128, 128, 128);	
+    Canvas.SetDrawColor(128, 128, 128);
     Canvas.TextSize("T", xLen, yLen);
 
 	// Find box width with the max number of characters in a description
@@ -654,10 +654,10 @@ function DisplayInteractBox(ECanvas Canvas, int iNbrOfInter, int iCurrentInter)
 
 	IO = Epc.IManager.Interactions[iCurrentInter];
 	if (IO != None)
-	{	
+	{
 		if (iCurrentInter == Epc.IManager.SelectedInteractions)
-		{	
-			// Draw selector		
+		{
+			// Draw selector
 			// When X is hold selector can go on BACK TO MAIN MENU
 			if (Epc.egi.bInteracting && (iCurrentInter == 0))
 			{
@@ -683,16 +683,16 @@ function DisplayInteractBox(ECanvas Canvas, int iNbrOfInter, int iCurrentInter)
 				else
 					Canvas.SetPos(xPos + 2, yPos + 2 + ((iNbrOfInter - 1) * yLen) - (iCurrentInter * yLen) + 2);
 				// Joshua - Fixing bug with Interaction Box selector not extending fully
-				Canvas.Style = ERenderStyle.STY_Alpha;			
+				Canvas.Style = ERenderStyle.STY_Alpha;
 				eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_selecteur, INTER_OPT_BOX_WIDTH - 4, yLen - 2, 0, 0, 1, 1);
 			}
 			Canvas.Style = ERenderStyle.STY_Normal;
 
 			// Color given by the interface artist (Veronique)
-			Canvas.SetDrawColor(92, 109, 76);		
+			Canvas.SetDrawColor(92, 109, 76);
 		}
 		else
-		{		
+		{
 			// Color given by the interface artist (Veronique)
 			Canvas.SetDrawColor(49, 56, 40);
 		}
@@ -705,7 +705,7 @@ function DisplayInteractBox(ECanvas Canvas, int iNbrOfInter, int iCurrentInter)
 				Canvas.SetPos(640 - eGame.HUD_OFFSET_X - INTER_BOX_WIDTH + 5, eGame.HUD_OFFSET_Y + LIFEBAR_WIDTH + (INTER_BOX_HEIGHT / 2) - (yLen / 2));
 			else
 				Canvas.SetPos(640 - eGame.HUD_OFFSET_X - LIFEBAR_WIDTH - INTER_BOX_WIDTH + 5, eGame.HUD_OFFSET_Y + (INTER_BOX_HEIGHT / 2) - (yLen / 2));
-			Canvas.DrawTextAligned(Caps(IO.GetDescription()));		
+			Canvas.DrawTextAligned(Caps(IO.GetDescription()));
 		}
 		else
 		{
@@ -719,9 +719,9 @@ function DisplayInteractBox(ECanvas Canvas, int iNbrOfInter, int iCurrentInter)
 			}
 			else
 				Canvas.SetPos(xPos + 5, yPos + 2 + ((iNbrOfInter - 1) * yLen) - (iCurrentInter * yLen));
-			Canvas.DrawTextAligned(Caps(IO.GetDescription()));		
+			Canvas.DrawTextAligned(Caps(IO.GetDescription()));
 		}
-	}		
+	}
 }
 
 
@@ -737,7 +737,7 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
     local EInteractObject	IO;
 
 	local int INTER_OPT_BOX_HEIGHT, INTER_OPT_BOX_WIDTH, INTER_BOX_WIDTH, INTER_BOX_HEIGHT;
-	local float xLen, yLen; 		
+	local float xLen, yLen;
 
     Canvas.SetDrawColor(128, 128, 128);
     Canvas.Font = Canvas.EHUDFont;
@@ -747,9 +747,9 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 
 	// Display the interaction boxes
 	if ((iNbrOfInter > 0) || (bSetPos))
-	{		
+	{
 		Canvas.Font = Canvas.ETextFont;
-		Canvas.SetDrawColor(128, 128, 128);	
+		Canvas.SetDrawColor(128, 128, 128);
 		Canvas.TextSize("T", xLen, yLen);
 
 		// Find box width with the max number of caracter in a description
@@ -761,7 +761,7 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 		else
 		{
 			INTER_OPT_BOX_HEIGHT = iNbrOfInter * yLen + 3 + 3;
-		}		
+		}
 
 		INTER_OPT_BOX_WIDTH  = xLen * MAX_INTER_NAME_LENGHT + 3 + 3;
 		INTER_BOX_WIDTH = INTER_OPT_BOX_WIDTH;
@@ -781,18 +781,18 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 
 		Canvas.Style = ERenderStyle.STY_Alpha;
 		// Draw the top box with "INTERACT..." title
-		// TOP LEFT CORNER 
+		// TOP LEFT CORNER
 		Canvas.SetPos(xPos, yPos);
 		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin2, 8, 4, 8, 4, -8, -4);
 
-		// BOTTOM LEFT CORNER 
+		// BOTTOM LEFT CORNER
 		Canvas.SetPos(xPos, yPos+ INTER_BOX_HEIGHT - 7);
 		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin1, 8, 7, 0, 0, 8, 7);
 
-		// TOP RIGHT CORNER 
+		// TOP RIGHT CORNER
 		Canvas.SetPos(xPos + INTER_BOX_WIDTH - 8, yPos);
 		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin2, 8, 4, 0, 4, 8, -4);
-    
+
 		// BOTTOM RIGHT CORNER
 		Canvas.SetPos(xPos + INTER_BOX_WIDTH - 8, yPos + INTER_BOX_HEIGHT - 7);
 		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin1, 8, 7, 8, 0, -8, 7);
@@ -800,27 +800,29 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 		// LEFT BORDER
 		Canvas.SetPos(xPos, yPos + 4);
 		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v,5, INTER_BOX_HEIGHT - 11, 0, 0, 5, 1);
-    
+
 		// RIGHT
 		Canvas.SetPos(xPos + INTER_BOX_WIDTH - 5, yPos + 4);
 		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v,5, INTER_BOX_HEIGHT - 11, 5, 0, -5, 1);
-    
+
 		// TOP
 		Canvas.SetPos(xPos + 8, yPos);
-		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_h2, INTER_BOX_WIDTH - 16, 4, 0, 0, 1, 4);
+		// Joshua - Fixed vertical flip of top border, it was flipped the wrong way
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_h2, INTER_BOX_WIDTH - 16, 4, 0, 4, 1, -4);
+
 
 		// BOTTOM
 		Canvas.SetPos(xPos + 8, yPos + INTER_BOX_HEIGHT - 6);
 		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_h, INTER_BOX_WIDTH - 16, 6, 0, 0, 1, 6);
-		
+
 		// Fill the background
-		Canvas.DrawLine(xPos + 4, yPos + 4, INTER_BOX_WIDTH - 8, INTER_BOX_HEIGHT - 8, Canvas.black, 200, eLevel.TGAME);				
-				
+		Canvas.DrawLine(xPos + 4, yPos + 4, INTER_BOX_WIDTH - 8, INTER_BOX_HEIGHT - 8, Canvas.black, 200, eLevel.TGAME);
+
 		// Reset color
 		// (Yanick Mimee) June-27-2002
-		Canvas.SetDrawColor(128, 128, 128, 255);	
-		Canvas.Style = ERenderStyle.STY_Normal;	
-		
+		Canvas.SetDrawColor(128, 128, 128, 255);
+		Canvas.Style = ERenderStyle.STY_Normal;
+
 		if (!Epc.egi.bInteracting)
 		{
 			// Display "INTERACT"
@@ -829,7 +831,7 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 			Canvas.SetPos(xPos + 5, yPos + (INTER_BOX_HEIGHT / 2) - (yLen / 2));
 			Canvas.DrawTextAligned(Caps(Localize("HUD", "INTERACT", "Localization\\HUD"))); // Joshua - Added caps to be consistent with the other interaction text
 
-			// Draw the X button 						
+			// Draw the X button
 			// Color given by the interface artist (Veronique)
 			if (eGame.bUseController)
 			{
@@ -844,18 +846,18 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 					case CI_Xbox:
 						eLevel.Tmenu.DrawTileFromManager(Canvas, eLevel.TMENU.but_s_a, 22, 22, 0, 0, 22, 22);
 						break;
-						
+
 					case CI_PlayStation:
-						Canvas.DrawTile(Texture'HUD_Enhanced.HUD.PS2_Cross', 22, 22, 3, 3, 26, 26);
+						Canvas.DrawTile(Texture'HUD_Enhanced.ControllerIcons.PS2_Cross', 22, 22, 3, 3, 26, 26);
 						break;
-						
+
 					case CI_GameCube:
-						Canvas.DrawTile(Texture'HUD_Enhanced.HUD.GameCube_A', 22, 22, 3, 3, 26, 26);
+						Canvas.DrawTile(Texture'HUD_Enhanced.ControllerIcons.GameCube_A', 22, 22, 3, 3, 26, 26);
 						break;
 				}
 			}
 		}
-				
+
 		// Reset color
 		Canvas.SetDrawColor(128, 128, 128, 255);
 
@@ -873,38 +875,38 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 
 		Canvas.Style = ERenderStyle.STY_Alpha;
 
-		// Draw the second box with the interaction messages	
-		// TOP LEFT CORNER 
+		// Draw the second box with the interaction messages
+		// TOP LEFT CORNER
 		Canvas.SetPos(xPos, yPos);
-		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_coin, 3, 3, 0, 3, 3, -3);				
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_coin, 3, 3, 0, 3, 3, -3);
 
-		// BOTTOM LEFT CORNER 		
+		// BOTTOM LEFT CORNER
 		Canvas.SetPos(xPos, yPos+ INTER_OPT_BOX_HEIGHT - 3);
-		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_coin, 3, 3, 0, 0, 3, 3);				
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_coin, 3, 3, 0, 0, 3, 3);
 
-		// TOP RIGHT CORNER 
+		// TOP RIGHT CORNER
 		Canvas.SetPos(xPos + INTER_OPT_BOX_WIDTH - 3, yPos);
-		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_coin, 3, 3, 3, 3, -3, -3);		
-    
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_coin, 3, 3, 3, 3, -3, -3);
+
 		// BOTTOM RIGHT CORNER
 		Canvas.SetPos(xPos + INTER_OPT_BOX_WIDTH - 3, yPos + INTER_OPT_BOX_HEIGHT - 3);
 		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_coin, 3, 3, 3, 0, -3, 3);
 
 		// LEFT BORDER
 		Canvas.SetPos(xPos, yPos + 3);
-		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_bord_v,2, INTER_OPT_BOX_HEIGHT - 3, 0, 0, 2, 1);		
-    
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_bord_v,2, INTER_OPT_BOX_HEIGHT - 3, 0, 0, 2, 1);
+
 		// RIGHT
 		Canvas.SetPos(xPos + INTER_OPT_BOX_WIDTH - 2, yPos + 3);
-		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_bord_v,2, INTER_OPT_BOX_HEIGHT - 3, 2, 1, -2, -1);		
-    
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_bord_v,2, INTER_OPT_BOX_HEIGHT - 3, 2, 1, -2, -1);
+
 		// TOP
 		Canvas.SetPos(xPos + 3, yPos);
-		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_bord_h, INTER_OPT_BOX_WIDTH - 6, 2, 0, 0, 1, 2);		
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_bord_h, INTER_OPT_BOX_WIDTH - 6, 2, 0, 0, 1, 2);
 
 		// BOTTOM
 		Canvas.SetPos(xPos + 3, yPos + INTER_OPT_BOX_HEIGHT - 2);
-		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_bord_h, INTER_OPT_BOX_WIDTH - 6, 2, 0, 0, 1, 2);		
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.int_bord_h, INTER_OPT_BOX_WIDTH - 6, 2, 0, 0, 1, 2);
 		Canvas.Style = ERenderStyle.STY_Normal;
 
 		// Fill the background
@@ -914,8 +916,8 @@ function DisplayInteractIcons(ECanvas Canvas, bool bSetPos)
 	if (!bSetPos)
 	{
 		for (i = 0; i < iNbrOfInter; i++)
-		{		        
-			DisplayInteractBox(Canvas, iNbrOfInter, i);        
+		{
+			DisplayInteractBox(Canvas, iNbrOfInter, i);
 		}
 	}
 }
@@ -958,7 +960,6 @@ function DrawMainHUD(ECanvas Canvas)
 		DisplayInteractIcons(Canvas, false);
 	}
 
-	// Debug information
 	DrawDebugInfo(Canvas);
 	DrawDebugModeIndicator(Canvas);
 
@@ -972,7 +973,7 @@ function DrawMainHUD(ECanvas Canvas)
 
 /*-----------------------------------------------------------------------------
  Function:      DrawInventoryItemInfo
-    
+
  Description:   Draw any additionnal HUd info requested by InventoryItem
 -----------------------------------------------------------------------------*/
 function DrawInventoryItemInfo(ECanvas Canvas)
@@ -998,7 +999,7 @@ function DrawConfigMainHUD(ECanvas Canvas)
     // Quick Inventory
 	QuickInvAndCurrentItems.PostRender(Canvas);
 
-	// Interactions    
+	// Interactions
 	DisplayInteractIcons(Canvas, true);
 
 	DrawDebugModeIndicator(Canvas);
@@ -1006,8 +1007,8 @@ function DrawConfigMainHUD(ECanvas Canvas)
 
 event DrawErrorMsgBox(ECanvas Canvas, String sErrorMsg)
 {
-	local int xPos, yPos, iNbrOfLine, test, iErrorBoxHeight;    	
-	local float xLen, yLen; 		
+	local int xPos, yPos, iNbrOfLine, test, iErrorBoxHeight;
+	local float xLen, yLen;
 
 	// Compute usefull infos on text
 	Canvas.Font = Canvas.ETextFont;
@@ -1021,7 +1022,7 @@ event DrawErrorMsgBox(ECanvas Canvas, String sErrorMsg)
 
 	xPos = SCREEN_WIDTH / 2 - ERROR_BOX_WIDTH / 2;
 	yPos = SCREEN_HEIGHT / 2 - iErrorBoxHeight / 2;
-	
+
 	Canvas.Style = ERenderStyle.STY_Alpha;
 
     // FILL BACKGROUND //
@@ -1032,7 +1033,7 @@ event DrawErrorMsgBox(ECanvas Canvas, String sErrorMsg)
 					 Canvas.white, -1, eLevel.TGAME);
 
     Canvas.SetDrawColor(128, 128, 128);
-	
+
     // CORNERS //
     // TOP LEFT CORNER //
     Canvas.SetPos(xPos, yPos);
@@ -1067,27 +1068,27 @@ event DrawErrorMsgBox(ECanvas Canvas, String sErrorMsg)
     // RIGHT BORDER //
     Canvas.SetPos(xPos + ERROR_BOX_WIDTH - 5, yPos + 7);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v, 5, iErrorBoxHeight - 14, 5, 0, -5, 1);
-	
-    // INSIDE BORDERS //	
-    Canvas.DrawRectangle(xPos + 5, yPos + 6, ERROR_BOX_WIDTH - 10, iErrorBoxHeight - 12, 1, Canvas.black, 77, eLevel.TGAME);	
+
+    // INSIDE BORDERS //
+    Canvas.DrawRectangle(xPos + 5, yPos + 6, ERROR_BOX_WIDTH - 10, iErrorBoxHeight - 12, 1, Canvas.black, 77, eLevel.TGAME);
 
 	Canvas.SetDrawColor(64, 64, 64, 255);
     Canvas.Style = ERenderStyle.STY_Modulated;
 
     Canvas.SetPos(xPos + 5, yPos + 6);
-    Canvas.DrawTile(Texture'HUD.HUD.ETMenuBar', ERROR_BOX_WIDTH - 10, iErrorBoxHeight - 12, 0, 0, 128, 2);	
+    Canvas.DrawTile(Texture'HUD.HUD.ETMenuBar', ERROR_BOX_WIDTH - 10, iErrorBoxHeight - 12, 0, 0, 128, 2);
 
 
-	// Draw error message text			
-	
-	
+	// Draw error message text
+
+
 	Canvas.SetDrawColor(128, 128, 128, 255);
 	Canvas.DrawColor = Canvas.TextBlack;
 	Canvas.SetClip(ERROR_BOX_WIDTH - 100, yLen);
-	Canvas.SetPos(xPos + (ERROR_BOX_WIDTH / 2), yPos + (iErrorBoxHeight / 2) - ((yLen * iNbrOfLine) / 2));			
-	Canvas.DrawTextAligned(sErrorMsg, TXT_CENTER);		        
+	Canvas.SetPos(xPos + (ERROR_BOX_WIDTH / 2), yPos + (iErrorBoxHeight / 2) - ((yLen * iNbrOfLine) / 2));
+	Canvas.DrawTextAligned(sErrorMsg, TXT_CENTER);
 
-		
+
 	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
