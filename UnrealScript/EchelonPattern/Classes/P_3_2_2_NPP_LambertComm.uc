@@ -83,7 +83,7 @@ function InitPattern()
             // Joshua - Fixing ammo placement
             if (EGO.name == 'EAmmoF1')
             {
-                EGO.SetLocation(EGO.Location + vect(0, 0, +8.5));
+                EGO.SetLocation(EGO.Location + vect(0, 0, 8.5));
             }
 
             // Joshua - Door nametag placement fix
@@ -108,7 +108,7 @@ function InitPattern()
                 EGO.bDestroyWhenDestructed = false;
             }
         }
-        
+
         // Joshua - Fixing some broken lighting
         ForEach AllActors(class'Actor', A)
         {

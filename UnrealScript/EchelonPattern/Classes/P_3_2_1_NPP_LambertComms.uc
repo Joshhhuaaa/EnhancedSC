@@ -54,7 +54,7 @@ function InitPattern()
 
     if (!bInit)
     {
-        
+
         ForEach DynamicActors(class'EGameplayObject', EGO)
         {
             // Joshua - Disposable pick was assigned the incorrect mesh
@@ -223,7 +223,7 @@ Screwed:
     //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_2_1_NPP_LambertComms", "Speech_0018L", "Localization\\P_3_2_1_PowerPlant"), None, 1, 0, TR_HEADQUARTER, 0, false);
     Sleep(4);
     Close();
-    GameOver(false, 0);
+    GameOver(false, 6); // Joshua - Added Objective Opportunity Missed
     End();
 Coded:
     Log("Code has been aquired.");
