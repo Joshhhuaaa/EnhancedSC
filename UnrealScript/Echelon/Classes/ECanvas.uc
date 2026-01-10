@@ -1,4 +1,4 @@
-class ECanvas extends Canvas 
+class ECanvas extends Canvas
 	config // Joshua - Allowing SplinterCell.ini to change fonts
 	native
 	noexport;
@@ -16,9 +16,9 @@ enum EPortalTextureEffect
 	E_Fish_Eye_Lens,
 };
 enum EPortalTarget
-{    
+{
 	CBUFFER,
-	TEX_0,	
+	TEX_0,
 };
 
 enum ETextAligned
@@ -40,7 +40,6 @@ var color TextGreen;
 //=============================================================================
 var Font ETextFontXbox; // Joshua - Xbox font support
 var Font ETextFontGameCube; // Joshua - GameCube font support
-var Font ETextFontPS2; // Joshua - PS2 font to be able to access the button icons
 
 native(3000) final function BeginScene(int X, int Y, int Width, int Height,float RWidth, float RHeight, optional int ClearFlags);
 native(3001) final function DrawPlayerPortal(PlayerController Player, optional int ClearFlags ,optional float blur_coef);
@@ -49,7 +48,7 @@ native(3003) final function DrawScaleText(coerce string Text, float Scale, optio
 //native(3004) final function DrawTextZone(coerce string Text, float Scale, int Line1, int Line2, optional bool CR);
 native(3005) final function SetRenderState(int State, bool Value);
 native(3006) final function DrawActorPortal(actor Actor, vector CamLocation, rotator CamRotation, optional int FOV, optional int ClearFlags, optional bool WireFrame);
-native(3007) final function CreateDepthMask(int X, int Y, int Width, int Height, texture clear_mask, byte alpha_ref, bool inv); 
+native(3007) final function CreateDepthMask(int X, int Y, int Width, int Height, texture clear_mask, byte alpha_ref, bool inv);
 native(3008) final function SetRenderTarget(EPortalTarget handle);
 native(3009) final function DrawPortalTexture(EPortalTarget handle,int X, int Y, int Width,int Height, optional EPortalTextureEffect effect, optional float Anim);
 native(1508) final function Draw3DLine(vector Start, vector End, optional Color DrawColor);
@@ -89,7 +88,7 @@ function DrawTextRightAligned(String strText)
 {
     local float fTextSizeX;
     local float fTextSizeY;
-    
+
     // Calculate Text Size
     TextSize(strText, fTextSizeX, fTextSizeY);
 
@@ -110,5 +109,4 @@ defaultproperties
 	//=============================================================================
 	ETextFontXbox=Font'Engine.ETextFontXbox' // Joshua - Xbox font support
 	ETextFontGameCube=Font'Engine.ETextFontGameCube' // Joshua - GameCube font support
-	ETextFontPS2=Font'Engine.ETextFontPS2' // Joshua - PS2 font to be able to access the button icons
 }

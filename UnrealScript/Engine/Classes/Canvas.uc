@@ -11,13 +11,12 @@ class Canvas extends Object
 	noexport;
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * fschelling (23 mar 2002)
 // ***********************************************************************************************
 #exec Font IMPORT NAME=ETextFont        	FILE="..\Textures\Font\txt_integration.pcx"
 #exec Font IMPORT NAME=ETextFontXbox      	FILE="..\Textures\Font\txt_integration_xbox.pcx"
 #exec Font IMPORT NAME=ETextFontGameCube	FILE="..\Textures\Font\txt_integration_gamecube.pcx"
-#exec Font IMPORT NAME=ETextFontPS2			FILE="..\Textures\Font\txt_integration_ps2.pcx"
 #exec Font IMPORT NAME=ETitleFont       	FILE="..\Textures\Font\titre_regular_integration.pcx"
 #exec Font IMPORT NAME=ETitleBoldFont   	FILE="..\Textures\Font\titre_bold_integration.pcx"
 #exec Font IMPORT NAME=EHUDFont         	FILE="..\Textures\Font\txt_hud.pcx"
@@ -29,7 +28,7 @@ class Canvas extends Object
 var config Font ETextFont, ETitleFont, ETitleBoldFont, EHUDFont, Verdana, EMissionFont;
 var bool bDrawTile;
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * fschelling (23 mar 2002)
 // ***********************************************************************************************
 
@@ -65,7 +64,7 @@ var int     m_bLoopAtLastFrame;
 //clauzon texture rendering:
 var transient Texture m_PlaybackTexture;
 var transient Texture m_FullTexture1;
-var transient Texture m_FullTexture2; 
+var transient Texture m_FullTexture2;
 var transient Texture m_CinematicTexture;
 
 var INT		m_iVidWidth;
@@ -90,7 +89,7 @@ native(469) final function DrawTextClipped(coerce string Text, optional bool bCh
 //native(470) final function TextSize(coerce string String, out float XL, out float YL);
 native(470) final function string TextSize(coerce string String, out float XL, out float YL , optional INT TotalWidth, optional INT SpaceWidth);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 
@@ -107,16 +106,16 @@ native(485) final function VideoGotoFrame(int iFrame);
 
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * fschelling (19 mar 2002)
-// * Purpose : 
+// * Purpose :
 // ***********************************************************************************************
 native(1312) final function SetPos(float X, float Y);
 native(1313) final function SetOrigin(float X, float Y);
 native(1314) final function SetClip(float X, float Y);
 native(1315) final function SetDrawColor(byte R, byte G, byte B, optional byte A);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * fschelling (19 mar 2002)
 // ***********************************************************************************************
 
@@ -137,7 +136,7 @@ event CheckVideoRequest()
 	if (m_bRequestVideoPlay != 0 && m_VideoName != "")
 	{
 		VideoOpen(m_VideoName, 0, true, true);
-		VideoPlay(0, 0, 1);		
+		VideoPlay(0, 0, 1);
 		m_bRequestVideoPlay = 0;
 	}
 	else if (m_bRequestVideoStop != 0)
@@ -171,7 +170,7 @@ event DisplayFullScreenVideo()
 		DrawTile(m_FullTexture1, 512, m_iVidHeight, 0, 0, 512, m_iVidHeight);
 
 		SetPos(512, videoPosY);
-		DrawTile(m_FullTexture2, 128, m_iVidHeight, 0, 0, 128, m_iVidHeight);	
+		DrawTile(m_FullTexture2, 128, m_iVidHeight, 0, 0, 128, m_iVidHeight);
 	}
 }
 
@@ -211,7 +210,7 @@ final function DrawRect(texture Tex, float RectX, float RectY)
 static final function Color MakeColor(byte R, byte G, byte B, optional byte A)
 {
 	local Color C;
-	
+
 	C.R = R;
 	C.G = G;
 	C.B = B;
