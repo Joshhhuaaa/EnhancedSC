@@ -298,6 +298,74 @@ function RealKeyEvent(string RealKeyValue, EInputAction Action, FLOAT Delta)
 	//GameMenuHUD.RealKeyEvent(RealKeyValue, Action, Delta);
 }
 
+/*-----------------------------------------------------------------------------
+ Function:      CountWordWrapLines
+
+ Description:   Joshua - Counts the number of lines text will take up when
+				wrapped to simulate C++ word-wrap behavior.
+-----------------------------------------------------------------------------*/
+function int CountWordWrapLines(ECanvas Canvas, string Text, int WrapWidth)
+{
+	local int Lines, SpacePos, TextLen;
+	local float LineWidth, WordWidth, SpaceWidth, TempY;
+	local string Remaining, Word;
+
+	if (Text == "")
+		return 1;
+
+	// Get space width for this font
+	Canvas.TextSize(" ", SpaceWidth, TempY);
+
+	Lines = 1;
+	LineWidth = 0;
+	Remaining = Text;
+	TextLen = Len(Remaining);
+
+	while (TextLen > 0)
+	{
+		// Find next space (word boundary)
+		SpacePos = InStr(Remaining, " ");
+
+		if (SpacePos == -1)
+		{
+			// No more spaces, this is the last word
+			Word = Remaining;
+			Remaining = "";
+		}
+		else
+		{
+			// Extract word up to space
+			Word = Left(Remaining, SpacePos);
+			Remaining = Mid(Remaining, SpacePos + 1); // Skip the space
+		}
+
+		// Measure this word
+		Canvas.TextSize(Word, WordWidth, TempY);
+
+		// Check if word fits on current line
+		if (LineWidth == 0)
+		{
+			// First word on line, always add it even if it's too long
+			LineWidth = WordWidth;
+		}
+		else if (LineWidth + SpaceWidth + WordWidth <= WrapWidth)
+		{
+			// Word fits, add space + word to current line
+			LineWidth = LineWidth + SpaceWidth + WordWidth;
+		}
+		else
+		{
+			// Word doesn't fit, start new line
+			Lines++;
+			LineWidth = WordWidth;
+		}
+
+		TextLen = Len(Remaining);
+	}
+
+	return Lines;
+}
+
 function DrawSaveLoadBox(ECanvas Canvas)
 {
 	if (Epc.bSavingTraining)
@@ -1615,20 +1683,115 @@ state s_Training
 {
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
+		// Joshua - Hack: Draw our own keybind processed TrainingForward text on top of the C++ one
+		if (Action == IST_Press)
+		{
+			switch (Key)
+			{
+			// Joshua - Increment TrainingIndex when player presses key to advance
+			case "Interaction":
+			case "FullInventory":
+				Epc.TrainingIndex++;
+				break;
+			}
+		}
         return GameMenuHUD.KeyEvent(Key, Action, Delta);
 	}
 
-	function PostRender(Canvas C)	
+	function PostRender(Canvas C)
 	{
 		Local ECanvas Canvas;
+		local string ProcessedText;
+		local float xLen, yLen;
+		local int yPos, numLines;
+
 		Canvas = ECanvas(C);
 		Canvas.Style = ERenderStyle.STY_Normal;
 
 		GameMenuHUD.PostRender(Canvas);
 
+		// Joshua - Hack: Draw our own keybind processed TrainingForward text on top of the C++ one
+		Canvas.Font = Canvas.ETextFont;
+		Canvas.Style = ERenderStyle.STY_Normal;
+		Canvas.DrawColor.R = 0;
+		Canvas.DrawColor.G = 0;
+		Canvas.DrawColor.B = 0;
+		Canvas.DrawColor.A = 110;
+
+		yPos = 278; // Default Y for 1-line training text
+		numLines = 1;
+		if (Epc.TrainingIndex < Epc.TrainingList.Length && Epc.TrainingList[Epc.TrainingIndex].Description != "")
+		{
+			// Native training box: text area is 434px wide (103 to 537)
+			numLines = CountWordWrapLines(Canvas, Epc.TrainingList[Epc.TrainingIndex].Description, 434);
+
+			// Scale Y position, each additional line adds 14 pixels
+			if (numLines > 1)
+			{
+				yPos = 278 + ((numLines - 1) * 14);
+			}
+		}
+
+		// Debug - Show word wrap line calculation
+		//Canvas.SetDrawColor(255, 255, 0, 255);
+		//Canvas.SetPos(10, 80);
+		//Canvas.DrawText("index:" @ Epc.TrainingIndex @ "/" @ Epc.TrainingList.Length);
+		//Canvas.SetPos(10, 95);
+		//Canvas.DrawText("WordWrap lines:" $ numLines $ " yPos: " $ yPos);
+		//Canvas.SetPos(10, 110);
+		//Canvas.DrawText("charCount:" @ Len(Epc.TrainingList[Epc.TrainingIndex].Description) @ "wrapW: 434");
+
+		if (eGame.bUseController)
+		{
+			// Controller: Draw button icon + "to continue"
+			// Don't use SetOrigin for controller, draw in screen space
+			ProcessedText = Localize("HUD", "TrainingForwardController", "Localization\\Enhanced"); // "to continue"
+			Canvas.TextSize(ProcessedText, xLen, yLen);
+
+			Canvas.SetDrawColor(92, 109, 76);
+			Canvas.SetPos(320 - (xLen / 2) - 15, yPos - 3); // Button before text (offset by 3 to align with text baseline)
+			switch (Epc.ControllerIcon)
+			{
+				case CI_Xbox:
+					eLevel.Tmenu.DrawTileFromManager(Canvas, eLevel.TMENU.but_s_a, 22, 22, 0, 0, 22, 22);
+					break;
+
+				case CI_PlayStation:
+					Canvas.Style = ERenderStyle.STY_Alpha;
+					Canvas.DrawTile(Texture'HUD_Enhanced.HUD.PS2_Cross', 22, 22, 3, 3, 26, 26);
+					Canvas.Style = ERenderStyle.STY_Normal;
+					break;
+
+				case CI_GameCube:
+					Canvas.Style = ERenderStyle.STY_Alpha;
+					Canvas.DrawTile(Texture'HUD_Enhanced.HUD.GameCube_A', 22, 22, 3, 3, 26, 26);
+					Canvas.Style = ERenderStyle.STY_Normal;
+					break;
+			}
+
+			// Draw "Continue" text after button
+			Canvas.DrawColor.R = 12;
+			Canvas.DrawColor.G = 15;
+			Canvas.DrawColor.B = 8;
+			Canvas.DrawColor.A = 255;
+			Canvas.SetPos(320 + 15, yPos); // Text after button (8px gap from button)
+			Canvas.DrawTextAligned(ProcessedText, TXT_CENTER);
+		}
+		else
+		{
+			// Keyboard: Show keybind text "Space to Continue"
+			Canvas.SetOrigin(110, 0);
+			Canvas.SetClip(430, 480);
+			ProcessedText = Epc.Player.Console.ProcessKeyBindingText(Localize("HUD", "TrainingForward", "Localization\\Enhanced"));
+			Canvas.SetPos(320, yPos);
+			Canvas.DrawTextAligned(ProcessedText, TXT_CENTER);
+			Canvas.SetOrigin(0, 0);
+			Canvas.SetClip(640, 480);
+		}
+
 		CheckError(Canvas, Epc.GetPause());
 
-        DrawDebugInfo(Canvas);
+		DrawDebugInfo(Canvas);
 		DrawDebugModeIndicator(Canvas);
 
 		Super.PostRender(Canvas);

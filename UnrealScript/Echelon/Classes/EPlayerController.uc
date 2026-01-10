@@ -239,6 +239,8 @@ var input byte bScope;
 
 var bool bCheckpoint; // Joshua - New variable to mark a save as a checkpoint
 
+var int	TrainingIndex; // Joshua - Current index into TrainingList being displayed
+
 var(Enhanced) config bool bMissionFailedQuickMenu;
 var string LastSaveName;					// Joshua - Used for mission failed screen to load last save
 var bool bMissionFailedShowConfirmation;  	// Joshua - Show confirmation prompt overlay on Mission Failed screen
@@ -918,6 +920,7 @@ function AddTrainingData(EPattern TrainingPattern, String TrainingDesc, array<Ec
 event CloseTrainingData()
 {
 	TrainingList.Remove(0, TrainingList.Length);
+	TrainingIndex = 0; // Joshua - Current index into TrainingList being displayed
 	CurrentPattern = None;
 	MyHUD.GotoState(EMainHUD(myHUD).RestoreState());
 }

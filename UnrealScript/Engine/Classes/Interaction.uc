@@ -74,7 +74,7 @@ event GameSaved(bool success);
 event GameLoaded(bool success);
 event PopCD();
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 
@@ -92,36 +92,36 @@ event ResetMainMenu();
 event ExitAltTab();
 event EnterAltTab();
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 
 
 // ====================================================================
 // FindAction - Translate the InputKey given into the action name associated
-//				with it				
+//				with it
 // ====================================================================
 native(3501) final function string FindAction(EInputKey key);
 
-// WorldToScreen converts a vector in the world 
+// WorldToScreen converts a vector in the world
 
 // ====================================================================
 // WorldToScreen - Returns the X/Y screen coordinates in to a viewport of a given vector
-// in the world. 
+// in the world.
 // ====================================================================
 native function vector WorldToScreen(vector Location, optional vector CameraLocation, optional rotator CameraRotation);
 
 // ====================================================================
 // ScreenToWorld - Converts an X/Y screen coordinate in to a world vector
 // ====================================================================
-native function vector ScreenToWorld(vector Location, optional vector CameraLocation, optional rotator CameraRotation); 
+native function vector ScreenToWorld(vector Location, optional vector CameraLocation, optional rotator CameraRotation);
 
 // ====================================================================
 // Initialized - Called directly after an Interaction Object has been created
 // and Initialized.  Should be subclassed
 // ====================================================================
 
-event Initialized(); 
+event Initialized();
 
 
 // ====================================================================
@@ -143,7 +143,7 @@ function Message(coerce string Msg, float MsgLife)
 
 function bool KeyType(out EInputKey Key)
 {
-	return false;	
+	return false;
 }
 
 function bool KeyEvent(out EInputKey Key, out EInputAction Action, FLOAT Delta)
@@ -174,7 +174,7 @@ function SetFocus()
 	Master.SetFocusTo(self,ViewportOwner);
 
 } // SetFocus
-	
+
 // ====================================================================
 // Tick - By default, Interactions do not get ticked, but you can
 // simply turn on bRequiresTick.
@@ -183,6 +183,7 @@ function SetFocus()
 function Tick(float DeltaTime);
 
 function string GetOldestCheckpointName(); // Joshua - Implemented in EPCConsole, needs to be called by EPlayerController so declared here
+function string ProcessKeyBindingText(string InputText); // Joshua - Implemented in EPCConsole, needs to be called by EPattern so declared here
 
 defaultproperties
 {

@@ -810,13 +810,115 @@ function ReturnToGame() //used to return to game and hide menus as well
 
 // ====================================================================
 // ConvertKeyToLocalisation: This is convert a key to the name of the key localization
-// Ex: english to french : A is A -- Space is Espace -- Backspace is reculer etc...
-//	   the localization is in R6Menu.int 
+// Ex: English to French: A is A -- Space is Espace -- Backspace is Retour etc.
 // ====================================================================
 function string ConvertKeyToLocalisation(BYTE _Key, string _szEnumKeyName)
 {
 	local string szResult;
-	
+	local bool bUsePlayStationIcons;
+
+    // Chr(0xFD) = Square
+    // Chr(0xDA) = Cross
+    // Chr(0xD9) = Circle
+    // Chr(0xDB) = Triangle
+
+	// Joshua - Check if we should use PlayStation controller icons
+	if (ViewportOwner != None &&
+		ViewportOwner.Actor != None &&
+		EPlayerController(ViewportOwner.Actor) != None)
+	{
+		bUsePlayStationIcons = (EPlayerController(ViewportOwner.Actor).ControllerIcon == CI_PlayStation);
+	}
+
+	// Joshua - Hardcode controller button labels (Xbox or PlayStation)
+	if (_Key == EInputKey.IK_Joy1)
+	{
+		if (bUsePlayStationIcons)
+			return Chr(0xDA); // Cross
+		else
+			return "A";
+	}
+	else if (_Key == EInputKey.IK_Joy2)
+	{
+		if (bUsePlayStationIcons)
+			return Chr(0xD9); // Circle
+		else
+			return "B";
+	}
+	else if (_Key == EInputKey.IK_Joy3)
+	{
+		if (bUsePlayStationIcons)
+			return Chr(0xFD); // Square
+		else
+			return "X";
+	}
+	else if (_Key == EInputKey.IK_Joy4)
+	{
+		if (bUsePlayStationIcons)
+			return Chr(0xDB); // Triangle
+		else
+			return "Y";
+	}
+	else if (_Key == EInputKey.IK_Joy5)
+	{
+		if (bUsePlayStationIcons)
+			return "L1";
+		else
+			return "LB";
+	}
+	else if (_Key == EInputKey.IK_Joy6)
+	{
+		if (bUsePlayStationIcons)
+			return "R1";
+		else
+			return "RB";
+	}
+	else if (_Key == EInputKey.IK_Joy7)
+	{
+		if (bUsePlayStationIcons)
+			return "L2";
+		else
+			return "LT";
+	}
+	else if (_Key == EInputKey.IK_Joy8)
+	{
+		if (bUsePlayStationIcons)
+			return "R2";
+		else
+			return "RT";
+	}
+	else if (_Key == EInputKey.IK_Joy9)
+	{
+		if (bUsePlayStationIcons)
+			return "Select";
+		else
+			return "Back";
+	}
+	else if (_Key == EInputKey.IK_Joy10)
+		return "Start";
+	else if (_Key == EInputKey.IK_Joy11)
+	{
+		if (bUsePlayStationIcons)
+			return "L3";
+		else
+			return "LS";
+	}
+	else if (_Key == EInputKey.IK_Joy12)
+	{
+		if (bUsePlayStationIcons)
+			return "R3";
+		else
+			return "RS";
+	}
+	else if (_Key == EInputKey.IK_Joy13)
+		return "D-Pad Up";
+	else if (_Key == EInputKey.IK_Joy14)
+		return "D-Pad Down";
+	else if (_Key == EInputKey.IK_Joy15)
+		return "D-Pad Left";
+	else if (_Key == EInputKey.IK_Joy16)
+		return "D-Pad Right";
+
 	// number
 	if ((_Key > EInputKey.IK_0 - 1) && (_Key < EInputKey.IK_9 + 1))
 	{
@@ -844,6 +946,120 @@ function string ConvertKeyToLocalisation(BYTE _Key, string _szEnumKeyName)
 	}
 
 	return szResult;
+}
+
+// ====================================================================
+// Joshua - GetActionKeyName: Get the localized key name for a specific action
+// Ex: GetActionKeyName("MoveForward") returns "W" (or user's bound key)
+// Prioritizes controller bindings (196-215 range) when bUseController is enabled
+// ====================================================================
+function string GetActionKeyName(string ActionName, optional bool bAltKey, optional bool bUsingController)
+{
+	local BYTE Key;
+	local string szEnumKeyName;
+	local string szResult;
+	local string BoundAction;
+	local int i;
+
+	if (ViewportOwner == None || ViewportOwner.Actor == None)
+		return "";
+
+	// If we prefer controller, scan all 16 controller buttons to find which one is bound to this action
+	if (bUsingController)
+	{
+		// Check all controller buttons (196-215 = IK_AnalogUp through IK_Joy16)
+		for (i = 196; i <= 215; i++)
+		{
+			// Get what action this controller button is bound to
+			BoundAction = ViewportOwner.Actor.GetActionKey(i);
+
+			// If this button is bound to the action we're looking for, use it
+			if (BoundAction ~= ActionName)
+			{
+				Key = i;
+				break;
+			}
+		}
+	}
+
+	// If no controller button found (or not using controller), fall back to normal key binding
+	if (Key == 0)
+	{
+		Key = ViewportOwner.Actor.GetKey(ActionName, bAltKey);
+	}
+
+	if (Key == 0)
+		return "";
+
+	// Convert the key byte to enum name (e.g., "IK_Space")
+	szEnumKeyName = string(GetEnum(enum'EInputKey', Key));
+
+	// Remove "IK_" prefix if present, since ConvertKeyToLocalisation adds it back
+	if (Left(szEnumKeyName, 3) == "IK_")
+		szEnumKeyName = Mid(szEnumKeyName, 3);
+
+	// Convert to localized key name
+	szResult = ConvertKeyToLocalisation(Key, szEnumKeyName);
+
+	return szResult;
+}
+
+// ====================================================================
+// Joshua - ProcessKeyBindingText: Replace {ActionName} placeholders with actual key bindings
+// "Press {MoveForward} to move forward" becomes "Press W to move forward" in localization
+// ====================================================================
+function string ProcessKeyBindingText(string InputText)
+{
+	local string ResultText;
+	local string LeftPart, RightPart, ActionName;
+	local string KeyName;
+	local int StartPos, EndPos;
+	local bool bUsingController;
+
+	ResultText = InputText;
+
+	// Check if controller is being used
+	if (ViewportOwner != None &&
+		ViewportOwner.Actor != None &&
+		ViewportOwner.Actor.Level != None &&
+		ViewportOwner.Actor.Level.Game != None)
+	{
+		bUsingController = EchelonGameInfo(ViewportOwner.Actor.Level.Game).bUseController;
+	}
+
+	// Keep processing until no more placeholders found
+	while (true)
+	{
+		// Find the next placeholder
+		StartPos = InStr(ResultText, "{");
+		if (StartPos == -1)
+			break; // No more placeholders
+
+		EndPos = InStr(ResultText, "}");
+		if (EndPos == -1 || EndPos <= StartPos)
+			break; // Malformed placeholder
+
+		// Extract the action name without braces
+		ActionName = Mid(ResultText, StartPos + 1, EndPos - StartPos - 1);
+
+		// Get the key bound to this action
+		KeyName = GetActionKeyName(ActionName, false, bUsingController);
+
+		// If no key found, try alt key
+		if (KeyName == "")
+			KeyName = GetActionKeyName(ActionName, true, bUsingController);
+
+		// If still no key found, keep the action name as fallback
+		if (KeyName == "")
+			KeyName = ActionName;
+
+		// Replace the placeholder with the key name
+		LeftPart = Left(ResultText, StartPos);
+		RightPart = Mid(ResultText, EndPos + 1);
+		ResultText = LeftPart $ KeyName $ RightPart;
+	}
+
+	return ResultText;
 }
 
 defaultproperties
