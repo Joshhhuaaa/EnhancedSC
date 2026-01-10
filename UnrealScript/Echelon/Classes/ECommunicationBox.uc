@@ -4,7 +4,7 @@ class ECommunicationBox extends Actor
 
 
 /*-----------------------------------------------------------------------------
-                      T Y P E   D E F I N I T I O N S 
+                      T Y P E   D E F I N I T I O N S
 -----------------------------------------------------------------------------*/
 
 const MIN_COMBOX_HEIGHT = 42;
@@ -22,7 +22,7 @@ enum eSpecialEvent
 };
 
 /*-----------------------------------------------------------------------------
-                          M E M B E R   V A R I A B L E S 
+                          M E M B E R   V A R I A B L E S
 -----------------------------------------------------------------------------*/
 
 var ESList							HQList;				    //List of NPCs communications
@@ -88,7 +88,7 @@ function ClearNPCTransmissions()
 		NPCList.Clear();
 		NPCNb = 0;
 	}
-	
+
 	// If currently showing NPC transmissions, reset everything so new speech can take over
 	if (CurrentTransmission == TR_NPCS)
 	{
@@ -310,25 +310,25 @@ function ScrollText(ECanvas Canvas, float _yLen, int iNbrOfBoxLine, int iNbrOfLi
 		Canvas.DrawText(_MyText, false);
 	}
 	else
-	{		
-		// Compute nbr of sec for each line 
-		fTimePerLine = fDuration / iNbrOfLine;	
-		
-		// Find first and last line to display based on time elapsed since first line displayed.		
-		iStartLine = iNbrOfLine - int((fDuration - fTimer + (iNbrOfBoxLine * fTimePerLine) - fTimePerLine) / fTimePerLine) ;		
+	{
+		// Compute nbr of sec for each line
+		fTimePerLine = fDuration / iNbrOfLine;
+
+		// Find first and last line to display based on time elapsed since first line displayed.
+		iStartLine = iNbrOfLine - int((fDuration - fTimer + (iNbrOfBoxLine * fTimePerLine) - fTimePerLine) / fTimePerLine) ;
 		if (iStartLine < 1) iStartLine = 1;
 
-		iEndLine = iStartLine + iNbrOfBoxLine - 1;		
-				
+		iEndLine = iStartLine + iNbrOfBoxLine - 1;
+
 		// Append all the line we want to display on the screen
 		for (i = iStartLine; i <= iEndLine; i++)
 		{
 			sTempMsg = sTempMsg $ Canvas.GetStringAtPos(_MyText, i, 1.0f) $ " ";
 		}
-		
+
 		// Display the appended lines
 		Canvas.DrawText(sTempMsg, false);
-	}	
+	}
 }
 
 /*-----------------------------------------------------------------------------
@@ -352,7 +352,7 @@ event SetClipZone(ECanvas C)
 event ResetClipZone(ECanvas C)
 {
 	C.SetOrigin(0,0);
-    C.SetPos(0,0);	
+    C.SetPos(0,0);
 	C.SetClip(640,480);
 }
 
@@ -372,7 +372,7 @@ function DrawConfig(ECanvas Canvas)
 // state : Idle
 //-----------------------------------------------------------------------------------------------------------------
 auto state() Idle
-{            
+{
 	function Tick(float Delta)
 	{
 		//Get current transmission Node
@@ -404,7 +404,6 @@ state() StandardDisplay
 		local bool bIsAGoal;
 		local String MyLine;
 		// Joshua - Fix bug causing incorrect communication box height when loading a save
-		local float calculatedHeight;
 		local EListNode TempNode;
 		local ETransmissionObj TempT;
 
@@ -418,20 +417,17 @@ state() StandardDisplay
 
 		if (bWithVoice)
 		{
-			// Set Communication Box height	
+			// Set Communication Box height
 			height = REAL_BOX_HEIGHT;
 		}
 		else
-		{        
+		{
 			// Joshua - Calculate height from text content directly
 			// This fixes a bug where GetCurrentSize/YSpace returns wrong value after loading a save
 			SetClipZone(Canvas);
 			height = 0;
 			TempNode = Node;
-			
-			// Debug - count nodes
-			iNbrOfLine = 0;
-			
+
 			while (TempNode != None)
 			{
 				TempT = ETransmissionObj(TempNode.Data);
@@ -440,15 +436,14 @@ state() StandardDisplay
 					// Joshua - If YSpace is 0/invalid after a load, recalculate and store it
 					if (TempT.YSpace <= 0)
 						TempT.YSpace = Canvas.GetNbStringLines(TempT.Data, 1.0f) * yLen;
-					
+
 					height += TempT.YSpace;
-					iNbrOfLine += 1;
 				}
 				TempNode = TempNode.NextNode;
 			}
 			ResetClipZone(Canvas);
 			// Joshua - End of fix
-			
+
 			// Joshua - Add one line of padding at bottom for NPC transmissions
 			if (CurrentTransmission == TR_NPCS)
 			{
@@ -457,11 +452,11 @@ state() StandardDisplay
 				if (CurrentSpecialEvent == ST_GOAL)
 					height += yLen;
 			}
-			
+
 			if (height < MIN_COMBOX_HEIGHT)
 			    height = MIN_COMBOX_HEIGHT;
 		}
-        
+
         // DRAW BOX //
         DrawBox(Canvas, eGame.HUD_OFFSET_X, eGame.HUD_OFFSET_Y, COMBOX_WIDTH, height + 16, false);
 
@@ -474,37 +469,37 @@ state() StandardDisplay
             switch (CurrentSpecialEvent)
 			{
 			    case ST_NOTEBOOK:
-                    iconIndex = eLevel.TICON.com_ic_notes;						
+                    iconIndex = eLevel.TICON.com_ic_notes;
                     break;
 			    case ST_GOAL:
                     iconIndex = eLevel.TICON.com_ic_goals;
-					bIsAGoal = true;					
+					bIsAGoal = true;
                     break;
                 case ST_RECON:
-                    iconIndex = eLevel.TICON.com_ic_recon;										
+                    iconIndex = eLevel.TICON.com_ic_recon;
                     break;
     			default:
 	    			switch (CurrentTransmission)
 				    {
 				        case TR_CONSOLE:
-                            iconIndex = eLevel.TICON.com_ic_console;														
+                            iconIndex = eLevel.TICON.com_ic_console;
                             break;
     				    case TR_NPCS:
-                            iconIndex = eLevel.TICON.com_ic_npc;														
+                            iconIndex = eLevel.TICON.com_ic_npc;
                             break;
     				    case TR_HEADQUARTER:
 						case TR_COMMWARNING:
-                            iconIndex = eLevel.TICON.com_ic_headq;														
+                            iconIndex = eLevel.TICON.com_ic_headq;
                             break;
-                        case TR_MENUSPEECH:							
+                        case TR_MENUSPEECH:
 				        case TR_CONVERSATION:
-                            iconIndex = eLevel.TICON.com_ic_talk;														
+                            iconIndex = eLevel.TICON.com_ic_talk;
                             break;
                         case TR_INVENTORY:
-                            iconIndex = eLevel.TICON.com_ic_inventory;														
+                            iconIndex = eLevel.TICON.com_ic_inventory;
                             break;
                         case TR_HINT:
-                            iconIndex = eLevel.TICON.com_ic_hints;														
+                            iconIndex = eLevel.TICON.com_ic_hints;
                             break;
         				default:
 		        			break;
@@ -515,57 +510,29 @@ state() StandardDisplay
 			// Find nbr of line in the box, based on box height
 			if (bWithVoice)
 			{
-				if (bIsAGoal)			
-					iNbrOfBoxLine = (height - yLen) / yLen;			
+				if (bIsAGoal)
+					iNbrOfBoxLine = (height - yLen) / yLen;
 				else
-					iNbrOfBoxLine = height / yLen;						
+					iNbrOfBoxLine = height / yLen;
 			}
-			
+
 
             // DRAW ICON //
             DrawIcon(Canvas, iconIndex, eGame.HUD_OFFSET_X, eGame.HUD_OFFSET_Y, COMBOX_WIDTH, height + 16);
 
-            // SET TEXT //            
+            // SET TEXT //
             xTextPos = 0;
             yTextPos = 0;
 
             SetClipZone(Canvas);
-			
-			iNbrOfLine = 0; // Joshua - Initialize line counter
-
-			// Joshua - Draw objective header once before the loop, not for each node
-			// This fixes bug where objective would appear multiple times when multiple NPC transmissions queued
-			if (bIsAGoal)
-			{
-				// DRAW TEXT				
-				Canvas.SetDrawColor(128, 128, 128, 153);
-				Canvas.Style = ERenderStyle.STY_Alpha;
-				// Joshua - Adjusted objective bar for consistency (adding 1px to the right, subtracting 1px from the bottom)
-				Canvas.DrawLine(xTextPos, yTextPos + 1, COMBOX_WIDTH - 14 - ICON_WIDTH, 14, Canvas.black, 150, eLevel.TMENU);
-				Canvas.SetDrawColor(128, 128, 128);
-				Canvas.Style = ERenderStyle.STY_Normal;
-
-				Canvas.SetPos(xTextPos,yTextPos);
-			
-				// Display the word OBJECTIVE in a blinking way
-				if (!bBlink)
-				{
-					Canvas.DrawText(Localize("HUD", "OBJECTIVE", "Localization\\HUD"), false);						
-				}
-				
-				Canvas.DrawColor = Canvas.TextBlack;
-				yTextPos = 18; // Move text position down past the header
-			}
 
             while (Node != None)
-			{		
+			{
 				T = ETransmissionObj(Node.Data);
-				
-				iNbrOfLine += 1; // Joshua - Increment line count for each transmission node
-								
+
 				if (bWithVoice)
-					iNbrOfLine = Canvas.GetNbStringLines(T.Data, 1.0f);								
-												
+					iNbrOfLine = Canvas.GetNbStringLines(T.Data, 1.0f);
+
                 if ((CurrentTransmission != TR_CONVERSATION) && (CurrentTransmission != TR_HEADQUARTER) && (CurrentTransmission != TR_MENUSPEECH))
                 {
                     tmpVal = (TimeElapsed - T.InsertionTime) / TimerRate;
@@ -578,48 +545,44 @@ state() StandardDisplay
                 else
                     Canvas.DrawColor = Canvas.TextBlack;
 
-				// Joshua - OBJECTIVE header was inside loop causing duplicates
-				/*
-                // Display a blinking OBJECTIVE when it`s a goal 
+                // Display a blinking OBJECTIVE when it's a goal
 				if (bIsAGoal)
 				{
-					// DRAW TEXT				
+					// DRAW TEXT
 					Canvas.SetDrawColor(128, 128, 128, 153);
 					Canvas.Style = ERenderStyle.STY_Alpha;
-					//Canvas.DrawLine(xTextPos, yTextPos + 1, COMBOX_WIDTH - 15 - ICON_WIDTH, 15, Canvas.black, 150, eLevel.TMENU);
                     // Joshua - Adjusted objective bar for consistency (adding 1px to the right, subtracting 1px from the bottom)
                     Canvas.DrawLine(xTextPos, yTextPos + 1, COMBOX_WIDTH - 14 - ICON_WIDTH, 14, Canvas.black, 150, eLevel.TMENU);
 					Canvas.SetDrawColor(128, 128, 128);
 					Canvas.Style = ERenderStyle.STY_Normal;
 
 					Canvas.SetPos(xTextPos,yTextPos);
-				
+
 					// Display the word OBJECTIVE in a blinking way
 					if (!bBlink)
 					{
-						Canvas.DrawText(Localize("HUD", "OBJECTIVE", "Localization\\HUD"), false);						
+						Canvas.DrawText(Localize("HUD", "OBJECTIVE", "Localization\\HUD"), false);
 					}
-					
+
 					Canvas.DrawColor = Canvas.TextBlack;
-					Canvas.SetPos(0,18);														
+					Canvas.SetPos(0,18);
 				}
 				else
-				*/
 					Canvas.SetPos(xTextPos,yTextPos);
-				
+
 				if (bWithVoice)
 					ScrollText(Canvas, yLen, iNbrOfBoxLine, iNbrOfLine, T.Data);
 				else
 					Canvas.DrawText(T.Data,false);
 
-				yTextPos += T.YSpace; // Joshua - Use T.YSpace (already corrected in height calculation if it was 0)
+				yTextPos += T.YSpace;
 				Node = Node.NextNode;
-            }			
+            }
 
             ResetClipZone(Canvas);
         }
         else
-		{			
+		{
 			bWithVoice = false;
 			GotoState('EndDisplay');
 		}
@@ -645,7 +608,7 @@ state() BeginDisplay
 		if (openHeight >= MIN_COMBOX_HEIGHT)
 		{
 			openHeight = MIN_COMBOX_HEIGHT;
-			
+
 			GotoState('StandardDisplay');
 		}
 	}
@@ -676,6 +639,7 @@ state() EndDisplay
 		if (openHeight <= 0)
 		{
 			openHeight = 0;
+
 			GotoState('Idle');
 		}
 	}
@@ -712,7 +676,7 @@ state s_Cinematic
         yTextPos = 430;
 
         while (Node != None)
-		{		
+		{
 			T = ETransmissionObj(Node.Data);
 
             //if ((CurrentTransmission != TR_CONVERSATION) && (CurrentTransmission != TR_HEADQUARTER))
@@ -759,7 +723,7 @@ state s_Menu
         Canvas.SetOrigin(640 - COMBOX_WIDTH - eGame.HUD_OFFSET_X + 7,eGame.HUD_OFFSET_Y + 7);
         Canvas.SetPos(0,0);
         Canvas.SetClip(COMBOX_WIDTH - 16 - ICON_WIDTH,480);
-        
+
         height = 0;
         TempNode = Node;
         while (TempNode != None)
@@ -776,10 +740,10 @@ state s_Menu
         }
         ResetClipZone(Canvas);
 		// Joshua - End of fix
-        
+
         if (height < MIN_COMBOX_HEIGHT)
             height = MIN_COMBOX_HEIGHT;
-        
+
         if (Node != None)
         {
             if (CurrentTransmission != TR_MENUSPEECH)
@@ -801,7 +765,7 @@ state s_Menu
 	        Canvas.SetClip(COMBOX_WIDTH - 16 - ICON_WIDTH,480);
 
             while (Node != None)
-		    {		
+		    {
 			    T = ETransmissionObj(Node.Data);
                 Canvas.DrawColor = Canvas.TextBlack;
 
