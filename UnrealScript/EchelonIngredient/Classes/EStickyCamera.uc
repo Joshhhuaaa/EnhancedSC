@@ -11,6 +11,11 @@ var(StickyCamera) float Damping;
 var float current_fov;
 var float ZoomAccumulator; // Joshua - Accumulates deltaTime to ensure 30fps zoom rate regardless of actual framerate
 
+// Joshua - Save camera settings for SwitchCam restore
+var float SavedFov;
+var int SavedRenderingMode;
+var bool bHasSavedSettings;
+
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
@@ -24,6 +29,39 @@ function PostBeginPlay()
 	HowToUseMe  = "StickyCameraHowToUseMe";
 
 	current_fov	 = MaxFov;
+}
+
+// Joshua - Override TakeView to restore saved settings when using SwitchCam
+function TakeView()
+{
+	Super.TakeView();
+
+	// Restore saved settings if we have them
+	if (bHasSavedSettings)
+	{
+		current_fov = SavedFov;
+		RenderingMode = SavedRenderingMode;
+		Epc.SetCameraFOV(self, current_fov);
+		Epc.SetCameraMode(self, RenderingMode);
+
+		// Restore thermal settings if needed
+		if (RenderingMode == REN_ThermalVision)
+		{
+			Epc.ThermalTexture = Level.pThermalTexture_B;
+			Epc.bBigPixels = true;
+		}
+	}
+}
+
+// Joshua - Override GiveView to save settings before exiting
+function GiveView(bool bFromPlayer)
+{
+	// Save current settings before exiting
+	SavedFov = current_fov;
+	SavedRenderingMode = RenderingMode;
+	bHasSavedSettings = true;
+
+	Super.GiveView(bFromPlayer);
 }
 
 state s_Camera

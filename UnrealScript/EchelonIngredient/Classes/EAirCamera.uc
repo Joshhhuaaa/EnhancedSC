@@ -8,16 +8,19 @@ var bool				bDirectShot;
 
 // Backup controller setting
 var Texture				BackupThermalTexture;
-var bool				BackupbBigPixels;		
+var bool				BackupbBigPixels;
 
 var int					RenderingMode;
+
+// Joshua - Track player state before entering camera to return properly
+var name				PlayerReturnState;
 
 const					CameraAdjustment = 5;
 
 function TakeView()
 {
 	Enable('Tick');
-	
+
 	// Block the PlayerController. Ends in s_camera EndState
 	Epc.backupRotation = Epc.Rotation;
 	Epc.SetCameraFOV(self, Epc.DesiredFov);
@@ -29,10 +32,10 @@ function TakeView()
 		Epc.bLockedCamera = true;
 	Epc.SetViewTarget(self);
 
-	Epc.bUsingAirCamera = true; // Joshua - True when the player is using a camera, prevents movement speed changes with mouse wheel
-	
+	Epc.bUsingCamera = true; // Joshua - True when the player is using a camera, prevents movement speed changes with mouse wheel
+
 	BackupThermalTexture= Epc.ThermalTexture;
-    BackupbBigPixels	= Epc.bBigPixels;		
+    BackupbBigPixels	= Epc.bBigPixels;
 
 	RenderingMode		= REN_DynLight;
 	Epc.SetCameraMode(self, RenderingMode);
@@ -50,7 +53,7 @@ function GiveView(bool bFromPlayer)
 	// Restore vision
 	Epc.PopCamera(self);
 	Epc.ThermalTexture	= BackupThermalTexture;
-    Epc.bBigPixels		= BackupbBigPixels;		
+    Epc.bBigPixels		= BackupbBigPixels;
 
 	// UnBlock the PlayerController
 	Epc.bLockedCamera = false;
@@ -59,21 +62,117 @@ function GiveView(bool bFromPlayer)
 	Epc.SetRotation(Epc.backupRotation);
 	Epc.SetBase(None);
 	Epc.SetViewTarget(Epc.Pawn);
-	Epc.bUsingAirCamera = false; // Joshua - True when the player is using a camera, prevents movement speed changes with mouse wheel
+	Epc.bUsingCamera = false; // Joshua - True when the player is using a camera, prevents movement speed changes with mouse wheel
 	Disable('Tick');
 
 	if (!bFromPlayer)
 		return;
-	
+
 	Controller = None;
-	if (!Epc.OnGroundScope())
-		Log("ERROR: OnGroundScope should never fail here.  Make sure everything's set so that it returns in FirstPersonTargeting");
+
+	//if (!Epc.OnGroundScope())
+	//	Log("ERROR: OnGroundScope should never fail here.  Make sure everything's set so that it returns in FirstPersonTargeting");
+
+	// Joshua - Return to appropriate state based on where player came from
+	if (PlayerReturnState == '')
+	{
+		// Original behavior when shooting camera normally
+		if (!Epc.OnGroundScope())
+			Log("ERROR: OnGroundScope should never fail here.");
+	}
+	else if (PlayerReturnState == 's_FirstPersonTargeting')
+	{
+		// Only draw weapon if player was in s_FirstPersonTargeting before entering camera
+		if (!Epc.OnGroundScope())
+			Log("ERROR: OnGroundScope should never fail here.");
+	}
+	else if (PlayerReturnState == 's_Split')
+	{
+		// Stop the palm animation before returning to split
+		Epc.ePawn.AnimBlendToAlpha(Epc.ePawn.ACTIONCHANNEL, 0.0, 0.2);
+		Epc.GotoState('s_Split');
+	}
+	else if (PlayerReturnState == 's_SplitTargeting')
+	{
+		// Return to split jump targeting with weapon, call ReturnFromInteraction to handle redrawing
+		Epc.ePawn.AnimBlendToAlpha(Epc.ePawn.ACTIONCHANNEL, 0.0, 0.2);
+		Epc.ReturnFromInteraction();
+	}
+	else if (PlayerReturnState == 's_RappellingTargeting')
+	{
+		// Return to rappelling targeting, call OnGroundScope to restore rope and weapon
+		Epc.ePawn.AnimBlendToAlpha(Epc.ePawn.ACTIONCHANNEL, 0.0, 0.2);
+		if (!Epc.OnGroundScope())
+			Log("ERROR: OnGroundScope should never fail here.");
+	}
+	else if (PlayerReturnState == 's_Rappelling')
+	{
+		// Return to rappelling, go to Begin to restore rope
+		Epc.ePawn.AnimBlendToAlpha(Epc.ePawn.ACTIONCHANNEL, 0.0, 0.2);
+		EMainHUD(Epc.myHud).NormalView();
+		Epc.bInTransition = false;
+		Epc.GotoState('s_Rappelling', 'Begin');
+	}
+	else
+	{
+		// Stop the palm animation before returning to walking
+		Epc.ePawn.AnimBlendToAlpha(Epc.ePawn.ACTIONCHANNEL, 0.0, 0.2);
+		Epc.GotoState('s_PlayerWalking');
+	}
+
+	// Clear the return state
+	PlayerReturnState = '';
+}
+
+// Joshua - Allow player to switch back to this camera after leaving it
+function SwitchToCamera()
+{
+	if (bDeleteMe || bHidden)
+		return;
+
+	if (Epc == None)
+		return;
+
+	// Don't allow switching while camera is still flying
+	if (GetStateName() == 's_Flying')
+		return;
+
+	// Set the controller reference back
+	Controller = Epc;
+
+	// Joshua - Save the player's current state so we can return to it properly
+	// Only draw weapon on exit if player was in s_FirstPersonTargeting
+	PlayerReturnState = Epc.GetStateName();
+
+	// Put player in palm state first (camera is already in s_Camera state from when it landed)
+	if (!Epc.bVideoMode)
+		Epc.UsePalm();
+
+	// Set up the HUD to slave to this camera
+	EMainHUD(Epc.myHud).Slave(self);
+
+	// Camera should already be in s_Camera state, but just in case
+	if (GetStateName() != 's_Camera')
+		GotoState('s_Camera');
+
+	// These are normally done in s_Camera.BeginState but we may already be in that state
+	//WallAdjust();
+	Epc.bDisableWhistle = true;
+}
+
+//------------------------------------------------------------------------
+// Joshua - Check if camera can be switched to
+//------------------------------------------------------------------------
+function bool CanSwitchTo()
+{
+	// Can switch to camera in any state (flying or stuck on wall)
+	return !bDeleteMe && !bHidden && GetStateName() != 's_Flying';
 }
 
 function HudView(bool bIn)
 {
 	//Log("HUD VIEW!!!"@bIn@Controller);
-	
+
 	if (Controller == None)
 		return;
 	if (bIn)
@@ -95,10 +194,20 @@ function WallAdjust()
 function Select(EInventory Inv)
 {
 	Super.Select(Inv);
-	
+
 	// Joshua - Don't play sound during silent restore (sorting)
 	if (!Inv.bSilentRestore)
 		PlaySound(Sound'Interface.Play_FisherEquipStickyCam', SLOT_Interface);
+}
+
+
+// Joshua - Clear previous camera reference when camera is picked back up
+function bool NotifyPickup(Controller Instigator)
+{
+	if (Instigator != None && Instigator.bIsPlayer)
+		EPlayerController(Instigator).ClearPreviousCamera(self);
+
+	return Super.NotifyPickup(Instigator);
 }
 
 function rotator GetStillRotation(vector HitNormal)
@@ -108,6 +217,10 @@ function rotator GetStillRotation(vector HitNormal)
 
 function Throw(Controller Thrower, vector ThrowVelocity)
 {
+	// Joshua - Clear previous camera reference when throwing a new one
+	if (EPlayerController(Thrower) != None)
+		EPlayerController(Thrower).ClearPreviousCamera();
+
 	bDirectShot = true;
 	Super.Throw(Thrower, ThrowVelocity);
 }
@@ -116,6 +229,11 @@ function HitFakeBackDrop()
 {
 	if (Controller != None && Epc != None)
 		GiveView(true);
+
+	// Joshua - Clear reference before destruction
+	if (Epc != None)
+		Epc.ClearPreviousCamera(self);
+
 	Super.HitFakeBackDrop();
 }
 
@@ -135,7 +253,11 @@ state s_Flying
 	{
 		Epc = EPlayerController(Controller);
 		if (Epc != None)
+		{
 			EMainHUD(Epc.myHud).Slave(self);
+			// Joshua - Set PreviousCamera immediately when thrown so player can switch back
+			Epc.PreviousCamera = self;
+		}
 
 		Super.BeginState();
 	}
@@ -200,7 +322,7 @@ state s_Flying
 	function Tick(float deltaTime)
 	{
 		local bool bShouldExitOnDuck;
-		
+
 		if (Epc == None)
 			return;
 
@@ -226,7 +348,10 @@ state s_Camera
 	{
 		Level.AddChange(self, CHANGE_AirCamera);
 
-		if (!Epc.bVideoMode)
+		// Joshua - Only call UsePalm if player is not already in s_UsingPalm
+		// This prevents EndState from triggering prematurely when using SwitchCam
+		// SwitchToCamera already calls UsePalm before transitioning camera to s_Camera
+		if (!Epc.bVideoMode && Epc.GetStateName() != 's_UsingPalm')
 			Epc.UsePalm();
 
 		WallAdjust();
@@ -239,8 +364,8 @@ state s_Camera
 	// same as Normalize for a rotator but for an int only
 	function int CenterToZero(int v)
 	{
-		v = v & 65535; 
-		if (v >= 32769) 
+		v = v & 65535;
+		if (v >= 32769)
 			v -= 65536;
 		return v;
 	}
@@ -271,7 +396,7 @@ state s_Camera
 
 		camera_rotation.Yaw = GetIntInRange(0, 8191, clamped_rotation.Yaw);
 		camera_rotation.Pitch = GetIntInRange(0, 8191, clamped_rotation.Pitch);
-		
+
 		// Motor rumble
 		delta_rotation = previous_rotation - camera_rotation;
 		if (delta_rotation != Rot(0,0,0))
@@ -302,7 +427,7 @@ state s_Camera
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Do treatment depending on light vars (50% of the visibility)
 //------------------------------------------------------------------------
 event VisibilityRating GetActorVisibility()

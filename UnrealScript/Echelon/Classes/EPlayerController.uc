@@ -306,7 +306,11 @@ var(Enhanced) config bool bLaserMicVisions; // Joshua - Allows the Laser Mic use
 
 var bool m_ChoosePreviousGadget;
 var bool m_ChooseNextGadget;
-var bool bUsingAirCamera; // Joshua - True when the player is using a camera, prevents movement speed changes with mouse wheel
+
+var(EnhancedDebug) bool bSwitchCam; // Joshua - Allows the functionalty to switch to a previous camera
+var EInventoryItem PreviousCamera;
+var bool bPendingCamera;
+var bool bUsingCamera; // Joshua - True when the player is using a camera, prevents movement speed changes with mouse wheel
 
 // Joshua - Adding the option to use Camera Jammer camera behavior from Pandora Tomorrow
 var(Enhanced) config bool bCameraJammerAutoLock;
@@ -1718,6 +1722,77 @@ exec function DecSpeed()
 			m_curWalkSpeed = 1;
 		}
 	}
+}
+
+//---------------------------------------[Joshua - 6 Jan 2026]-----
+// Description
+//		 Switch to a previous Sticky Camera or Diversion Camera that was previously placed.
+//------------------------------------------------------------------------
+exec function SwitchCam()
+{
+	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
+		return;
+
+	if (!bSwitchCam)
+		return;
+
+	ProcessSwitchCam();
+}
+
+function ProcessSwitchCam()
+{
+	// In transition or no cameras are available
+	if (bInTransition || bInGunTransition)
+		return;
+
+	if (!HasAvailableCam())
+		return;
+
+	DiscardPickup();
+
+	PreviousCamera.SwitchToCamera();
+}
+
+function bool HasAvailableCam()
+{
+	// No camera stored
+	if (PreviousCamera == None)
+		return false;
+
+	// Camera was destroyed - clear the reference
+	if (PreviousCamera.bDeleteMe)
+	{
+		ClearPreviousCamera();
+		return false;
+	}
+
+	if (!PreviousCamera.CanSwitchTo())
+		return false;
+
+	return true;
+}
+
+//------------------------------------------------------------------------
+// Joshua - Clear the previous camera reference
+// Can optionally specify a specific camera to clear (only clears if it matches)
+//------------------------------------------------------------------------
+function ClearPreviousCamera(optional EInventoryItem CamToClear)
+{
+	// If specific camera provided, only clear if it matches
+	if (CamToClear != None)
+	{
+		if (PreviousCamera == CamToClear)
+			PreviousCamera = None;
+		return;
+	}
+
+	// Clear any camera
+	PreviousCamera = None;
+}
+
+function bool IsInCamMode()
+{
+	return GetStateName() == 's_UsingPalm';
 }
 
 //---------------------------------------[Joshua - 8 Apr 2025]-----
@@ -3390,7 +3465,7 @@ native(1178) final function bool ShouldReleaseNPC();
 // ----------------------------------------------------------------------
 state s_Grab
 {
-	Ignores MayReload;
+	Ignores MayReload, ProcessSwitchCam;
 
     function BeginState()
     {
@@ -3761,7 +3836,7 @@ FromFP:
 
 state s_GrabTargeting
 {
-	Ignores MayReload;
+	Ignores MayReload, ProcessSwitchCam;
 
 	function BeginState()
 	{
@@ -3939,7 +4014,7 @@ Aim:
 // ----------------------------------------------------------------------
 state s_Carry
 {
-	Ignores Fire;
+	Ignores Fire, ProcessSwitchCam;
 
     function BeginState()
     {
@@ -4478,6 +4553,14 @@ state s_PlayerWalking
 			bInTransition = true; // prevent the SheathWeapon
 			GoggleItem.GotoState('s_Zooming');
 		}
+	}
+
+	function ProcessSwitchCam()
+	{
+		if (VSize(ePawn.Velocity) > 0)
+			return;
+
+		Global.ProcessSwitchCam();
 	}
 
 	function ProcessFire()
@@ -5085,7 +5168,7 @@ function PlayOnGroundSniping(bool bMoving, float Speed, optional bool bBlendRefP
 // ----------------------------------------------------------------------
 state s_Roll
 {
-	Ignores Fire, ProcessHeadSet;
+	Ignores Fire, ProcessHeadSet, ProcessSwitchCam;
 
 	function BeginState()
 	{
@@ -5226,20 +5309,43 @@ state PlayerFlying
 // ----------------------------------------------------------------------
 state s_UsingPalm
 {
-	Ignores AltFire, Fire, ProcessHeadSet;
+	Ignores AltFire, Fire, ProcessHeadSet, ProcessSwitchCam;
 
 	function BeginState()
 	{
+		local name PreviousState;
+
 		bLockedCamera = true;
+		PreviousState = JumpLabelPrivate;
 		JumpLabelPrivate = '';
-		KillPawnSpeed();
-		ePawn.PlayWait(0.0, 0.1);
+
+		// Joshua - Store previous state in SpecialWaitAnim for later use
+		SpecialWaitAnim = PreviousState;
+
+		// Joshua - Check if we came from s_Split and keep collision small
+		if (PreviousState == 's_Split')
+			ePawn.SetCollisionSize(ePawn.CollisionRadius, ePawn.Default.CollisionHeight * 0.35);
+		else
+		{
+			KillPawnSpeed();
+			ePawn.PlayWait(0.0, 0.1);
+		}
 	}
 
 	function EndState()
 	{
+		local name PreviousState;
+
 		bLockedCamera = false;
 		EMainHUD(myHud).NormalView();
+
+		// Joshua - Get the state name we saved in BeginState
+		PreviousState = SpecialWaitAnim;
+		SpecialWaitAnim = '';
+
+		// Joshua - Restore collision if we came from split
+		if (PreviousState == 's_Split')
+			ePawn.SetCollisionSize(ePawn.CollisionRadius, ePawn.Default.CollisionHeight);
 	}
 
 	// Joshua - Mission failed to bring back in 3rd person
@@ -5277,14 +5383,22 @@ Begin:
 	}
 
 	ePawn.AnimBlendParams(EPawn.ACTIONCHANNEL, 1,,,ePawn.UpperBodyBoneName);
-	if (!ePawn.bIsCrouched)
+
+	// Joshua - Use split animation if we came from s_Split, otherwise use normal palm animations
+	// Store the previous state name in SpecialWaitAnim for EndState to access
+	if (SpecialWaitAnim == 's_Split')
+	{
+		ePawn.LoopAnimOnly(ePawn.ASplitWait);
+		ePawn.LoopAnim('palmstalnt0',,0.8, EPawn.ACTIONCHANNEL);
+	}
+	else if (!ePawn.bIsCrouched)
 		ePawn.LoopAnim('palmstalnt0',,0.8, EPawn.ACTIONCHANNEL);
 	else
 		ePawn.LoopAnim('palmcralnt0',,0.8, EPawn.ACTIONCHANNEL);
 }
 
 function float GetGroundSpeed()
-{	
+{
 	if (ePawn.bIsCrouched)
 		return m_speedWalkFPCr;
 	else
@@ -5586,6 +5700,8 @@ SwitchWeapon:
 // ----------------------------------------------------------------------
 state s_PlayerSniping extends s_Targeting
 {
+	Ignores ProcessSwitchCam;
+
 	function BeginState()
 	{
 		Super.BeginState();
@@ -5733,7 +5849,7 @@ Begin:
 // ----------------------------------------------------------------------
 state s_CameraJammerTargeting extends s_Targeting
 {
-	Ignores NotifyWeapon;
+	Ignores NotifyWeapon, ProcessSwitchCam;
 
 	function BeginState()
 	{
@@ -5827,6 +5943,8 @@ state s_Zooming extends s_Targeting
 	parent=					ECM_Zooming
 	offset=					mx=0.0 my=25.0 mz=0.0
 	*/
+
+	Ignores ProcessSwitchCam;
 
 	function BeginState()
 	{
@@ -6022,7 +6140,7 @@ native(1175) final function bool CheckWallJump(vector X, vector Y, vector Z);
 // ----------------------------------------------------------------------
 state s_PlayerJumping
 {
-	Ignores Fire;
+	Ignores Fire, ProcessSwitchCam;
 
 	function BeginState()
 	{
@@ -6407,6 +6525,8 @@ Finish:
 // ----------------------------------------------------------------------
 state s_Throw
 {
+	Ignores ProcessSwitchCam;
+
 	function BeginState()
 	{
 		ePawn.HandItem.Use();
@@ -6700,6 +6820,8 @@ Throw:
 // ----------------------------------------------------------------------
 state s_InteractWithObject
 {
+	Ignores ProcessSwitchCam;
+
 	function BeginState()
 	{
         NormalIKFade();
@@ -7138,6 +7260,8 @@ state s_OpticCable extends s_InteractWithObject
 {
 	// Joshua - Adding support for switching visions in Optic Cable
 	//Ignores ProcessHeadset;
+
+	Ignores ProcessSwitchCam;
 
 	function PlayerMove(float DeltaTime)
 	{
@@ -7674,6 +7798,8 @@ RetinalEnd:
 // ----------------------------------------------------------------------
 state s_OpenDoor extends s_InteractWithObject
 {
+	Ignores ProcessSwitchCam;
+
 	function EndState()
 	{
 		Super.EndState();
@@ -8144,7 +8270,7 @@ EndState:
 // ----------------------------------------------------------------------
 state s_BreakObject
 {
-	Ignores Fire;
+	Ignores Fire, ProcessSwitchCam;
 
 	function BeginState()
 	{
@@ -8217,6 +8343,8 @@ state s_ShortRangeAttack extends s_BreakObject
 
 state s_PlayerBTWBase
 {
+	Ignores ProcessSwitchCam;
+
 	function BeginState()
 	{
 		ePawn.bBatmanHack = true;
@@ -8787,6 +8915,15 @@ state s_Rappelling
 		turnMul = m_turnMul;
 	}
 
+	// Joshua - Block goggles while in camera
+	function ProcessHeadSet(float i)
+	{
+		if (bInTransition)
+			return;
+
+		Global.ProcessHeadSet(i);
+	}
+
 	function PlayerMove(float DeltaTime)
 	{
 		local vector NewAccel;
@@ -8880,7 +9017,7 @@ state s_Rappelling
 		}
 		else
 			TraceStart2  = TraceStart1 + 20.0 * Z;
-		
+
 		TraceEnd1    = TraceStart1 + 25.0 * X;
 		TraceEnd2	 = TraceStart2 + 25.0 * X;
 
@@ -8915,6 +9052,13 @@ state s_Rappelling
 			Interaction.Interact(self);
 		if (bInGunTransition)
 			RapelRopeType = 1;
+	}
+
+	// Joshua - Override UsePalm to stay in this state and use BeginUsingPalm label for camera
+	function UsePalm()
+	{
+		if (!bInTransition && !bInGunTransition)
+			GotoState(,'BeginUsingPalm');
 	}
 
 	function ProcessScope()
@@ -9010,6 +9154,14 @@ EnterWindow:
 	ePawn.PlayAnimOnly(ePawn.AWaitCrouch);
 	bInTransition = false;
 	GotoState('s_PlayerWalking');
+
+BeginUsingPalm:
+	bInTransition = true;
+
+	// No weapon to sheath, just play palm animation directly
+	ePawn.AnimBlendParams(EPawn.ACTIONCHANNEL, 1,,,ePawn.UpperBodyBoneName);
+	ePawn.LoopAnim('palmstalnt0',,0.8, EPawn.ACTIONCHANNEL);
+	Stop;
 
 Begin:
 	RapelRopeType = 1;
@@ -9347,7 +9499,7 @@ BackToFirstPerson:
 // ----------------------------------------------------------------------
 state s_RappellingFall
 {
-	Ignores MayFall;
+	Ignores MayFall, ProcessSwitchCam;
 
 	function BeginState()
 	{
@@ -9623,6 +9775,14 @@ state s_SplitTargeting extends s_RappellingTargeting
 		}
 	}
 
+	// Joshua - Return to s_SplitTargeting after camera interaction and redraw weapon
+	function ReturnFromInteraction()
+	{
+		bInTransition = false;
+		DrawWeapon();
+		GotoState(, 'Begin');
+	}
+
 	function PlayerMove(float DeltaTime)
 	{
 		local vector testExt, moveDir;
@@ -9763,7 +9923,7 @@ state s_SplitZooming
 	maxPitch=				v=8000
 	*/
 
-	ignores Fire;
+	ignores Fire, ProcessSwitchCam;
 
 	function BeginState()
 	{
@@ -9847,7 +10007,7 @@ Begin:
 // ----------------------------------------------------------------------
 state s_Fence
 {
-	ignores Fire;
+	ignores Fire, ProcessSwitchCam;
 
     function BeginState()
     {
@@ -10069,7 +10229,7 @@ Electrocuted:
 
 state s_GrabbingGE
 {
-	Ignores ProcessHeadSet;
+	Ignores ProcessHeadSet, ProcessSwitchCam;
 
 	function BeginState()
 	{
@@ -10116,7 +10276,8 @@ Above:
 // ----------------------------------------------------------------------
 state s_Ledge
 {
-	ignores Fire;
+	ignores Fire, ProcessSwitchCam;
+
     function BeginState()
     {
 		m_camera.SetMode(ECM_HSphere);
@@ -10334,7 +10495,7 @@ Begin:
 // ----------------------------------------------------------------------
 state s_HoistingAboveLedge
 {
-	Ignores Fire, ProcessHeadSet;
+	Ignores Fire, ProcessHeadSet, ProcessSwitchCam;
 
     function BeginState()
     {
@@ -10443,6 +10604,8 @@ FromAir:
 
 state s_HandOverHand
 {
+	Ignores ProcessSwitchCam;
+
     function BeginState()
     {
 		KillPawnSpeed();
@@ -10613,7 +10776,7 @@ TurnAround:
 
 state s_HandOverHandFeetUp
 {
-	ignores Fire;
+	ignores Fire, ProcessSwitchCam;
 
 	function BeginState()
 	{
@@ -10774,7 +10937,7 @@ FromTarget:
 
 state s_HOHTargeting extends s_FirstPersonTargeting
 {
-	Ignores MayReload, CanSwitchGoggleManually;
+	Ignores MayReload, CanSwitchGoggleManually, ProcessSwitchCam;
 
 	event ReduceCameraSpeed(out float turnMul)
 	{
@@ -11187,7 +11350,7 @@ FromGround:
 // ----------------------------------------------------------------------
 state s_NarrowLadder
 {
-	ignores Fire;
+	ignores Fire, ProcessSwitchCam;
 
 	function bool CanInteract()
 	{
@@ -11475,6 +11638,8 @@ native(1147) final function bool CalculateLadderDestination();
 
 state s_SlideDownBase
 {
+	Ignores ProcessSwitchCam;
+
     function BeginState()
     {
 		bInTransition = false;
@@ -11685,7 +11850,8 @@ FromHOH:
 // ----------------------------------------------------------------------
 state s_Pipe
 {
-	ignores Fire;
+	ignores Fire, ProcessSwitchCam;
+
     function BeginState()
     {
 		m_SMInTrans = false;
@@ -12076,7 +12242,7 @@ FromAir:
 
 state s_ZipLine
 {
-	ignores Fire;
+	ignores Fire, ProcessSwitchCam;
 
     function BeginState()
     {
