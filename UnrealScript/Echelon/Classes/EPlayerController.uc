@@ -6929,9 +6929,25 @@ state s_Conversation extends s_InteractWithObject
 
 	function PlayerMove(float DeltaTime)
 	{
+		local rotator LookRotation;
+		local EPawn NpcPawn;
+
 		// Always look toward Npc while talking
 		if (Interaction != None)
+		{
 			ePawn.RotateTowardsRotator(Rotator(Interaction.Owner.Location - ePawn.Location));
+
+			// Joshua - Look down at NPC if they are sitting
+			NpcPawn = EPawn(Interaction.Owner);
+			if (NpcPawn != None && NpcPawn.IsInState('s_Sitting'))
+			{
+				LookRotation = Rotator(NpcPawn.Location - ePawn.Location);
+
+				// Force a downward pitch angle
+				LookRotation.Pitch = Clamp(LookRotation.Pitch, -16384, -4096);
+				ePawn.LookAt(LANORMAL, Vector(LookRotation), Vector(ePawn.Rotation), -60, 60, -60, 60);
+			}
+		}
 	}
 
 // Joshua - Force player to match NPC stance when having a conversation
