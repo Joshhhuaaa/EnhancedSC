@@ -10,7 +10,7 @@
 class EStickyView extends ECameraView;
 
 /*-----------------------------------------------------------------------------
-                        T Y P E   D E F I N I T I O N S 
+                        T Y P E   D E F I N I T I O N S
 -----------------------------------------------------------------------------*/
 const EYE_ICON_LEFT     = 509;
 const EYE_ICON_TOP      = 345;
@@ -49,21 +49,21 @@ state s_Online
 -----------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------
-    Function :      DrawIcon  
+    Function :      DrawIcon
 
     Description:    -
 -----------------------------------------------------------------------------*/
 function DrawIcon(ECanvas Canvas)
 {
     Canvas.DrawColor = White;
-	Canvas.Style = ERenderStyle.STY_Alpha;    
+	Canvas.Style = ERenderStyle.STY_Alpha;
     Canvas.SetPos(EYE_ICON_LEFT, EYE_ICON_TOP);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_ic_surveillance, 64, 32, 0, 0, 64, 32);
-	Canvas.Style = ERenderStyle.STY_Normal;    
+	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
 /*-----------------------------------------------------------------------------
-    Function :      DrawButtons  
+    Function :      DrawButtons
 
     Description:    -
 -----------------------------------------------------------------------------*/
@@ -72,6 +72,9 @@ function DrawButtons(ECanvas Canvas)
     local int xPos, yPos;
 	local float xLen, yLen;
 	local string sTemp;
+    local EPlayerController EPC; // Joshua - Controller scheme
+
+    EPC = EPlayerController(Camera.Owner);
 
     Super.DrawButtons(Canvas);
 
@@ -88,21 +91,21 @@ function DrawButtons(ECanvas Canvas)
 
         Canvas.SetPos(xPos + BUTTON_THERMAL_BOX_X - 5, yPos);
         Canvas.DrawTextAligned(Canvas.LocalizeStr("THERMAL"),TXT_RIGHT);
-    
+
         Canvas.SetPos(xPos + BUTTON_NIGHT_BOX_X - 5, yPos);
         Canvas.DrawTextAligned(Canvas.LocalizeStr("NIGHT"),TXT_RIGHT);
-    
+
         xPos = SCREEN_END_X - CAM_X - SIDEBAR_WIDTH;
-    
+
         Canvas.SetPos(xPos - BUTTON_ZOOMP_BOX_X - 5, yPos);
         Canvas.DrawTextAligned(Canvas.LocalizeStr("ZOOMPLUS"),TXT_RIGHT);
-    
+
         Canvas.SetPos(xPos - BUTTON_ZOOMM_BOX_X - 5, yPos);
         Canvas.DrawTextAligned(Canvas.LocalizeStr("ZOOMMINUS"),TXT_RIGHT);
-    
+
         Canvas.SetPos(xPos - BUTTON_EXIT_BOX_X - 5, yPos);
-        Canvas.DrawTextAligned(Canvas.LocalizeStr("EXIT"),TXT_RIGHT); 
-    	    
+        Canvas.DrawTextAligned(Canvas.LocalizeStr("EXIT"),TXT_RIGHT);
+
     if (eGame.bUseController) // Joshua - Controller prompts for Sticky Camera
     {
         // Button box //
@@ -123,16 +126,16 @@ function DrawButtons(ECanvas Canvas)
         Canvas.DrawLine(xPos - BUTTON_ZOOMP_BOX_X, yPos - BUTTON_BOX_HEIGHT, BUTTON_BOX_WIDTH, BUTTON_BOX_HEIGHT, Canvas.black, -1, eLevel.TGAME);
         Canvas.DrawRectangle(xPos - BUTTON_ZOOMP_BOX_X + 1, yPos - BUTTON_BOX_HEIGHT + 1, BUTTON_BOX_WIDTH - 2, BUTTON_BOX_HEIGHT - 2, 1, Green, -1, eLevel.TGAME);
         Canvas.SetPos(xPos - BUTTON_ZOOMP_BOX_X + 1, yPos - BUTTON_BOX_HEIGHT + 1);
-        
+
         // Zoom minus button (black square)
         Canvas.DrawLine(xPos - BUTTON_ZOOMM_BOX_X, yPos - BUTTON_BOX_HEIGHT, BUTTON_BOX_WIDTH, BUTTON_BOX_HEIGHT, Canvas.black, -1, eLevel.TGAME);
         Canvas.DrawRectangle(xPos - BUTTON_ZOOMM_BOX_X + 1, yPos - BUTTON_BOX_HEIGHT + 1, BUTTON_BOX_WIDTH - 2, BUTTON_BOX_HEIGHT - 2, 1, Green, -1, eLevel.TGAME);
         Canvas.SetPos(xPos - BUTTON_ZOOMM_BOX_X + 1, yPos - BUTTON_BOX_HEIGHT + 1);
-        
+
         // Exit button (black square)
         Canvas.DrawLine(xPos - BUTTON_EXIT_BOX_X, yPos - BUTTON_BOX_HEIGHT, BUTTON_BOX_WIDTH, BUTTON_BOX_HEIGHT, Canvas.black, -1, eLevel.TGAME);
         Canvas.DrawRectangle(xPos - BUTTON_EXIT_BOX_X + 1, yPos - BUTTON_BOX_HEIGHT + 1, BUTTON_BOX_WIDTH - 2, BUTTON_BOX_HEIGHT - 2, 1, Green, -1, eLevel.TGAME);
-        
+
         // Draw the textures inside the button box
         Canvas.DrawColor = Green;
         xPos = CAM_X + SIDEBAR_WIDTH;
@@ -141,37 +144,53 @@ function DrawButtons(ECanvas Canvas)
         Canvas.Style = ERenderStyle.STY_Alpha;
 
         // Right arrow to change vision to thermal view
-        Canvas.SetPos(xPos + BUTTON_THERMAL_BOX_X + BUTTON_BOX_WIDTH / 2 - eLevel.TGAME.GetWidth(eLevel.TGAME.sc_fleche) / 2,																	
+        Canvas.SetPos(xPos + BUTTON_THERMAL_BOX_X + BUTTON_BOX_WIDTH / 2 - eLevel.TGAME.GetWidth(eLevel.TGAME.sc_fleche) / 2,
                     yPos - BUTTON_BOX_HEIGHT + BUTTON_BOX_HEIGHT / 2 - eLevel.TGAME.GetHeight(eLevel.TGAME.sc_fleche) / 2);
-        eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_fleche2, 12, 13, 12, 13, -12, -13);	
-            
+        eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_fleche2, 12, 13, 12, 13, -12, -13);
+
 
         // Left arrow to change vision to night view
-        Canvas.SetPos(xPos + BUTTON_NIGHT_BOX_X + BUTTON_BOX_WIDTH / 2 - eLevel.TGAME.GetWidth(eLevel.TGAME.sc_fleche) / 2,																	
+        Canvas.SetPos(xPos + BUTTON_NIGHT_BOX_X + BUTTON_BOX_WIDTH / 2 - eLevel.TGAME.GetWidth(eLevel.TGAME.sc_fleche) / 2,
                     yPos - BUTTON_BOX_HEIGHT + BUTTON_BOX_HEIGHT / 2 - eLevel.TGAME.GetHeight(eLevel.TGAME.sc_fleche) / 2);
-        eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_fleche2, 12, 13, 0, 0, 12, 13);	
-        
+        eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_fleche2, 12, 13, 0, 0, 12, 13);
+
         xPos = SCREEN_END_X - CAM_X - SIDEBAR_WIDTH;
-        
+
         // Down arrow to zoom out
-        Canvas.SetPos(xPos - BUTTON_ZOOMP_BOX_X + BUTTON_BOX_WIDTH / 2 - eLevel.TGAME.GetWidth(eLevel.TGAME.sc_fleche) / 2,																	
+        Canvas.SetPos(xPos - BUTTON_ZOOMP_BOX_X + BUTTON_BOX_WIDTH / 2 - eLevel.TGAME.GetWidth(eLevel.TGAME.sc_fleche) / 2,
                     yPos - BUTTON_BOX_HEIGHT + BUTTON_BOX_HEIGHT / 2 - eLevel.TGAME.GetHeight(eLevel.TGAME.sc_fleche) / 2);
-        eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_fleche, 13, 12, 13, 12, -13, -12);	
+        eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_fleche, 13, 12, 13, 12, -13, -12);
 
         // Up arrow to zoom in
         Canvas.SetPos(xPos - BUTTON_ZOOMM_BOX_X + BUTTON_BOX_WIDTH / 2 - eLevel.TGAME.GetWidth(eLevel.TGAME.sc_fleche) / 2,
                     yPos - BUTTON_BOX_HEIGHT + BUTTON_BOX_HEIGHT / 2 - eLevel.TGAME.GetHeight(eLevel.TGAME.sc_fleche) / 2);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_fleche, 13, 12, 0, 0, 13, 12);
 
-        Canvas.Style = ERenderStyle.STY_Normal;    
+        Canvas.Style = ERenderStyle.STY_Normal;
 
-        Canvas.SetPos(xPos - BUTTON_EXIT_BOX_X + 5, yPos - BUTTON_BOX_HEIGHT + 2);
-        Canvas.DrawText("R");
+        Canvas.DrawColor = Green;
+        if (EPC.ControllerIcon == CI_PlayStation && EPC.ControllerScheme == CS_Default) // Joshua - PlayStation controller prompts
+        {
+            // Joshua - Default controller scheme allows Circle to exit
+            Canvas.SetPos(xPos - BUTTON_EXIT_BOX_X + 5 - 1, yPos - BUTTON_BOX_HEIGHT + 2 - 1);
+            Canvas.Font = Canvas.ETextFont;
+            Canvas.DrawText(Chr(0xD9)); // Circle
+            Canvas.Font = Font'EHUDFont';
+        }
+        else
+        {
+            Canvas.SetPos(xPos - BUTTON_EXIT_BOX_X + 5, yPos - BUTTON_BOX_HEIGHT + 2);
+            // Joshua - Default controller scheme allows B to exit, otherwise R
+            if (EPC.ControllerScheme == CS_Default)
+                Canvas.DrawText("B");
+            else
+                Canvas.DrawText("R");
+        }
     }
 }
 
 /*-----------------------------------------------------------------------------
-    Function :      UpdateDistanceMeter  
+    Function :      UpdateDistanceMeter
 
     Description:    -
 -----------------------------------------------------------------------------*/
@@ -184,7 +203,7 @@ function UpdateDistanceMeter(float DeltaTime)
     local int               iPillTag;
 
     TraceEnd = Location + (vector(Camera.camera_rotation) * 5000);
-        
+
     Traced = Trace(HitLocation, HitNormal, TraceEnd, Location, True);
 
     if (Traced != None)
@@ -198,7 +217,7 @@ function UpdateDistanceMeter(float DeltaTime)
 }
 
 /*-----------------------------------------------------------------------------
-    Function :      DrawZoomMeter  
+    Function :      DrawZoomMeter
 
     Description:    -
 -----------------------------------------------------------------------------*/
@@ -219,7 +238,7 @@ function DrawZoomMeter(ECanvas Canvas)
         fZoomRatio = 1.0;
 
     strZoom = (int(fZoomRatio)$"X");
-    
+
     Canvas.Font = Font'EHUDFont';
     Canvas.DrawColor = Green;
 
@@ -235,7 +254,7 @@ function DrawZoomMeter(ECanvas Canvas)
 }
 
 /*-----------------------------------------------------------------------------
-    Function :      DrawDistanceMeter  
+    Function :      DrawDistanceMeter
 
     Description:    -
 -----------------------------------------------------------------------------*/
@@ -250,7 +269,7 @@ function DrawDistanceMeter(ECanvas Canvas)
     // Only keep 2 numbers after '.'
     strFormattedDistance = String(fDistance / 100.0);
     iDecimal = InStr(strFormattedDistance, ".");
-    strFormattedDistance = left(strFormattedDistance, iDecimal + 3);
+    strFormattedDistance = Left(strFormattedDistance, iDecimal + 3);
     strFormattedDistance = strFormattedDistance $ " M";
 
     // If trace didnt return anything, just draw a dash.
@@ -258,8 +277,8 @@ function DrawDistanceMeter(ECanvas Canvas)
         strFormattedDistance = "  - ";
 
     //Canvas.SetPos(SCREEN_END_X - GADGETS_RIGHT + 67, GADGETS_TOP - 3);
-    Canvas.SetPos(SCREEN_END_X - CAM_X - SIDEBAR_WIDTH - 7, TOP_CAM_Y + 8);  
-    Canvas.DrawTextRightAligned(strFormattedDistance); 
+    Canvas.SetPos(SCREEN_END_X - CAM_X - SIDEBAR_WIDTH - 7, TOP_CAM_Y + 8);
+    Canvas.DrawTextRightAligned(strFormattedDistance);
 }
 
 

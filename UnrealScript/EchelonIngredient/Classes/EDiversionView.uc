@@ -10,7 +10,7 @@
 class EDiversionView extends ECameraView;
 
 /*-----------------------------------------------------------------------------
-                        T Y P E   D E F I N I T I O N S 
+                        T Y P E   D E F I N I T I O N S
 -----------------------------------------------------------------------------*/
 const DIVERSION_ICON_LEFT   = 498;
 const DIVERSION_ICON_TOP    = 306;
@@ -50,7 +50,7 @@ state s_Online
 -----------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------
-    Function :      DrawIcon  
+    Function :      DrawIcon
 
     Description:    -
 -----------------------------------------------------------------------------*/
@@ -63,7 +63,7 @@ function DrawIcon(ECanvas Canvas)
 }
 
 /*-----------------------------------------------------------------------------
-    Function :      DrawButtons  
+    Function :      DrawButtons
 
     Description:    -
 -----------------------------------------------------------------------------*/
@@ -72,17 +72,17 @@ function DrawButtons(ECanvas Canvas)
     local int xPos, yPos;
 	local float xLen, yLen;
     local EPlayerController EPC; // Joshua - PlayStation controller prompts
-	
+
     EPC = EPlayerController(Camera.Owner);
 
     Super.DrawButtons(Canvas);
-	
+
     //// Text Stuff //
 	Canvas.Font = Font'EHUDFont';
 	yPos = SCREEN_END_Y - BOTTOM_CAM_Y - (BUTTONBAR_HEIGHT - BUTTON_BOX_HEIGHT) / 2;
 	xPos = CAM_X + SIDEBAR_WIDTH;
 
-    if (eGame.bUseController) 
+    if (eGame.bUseController)
     {
         Canvas.DrawLine(xPos + BUTTON_NOISE_BOX_X_XBOX, yPos - BUTTON_BOX_HEIGHT, BUTTON_BOX_WIDTH, BUTTON_BOX_HEIGHT, Canvas.black, -1, eLevel.TGAME);
         Canvas.DrawRectangle(xPos + BUTTON_NOISE_BOX_X_XBOX + 1, yPos - BUTTON_BOX_HEIGHT + 1, BUTTON_BOX_WIDTH - 2, BUTTON_BOX_HEIGHT - 2, 1, Green, -1, eLevel.TGAME);
@@ -104,7 +104,7 @@ function DrawButtons(ECanvas Canvas)
         if (EPC.ControllerIcon == CI_PlayStation) // Joshua - PlayStation controller prompts
         {
             Canvas.SetPos(xPos + BUTTON_NOISE_BOX_X_XBOX + 5 - 1, yPos - BUTTON_BOX_HEIGHT + 2 - 1);
-            Canvas.Font = Font'ETextFontPS2';
+            Canvas.Font = Canvas.ETextFont;
             // Joshua - Default controller sceheme uses X/Square to make noise
             if (Epc.ControllerScheme == CS_Default)
                 Canvas.DrawText(Chr(0xFD));
@@ -133,7 +133,7 @@ function DrawButtons(ECanvas Canvas)
         if (EPC.ControllerIcon == CI_PlayStation) // Joshua - PlayStation controller prompts
         {
             Canvas.SetPos(xPos + BUTTON_GAS_BOX_X_XBOX + 5 - 2, yPos - BUTTON_BOX_HEIGHT + 2 - 1);
-            Canvas.Font = Font'ETextFontPS2';
+            Canvas.Font = Canvas.ETextFont;
             Canvas.DrawText(Chr(0xDB));
             Canvas.Font = Font'EHUDFont';
         }
@@ -148,22 +148,33 @@ function DrawButtons(ECanvas Canvas)
         Canvas.TextSize(Canvas.LocalizeStr("GAS"), xLen, yLen);
         Canvas.SetPos(xPos + BUTTON_GAS_BOX_X_XBOX - xLen - 10, SCREEN_END_Y - BOTTOM_CAM_Y - (BUTTONBAR_HEIGHT / 2) - 6);
         Canvas.DrawText(Canvas.LocalizeStr("GAS"));
-        
+
 
         xPos = SCREEN_END_X - CAM_X - SIDEBAR_WIDTH;
 
         // Draw EXIT button
         Canvas.DrawColor = Green;
-        Canvas.SetPos(xPos - BUTTON_EXIT_BOX_X + 5, yPos - BUTTON_BOX_HEIGHT + 2);
-        // Joshua - Default controller sceheme allows B to exit
-        if (EPC.ControllerScheme == CS_Default)
-            Canvas.DrawText("B");
+        if (EPC.ControllerIcon == CI_PlayStation && EPC.ControllerScheme == CS_Default) // Joshua - PlayStation controller prompts
+        {
+            // Joshua - Default controller scheme allows Circle to exit
+            Canvas.SetPos(xPos - BUTTON_EXIT_BOX_X + 5 - 1, yPos - BUTTON_BOX_HEIGHT + 2 - 1);
+            Canvas.Font = Canvas.ETextFont;
+            Canvas.DrawText(Chr(0xD9)); // Circle
+            Canvas.Font = Font'EHUDFont';
+        }
         else
-            Canvas.DrawText("R");
+        {
+            Canvas.SetPos(xPos - BUTTON_EXIT_BOX_X + 5, yPos - BUTTON_BOX_HEIGHT + 2);
+            // Joshua - Default controller scheme allows B to exit, otherwise R
+            if (EPC.ControllerScheme == CS_Default)
+                Canvas.DrawText("B");
+            else
+                Canvas.DrawText("R");
+        }
 
         // Right EXIT text
         Canvas.DrawColor = Black;
-        Canvas.TextSize(Canvas.LocalizeStr("EXIT"), xLen, yLen);	
+        Canvas.TextSize(Canvas.LocalizeStr("EXIT"), xLen, yLen);
         Canvas.SetPos(xPos - BUTTON_EXIT_BOX_X - xLen - 10, SCREEN_END_Y - BOTTOM_CAM_Y - (BUTTONBAR_HEIGHT / 2) - 6);
         Canvas.DrawText(Canvas.LocalizeStr("EXIT"));
     }
@@ -193,20 +204,20 @@ function DrawButtons(ECanvas Canvas)
 
         // EXIT
         Canvas.DrawColor = Black;
-        Canvas.TextSize(Canvas.LocalizeStr("EXIT"), xLen, yLen);	
+        Canvas.TextSize(Canvas.LocalizeStr("EXIT"), xLen, yLen);
         Canvas.SetPos(xPos - BUTTON_EXIT_BOX_X - xLen - 10, SCREEN_END_Y - BOTTOM_CAM_Y - (BUTTONBAR_HEIGHT / 2) - 6);
         Canvas.DrawText(Canvas.LocalizeStr("EXIT"));
         /*
         Canvas.DrawColor = Green;
         Canvas.TextSize(Localize("Keys","K_Fire","Localization\\HUD"), xLen, yLen);
-        
+
         // Joshua - PS3 used this
         Canvas.SetPos(xPos - 20 + BUTTON_EXIT_BOX_X + 5, yPos - BUTTON_BOX_HEIGHT + 2);
-        
+
         // PS3 removed this
         xPos = xPos - xLen - 5;
         Canvas.SetPos(xPos, yPos - BUTTON_BOX_HEIGHT + 2);
-        
+
 
         Canvas.DrawText("[" $ Caps(Localize("Keys","K_Fire","Localization\\HUD")) $ "]");
         */
@@ -227,7 +238,7 @@ function UpdateDistanceMeter(float DeltaTime)
     local int               iPillTag;
 
     TraceEnd = Location + (vector(Rotation) * 5000);
-        
+
     Traced = Trace(HitLocation, HitNormal, TraceEnd, Location, True);
 
     if (Traced != None)
