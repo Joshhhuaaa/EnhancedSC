@@ -120,8 +120,28 @@ var int lf_niv_plein_hor;
 // Joshua - SCPT zoom flash cycle animation
 var int cycle_flash;
 
+// Joshua - Crosshair variants for different platforms
+// EF2000 crosshairs
+var int svf2_mire_fond_PS2;
+var int svf2_mire_PS2;
+var int svf2_mire_fond_PS3;
+var int svf2_mire_PS3;
+var int svf2_mire_fond_SCCT;
+var int svf2_mire_SCCT;
+
+// EFN7 crosshairs
+var int pi_mire_top_bas_PS2;
+var int pi_fond_mire_PS2;
+var int pi_mire_cote_PS2;
+var int pi_mire_top_bas_PS3;
+var int pi_fond_mire_PS3;
+var int pi_mire_cote_PS3;
+var int pi_mire_top_bas_SCCT;
+var int pi_fond_mire_SCCT;
+var int pi_mire_cote_SCCT;
+
 /*-----------------------------------------------------------------------------
-                     D E F A U L T   P R O P E R T I E S 
+                     D E F A U L T   P R O P E R T I E S
 -----------------------------------------------------------------------------*/
 
 defaultproperties
@@ -220,6 +240,22 @@ defaultproperties
     qi_bord_h2_hor=91
     lf_niv_plein_hor=92
     cycle_flash=93
+    // Joshua - Crosshair variants
+    svf2_mire_fond_PS2=94
+    svf2_mire_PS2=95
+    svf2_mire_fond_PS3=96
+    svf2_mire_PS3=97
+    svf2_mire_fond_SCCT=98
+    svf2_mire_SCCT=99
+    pi_mire_top_bas_PS2=100
+    pi_fond_mire_PS2=101
+    pi_mire_cote_PS2=102
+    pi_mire_top_bas_PS3=103
+    pi_fond_mire_PS3=104
+    pi_mire_cote_PS3=105
+    pi_mire_top_bas_SCCT=106
+    pi_fond_mire_SCCT=107
+    pi_mire_cote_SCCT=108
     ArrayTexture(0)=(TextureName="ic_lock",TextureOwner=Texture'HUD.HUD.ETGAME',Origin=(X=202.000000,Y=103.000000),Size=(X=12.000000,Y=15.000000))
     ArrayTexture(1)=(TextureName="ic_unlock",TextureOwner=Texture'HUD.HUD.ETGAME',Origin=(X=184.000000,Y=103.000000),Size=(X=12.000000,Y=17.000000))
     ArrayTexture(2)=(TextureName="trai_s_button",TextureOwner=Texture'HUD.HUD.ETGAME',Origin=(X=454.000000,Y=155.000000),Size=(X=13.000000,Y=13.000000))
@@ -317,5 +353,27 @@ defaultproperties
     ArrayTexture(92)=(TextureName="lf_niv_plein_hor",TextureOwner=Texture'HUD_Enhanced.HUD.ETGAME_Hor',Origin=(X=407.000000,Y=78.000000),Size=(X=8.000000,Y=8.000000))
     // Joshua - SCPT zoom flash cycle animation
     ArrayTexture(93)=(TextureName="cycle_flash",TextureOwner=Texture'HUD_Enhanced.HUD.ETGAME2_SCPT',Origin=(X=131.000000,Y=84.000000),Size=(X=125.000000,Y=125.000000))
+    // Joshua - Crosshair variants for different platforms
+    // F2000 PS2
+    ArrayTexture(94)=(TextureName="svf2_mire_fond",TextureOwner=Texture'HUD_Enhanced.HUD.Crosshair_PS2',Origin=(X=68.000000,Y=66.000000),Size=(X=17.000000,Y=17.000000))
+    ArrayTexture(95)=(TextureName="svf2_mire",TextureOwner=Texture'HUD_Enhanced.HUD.Crosshair_PS2',Origin=(X=96.000000,Y=10.000000),Size=(X=7.000000,Y=7.000000))
+    // F2000 PS3
+    ArrayTexture(96)=(TextureName="svf2_mire_fond",TextureOwner=Texture'HUD_Enhanced.HUD.Crosshair_PS3',Origin=(X=68.000000,Y=66.000000),Size=(X=17.000000,Y=17.000000))
+    ArrayTexture(97)=(TextureName="svf2_mire",TextureOwner=Texture'HUD_Enhanced.HUD.Crosshair_PS3',Origin=(X=96.000000,Y=10.000000),Size=(X=7.000000,Y=7.000000))
+    // F2000 SCCT
+    ArrayTexture(98)=(TextureName="svf2_mire_fond",TextureOwner=Texture'HUD_Enhanced.HUD.Crosshair_SCCT',Origin=(X=68.000000,Y=66.000000),Size=(X=17.000000,Y=17.000000))
+    ArrayTexture(99)=(TextureName="svf2_mire",TextureOwner=Texture'HUD_Enhanced.HUD.Crosshair_SCCT',Origin=(X=96.000000,Y=10.000000),Size=(X=7.000000,Y=7.000000))
+    // FN7 PS2
+    ArrayTexture(100)=(TextureName="pi_mire_top_bas",TextureOwner=Texture'HUD_Enhanced.HUD.Crosshair_PS2',Origin=(X=173.000000,Y=121.000000),Size=(X=5.000000,Y=6.000000))
+    ArrayTexture(101)=(TextureName="pi_fond_mire",TextureOwner=Texture'HUD_Enhanced.HUD.Crosshair_PS2',Origin=(X=146.000000,Y=120.000000),Size=(X=11.000000,Y=11.000000))
+    ArrayTexture(102)=(TextureName="pi_mire_cote",TextureOwner=Texture'HUD_Enhanced.HUD.Crosshair_PS2',Origin=(X=163.000000,Y=121.000000),Size=(X=6.000000,Y=5.000000))
+    // FN7 PS3
+    ArrayTexture(103)=(TextureName="pi_mire_top_bas",TextureOwner=Texture'HUD_Enhanced.HUD.Crosshair_PS3',Origin=(X=173.000000,Y=121.000000),Size=(X=5.000000,Y=6.000000))
+    ArrayTexture(104)=(TextureName="pi_fond_mire",TextureOwner=Texture'HUD_Enhanced.HUD.Crosshair_PS3',Origin=(X=146.000000,Y=120.000000),Size=(X=11.000000,Y=11.000000))
+    ArrayTexture(105)=(TextureName="pi_mire_cote",TextureOwner=Texture'HUD_Enhanced.HUD.Crosshair_PS3',Origin=(X=163.000000,Y=121.000000),Size=(X=6.000000,Y=5.000000))
+    // FN7 SCCT
+    ArrayTexture(106)=(TextureName="pi_mire_top_bas",TextureOwner=Texture'HUD_Enhanced.HUD.Crosshair_SCCT',Origin=(X=173.000000,Y=121.000000),Size=(X=5.000000,Y=6.000000))
+    ArrayTexture(107)=(TextureName="pi_fond_mire",TextureOwner=Texture'HUD_Enhanced.HUD.Crosshair_SCCT',Origin=(X=146.000000,Y=120.000000),Size=(X=11.000000,Y=11.000000))
+    ArrayTexture(108)=(TextureName="pi_mire_cote",TextureOwner=Texture'HUD_Enhanced.HUD.Crosshair_SCCT',Origin=(X=163.000000,Y=121.000000),Size=(X=6.000000,Y=5.000000))
     pixel=40
 }

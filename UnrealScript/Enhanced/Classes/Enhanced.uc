@@ -12,21 +12,30 @@ class Enhanced extends Actor;
 // Joshua - Uncomment to generate a new HUD_Enhanced.utx with modified or new textures
 // Textures must be extracted into Textures\HUD_Enhanced
 /*
-#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\PS2_Cross.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="PS2_Cross" MIPS=0
-#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\GameCube_A.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="GameCube_A" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\Menus\Discord.tga" PACKAGE="HUD_Enhanced" GROUP="Menus" NAME="Discord" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\Menus\Discord_dis.tga" PACKAGE="HUD_Enhanced" GROUP="Menus" NAME="Discord_dis" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\Menus\QR_Discord.tga" PACKAGE="HUD_Enhanced" GROUP="Menus" NAME="QR_Discord" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\Menus\QR_GitHub.tga" PACKAGE="HUD_Enhanced" GROUP="Menus" NAME="QR_GitHub" MIPS=0
+
+#exec Texture Import File="..\Textures\HUD_Enhanced\ControllerIcons\PS2_Cross.tga" PACKAGE="HUD_Enhanced" GROUP="ControllerIcons" NAME="PS2_Cross" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\ControllerIcons\PS2_Circle.tga" PACKAGE="HUD_Enhanced" GROUP="ControllerIcons" NAME="PS2_Circle" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\ControllerIcons\PS2_Square.tga" PACKAGE="HUD_Enhanced" GROUP="ControllerIcons" NAME="PS2_Square" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\ControllerIcons\PS2_Triangle.tga" PACKAGE="HUD_Enhanced" GROUP="ControllerIcons" NAME="PS2_Triangle" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\ControllerIcons\PS2_Start.tga" PACKAGE="HUD_Enhanced" GROUP="ControllerIcons" NAME="PS2_Start" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\ControllerIcons\GameCube_A.tga" PACKAGE="HUD_Enhanced" GROUP="ControllerIcons" NAME="GameCube_A" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\ControllerIcons\GameCube_B.tga" PACKAGE="HUD_Enhanced" GROUP="ControllerIcons" NAME="GameCube_B" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\ControllerIcons\GameCube_X.tga" PACKAGE="HUD_Enhanced" GROUP="ControllerIcons" NAME="GameCube_X" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\ControllerIcons\GameCube_Y.tga" PACKAGE="HUD_Enhanced" GROUP="ControllerIcons" NAME="GameCube_Y" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\ControllerIcons\GameCube_Start.tga" PACKAGE="HUD_Enhanced" GROUP="ControllerIcons" NAME="GameCube_Start" MIPS=0
+
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Alarm.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Alarm" MIPS=0
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\AlarmBackground.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="AlarmBackground" MIPS=0
-#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Discord.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Discord" MIPS=0
-#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Discord_dis.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Discord_dis" MIPS=0
-#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\QR_Discord.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="QR_Discord" MIPS=0
-#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\QR_GitHub.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="QR_GitHub" MIPS=0
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\ETGAME_PS2.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="ETGAME_PS2" MIPS=0
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\ETGAME_Hor.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="ETGAME_Hor" MIPS=0
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\ETGAME2_SCPT.dds" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="ETGAME2_SCPT" MIPS=0
-
-// Alpha textures
-#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\ETMENU_PS2.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="ETMENU_PS2" MIPS=0
-#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\ETMENU_GameCube.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="ETMENU_GameCube" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Crosshair_PS2.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Crosshair_PS2" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Crosshair_PS3.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Crosshair_PS3" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Crosshair_SCCT.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Crosshair_SCCT" MIPS=0
 
 #exec SAVEPACKAGE FILE=..\Textures\HUD_Enhanced.utx PACKAGE=HUD_Enhanced
 */
@@ -191,13 +200,14 @@ class Enhanced extends Actor;
 // Sam Cuit D - Green Vest
 #exec Texture Import File="..\Textures\ETexCharacter\Sam\SamDFace.tga" PACKAGE="ETexCharacter" GROUP="Sam" NAME="SamDFace" MIPS=1
 #exec Texture Import File="..\Textures\ETexCharacter\Sam\SamDBody.tga" PACKAGE="ETexCharacter" GROUP="Sam" NAME="SamDBody" MIPS=1
+#exec Texture Import File="..\Textures\ETexCharacter\Sam\SamDBodyHeat.dds" PACKAGE="ETexCharacter" GROUP="Sam" NAME="SamDBodyHeat" MIPS=1
 // Sam Suit E - White Balaclava
 #exec Texture Import File="..\Textures\ETexCharacter\Sam\SamEBody.tga" PACKAGE="ETexCharacter" GROUP="Sam" NAME="SamEBody" MIPS=1
 #exec Texture Import File="..\Textures\ETexCharacter\Sam\SamEFace.tga" PACKAGE="ETexCharacter" GROUP="Sam" NAME="SamEFace" MIPS=1
 // Sam Suit F - Short Sleeves
 #exec Texture Import File="..\Textures\ETexCharacter\Sam\SamFBody.tga" PACKAGE="ETexCharacter" GROUP="Sam" NAME="SamFBody" MIPS=1
 #exec Texture Import File="..\Textures\ETexCharacter\Sam\SamFFace.tga" PACKAGE="ETexCharacter" GROUP="Sam" NAME="SamFFace" MIPS=1
-#exec Texture Import File="..\Textures\ETexCharacter\Sam\SamFBodyHeat.tga" PACKAGE="ETexCharacter" GROUP="Sam" NAME="SamFBodyHeat" MIPS=1
+#exec Texture Import File="..\Textures\ETexCharacter\Sam\SamFBodyHeat.dds" PACKAGE="ETexCharacter" GROUP="Sam" NAME="SamFBodyHeat" MIPS=1
 
 
 #exec Texture Import File="..\Textures\ETexCharacter\Security\SecurityA.dds" PACKAGE="ETexCharacter" GROUP="Security" NAME="SecurityA" MIPS=1

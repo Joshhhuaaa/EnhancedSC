@@ -1,5 +1,5 @@
 /******************************************************************************
- 
+
  Class:         EF2000Reticle
 
  Description:   -
@@ -11,11 +11,11 @@
 class EF2000Reticle extends EWeaponReticle;
 
 /*-----------------------------------------------------------------------------
-                      T Y P E   D E F I N I T I O N S 
+                      T Y P E   D E F I N I T I O N S
 -----------------------------------------------------------------------------*/
 // General screen Stuff
 const   SCREEN_HALF_X               = 319;
-const   SCREEN_HALF_Y               = 239;  
+const   SCREEN_HALF_Y               = 239;
 
 // Stems const's
 const STEMS_NORTH_START             = 0;
@@ -56,7 +56,7 @@ const NOISE_BARS_VERT_DIST          = 200;
 const NOISE_BARS_HORIZ_SIZE         = 400;
 const NOISE_BARS_MAX_SPEED          = 100.0;
 
-// Quick Inv. const's 
+// Quick Inv. const's
 const QUICK_INV_LEFT    = 277;
 const QUICK_INV_TOP     = 386;
 const QUICK_INV_RIGHT   = 362;
@@ -85,7 +85,7 @@ const FATIGUETHICK = 1;
 const FATIGUEBARTHICK = 2;
 
 /*-----------------------------------------------------------------------------
-                        M E M B E R   V A R I A B L E S 
+                        M E M B E R   V A R I A B L E S
 -----------------------------------------------------------------------------*/
 
 var EF2000			F2000;
@@ -117,6 +117,111 @@ function PostBeginPlay()
 }
 
 /*-----------------------------------------------------------------------------
+ Function:      GetCrosshairMire
+
+ Description:   Joshua - Returns the appropriate crosshair texture index based on
+                the player's crosshair style preference
+-----------------------------------------------------------------------------*/
+function int GetCrosshairMire()
+{
+	switch (Epc.CrosshairStyle)
+	{
+		case CS_PS2:
+			return eLevel.TGAME.svf2_mire_PS2;
+		case CS_PS3:
+			return eLevel.TGAME.svf2_mire_PS3;
+		case CS_SCCT:
+			return eLevel.TGAME.svf2_mire_SCCT;
+		default:
+			return eLevel.TGAME.svf2_mire;
+	}
+}
+
+/*-----------------------------------------------------------------------------
+ Function:      GetCrosshairMireFond
+
+ Description:   Joshua - Returns the appropriate crosshair background texture index
+                based on the player's crosshair style preference
+-----------------------------------------------------------------------------*/
+function int GetCrosshairMireFond()
+{
+	switch (Epc.CrosshairStyle)
+	{
+		case CS_PS2:
+			return eLevel.TGAME.svf2_mire_fond_PS2;
+		case CS_PS3:
+			return eLevel.TGAME.svf2_mire_fond_PS3;
+		case CS_SCCT:
+			return eLevel.TGAME.svf2_mire_fond_SCCT;
+		default:
+			return eLevel.TGAME.svf2_mire_fond;
+	}
+}
+
+/*-----------------------------------------------------------------------------
+ Function:      GetPistolMireTopBas
+
+ Description:   Joshua - Returns the appropriate pistol crosshair top/bottom texture
+                index based on the player's crosshair style preference
+-----------------------------------------------------------------------------*/
+function int GetPistolMireTopBas()
+{
+	switch (Epc.CrosshairStyle)
+	{
+		case CS_PS2:
+			return eLevel.TGAME.pi_mire_top_bas_PS2;
+		case CS_PS3:
+			return eLevel.TGAME.pi_mire_top_bas_PS3;
+		case CS_SCCT:
+			return eLevel.TGAME.pi_mire_top_bas_SCCT;
+		default:
+			return eLevel.TGAME.pi_mire_top_bas;
+	}
+}
+
+/*-----------------------------------------------------------------------------
+ Function:      GetPistolFondMire
+
+ Description:   Joshua - Returns the appropriate pistol crosshair background texture
+                index based on the player's crosshair style preference
+-----------------------------------------------------------------------------*/
+function int GetPistolFondMire()
+{
+	switch (Epc.CrosshairStyle)
+	{
+		case CS_PS2:
+			return eLevel.TGAME.pi_fond_mire_PS2;
+		case CS_PS3:
+			return eLevel.TGAME.pi_fond_mire_PS3;
+		case CS_SCCT:
+			return eLevel.TGAME.pi_fond_mire_SCCT;
+		default:
+			return eLevel.TGAME.pi_fond_mire;
+	}
+}
+
+/*-----------------------------------------------------------------------------
+ Function:      GetPistolMireCote
+
+ Description:   Joshua - Returns the appropriate pistol crosshair side texture
+                index based on the player's crosshair style preference
+-----------------------------------------------------------------------------*/
+function int GetPistolMireCote()
+{
+	switch (Epc.CrosshairStyle)
+	{
+		case CS_PS2:
+			return eLevel.TGAME.pi_mire_cote_PS2;
+		case CS_PS3:
+			return eLevel.TGAME.pi_mire_cote_PS3;
+		case CS_SCCT:
+			return eLevel.TGAME.pi_mire_cote_SCCT;
+		default:
+			return eLevel.TGAME.pi_mire_cote;
+	}
+}
+
+/*-----------------------------------------------------------------------------
  Function:      PostBeginPlay
 
  Description:   -
@@ -124,7 +229,7 @@ function PostBeginPlay()
  Be carefull so that any state ObjectHudTick are not declared in SuperClasses
 -----------------------------------------------------------------------------*/
 function ObjectHudTick(float DeltaTime)
-{  
+{
     local int               i;
 
     if (Epc.m_useTarget)
@@ -181,7 +286,7 @@ function ObjectHudTick(float DeltaTime)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //------------------------------------------------------------------------
 state s_Selected
 {
@@ -223,46 +328,46 @@ function DrawView(HUD Hud, ECanvas Canvas)
 	Super.DrawView(Hud, Canvas);
 
 	if (F2000 != None && F2000.bSniperMode && Epc.bShowScope && Epc.bShowHUD) // Joshua - Show scope toggle
-	{			
+	{
         DrawDistanceMeter(Canvas);
         DrawQuickInv(Canvas);
         DrawFlashCycle(Canvas); // Joshua - SCPT zoom flash cycle animation
 		DrawStems(Canvas);
         DrawNoiseBars(Canvas);
         DrawGreenRing(Canvas);
-        DrawSniperMask(Canvas);		
+        DrawSniperMask(Canvas);
 		if (F2000.Sn != None)
 			DrawFatigueMeter(Canvas, F2000.Sn.fatigueLevel);
 	}
 }
 
 function DrawFatigueMeter(ECanvas Canvas, float fatigueLevel)
-{			
+{
     // Fill
     Canvas.SetDrawColor(128, 128, 128);
 	Canvas.Style = ERenderStyle.STY_Alpha;
 
 	DrawLine(0 + DIST_METER_END + 1, SCREEN_HALF_Y - DIST_METER_VERT_SIZE + 1,
              0 + DIST_METER_START - 1  , SCREEN_HALF_Y + DIST_METER_VERT_SIZE    , EHC_ALPHA_GREEN, Canvas);
-	
+
 	DrawLine(0 + DIST_METER_END + 1 + 1, SCREEN_HALF_Y - DIST_METER_VERT_SIZE + 1,
              0 + DIST_METER_START - 1 - int(fatigueLevel * float(DIST_METER_START - DIST_METER_END)), SCREEN_HALF_Y + DIST_METER_VERT_SIZE, EHC_GREEN_PALE, Canvas);
 
     DrawRectangle(0 + DIST_METER_END    , SCREEN_HALF_Y - DIST_METER_VERT_SIZE    , 0 + DIST_METER_START    , SCREEN_HALF_Y + 1 + DIST_METER_VERT_SIZE, 1, EHC_GREEN, Canvas);
-    DrawRectangle(0 + DIST_METER_END - 1, SCREEN_HALF_Y - DIST_METER_VERT_SIZE + 1, 0 + DIST_METER_START + 1, SCREEN_HALF_Y + DIST_METER_VERT_SIZE    , 1, EHC_BLACK, Canvas);	
-        
+    DrawRectangle(0 + DIST_METER_END - 1, SCREEN_HALF_Y - DIST_METER_VERT_SIZE + 1, 0 + DIST_METER_START + 1, SCREEN_HALF_Y + DIST_METER_VERT_SIZE    , 1, EHC_BLACK, Canvas);
+
 	Canvas.SetDrawColor(128, 128, 128);
 	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
 
 //------------------------------------------------------------------------
-// Description		
-//		
+// Description
+//
 //------------------------------------------------------------------------
 function DrawGreenRing(ECanvas Canvas)
-{                
-	// (Yanick Mimee) July-04-2002	
+{
+	// (Yanick Mimee) July-04-2002
 	// Green border
 	Canvas.Style = ERenderStyle.STY_Alpha;
 	Canvas.SetDrawColor(128, 128, 128);
@@ -272,36 +377,36 @@ function DrawGreenRing(ECanvas Canvas)
 
     Canvas.SetPos(0, SCREEN_END_Y - GREEN_BORDER_TEXURE_SIZE_Y);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_border, GREEN_BORDER_TEXURE_SIZE_X ,GREEN_BORDER_TEXURE_SIZE_Y, 0, GREEN_BORDER_TEXURE_SIZE_Y, GREEN_BORDER_TEXURE_SIZE_X, -GREEN_BORDER_TEXURE_SIZE_Y);
-    
+
     Canvas.SetPos(SCREEN_END_X - GREEN_BORDER_TEXURE_SIZE_X, 0);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_border, GREEN_BORDER_TEXURE_SIZE_X ,GREEN_BORDER_TEXURE_SIZE_Y, GREEN_BORDER_TEXURE_SIZE_X, 0, -GREEN_BORDER_TEXURE_SIZE_X, GREEN_BORDER_TEXURE_SIZE_Y);
-    
+
     Canvas.SetPos(SCREEN_END_X - GREEN_BORDER_TEXURE_SIZE_X, SCREEN_END_Y - GREEN_BORDER_TEXURE_SIZE_Y);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_border, GREEN_BORDER_TEXURE_SIZE_X ,GREEN_BORDER_TEXURE_SIZE_Y, GREEN_BORDER_TEXURE_SIZE_X, GREEN_BORDER_TEXURE_SIZE_Y, -GREEN_BORDER_TEXURE_SIZE_X, -GREEN_BORDER_TEXURE_SIZE_Y);
-	
-	
-    // Corners //    	
+
+
+    // Corners //
 
     // Top Left Corner //
     Canvas.DrawLine(GREEN_BORDER_CORNER_X, GREEN_BORDER_CORNER_Y    , GREEN_BORDER_CORNER_LENGTH, 1, gray, -1, eLevel.TGAME);
     Canvas.DrawLine(GREEN_BORDER_CORNER_X, GREEN_BORDER_CORNER_Y + 1, 1, GREEN_BORDER_CORNER_HEIGHT, gray, -1, eLevel.TGAME);
-    
+
     Canvas.DrawLine(GREEN_BORDER_CORNER_X    , GREEN_BORDER_CORNER_Y    , GREEN_BORDER_CORNER2_LENGTH, 1, green, -1, eLevel.TGAME);
     Canvas.DrawLine(GREEN_BORDER_CORNER_X + 1, GREEN_BORDER_CORNER_Y + 1, GREEN_BORDER_CORNER2_LENGTH, 1, Canvas.black, -1, eLevel.TGAME);
-    
+
     Canvas.DrawLine(GREEN_BORDER_CORNER_X    , GREEN_BORDER_CORNER_Y + 1, 1, GREEN_BORDER_CORNER2_LENGTH, green, -1, eLevel.TGAME);
     Canvas.DrawLine(GREEN_BORDER_CORNER_X + 1, GREEN_BORDER_CORNER_Y + 1, 1, GREEN_BORDER_CORNER2_LENGTH, Canvas.black, -1, eLevel.TGAME);
-    
+
     // Top Right Corner //
     Canvas.DrawLine(SCREEN_END_X - GREEN_BORDER_CORNER_X - GREEN_BORDER_CORNER_LENGTH - 1, GREEN_BORDER_CORNER_Y, GREEN_BORDER_CORNER_LENGTH, 1, gray, -1, eLevel.TGAME);
     Canvas.DrawLine(SCREEN_END_X - GREEN_BORDER_CORNER_X - 2, GREEN_BORDER_CORNER_Y + 1, 1, GREEN_BORDER_CORNER_HEIGHT - 1, gray, -1, eLevel.TGAME);
-    
+
     Canvas.DrawLine(SCREEN_END_X - GREEN_BORDER_CORNER_X - GREEN_BORDER_CORNER2_LENGTH - 1, GREEN_BORDER_CORNER_Y    , GREEN_BORDER_CORNER2_LENGTH    , 1, green, -1, eLevel.TGAME);
     Canvas.DrawLine(SCREEN_END_X - GREEN_BORDER_CORNER_X - GREEN_BORDER_CORNER2_LENGTH - 1, GREEN_BORDER_CORNER_Y + 1, GREEN_BORDER_CORNER2_LENGTH - 1, 1, Canvas.black, -1, eLevel.TGAME);
-    
+
     Canvas.DrawLine(SCREEN_END_X - GREEN_BORDER_CORNER_X - 2, GREEN_BORDER_CORNER_Y + 1, 1, GREEN_BORDER_CORNER2_LENGTH    , green, -1, eLevel.TGAME);
     Canvas.DrawLine(SCREEN_END_X - GREEN_BORDER_CORNER_X - 3, GREEN_BORDER_CORNER_Y + 2, 1, GREEN_BORDER_CORNER2_LENGTH - 1, Canvas.black, -1, eLevel.TGAME);
-    
+
     // Bottom Left Corner //
     DrawLine(GREEN_BORDER_CORNER_X, SCREEN_END_Y - GREEN_BORDER_CORNER_Y - 2, GREEN_BORDER_CORNER_X + GREEN_BORDER_CORNER_LENGTH, SCREEN_END_Y - GREEN_BORDER_CORNER_Y - 1, EHC_GRAY, Canvas);
     DrawLine(GREEN_BORDER_CORNER_X, SCREEN_END_Y - GREEN_BORDER_CORNER_Y - GREEN_BORDER_CORNER_HEIGHT - 2, GREEN_BORDER_CORNER_X + 1, SCREEN_END_Y - GREEN_BORDER_CORNER_Y - 2, EHC_GRAY, Canvas);
@@ -325,8 +430,8 @@ function DrawGreenRing(ECanvas Canvas)
 }
 
 //------------------------------------------------------------------------
-// Description		
-//		
+// Description
+//
 //------------------------------------------------------------------------
 function DrawStems(ECanvas Canvas)
 {
@@ -368,8 +473,8 @@ function DrawStems(ECanvas Canvas)
     DrawLine(SCREEN_HALF_X - 2, SCREEN_END_Y - STEMS_VERT_END - 3, SCREEN_HALF_X + 3, SCREEN_END_Y - STEMS_VERT_END - 2, EHC_BLACK, Canvas);
 
     // West Stem //
-	
-	
+
+
     DrawLine(STEMS_HORIZ_START, SCREEN_HALF_Y - 1, DIST_METER_END - 1, SCREEN_HALF_Y    , EHC_GREEN, Canvas);
     DrawLine(STEMS_HORIZ_START, SCREEN_HALF_Y    , DIST_METER_END - 1, SCREEN_HALF_Y + 1, EHC_BLACK, Canvas);
     DrawLine(STEMS_HORIZ_START, SCREEN_HALF_Y + 1, DIST_METER_END - 1, SCREEN_HALF_Y + 2, EHC_GREEN, Canvas);
@@ -377,20 +482,20 @@ function DrawStems(ECanvas Canvas)
 	DrawLine(DIST_METER_START + 1, SCREEN_HALF_Y - 1, STEMS_HORIZ_1ST_STOP, SCREEN_HALF_Y    , EHC_GREEN, Canvas);
     DrawLine(DIST_METER_START + 1, SCREEN_HALF_Y    , STEMS_HORIZ_1ST_STOP, SCREEN_HALF_Y + 1, EHC_BLACK, Canvas);
     DrawLine(DIST_METER_START + 1, SCREEN_HALF_Y + 1, STEMS_HORIZ_1ST_STOP, SCREEN_HALF_Y + 2, EHC_GREEN, Canvas);
-	
-    
+
+
     DrawLine(STEMS_HORIZ_1ST_STOP    , SCREEN_HALF_Y - 2, STEMS_HORIZ_1ST_STOP + 1, SCREEN_HALF_Y + 3, EHC_GREEN, Canvas);
     DrawLine(STEMS_HORIZ_1ST_STOP + 1, SCREEN_HALF_Y - 2, STEMS_HORIZ_1ST_STOP + 2, SCREEN_HALF_Y + 3, EHC_BLACK, Canvas);
 
-	
+
     DrawLine(STEMS_HORIZ_1ST_STOP + 2, SCREEN_HALF_Y - 1, STEMS_HORIZ_END, SCREEN_HALF_Y    , EHC_GREEN, Canvas);
     DrawLine(STEMS_HORIZ_1ST_STOP + 2, SCREEN_HALF_Y    , STEMS_HORIZ_END, SCREEN_HALF_Y + 1, EHC_BLACK, Canvas);
     DrawLine(STEMS_HORIZ_1ST_STOP + 2, SCREEN_HALF_Y + 1, STEMS_HORIZ_END, SCREEN_HALF_Y + 2, EHC_GREEN, Canvas);
 
     DrawLine(STEMS_HORIZ_END    , SCREEN_HALF_Y - 2, STEMS_HORIZ_END + 1, SCREEN_HALF_Y + 3, EHC_GREEN, Canvas);
     DrawLine(STEMS_HORIZ_END + 1, SCREEN_HALF_Y - 2, STEMS_HORIZ_END + 2, SCREEN_HALF_Y + 3, EHC_BLACK, Canvas);
-	
-	
+
+
 
     // East Stem //
     DrawLine(SCREEN_END_X - STEMS_HORIZ_START, SCREEN_HALF_Y - 1, SCREEN_END_X - STEMS_DIST_BOX_START    , SCREEN_HALF_Y    , EHC_GREEN, Canvas);
@@ -400,7 +505,7 @@ function DrawStems(ECanvas Canvas)
     DrawLine(SCREEN_END_X - STEMS_DIST_BOX_END    , SCREEN_HALF_Y - 1, SCREEN_END_X - STEMS_HORIZ_1ST_STOP - 1, SCREEN_HALF_Y    , EHC_GREEN, Canvas);
     DrawLine(SCREEN_END_X - STEMS_DIST_BOX_END + 1, SCREEN_HALF_Y    , SCREEN_END_X - STEMS_HORIZ_1ST_STOP - 1, SCREEN_HALF_Y + 1, EHC_BLACK, Canvas);
     DrawLine(SCREEN_END_X - STEMS_DIST_BOX_END   , SCREEN_HALF_Y + 1, SCREEN_END_X - STEMS_HORIZ_1ST_STOP - 1, SCREEN_HALF_Y + 2, EHC_GREEN, Canvas);
-    
+
     DrawLine(SCREEN_END_X - STEMS_HORIZ_1ST_STOP - 2, SCREEN_HALF_Y - 2, SCREEN_END_X - STEMS_HORIZ_1ST_STOP - 1, SCREEN_HALF_Y + 3, EHC_GREEN, Canvas);
     DrawLine(SCREEN_END_X - STEMS_HORIZ_1ST_STOP - 3, SCREEN_HALF_Y - 2, SCREEN_END_X - STEMS_HORIZ_1ST_STOP - 2, SCREEN_HALF_Y + 3, EHC_BLACK, Canvas);
 
@@ -415,8 +520,8 @@ function DrawStems(ECanvas Canvas)
 }
 
 //------------------------------------------------------------------------
-// Description		
-//		
+// Description
+//
 //------------------------------------------------------------------------
 function DrawDistanceMeter(ECanvas Canvas)
 {
@@ -433,31 +538,31 @@ function DrawDistanceMeter(ECanvas Canvas)
 
     DrawRectangle(SCREEN_END_X - DIST_METER_START    , SCREEN_HALF_Y - DIST_METER_VERT_SIZE    , SCREEN_END_X - DIST_METER_END    , SCREEN_HALF_Y + 1 + DIST_METER_VERT_SIZE, 1, EHC_GREEN, Canvas);
     DrawRectangle(SCREEN_END_X - DIST_METER_START + 1, SCREEN_HALF_Y - DIST_METER_VERT_SIZE + 1, SCREEN_END_X - DIST_METER_END - 1, SCREEN_HALF_Y + DIST_METER_VERT_SIZE    , 1, EHC_BLACK, Canvas);
-    
+
     // Draw Distance
-    Canvas.Font = Font'EHUDFont';     
+    Canvas.Font = Font'EHUDFont';
     Canvas.DrawColor = Green;
 
-    // Only keep 4 numbers + '.'   
+    // Only keep 4 numbers + '.'
     strFormattedDistance = string (fDistDistance / 100.0);
     iDecimal = InStr(strFormattedDistance, ".");
-    strFormattedDistance = left(strFormattedDistance, iDecimal + 3);
+    strFormattedDistance = Left(strFormattedDistance, iDecimal + 3);
     strFormattedDistance = strFormattedDistance $ " M";
 
     // If trace didnt return anything, just draw a dash.
     if (fDistDistance == 0.0)
     {
         strFormattedDistance = "  - ";
-    }      
-        
+    }
+
     Canvas.SetPos(SCREEN_END_X - DIST_METER_END - 5, SCREEN_HALF_Y - DIST_METER_VERT_SIZE + 4);
-    Canvas.DrawTextRightAligned(strFormattedDistance);    
+    Canvas.DrawTextRightAligned(strFormattedDistance);
 	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
 //------------------------------------------------------------------------
-// Description		
-//		
+// Description
+//
 //------------------------------------------------------------------------
 function DrawQuickInv(ECanvas Canvas)
 {
@@ -467,7 +572,7 @@ function DrawQuickInv(ECanvas Canvas)
 	local ESecondaryAmmo	SecAmmo;
     local float             xLen, yLen; // Joshua - Display zoom level in SC-20K scope
 
-    Canvas.SetDrawColor(128, 128, 128); 
+    Canvas.SetDrawColor(128, 128, 128);
     Canvas.Style = ERenderStyle.STY_Alpha;
     // Fond Vert Transparent
     DrawLine(QUICK_INV_LEFT + 2, QUICK_INV_TOP + 2, QUICK_INV_RIGHT - 2, QUICK_INV_BOTTOM - 2, EHC_ALPHA_GREEN, Canvas);
@@ -476,12 +581,12 @@ function DrawQuickInv(ECanvas Canvas)
     // Green
     DrawRectangle(QUICK_INV_LEFT    , QUICK_INV_TOP    , QUICK_INV_RIGHT    , QUICK_INV_BOTTOM    , 1, EHC_GREEN, Canvas);
     DrawRectangle(QUICK_INV_LEFT + 1, QUICK_INV_TOP + 1, QUICK_INV_RIGHT - 1, QUICK_INV_BOTTOM - 1, 1, EHC_BLACK, Canvas);
-    
+
     // Three strokes
     DrawLine(QUICK_INV_LEFT + 57, QUICK_INV_TOP + 1, QUICK_INV_LEFT + 58, QUICK_INV_BOTTOM - 1, EHC_BLACK, Canvas);
     DrawLine(QUICK_INV_LEFT + 58, QUICK_INV_TOP + 1, QUICK_INV_LEFT + 59, QUICK_INV_BOTTOM - 1, EHC_GREEN, Canvas);
     DrawLine(QUICK_INV_LEFT + 59, QUICK_INV_TOP + 1, QUICK_INV_LEFT + 60, QUICK_INV_BOTTOM - 1, EHC_BLACK, Canvas);
-    
+
     // Gun Icon
     Canvas.SetPos(QUICK_INV_LEFT - 14, QUICK_INV_TOP + 2);
 
@@ -495,7 +600,7 @@ function DrawQuickInv(ECanvas Canvas)
 
     // Primary ammo qty
     Canvas.SetPos(QUICK_INV_LEFT + 50, QUICK_INV_TOP + 27);
-    Canvas.Font = Font'EHUDFont'; 
+    Canvas.Font = Font'EHUDFont';
     Canvas.DrawColor = Green;
     strPrimAmmoNb = String(Weapon.Ammo);
     iPrimAmmoClipNb = Weapon.Ammo / Weapon.ClipMaxAmmo;
@@ -523,16 +628,16 @@ function DrawQuickInv(ECanvas Canvas)
         Canvas.SetDrawColor(128, 128, 128);
         Canvas.DrawColor = Green;
         Canvas.Style = ERenderStyle.STY_Alpha;
-        
+
         Canvas.TextSize(strZoomLevel, xLen, yLen);
-    
+
         Canvas.SetPos(QUICK_INV_LEFT + 60 + (23 - xLen) / 2, QUICK_INV_TOP + 10 + (25 - yLen) / 2);
         Canvas.DrawText(strZoomLevel);
 
         Canvas.Style = ERenderStyle.STY_Normal;
     }
 
-    // Secondary Ammo, if any 
+    // Secondary Ammo, if any
 	if (F2000 == None)
 		return;
 
@@ -560,8 +665,8 @@ function DrawQuickInv(ECanvas Canvas)
 }
 
 //------------------------------------------------------------------------
-// Description		
-//		
+// Description
+//
 //------------------------------------------------------------------------
 function DrawNoiseBars(ECanvas Canvas)
 {
@@ -575,7 +680,7 @@ function DrawNoiseBars(ECanvas Canvas)
 
     // Hack for Defense Ministry
     // Joshua - This shifts the compass by 90 degrees so the East Wing of the map point towards East on the binoculars
-	if (left(GetCurrentMapName(), 3) == "1_2")
+	if (Left(GetCurrentMapName(), 3) == "1_2")
 		pRotation += 0.25;
 	if (pRotation >= 1.0)
 		pRotation -= 1.0;
@@ -637,7 +742,7 @@ function DrawNoiseBars(ECanvas Canvas)
             break;
     }
 
-	Canvas.Style = ERenderStyle.STY_Alpha;	
+	Canvas.Style = ERenderStyle.STY_Alpha;
 
     // Draw Compas Coordinates //
     Canvas.Font = Font'EHUDFont';
@@ -659,26 +764,26 @@ function DrawNoiseBars(ECanvas Canvas)
     Canvas.SetPos(SCREEN_HALF_X + (630 - rPos) + p2, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST - 10);
     Canvas.DrawText(".");
 
-    // Draw noise bars //	
-    DrawNoiseBar(SCREEN_HALF_X - NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST - 6, 
-                 SCREEN_HALF_X + NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST - 2, 
+    // Draw noise bars //
+    DrawNoiseBar(SCREEN_HALF_X - NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST - 6,
+                 SCREEN_HALF_X + NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST - 2,
                  -rPos % 126, Canvas);
-    DrawNoiseBar(SCREEN_HALF_X - NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST, 
-                 SCREEN_HALF_X + NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST + 4, 
+    DrawNoiseBar(SCREEN_HALF_X - NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST,
+                 SCREEN_HALF_X + NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y - NOISE_BARS_VERT_DIST + 4,
                  rPos % 126, Canvas);
 
-    DrawNoiseBar(SCREEN_HALF_X - NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y + NOISE_BARS_VERT_DIST - 4, 
-                 SCREEN_HALF_X + NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y + NOISE_BARS_VERT_DIST, 
+    DrawNoiseBar(SCREEN_HALF_X - NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y + NOISE_BARS_VERT_DIST - 4,
+                 SCREEN_HALF_X + NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y + NOISE_BARS_VERT_DIST,
                  rPos % 126, Canvas);
-    DrawNoiseBar(SCREEN_HALF_X - NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y + NOISE_BARS_VERT_DIST + 2, 
-                 SCREEN_HALF_X + NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y + NOISE_BARS_VERT_DIST + 6, 
+    DrawNoiseBar(SCREEN_HALF_X - NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y + NOISE_BARS_VERT_DIST + 2,
+                 SCREEN_HALF_X + NOISE_BARS_HORIZ_SIZE, SCREEN_HALF_Y + NOISE_BARS_VERT_DIST + 6,
                  -rPos % 126, Canvas);
 	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
 //------------------------------------------------------------------------
-// Description		
-//		
+// Description
+//
 //------------------------------------------------------------------------
 function DrawCrosshair(ECanvas Canvas)
 {
@@ -718,11 +823,11 @@ function DrawCrosshair(ECanvas Canvas)
 		CENTERSCALE = 0.5;
 	}
 	else
-	{	
+	{
 		CENTERSCALE = Weapon.Accuracy;
-	}	
+	}
 
-	
+
 	TOPLEFT_DEP_X = - (8 + MAX_CROSSHAIR_DEP_X * CENTERSCALE);
 	TOPLEFT_DEP_Y = - (8 + MAX_CROSSHAIR_DEP_X * CENTERSCALE);
 	TOPRIGHT_DEP_X = 4 + MAX_CROSSHAIR_DEP_X * CENTERSCALE;
@@ -731,11 +836,11 @@ function DrawCrosshair(ECanvas Canvas)
 	BOTTOMLEFT_DEP_Y = 4 + MAX_CROSSHAIR_DEP_X * CENTERSCALE;
 	BOTTOMRIGHT_DEP_X = 4 + MAX_CROSSHAIR_DEP_X * CENTERSCALE;
 	BOTTOMRIGHT_DEP_Y = 4 + MAX_CROSSHAIR_DEP_X * CENTERSCALE;
-	
-    
+
+
     switch (chStyle)
     {
-        
+
         case CH_NONE:
             chColor = Canvas.MakeColor(38,81,50);
             break;
@@ -743,47 +848,47 @@ function DrawCrosshair(ECanvas Canvas)
             chColor = Canvas.MakeColor(27,70,122);
             break;
     }
-	
+
 	Canvas.Style = ERenderStyle.STY_Alpha;
 
 	if (F2000 == None || !F2000.bSniperMode)
-	{	
+	{
 		if (F2000 != None)
 		{
-			
-			// Top Right Corner 
-			Canvas.SetPos(CROSSHAIR_CENTER_X + TOPRIGHT_DEP_X - 3, CROSSHAIR_CENTER_Y + TOPRIGHT_DEP_Y + 1);			
-			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 7, 7, 0, 0, 7, 7); 		
 
-			// Top Left Corner 			
+			// Top Right Corner
+			Canvas.SetPos(CROSSHAIR_CENTER_X + TOPRIGHT_DEP_X - 3, CROSSHAIR_CENTER_Y + TOPRIGHT_DEP_Y + 1);
+			eLevel.TGAME.DrawTileFromManager(Canvas, GetCrosshairMire(), 7, 7, 0, 0, 7, 7);
+
+			// Top Left Corner
 			Canvas.SetPos(CROSSHAIR_CENTER_X + TOPLEFT_DEP_X + 1, CROSSHAIR_CENTER_Y + TOPLEFT_DEP_Y + 1);
-			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 7, 7, 7, 0, -7, 7); 		
+			eLevel.TGAME.DrawTileFromManager(Canvas, GetCrosshairMire(), 7, 7, 7, 0, -7, 7);
 
-			// Bottom Right Corner 			
+			// Bottom Right Corner
 			Canvas.SetPos(CROSSHAIR_CENTER_X + BOTTOMRIGHT_DEP_X - 3,CROSSHAIR_CENTER_Y + BOTTOMRIGHT_DEP_Y - 3);
-			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 7, 7, 0, 7, 7, -7); 		
+			eLevel.TGAME.DrawTileFromManager(Canvas, GetCrosshairMire(), 7, 7, 0, 7, 7, -7);
 
-			// Bottom Left Corner			
+			// Bottom Left Corner
 			Canvas.SetPos(CROSSHAIR_CENTER_X + BOTTOMLEFT_DEP_X + 1, CROSSHAIR_CENTER_Y + BOTTOMLEFT_DEP_Y - 3);
-			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 7, 7, 7, 7, -7, -7); 		
+			eLevel.TGAME.DrawTileFromManager(Canvas, GetCrosshairMire(), 7, 7, 7, 7, -7, -7);
 		}
 		else
-		{  
-			// Top 
+		{
+			// Top
 			Canvas.SetPos(CROSSHAIR_CENTER_X - 2, CROSSHAIR_CENTER_Y - (MAX_CROSSHAIR_DEP_X * CENTERSCALE) - 10);
-			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.pi_mire_top_bas, 5, 6, 0, 0, 5, 6); 		
+			eLevel.TGAME.DrawTileFromManager(Canvas, GetPistolMireTopBas(), 5, 6, 0, 0, 5, 6);
 
 			// Right
 			Canvas.SetPos(CROSSHAIR_CENTER_X + (MAX_CROSSHAIR_DEP_X * CENTERSCALE) + 5, CROSSHAIR_CENTER_Y - 2);
-			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.pi_mire_cote, 6, 5, 0, 0, 6, 5); 		
+			eLevel.TGAME.DrawTileFromManager(Canvas, GetPistolMireCote(), 6, 5, 0, 0, 6, 5);
 
 			// Bottom
 			Canvas.SetPos(CROSSHAIR_CENTER_X - 2, CROSSHAIR_CENTER_Y + (MAX_CROSSHAIR_DEP_X * CENTERSCALE) + 5);
-			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.pi_mire_top_bas, 5, 6, 5, 6, -5, -6); 		
+			eLevel.TGAME.DrawTileFromManager(Canvas, GetPistolMireTopBas(), 5, 6, 5, 6, -5, -6);
 
 			// Left
 			Canvas.SetPos(CROSSHAIR_CENTER_X - (MAX_CROSSHAIR_DEP_X * CENTERSCALE) - 5 - 5, CROSSHAIR_CENTER_Y - 2);
-			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.pi_mire_cote, 6, 5, 6, 5, -6, -5); 		
+			eLevel.TGAME.DrawTileFromManager(Canvas, GetPistolMireCote(), 6, 5, 6, 5, -6, -5);
 		}
 	}
 
@@ -796,68 +901,68 @@ function DrawCrosshair(ECanvas Canvas)
 		if (F2000 != None)
 		{
 			Canvas.SetPos(CROSSHAIR_CENTER_X - CROSSHAIR_WIDTH / 2, CROSSHAIR_CENTER_Y - CROSSHAIR_HEIGHT / 2);
-			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire_fond, CROSSHAIR_WIDTH, CROSSHAIR_HEIGHT, 0, 0, 17, 17); 
+			eLevel.TGAME.DrawTileFromManager(Canvas, GetCrosshairMireFond(), CROSSHAIR_WIDTH, CROSSHAIR_HEIGHT, 0, 0, 17, 17);
 		}
 		else
 		{
 			Canvas.SetPos(CROSSHAIR_CENTER_X - CROSSHAIR_WIDTH_SMALL / 2, CROSSHAIR_CENTER_Y - CROSSHAIR_HEIGHT_SMALL / 2);
-			eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.pi_fond_mire, CROSSHAIR_WIDTH_SMALL, CROSSHAIR_HEIGHT_SMALL, 0, 0, 11, 11); 
+			eLevel.TGAME.DrawTileFromManager(Canvas, GetPistolFondMire(), CROSSHAIR_WIDTH_SMALL, CROSSHAIR_HEIGHT_SMALL, 0, 0, 11, 11);
 		}
 	}
 
 	/* REMOVE THE DOUBLE CIRCLE THING - KEEP THE CODE IN CASE THEY WANT IT BACK (Yanick Mimee)
     // Corners around crosshair thinggy
     if (!bBlinkOff && (chStyle != CH_NONE || (F2000 != None && F2000.bSniperMode)))
-    {		
-        // Top Left Corner 
-		Canvas.SetPos(CROSSHAIR_CENTER_X + TOPLEFT_DEP_X, 
+    {
+        // Top Left Corner
+		Canvas.SetPos(CROSSHAIR_CENTER_X + TOPLEFT_DEP_X,
 			           CROSSHAIR_CENTER_Y + TOPLEFT_DEP_Y);
-		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 
-			                              9, 
-										  9, 
-										  0, 0, 9, 9); 
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire,
+			                              9,
+										  9,
+										  0, 0, 9, 9);
 
 		// Top Right Corner
-		Canvas.SetPos(CROSSHAIR_CENTER_X + TOPRIGHT_DEP_X - 4, 
+		Canvas.SetPos(CROSSHAIR_CENTER_X + TOPRIGHT_DEP_X - 4,
 					   CROSSHAIR_CENTER_Y + TOPRIGHT_DEP_Y);
-		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 
-			                              9, 
-										  9, 
-										  9, 0, -9, 9); 
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire,
+			                              9,
+										  9,
+										  9, 0, -9, 9);
 
-		// Bottom Left Corner 
-		Canvas.SetPos(CROSSHAIR_CENTER_X + BOTTOMLEFT_DEP_X, 
+		// Bottom Left Corner
+		Canvas.SetPos(CROSSHAIR_CENTER_X + BOTTOMLEFT_DEP_X,
 					   CROSSHAIR_CENTER_Y + BOTTOMLEFT_DEP_Y - 4);
-		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 
-			                              9, 
-										  9, 										  
-										  0, 9, 9, -9); 
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire,
+			                              9,
+										  9,
+										  0, 9, 9, -9);
 
 		// Bottom right Corner //
 		Canvas.SetPos(CROSSHAIR_CENTER_X + BOTTOMRIGHT_DEP_X - 4,
 			           CROSSHAIR_CENTER_Y + BOTTOMRIGHT_DEP_Y - 4);
-		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire, 
-			                              9, 
-										  9, 
-										  9, 9, -9, -9);		
-    }*/	
+		eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_mire,
+			                              9,
+										  9,
+										  9, 9, -9, -9);
+    }*/
 	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
 //------------------------------------------------------------------------
-// Description		
-//		
+// Description
+//
 //------------------------------------------------------------------------
 function DrawNoiseBar(int AX, int AY, int BX, int BY, int OffsetX, ECanvas Canvas)
 {
-    Canvas.DrawColor.R = 128; 
+    Canvas.DrawColor.R = 128;
     Canvas.DrawColor.G = 128;
-    Canvas.DrawColor.B = 128; 
-    Canvas.DrawColor.A = 255; 
+    Canvas.DrawColor.B = 128;
+    Canvas.DrawColor.A = 255;
 
     Canvas.SetPos(AX, AY);
 	Canvas.Style = ERenderStyle.STY_Alpha;
-    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_anim_border, 630, abs(BY - AY), OffsetX, 0, 630, 4); 
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_anim_border, 630, abs(BY - AY), OffsetX, 0, 630, 4);
 	Canvas.Style = ERenderStyle.STY_Normal;
 }
 

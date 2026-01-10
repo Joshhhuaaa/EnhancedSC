@@ -352,6 +352,15 @@ var(Enhanced) config bool bShowScope;
 var(Enhanced) config bool bShowAlarms; // Joshua - Alarm stages like the Shanghai version
 var(Enhanced) config bool bShowCurrentGadget; // Joshua - Briefly displays the gadget name after selection (GameCube feature)
 
+enum ECrosshairStyle
+{
+	CS_Original,
+	CS_PS2,
+	CS_SCCT,
+	CS_PS3,
+};
+var(Enhanced) config ECrosshairStyle CrosshairStyle;
+
 native(1290) final function SetCameraFOV(actor Owner, float NewFOV);
 native(1291) final function SetCameraMode(actor Owner, int NewRendMap);
 native(1292) final function PopCamera(actor Owner);
@@ -3180,6 +3189,26 @@ function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 exec function ToggleHUD()
 {
 	bShowHUD = !bShowHUD;
+}
+
+// Joshua - New function to toggle crosshair style
+exec function ToggleCrosshair()
+{
+	switch (CrosshairStyle)
+	{
+		case CS_Original:
+			CrosshairStyle = CS_PS2;
+			break;
+		case CS_PS2:
+			CrosshairStyle = CS_SCCT;
+			break;
+		case CS_SCCT:
+			CrosshairStyle = CS_PS3;
+			break;
+		case CS_PS3:
+			CrosshairStyle = CS_Original;
+			break;
+	}
 }
 
 // Joshua - New function to toggle debug
@@ -12513,5 +12542,6 @@ defaultproperties
 	bShowCrosshair=True
 	bShowScope=True
 	bShowAlarms=True
+	CrosshairStyle=CS_Original
 	CheatClass=Class'ECheatManager'
 }
