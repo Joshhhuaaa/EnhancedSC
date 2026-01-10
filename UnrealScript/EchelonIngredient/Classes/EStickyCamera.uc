@@ -32,7 +32,15 @@ state s_Camera
 	{
 		Super.BeginState();
 
-		current_fov = MaxFov;
+		// Joshua - Clear zoom input buttons
+		Epc.bIncSpeedPressed = false;
+		Epc.bDecSpeedPressed = false;
+
+		// Joshua - Only reset FOV if we don't have saved settings
+		// Saved settings are restored in TakeView() when using SwitchCam
+		if (!bHasSavedSettings)
+			current_fov = MaxFov;
+
 		ZoomAccumulator = 0.0; // Joshua - Reset accumulator when entering camera state
 	}
 

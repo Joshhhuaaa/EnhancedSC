@@ -35,6 +35,10 @@ state s_Zooming
 		if (Epc == None)
 			Log(self$" ERROR: Controller is not a EPlayerController");
 
+		// Clear zoom input buttons
+		Epc.bIncSpeedPressed = false;
+		Epc.bDecSpeedPressed = false;
+
 		// Don't switch states if coming from split jump
 		if (Epc.GetStateName() != 's_SplitZooming')
 			Epc.GotoState('s_Zooming');
@@ -54,7 +58,7 @@ state s_Zooming
 		AddSoundRequest(Sound'Interface.Play_FisherEquipGoggle', SLOT_Interface, 0.1f);
 
 		ObjectHud.GotoState('');
-		
+
 		EMainHUD(Epc.myHud).NormalView();
 	}
 
@@ -78,16 +82,16 @@ state s_Zooming
 		// Accumulate actual deltaTime and only update zoom at 30fps intervals
 		ZoomAccumulator += DeltaTime;
 		simDeltaTime = 1.0f / 30.0f;
-		
+
 		// Calculate how many 30fps frames have passed
 		numUpdates = int(ZoomAccumulator / simDeltaTime);
-		
+
 		// Only process zoom if at least one 30fps frame has passed
 		if (numUpdates > 0)
 		{
 			// Subtract the time we're about to process
 			ZoomAccumulator -= numUpdates * simDeltaTime;
-			
+
 			// Apply zoom updates (usually just 1, but could be more if frame rate drops)
 			for (i = 0; i < numUpdates; i++)
 			{
@@ -105,7 +109,7 @@ state s_Zooming
 				else if (Epc.bDecSpeedPressed == true)
 				{
 					Epc.bDecSpeedPressed = false;
-					current_fov += simDeltaTime * ZoomSpeed;	    
+					current_fov += simDeltaTime * ZoomSpeed;
 					if (current_fov <= MaxFov)
 					{
 						zoomed = true;
@@ -124,7 +128,7 @@ state s_Zooming
 				// Zoom out
 				else if (Epc.bDPadDown != 0)
 				{
-					current_fov += simDeltaTime * ZoomSpeedController;	    
+					current_fov += simDeltaTime * ZoomSpeedController;
 					if (current_fov <= MaxFov)
 					{
 						zoomed = true;
@@ -146,7 +150,7 @@ state s_Zooming
 		}
 
 		Super.Tick(DeltaTime);
-	}	
+	}
 
 }
 
