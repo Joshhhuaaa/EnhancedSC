@@ -35,7 +35,7 @@ function InitPattern()
     local ETurret Turret;
     local ETurretController TurretController;
     local name OspreyAnimation;
-    
+
     if (!bInit)
     {
         // Joshua - Adding turret controllers for the turrets
@@ -78,7 +78,7 @@ function InitPattern()
         Osprey.SetDrawType(DT_Mesh);
         Osprey.Mesh = SkeletalMesh'EOSP.Osprey';
         Osprey.bLoopNeutral = true;
-    
+
         OspreyAnimation = '2260osp3';
         Osprey.NeutralPoseAnim =  OspreyAnimation;
 
@@ -92,12 +92,12 @@ function InitPattern()
         Osprey.AmbientStopSound = Sound'Vehicules.Play_OspreyIdle';
 
         Osprey.HeatIntensity = 1.0;
-        Osprey.SurfaceType = SURFACE_MetalHard;        
+        Osprey.SurfaceType = SURFACE_MetalHard;
         Osprey.InitialHitPoints = 100;
-        
+
         Osprey.Tag = 'Osprey';
     }
-    
+
     Super.InitPattern();
 
     ForEach DynamicActors(class'Pawn', P)
@@ -121,7 +121,7 @@ function InitPattern()
                 A.Skins[0] = Texture(DynamicLoadObject("3_4_Severo_tex.Door07_SEV", class'Texture'));
             if (A.name == 'StaticMeshActor237') // Joshua - Hiding the placeholder Osprey
                 A.bHidden = true;
-            if (A.name == 'ESBPatchActor2') 
+            if (A.name == 'ESBPatchActor2')
                 A.Texture = Shader(DynamicLoadObject("3_4_Severo_tex.Objects.plasticshd", class'Shader'));
             if (A.name == 'StaticMeshActor273')
                 A.Skins[0] = Texture(DynamicLoadObject("3_2PowerPlant_tex.Cleanup.classeur_pow", class'Texture'));
@@ -291,7 +291,7 @@ Executed:
     //Joshua - Temporarily removed until audio is restored: Speech(Localize("P_3_4_3_Sev_LambertComms", "Speech_0025L", "Localization\\P_3_4_3Severonickel"), Sound'S3_4_3Voice.Play_34_62_02', 1, 0, TR_HEADQUARTER, 0, false);
     Sleep(0.1);
     Close();
-    GameOver(false, 0);
+    GameOver(false, 6); // Joshua - Added Objective Opportunity Missed
     End();
 TimerWarning:
     Log("Masses timer has started.");
