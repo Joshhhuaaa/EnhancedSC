@@ -55,7 +55,7 @@ function PostBeginPlay()
 }
 
 //--------------------------------[Matthew Clarke - August 20th 2002]-----
-// 
+//
 // Description
 //
 //------------------------------------------------------------------------
@@ -74,9 +74,9 @@ function PlayMusic(Sound _S, bool Stream)
 
 
 //---------------------------------------[Frederic Blais - 27 Feb 2002]-----
-// 
+//
 // Description
-// 
+//
 // _Type
 // 0 = Stress Music
 // 1 = Combat Music
@@ -91,7 +91,7 @@ function SendMusicRequest(int _Type, bool _bPlay, Actor _Instigator, optional bo
 	local int i;
 	local int RequestType;
 	local bool bInstigatorFound;
-	
+
 	RequestType=-1;
 
 	//log("SendMusicRequest    Type: "$_Type$"  Play: "$_bPlay$" Instigator: "$_Instigator);
@@ -141,8 +141,8 @@ function SendMusicRequest(int _Type, bool _bPlay, Actor _Instigator, optional bo
 			CurrentMusicType = RequestType;
 			PlayPunch = !DontPlayPunch;
 		}
-			
-		
+
+
 	}
 	else
 	{
@@ -167,7 +167,7 @@ function SendMusicRequest(int _Type, bool _bPlay, Actor _Instigator, optional bo
 
 		if (bInstigatorFound)
 		{
-			//check 
+			//check
 			for (i = 0; i < MaxMusicRequest; i++)
 			{
 				if (RequestType < MusicR[i].RequestType)
@@ -204,7 +204,7 @@ auto state Idle
 				if (CanPlayMusic())
 				{
 					//play stress intro
-					if (PlayPunch)
+					if (PlayPunch && !EchelonGameInfo(Level.Game).bDisableMusicPunch) // Joshua - Added option to disable music punch
 						PlayMusic(Sound'CommonMusic.Play_PunchStress', false);
 
 					if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayStressMusic)
@@ -226,9 +226,9 @@ auto state Idle
 					}
 					else
 					{
-						if (PlayPunch)
+						if (PlayPunch && !EchelonGameInfo(Level.Game).bDisableMusicPunch) // Joshua - Added option to disable music punch
 							PlayMusic(Sound'CommonMusic.Play_PunchCombat', false);
-						
+
 						if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFightMusic)
 						{
 							CombatMusicType = 1;
@@ -273,11 +273,11 @@ state StressIntro
 			}
 			else
 			{
-				if (PlayPunch)
+				if (PlayPunch && !EchelonGameInfo(Level.Game).bDisableMusicPunch) // Joshua - Added option to disable music punch
 					PlayMusic(Sound'CommonMusic.Play_PunchCombat', false);
 
 				if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFightMusic)
-				{		
+				{
 					//Stop previous music with a fade
 					StopSound(StressA);
 					//Start the new one with a delay
@@ -288,7 +288,7 @@ state StressIntro
 				else
 					GotoState('Idle');
 			}
-			
+
 			break;
 		default:
 			break;
@@ -337,7 +337,7 @@ state StressLoop
 			}
 			else
 			{
-				if (PlayPunch)
+				if (PlayPunch && !EchelonGameInfo(Level.Game).bDisableMusicPunch) // Joshua - Added option to disable music punch
 					PlayMusic(Sound'CommonMusic. Play_PunchCombat', false);
 
 				if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFightMusic)
@@ -406,7 +406,7 @@ state CombatIntro
 				GotoState('CombatLoop');
 			}
 		}
-		else if (CombatMusicType == 1) 
+		else if (CombatMusicType == 1)
 		{
 			if (((GetSoundDuration(CombatA) - GetSoundPosition(CombatA)) < 1.5f) || !IsPlaying(CombatA))
 			{

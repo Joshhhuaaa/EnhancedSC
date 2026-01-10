@@ -183,7 +183,7 @@ enum ESamMeshType
     SMT_WhiteBalaclava, // SamBMesh, modified with SamE textures
     SMT_BetaSleeves     // SamAMesh, modified with SamF textures
 };
-var config ESamMeshType ESam_Training; 
+var config ESamMeshType ESam_Training;
 var config ESamMeshType ESam_Tbilisi;
 var config ESamMeshType ESam_DefenseMinistry;
 var config ESamMeshType ESam_CaspianOilRefinery;
@@ -209,6 +209,8 @@ enum ETurnOffDistanceScale
 };
 var(Enhanced) config ETurnOffDistanceScale TurnOffDistanceScale;
 
+var(Enhanced) config bool bDisableMusicPunch; // Joshua - Option to disable punch that plays before Stress and Combat music
+
 // Native Variables
 var(Enhanced) config bool bEnableRumble; // Joshua - UseRumble in Engine.GameInfo is now deprecated, this setting will now toggle rumble
 var(Enhanced) config bool bSkipIntroVideos;
@@ -217,6 +219,8 @@ var(Enhanced) config bool bLODDistance;
 var(Enhanced) config bool bPauseOnFocusLoss;
 var(Enhanced) config bool bCheckForUpdates;
 var(Enhanced) config bool bSteamDeckMode; // Joshua - Block opening links on Steam Deck as it will crash the game
+var(Enhanced) config bool bWarnReadOnlyInis;
+var(Enhanced) config bool bWarnReadOnlySaveFiles;
 var(Enhanced) int bWidescreenMode; // Joshua - Widescreen mode via ThirteenAG Widescreen Fix
 
 //----------------------------------------[FSchelling - 15 June 2001]-----
@@ -236,7 +240,7 @@ function PostBeginPlay()
 
 		//log("Variable class for the game spawned: "$VarObject);
 	}
-	
+
 	// set EchelonLevelInfo reference
 	ELevel = EchelonLevelInfo(Level);
 
@@ -245,19 +249,19 @@ function PostBeginPlay()
 }
 
 //---------------------------------------[David Kalina - 12 Apr 2001]-----
-// 
+//
 // Description
 //		Spawns and logs in the Player Controller.
 //		Since this is an Echelon Game, we make sure the controller casts
 //		to an EPlayerController and store it for easy access.
-// 
+//
 // Input
-//		Portal : 
-//		Options : 
-//		Error : 
+//		Portal :
+//		Options :
+//		Error :
 //
 // Output
-//		PlayerController : 
+//		PlayerController :
 //
 //------------------------------------------------------------------------
 
@@ -296,33 +300,6 @@ event PlayerController Login(string Portal,
 			break;
 	}
 
-    // Joshua - Set controller prompts for menus
-    switch (pPlayer.ControllerIcon)
-    {
-        case CI_None:
-        case CI_Xbox:
-            EchelonLevelInfo(Level).TMENU.ArrayTexture[28].TextureOwner = Texture'HUD.HUD.ETMENU'; // Y
-            EchelonLevelInfo(Level).TMENU.ArrayTexture[29].TextureOwner = Texture'HUD.HUD.ETMENU'; // B
-            EchelonLevelInfo(Level).TMENU.ArrayTexture[30].TextureOwner = Texture'HUD.HUD.ETMENU'; // X
-            EchelonLevelInfo(Level).TMENU.ArrayTexture[31].TextureOwner = Texture'HUD.HUD.ETMENU'; // A
-            EchelonLevelInfo(Level).TMENU.ArrayTexture[32].TextureOwner = Texture'HUD.HUD.ETMENU'; // Start
-            break;
-        case CI_PlayStation:
-            EchelonLevelInfo(Level).TMENU.ArrayTexture[28].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Triangle
-            EchelonLevelInfo(Level).TMENU.ArrayTexture[29].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Circle
-            EchelonLevelInfo(Level).TMENU.ArrayTexture[30].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Square
-            EchelonLevelInfo(Level).TMENU.ArrayTexture[31].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Cross
-            EchelonLevelInfo(Level).TMENU.ArrayTexture[32].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Start
-            break;
-        case CI_GameCube:
-            EchelonLevelInfo(Level).TMENU.ArrayTexture[28].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // Y
-            EchelonLevelInfo(Level).TMENU.ArrayTexture[29].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // X
-            EchelonLevelInfo(Level).TMENU.ArrayTexture[30].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // B
-            EchelonLevelInfo(Level).TMENU.ArrayTexture[31].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // A
-            EchelonLevelInfo(Level).TMENU.ArrayTexture[32].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // Start
-            break;
-    }
-
     if (bPermadeathMode)
         pPlayer.CheatManager = None;
 
@@ -330,7 +307,7 @@ event PlayerController Login(string Portal,
     if (bEliteMode)
     {
         pPlayer.CheatManager = None;
-        pPlayer.ePawn.InitialHealth = 100; // 100 * 0.66 = 66 HP
+        pPlayer.ePawn.InitialHealth = 152; // 152 * 0.66 = ~100 HP
         pPlayer.ePawn.Health = pPlayer.ePawn.InitialHealth;
 
         if (pPlayer.MainGun != None) // No SC-20K ammo
@@ -381,11 +358,11 @@ function ApplyTurnOffDistanceScale(ETurnOffDistanceScale Scale)
 	local int i;
 	local float Multiplier;
 	local EchelonLevelInfo ELevel;
-	
+
 	ELevel = EchelonLevelInfo(Level);
 	if (ELevel == None)
 		return;
-	
+
 	// Determine multiplier based on scale
 	switch (Scale)
 	{
@@ -404,7 +381,7 @@ function ApplyTurnOffDistanceScale(ETurnOffDistanceScale Scale)
 		default:
 			Multiplier = 1.0;
 	}
-	
+
 	// Apply multiplier to all stored actors using their original values
 	for (i = 0; i < ELevel.OriginalTurnOffDistances.Length; i++)
 	{
@@ -547,4 +524,6 @@ defaultproperties
     bLODDistance=True
     bPauseOnFocusLoss=True
     bCheckForUpdates=True
+    bWarnReadOnlyInis=True
+    bWarnReadOnlySaveFiles=True
 }

@@ -26,13 +26,13 @@ var						EInfoPoint				InfoPointList;
 var						int						AlarmStage;
 var						float					AlarmModifier[5];
 
-var                     float                   afLastBarked[44]; 
+var                     float                   afLastBarked[44];
 var						float					LastWhistleTime;
 var						Sound					RandomWhistle;
 
 // ladder lock mechanism
 struct SLadderLock
-{	
+{
 	var Pawn     LockingPawn;
 	var int		 GEID;
 	var byte	 LockInfo;
@@ -71,7 +71,7 @@ var array<Projectile> AllShellCases;
 const MAX_SHELL_CASES = 500;
 
 //---------------------------------------[Frederic Blais - 20 Nov 2001]-----
-// 
+//
 // PostBeginPlay
 //
 //------------------------------------------------------------------------
@@ -104,7 +104,7 @@ function PostBeginPlay()
 	switch (GetCurrentMapName())
 	{
 		case "1_3_2CaspianOilRefinery":
-        case "1_3_3CaspianOilRefinery": 
+        case "1_3_3CaspianOilRefinery":
                 EchelonLevelInfo(Level).SamMesh = SkeletalMesh'ESam.samCMesh';
                 break;
 
@@ -147,33 +147,6 @@ function PostBeginPlay()
     TGAME = spawn(class'ETGAME', self);
     TMENU = spawn(class'ETMENU', self);
     TICON = spawn(class'ETICON', self);
-
-	// Joshua - Apply controller icon for Xbox pause screen
-    switch (EchelonGameInfo(Level.Game).pPlayer.ControllerIcon)
-    {
-		case CI_None:
-        case CI_Xbox:
-            TMENU.ArrayTexture[28].TextureOwner = Texture'HUD.HUD.ETMENU'; // Y
-            TMENU.ArrayTexture[29].TextureOwner = Texture'HUD.HUD.ETMENU'; // B
-            TMENU.ArrayTexture[30].TextureOwner = Texture'HUD.HUD.ETMENU'; // X
-            TMENU.ArrayTexture[31].TextureOwner = Texture'HUD.HUD.ETMENU'; // A
-            TMENU.ArrayTexture[32].TextureOwner = Texture'HUD.HUD.ETMENU'; // Start
-            break;
-        case CI_PlayStation:
-            TMENU.ArrayTexture[28].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Triangle
-            TMENU.ArrayTexture[29].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Circle
-            TMENU.ArrayTexture[30].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Square
-            TMENU.ArrayTexture[31].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Cross
-            TMENU.ArrayTexture[32].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_PS2", class'Texture')); // Start
-            break;
-        case CI_GameCube:
-            TMENU.ArrayTexture[28].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // Y
-            TMENU.ArrayTexture[29].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // X
-            TMENU.ArrayTexture[30].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // B
-            TMENU.ArrayTexture[31].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // A
-            TMENU.ArrayTexture[32].TextureOwner = Texture(DynamicLoadObject("HUD_Enhanced.HUD.ETMENU_GameCube", class'Texture')); // Start
-            break;
-    }
 
 	// Add all the memoryStick in the map in the bank
 	ForEach DynamicActors(class'EMemoryStick', Ms)
@@ -316,12 +289,12 @@ function PostBeginPlay()
 	ImpactSurfaceToSubTexLink[13].Width = 32;
 	ImpactSurfaceToSubTexLink[13].Height = 32;
 	ImpactSurfaceToSubTexLink[13].Scale = 0.50;
-	
+
 	Super.PostBeginPlay();
 }
 
 //--------------------------------[Matthew Clarke - August 19th 2002]-----
-// 
+//
 // Description
 //		Gets NPCs to bark every 10 secs
 //
@@ -342,7 +315,7 @@ function Timer()
     local EAIController Searcher;
     local EAIController Attacker;
 
-    if ((EchelonGameInfo(Level.Game).pPlayer == None) 
+    if ((EchelonGameInfo(Level.Game).pPlayer == None)
     || (EchelonGameInfo(Level.Game).pPlayer.Pawn.Health <= 0))
     {
         // Do not bark if player is dead
@@ -353,11 +326,11 @@ function Timer()
 	if (EchelonLevelInfo(Level).bGameOver)
 		return;
 
-    for (C = Level.ControllerList; C != None; C = C.nextController)  
+    for (C = Level.ControllerList; C != None; C = C.nextController)
     {
         AI = EAIController(C);
 
-        if ((AI == None) 
+        if ((AI == None)
         || (AI.EPawn.bIsDog)
         || (AI.GetStateName() == 's_Unconscious'))
         {
@@ -365,7 +338,7 @@ function Timer()
         }
 
         // Check if its an NPC firing at some gameplay object
-        if ((AI.m_pGoalList.GetCurrent().m_GoalType == GOAL_Attack) 
+        if ((AI.m_pGoalList.GetCurrent().m_GoalType == GOAL_Attack)
         && ((AI.m_pGoalList.GetCurrent().GoalTarget) != (EchelonGameInfo(Level.Game).pPlayer.Pawn)))
         {
             continue;
@@ -376,7 +349,7 @@ function Timer()
             iGrabbed++;
         }
 
-        
+
         if (AI.Pattern != None)
         {
             if (AI.Pattern.GetStateName() == 'attack')
@@ -392,7 +365,7 @@ function Timer()
                     continue;
                 }
 
-                iAttack++; 
+                iAttack++;
 
 				if (Attacker != None)
 				{
@@ -435,7 +408,7 @@ function Timer()
                 }
                 }
 
-                iSearch++;                
+                iSearch++;
             }
             else
             {
@@ -446,23 +419,23 @@ function Timer()
 
     // 2+ guys attacking sam
     if ((iAttack > 1)
-     && (iGrabbed == 0) 
-     && (Attacker != None) 
-     && (Attacker.Group != None) 
+     && (iGrabbed == 0)
+     && (Attacker != None)
+     && (Attacker.Group != None)
      && (Attacker.Group.PlayerHasBeenSeen()))
     {
         // BARK_AttackMove
         if ((bMoveOrCharge) && (fSpeedTotal != 0.0))
         {
-            EPawn(Attacker.Pawn).PlayAttackMove(); 
+            EPawn(Attacker.Pawn).PlayAttackMove();
         }
-        // BARK_LookingForYou        
+        // BARK_LookingForYou
         else if (iSeeingPlayer == 0)
         {
             if (ePawn(Attacker.Pawn).ICanBark())
             {
 				ePawn(Attacker.Pawn).Bark_Type = BARK_LookingForYou;
-	            Attacker.Pawn.PlaySound(ePawn(Attacker.Pawn).Sounds_Barks, SLOT_Barks);    
+	            Attacker.Pawn.PlaySound(ePawn(Attacker.Pawn).Sounds_Barks, SLOT_Barks);
 
                 if (ePawn(Attacker.Pawn).bIsHotBlooded)
                 {
@@ -470,22 +443,22 @@ function Timer()
                 }
             }
         }
-        // BARK_AttackGetDown       
+        // BARK_AttackGetDown
         else if (bPlayerIsFiring)
         {
             EPawn(Attacker.Pawn).PlayAttackGetDown();
         }
-        // BARK_AttackStop        
+        // BARK_AttackStop
         else if (fSpeedTotal == 0.0)
         {
-            EPawn(Attacker.Pawn).PlayAttackStop();   
+            EPawn(Attacker.Pawn).PlayAttackStop();
         }
     }
     // 1 guy attacking Sam, and not seeing him - just use the BARK_LookingForYou
-    else if ((iAttack == 1) 
-         && (iGrabbed == 0) 
-         && (Attacker != None) 
-         && (Attacker.Group != None) 
+    else if ((iAttack == 1)
+         && (iGrabbed == 0)
+         && (Attacker != None)
+         && (Attacker.Group != None)
          && (Attacker.Group.PlayerHasBeenSeen()))
     {
         if (iSeeingPlayer == 0)
@@ -494,7 +467,7 @@ function Timer()
             {
 				ePawn(Attacker.Pawn).Bark_Type = BARK_LookingForYou;
 	            Attacker.Pawn.PlaySound(ePawn(Attacker.Pawn).Sounds_Barks, SLOT_Barks);
-                    
+
                 if (ePawn(Attacker.Pawn).bIsHotBlooded)
                 {
                     Attacker.TimedForceFire();
@@ -511,7 +484,7 @@ function Timer()
 	        Searcher.Pawn.PlaySound(ePawn(Searcher.Pawn).Sounds_Barks, SLOT_Barks);
 		}
     }
-    
+
 
 }
 
@@ -535,7 +508,7 @@ function IncreaseAlarmStage()
 		    AlarmPattern.InitPattern();
     }
 
-	bAlarmStageChanged = true;
+	bAlarmStageChanged = true; // Joshua - Alarm blinking
 
 	// Joshua - Cleaner method for one alarm levels like Defense Ministry
 	if (bOneAlarmLevel)
@@ -543,7 +516,7 @@ function IncreaseAlarmStage()
 		// Prevent multiple alarms from triggering in quick succession
 		if (AlarmStage > 0)
 			return;
-		
+
 		AlarmStage++;
 		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("AlarmTriggered");
 
@@ -636,7 +609,7 @@ function IncreaseAlarmStage()
 
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
-// MEMORY INFORMATION 
+// MEMORY INFORMATION
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
 function bool GetMemoryStick(out Array<EMemoryStick> Mems, Actor AccessActor, optional bool bTest)
@@ -692,7 +665,7 @@ function RemoveMemoryStick(EMemoryStick Ms)
 
 
 //----------------------------------------[David Kalina - 3 Aug 2001]-----
-// 
+//
 // Description
 //		Add ladder to dynarray
 //		Encode direction in sign of stored LadderID
@@ -701,18 +674,18 @@ function RemoveMemoryStick(EMemoryStick Ms)
 //		LadderID : ID (tag) of Ladder GE
 //		Direction : 0 | from top to bottom
 //					1 | from bottom to top
-// 
+//
 //------------------------------------------------------------------------
 native(1528) final function LockLadder(int LadderID, Pawn LockingPawn, bool bClimbingUp, bool bClimbingDown, bool bAtTop, bool bAtBottom);
 
 
 //----------------------------------------[David Kalina - 3 Aug 2001]-----
-// 
+//
 // Description
 //		Unlock specified ladder (regardless of direction)
 //
 // Input
-//		LadderID : 
+//		LadderID :
 //
 //------------------------------------------------------------------------
 
@@ -720,16 +693,16 @@ native(1529) final function UnlockLadder(int LadderID);
 
 
 //----------------------------------------[David Kalina - 3 Aug 2001]-----
-// 
+//
 // Description
 //		Returns true if the ladder is locked in the specified direction.
 //		Typically, whomever is calling the function should check
 //		for a lock in the OPPOSITE direction from which they want to go.
-// 
+//
 // Input
-//		LadderID : 
+//		LadderID :
 //		Direction : Direction to check for lock.
-// 
+//
 //------------------------------------------------------------------------
 
 native(1530) final function bool IsLadderLocked(int LadderID, byte Direction);
@@ -738,10 +711,10 @@ native(1530) final function bool IsLadderLocked(int LadderID, byte Direction);
 
 
 //---------------------------------------[David Kalina - 28 Jan 2002]-----
-// 
+//
 // Description
 //		Is the ladder specified by LadderID presently locked by LockingPawn?
-// 
+//
 //------------------------------------------------------------------------
 
 native(1532) final function bool IsLadderLockedBy(int LadderID, Pawn LockingPawn);
@@ -749,9 +722,9 @@ native(1532) final function bool IsLadderLockedBy(int LadderID, Pawn LockingPawn
 
 
 //---------------------------------------[Frederic Blais - 27 Feb 2002]-----
-// 
+//
 // Description
-// 
+//
 // _Type
 // 0 = Stress Music
 // 1 = Combat Music
@@ -771,7 +744,7 @@ function SendMusicRequest(int _Type, bool _bPlay, Actor _Instigator, optional bo
 function RumbleShake(float Duration, float Strenth)
 {
 	local EchelonGameInfo eGame;
-	
+
 	eGame = EchelonGameInfo(Game);
 
 	if (eGame != None && eGame.bUseController && eGame.bEnableRumble && Rumble != None)
@@ -781,7 +754,7 @@ function RumbleShake(float Duration, float Strenth)
 function RumbleVibrate(float Duration, float Strenth)
 {
 	local EchelonGameInfo eGame;
-	
+
 	eGame = EchelonGameInfo(Game);
 
 	if (eGame != None && eGame.bUseController && eGame.bEnableRumble && Rumble != None)
