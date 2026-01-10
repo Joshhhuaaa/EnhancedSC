@@ -293,9 +293,9 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 //
 //
 
-    if ((Key == ViewportOwner.Actor.GetKey("FullInventory", false)) && 
+    if (((Key == ViewportOwner.Actor.GetKey("FullInventory", false)) || (Key == ViewportOwner.Actor.GetKey("FullInventory", true))) && // Joshua - Added bAltKey for controller to pause
         (EPlayerController(ViewportOwner.Actor).CanGoBackToGame()) && // Joshua - Prevent the PC menus during GameOver
-        (Action == IST_Press) && (Root != None))     
+        (Action == IST_Press) && (Root != None))
     {
 		if (ViewportOwner.Actor.Level.Pauser == None)
 		{
