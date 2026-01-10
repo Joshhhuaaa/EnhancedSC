@@ -3447,6 +3447,24 @@ exec function NextGadget()
 	m_ChooseNextGadget = true;
 }
 
+// Joshua - Reset all input button
+function ResetInputButtons()
+{
+	bFire = 0;
+	bAltFire = 0;
+
+	bScope = 0;
+	bDuck = 0;
+	bJump = 0;
+
+	bDPadUp = 0;
+	bDPadDown = 0;
+	bDPadLeft = 0;
+	bDPadRight = 0;
+
+	bResetCamera = 0;
+}
+
 //-----
 // END
 //-----

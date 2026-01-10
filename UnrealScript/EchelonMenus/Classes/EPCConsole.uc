@@ -300,8 +300,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 		if (ViewportOwner.Actor.Level.Pauser == None)
 		{
             // Joshua - Clearing input after pausing game
-            EPlayerController(ViewportOwner.Actor).bFire = 0;
-            EPlayerController(ViewportOwner.Actor).bAltFire = 0;
+            EPlayerController(ViewportOwner.Actor).ResetInputButtons();
 			bLaunchWasCalled = false;
 			bReturnToMenu = false;
 			GotoState('UWindow');
