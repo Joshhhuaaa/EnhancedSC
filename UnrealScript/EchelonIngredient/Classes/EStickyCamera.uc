@@ -31,7 +31,9 @@ function PostBeginPlay()
 	current_fov	 = MaxFov;
 }
 
+//------------------------------------------------------------------------
 // Joshua - Override TakeView to restore saved settings when using SwitchCam
+//------------------------------------------------------------------------
 function TakeView()
 {
 	Super.TakeView();
@@ -53,7 +55,9 @@ function TakeView()
 	}
 }
 
+//------------------------------------------------------------------------
 // Joshua - Override GiveView to save settings before exiting
+//------------------------------------------------------------------------
 function GiveView(bool bFromPlayer)
 {
 	// Save current settings before exiting
@@ -98,13 +102,16 @@ state s_Camera
 		{
 			if (RenderingMode != REN_NightVision)
 			{
-				if (RenderingMode != REN_ThermalVision)
-					PlaySound(Sound'FisherEquipement.Play_GoggleRun', SLOT_SFX);
+				// Joshua - Play sound based on previous mode
+				if (RenderingMode == REN_ThermalVision)
+					PlaySound(Sound'Interface.Play_FisherSwitchGoggle', SLOT_Interface); // Switching between vision modes
+				else
+					PlaySound(Sound'FisherEquipement.Play_GoggleRun', SLOT_SFX); // Turning vision on from off
 				RenderingMode = REN_NightVision;
 			}
 			else
 				RenderingMode = REN_DynLight;
-			
+
 			Epc.SetCameraMode(self, RenderingMode);
 			Epc.bDPadLeft	= 0;
 		}
@@ -113,29 +120,32 @@ state s_Camera
 		{
 			if (RenderingMode != REN_ThermalVision)
 			{
-				if (RenderingMode != REN_NightVision)
-					PlaySound(Sound'FisherEquipement.Play_GoggleRun', SLOT_SFX);
-				RenderingMode = REN_ThermalVision;				
+				// Joshua - Play sound based on previous mode
+				if (RenderingMode == REN_NightVision)
+					PlaySound(Sound'Interface.Play_FisherSwitchGoggle', SLOT_Interface); // Switching between vision modes
+				else
+					PlaySound(Sound'FisherEquipement.Play_GoggleRun', SLOT_SFX); // Turning vision on from off
+				RenderingMode = REN_ThermalVision;
 			}
 			else
 				RenderingMode = REN_DynLight;
-			
+
 			Epc.SetCameraMode(self, RenderingMode);
 
 	        Epc.ThermalTexture	= Level.pThermalTexture_B;
-            Epc.bBigPixels		= true;		
+            Epc.bBigPixels		= true;
 			Epc.bDPadRight		= 0;
 		}
 
 		// Joshua - Calculate how many 30fps frames have passed
 		numUpdates = int(ZoomAccumulator / simDeltaTime);
-		
+
 		// Joshua - Only process zoom if at least one 30fps frame has passed
 		if (numUpdates > 0)
 		{
 			// Joshua -  Subtract the time we're about to process
 			ZoomAccumulator -= numUpdates * simDeltaTime;
-			
+
 			// Joshua -  Apply zoom updates (usually just 1, but could be more if frame rate drops)
 			for (i = 0; i < numUpdates; i++)
 			{
@@ -151,7 +161,7 @@ state s_Camera
 				// Joshua - Adding controller support for Sticky Camera (zoom out)
 				else if (Epc.bDPadDown != 0)
 				{
-					current_fov += simDeltaTime * ZoomSpeedController;	    
+					current_fov += simDeltaTime * ZoomSpeedController;
 					if (current_fov <= MaxFov)
 					{
 						zoomed = true;
@@ -172,7 +182,7 @@ state s_Camera
 				else if (Epc.bDecSpeedPressed == true)
 				{
 					Epc.bDecSpeedPressed = false;
-					current_fov += simDeltaTime * ZoomSpeed;	    
+					current_fov += simDeltaTime * ZoomSpeed;
 					if (current_fov <= MaxFov)
 					{
 						zoomed = true;
