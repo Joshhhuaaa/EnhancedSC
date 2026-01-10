@@ -1678,13 +1678,12 @@ exec function IncSpeed()
 	// Aliases[]=(Command="IncSpeed|SnipeZoomIn",Alias="ZoomIn")
 	SnipeZoomIn();
 
-	// Joshua - QoL improvement: variable speeds in weapon mode but we must prevent it while zooming or using air camera
-	if (GetStateName() != 's_PlayerSniping' &&
-		GetStateName() != 's_RappellingSniping' &&
-		GetStateName() != 's_SplitSniping' &&
-		GetStateName() != 's_LaserMicTargeting' &&
-		GetStateName() != 's_Zooming' &&
-		!bUsingAirCamera)
+	// Joshua - QoL improvement: variable speeds in weapon mode but we must prevent it using binocular or air camera
+	// If bF2000ZoomLevels is false, allow speed changes in sniper states
+	// If bLaserMicZoomLevels is false, allow speed changes in laser mic state
+	if (GetStateName() != 's_Zooming' && !bUsingCamera &&
+		!((GetStateName() == 's_PlayerSniping' || GetStateName() == 's_RappellingSniping' || GetStateName() == 's_SplitSniping') && bF2000ZoomLevels) &&
+		!(GetStateName() == 's_LaserMicTargeting' && bLaserMicZoomLevels))
 	{
 		m_curWalkSpeed += 1;
 		if (m_curWalkSpeed > eGame.m_maxSpeedInterval)
@@ -1711,13 +1710,12 @@ exec function DecSpeed()
 	// Aliases[]=(Command="DecSpeed|SnipeZoomOut",Alias="ZoomOut")
 	SnipeZoomOut();
 
-	// Joshua - QoL improvement: variable speeds in weapon mode but we must prevent it while zooming or using air camera
-	if (GetStateName() != 's_PlayerSniping' &&
-		GetStateName() != 's_RappellingSniping' &&
-		GetStateName() != 's_SplitSniping' &&
-		GetStateName() != 's_LaserMicTargeting' &&
-		GetStateName() != 's_Zooming' &&
-		!bUsingAirCamera)
+	// Joshua - QoL improvement: variable speeds in weapon mode but we must prevent it using binocular or air camera
+	// If bF2000ZoomLevels is false, allow speed changes in sniper states
+	// If bLaserMicZoomLevels is false, allow speed changes in laser mic state
+	if (GetStateName() != 's_Zooming' && !bUsingCamera &&
+		!((GetStateName() == 's_PlayerSniping' || GetStateName() == 's_RappellingSniping' || GetStateName() == 's_SplitSniping') && bF2000ZoomLevels) &&
+		!(GetStateName() == 's_LaserMicTargeting' && bLaserMicZoomLevels))
 	{
 		m_curWalkSpeed -= 1;
 		if (m_curWalkSpeed <= 0)
