@@ -45,10 +45,7 @@ Begin:
 LatentDesc:
     Log("This label is only running a latent function on the 002 Training Desc pattern");
     SetFlags(V0_0_2_Training(Level.VarObject).BoxTipPlayed,TRUE);
-    if (!EchelonGameInfo(Level.Game).bUseController)
-        AddTrainingData(Localize("P_0_0_2_Training_Description", "Training_0013L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_INTERACTION_MASK, FALSE);
-    else
-        AddTrainingData(Localize("P_0_0_2_Training_Description", "Training_0013L", "Localization\\P_0_0_2_Training_Xbox"), KEY_NONE_MASK | KEY_INTERACTION_MASK, FALSE);
+    AddTrainingData(Localize("P_0_0_2_Training_Description", "Training_0013L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_INTERACTION_MASK, FALSE);
     End();
 
 }
