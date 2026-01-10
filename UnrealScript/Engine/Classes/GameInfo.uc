@@ -1,16 +1,16 @@
 //=============================================================================
 // GameInfo.
 //
-// The GameInfo defines the game being played: the game rules, scoring, what actors 
-// are allowed to exist in this game type, and who may enter the game.  While the 
-// GameInfo class is the public interface, much of this functionality is delegated 
-// to several classes to allow easy modification of specific game components.  These 
-// classes include GameInfo.  
-// A GameInfo actor is instantiated when the level is initialized for gameplay (in 
-// C++ UGameEngine::LoadMap()).  The class of this GameInfo actor is determined by 
-// (in order) either  if specified in the LevelInfo, or the 
-// DefaultGame entry in the game's .ini file (in the Engine.Engine section), unless 
-// its a network game in which case the DefaultServerGame entry is used.  
+// The GameInfo defines the game being played: the game rules, scoring, what actors
+// are allowed to exist in this game type, and who may enter the game.  While the
+// GameInfo class is the public interface, much of this functionality is delegated
+// to several classes to allow easy modification of specific game components.  These
+// classes include GameInfo.
+// A GameInfo actor is instantiated when the level is initialized for gameplay (in
+// C++ UGameEngine::LoadMap()).  The class of this GameInfo actor is determined by
+// (in order) either  if specified in the LevelInfo, or the
+// DefaultGame entry in the game's .ini file (in the Engine.Engine section), unless
+// its a network game in which case the DefaultServerGame entry is used.
 //
 //=============================================================================
 class GameInfo extends Info
@@ -33,26 +33,27 @@ var localized string	      DefaultPlayerName;
 var localized string	      GameName;
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * Fblais (27 Jun 2001)
 // * Purpose : So now we can get the player directly from the gameinfo
 // ***********************************************************************************************
 var PlayerController		PlayerC;
 
-var(Stealth) config 	float	VisFullyThreshold;
-var(Stealth) config 	float	VisMostlyThreshold;
-var(Stealth) config 	float	VisPartiallyThreshold;
-var(Stealth) config 	float	VisBarelyThreshold;
-var(Stealth) config 	float	VisSpeedGain;		// divide current player speed by this value and add to base light calculation
-var(Stealth) config 	float	VisCrouchMul;			// crouching subtracts this amount from base light calculation
-var(Stealth) config		float	VisBackToWallMul;
+// Joshua - Removed 'config' keyword to cleanup Enhanced.ini
+var(Stealth) float VisFullyThreshold;
+var(Stealth) float VisMostlyThreshold;
+var(Stealth) float VisPartiallyThreshold;
+var(Stealth) float VisBarelyThreshold;
+var(Stealth) float VisSpeedGain;			// divide current player speed by this value and add to base light calculation
+var(Stealth) float VisCrouchMul;			// crouching subtracts this amount from base light calculation
+var(Stealth) float VisBackToWallMul;
 
 // Joshua - Removed 'config' keyword so SplinterCell.ini no longer affects this option
 // Rumble is now controlled by bEnableRumble in EchelonGameInfo
 var	bool UseRumble;
 
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * Fblais (27 Jun 2001)
 // ***********************************************************************************************
 
@@ -78,7 +79,7 @@ function PreBeginPlay()
 	StartTime = 0;
 }
 
-/* Reset() 
+/* Reset()
 reset actor to initial state - used when restarting level without reloading.
 */
 function Reset()
@@ -98,8 +99,8 @@ function bool SetPause(BOOL bPause, PlayerController P)
 }
 
 function bool GetPause()
-{		
-	return Level.Pauser != none;	
+{
+	return Level.Pauser != none;
 }
 
 //
@@ -191,7 +192,7 @@ function int GetIntOption(string Options, string ParseString, int CurrentValue)
 	{
 		log(ParseString@InOpt);
 		return int(InOpt);
-	}	
+	}
 	return CurrentValue;
 }
 
@@ -253,15 +254,15 @@ event PlayerController Login
 		RestartPlayer(newPlayer);
 	bRestartLevel = Default.bRestartLevel;
 	return newPlayer;
-}	
+}
 
 /* StartMatch()
 Start the game - inform all actors that the match is starting, and spawn player pawns
 */
 function StartMatch()
-{	
+{
 	local Controller P;
-	local Actor A; 
+	local Actor A;
 
 	// start human players first
 	for (P = Level.ControllerList; P != None; P = P.nextController)
@@ -283,7 +284,7 @@ function StartMatch()
 //
 // Restart a player.
 //
-function RestartPlayer(Controller aPlayer)	
+function RestartPlayer(Controller aPlayer)
 {
 	local NavigationPoint StartSpot;
 	local bool foundStart;
@@ -300,7 +301,7 @@ function RestartPlayer(Controller aPlayer)
 	{
 		log(" Player start not found!!!");
 		return;
-	}	
+	}
 
 	if (aPlayer.PawnClass != None)
 		aPlayer.Pawn = Spawn(aPlayer.PawnClass,,,StartSpot.Location,StartSpot.Rotation);
@@ -370,7 +371,7 @@ function PlayTeleportEffect(actor Incoming, bool bOut, bool bSound)
 }
 
 //==========================================================================
-	
+
 function NavigationPoint FindPlayerStart(Controller Player, optional byte InTeam, optional string incomingName)
 {
 	local NavigationPoint N, BestStart;
@@ -382,7 +383,7 @@ function NavigationPoint FindPlayerStart(Controller Player, optional byte InTeam
 	if ((Player != None) && (Player.StartSpot != None))
 	{
 		return Player.StartSpot;
-	}	
+	}
 
 	// if incoming start is specified, then just use it
 	if (incomingName!="")
@@ -401,17 +402,17 @@ function NavigationPoint FindPlayerStart(Controller Player, optional byte InTeam
 			BestStart = N;
 		}
 	}
-	
+
 	if (BestStart == None)
 	{
-		log("Warning - PATHS NOT DEFINED or NO PLAYERSTART");			
+		log("Warning - PATHS NOT DEFINED or NO PLAYERSTART");
 		foreach AllActors(class 'NavigationPoint', N)
 		{
 			NewRating = RatePlayerStart(N,0,Player);
 			if (NewRating > BestRating)
 			{
 				BestRating = NewRating;
-				BestStart = N;	
+				BestStart = N;
 			}
 		}
 	}
@@ -440,5 +441,13 @@ defaultproperties
     DefaultPlayerName="Player"
     GameName="Game"
     PlayerControllerClassName="Engine.PlayerController"
+	// Joshua - Previously set in SplinterCell.ini, no longer config variables
+	VisFullyThreshold=120.000000
+	VisMostlyThreshold=78.000000
+	VisPartiallyThreshold=42.000000
+	VisBarelyThreshold=15.000000
+	VisSpeedGain=10.000000
+	VisCrouchMul=0.90000
+	VisBackToWallMul=0.90000
 	UseRumble=True // Joshua - Always set to true, Rumble is now toggled via bEnableRumble in EchelonGameInfo
 }

@@ -106,10 +106,11 @@ var name				m_HoistCr;
 var vector				m_HoistStOffset;
 var vector				m_HoistCrOffset;
 
-var vector				m_ThrowSpeed;
-var(Throw) config vector m_ThrowMinSpeed;
-var(Throw) config vector m_ThrowMaxSpeed;
-var(Throw) config float m_ThrowVarSpeed;
+var vector		  m_ThrowSpeed;
+// Joshua - Removed 'config' keyword to cleanup Enhanced.ini
+var(Throw) vector m_ThrowMinSpeed;
+var(Throw) vector m_ThrowMaxSpeed;
+var(Throw) float  m_ThrowVarSpeed;
 
 // Stuff for GEO
 var bool				m_LedgeTurnRight;
@@ -135,20 +136,21 @@ var EVolume				CurrentVolume;
 var EPattern			CurrentPattern;
 
 // Sam speeds
-var					int		m_curWalkSpeed;
-var(Speed)	config	float	m_speedRun;
-var(Speed)	config	float	m_speedRunCr;
-var(Speed)	config	float	m_speedWalk;
-var(Speed)	config	float	m_speedWalkCr;
-var(Speed)	config	float   m_speedWalkFP;
-var(Speed)	config	float	m_speedWalkFPCr;
-var(Speed)	config	float	m_speedWalkSniping;
-var(Speed)	config	float	m_speedBTWCr;
-var(Speed)	config	float	m_speedBTW;
-var(Speed)	config	float	m_speedFence;
-var(Speed)	config	float	m_speedGrab;
-var(Speed)	config	float	m_speedGrabFP;
-var(Speed)	config	float	m_speedCarry;
+var		   int	 m_curWalkSpeed;
+// Joshua - Removed 'config' keyword to cleanup Enhanced.ini
+var(Speed) float m_speedRun;
+var(Speed) float m_speedRunCr;
+var(Speed) float m_speedWalk;
+var(Speed) float m_speedWalkCr;
+var(Speed) float m_speedWalkFP;
+var(Speed) float m_speedWalkFPCr;
+var(Speed) float m_speedWalkSniping;
+var(Speed) float m_speedBTWCr;
+var(Speed) float m_speedBTW;
+var(Speed) float m_speedFence;
+var(Speed) float m_speedGrab;
+var(Speed) float m_speedGrabFP;
+var(Speed) float m_speedCarry;
 
 var(Turning) float	m_turnMul;
 
