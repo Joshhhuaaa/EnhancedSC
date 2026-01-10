@@ -2771,12 +2771,14 @@ function ProcessToggleCinematic()
 //------------------------------------------------------------------------
 function EndMission(bool bMissionComplete, int iFailureType)
 {
-	// Joshua - Prevents player from dying during Mission Complete
 	if (bMissionComplete)
+	{
+		// Joshua - Prevents player from dying during Mission Complete
 		bInvincible = true;
-	
-	// Joshua - Prevents NPC from firing weapon and barking during GameOver
-	EchelonLevelInfo(Level).GameOver();
+
+		// Joshua - Prevents NPC from firing weapon and barking during GameOver
+		EchelonLevelInfo(Level).GameOver();
+	}
 
 	// Stop player input
 	bStopInput = true;
