@@ -55,7 +55,7 @@ LevelChange:
 FirstGeneratorLights:
     Log("Lighting system for the first generator.");
     DisableMessages(TRUE, TRUE);
-    JumpRandom('FirstGeneratorLightOne', 0.20, 'FirstGeneratorLightTwo', 0.40, 'FirstGeneratorLightThree', 0.60, 'FirstGeneratorLightFour', 0.80, 'FirstGeneratorLightFive', 1.00); 
+    JumpRandom('FirstGeneratorLightOne', 0.20, 'FirstGeneratorLightTwo', 0.40, 'FirstGeneratorLightThree', 0.60, 'FirstGeneratorLightFour', 0.80, 'FirstGeneratorLightFive', 1.00);
 FirstGeneratorLightOne:
     Log("First light cascade configuration.");
     SendUnrealEvent('FirstGeneratorLightOne');

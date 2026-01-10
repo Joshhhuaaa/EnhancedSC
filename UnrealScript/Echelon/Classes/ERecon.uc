@@ -14,7 +14,7 @@ struct sReconPos
 {
 	var String RoomDesc;
     var int x;
-    var int y;    
+    var int y;
 };
 
 var int ReconType; // 1- Full screen

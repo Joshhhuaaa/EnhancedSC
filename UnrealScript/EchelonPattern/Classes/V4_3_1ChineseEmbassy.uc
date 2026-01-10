@@ -3,20 +3,20 @@
 //=============================================================================
 class V4_3_1ChineseEmbassy extends EVariable;
 
-var int BasementDataDone; 
-var int BothKeypadADied; 
-var int ColonelOnRetinal; 
-var int DestroyFeirongComputer; 
-var int DoorPassed; 
-var int FeirongSawSam; 
-var int KeypadAColonelSwitch; 
-var int KeypadASoldierSwitch; 
-var int KeypadExpiredToggle; 
-var int KeypadWasUsed; 
-var int RetinalColonelSwitch; 
-var int RetinalSoldierSwitch; 
-var int SamSwitch; 
-var int ThermalKeypadADoorClosed; 
+var int BasementDataDone;
+var int BothKeypadADied;
+var int ColonelOnRetinal;
+var int DestroyFeirongComputer;
+var int DoorPassed;
+var int FeirongSawSam;
+var int KeypadAColonelSwitch;
+var int KeypadASoldierSwitch;
+var int KeypadExpiredToggle;
+var int KeypadWasUsed;
+var int RetinalColonelSwitch;
+var int RetinalSoldierSwitch;
+var int SamSwitch;
+var int ThermalKeypadADoorClosed;
 
 
 function PostBeginPlay()

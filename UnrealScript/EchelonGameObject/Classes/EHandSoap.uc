@@ -1,4 +1,4 @@
-class EHandSoap extends EGameplayObject; 
+class EHandSoap extends EGameplayObject;
 
 defaultproperties
 {

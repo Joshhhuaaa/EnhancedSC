@@ -75,30 +75,30 @@ function FW_DrawWindowFrame(UWindowFramedWindow W, Canvas C)
 	W.DrawStretchedTextureSegment(C, 0, 0, R.W, R.H, R.X, R.Y, R.W, R.H, T);
 
 	R = FrameT;
-	W.DrawStretchedTextureSegment(C, FrameTL.W, 0, 
+	W.DrawStretchedTextureSegment(C, FrameTL.W, 0,
 									W.WinWidth - FrameTL.W
 									- FrameTR.W,
 									R.H, R.X, R.Y, R.W, R.H, T);
 
 	R = FrameTR;
 	W.DrawStretchedTextureSegment(C, W.WinWidth - R.W, 0, R.W, R.H, R.X, R.Y, R.W, R.H, T);
-	
+
 
 	if (W.bStatusBar)
 		Temp = FrameSBL;
 	else
 		Temp = FrameBL;
-	
+
 	R = FrameL;
 	W.DrawStretchedTextureSegment(C, 0, FrameTL.H,
-									R.W,  
+									R.W,
 									W.WinHeight - FrameTL.H
 									- Temp.H,
 									R.X, R.Y, R.W, R.H, T);
 
 	R = FrameR;
 	W.DrawStretchedTextureSegment(C, W.WinWidth - R.W, FrameTL.H,
-									R.W,  
+									R.W,
 									W.WinHeight - FrameTL.H
 									- Temp.H,
 									R.X, R.Y, R.W, R.H, T);
@@ -112,7 +112,7 @@ function FW_DrawWindowFrame(UWindowFramedWindow W, Canvas C)
 	if (W.bStatusBar)
 	{
 		R = FrameSB;
-		W.DrawStretchedTextureSegment(C, FrameBL.W, W.WinHeight - R.H, 
+		W.DrawStretchedTextureSegment(C, FrameBL.W, W.WinHeight - R.H,
 										W.WinWidth - FrameSBL.W
 										- FrameSBR.W,
 										R.H, R.X, R.Y, R.W, R.H, T);
@@ -120,7 +120,7 @@ function FW_DrawWindowFrame(UWindowFramedWindow W, Canvas C)
 	else
 	{
 		R = FrameB;
-		W.DrawStretchedTextureSegment(C, FrameBL.W, W.WinHeight - R.H, 
+		W.DrawStretchedTextureSegment(C, FrameBL.W, W.WinHeight - R.H,
 										W.WinWidth - FrameBL.W
 										- FrameBR.W,
 										R.H, R.X, R.Y, R.W, R.H, T);
@@ -130,7 +130,7 @@ function FW_DrawWindowFrame(UWindowFramedWindow W, Canvas C)
 		R = FrameSBR;
 	else
 		R = FrameBR;
-	W.DrawStretchedTextureSegment(C, W.WinWidth - R.W, W.WinHeight - R.H, R.W, R.H, R.X, R.Y, 
+	W.DrawStretchedTextureSegment(C, W.WinWidth - R.W, W.WinHeight - R.H, R.W, R.H, R.X, R.Y,
 									R.W, R.H, T);
 
 
@@ -141,10 +141,10 @@ function FW_DrawWindowFrame(UWindowFramedWindow W, Canvas C)
 		C.DrawColor = FrameInactiveTitleColor;
 
 
-	W.ClipTextWidth(C, FrameTitleX, FrameTitleY, 
+	W.ClipTextWidth(C, FrameTitleX, FrameTitleY,
 					W.WindowTitle, W.WinWidth - 22);
 
-	if (W.bStatusBar) 
+	if (W.bStatusBar)
 	{
 		C.DrawColor.r = 0;
 		C.DrawColor.g = 0;
@@ -188,7 +188,7 @@ function Region FW_GetClientArea(UWindowFramedWindow W)
 	R.X = FrameL.W;
 	R.Y	= FrameT.H;
 	R.W = W.WinWidth - (FrameL.W + FrameR.W);
-	if (W.bStatusBar) 
+	if (W.bStatusBar)
 		R.H = W.WinHeight - (FrameT.H + FrameSB.H);
 	else
 		R.H = W.WinHeight - (FrameT.H + FrameB.H);
@@ -201,11 +201,11 @@ function FrameHitTest FW_HitTest(UWindowFramedWindow W, float X, float Y)
 {
 	if ((X >= 3) && (X <= W.WinWidth - 3) && (Y >= 3) && (Y <= 14))
 		return HT_TitleBar;
-	if ((X < BRSIZEBORDER && Y < SIZEBORDER) || (X < SIZEBORDER && Y < BRSIZEBORDER)) 
+	if ((X < BRSIZEBORDER && Y < SIZEBORDER) || (X < SIZEBORDER && Y < BRSIZEBORDER))
 		return HT_NW;
 	if ((X > W.WinWidth - SIZEBORDER && Y < BRSIZEBORDER) || (X > W.WinWidth - BRSIZEBORDER && Y < SIZEBORDER))
 		return HT_NE;
-	if ((X < BRSIZEBORDER && Y > W.WinHeight - SIZEBORDER)|| (X < SIZEBORDER && Y > W.WinHeight - BRSIZEBORDER)) 
+	if ((X < BRSIZEBORDER && Y > W.WinHeight - SIZEBORDER)|| (X < SIZEBORDER && Y > W.WinHeight - BRSIZEBORDER))
 		return HT_SW;
 	if ((X > W.WinWidth - BRSIZEBORDER) && (Y > W.WinHeight - BRSIZEBORDER))
 		return HT_SE;
@@ -215,10 +215,10 @@ function FrameHitTest FW_HitTest(UWindowFramedWindow W, float X, float Y)
 		return HT_S;
 	if (X < SIZEBORDER)
 		return HT_W;
-	if (X > W.WinWidth - SIZEBORDER)	
+	if (X > W.WinWidth - SIZEBORDER)
 		return HT_E;
 
-	return HT_None;	
+	return HT_None;
 }
 
 /* Client Area Drawing Functions */
@@ -235,9 +235,9 @@ function Combo_SetupSizes(UWindowComboControl W, Canvas C)
 
 	C.Font = W.Root.Fonts[W.Font];
 	W.TextSize(C, W.Text, TW, TH);
-	
+
 	W.WinHeight = 12 + MiscBevelT[2].H + MiscBevelB[2].H;
-	
+
 	switch (W.Align)
 	{
 	case TXT_LEFT:
@@ -245,7 +245,7 @@ function Combo_SetupSizes(UWindowComboControl W, Canvas C)
 		W.TextX = 0;
 		break;
 	case TXT_RIGHT:
-		W.EditAreaDrawX = 0;	
+		W.EditAreaDrawX = 0;
 		W.TextX = W.WinWidth - TW;
 		break;
 	case TXT_CENTER:
@@ -347,7 +347,7 @@ function Combo_GetButtonBitmaps(UWindowComboButton W)
 	local Texture T;
 
 	T = W.GetLookAndFeelTexture();
-	
+
 	W.bUseRegion = true;
 
 	W.UpTexture = T;
@@ -367,12 +367,12 @@ function Editbox_SetupSizes(UWindowEditControl W, Canvas C)
 	local int B;
 
 	B = EditBoxBevel;
-		
+
 	C.Font = W.Root.Fonts[W.Font];
 	W.TextSize(C, W.Text, TW, TH);
-	
+
 	W.WinHeight = 12 + MiscBevelT[B].H + MiscBevelB[B].H;
-	
+
 	switch (W.Align)
 	{
 	case TXT_LEFT:
@@ -380,7 +380,7 @@ function Editbox_SetupSizes(UWindowEditControl W, Canvas C)
 		W.TextX = 0;
 		break;
 	case TXT_RIGHT:
-		W.EditAreaDrawX = 0;	
+		W.EditAreaDrawX = 0;
 		W.TextX = W.WinWidth - TW;
 		break;
 	case TXT_CENTER:
@@ -423,14 +423,14 @@ function Tab_DrawTab(UWindowTabControlTabArea Tab, Canvas C, bool bActiveTab, bo
 	C.DrawColor.B = 255;
 
 	T = Tab.GetLookAndFeelTexture();
-	
+
 	if (bActiveTab)
 	{
 		R = TabSelectedL;
 		Tab.DrawStretchedTextureSegment(C, X, Y, R.W, R.H, R.X, R.Y, R.W, R.H, T);
 
 		R = TabSelectedM;
-		Tab.DrawStretchedTextureSegment(C, X + TabSelectedL.W, Y, 
+		Tab.DrawStretchedTextureSegment(C, X + TabSelectedL.W, Y,
 										W - TabSelectedL.W
 										- TabSelectedR.W,
 										R.H, R.X, R.Y, R.W, R.H, T);
@@ -455,7 +455,7 @@ function Tab_DrawTab(UWindowTabControlTabArea Tab, Canvas C, bool bActiveTab, bo
 		Tab.DrawStretchedTextureSegment(C, X, Y, R.W, R.H, R.X, R.Y, R.W, R.H, T);
 
 		R = TabUnselectedM;
-		Tab.DrawStretchedTextureSegment(C, X + TabUnselectedL.W, Y, 
+		Tab.DrawStretchedTextureSegment(C, X + TabUnselectedL.W, Y,
 										W - TabUnselectedL.W
 										- TabUnselectedR.W,
 										R.H, R.X, R.Y, R.W, R.H, T);
@@ -563,7 +563,7 @@ function SB_VDraw(UWindowVScrollbar W, Canvas C)
 
 	R = SBBackground;
 	W.DrawStretchedTextureSegment(C, 0, 0, W.WinWidth, W.WinHeight, R.X, R.Y, R.W, R.H, T);
-	
+
 	if (!W.bDisabled)
 	{
 		W.DrawUpBevel(C, 0, W.ThumbStart, Size_ScrollbarWidth,	W.ThumbHeight, T);
@@ -579,8 +579,8 @@ function SB_HDraw(UWindowHScrollbar W, Canvas C)
 
 	R = SBBackground;
 	W.DrawStretchedTextureSegment(C, 0, 0, W.WinWidth, W.WinHeight, R.X, R.Y, R.W, R.H, T);
-	
-	if (!W.bDisabled) 
+
+	if (!W.bDisabled)
 	{
 		W.DrawUpBevel(C, W.ThumbStart, 0, W.ThumbWidth, Size_ScrollbarWidth, T);
 	}
@@ -717,7 +717,7 @@ function Menu_DrawPulldownMenuItem(UWindowPulldownMenu M, UWindowPulldownMenuIte
 	if (bSelected)
 		M.DrawStretchedTexture(C, X, Y, W, H, Texture'UWindow.MenuHighlight');
 
-	if (Item.bDisabled) 
+	if (Item.bDisabled)
 	{
 		// Black Shadow
 		C.DrawColor.R = 96;
@@ -738,7 +738,7 @@ function Menu_DrawPulldownMenuItem(UWindowPulldownMenu M, UWindowPulldownMenuIte
 	if (Item.SubMenu != None)
 		M.DrawClippedTexture(C, X + W - 9, Y + 3, Texture'MenuSubArrow');
 
-	M.ClipText(C, X + M.TextBorder + 2, Y + 3, Item.Caption, True);	
+	M.ClipText(C, X + M.TextBorder + 2, Y + 3, Item.Caption, True);
 }
 
 defaultproperties

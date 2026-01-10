@@ -55,7 +55,7 @@ function InitPattern()
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.GESoldier.GESoldierA", class'Texture'));
             }
         }
-    
+
         // Joshua - Defense Ministry requires 1 bullet to shoot a unavoidable camera for Elite mode
         if (EchelonGameInfo(Level.Game).bEliteMode && EPlayerController(Characters[0]) != None && EPlayerController(Characters[0]).HandGun != None)
         {

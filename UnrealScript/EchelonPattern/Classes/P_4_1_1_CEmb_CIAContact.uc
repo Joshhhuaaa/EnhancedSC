@@ -102,7 +102,7 @@ TalkThree:
     End();
 LastTalk:
     Log("LastTalk");
-    JumpRandom('lasttalkone', 0.50, 'lasttalktwo', 1.00, , , , , ,); 
+    JumpRandom('lasttalkone', 0.50, 'lasttalktwo', 1.00, , , , , ,);
     End();
 lasttalkone:
     Log("lasttalkone");

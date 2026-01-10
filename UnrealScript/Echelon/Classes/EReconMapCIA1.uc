@@ -2,23 +2,23 @@ class EReconMapCIA1 extends ERecon;
 
 function InitRecon()
 {
-	
+
     ReconType        = 2;
 	ReconName        = "ReconNameMapCIA1";
 	ReconPicName     = Texture'HUD.RECON.rc_2_1_CIA1';
 	ReconPreviewText = "ReconPTMapCIA1";
 	ReconText        = "";
-	
+
 	NbrOfCoord = 11;
-		
+
 	// Add manualy because of defined structure
 	ReconDynMapArray.Length = ReconDynMapArray.Length + NbrOfCoord;
-	
+
 	// Map COORDinates for Tbilisi MAP
 	ReconDynMapArray[0].x        = 94;
 	ReconDynMapArray[0].y        = 207;
 	ReconDynMapArray[0].RoomDesc = "ReconMapCIA1Room1";
-		
+
 
 	ReconDynMapArray[1].x = 135;
 	ReconDynMapArray[1].y = 170;

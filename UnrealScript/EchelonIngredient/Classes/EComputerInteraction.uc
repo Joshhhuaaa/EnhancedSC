@@ -75,7 +75,7 @@ function SetInteractLocation(Pawn InteractPawn)
 {
 	local vector MovePos, X,Y,Z;
 	local EPawn InteractEPawn;
-	
+
 	InteractEPawn = EPawn(InteractPawn);
 	if (InteractEPawn == None)
 		return;
@@ -97,7 +97,7 @@ function SetInteractLocation(Pawn InteractPawn)
 		break;
 	}
 	MovePos.Z	= InteractEPawn.Location.Z;									// keep on same Z
-	
+
 	InteractEPawn.m_locationStart		= InteractEPawn.Location;
 	InteractEPawn.m_orientationStart	= InteractEPawn.Rotation;
 	InteractEPawn.m_locationEnd			= MovePos;

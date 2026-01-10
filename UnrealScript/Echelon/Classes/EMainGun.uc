@@ -50,7 +50,7 @@ function bool IsROFModeAvailable(ERateOfFireMode rof)
 
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Do own treatment when selected in inventory
 //------------------------------------------------------------------------
 function Select(EInventory Inv)
@@ -77,19 +77,19 @@ function AddedToInventory()
 function bool NotifyPickup(Controller Instigator)
 {
 	local EPlayerController Epc;
-	
+
 	Super.NotifyPickup(Instigator);
 
 	// Set as Player HandGun
 	Epc = EPlayerController(Controller);
 	Epc.ePawn.FullInventory.SetSelectedItem(self);
 	Epc.SheathWeapon();
-	
+
 	return false;
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Link the maingun to its ammo
 //------------------------------------------------------------------------
 function Link(ESecondaryAmmo Ammo)

@@ -1,4 +1,4 @@
-class EStairlamplight_pal extends EGameplayObjectLight; 
+class EStairlamplight_pal extends EGameplayObjectLight;
 
 defaultproperties
 {

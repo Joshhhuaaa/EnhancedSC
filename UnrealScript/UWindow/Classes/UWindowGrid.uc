@@ -96,7 +96,7 @@ function Resized()
 	else
 		VertSB.WinHeight = WinHeight;
 
-	
+
 	if (bShowHorizSB)
 		Offset = 1 - HorizSB.Pos;
 	else
@@ -138,7 +138,7 @@ function UWindowGridColumn AddColumn(string ColumnHeading, float DefaultWidth)
 	NewColumn.NextColumn = None;
 	NewColumn.PrevColumn = OldLastColumn;
 
-	NewColumn.ColumnHeading = ColumnHeading;	
+	NewColumn.ColumnHeading = ColumnHeading;
 	return NewColumn;
 }
 

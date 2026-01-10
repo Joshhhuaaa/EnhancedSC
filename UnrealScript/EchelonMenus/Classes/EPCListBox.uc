@@ -20,7 +20,7 @@ function Created()
 
 function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H)
 {
-    RenderItem(C, UWindowListBoxItem(Item), X, Y, W - m_IRightPadding, H);  
+    RenderItem(C, UWindowListBoxItem(Item), X, Y, W - m_IRightPadding, H);
 }
 
 function DoubleClickItem(UWindowListBoxItem I)

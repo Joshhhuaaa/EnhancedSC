@@ -45,7 +45,7 @@ function PostRender(Canvas C)
 }
 
 state s_StandardDisplay
-{   
+{
 	function BeginState()
 	{
         Epc.PlayerInput.bStopInputAlternate = true;
@@ -65,7 +65,7 @@ state s_StandardDisplay
             Owner.GotoState(EchelonMainHud(Owner).RestoreState());
         }
     }
-    
+
     function bool KeyEvent(string Key, EInputAction Action, float Delta)
     {
         if (Key == "PlayerStats")
@@ -172,10 +172,10 @@ function DrawPlayerStats(ECanvas Canvas)
     local string timeString;
     local float xLen, yLen;
     local int topBarY;
-                
+
     if (Epc == None || Epc.playerStats == None)
         return;
-        
+
     playerStats = Epc.playerStats;
 
     // Xbox font is too large to display here
@@ -184,37 +184,37 @@ function DrawPlayerStats(ECanvas Canvas)
     else
         Canvas.Font = Canvas.ETextFont;
     Canvas.TextSize("T", xLen, yLen);
-    
+
     TitleColor.R = 96;
     TitleColor.G = 101;
     TitleColor.B = 79;
     TitleColor.A = PlayerStatsAlpha;
-    
+
     TextColor.R = 180;
     TextColor.G = 180;
     TextColor.B = 180;
     TextColor.A = PlayerStatsAlpha;
-    
+
     SectionColor.R = 75;
     SectionColor.G = 83;
     SectionColor.B = 60;
     SectionColor.A = PlayerStatsAlpha;
-    
+
     // Position and layout
     spacing = yLen + 2;
     headerHeight = 28;
     leftMargin = 20;
     boxWidth = 480;
     boxHeight = 500;
-    
+
     // Position box in center of screen
     xPos = (640 / 2) - (boxWidth / 2);
     yPos = (480 / 2) - (boxHeight / 2);
-    
+
     // Draw the stat box with borders
     Canvas.Style = ERenderStyle.STY_Alpha;
     Canvas.SetDrawColor(128, 128, 128, PlayerStatsAlpha);
-    
+
     // TOP LEFT CORNER
     Canvas.SetPos(xPos, yPos);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin2, 8, 4, 8, 4, -8, -4);
@@ -226,7 +226,7 @@ function DrawPlayerStats(ECanvas Canvas)
     // TOP RIGHT CORNER
     Canvas.SetPos(xPos + boxWidth - 8, yPos);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin2, 8, 4, 0, 4, 8, -4);
-    
+
     // BOTTOM RIGHT CORNER
     Canvas.SetPos(xPos + boxWidth - 8, yPos + boxHeight - 7);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin1, 8, 7, 8, 0, -8, 7);
@@ -234,11 +234,11 @@ function DrawPlayerStats(ECanvas Canvas)
     // LEFT BORDER
     Canvas.SetPos(xPos, yPos + 4);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v, 5, boxHeight - 11, 0, 0, 5, 1);
-    
+
     // RIGHT BORDER
     Canvas.SetPos(xPos + boxWidth - 5, yPos + 4);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v, 5, boxHeight - 11, 5, 0, -5, 1);
-    
+
     // TOP BORDER
     Canvas.SetPos(xPos + 8, yPos);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_h2, boxWidth - 16, 4, 0, 0, 1, 4);
@@ -246,11 +246,11 @@ function DrawPlayerStats(ECanvas Canvas)
     // BOTTOM BORDER
     Canvas.SetPos(xPos + 8, yPos + boxHeight - 6);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_h, boxWidth - 16, 6, 0, 0, 1, 6);
-    
+
     // Fill the background
     Canvas.DrawLine(xPos + 4, yPos + 4, boxWidth - 8, boxHeight - 8, Canvas.black, 200, eLevel.TGAME);
     Canvas.Style = ERenderStyle.STY_Normal;
-    
+
     // Draw header with title background
     topBarY = yPos + 5;
 
@@ -265,19 +265,19 @@ function DrawPlayerStats(ECanvas Canvas)
     Canvas.TextSize(Caps((Localize("PlayerStats", "MissionStatistics", "Localization\\Enhanced"))), xLen, yLen);
     Canvas.SetPos(xPos + (boxWidth / 2) - (xLen / 2), topBarY + 9);
     Canvas.DrawText(Caps((Localize("PlayerStats", "MissionStatistics", "Localization\\Enhanced"))));
-    
+
     // Start position for stats
     yPos += headerHeight + spacing;
-    
+
     // SECTION: Mission Information
     Canvas.SetDrawColor(SectionColor.R, SectionColor.G, SectionColor.B, SectionColor.A);
     Canvas.SetPos(xPos + 10, yPos);
     Canvas.DrawText(Localize("PlayerStats", "MissionInformation", "Localization\\Enhanced"));
     yPos += spacing;
-    
+
     // Mission stats with white text
     Canvas.SetDrawColor(TextColor.R, TextColor.G, TextColor.B, TextColor.A);
-    
+
     // Mission Name
     Canvas.SetPos(xPos + leftMargin, yPos);
     Canvas.DrawText(Localize("PlayerStats", "Mission", "Localization\\Enhanced"));
@@ -295,7 +295,7 @@ function DrawPlayerStats(ECanvas Canvas)
     Canvas.SetPos(xPos + (boxWidth * 0.60), yPos);
     Canvas.DrawText(timeString);
     yPos += spacing;
-    
+
     // Difficulty
     switch (Epc.playerInfo.Difficulty)
     {
@@ -327,7 +327,7 @@ function DrawPlayerStats(ECanvas Canvas)
             DifficultyText = "Unknown (" $ Epc.playerInfo.Difficulty $ ")";
             break;
     }
-    
+
     // Difficulty
     Canvas.SetPos(xPos + leftMargin, yPos);
     Canvas.DrawText(Localize("PlayerStats", "Difficulty", "Localization\\Enhanced"));
@@ -335,13 +335,13 @@ function DrawPlayerStats(ECanvas Canvas)
     Canvas.SetPos(xPos + (boxWidth * 0.60), yPos);
     Canvas.DrawText(DifficultyText);
     yPos += spacing * 1.5;
-    
+
     // SECTION: Alert Statistics
     Canvas.SetDrawColor(SectionColor.R, SectionColor.G, SectionColor.B, SectionColor.A);
     Canvas.SetPos(xPos + 10, yPos);
     Canvas.DrawText(Localize("PlayerStats", "AlarmStatistics", "Localization\\Enhanced"));
     yPos += spacing;
-    
+
     Canvas.SetDrawColor(TextColor.R, TextColor.G, TextColor.B, TextColor.A);
 
     Canvas.SetPos(xPos + leftMargin, yPos);
@@ -350,7 +350,7 @@ function DrawPlayerStats(ECanvas Canvas)
     Canvas.SetPos(xPos + (boxWidth * 0.60), yPos);
     Canvas.DrawText(playerStats.PlayerIdentified);
     yPos += spacing;
-    
+
     // Body Found stats
     Canvas.SetPos(xPos + leftMargin, yPos);
     Canvas.DrawText(Localize("PlayerStats", "BodyFound", "Localization\\Enhanced"));
@@ -434,15 +434,15 @@ function DrawPlayerStats(ECanvas Canvas)
     Canvas.SetPos(xPos + (boxWidth * 0.60), yPos);
     Canvas.DrawText(statString);
     yPos += spacing * 1.5;
-    
+
     // SECTION: Miscellaneous Statistics
     Canvas.SetDrawColor(SectionColor.R, SectionColor.G, SectionColor.B, SectionColor.A);
     Canvas.SetPos(xPos + 10, yPos);
     Canvas.DrawText(Localize("PlayerStats", "MiscellaneousStatistics", "Localization\\Enhanced"));
     yPos += spacing;
-    
+
     Canvas.SetDrawColor(TextColor.R, TextColor.G, TextColor.B, TextColor.A);
-    
+
     // Bullets Fired stats
     Canvas.SetPos(xPos + leftMargin, yPos);
     Canvas.DrawText(Localize("PlayerStats", "BulletFired", "Localization\\Enhanced"));
@@ -503,7 +503,7 @@ function DrawPlayerStats(ECanvas Canvas)
     if (Epc.playerStats.bCheatsActive)
         Canvas.DrawText(statString);
     yPos += spacing;
-    
+
     // Rating bar
     Canvas.Style = ERenderStyle.STY_Alpha;
     Canvas.SetPos(xPos + 5, yPos);

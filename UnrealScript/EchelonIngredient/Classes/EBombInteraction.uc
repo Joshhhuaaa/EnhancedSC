@@ -36,11 +36,11 @@ function SetInteractLocation(Pawn InteractPawn)
 		return;
 
 	GetAxes(Owner.Rotation, X, Y, Z);
-	
+
 	MovePos = Owner.Location;
 	MovePos += 1.1f * InteractEPawn.CollisionRadius * X;
 	MovePos.Z = InteractEPawn.Location.Z;
-	
+
 	InteractEPawn.m_locationStart	= InteractEPawn.Location;
 	InteractEPawn.m_orientationStart= InteractEPawn.Rotation;
 	InteractEPawn.m_locationEnd		= MovePos;

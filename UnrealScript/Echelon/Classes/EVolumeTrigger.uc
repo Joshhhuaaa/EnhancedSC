@@ -31,7 +31,7 @@ function Touch(actor Other)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		for shootable volume (oil barrel,etc...)
 //------------------------------------------------------------------------
 function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag)

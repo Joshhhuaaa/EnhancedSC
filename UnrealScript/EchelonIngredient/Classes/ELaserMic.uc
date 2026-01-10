@@ -18,7 +18,7 @@ var float ZoomAccumulator; // Joshua - Accumulates deltaTime to ensure 30fps zoo
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
-    
+
 	HUDTex       = EchelonLevelInfo(Level).TICON.qi_ic_lasermic;
     InventoryTex = EchelonLevelInfo(Level).TICON.inv_ic_lasermic;
     ItemName     = "LaserMic";
@@ -40,7 +40,7 @@ function ResetTarget()
 function Select(EInventory Inv)
 {
 	Super.Select(Inv);
-	
+
 	// Joshua - Don't play sound during silent restore (sorting)
 	if (!Inv.bSilentRestore)
 		PlaySound(Sound'Interface.Play_FisherEquipLaserMic', SLOT_Interface);
@@ -62,6 +62,10 @@ state s_Microiing
 		Epc = EPlayerController(controller);
 		if (Epc == None)
 			Log(self$" ERROR: Controller is not a EPlayerController");
+
+		// Joshua - Clear zoom input buttons
+		Epc.bIncSpeedPressed = false;
+		Epc.bDecSpeedPressed = false;
 
 		// Once Micro set, send Controller into lasermic state
 		Epc.GotoState('s_LaserMicTargeting');
@@ -101,7 +105,7 @@ state s_Microiing
 		Epc.SetCameraFOV(Epc, (Epc.DesiredFov)); // Joshua - Necessary to reset FOV when using Laser Mic visions
 		Epc.PopCamera(self);
 		Epc.iRenderMask = 0;
-		
+
 		ResetTarget();
 
 		ObjectHud.GotoState('');
@@ -124,16 +128,16 @@ state s_Microiing
 		// Accumulate actual deltaTime and only update zoom at 30fps intervals
 		ZoomAccumulator += DeltaTime;
 		simDeltaTime = 1.0f / 30.0f;
-		
+
 		// Calculate how many 30fps frames have passed
 		numUpdates = int(ZoomAccumulator / simDeltaTime);
-		
+
 		// Only process zoom if at least one 30fps frame has passed
 		if (numUpdates > 0)
 		{
 			// Subtract the time we're about to process
 			ZoomAccumulator -= numUpdates * simDeltaTime;
-			
+
 			// Apply zoom updates (usually just 1, but could be more if frame rate drops)
 			for (i = 0; i < numUpdates; i++)
 			{
@@ -151,7 +155,7 @@ state s_Microiing
 				else if (Epc.bDecSpeedPressed == true)
 				{
 					Epc.bDecSpeedPressed = false;
-					current_fov += simDeltaTime * ZoomSpeed;	    
+					current_fov += simDeltaTime * ZoomSpeed;
 					if (current_fov <= MaxFov)
 					{
 						zoomed = true;
@@ -170,7 +174,7 @@ state s_Microiing
 				// Zoom out
 				else if (Epc.bDPadDown != 0)
 				{
-					current_fov += simDeltaTime * ZoomSpeedController;	    
+					current_fov += simDeltaTime * ZoomSpeedController;
 					if (current_fov <= MaxFov)
 					{
 						zoomed = true;
@@ -194,14 +198,14 @@ state s_Microiing
 			else
 				Epc.SetCameraFOV(self, current_fov);
 		}
-	}		
+	}
 
 	function Tick(float DeltaTime)
 	{
 		// Update mic location for sound engine
 		Micro.SetLocation(Epc.m_TargetLocation - Epc.ToWorldDir(vect(25,0,0)));
 
-		// Always look up CurrentTarget if it's a Mic Mover, in case the conversation is turned on/off while pointing it.  
+		// Always look up CurrentTarget if it's a Mic Mover, in case the conversation is turned on/off while pointing it.
 		// Else, the conversation will only get detected unless you change to a different target
 		if (Epc.m_targetActor != CurrentTarget || CurrentTarget.IsA('ELaserMicMover'))
 		{
@@ -211,17 +215,17 @@ state s_Microiing
 				//Log("s_Microiing new TARGET ="@Epc.m_targetActor);
 				CurrentTarget = Epc.m_targetActor;
 			}
-			
+
 			// process valid target
 			if (CurrentTarget.IsA('ELaserMicMover'))
 			{
 				LaserMicTarget = ELaserMicMover(CurrentTarget);
 				LaserMicTarget.TouchedByLaserMic = true;
 				SetLaserLocked(true);
-				
+
 				// Set sound object when touching a valid mic mover
 				Epc.MicroTarget = Micro;
-				
+
 				//Log("Valid Target"@LaserMicTarget);
 			}
 			// If not touching a valid target, reset flags
@@ -236,7 +240,7 @@ state s_Microiing
 		// Reset pointers if the mic mover pattern is not yet started
 		if (LaserMicTarget != None && LaserMicTarget.LinkedSession == None)
 			ResetTarget();
-		
+
 		// Joshua - Zoom functionality
 		if (Epc.bLaserMicZoomLevels)
 			Zoom(DeltaTime);

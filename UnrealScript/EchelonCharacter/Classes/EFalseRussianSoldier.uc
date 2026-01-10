@@ -1,5 +1,5 @@
 //===============================================================================
-//  [EFalseRussianSoldier] 
+//  [EFalseRussianSoldier]
 //===============================================================================
 
 class EFalseRussianSoldier extends EAIProfessional

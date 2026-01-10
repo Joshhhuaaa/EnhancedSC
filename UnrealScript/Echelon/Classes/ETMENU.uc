@@ -12,7 +12,7 @@ class ETMENU extends ETextureManager native;
 ******************************************************************************/
 
 /*-----------------------------------------------------------------------------
-                      I N S T A N C E   V A R I A B L E S 
+                      I N S T A N C E   V A R I A B L E S
 -----------------------------------------------------------------------------*/
 var int inv_ic_batterie;
 var int pda_border_logo;
@@ -52,7 +52,7 @@ var int inv_dropdown_fleche;
 var int inv_scrollbar_fleche;
 
 /*-----------------------------------------------------------------------------
-                     D E F A U L T   P R O P E R T I E S 
+                     D E F A U L T   P R O P E R T I E S
 -----------------------------------------------------------------------------*/
 
 defaultproperties

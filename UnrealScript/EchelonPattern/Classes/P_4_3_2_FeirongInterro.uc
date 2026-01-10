@@ -78,7 +78,7 @@ RandomCalisse:
     Log("RandomCalisse");
     Log("These two RED commands should solve PC Bug 377. If it doesn't, talk to Clint");
     EndConversation();
-    JumpRandom('FeirongIntelC', 0.50, 'FeirongIntelD', 1.00, , , , , ,); 
+    JumpRandom('FeirongIntelC', 0.50, 'FeirongIntelD', 1.00, , , , , ,);
     End();
 FeirongIntelC:
     Log("FeirongIntelC");

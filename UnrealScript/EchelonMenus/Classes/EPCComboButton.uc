@@ -7,7 +7,7 @@ function Created(){}
 function MouseWheelDown(FLOAT X, FLOAT Y)
 {
 	local UWindowWindow W;
-	
+
 	// Joshua - The parent is the combo control, we need to go to its owner to find the listbox
 	if (ParentWindow != None && UWindowDialogControl(ParentWindow).NotifyWindow != None)
 	{
@@ -28,7 +28,7 @@ function MouseWheelDown(FLOAT X, FLOAT Y)
 function MouseWheelUp(FLOAT X, FLOAT Y)
 {
 	local UWindowWindow W;
-	
+
 	// Joshua - The parent is the combo control, we need to go to its owner to find the listbox
 	if (ParentWindow != None && UWindowDialogControl(ParentWindow).NotifyWindow != None)
 	{
@@ -44,5 +44,5 @@ function MouseWheelUp(FLOAT X, FLOAT Y)
 		}
 	}
 }
- 
+
 

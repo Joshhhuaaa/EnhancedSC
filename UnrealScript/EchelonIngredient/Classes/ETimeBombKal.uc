@@ -14,7 +14,7 @@ function PostBeginPlay()
 
 function SpawnNeedle(out EGameplayObject Needle, Rotator Rate)
 {
-	if (Needle != None) 
+	if (Needle != None)
 		return;
 	Needle = spawn(class'EGameplayObject', self,, ToWorld(Vect(3.887,-4.63,0.373)));
 	Needle.SetStaticMesh(StaticMesh'EMeshIngredient.Object.BombNeedle_kal');

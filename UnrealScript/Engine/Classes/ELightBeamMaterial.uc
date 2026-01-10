@@ -5,4 +5,4 @@ class ELightBeamMaterial extends Material
 var() Texture LightMaterialProj;
 var() Texture LightMaterialEnvFX;
 
-    
+

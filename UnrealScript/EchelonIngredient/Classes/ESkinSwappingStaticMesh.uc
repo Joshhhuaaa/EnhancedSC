@@ -1,11 +1,11 @@
 class ESkinSwappingStaticMesh extends StaticMeshActor;
 
-#exec OBJ LOAD FILE=..\StaticMeshes\EMeshIngredient.usx 
+#exec OBJ LOAD FILE=..\StaticMeshes\EMeshIngredient.usx
 
 function Tick(float DeltaTime)
 {
 	local Material temp;
-	
+
 	temp = Skins[0];
 	Skins[0] = Skins[1];
 	Skins[1] = temp;

@@ -17,15 +17,15 @@ var FLOAT			m_fFontSpacing;
 
 function SetLabelText(string _Text, ECanvas.ETextAligned _Align)
 {
-    text = _Text;    
-    Align = _Align;    
+    text = _Text;
+    Align = _Align;
 }
 
 
 function Paint(Canvas C, float X, float Y)
 {
-    
-    Render(C , X, Y);        
+
+    Render(C , X, Y);
 
     if (m_bDrawButtonBorders)
 	{

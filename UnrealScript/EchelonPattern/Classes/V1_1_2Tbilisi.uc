@@ -3,10 +3,10 @@
 //=============================================================================
 class V1_1_2Tbilisi extends EVariable;
 
-var int BodyFound; 
-var int GateOpen; 
-var int GotTape; 
-var int OneCiviDead; 
+var int BodyFound;
+var int GateOpen;
+var int GotTape;
+var int OneCiviDead;
 
 
 function PostBeginPlay()

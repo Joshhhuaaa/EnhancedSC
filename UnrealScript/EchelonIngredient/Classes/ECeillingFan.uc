@@ -1,7 +1,7 @@
 class ECeillingFan extends EGameplayObject;
 
-#exec OBJ LOAD FILE=..\textures\ETexIngredient.utx 
-#exec OBJ LOAD FILE=..\StaticMeshes\EMeshIngredient.usx 
+#exec OBJ LOAD FILE=..\textures\ETexIngredient.utx
+#exec OBJ LOAD FILE=..\StaticMeshes\EMeshIngredient.usx
 
 var		EGameplayObject	myWings;
 var()	int				RotationSpeed;

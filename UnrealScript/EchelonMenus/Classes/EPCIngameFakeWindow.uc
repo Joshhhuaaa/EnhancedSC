@@ -18,7 +18,7 @@ function HideWindow()
     Super.HideWindow();
     EPCMainMenuRootWindow(Root).bSkipLaptopOverlay = false;
 }
-			
+
 function MouseMove(float X, float Y)
 {
 	EPlayerController(GetPlayerOwner()).MouseMove(X, Y);

@@ -31,7 +31,7 @@ function BuildCurvedStair(int Direction)
 			Adjustment = AddToFirstStep;
 		else
 			Adjustment = 0;
-				
+
 		NewVtx = vtx >> (RotStep * x);
 
 		Vertex3f(NewVtx.x, NewVtx.y, vtx.z - Adjustment);
@@ -49,7 +49,7 @@ function BuildCurvedStair(int Direction)
 			Adjustment = AddToFirstStep;
 		else
 			Adjustment = 0;
-				
+
 		NewVtx = vtx >> (RotStep * x);
 
 		Vertex3f(NewVtx.x, NewVtx.y, vtx.z - Adjustment);

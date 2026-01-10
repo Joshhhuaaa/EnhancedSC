@@ -24,7 +24,7 @@ function PostBeginPlay()
     }
     else // Remove for retail!
     {
-        // 
+        //
         for (i = 0; i < TriggeredObjects.Length; i++)
         {
             if ((TriggeredObjects[i] != None)
@@ -50,7 +50,7 @@ auto state s_On
 	function BeginState()
 	{
 		Button.SetRotation(Rotation + Rot(8191,0,0));
-		
+
 		Super.BeginState();
 	}
 }

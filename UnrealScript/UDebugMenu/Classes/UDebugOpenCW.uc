@@ -48,7 +48,7 @@ function OpenURL()
 		OpenCombo.BringToFront();
 		return;
 	}
-	
+
 	for (i = 0; i < 10; i++)
 	{
 		if (OpenHistory[i] ~= URL)
@@ -70,15 +70,15 @@ function OpenURL()
 			}
 			else
 				OpenHistory[i] = "";
-		}			
+		}
 	}
-	
+
 	SaveConfig();
 	OpenCombo.ClearValue();
 	GetParent(class'UWindowFramedWindow').Close();
 	Root.GotoState('');
 	GetLevel().ConsoleCommand("open "$URL);
-	
+
 }
 
 defaultproperties

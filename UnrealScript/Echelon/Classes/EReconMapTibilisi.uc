@@ -2,23 +2,23 @@ class EReconMapTibilisi extends ERecon;
 
 function InitRecon()
 {
-	
+
     ReconType        = 2;
 	ReconName        = "ReconNameMapTsi";
 	ReconPicName     = Texture'HUD.RECON.rc_1_1_maptibilisi';
 	ReconPreviewText = "ReconPTMapTsi";
 	ReconText        = "";
-	
+
 	NbrOfCoord = 15;
-		
+
 	// Add manualy because of defined structure
 	ReconDynMapArray.Length = ReconDynMapArray.Length + NbrOfCoord;
-	
+
 	// Map COORDinates for Tbilisi MAP
 	ReconDynMapArray[0].x        = 355;
 	ReconDynMapArray[0].y        = 120;
 	ReconDynMapArray[0].RoomDesc = "ReconMapTsiRoom1";
-		
+
 
 	ReconDynMapArray[1].x = 338;
 	ReconDynMapArray[1].y = 150;

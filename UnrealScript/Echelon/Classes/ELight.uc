@@ -1,7 +1,7 @@
 class ELight extends Light
 	native;
 
-#exec OBJ LOAD FILE=..\textures\ETexRenderer.utx 
+#exec OBJ LOAD FILE=..\textures\ETexRenderer.utx
 #exec OBJ LOAD FILE=..\StaticMeshes\LightGenOBJ.usx
 
 var ELightType	InitialLightType;
@@ -20,8 +20,8 @@ function PreBeginPlay()
 }
 
 //------------------------------------------------------------------------
-// Description		
-//		If go gets to be a controller, he will shut down light percent 
+// Description
+//		If go gets to be a controller, he will shut down light percent
 //------------------------------------------------------------------------
 function SetController(EGameplayObject obj)
 {
@@ -31,7 +31,7 @@ function SetController(EGameplayObject obj)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Turns on and off lights
 //------------------------------------------------------------------------
 function Trigger(actor Other, pawn EventInstigator, optional name InTag)
@@ -50,11 +50,11 @@ function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		If we explicitely want to turn lights on/off
 //------------------------------------------------------------------------
 function TurnOn(optional EChangeType _Type, optional Pawn EventInstigator)
-{ 
+{
 	if (LightBrightness != InitialLightBrightness && NbControllers > 1)
 	{
 		LightBrightness		= Min(LightBrightness + InitialLightBrightness / NbControllers, InitialLightBrightness);
@@ -80,7 +80,7 @@ function TurnOn(optional EChangeType _Type, optional Pawn EventInstigator)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		If we explicitely want to turn lights on/off
 //------------------------------------------------------------------------
 function TurnOff(EChangeType _Type, optional Pawn EventInstigator)

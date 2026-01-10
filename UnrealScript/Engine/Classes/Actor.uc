@@ -1,9 +1,9 @@
 //=============================================================================
 // Actor: The base class of all actors.
-// Actor is the base class of all gameplay objects.  
+// Actor is the base class of all gameplay objects.
 // A large number of properties, behaviors and interfaces are implemented in Actor, including:
 //
-// -	Display 
+// -	Display
 // -	Animation
 // -	Physics and world interaction
 // -	Making sounds
@@ -68,14 +68,14 @@ var(Movement) const enum EPhysics
 	PHYS_Trailer,
 	PHYS_RootMotion,
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * dchabot (25 mai 2001)
-// * Purpose : 
+// * Purpose :
 // ***********************************************************************************************
 	PHYS_Linear,
 	PHYS_Fence,
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * dchabot (25 mai 2001)
 // ***********************************************************************************************
 } Physics;
@@ -93,7 +93,7 @@ var(Display) const enum EDrawType
 	DT_SpriteAnimOnce,
 	DT_StaticMesh,
 	DT_DrawType,
-	DT_Particle, 
+	DT_Particle,
 	DT_AntiPortal,
 	DT_Rain,
 } DrawType;
@@ -156,11 +156,11 @@ var(Sound) bool         	m_bPlayIfSameZone;        	// Play the sounds only if t
 var(Sound) bool         	m_bIfDirectLineOfSight;   	// Play the sounds only if we have a direct line of sight
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // ***********************************************************************************************
 var bool		      bInAmbientRange;// Are we within the radius?
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 var const Actor           Base;          // Actor we're standing on.
@@ -214,7 +214,7 @@ var(Display) enum ERenderStyle
 	STY_Normal,
 	STY_Masked,
 	STY_Translucent,
-	STY_Modulated, 
+	STY_Modulated,
 	STY_Alpha,
 	STY_Particle
 } Style;
@@ -237,7 +237,7 @@ var			  bool		bTravel;				// Actor is capable of travelling among servers.
 var(Advanced) bool		bMovable;				// Actor can be moved.
 var(Events)	  bool		bLocalGameEvent;		// this event should be saved as a local saved game event
 var(Events)	  bool		bTravelGameEvent;		// this event should travel across levels as a saved game event
-var			  bool		bPendingDelete;			// set when actor is about to be deleted (since endstate and other functions called 
+var			  bool		bPendingDelete;			// set when actor is about to be deleted (since endstate and other functions called
 												// during deletion process before bDeleteMe is set).
 //-----------------------------------------------------------------------------
 // Sound.
@@ -258,7 +258,7 @@ var(Sound)		float			SoundRadiusSaturation;	 // Radius of full volume for a sound
 var(Sound)		float			SoundRadiusBackground;	 // Radius of full volume for a sound, it decrases when farther
 var(Surface)	ESurfaceType	SurfaceType;
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 enum EQuickLoadType
@@ -267,7 +267,7 @@ enum EQuickLoadType
 	EQLoad_Slot1,
 	EQLoad_Slot2,
 	EQLoad_Slot3,
-	EQLoad_MapStart 
+	EQLoad_MapStart
 };
 
 // Sound slots for actors.
@@ -330,7 +330,7 @@ var(Lighting) bool	     bCorona;       // Light uses Skin as a corona.
 var transient bool		 bLightChanged;	// Recalculate this light's lighting now.
 
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 //-----------------------------------------------------------------------------
@@ -380,7 +380,7 @@ var(Lighting) enum ELightEffect
 	LE_Unused,
 	LE_Sunlight,
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * yletourneau (01 Oct 2001)
 // * Purpose : <Unspecified>
 // ***********************************************************************************************
@@ -423,7 +423,7 @@ var(Lighting) enum ELightEffect
 	LE_EUnused11,//LE_ESpotOrthoBumpDistAtten,
 	LE_ESpotOrtho,
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * yletourneau (01 Oct 2001)
 // ***********************************************************************************************
 } LightEffect;
@@ -446,7 +446,7 @@ var(Lighting) byte
 
 // ***********************************************************************************************
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * Purpose : Echelon-specific Variables
 // ***********************************************************************************************
 // ***********************************************************************************************
@@ -486,7 +486,7 @@ var(Display) bool       bGlowDisplay;     //just display for the glow
 var(Display) bool       bInvalidateLightCachingIfMoved;     //for moving flashlights
 
 var(LightBeamVolumeProperties) bool				UsesSpotLightBeam;
-var(LightBeamVolumeProperties) const StaticMesh	VolumeLightMesh;	
+var(LightBeamVolumeProperties) const StaticMesh	VolumeLightMesh;
 var(LightBeamVolumeProperties) float 			VolumeTotalFalloffScale;
 var(LightBeamVolumeProperties) byte				VolumeInitialAlpha;
 
@@ -495,7 +495,7 @@ var(EchelonLighting) byte
 	AmbientHue,
 	AmbientSaturation;
 
-var(EchelonLighting) float 
+var(EchelonLighting) float
 	TurnOffDistance,
 	TurnOffDistancePercentageFadeIn,
 	MinDistance,
@@ -518,7 +518,7 @@ var(EchelonModifier) editinline EModifier
 	Modifier;
 
 ////////////////////////////////////////////////////////////
-/// Other Echelon specific vars 
+/// Other Echelon specific vars
 ////////////////////////////////////////////////////////////
 
 var(Debug) enum EChangeType
@@ -701,7 +701,7 @@ enum AIEventType
 	 AI_UNCONSCIOUS,
 	 AI_REVIVED,
 	 AI_GRABBED,
-	 AI_RELEASED,	 
+	 AI_RELEASED,
      AI_LOST_PLAYER,
 	 AI_LOST_PLAYER_AFTER,
 	 AI_SEE_PLAYER_AGAIN,
@@ -740,7 +740,7 @@ enum AIEventType
 
 	 AI_ARE_YOU_OK,
 	 AI_LET_HIM_GO,
-	 AI_INVESTIGATE_GREETINGS	 
+	 AI_INVESTIGATE_GREETINGS
 
 };
 
@@ -791,7 +791,7 @@ enum BroadCastType
 
 // Visibility flags
 enum VisibilityRating
-{	
+{
 	VIS_Invisible,
 	VIS_Barely,
 	VIS_Partially,
@@ -882,7 +882,7 @@ enum MoveFlags
 };
 
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 
@@ -893,7 +893,7 @@ enum MoveFlags
 var(Movement) float       Mass;				// Mass of this actor.
 var(Movement) rotator	  RotationRate;		// Change in rotation per second.
 var(Movement) rotator     DesiredRotation;	// Physics will smoothly rotate actor to this rotation if bRotateToDesired.
-var			  Actor		  PendingTouch;		// Actor touched during move which wants to add an effect after the movement completes 
+var			  Actor		  PendingTouch;		// Actor touched during move which wants to add an effect after the movement completes
 var       const vector    ColLocation;		// Actor's old location one move ago. Only for debugging
 var       const rotator   ColRotation;		// Actor's old rotation one move ago. Only for debugging
 
@@ -929,7 +929,7 @@ var	const bool			  bObsolete;	 // actor is obsolete - warn level designers to re
 // ***********************************************************************************************
 var(Collision) bool				  bPathColliding;// this actor should collide (if bWorldGeometry && bBlockActors is true) during path building (ignored if bStatic is true, as actor will always collide during path building)
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 var transient bool		  bPathTemp;	 // Internal/path building
 
@@ -1025,14 +1025,14 @@ native final function AnimBlendParams(int Stage, optional float BlendAlpha, opti
 native final function AnimBlendToAlpha(int Stage, float TargetAlpha, float TimeInterval);
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * dchabot (4 oct. 2001)
 // * Purpose : Added params
 // ***********************************************************************************************
 native final function coords  GetBoneCoords(name BoneName, optional bool ForceRefresh);
 native final function		  SetIKFade(float FadeIn, float FadeOut);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * dchabot (4 oct. 2001)
 // ***********************************************************************************************
 native final function rotator GetBoneRotation(name BoneName, optional int Space);
@@ -1050,18 +1050,18 @@ native final function SetBoneScale(int Slot, optional float BoneScale, optional 
 
 native final function SetBoneDirection(name BoneName, rotator BoneTurn, optional vector BoneTrans, optional float Alpha);
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * dchabot (9 oct. 2001)
-// * Purpose : 
+// * Purpose :
 // ***********************************************************************************************
 native final function SetBoneLocation(name BoneName, optional vector BoneTrans, optional float FadeIn, optional float FadeOut, optional float Alpha);
 native final function SetBoneRotation(name BoneName, optional rotator BoneTurn, optional int Space, optional float FadeIn, optional float FadeOut, optional float Alpha);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * dchabot (9 oct. 2001)
 // ***********************************************************************************************
 native final function GetAnimParams(int Channel, out name OutSeqName, out float OutAnimFrame, out float OutAnimRate);
-native final function bool AnimIsInGroup(int Channel, name GroupName);  
+native final function bool AnimIsInGroup(int Channel, name GroupName);
 
 
 //=========================================================================
@@ -1077,7 +1077,7 @@ native(3970) final function SetPhysics(EPhysics newPhysics);
 
 native(4014) static final function Canvas GetCanvas();
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 
@@ -1088,7 +1088,7 @@ native(4014) static final function Canvas GetCanvas();
 // Major notifications.
 //
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // ***********************************************************************************************
 event Destroyed()
 {
@@ -1102,7 +1102,7 @@ event Destroyed()
 native(1419) final function string GetCurrentMapName();
 
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 event GainedChild(Actor Other);
 event LostChild(Actor Other);
@@ -1113,13 +1113,13 @@ event Tick(float DeltaTime);
 // Triggers.
 //
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // ***********************************************************************************************
 event Trigger(Actor Other, Pawn EventInstigator, optional name InTag);
 event UnTrigger(Actor Other, Pawn EventInstigator, optional name InTag);
 event HitFakeBackDrop();
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 event BeginEvent();
 event EndEvent();
@@ -1151,14 +1151,14 @@ event FellOutOfWorld()
 {
 	SetPhysics(PHYS_None);
 	Destroy();
-}	
+}
 
 //
 // Damage and kills.
 //
 event KilledBy(pawn EventInstigator);
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // ***********************************************************************************************
 event TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag);
 
@@ -1175,7 +1175,7 @@ event BulletWentTru(Actor Instigator, vector HitLocation, vector HitNormal, vect
 		Instigator.SpawnWallHit(self, HitLocation, HitNormal, HitMaterial);
 }
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 //
@@ -1247,7 +1247,7 @@ native(264) final function bool PlaySound
 );
 
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 /* Get a sound duration.
@@ -1284,7 +1284,7 @@ native(1624) final function FlushRequests();
 native(1625) final function StartFadeOut(float Time);
 native(1626) final function bool IsGameOver();
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 // ***********************************************************************************************
@@ -1292,7 +1292,7 @@ native(1626) final function bool IsGameOver();
 // ***********************************************************************************************
 native(4015) static final function EPCGameOptions GetGameOptions();
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 
@@ -1309,7 +1309,7 @@ native(532) final function bool PlayerCanSeeMe();
 // ***********************************************************************************************
 native(3082) final function BYTE IsLocationInRainVolume(Vector _Location);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 
@@ -1334,8 +1334,8 @@ event BeginPlay();
 native(304) final iterator function AllActors     (class<actor> BaseClass, out actor Actor, optional name MatchTag);
 
 /* DynamicActors() only iterates through the non-static actors on the list (still relatively slow, bu
- much better than AllActors).  This should be used in most cases and replaces AllActors in most of 
- Epic's game code. 
+ much better than AllActors).  This should be used in most cases and replaces AllActors in most of
+ Epic's game code.
 */
 native(313) final iterator function DynamicActors     (class<actor> BaseClass, out actor Actor, optional name MatchTag);
 
@@ -1360,7 +1360,7 @@ native(309) final iterator function TraceActors   (class<actor> BaseClass, out a
 */
 native(310) final iterator function RadiusActors  (class<actor> BaseClass, out actor Actor, float Radius, optional vector Loc);
 
-/* VisibleActors() returns all visible actors within a radius.  Slow like AllActors().  Use VisibleCollidingActors() instead if desired actor types are 
+/* VisibleActors() returns all visible actors within a radius.  Slow like AllActors().  Use VisibleCollidingActors() instead if desired actor types are
 in the collision hash (bCollideActors is true)
 */
 native(311) final iterator function VisibleActors (class<actor> BaseClass, out actor Actor, optional float Radius, optional vector Loc);
@@ -1389,7 +1389,7 @@ native(552) static final operator(16) color *     (color A, float B);
 called by player's hud to request drawing of actor specific overlays onto canvas
 */
 function RenderOverlays(Canvas Canvas);
-	
+
 //
 // Called immediately before gameplay begins.
 //
@@ -1401,7 +1401,7 @@ event PreBeginPlay()
 // Called immediately after gameplay begins.
 //
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // ***********************************************************************************************
 event PostBeginPlay()
 {
@@ -1409,11 +1409,11 @@ event PostBeginPlay()
 		Interaction = Spawn(InteractionClass,self);
 
 	// add any actors with initial change type to change list
-	if (ChangeType > CHANGE_None) 
+	if (ChangeType > CHANGE_None)
 		Level.AddChange(self, ChangeType);
 }
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 // Called after PostBeginPlay.
@@ -1435,7 +1435,7 @@ final function HurtRadius(float DamageAmount, float DamageRadius, class<DamageTy
 	local Actor Victims;
 	local float damageScale, dist;
 	local vector dir;
-	
+
 	if (bHurtEntry)
 		return;
 
@@ -1446,18 +1446,18 @@ final function HurtRadius(float DamageAmount, float DamageRadius, class<DamageTy
 		{
 			dir = Victims.Location - HitLocation;
 			dist = FMax(1,VSize(dir));
-			dir = dir / dist; 
+			dir = dir / dist;
 			damageScale = 1 - FMax(0,(dist - Victims.CollisionRadius) / DamageRadius);
 			Victims.TakeDamage
 			(
 				damageScale * DamageAmount,
-				Instigator, 
+				Instigator,
 				Victims.Location - 0.5 * (Victims.CollisionHeight + Victims.CollisionRadius) * dir,
 				dir,
 				(damageScale * Momentum * dir),
 				DamageType
 );
-		} 
+		}
 	}
 	bHurtEntry = false;
 }
@@ -1495,14 +1495,14 @@ final function ReplaceText(out string Text, string Replace, string With)
 {
 	local int i;
 	local string Input;
-		
+
 	Input = Text;
 	Text = "";
 	i = InStr(Input, Replace);
 	while (i != -1)
-	{	
+	{
 		Text = Text $ Left(Input, i) $ With;
-		Input = Mid(Input, i + Len(Replace));	
+		Input = Mid(Input, i + Len(Replace));
 		i = InStr(Input, Replace);
 	}
 	Text = Text $ Input;
@@ -1554,7 +1554,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 		case PHYS_MovingBrush: T = T$"MovingBrush"; break;
 		case PHYS_Trailer: T = T$"Trailer"; break;
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * ATurcotte (MTL) (12 Jul 2001)
 // * Purpose : Add new physics
 // ***********************************************************************************************
@@ -1562,7 +1562,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 		case PHYS_Fence: T = T$"Fence"; break;
 		case PHYS_RootMotion: T = T$"RootMotion"; break;
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * ATurcotte (MTL) (12 Jul 2001)
 // ***********************************************************************************************
 	}
@@ -1585,7 +1585,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 	Canvas.DrawText("Acceleration: "$Acceleration, false);
 	YPos += YL;
 	Canvas.SetPos(4, YPos);
-	
+
 	Canvas.SetDrawColor(255, 255, 0);
 	Canvas.DrawText("Collision Radius "$CollisionRadius$" Height "$CollisionHeight);
 	YPos += YL;
@@ -1619,7 +1619,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 		case STY_Translucent: T = T$"Translucent"; break;
 		case STY_Modulated: T = T$"Modulated"; break;
 		case STY_Alpha: T = T$"Alpha"; break;
-	}		
+	}
 
 	Switch (DrawType)
 	{
@@ -1652,7 +1652,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 		Canvas.DrawText(T, false);
 		YPos += YL;
 		Canvas.SetPos(4, YPos);
-		
+
 		// mesh animation
 		GetAnimParams(0,Anim,frame,rate);
 		T = "AnimSequence "$Anim$" Frame "$frame$" Rate "$rate;
@@ -1661,11 +1661,11 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 		T = T$Texture;
 	else if (DrawType == DT_Brush)
 		T = T$Brush;
-		
+
 	Canvas.DrawText(T, false);
 	YPos += YL;
 	Canvas.SetPos(4, YPos);
-	
+
 	Canvas.SetDrawColor(0, 255, 255);
 	Canvas.DrawText("Tag: "$Tag$" Event: "$Event$" STATE: "$GetStateName(), false);
 	YPos += YL;
@@ -1692,7 +1692,7 @@ final function bool NearSpot(vector Spot)
 	local vector Dir;
 
 	Dir = Location - Spot;
-	
+
 	if (abs(Dir.Z) > CollisionHeight)
 		return false;
 
@@ -1705,7 +1705,7 @@ final function bool TouchingActor(Actor A)
 	local vector Dir;
 
 	Dir = Location - A.Location;
-	
+
 	if (abs(Dir.Z) > CollisionHeight + A.CollisionHeight)
 		return false;
 
@@ -1729,7 +1729,7 @@ function bool PlusDir(int A, int B)
 /* StartInterpolation()
 when this function is called, the actor will start moving along an interpolation path
 beginning at Dest
-*/	
+*/
 function StartInterpolation()
 {
 	GotoState('');
@@ -1739,18 +1739,18 @@ function StartInterpolation()
 	SetPhysics(PHYS_None);
 }
 
-/* Reset() 
+/* Reset()
 reset actor to initial state - used when restarting level without reloading.
 */
 function Reset();
 
-/* 
+/*
 Trigger an event
 */
 event TriggerEvent(Name EventName, Actor Other, Pawn EventInstigator)
 {
 	// ***********************************************************************************************
-	// * BEGIN UBI MODIF 
+	// * BEGIN UBI MODIF
 	// * dkalina (25 Sep 2001)
 	// * Purpose : Patch so TriggerEvent calls will affect NavPoints
 	// ***********************************************************************************************
@@ -1769,7 +1769,7 @@ event TriggerEvent(Name EventName, Actor Other, Pawn EventInstigator)
 			nav.Trigger(Other, EventInstigator, Tag);
 	}
 	// ***********************************************************************************************
-	// * END UBI MODIF 
+	// * END UBI MODIF
 	// * dkalina (25 Sep 2001)
 	// ***********************************************************************************************
 
@@ -1778,7 +1778,7 @@ event TriggerEvent(Name EventName, Actor Other, Pawn EventInstigator)
 	{
 		if (bTravelGameEvent)
 			Level.Game.AddTravelGameEvent(EventName);
-		else if (bLocalGameEvent)		
+		else if (bLocalGameEvent)
 			Level.Game.AddLocalGameEvent(EventName);
 	}
 }
@@ -1802,13 +1802,13 @@ function UntriggerEvent(Name EventName, Actor Other, Pawn EventInstigator)
 function bool IsInVolume(Volume aVolume)
 {
 	local Volume V;
-	
+
 	ForEach TouchingActors(class'Volume',V)
 		if (V == aVolume)
 			return true;
 	return false;
 }
-	 
+
 function bool IsInPain()
 {
 	local PhysicsVolume V;
@@ -1820,7 +1820,7 @@ function bool IsInPain()
 }
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * Purpose : Echelon specifics Events and Functions
 // ***********************************************************************************************
 
@@ -1832,7 +1832,7 @@ native(1232) final function SetCollisionPrim(StaticMesh NewCollPrim);
 native(1233) final function vector GetVectorFrom(Rotator RotationDir, int ConeAngle);
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Temp while we do something else
 //------------------------------------------------------------------------
 event VisibilityRating VisibilityTableLookup(float BaseVisibility)
@@ -1845,7 +1845,7 @@ event VisibilityRating VisibilityTableLookup(float BaseVisibility)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		By default, return full visibility for an actor
 //------------------------------------------------------------------------
 event VisibilityRating GetActorVisibility()
@@ -1860,18 +1860,18 @@ event VisibilityRating GetActorVisibility()
 native(1203) final function float GetVisibilityFactor(optional bool bFullTest);
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Called from skeletal attachement moving
 //------------------------------------------------------------------------
 event AttachedMoved();
 
 //---------------------------------------[David Kalina - 18 Dec 2000]-----
-// 
+//
 // Description
 //		TODO:  Move to Native??
-//      Performs a linear interpolation (Lerp) on each float member of 
+//      Performs a linear interpolation (Lerp) on each float member of
 //      the source vector, given a target vector and an alpha value.
-// 
+//
 // Input
 //          _InterpolationResult : Return - interpolated vector
 //          _InterpolationSource : Source Vector
@@ -1884,13 +1884,13 @@ function Interpolate(out vector _vInterpolationResult, vector _vInterpolationSou
     _vInterpolationResult.X = Lerp(_rAlpha, _vInterpolationSource.X, _vInterpolationTarget.X);
     _vInterpolationResult.Y = Lerp(_rAlpha, _vInterpolationSource.Y, _vInterpolationTarget.Y);
     _vInterpolationResult.Z = Lerp(_rAlpha, _vInterpolationSource.Z, _vInterpolationTarget.Z);
-} 
+}
 
 // Joshua - Added bUseName parameter
 function Actor GetMatchingActor(Name matchTag, optional bool bUseName)
 {
 	local Actor A;
-	
+
 	if (matchTag != '')
 	{
 		if (bUseName)
@@ -1906,7 +1906,7 @@ function Actor GetMatchingActor(Name matchTag, optional bool bUseName)
 					return A;
 		}
 	}
-	
+
 	return none;
 }
 
@@ -1970,19 +1970,19 @@ native(1514) final function AddChangedActor();
 native(1515) final function RemoveChangedActor();
 
 //----------------------------------------[David Kalina - 9 Jul 2001]-----
-// 
+//
 // Description
 //		Replaced old MakeNoise with Echelon-specific version
 // Input
 //		Radius : how far noise can travel
 //		nType  : type of noise - used for AI response
 //		ZThreshold : how far up/down the noise can reach
-// 
+//
 //------------------------------------------------------------------------
 native(512) final function MakeNoise(float Radius, optional NoiseType nType, optional float ZThreshold);
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Log wrapper that includes Name and StateName.
 //		Only visible if LPATTERN is on.
 //------------------------------------------------------------------------
@@ -1992,7 +1992,7 @@ function plog(coerce string S)
 }
 
 //---------------------------------------[David Kalina - 24 Jan 2002]-----
-// 
+//
 // Description
 //		Return this objects relevant Interaction
 //
@@ -2005,7 +2005,7 @@ function EInteractObject GetInteraction(Pawn InteractPawn)
 
 
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 defaultproperties

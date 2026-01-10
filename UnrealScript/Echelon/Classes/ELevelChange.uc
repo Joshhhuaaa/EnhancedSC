@@ -8,7 +8,7 @@ var() string URL;
 var() bool   bTravel;
 
 function Touch(actor Other)
-{  
+{
 	local vector HitNormal, HitLocation;
 	// Make sure not touching through wall
 	// Joshua - Bug fix: Added health check (used in EPattern's LevelChange function)
@@ -22,7 +22,7 @@ function Touch(actor Other)
 			EPlayerController(EPawn(Other).Controller).playerStats.OnLevelChange(); // Joshua - For player statistics, saves the mission time from the previous part
 		}
 	}
-}  
+}
 
 defaultproperties
 {

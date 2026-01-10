@@ -17,11 +17,11 @@ var		EAIController			pOwner;
 
 
 //---------------------------------------[David Kalina - 23 Apr 2001]-----
-// 
+//
 // Description
 //		Accessor for currently active goal in list (the head).
 //		Is this really necessary?
-// 
+//
 //------------------------------------------------------------------------
 
 event EGoal GetCurrent()
@@ -33,7 +33,7 @@ event EGoal GetCurrent()
 
 
 //---------------------------------------[David Kalina - 23 Apr 2001]-----
-// 
+//
 // Description
 //		Inserts goal G into this list based on priority.
 //
@@ -72,7 +72,7 @@ function Insert(EGoal G)
 
 
 //---------------------------------------[David Kalina - 13 Jun 2001]-----
-// 
+//
 // Description
 //		Searches the Goal List for a goal with EQUAL PRIORITY AND TYPE.
 //		If it finds such a goal, it will replace it with this functions arg.
@@ -83,7 +83,7 @@ function Insert(EGoal G)
 // Output
 //		T : update successful
 //      F : no matching goal found
-// 
+//
 //------------------------------------------------------------------------
 
 function bool Replace(EGoal G)
@@ -102,14 +102,14 @@ function bool Replace(EGoal G)
 	}
 
 	// recurse through remainder of list
-	return RecursiveReplace(G, pHead);	
+	return RecursiveReplace(G, pHead);
 }
 
 
 //---------------------------------------[Frederic Blais - 13 Jun 2001]-----
-// 
+//
 // Description
-// 
+//
 //------------------------------------------------------------------------
 function ReplaceDefaultGoal(EGoal G)
 {
@@ -140,7 +140,7 @@ function ReplaceDefaultGoal(EGoal G)
 			PrevGoal= CurGoal;
 			CurGoal = CurGoal.Next;
 		}
-		
+
 		//replace the default goal of the list AND destroy the older
 		PrevGoal.Next = G;
 		G.Next = None;
@@ -150,11 +150,11 @@ function ReplaceDefaultGoal(EGoal G)
 
 
 //---------------------------------------[David Kalina - 13 Jun 2001]-----
-// 
+//
 // Description
-//		First passed head of list - checks current Next pointer to see if 
-//		it should be replaced. 
-// 
+//		First passed head of list - checks current Next pointer to see if
+//		it should be replaced.
+//
 //------------------------------------------------------------------------
 
 function bool RecursiveReplace (EGoal G, EGoal Current)
@@ -181,18 +181,18 @@ function bool RecursiveReplace (EGoal G, EGoal Current)
 
 
 //---------------------------------------[David Kalina - 23 Apr 2001]-----
-// 
+//
 // Description
 //		Recursive insertion of new Goal into list based on priority.
-//		If newGoal's priority is greater than the currentGoal, 
-//		we return newGoal. 
+//		If newGoal's priority is greater than the currentGoal,
+//		we return newGoal.
 //
 // Input
 //		newGoal : the goal we are trying to insert
 //		currentGoal : the goal we are presently comparing with
 //
 // Output
-//		function EGoal : 
+//		function EGoal :
 //
 //------------------------------------------------------------------------
 
@@ -214,11 +214,11 @@ function EGoal PriorityInsert(EGoal newGoal, EGoal currentGoal)
 
 
 //---------------------------------------[David Kalina - 23 Apr 2001]-----
-// 
+//
 // Description
 //		Pops off the head of the list.  No deletion required,
 //		as I believe garbage collection will handle it..
-// 
+//
 //------------------------------------------------------------------------
 
 function Pop()
@@ -243,7 +243,7 @@ function Pop()
 				//reset NPC
 				EAIController(Owner).m_vPrevDestination = vect(0,0,0);
                 EAIController(Owner).EPawn.Anchor = None;
-                EAIController(Owner).ClearRoutes(); 
+                EAIController(Owner).ClearRoutes();
 
 			}
 
@@ -282,7 +282,7 @@ function Pop()
 	else
 	{
 		log("Warning: Trying to Pop a goal from an Empty list.");
-	}		
+	}
 }
 
 
@@ -291,7 +291,7 @@ function Pop()
 // PopDefault
 //
 // Description: Remove the default goal
-// 
+//
 //------------------------------------------------------------------------
 function PopDefault()
 {
@@ -303,7 +303,7 @@ function PopDefault()
 }
 
 //---------------------------------------[David Kalina - 23 Apr 2001]-----
-// 
+//
 // Description
 //		Removes all BUT default goal (last goal in chain)
 //
@@ -340,7 +340,7 @@ function ResetBasics()
 					pHead = CurGoal;
 
 				tmp.Destroy();
-				
+
 			}
 			else
 			{
@@ -358,7 +358,7 @@ function ResetBasics()
 }
 
 //---------------------------------------[Frederic Blais - 23 Apr 2001]-----
-// 
+//
 // Description
 //		Returns true if a goal with that specific priority is existing
 //
@@ -385,16 +385,16 @@ function bool CheckGoalPriority(byte _priority)
 }
 
 //---------------------------------------[David Kalina - 23 Apr 2001]-----
-// 
+//
 // Description
 //		Uses ShowDebug exec statement to show info for current
 //		ViewTarget
 //
 // Input
-//		Canvas : 
+//		Canvas :
 //		YL : distance between lines
 //		YPos : current y position
-// 
+//
 //------------------------------------------------------------------------
 
 function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
@@ -403,7 +403,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 	local string T, goalstring;
 	local int i;
 
-	Canvas.DrawColor.B = 255;	
+	Canvas.DrawColor.B = 255;
 	Canvas.DrawColor.R = 170;
 	Canvas.DrawColor.G = 128;
 
@@ -422,7 +422,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 
 			// setup goalstring based on goal Type
 			switch (Current.m_GoalType)
-			{	
+			{
 				case GOAL_Guard			: goalstring = "GOAL_Guard";			break;
 				case GOAL_Defend		: goalstring = "GOAL_Defend";			break;
 				case GOAL_Patrol		: goalstring = "GOAL_Patrol";			break;
@@ -453,7 +453,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 			}
 
 			T = T $ goalstring $ " Priority: " $ Current.Priority;
-			
+
 			switch (Current.GoalMoveFlags)
 			{
 				case MOVE_WalkRelaxed   : T = T @ "Move: WalkRelaxed";			break;
@@ -477,15 +477,15 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 			if (Current.GoalTag != '')
 				T = T @ "Tag: "			$ Current.GoalTag;
 			if (Current.GoalSound != none)
-				T = T @ "Sound: "		$ Current.GoalSound; 
+				T = T @ "Sound: "		$ Current.GoalSound;
 			if (Current.GoalAnim != '')
 				T = T @ "Anim: "		$ Current.GoalAnim;
 			if (Current.GoalValue > 0.0f)
 				T = T @ "Value:  "		$ Current.GoalValue;
-			
+
 			T = T @ "Flag:  "			$ Current.GoalFlag;
 
-						
+
 			Canvas.DrawText(T, false);
 			YPos += YL * 2;
 			Canvas.SetPos(4,YPos);

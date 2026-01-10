@@ -1,5 +1,5 @@
 //===============================================================================
-//  [EMercenaryTechnician] 
+//  [EMercenaryTechnician]
 //===============================================================================
 
 class EMercenaryTechnician extends EAINonHostile
@@ -20,9 +20,9 @@ function PostBeginPlay()
 {
 	local MeshAnimation Anim;
 
-	
+
 	Super(EAIPawn).PostBeginPlay();
-	
+
 
 	// chest screen
 	ComputerScreen = spawn(class'EGameplayObject', self);
@@ -62,8 +62,8 @@ function SwitchAnims()
 	{
 		switch (BaseMoveFlags)
 		{
-			case MOVE_WalkRelaxed : 
-			case MOVE_WalkNormal : 
+			case MOVE_WalkRelaxed :
+			case MOVE_WalkNormal :
 			case MOVE_WalkAlert :
 				ABlendMovement.m_forward = 'WalkStNmFdV';
 				break;

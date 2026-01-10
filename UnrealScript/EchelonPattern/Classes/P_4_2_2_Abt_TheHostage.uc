@@ -132,7 +132,7 @@ LongDanKiLLGrinko:
 USspeach:
     Log("");
     DisableMessages(FALSE, TRUE);
-    JumpRandom('UsSpeach1', 0.34, 'UsSpeach2', 0.67, 'UsSpeach3', 1.00, , , ,); 
+    JumpRandom('UsSpeach1', 0.34, 'UsSpeach2', 0.67, 'UsSpeach3', 1.00, , , ,);
 UsSpeach1:
     Log("");
     Talk(Sound'S4_2_2Voice.Play_42_66_01', 4, , TRUE, 0);
@@ -154,7 +154,7 @@ UsSpeach3:
 DiplomatSpeach:
     Log("");
     DisableMessages(FALSE, TRUE);
-    JumpRandom('DiploSpeach1', 0.34, 'DiploSpeach2', 0.67, 'DiploSpeach3', 1.00, , , ,); 
+    JumpRandom('DiploSpeach1', 0.34, 'DiploSpeach2', 0.67, 'DiploSpeach3', 1.00, , , ,);
 DiploSpeach1:
     Log("");
     Talk(Sound'S4_2_2Voice.Play_42_67_01', 2, , TRUE, 0);

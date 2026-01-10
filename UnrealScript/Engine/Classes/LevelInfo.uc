@@ -1,6 +1,6 @@
 //=============================================================================
-// LevelInfo contains information about the current level. There should 
-// be one per level and it should be actor 0. UnrealEd creates each level's 
+// LevelInfo contains information about the current level. There should
+// be one per level and it should be actor 0. UnrealEd creates each level's
 // LevelInfo automatically so you should never have to place one
 // manually.
 //
@@ -175,7 +175,7 @@ var       NavigationPoint CurrentAttackPoint;
 var		  Controller	  CurrentController;	//used for visibility purpose
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // ***********************************************************************************************
 var const float m_dT;
 var() bool			 bIsStartMenu;     // the map is the start menu
@@ -192,7 +192,7 @@ var(SoundMap) bool		    UseDefaultSoundMap;	   //The default sound map as the sa
 var()		  bool			DownloadedMap;
 
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 
@@ -222,7 +222,7 @@ function ThisIsNeverExecuted()
 }
 
 
-/* Reset() 
+/* Reset()
 reset actor to initial state - used when restarting level without reloading.
 */
 function Reset()
@@ -246,15 +246,15 @@ function RumbleVibrate(float Duration, float Strenth)
 }
 
 //----------------------------------------[David Kalina - 3 Jul 2001]-----
-// 
+//
 // Description
 //		Adds a changed actor to the ChangedActorsList.
 //		Simple interface so any actor can add itself.
 //		TODO:  Check for duplication?
-// 
+//
 // Input
-//		changedActor : 
-//		type : 
+//		changedActor :
+//		type :
 //
 //------------------------------------------------------------------------
 function AddChange(Actor changedActor, EChangeType type)
@@ -265,10 +265,10 @@ function AddChange(Actor changedActor, EChangeType type)
 
 
 //---------------------------------------[David Kalina - 10 Oct 2001]-----
-// 
+//
 // Description
 //		Remove an actor specified from the Changed Actors list.
-// 
+//
 //------------------------------------------------------------------------
 
 function RemoveChange(Actor changedActor)
@@ -279,8 +279,8 @@ function RemoveChange(Actor changedActor)
 
 
 //---------------------------------------------------[Frederic Blais]-----
-// 
-// 
+//
+//
 //------------------------------------------------------------------------
 event PostBeginPlay()
 {
@@ -288,7 +288,7 @@ event PostBeginPlay()
 	local class<EVariable>	VarObjectClassName;
 	local class<ELevelInfo>	ELevInfClassName;
 local int i;
-    
+
 	Super.PostBeginPlay();
 
 
@@ -300,7 +300,7 @@ local int i;
     {
         temp = Left(temp, InStr(temp, "."));
     }
-       
+
 	if (UseDefaultSoundMap)
 		SoundMapName = temp;
 
@@ -357,5 +357,4 @@ defaultproperties
     bBlockNPCShot=True
     bBlockNPCVision=True
     bHiddenEd=True
-	EngineVersion="Enhanced"
 }

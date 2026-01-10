@@ -77,8 +77,8 @@ function CheckForCatchOnFire(EPawn Pawn)
 function Touch(actor Other)
 {
 	Super.Touch(Other);
-	
-	if (!Other.bIsPawn) 
+
+	if (!Other.bIsPawn)
 		return;
 
 	// Insert pawn. (impossible that he's already in)
@@ -89,8 +89,8 @@ function Touch(actor Other)
 function UnTouch(actor Other)
 {
 	Super.UnTouch(Other);
-	
-	if (!Other.bIsPawn) 
+
+	if (!Other.bIsPawn)
 		return;
 
 	RemovePawn(EPawn(Other));

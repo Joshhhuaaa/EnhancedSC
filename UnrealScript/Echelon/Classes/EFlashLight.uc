@@ -1,6 +1,6 @@
 class EFlashLight extends EGameplayObject;
 
-#exec OBJ LOAD FILE=..\textures\ETexRenderer.utx 
+#exec OBJ LOAD FILE=..\textures\ETexRenderer.utx
 
 function PostBeginPlay()
 {

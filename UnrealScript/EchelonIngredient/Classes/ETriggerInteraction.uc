@@ -44,14 +44,14 @@ function SetInteractLocation(Pawn InteractPawn)
 	local Vector X, Y, Z, MovePos;
 	local EPawn InteractEPawn;
 	local vector HitLocation, HitNormal;
-	
+
 	InteractEPawn = EPawn(InteractPawn);
-	
+
 	if (InteractEPawn != none)
-	{		
+	{
 		// get owner rotation axes for positioning
 		GetAxes(Owner.Rotation, X, Y, Z);
-		
+
 		MovePos = Owner.Location;
 		MovePos -= (0.5 * InteractEPawn.CollisionRadius) * Y;
 		MovePos += (1.25 * InteractEPawn.CollisionRadius) * X;
@@ -68,12 +68,12 @@ function SetInteractLocation(Pawn InteractPawn)
 				MovePos = HitLocation;
 			}
         }
-		
+
 		InteractEPawn.m_locationStart	= InteractEPawn.Location;
 		InteractEPawn.m_orientationStart= InteractEPawn.Rotation;
 		InteractEPawn.m_locationEnd		= MovePos;
 		InteractEPawn.m_orientationEnd	= Rotator(-X);
-	}	
+	}
 }
 
 

@@ -18,7 +18,7 @@ var()   string                  From;				// Header
 var()   string                  To;
 var()   string                  SentStringID;
 var()   string                  SubjectStringID;
-var()   string                  MemoryTextID;       // StringID in the localization file 
+var()   string                  MemoryTextID;       // StringID in the localization file
 var()   Array<string>		    NotesStringID;		// Notes to be added to Inventory
 var()   Array<MSGoal>		    Goals;				// Goals to be added to Inventory
 var()   Array<Attachment>	    Pictures;			// Contained pictures available in Memory stick
@@ -42,7 +42,7 @@ function PostBeginPlay()
 }
 
 function bool NotifyPickup(Controller Instigator)
-{	
+{
 	EPlayerController(Instigator).AddReconText(string(ObjectName), MemoryTextSection, From, To, SentStringID, SubjectStringID, MemoryTextID, false);
 	UploadDataToPDA();
 

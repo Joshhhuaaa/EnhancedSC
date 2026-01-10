@@ -16,7 +16,7 @@ function PostBeginPlay()
 		SetStaticMesh(default.StaticMesh);
 	else
 		SetStaticMesh(StaticMesh'EMeshIngredient.Item.FragGrenadePack_6');
-    
+
 	HUDTex       = EchelonLevelInfo(Level).TICON.qi_ic_grenades;
     InventoryTex = EchelonLevelInfo(Level).TICON.inv_ic_grenades;
     ItemName     = "FragGrenade";
@@ -26,7 +26,7 @@ function PostBeginPlay()
 }
 
 //---------------------------------------[David Kalina - 26 Nov 2001]-----
-// 
+//
 // Description
 //		Thrower wants to throw us at specified velocity.
 //
@@ -50,7 +50,7 @@ state s_Flying
 		bPickable = false;
 		SetTimer(ExplodeTimer, false);
 	}
-	
+
 	function Timer()
 	{
 		// destroy will call the explosion and related damage stuff
@@ -62,7 +62,7 @@ state s_Flying
 function Select(EInventory Inv)
 {
 	Super.Select(Inv);
-	
+
 	// Joshua - Don't play sound during silent restore (sorting)
 	if (!Inv.bSilentRestore)
 		PlaySound(Sound'Interface.Play_FisherEquipFragGrenade', SLOT_Interface);

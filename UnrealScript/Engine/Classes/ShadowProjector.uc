@@ -45,7 +45,7 @@ event PostBeginPlay()
 	ShadowTexture.SpotTexture = ProjTexture;
 	ShadowTexture.proj = self;
 	ProjOnBSPTex   = ShadowTexture;
-	ShadowTexture.bFirstFrame = true;	
+	ShadowTexture.bFirstFrame = true;
 
 	ShadowTextOnActor = new class'ShadowBitmapMaterial';
 	ShadowTextOnActor.SpotTexture = ProjTexture;
@@ -74,7 +74,7 @@ function UpdateShadow()
     local Plane	    BoundingSphere;
 
     DetachProjector(true);
-    
+
     //if (bProjectActor)
     //{
     //    SetCollision(false, false, false);
@@ -123,7 +123,7 @@ event Touch(Actor Other)
 
 // JFP: Added for the projector trigger processing, when lights are shot or turned off.
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		If we explicitely want to turn lights on/off
 //------------------------------------------------------------------------
 function TurnOff(EChangeType _Type, optional Pawn EventInstigator)
@@ -147,7 +147,7 @@ function TurnOff(EChangeType _Type, optional Pawn EventInstigator)
 	if (Owner.IsA('ESwitchObject'))
  		Level.AddChange(self, _Type);
 
-	if (_Type == CHANGE_LightShotOut && Nbcontrollers <= 1)	
+	if (_Type == CHANGE_LightShotOut && Nbcontrollers <= 1)
 		GotoState('s_Destrocuted');
 	*/
 	Log("Shadow projector: " $ self $" Turned OFF, owner is " $ owner $ ", nbControllers==" $ Nbcontrollers);
@@ -166,11 +166,11 @@ function TurnOff(EChangeType _Type, optional Pawn EventInstigator)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		If we explicitely want to turn lights on/off
 //------------------------------------------------------------------------
 function TurnOn(optional EChangeType _Type, optional Pawn EventInstigator)
-{ 
+{
 	/*
 	if (LightBrightness != InitialLightBrightness && NbControllers > 1)
 	{
@@ -203,7 +203,7 @@ function TurnOn(optional EChangeType _Type, optional Pawn EventInstigator)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Turns on and off lights
 //------------------------------------------------------------------------
 function Trigger(actor Other, pawn EventInstigator, optional name InTag)

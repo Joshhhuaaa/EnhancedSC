@@ -63,7 +63,7 @@ function bool IsAvailable()
 		break;
 
 	case EWT_High:
-		if (Distance > 70.f) 
+		if (Distance > 70.f)
 			return false;
 		break;
 
@@ -112,11 +112,11 @@ function SetInteractLocation(Pawn InteractPawn)
 
 	InteractEPawn = EPawn(InteractPawn);
 	if (InteractEPawn != none)
-	{		
+	{
 		MoveRot			= Rotator(Owner.Location - InteractEPawn.Location);
 		MoveRot.Roll	= 0;
 		MoveRot.Pitch	= 0;
-		
+
 		InteractEPawn.m_locationStart	= InteractEPawn.Location;
 		InteractEPawn.m_orientationStart= InteractEPawn.Rotation;
 		InteractEPawn.m_locationEnd		= InteractEPawn.Location;

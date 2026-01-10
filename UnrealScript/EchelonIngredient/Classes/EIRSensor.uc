@@ -53,7 +53,7 @@ function UnTouch(Actor Other)
 }
 */
 function AdjustScale(vector LaserEnd)
-{    
+{
 	Laser.SetDrawScale3D(((VSize(Location - LaserEnd) + 2.f) * Vect(1,0,0)) + DrawScale3D);
 }
 
@@ -72,7 +72,7 @@ state s_RayTracing
 	{
 		if (Receiver == None)
 			Disable('Tick');
-		
+
 		// call once to activate on startup
 		Activate();
 		SetTimer(StayOnTime, true);

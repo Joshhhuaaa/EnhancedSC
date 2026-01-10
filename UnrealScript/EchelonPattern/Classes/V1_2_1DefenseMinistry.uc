@@ -3,18 +3,18 @@
 //=============================================================================
 class V1_2_1DefenseMinistry extends EVariable;
 
-var int CookOneDead; 
-var int CooksAlerted; 
-var int CookTwoDead; 
-var int FirstNPCAlerted; 
-var int HallwayAlerted; 
-var int HamletAlerted; 
-var int InterroDone; 
-var int LambertPostLaserSpoken; 
-var int LaserDown; 
-var int LaserMicDone; 
-var int TooFastLaserMic; 
-var int WestWingFastDone; 
+var int CookOneDead;
+var int CooksAlerted;
+var int CookTwoDead;
+var int FirstNPCAlerted;
+var int HallwayAlerted;
+var int HamletAlerted;
+var int InterroDone;
+var int LambertPostLaserSpoken;
+var int LaserDown;
+var int LaserMicDone;
+var int TooFastLaserMic;
+var int WestWingFastDone;
 
 
 function PostBeginPlay()

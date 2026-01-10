@@ -57,7 +57,7 @@ AAnton:
     ResetGroupGoals();
     ChangeGroupState('s_default');
 JRAntLoop:
-    JumpRandom('APath', 0.34, 'BPath', 0.67, 'CPath', 1.00, , , ,); 
+    JumpRandom('APath', 0.34, 'BPath', 0.67, 'CPath', 1.00, , , ,);
 APath:
     Log("");
     Teleport(1, 'Start1io');

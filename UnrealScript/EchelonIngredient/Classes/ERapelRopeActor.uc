@@ -1,6 +1,6 @@
 class ERapelRopeActor extends ERopeActor;
 
-#exec OBJ LOAD FILE=..\textures\ETexIngredient.utx 
+#exec OBJ LOAD FILE=..\textures\ETexIngredient.utx
 
 defaultproperties
 {

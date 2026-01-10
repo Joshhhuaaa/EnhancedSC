@@ -11,7 +11,7 @@ var() name				GroupTag;
 var() name				JumpLabel;
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Called from EPlayerController to break when pass through it
 //------------------------------------------------------------------------
 function Timer()
@@ -23,7 +23,7 @@ function Timer()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Bumps should destroy at a minimum velocity
 //------------------------------------------------------------------------
 function Bump(Actor Other, optional int Pill)
@@ -35,13 +35,13 @@ function Bump(Actor Other, optional int Pill)
 	ImpactForce = Normal(Other.Velocity) dot Vector(Rotation);
 	ImpactMass = VSize(Other.Velocity);
 	if (Other.bIsGamePlayObject)
-		ImpactMass *= Other.Mass / class'EGameplayObject'.default.Mass; 
-		
+		ImpactMass *= Other.Mass / class'EGameplayObject'.default.Mass;
+
 	//Log("VSize(Other.Velocity)"@VSize(Other.Velocity));
 	//Log("ImpactMass"@ImpactMass@Other.Mass@class'EGameplayObject'.default.Mass);
 	//Log("ImpactResistance"@ImpactResistance);
 	//Log("Abs(ImpactForce)"@Abs(ImpactForce));
-	
+
 	if ((!Other.bIsPawn && ImpactMass > ImpactResistance) ||
 		(Other.bIsPawn && Abs(ImpactForce) < 0.5f && ImpactMass > ImpactResistance * 1.5f))
 	{
@@ -54,7 +54,7 @@ function Bump(Actor Other, optional int Pill)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Damage from bullet
 //------------------------------------------------------------------------
 event BulletWentTru(Actor Instigator, vector HitLocation, vector HitNormal, vector Momentum, Material HitMaterial)
@@ -73,7 +73,7 @@ event BulletWentTru(Actor Instigator, vector HitLocation, vector HitNormal, vect
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Glass should only be destroyed from Bullets, by its own Bump event
 //		and from EPlayerController short attack
 //
@@ -83,7 +83,7 @@ function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector
 {
 	local EGroupAI	Group;
 
-	if (!(DamageType == class'Crushed' || DamageType == class'EBurned' || 
+	if (!(DamageType == class'Crushed' || DamageType == class'EBurned' ||
 		 (DamageType == None && PillTag == 69)))
 		return;
 
@@ -108,7 +108,7 @@ function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector
 		{
 			Group.SendJumpEvent(JumpLabel,false,false);
 			break;
-		}	
+		}
 	}
 
 	if (OpeningSoundEvents.Length != 0)
@@ -136,7 +136,7 @@ function FakeDestroy()
 	local int i;
 
 	// Removed any attached object
-	// Double loop needed because the Go gets detach in falling physics, 
+	// Double loop needed because the Go gets detach in falling physics,
 	//    thus messing with the array while looping
 	while (Attached.Length > 0)
 	{

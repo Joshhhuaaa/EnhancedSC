@@ -28,12 +28,12 @@ class EAIFemale extends EAIPawn
 //
 //
 //  Attachments
-//	
+//
 //
 
 
 // no weapons allowed for females .. only ref. female.psa
-#exec MESH CLEARATTACHTAGS	MESH=BurFemAMesh			
+#exec MESH CLEARATTACHTAGS	MESH=BurFemAMesh
 #exec MESH CLEARATTACHTAGS	MESH=AnnaMesh
 #exec MESH CLEARATTACHTAGS	MESH=FranceCoen
 
@@ -44,7 +44,7 @@ class EAIFemale extends EAIPawn
 //
 //
 
-#exec MESH CLEARPILLINFO	MESH=BurFemAMesh			
+#exec MESH CLEARPILLINFO	MESH=BurFemAMesh
 #exec MESH CLEARPILLINFO	MESH=AnnaMesh
 #exec MESH CLEARPILLINFO	MESH=FranceCoen
 
@@ -160,7 +160,7 @@ class EAIFemale extends EAIPawn
 #exec SAVEPACKAGE FILE=..\Animations\EFemale.ukx PACKAGE=EFemale
 
 //---------------------------------------[David Kalina - 16 Apr 2002]-----
-// 
+//
 // Description
 //		Must load FemaleAnims for EAIFemale class types.
 //
@@ -171,11 +171,11 @@ function PostBeginPlay()
 	local MeshAnimation Anim;
 
 	RandomizedAnimRate = 0.97f + RandRange(0.0f, 0.06f);
-		
+
 	SetIKFade(1.666f,1.666f);		// set ik fade for AimAt
-	
+
 	Super(EPawn).PostBeginPlay();
-	
+
 	// load female anim package
 
 	if (Mesh != None)
@@ -203,8 +203,8 @@ function SwitchAnims()
 {
 	switch (BaseMoveFlags)
 	{
-		case MOVE_WalkRelaxed : 
-		case MOVE_WalkNormal : 
+		case MOVE_WalkRelaxed :
+		case MOVE_WalkNormal :
 		case MOVE_WalkAlert :
 
 			AWait					 = 'WaitStFmFd0';
@@ -216,11 +216,11 @@ function SwitchAnims()
 		case MOVE_JogNoWeapon:
 
 		// should be replaced?
-		case MOVE_CrouchWalk :  
-		case MOVE_CrouchJog : 
+		case MOVE_CrouchWalk :
+		case MOVE_CrouchJog :
 		case MOVE_Search:
 		case MOVE_Snipe:
-			
+
 			AWait					 = 'WaitStFaFd0';
 			ABlendMovement.m_forward = 'JoggStFaFd0';
 			SoundWalkingRatio = 1.0;
@@ -230,7 +230,7 @@ function SwitchAnims()
 
 //function GetMoveSpeed() {}
 
-function GetReactionAnim(out name Anim, out name AnimB, out float BlendAlpha, optional eReactionAnimGroup ReactionGroup) 
+function GetReactionAnim(out name Anim, out name AnimB, out float BlendAlpha, optional eReactionAnimGroup ReactionGroup)
 {
 	Anim = 'ReacStFmAA0';
 }
@@ -238,21 +238,21 @@ function GetReactionAnim(out name Anim, out name AnimB, out float BlendAlpha, op
 event CheckForTransition(MoveFlags NewMoveFlags) {}
 
 
-event GetRandomWaitAnim(out name ReturnName) 
+event GetRandomWaitAnim(out name ReturnName)
 {
 	local int choice;
 
 	//
 	//
-	// CHOOSE STANDARD PERSONALITY ANIMATIONS 
+	// CHOOSE STANDARD PERSONALITY ANIMATIONS
 	//
 	//
 
 	choice = rand(5);
 
 	switch (WeaponStance)
-	{				
-		case 0 : 			
+	{
+		case 0 :
 			switch (choice)
 			{
 				case 0 : ReturnName = 'PrsoStFmAA0'; break;

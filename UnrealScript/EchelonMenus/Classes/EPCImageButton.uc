@@ -25,13 +25,13 @@ function Paint(Canvas C, float X, float Y)
     if (TextureToDraw != None)
     {
         C.Style = 5; // Alpha
-        
+
         if (bStretch)
             DrawStretchedTexture(C, 0, 0, WinWidth, WinHeight, TextureToDraw);
         else if (bCenter)
         {
             // Center the texture if it's not being stretched
-            DrawStretchedTexture(C, 
+            DrawStretchedTexture(C,
                 (WinWidth - TextureToDraw.USize) / 2,
                 (WinHeight - TextureToDraw.VSize) / 2,
                 TextureToDraw.USize,
@@ -40,7 +40,7 @@ function Paint(Canvas C, float X, float Y)
         }
         else
             DrawStretchedTexture(C, 0, 0, TextureToDraw.USize, TextureToDraw.VSize, TextureToDraw);
-            
+
         C.Style = 1; // Normal
     }
 }

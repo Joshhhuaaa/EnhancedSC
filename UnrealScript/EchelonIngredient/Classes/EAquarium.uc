@@ -16,18 +16,18 @@ var() Actor				WaterEffectLight;
 function PostBeginPlay()
 {
 	local int i;
-	
+
 	if (Glass == None)
 		Log("WARNING: No Glass for aquarium");
 	else
 	{
 		Glass.SetOwner(self);
 	}
-		
+
 	// Set water
 	if (Water == None)
 		Log("WARNING: No Water for aquarium");
-	else 
+	else
 	{
 		if (Water.InitialState != 'TriggerControl')
 			Log("WARNING: Water for aquarium is not in TriggerControl state");
@@ -38,7 +38,7 @@ function PostBeginPlay()
 		Water.InitialState		= 'TriggerControl';
 		Water.MoverEncroachType	= ME_IgnoreWhenEncroach;
 	}
-	
+
 	// Volume
 	if (WaterVolume == None)
 		Log("WARNING: No WaterVolume for aquarium");
@@ -73,7 +73,7 @@ function ReceiveMessage(EGameplayObject Sender, EGOMsgEvent Event)
 	{
 	// Glass
 	case Glass:
-		
+
 		if (Event == GOEV_TakeDamage)
 		{
 			// dont move if not a real hit
@@ -103,7 +103,7 @@ function ReceiveMessage(EGameplayObject Sender, EGOMsgEvent Event)
 
 			Water.bHidden = true;
 			Water.SetCollision(false);
-			
+
 			// Removed water effect
 			if (WaterEffectLight != None)
 				WaterEffectLight.SpotProjectedMaterial = WaterEffectLight.default.SpotProjectedMaterial;

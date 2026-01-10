@@ -12,7 +12,7 @@ class ETICON extends ETextureManager native;
 ******************************************************************************/
 
 /*-----------------------------------------------------------------------------
-                      I N S T A N C E   V A R I A B L E S 
+                      I N S T A N C E   V A R I A B L E S
 -----------------------------------------------------------------------------*/
 var int inv_fleche_icones;
 var int inv_ic_save;
@@ -100,7 +100,7 @@ var int ct_controller_s2;
 var int inv_ic_menus;
 
 /*-----------------------------------------------------------------------------
-                     D E F A U L T   P R O P E R T I E S 
+                     D E F A U L T   P R O P E R T I E S
 -----------------------------------------------------------------------------*/
 
 defaultproperties

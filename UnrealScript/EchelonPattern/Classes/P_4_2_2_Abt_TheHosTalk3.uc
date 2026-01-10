@@ -54,7 +54,7 @@ Begin:
 UShostage2:
     Log("");
     CheckFlags(pass1,FALSE,'Talk1');
-    JumpRandom('Talk2', 0.50, 'Talk3', 1.00, , , , , ,); 
+    JumpRandom('Talk2', 0.50, 'Talk3', 1.00, , , , , ,);
 Talk1:
     Log("");
     SetFlags(pass1,TRUE);

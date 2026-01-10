@@ -1,7 +1,7 @@
 //=============================================================================
 // NavigationPoint.
 //
-// NavigationPoints are organized into a network to provide AIControllers 
+// NavigationPoints are organized into a network to provide AIControllers
 // the capability of determining paths to arbitrary destinations in a level
 //
 //=============================================================================
@@ -32,7 +32,7 @@ var() int ExtraCost;			// Extra weight added by level designer
 var transient bool bEndPoint;	// used by C++ navigation code
 var bool bSpecialCost;			// if true, navigation code will call SpecialCost function for this navigation point
 var bool taken;					// set when a creature is occupying this spot
-var() bool bBlocked;			// this path is currently unuseable 
+var() bool bBlocked;			// this path is currently unuseable
 var() bool bPropagatesSound;	// this navigation point can be used for sound propagation (around corners)
 var() bool bOneWayPath;			// reachspecs from this path only in the direction the path is facing (180 degrees)
 var() bool bNeverUseStrafing;	// shouldn't use bAdvancedTactics going to this point
@@ -44,7 +44,7 @@ var const bool  bAutoPlaced;	// placed as marker for another object during a pat
 var const bool  bPathsChanged;	// used for incremental path rebuilding in the editor
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * Purpose : Special Navigation vars - ladder climbing / interaction / etc
 // ***********************************************************************************************
 var()	bool			bLadderPoint;
@@ -53,7 +53,7 @@ var		bool			bDoorPoint;				// set in EDoorPoint class
 var()	bool			bFindBaseOnBuild;		// if false, don't call FindBase during path build
 var		bool			bIsLadderTop;			// true if this node is at the top of a ladder
 var()	bool			bSearchPoint;			// true if this point should be chosen for search purposes
-var()	bool			bHidePoint;				// true if NPCs should try to flee to this point (can also be used for motivating search points) 
+var()	bool			bHidePoint;				// true if NPCs should try to flee to this point (can also be used for motivating search points)
 var()   bool            bIgnoreAwarenessForAnim;// true if NPCs should not play an anim based on awareness for this NavPOint (in front of computer for example)
 var()   bool            bDoNotUseAsHidePoint;
 var		int				LadderID;				// ladder ID associated with this Nav Point (if any)
@@ -66,7 +66,7 @@ var(Patrol)				MoveFlags				m_ForcedMoveFlag;				// WHILE MOVING TO : use this m
 var(Patrol)				MoveFlags				m_ForcedWaitFlag;				// WHEN AT, and using as Cover Point : use this waitflag, MOVE_NotSpecified is default
 
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 event int SpecialCost(Pawn Seeker);
@@ -110,16 +110,16 @@ function MoverOpened();
 function MoverClosed();
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * Purpose : Special Navigation events and functions
 // ***********************************************************************************************
 
 //----------------------------------------[David Kalina - 9 Feb 2001]-----
-// 
+//
 // Description
 //      Using designer specified Tags, sets next NavigationPoint in sequence.
 //      And makes sure it knows we are the previous NavigationPoint.
-// 
+//
 //------------------------------------------------------------------------
 
 function PostBeginPlay()
@@ -156,12 +156,12 @@ function PostBeginPlay()
 
 
 //---------------------------------------[David Kalina - 25 Jul 2001]-----
-// 
+//
 // Description
 //		If a controller is waiting at this point,
 //		trigger it so it knows to continue on its path
 //		and clear our Patrol.m_WaitingController var.
-// 
+//
 //------------------------------------------------------------------------
 
 function Trigger(Actor other, Pawn EventInstigator, optional name InTag)		// UBI MODIF - DAK - added optional InTag parameter
@@ -170,7 +170,7 @@ function Trigger(Actor other, Pawn EventInstigator, optional name InTag)		// UBI
 	{
 		if (Patrol.m_WaitingController != none)
 		{
-			Patrol.m_WaitingController.Trigger(other, EventInstigator, Tag); 
+			Patrol.m_WaitingController.Trigger(other, EventInstigator, Tag);
 		}
 
 		Patrol.m_WaitingController = none;
@@ -179,7 +179,7 @@ function Trigger(Actor other, Pawn EventInstigator, optional name InTag)		// UBI
 
 
 //----------------------------------------[David Kalina - 9 Feb 2001]-----
-// 
+//
 // Description
 //      Sets link to previous patrol point in network.
 //
@@ -195,20 +195,20 @@ function SetPreviousPatrolPoint(NavigationPoint _pPrevious)
 	if (Patrol != none)
 	{
 		Patrol.m_pPrevious[Patrol.m_pPrevious.Length] = _pPrevious;
-	}	
+	}
 }
 
 
 
 
 //---------------------------------------[David Kalina - 12 Mar 2001]-----
-// 
+//
 // Description
 //      Return next patrol point in network.
 //      Will reverse 'direction' of network if it is non-circular and
 //      we have reached the end.
 //
-// Input 
+// Input
 //		if bNoReverse is true, return nothing upon reaching the end of a one-way patrol
 //		currently used for test GetNext calls from navigation code
 //
@@ -216,7 +216,7 @@ function SetPreviousPatrolPoint(NavigationPoint _pPrevious)
 
 event NavigationPoint GetNext(optional bool bNoReverse)
 {
-	if (Patrol != none) 
+	if (Patrol != none)
 	{
 		// IF WE ARE MOVING FORWARDS ..
 		if  (!Patrol.m_bPatrolBackwards)
@@ -227,7 +227,7 @@ event NavigationPoint GetNext(optional bool bNoReverse)
 				return Patrol.m_pNext[ rand(Patrol.m_pNext.Length) ];
 			}
 			else
-			{				
+			{
 				if (bNoReverse)
 					return none;
 
@@ -238,8 +238,8 @@ event NavigationPoint GetNext(optional bool bNoReverse)
 			}
 		}
 
-		// GOING BACKWARDS 
-		else 
+		// GOING BACKWARDS
+		else
 		{
 			if  (Patrol.m_pPrevious.Length > 0)
 			{
@@ -261,11 +261,11 @@ event NavigationPoint GetNext(optional bool bNoReverse)
 
 
 //----------------------------------------[David Kalina - 3 Aug 2001]-----
-// 
+//
 // Description
 //		Perhaps called when Goal_Patrol fails because a path is
-//		blocked ..?  
-// 
+//		blocked ..?
+//
 //------------------------------------------------------------------------
 
 function ReverseDirection()
@@ -278,7 +278,7 @@ function ReverseDirection()
 
 
 //---------------------------------------[David Kalina - 12 Mar 2001]-----
-// 
+//
 // Description
 //      Should be called from terminal point in non-circular path.
 //      Iterates through all members of path in given direction and
@@ -297,7 +297,7 @@ function ReverseDirection()
 function SetAllPatrolDirections(bool _isBackwards)
 {
 	local int i;
-	
+
 	if (Patrol != none)
 	{
 		// prevent against infinite recursion
@@ -306,7 +306,7 @@ function SetAllPatrolDirections(bool _isBackwards)
 
 		Patrol.m_bPatrolBackwards = _isBackwards;
 
-		if (_isBackwards) 
+		if (_isBackwards)
 		{
 			for (i = 0; i < Patrol.m_pPrevious.Length; i++)
 				Patrol.m_pPrevious[i].SetAllPatrolDirections(_isBackwards);
@@ -326,7 +326,7 @@ function touch(actor other)
 	if (other != none && other.bIsPawn)
 	{
 		myPawn = Pawn(other);
-		
+
 		if ((myPawn.Controller != None) && (!myPawn.Controller.bIsPlayer))
 			myPawn.Controller.touch(self);
 	}
@@ -343,7 +343,7 @@ function untouch(actor other)
 	}
 }
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 defaultproperties

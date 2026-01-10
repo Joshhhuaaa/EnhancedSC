@@ -51,7 +51,7 @@ state Pattern
 Begin:
 UShostage1:
     Log("");
-    JumpRandom('Talk1', 0.34, 'Talk2', 0.67, 'Talk3', 1.00, , , ,); 
+    JumpRandom('Talk1', 0.34, 'Talk2', 0.67, 'Talk3', 1.00, , , ,);
 Talk1:
     Log("");
     Talk(Sound'S4_2_2Voice.Play_42_51_04', 1, , TRUE, 0);

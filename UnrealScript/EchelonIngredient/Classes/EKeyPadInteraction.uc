@@ -57,11 +57,11 @@ function SetInteractLocation(Pawn InteractPawn)
 	local Vector X, Y, Z, MovePos;
 	local EPawn InteractEPawn;
 	local vector HitLocation, HitNormal;
-	
+
 	InteractEPawn = EPawn(InteractPawn);
-	
+
 	if (InteractEPawn != none)
-	{	
+	{
 		// get MyKeyPad object rotation axes for positioning
 		GetAxes(MyKeyPad.Rotation, X, Y, Z);
 		MovePos = MyKeyPad.Location;
@@ -90,11 +90,11 @@ function SetInteractLocation(Pawn InteractPawn)
 
 function KeyEvent(String Key, EInputAction Action, float Delta, optional bool bAuto)
 {
-	
+
 	local EPlayerController EPC; // Joshua - Adding controller support for keypads
 	local int OldSelectedButton; // Joshua - Adding NumPad support for keypads
 	EPC = EPlayerController(EKeyPadInteraction(Interaction).InteractionController);
-	
+
 	// Process Npc interaction
 	if (bAuto)
 	{
@@ -178,19 +178,19 @@ function KeyEvent(String Key, EInputAction Action, float Delta, optional bool bA
 			if (MyKeyPad.SelectedButton < 9)
 				MyKeyPad.SelectedButton += 3;
 			break;
-		
+
 		case "AnalogLeft" :
 		case "StrafeLeft" :
 			if (MyKeyPad.SelectedButton > 0 && MyKeyPad.SelectedButton % 3 != 0)
 				MyKeyPad.SelectedButton -= 1;
 			break;
-		
+
 		case "AnalogRight" :
 		case "StrafeRight" :
 			if (MyKeyPad.SelectedButton < 11 && (MyKeyPad.SelectedButton + 1) % 3 != 0)
 				MyKeyPad.SelectedButton += 1;
 			break;
-		
+
 		case "Fire" :
 			PostInteract(InteractionController);
 			break;
@@ -203,7 +203,7 @@ function KeyEvent(String Key, EInputAction Action, float Delta, optional bool bA
 				MyKeyPad.KeyPushed();
 			break;
 		}
-		
+
 		// Joshua - Adding NumPad support for keypads
 		if (OldSelectedButton != MyKeyPad.SelectedButton)
 		   MyKeyPad.GlowSelected();

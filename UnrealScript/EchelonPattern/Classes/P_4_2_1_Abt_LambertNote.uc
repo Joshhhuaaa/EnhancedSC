@@ -44,8 +44,8 @@ function InitPattern()
         // Joshua - Replace NPC skins for variety
         ForEach DynamicActors(class'Pawn', P)
         {
-            if (P.name == 'EGeorgianSoldier2' || P.name == 'EGeorgianSoldier3' || P.name == 'EGeorgianSoldier6' || 
-                P.name == 'EGeorgianSoldier13' || P.name == 'EGeorgianSoldier14' || P.name == 'EGeorgianSoldier16' || 
+            if (P.name == 'EGeorgianSoldier2' || P.name == 'EGeorgianSoldier3' || P.name == 'EGeorgianSoldier6' ||
+                P.name == 'EGeorgianSoldier13' || P.name == 'EGeorgianSoldier14' || P.name == 'EGeorgianSoldier16' ||
                 P.name == 'EGeorgianSoldier21' || P.name == 'EGeorgianSoldier31' || P.name == 'EGeorgianSoldier33' ||
                 P.name == 'EGeorgianSoldier37')
             {
@@ -60,7 +60,7 @@ function InitPattern()
             {
                 ZoneAI.DisableGroupTags.Length = 0;
             }
-            
+
             if (ZoneAI.name == 'EZoneAI5')
             {
                 ZoneAI.DisableGroupTags[6] = 'EGroupAI2';

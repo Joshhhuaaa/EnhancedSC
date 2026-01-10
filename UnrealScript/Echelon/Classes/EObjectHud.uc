@@ -2,21 +2,21 @@ class EObjectHud extends Actor;
 
 // General screen Stuff
 const   SCREEN_HALF_X               = 320;
-const   SCREEN_HALF_Y               = 240;  
+const   SCREEN_HALF_Y               = 240;
 const   SCREEN_END_X                = 640;
 const   SCREEN_END_Y                = 480;
 
-enum EHUD_COLOR 
+enum EHUD_COLOR
 {
     EHC_GREEN,
 	EHC_GREEN_PALE,
     EHC_RED,
-    EHC_BLACK,       
+    EHC_BLACK,
     EHC_GRAY,
     EHC_ALPHA_BLACK,
     EHC_ALPHA_WHITE,
 	EHC_ALPHA_RED,
-    EHC_ALPHA_GREEN,	
+    EHC_ALPHA_GREEN,
 };
 
 var Color           Black;
@@ -39,13 +39,13 @@ function DrawView(HUD Hud, ECanvas Canvas);		// Drawing
 function ObjectHudTick(float DeltaTime);		// Ticking
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Draws a vertical or horizontal line from pt A to pt B
 //------------------------------------------------------------------------
 function DrawLine(int AX, int AY, int BX, int BY, EHUD_COLOR eColor, ECanvas Canvas)
 {
     local int iTemp, index;
-	
+
     // Arrange Position //
     if (BX < AX)
     {
@@ -53,14 +53,14 @@ function DrawLine(int AX, int AY, int BX, int BY, EHUD_COLOR eColor, ECanvas Can
         BX = AX;
         AX = iTemp;
     }
-	
+
     if (BY < AY)
     {
         iTemp = BY;
         BY = AY;
         AY = iTemp;
     }
-	
+
     // Get color index //
     switch (eColor)
     {
@@ -68,7 +68,7 @@ function DrawLine(int AX, int AY, int BX, int BY, EHUD_COLOR eColor, ECanvas Can
 		Canvas.DrawColor = Green;
 		break;
 	case EHC_GREEN_PALE:
-		Canvas.DrawColor = GreenPale;		
+		Canvas.DrawColor = GreenPale;
 		break;
 	case EHC_RED:
 		Canvas.SetDrawColor(128, 0, 0);
@@ -94,16 +94,16 @@ function DrawLine(int AX, int AY, int BX, int BY, EHUD_COLOR eColor, ECanvas Can
 	case EHC_ALPHA_GREEN:
 		Canvas.DrawColor = Green;
 		Canvas.DrawColor.A = 128;
-		break;	
+		break;
     }
-	
+
     Canvas.SetPos(AX, AY);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.pixel, BX - AX, BY - AY, 0, 0, 1, 1);
 }
 
 //------------------------------------------------------------------------
-// Description		
-//		
+// Description
+//
 //------------------------------------------------------------------------
 function DrawRectangle(int AX, int AY, int BX, int BY, int LineWidth, EHUD_COLOR eColor, ECanvas Canvas)
 {
@@ -128,8 +128,8 @@ function DrawRectangle(int AX, int AY, int BX, int BY, int LineWidth, EHUD_COLOR
 //}
 
 //------------------------------------------------------------------------
-// Description		
-//		
+// Description
+//
 //------------------------------------------------------------------------
 function DrawSniperMask(ECanvas Canvas)
 {
@@ -146,10 +146,10 @@ function DrawSniperMask(ECanvas Canvas)
 
     Canvas.SetPos(0, SCREEN_END_Y - height);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_bordernoir, width ,height, 0, height, width, -height);
-    
+
     Canvas.SetPos(SCREEN_END_X - width, 0);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_bordernoir, width ,height, width, 0, -width, height);
-    
+
     Canvas.SetPos(SCREEN_END_X - width, SCREEN_END_Y - height);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.svf2_bordernoir, width ,height, width, height, -width, -height);
 	Canvas.Style = ERenderStyle.STY_Normal;

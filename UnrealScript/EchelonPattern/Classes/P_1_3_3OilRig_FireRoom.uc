@@ -75,7 +75,7 @@ FlameOn:
     CheckFlags(Ignition,TRUE,'Nada');
     SetFlags(Ignition,TRUE);
     SendPatternEvent('Merctech2AI','FireComplete');
-    JumpRandom('SOne', 0.33, 'STwo', 0.67, 'SThree', 1.00, , , ,); 
+    JumpRandom('SOne', 0.33, 'STwo', 0.67, 'SThree', 1.00, , , ,);
 SOne:
     Sleep(0.1667);
     Jump('SleepDone');

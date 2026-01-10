@@ -8,7 +8,7 @@
 class EPCTextButton extends UWindowButton
                     native;
 
-function Click(float X, float Y) 
+function Click(float X, float Y)
 {
 	Super.Click(X, Y);
 	Root.PlayClickSound();

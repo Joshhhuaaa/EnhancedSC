@@ -1,4 +1,4 @@
-class EKolaVodka extends EGameplayObject; 
+class EKolaVodka extends EGameplayObject;
 
 function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocation, Vector HitNormal)
 {

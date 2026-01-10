@@ -3,7 +3,7 @@
 //
 // Group AI Object
 // Manages / Coordinates the behaviors of its members
-//      
+//
 //=============================================================================
 
 
@@ -17,7 +17,7 @@ class EGroupAI extends Actor
 struct CheckPointInfo
 {
     var EAIController   oController;
-    var float           fPatrolCheckPointTimeOut; 
+    var float           fPatrolCheckPointTimeOut;
 };
 
 
@@ -32,7 +32,7 @@ var    bool				 bDestroyScriptedEventAfterEnd;
 var    bool              bPlayerDeadSent;
 var    bool              bLostPlayerSent;
 var    bool	             bGroupRunningForAlarm;
-var    bool              bChangeHistory_Init; 
+var    bool              bChangeHistory_Init;
 
 var()  bool				 PlayFisherMusic;
 var()  bool				 bDontMirrorAttack;
@@ -65,17 +65,17 @@ struct EChangeEvent
 
 var EChangeEvent                ChangeHistory[16];
 var float                       ChangeHistory_LastChangeBark;
-var float                       ChangeHistory_PrevChangeBark; 
+var float                       ChangeHistory_PrevChangeBark;
 
 var(Enhanced) bool bPlayerIdentifiedCounted;
 
 native(1418) final function Broadcast(EAIController Instigator,BroadCastType _BCType, Vector _EventLocation, optional bool bOnlyRadio);
 
-native(1550) final function int ChangeHistory_AddChangeAndSuggestBehavior(Vector Location, EChangeType ChangeType);  
+native(1550) final function int ChangeHistory_AddChangeAndSuggestBehavior(Vector Location, EChangeType ChangeType);
 
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // Description
 //
 //
@@ -86,7 +86,7 @@ function PreBeginPlay()
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // Description
 //
 //
@@ -97,15 +97,15 @@ function ResetGrenadeTimer()
 }
 
 //---------------------------------------[David Kalina - 30 Jul 2001]-----
-// 
+//
 // Description
 //		Set default patterns if necessary.
-// 
+//
 //------------------------------------------------------------------------
 function PostBeginPlay()
 {
 	if (ScriptedPatternClass != None)
-	{	
+	{
 		//create the scripted pattern / made by the Pattern Editor
 		ScriptedPattern	= Spawn(ScriptedPatternClass, self);
 
@@ -121,10 +121,10 @@ function PostBeginPlay()
 
 
 //---------------------------------------[David Kalina - 28 Mar 2001]-----
-// 
+//
 // Description
 //      Add _AI to my AIMembers list, without prejudice.
-// 
+//
 //------------------------------------------------------------------------
 function AddAIMember(EAIController _AI)
 {
@@ -141,7 +141,7 @@ function AddAIMember(EAIController _AI)
 		{
 			bFound = true;
 		}
-		
+
 		Node = Node.NextNode;
 	}
 
@@ -162,7 +162,7 @@ function AddAIMember(EAIController _AI)
 function RequestPatternChange(class<EPattern> PatternClass, bool EventEx)
 {
 	bDestroyScriptedEventAfterEnd = true;
-	
+
 	if (ScriptedPattern != None)
 	{
 		ScriptedPattern.StopPattern();
@@ -281,7 +281,7 @@ event SendJumpEvent(name LabelName,bool bAffectLastZone, bool bForceJump)
 		{
 			//check if we can spawn the pattern class again
 			if (ScriptedPatternClass != None)
-			{	
+			{
 				//create the scripted pattern / made by the Pattern Editor
 				ScriptedPattern	= Spawn(ScriptedPatternClass, self);
 
@@ -300,7 +300,7 @@ event SendJumpEvent(name LabelName,bool bAffectLastZone, bool bForceJump)
 	{
 		if (bAffectLastZone)
 			ScriptedPattern.LastZoneTouched = LabelName;
-       
+
         if ((!ScriptedPattern.bDisableEventTrigger) || (bForceJump))
         {
 		    ScriptedPattern.EventJump(LabelName);
@@ -335,7 +335,7 @@ function UpdateGoalState(EAIController Instigator, int Status)
 
 //--------------------------------------------------[Frederic Blais]-----
 // ResetGoals
-// 
+//
 // Description:
 //
 //------------------------------------------------------------------------
@@ -358,7 +358,7 @@ function ResetGoals()
 
 //--------------------------------------------------[Frederic Blais]-----
 // PlayerIsVisible
-// 
+//
 // Description: check If one member can see the player
 //
 //------------------------------------------------------------------------
@@ -381,7 +381,7 @@ event bool PlayerIsVisible()
 
 //--------------------------------------------------[Frederic Blais]-----
 // CheckLastKnownPlayerTime
-// 
+//
 // Description:
 //
 //------------------------------------------------------------------------
@@ -426,12 +426,12 @@ event GetMostRecentPlayerInfo(out float BestTime, out vector PlayerPos)
 
 //--------------------------------------------------[Frederic Blais]-----
 // PlayerHasBeenSeen
-// 
+//
 // Description:
 //
 //------------------------------------------------------------------------
 function bool PlayerHasBeenSeen()
-{ 
+{
 	local EListNode Node;
 
 	Node = AIMembers.FirstNode;
@@ -452,7 +452,7 @@ function bool PlayerHasBeenSeen()
 
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // Description: Get the closest member from a location
 //
 //
@@ -492,7 +492,7 @@ event EAIController GetClosestMember(vector _location, optional actor IgnoredAct
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // Description: Check if the actor is a member of the group
 //
 //
@@ -511,12 +511,12 @@ function bool IsAMember(Actor a)
 		Node = Node.NextNode;
 	}
 
-	return false;	
+	return false;
 }
 
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 //
 //
 //------------------------------------------------------------------------
@@ -542,12 +542,12 @@ function bool AllGroupLostPlayer(EAIController Instigator)
 		return true;
 	else
 		return false;
-	
+
 }
 
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 //
 //
 //------------------------------------------------------------------------
@@ -676,7 +676,7 @@ function timer()
 
 //--------------------------------------------------[Frederic Blais]-----
 // ChangeStates
-// 
+//
 // Description: Change state of every members
 //
 //------------------------------------------------------------------------
@@ -712,7 +712,7 @@ function ChangeStates(name State)
 
 //--------------------------------------------------[Frederic Blais]-----
 // ResetDefaultPatternStates
-// 
+//
 // Description:
 //
 //------------------------------------------------------------------------
@@ -742,7 +742,7 @@ function ResetDefaultPatternStates()
 // StartAlarmBehavior
 //
 // Description: Start the primary behavior for each members of group.
-//			    This function is called only if we are a PRIMARY group on 
+//			    This function is called only if we are a PRIMARY group on
 //				a alarm call.
 //
 //------------------------------------------------------------------------
@@ -835,7 +835,7 @@ event AIAlarmCallBack(EAlarm A, EAIEvent Event, optional bool bForceUpdatePos)
 	}
 
 	////////////////////////////////////////////////////////////////////
-	//process ALARM event 
+	//process ALARM event
 
 	//be sure to kill the scripted pattern
 	EndScriptedPattern();
@@ -988,8 +988,8 @@ function VerifyCheckPoints(float Delta)
                     if (IsAMember(oController))
                     {
                         break;
-                    }  
-                }                
+                    }
+                }
             }
 
             if (oController != None)
@@ -998,11 +998,11 @@ function VerifyCheckPoints(float Delta)
                 // send AIEvent to GroupAI
                 oController.AIEvent.Reset();
                 oController.AIEvent.EventType = AI_PATROL_TIMEOUT;
-                oController.AIEvent.EventLocation = oController.EPawn.Location;	
+                oController.AIEvent.EventLocation = oController.EPawn.Location;
                 oController.AIEvent.EventTarget = oController.EPawn;
                 AIEventCallBack(oController, oController.AIEvent);
 
-                // Remove from arCheckPointTimers 
+                // Remove from arCheckPointTimers
                 log("Remove from arCheckPointTimers ");
                 arCheckPointTimers.remove(iCounter, 1);
 
@@ -1024,13 +1024,13 @@ function VerifyCheckPoints(float Delta)
 event AddOrUpdateCheckPoint(EAIController oController,  float fPatrolCheckPointTimeOut)
 {
     local CheckPointInfo    oNewCPI;
-    local int               iCounter;  
+    local int               iCounter;
 
 
     // Verify if we are updating the timer
     for (iCounter = 0; iCounter < arCheckPointTimers.Length; iCounter++)
     {
-        if (arCheckPointTimers[iCounter].oController == oController) 
+        if (arCheckPointTimers[iCounter].oController == oController)
         {
             // Update timer
             arCheckPointTimers[iCounter].fPatrolCheckPointTimeOut = fPatrolCheckPointTimeOut;
@@ -1038,7 +1038,7 @@ event AddOrUpdateCheckPoint(EAIController oController,  float fPatrolCheckPointT
         }
 
     }
-    
+
     // We are not updating a timer, we are adding a new timer
     oNewCPI.oController = oController;
     oNewCPI.fPatrolCheckPointTimeOut = fPatrolCheckPointTimeOut;
@@ -1082,7 +1082,7 @@ event EndScriptedPattern()
 //--------------------------------------------------[Frederic Blais]-----
 // checkInterrogation
 //
-// Description: 
+// Description:
 //
 //------------------------------------------------------------------------
 function checkInterrogation(EAIController Instigator, EAIEvent Event)
@@ -1093,7 +1093,7 @@ function checkInterrogation(EAIController Instigator, EAIEvent Event)
 	case AI_SEE_PLAYER_ALERT:
     case AI_SEE_PLAYER_AGAIN:
 
-		//check if the player is grabbing a NPC		
+		//check if the player is grabbing a NPC
 		if (((Instigator.eGame.pPlayer.GetStateName() == 'S_Grab') || (Instigator.eGame.pPlayer.GetStateName() == 'S_GrabTargeting'))
             && (fSeeInterrogationTimer < (Level.TimeSeconds - 7.0f)))
 		{
@@ -1103,7 +1103,7 @@ function checkInterrogation(EAIController Instigator, EAIEvent Event)
 			log("GroupAI - AI_SEE_INTERROGATION "$Event.EventTarget);
 
 		}
-		
+
 		break;
 	default:
 		break;
@@ -1211,7 +1211,7 @@ event AIEventCallBack(EAIController Instigator, EAIEvent Event)
         case AI_COMMUNICATION_EVENTS        : S = "AI_COMMUNICATION_EVENTS"; break;
         case AI_ARE_YOU_OK                  : S = "AI_ARE_YOU_OK"; break;
         case AI_LET_HIM_GO                  : S = "AI_LET_HIM_GO"; break;
-        case AI_MASTER_DEAD                 : S = "AI_MASTER_DEAD"; break;              
+        case AI_MASTER_DEAD                 : S = "AI_MASTER_DEAD"; break;
 	}
 
 	if (S == "")
@@ -1248,7 +1248,7 @@ event AIEventCallBack(EAIController Instigator, EAIEvent Event)
 	if ((Event.EventType == AI_REVIVED) || (Event.EventType == AI_RELEASED))
 	{
 		Instigator.Pattern.bDisableMessages = false;
-		AddAIMember(Instigator);		
+		AddAIMember(Instigator);
 	}
 
 	//check to be sure that the Instigator is a member of the group
@@ -1346,11 +1346,11 @@ event AIEventCallBack(EAIController Instigator, EAIEvent Event)
 	if (Event.EventType == AI_HEAR_SOMETHING)
 	{
 		if ((Event.EventNoiseType == NOISE_InfoBarkAware) || (Event.EventNoiseType == NOISE_InfoBarkAlert) ||
-			(Event.EventNoiseType == NOISE_BackupBarkInvestigate) || (Event.EventNoiseType == NOISE_BackUpBarkAttack) 
+			(Event.EventNoiseType == NOISE_BackupBarkInvestigate) || (Event.EventNoiseType == NOISE_BackUpBarkAttack)
 			|| (Event.EventNoiseType == NOISE_TakeCover))
 		{
 			bForceInternEvent = true;
-		}		
+		}
 	}
 
 	//check if we just received an INTERN event
@@ -1441,14 +1441,14 @@ event AIEventCallBack(EAIController Instigator, EAIEvent Event)
 		E.Instigator     = Event.Instigator;
 		E.EventNoiseType = Event.EventNoiseType;
 
-		E.EventBroadcastType  = Event.EventBroadcastType; 
-		
+		E.EventBroadcastType  = Event.EventBroadcastType;
+
 		E.ReceivedTime = Level.TimeSeconds;
 		E.Instigator   = Instigator;
 
 		//add the event in the list - All events will be processed at the end of the frame
 		EventList[EventList.Length] = E;
-	}	
+	}
 }
 
 defaultproperties

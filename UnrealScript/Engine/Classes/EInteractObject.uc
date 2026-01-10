@@ -33,7 +33,7 @@ function PostBeginPlay()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		DestroyActor won't call the UnTouch on this actor so call this manually
 //------------------------------------------------------------------------
 function Destroyed()
@@ -45,7 +45,7 @@ function Destroyed()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Never change the priority by hand
 //------------------------------------------------------------------------
 function SetPriority(int iNewPriority)
@@ -55,7 +55,7 @@ function SetPriority(int iNewPriority)
 
 	if (OldCollideActors)
 	SetCollision(false);
-	
+
 	iPriority = iNewPriority;
 
 	if (OldCollideActors)
@@ -63,8 +63,8 @@ function SetPriority(int iNewPriority)
 }
 
 //------------------------------------------------------------------------
-// Description		
-//		Used to Know if interaction can be used .. 
+// Description
+//		Used to Know if interaction can be used ..
 //		Test Collision, Orientation and availability here.
 //------------------------------------------------------------------------
 function bool IsAvailable()
@@ -99,7 +99,7 @@ function Touch(actor Other)
 
 	InteractionPlayerController = PlayerController(P.Controller);
 
-	//log(self$" Touch--AddToManager."@InteractionPlayerController.CanAddInteract(self)@IsAvailable()); 
+	//log(self$" Touch--AddToManager."@InteractionPlayerController.CanAddInteract(self)@IsAvailable());
 
 	if (InteractionPlayerController.CanAddInteract(self) && IsAvailable())
 		InteractionPlayerController.IManager.AddInteractionObj(Self);
@@ -115,7 +115,7 @@ function UnTouch(actor Other)
 	if (P == None || !P.bIsPlayerPawn || InteractionPlayerController == None)
 		return;
 
-	//log(self$" UnTouch--RemoveInteractionObj called."); 
+	//log(self$" UnTouch--RemoveInteractionObj called.");
 
 	InteractionPlayerController.IManager.RemoveInteractionObj(Self);
 	InteractionPlayerController = None;

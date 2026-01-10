@@ -4,7 +4,7 @@ function Created()
 {
     Super.Created();
     LookAndFeel.Combo_SetupLeftButton(Self);
-}   
+}
 
 function LMouseDown(float X, float Y)
 {

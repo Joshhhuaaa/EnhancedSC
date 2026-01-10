@@ -3,7 +3,7 @@
 //
 // Used to define a patrol network by level designers.
 // m_sNextPatrolPointTag is the variable that matches the next PatrolPoint Tag
-// in the network.  
+// in the network.
 //
 // m_rSleepTime defines how long an NPC will stop at a given PatrolPoint
 //

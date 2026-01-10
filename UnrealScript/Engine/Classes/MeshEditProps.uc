@@ -1,16 +1,16 @@
 //=============================================================================
 // Object to facilitate properties editing
 //=============================================================================
-//  Animation / Mesh editor object to expose/shuttle only selected editable 
+//  Animation / Mesh editor object to expose/shuttle only selected editable
 //  parameters from UMeshAnim/ UMesh objects back and forth in the editor.
-//  
- 
+//
+
 class MeshEditProps extends Object
 	noexport
 	hidecategories(Object)
-	native;	
+	native;
 
-// abstract, editinlinenew ? 
+// abstract, editinlinenew ?
 
 var(Mesh) vector			 NewScale;
 var(Mesh) vector             NewTranslation;

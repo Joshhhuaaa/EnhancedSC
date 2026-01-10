@@ -20,12 +20,12 @@ var int LastTimeDamage;
 auto state idle
 {
 	//----------------------------------------[David Kalina - 5 Oct 2001]-----
-	// 
+	//
 	// Description
-	//		No need to override here.  Example. 
-	//	
+	//		No need to override here.  Example.
+	//
 	//------------------------------------------------------------------------
-	
+
 	function BeginState()
 	{
 		if ((Characters[1]!= None) && (Characters[1].GetStateName() == 's_Alert'))
@@ -40,34 +40,34 @@ auto state idle
 	}
 
 
-	
-	
+
+
 	//---------------------------------------[David Kalina - 10 Oct 2001]-----
-	// 
+	//
 	// Description
 	//		All Events sent through here.
 	//		This function sets HIGH-PRIORITY Goals (all Action?)
 	//		So that the AI will respond to certain things regardless of whether or
 	//		not it is running a DEFAULT or a SCRIPTED pattern.
 	//
-	//		TODO : How do we change the default patterns state when a 
+	//		TODO : How do we change the default patterns state when a
 	//		scripted pattern is running???
 	//
 	//		Add this / distinguish in each state
 	//
 	// Input
-	//		Event : 
-	// 
+	//		Event :
+	//
 	//------------------------------------------------------------------------
-	
+
 	function ReflexCallBack(EAIEvent Event){}
 
 
 	//----------------------------------------[Frederic Blais - 5 Oct 2001]-----
-	// 
+	//
 	// Description
 	//		Communication callback
-	// 
+	//
 	//------------------------------------------------------------------------
 	function CommunicationCallBack(AIEventType eType){}
 
@@ -96,14 +96,14 @@ auto state idle
 					break;
 
 				case AI_HEAR_SOMETHING:
-					
+
 					switch (Event.EventNoiseType)
 					{
 						case NOISE_LightFootstep :
-						case NOISE_Object_Falling :						
+						case NOISE_Object_Falling :
 						case NOISE_HeavyFootstep :
 						case NOISE_Object_Breaking :
-							
+
 							EventJump('HearSomethingInvestigate');
 							break;
 
@@ -146,7 +146,7 @@ auto state idle
 
 
 				/*******  INTERNAL EVENTS  ********************************************/
-				
+
 				case AI_SEE_PLAYER_AGAIN:
 					EventJump('SeePlayerAgain');
 					break;
@@ -180,7 +180,7 @@ SeeUnconsciousBody:
 	End();
 
 SeeDeadBody:
-	
+
 	plog("SeeDeadBody");
 	End();
 
@@ -197,10 +197,10 @@ MasterIncapacitated:
 
 SeePlayerInvestigate:
 
-	plog("SeePlayerInvestigate"); 
+	plog("SeePlayerInvestigate");
     eDog(Characters[1].Pawn).PlayDogBark();
 	Jump('Search_Location');
-	
+
 HearSomethingInvestigate:
 
 	plog("HearSomethingInvestigate");
@@ -245,33 +245,33 @@ state Search
 {
 
 	//----------------------------------------[David Kalina - 12 Oct 2001]-----
-	// 
+	//
 	// Description
 	//		OVERRIDEN Function so GotoPatternLabel calls are done w/in this state.
-	//	
+	//
 	//------------------------------------------------------------------------
 	function BeginState()
 	{
 		EAIController(Characters[1]).GotoStateSafe('s_Investigate');
 	}
-	
+
 	function GotoPatternLabel(name label)
 	{
 		GotoState('Search', label);
 	}
 
-	
+
 	function ReflexCallBack(EAIEvent Event)
 	{}
-	
+
 
 	//----------------------------------------[David Kalina - 5 Oct 2001]-----
-	// 
+	//
 	// Description
-	//		Handle incoming AIEvents by jumping to the appropriate label. 
-	// 
+	//		Handle incoming AIEvents by jumping to the appropriate label.
+	//
 	//------------------------------------------------------------------------
-	
+
 	function EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
 		if (!bDisableMessages)
@@ -301,14 +301,14 @@ state Search
 					break;
 
 				case AI_HEAR_SOMETHING:
-					
+
 					switch (Event.EventNoiseType)
 					{
 						case NOISE_LightFootstep :
-						case NOISE_Object_Falling :						
+						case NOISE_Object_Falling :
 						case NOISE_HeavyFootstep :
 						case NOISE_Object_Breaking :
-							
+
 							EventJump('Search_Location');
 							break;
 
@@ -376,9 +376,9 @@ SeePlayer:
 	GotoPatternState('Wait', 'StartBark');
 	End();
 
-	
+
 Search_Location:
-	
+
 	plog("Search_Location -- Search at Smell Point Location");
 
 	ResetGoals(1);
@@ -444,7 +444,7 @@ state Wait
 
 
 				case AI_HEAR_SOMETHING:
-					
+
 					switch (Event.EventNoiseType)
 					{
 						case NOISE_BackUpBarkAttack:
@@ -497,7 +497,7 @@ state Wait
 
 
 WaitBark:
-	
+
 	plog("WaitBark");
 	CheckFlags(bCharge,true,'WaitCharge');
 	WaitForGoal(1,GOAL_Stop);
@@ -579,7 +579,7 @@ AfterChargeFailed:
 MakeDamage:
 
 	plog("MakeDamage");
-	
+
 	NumberOfTry = 0;
 
 	if (Characters[0].Pawn.Health <= 0)
@@ -617,7 +617,7 @@ PlayerIsVeryClose:
 	ResetGoals(1);
 	Goal_Stop(1, 15, 0.5f, Characters[0].Pawn, MOVE_Snipe);
 	Jump('WaitBark');
-	
+
 
 StartBark:
 
@@ -647,5 +647,5 @@ PlayerLost:
 	Goal_Charge(1,15,Characters[0].Pawn,MOVE_JogAlert,,,,);
 	Jump('WaitCharge');
 
-	
+
 }

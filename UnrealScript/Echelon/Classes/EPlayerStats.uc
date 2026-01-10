@@ -60,11 +60,11 @@ function ResetSessionStats()
     BulletFired = 0;
     LightDestroyed = 0;
     ObjectDestroyed = 0;
-    
+
     LockPicked = 0;
     LockDestroyed = 0;
     MedkitUsed = 0;
- 
+
     NPCsInterrogated = 0;
 
     GhostRating = 100.0;
@@ -77,11 +77,11 @@ function PostBeginPlay()
 {
     Epc = EPlayerController(Owner);
     bStatsInitialized = false;
-    
+
     // Joshua - Reset stats initially, will load from console once Player is ready
     ResetSessionStats();
     MissionName = GetCurrentMapName();
-    
+
     Enable('Tick');
 }
 
@@ -91,7 +91,7 @@ function Tick(float DeltaTime)
     {
         InitializeStats();
     }
-    
+
     if (!bMissionComplete)
     {
         MissionTime += DeltaTime;
@@ -103,16 +103,16 @@ function InitializeStats()
 {
     local string CurrentMap;
     local bool bReset;
-    
+
     CurrentMap = GetCurrentMapName();
     bReset = false;
-    
+
     // Joshua - Only reset stats if we're moving to a new mission
     if (Epc.Player.Console.StatsMissionName != "")
     {
         bReset = ShouldResetStats(Epc.Player.Console.StatsMissionName, CurrentMap);
     }
-    
+
     if (bReset || Epc.Player.Console.StatsMissionName == "")
     {
         ResetSessionStats();
@@ -121,12 +121,12 @@ function InitializeStats()
     {
         LoadStatsFromConsole();
     }
-    
+
     MissionName = CurrentMap;
 
     CalculateGhostRating();
     CalculateStealthRating();
-    
+
     bStatsInitialized = true;
 }
 
@@ -137,7 +137,7 @@ function AddStat(string StatName, optional int Amount)
 
     if (Amount == 0)
         Amount = 1;
-        
+
     switch (StatName)
     {
         case "PlayerIdentified":
@@ -210,35 +210,35 @@ function AddStat(string StatName, optional int Amount)
 function bool ShouldResetStats(string PreviousMap, string NextMap)
 {
     if (PreviousMap == "0_0_2_Training" && NextMap == "0_0_3_Training") return false;
-    
+
     if (PreviousMap == "1_1_0Tbilisi" && NextMap == "1_1_1Tbilisi") return false;
     if (PreviousMap == "1_1_1Tbilisi" && NextMap == "1_1_2Tbilisi") return false;
-    
+
     if (PreviousMap == "1_2_1DefenseMinistry" && NextMap == "1_2_2DefenseMinistry") return false;
-    
+
     if (PreviousMap == "1_3_2CaspianOilRefinery" && NextMap == "1_3_3CaspianOilRefinery") return false;
-    
+
     if (PreviousMap == "1_7_1_1VselkaInfiltration" && NextMap == "1_7_1_2Vselka") return false;
-    
+
     if (PreviousMap == "2_1_0CIA" && NextMap == "2_1_1CIA") return false;
     if (PreviousMap == "2_1_1CIA" && NextMap == "2_1_2CIA") return false;
-    
+
     if (PreviousMap == "2_2_1_Kalinatek" && NextMap == "2_2_2_Kalinatek") return false;
     if (PreviousMap == "2_2_2_Kalinatek" && NextMap == "2_2_3_Kalinatek") return false;
-    
+
     if (PreviousMap == "3_2_1_PowerPlant" && NextMap == "3_2_2_PowerPlant") return false;
-    
+
     if (PreviousMap == "3_4_2Severonickel" && NextMap == "3_4_3Severonickel") return false;
-    
+
     if (PreviousMap == "4_1_1ChineseEmbassy" && NextMap == "4_1_2ChineseEmbassy") return false;
-    
+
     if (PreviousMap == "4_2_1_Abattoir" && NextMap == "4_2_2_Abattoir") return false;
-    
+
     if (PreviousMap == "4_3_0ChineseEmbassy" && NextMap == "4_3_1ChineseEmbassy") return false;
     if (PreviousMap == "4_3_1ChineseEmbassy" && NextMap == "4_3_2ChineseEmbassy") return false;
-    
+
     if (PreviousMap == "5_1_1_PresidentialPalace" && NextMap == "5_1_2_PresidentialPalace") return false;
-    
+
     return true;
 }
 
@@ -250,7 +250,7 @@ function CalculateGhostRating()
     rating -= float(PlayerIdentified) * 15.0;
     rating -= float(BodyFound) * 15.0;
     rating -= float(AlarmTriggered) * 20.0;
-    
+
     rating -= float(EnemyKnockedOut) * 5.0;
     rating -= float(CivilianKnockedOut) * 5.0;
 
@@ -274,7 +274,7 @@ function CalculateStealthRating()
     rating -= float(PlayerIdentified) * 15.0;
     rating -= float(BodyFound) * 15.0;
     rating -= float(AlarmTriggered) * 20.0;
-    
+
     rating -= float(EnemyKilled) * 15.0;
     rating -= float(CivilianKilled) * 30.0;
 
@@ -290,26 +290,26 @@ function string GetFormattedPlayTime(float TimeInSeconds)
 {
     local int Hours, Minutes, Seconds;
     local string TimeString;
-    
+
     Hours = int(TimeInSeconds / 3600);
     Minutes = int((TimeInSeconds - (Hours * 3600)) / 60);
     Seconds = int(TimeInSeconds - (Hours * 3600) - (Minutes * 60));
-    
+
     if (Hours < 10)
         TimeString = "0" $ Hours $ ":";
     else
         TimeString = Hours $ ":";
-        
+
     if (Minutes < 10)
         TimeString = TimeString $ "0" $ Minutes $ ":";
     else
         TimeString = TimeString $ Minutes $ ":";
-        
+
     if (Seconds < 10)
         TimeString = TimeString $ "0" $ Seconds;
     else
         TimeString = TimeString $ Seconds;
-        
+
     return TimeString;
 }
 

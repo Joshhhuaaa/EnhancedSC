@@ -1,4 +1,4 @@
-class EToiletPaper extends EGameplayObject; 
+class EToiletPaper extends EGameplayObject;
 
 defaultproperties
 {

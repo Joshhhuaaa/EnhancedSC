@@ -8,13 +8,13 @@ class CheatManager extends Object within PlayerController
 	native;
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // ***********************************************************************************************
 var bool bGhost;
 var Actor RadiiActorList[8];
 var int iCurViewActor;
 
-/* 
+/*
 Scale the player's size to be F * default size
 */
 exec function ChangeSize(float F)
@@ -39,7 +39,7 @@ exec function Fly()
 }
 
 exec function Walk()
-{	
+{
 	if (Pawn != None)
 	{
 		Pawn.SetCollision(true, true , true);
@@ -87,7 +87,7 @@ exec function Avatar(string ClassName)
 {
 	local class<actor> NewClass;
 	local Pawn P;
-		
+
 	NewClass = class<actor>(DynamicLoadObject(ClassName, class'Class'));
 	if (NewClass != None)
 	{
@@ -157,9 +157,9 @@ exec function ViewClass(class<actor> aClass, optional bool bQuiet, optional bool
 			if (bFound)
 				break;
 		}
-		if (other == ViewTarget) 
+		if (other == ViewTarget)
 			bFound = true;
-	}  
+	}
 
 	if (first != None)
 	{
@@ -172,7 +172,7 @@ exec function ViewClass(class<actor> aClass, optional bool bQuiet, optional bool
 }
 
 // ***********************************************************************************************
-// * Purpose : For Viewing Targets in a radius outwards from player 
+// * Purpose : For Viewing Targets in a radius outwards from player
 //		Only for Pawns - won't show a Pawn if it doesn't have a Controller. (no cams/turrets/dead ppl)
 // ***********************************************************************************************
 exec function ViewClassRadii(class<actor> aClass)
@@ -185,27 +185,27 @@ exec function ViewClassRadii(class<actor> aClass)
 	if (RadiiActorList[0] == none)
 	{
 		MinimumDistance = 0.0f;
-		
+
 		for (i = 0; i < 8; i++)
 		{
 			CurrentActorDistance = 1000000.0f;
-			
+
 			foreach AllActors(aClass, CurActor)
 			{
 				if (Pawn(CurActor) != none && Pawn(CurActor).Controller != none)
 				{
 					CurSize = VSize(CurActor.Location - Pawn.Location);
-					
+
 					if (CurSize > MinimumDistance && CurSize < CurrentActorDistance)
 					{
-						//log(i $ "==>  Considering actor:  "$ CurActor $ "   at Distance : " $ CurSize $ 
+						//log(i $ "==>  Considering actor:  "$ CurActor $ "   at Distance : " $ CurSize $
 						//	"  within minimum / currentactor distances[ " $ MinimumDistance $ "," $ CurrentActorDistance $ "]");
-						
+
 						RadiiActorList[i] = CurActor;
 						CurrentActorDistance = CurSize;
 					}
-				}					
-			}		
+				}
+			}
 
 			MinimumDistance = CurrentActorDistance;
 		}
@@ -227,7 +227,7 @@ exec function ViewClassRadii(class<actor> aClass)
 	{
 		// return to player view, clear the list so it will be rebuilt
 		//log("Rebuilding List....");
-		
+
 		SetViewTarget(Pawn);
 		iCurViewActor = 0;
 		for (i = 0; i < 8; i++)

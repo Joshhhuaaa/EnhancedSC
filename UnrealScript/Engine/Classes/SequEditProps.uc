@@ -1,13 +1,13 @@
 //=============================================================================
 // Object to facilitate properties editing
 //=============================================================================
-//  Sequence / Mesh editor object to expose/shuttle only selected editable 
-//  
+//  Sequence / Mesh editor object to expose/shuttle only selected editable
+//
 
 class SequEditProps extends Object
 	noexport
 	hidecategories(Object)
-	native;	
+	native;
 
 var() float             NewRate;
 var() float             NewCompression;

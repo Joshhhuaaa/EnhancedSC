@@ -12,13 +12,13 @@ class ELantern extends EGameplayObject;
 function PostBeginPlay()
 {
 	Super.PostBeginplay();
-	
+
 	if (ObjectLights.Length > 0)
 	{
 		ObjectLights[0].bMovable = true;
 		AttachToBone(ObjectLights[0],'Bone03');
 	}
-	
+
 	LoopAnim('Swing');
 }
 

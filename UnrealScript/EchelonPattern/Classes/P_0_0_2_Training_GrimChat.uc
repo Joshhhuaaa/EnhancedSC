@@ -114,7 +114,7 @@ ThirdChat:
     End();
 FinalLoop:
     Log("Sam has drained it, looping the endings.");
-    JumpRandom('ANiceties', 0.50, 'BNiceties', 1.00, , , , , ,); 
+    JumpRandom('ANiceties', 0.50, 'BNiceties', 1.00, , , , , ,);
     End();
 ANiceties:
     Talk(Sound'S0_0_2Voice.Play_00_18_19', 1, , TRUE, 0);

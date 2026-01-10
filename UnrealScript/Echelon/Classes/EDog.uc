@@ -1,5 +1,5 @@
 //===============================================================================
-//  [EDog] 
+//  [EDog]
 //
 //	Nasty dawg base class.
 //
@@ -50,7 +50,7 @@ function PostBeginPlay()
 
 	if (AI != None)
 	{
-		AI.Master =	EPawn(GetMatchingActor(MasterTag)); 
+		AI.Master =	EPawn(GetMatchingActor(MasterTag));
 	}
 }
 
@@ -78,26 +78,26 @@ function SwitchAnims()
 
 	switch (BaseMoveFlags)
 	{
-		case MOVE_WalkRelaxed : 
-		case MOVE_WalkNormal : 
+		case MOVE_WalkRelaxed :
+		case MOVE_WalkNormal :
 		case MOVE_WalkAlert :
 
-	
+
 			AWait					 = 'waitstnmfd0';
 			ABlendMovement.m_forward = 'walkstnmfd0';
 			SoundWalkingRatio = 0.60;
 			break;
-			
+
 		case MOVE_JogAlert :
 		case MOVE_JogNoWeapon:
-			
+
 			AWait					 = 'waitstalfd0';
 			ABlendMovement.m_forward = 'runstalfd0';
 			SoundWalkingRatio = 1.0;
 			break;
-			
-		case MOVE_CrouchWalk :  
-		case MOVE_CrouchJog : 
+
+		case MOVE_CrouchWalk :
+		case MOVE_CrouchJog :
 			AWait					 = 'waitcrnmfd0';
 			bWantsToCrouch = true;
 			break;
@@ -149,7 +149,7 @@ event float GetMoveSpeed(MoveFlags MoveFlags)
 	switch (MoveFlags)
 	{
 		case MOVE_JogAlert :
-		case MOVE_JogNoWeapon: 
+		case MOVE_JogNoWeapon:
 
 			if (Goal.m_GoalType == GOAL_Charge && dist < 90)
 				return 100.0f;
@@ -159,10 +159,10 @@ event float GetMoveSpeed(MoveFlags MoveFlags)
 				return 400.0f;
 			else if (Goal.m_GoalType == GOAL_Charge && dist < 150)
 				return 445.0f;
-			else					
+			else
 				return 490.0f;
-			
-		default:			
+
+		default:
 			return 100.0f;
 	}
 }
@@ -180,7 +180,7 @@ event CheckForTransition(MoveFlags NewMoveFlags)
 		case MOVE_Search:
 		case MOVE_JogAlert:
 		case MOVE_JogNoWeapon:
-			
+
 			// are we crouching?
 			if (!bIsCrouched)
 			{
@@ -204,7 +204,7 @@ event CheckForTransition(MoveFlags NewMoveFlags)
 
 			if (bIsCrouched)
 			{
-				switch (NewMoveFlags) 
+				switch (NewMoveFlags)
 				{
 					case MOVE_WalkRelaxed:
 					case MOVE_WalkNormal:
@@ -229,14 +229,14 @@ event GetRandomWaitAnim(out name ReturnName)
 
 	//
 	//
-	// CHOOSE STANDARD PERSONALITY ANIMATIONS 
+	// CHOOSE STANDARD PERSONALITY ANIMATIONS
 	//
 	//
 
 	choice = rand(6);
 
 	switch (BaseMoveFlags)
-	{				
+	{
 		case MOVE_WalkRelaxed:
 		case MOVE_WalkNormal:
 		case MOVE_WalkAlert:
@@ -278,14 +278,14 @@ function PlayBlend(SAnimBlend	anims,
 				   float		minForwardRatio,
 				   float		tweenTime,
 				   optional bool noloop)
-{	
+{
 	if (!IsPlaying(PlayBreath))
 		PlaySound(PlayBreath, SLOT_SFX);
 
 	// loop movement animation
 	LoopAnimOnly(anims.m_forward,,tweenTime);
 
-	// orient bones accordingly 
+	// orient bones accordingly
 	SetMotionBones(moveDir, 30.0f);
 }
 
@@ -308,7 +308,7 @@ event bool RotateTowardsRotator(rotator Target, optional int TurnSpeed, optional
 
 // ***********************************************************
 //
-// DAMAGE STUFF 
+// DAMAGE STUFF
 //
 // ***********************************************************
 function ResolveDamageType(int PillTag, vector Momentum, class<DamageType> DamageType)
@@ -325,13 +325,13 @@ function ResolveDamageType(int PillTag, vector Momentum, class<DamageType> Damag
 		case 'EKnocked':
 		case 'EElectrocuted':
 		case 'EStunned':
-			Knocked(PillTag, Momentum); 
+			Knocked(PillTag, Momentum);
 			break;
 
 		case 'ESleepingGas':
 		case 'EBurned':
 			if (Speed < 0.7f * GetMoveSpeed(MOVE_JogAlert) || Health <= 50)
-				GotoState('s_Stunned','Gassed'); 
+				GotoState('s_Stunned','Gassed');
 			break;
 	}
 }

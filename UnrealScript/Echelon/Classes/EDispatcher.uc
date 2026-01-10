@@ -1,5 +1,5 @@
 //=============================================================================
-// EDispatcher: receives one trigger (corresponding to its name) as input, 
+// EDispatcher: receives one trigger (corresponding to its name) as input,
 // then triggers a set of specifid events with optional delays.
 //=============================================================================
 class EDispatcher extends Triggers;
@@ -10,7 +10,7 @@ class EDispatcher extends Triggers;
 // EDispatcher variables.
 
 var() name  OutEvents[8]; // Events to generate.
-var() float OutDelays[8]; // Relative delays before generating events. 
+var() float OutDelays[8]; // Relative delays before generating events.
 var int i;                // Internal counter.
 
 //=============================================================================

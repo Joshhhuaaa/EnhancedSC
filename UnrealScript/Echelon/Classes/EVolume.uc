@@ -6,8 +6,8 @@ class EVolume extends PhysicsVolume
 
 var() enum EProximity
 {
-	PlayerProximity,	
-	NPCProximity,	    
+	PlayerProximity,
+	NPCProximity,
 	PawnProximity
 
 } ProximityType;
@@ -60,7 +60,7 @@ function PostBeginPlay()
 	{
 		P.SetVolumeZone(true, self);
 	}
-	
+
 	// JFPDemoPatch, november 16th 2002:
 	//               With the new menu system the game freezes when we try to save from the checkpoints.
 	//               We go to the save state, but we can't render the message box, so we can't continue since
@@ -118,7 +118,7 @@ function bool IsRelevant(actor Other)
 				else
 					return false;
 
-			
+
 	}
 }
 
@@ -131,9 +131,9 @@ function Touch(actor Other)
 
 	Super.Touch(Other);
 
-	if ((bSavegame) 
-     && (Other.bIsPlayerPawn) 
-     && (EPawn(Other).Controller != None) 
+	if ((bSavegame)
+     && (Other.bIsPlayerPawn)
+     && (EPawn(Other).Controller != None)
 	 && ((!EchelonGameInfo(Level.Game).bEliteMode && EchelonLevelInfo(Level).AlarmStage < 4)
 	 || (EchelonGameInfo(Level.Game).bEliteMode && EchelonLevelInfo(Level).AlarmStage < 3)) // Joshua - Elite only allows for 3 alarms
 	 && !IsGameOver()) // Do not save if the player is about to be put GameOver because of the alarm stage
@@ -144,10 +144,10 @@ function Touch(actor Other)
 			EPlayerController(EPawn(Other).Controller).bAutoSaveLoad = true;
 			EPlayerController(EPawn(Other).Controller).bSavingTraining = true;
 			EPlayerController(EPawn(Other).Controller).bCheckpoint = true;
-			
+
 			// Joshua - Get the oldest checkpoint to overwrite (rotates between CHECKPOINT1, CHECKPOINT2, CHECKPOINT3)
 			CheckpointName = EPlayerController(EPawn(Other).Controller).GetOldestCheckpointName();
-			
+
 			// Joshua - Update LastSaveName for checkpoint before saving
 			EPlayerController(EPawn(Other).Controller).LastSaveName = CheckpointName;
 			ConsoleCommand("SAVEGAME FILENAME=" $ CheckpointName $ " OVERWRITE=TRUE");
@@ -170,10 +170,10 @@ function Touch(actor Other)
 				foreach DynamicActors(class'EGroupAI', Group, GroupTag)
 				{
 					Group.SendJumpEvent(JumpLabel,bAffectLastZone,bForceJump);
-					break; 
-				}			
+					break;
+				}
 			}
-			
+
 		}
 
 	}

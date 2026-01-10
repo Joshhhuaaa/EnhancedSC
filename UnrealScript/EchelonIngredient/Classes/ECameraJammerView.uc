@@ -10,7 +10,7 @@
 class ECameraJammerView extends EObjectHud;
 
 /*-----------------------------------------------------------------------------
-                        T Y P E   D E F I N I T I O N S 
+                        T Y P E   D E F I N I T I O N S
 -----------------------------------------------------------------------------*/
 const CAMJAM_WIDTH      = 142;
 const CAMJAM_HEIGHT     = 75;
@@ -28,7 +28,7 @@ const SCREEN_HALF_Y     = 239;
 const ANIM_SPEED        = 0.5f;
 
 /*-----------------------------------------------------------------------------
-                        M E M B E R   V A R I A B L E S 
+                        M E M B E R   V A R I A B L E S
 -----------------------------------------------------------------------------*/
 var color lightgreen;
 var color darkgreen;
@@ -47,7 +47,7 @@ var bool  bBlink;
 /*-----------------------------------------------------------------------------
      Function:      PostBeginPlay
 
-     Description:   
+     Description:
 -----------------------------------------------------------------------------*/
 function PostBeginPlay()
 {
@@ -61,7 +61,7 @@ function PostBeginPlay()
 /*-----------------------------------------------------------------------------
      Function:      DrawView
 
-     Description:   
+     Description:
 -----------------------------------------------------------------------------*/
 function DrawView(HUD Hud,ECanvas Canvas)
 {
@@ -106,7 +106,7 @@ function DrawView(HUD Hud,ECanvas Canvas)
 /*-----------------------------------------------------------------------------
      Function:      DrawBorders
 
-     Description:   
+     Description:
 -----------------------------------------------------------------------------*/
 function DrawBorders(ECanvas Canvas, int xPos, int yPos, int width, int height)
 {
@@ -156,12 +156,12 @@ function DrawBorders(ECanvas Canvas, int xPos, int yPos, int width, int height)
 /*-----------------------------------------------------------------------------
      Function:      DrawBatteryMeter
 
-     Description:   
+     Description:
 -----------------------------------------------------------------------------*/
 function DrawBatteryMeter(ECanvas Canvas, int xPos, int yPos)
 {
     local float e;
-    
+
 	Canvas.Style = ERenderStyle.STY_Alpha;
     // FILL BACKGROUND //
     Canvas.DrawLine(xPos, yPos, BATTERY_WIDTH, BATTERY_HEIGHT, Canvas.black, -1, eLevel.TGAME);
@@ -194,7 +194,7 @@ function DrawBatteryMeter(ECanvas Canvas, int xPos, int yPos)
 /*-----------------------------------------------------------------------------
      Function:      DrawCamJamInfo
 
-     Description:   
+     Description:
 -----------------------------------------------------------------------------*/
 function DrawCamJamInfo(ECanvas Canvas, int xPos, int yPos, int width)
 {
@@ -213,7 +213,7 @@ function DrawCamJamInfo(ECanvas Canvas, int xPos, int yPos, int width)
     {
         szText = Canvas.LocalizeStr("JAMMING");
         Canvas.DrawColor.A = 192;
-    }   
+    }
     else if (camjam.GetStateName() != 's_Jamming' && camjam.CurrentCharge < camjam.BatteryCharge)
         szText = Canvas.LocalizeStr("RECHARGING");
 
@@ -240,7 +240,7 @@ function DrawCamJamInfo(ECanvas Canvas, int xPos, int yPos, int width)
 /*-----------------------------------------------------------------------------
      Function:      DrawCrosshair
 
-     Description:   
+     Description:
 -----------------------------------------------------------------------------*/
 function DrawCrosshair(ECanvas Canvas)
 {
@@ -253,7 +253,7 @@ function DrawCrosshair(ECanvas Canvas)
 
     if (camjam.JammedCamera != None)
         Canvas.SetDrawColor(79, 8, 8);
-    else        
+    else
         Canvas.SetDrawColor(38, 81, 50);
 
     Canvas.SetPos(SCREEN_HALF_X - width / 2, SCREEN_HALF_Y - height / 2);

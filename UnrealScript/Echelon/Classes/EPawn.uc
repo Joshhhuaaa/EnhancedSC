@@ -59,7 +59,7 @@ var		rotator					m_inertRot;
 var		EchelonGameInfo			eGame;
 // NPC movement
 
-var				Rotator					DesiredTurnTarget;				// rotator towards which we are trying to turn 
+var				Rotator					DesiredTurnTarget;				// rotator towards which we are trying to turn
 
 var(Debug)		MoveFlags				BaseMoveFlags;					// currently selected set of animations for movement
 
@@ -132,7 +132,7 @@ var(AI)			bool					bDontSendNoise;
 var				bool					bIsAttachedToAnimObject;		// is NPC attached to an EAnimatedObject?
 var(Debug)		bool					bAlwaysFrag;					// always fresh, always fragtastic
 var				bool					bPitchBlack;
-var(AI)		    bool					bIgnorePitchBlack;              // This NPC doesn't worry (slow down) when in pitch black conditions 
+var(AI)		    bool					bIgnorePitchBlack;              // This NPC doesn't worry (slow down) when in pitch black conditions
 var             bool                    bIsHotBlooded;                   // This NPC will fire at Sam when using BARK_LookingForYou
 var(Interaction)bool                    bForceNoInteraction;
 var(AI)         bool					bCanWhistle;
@@ -177,7 +177,7 @@ enum EAIControllerState
 
 var(DefaultAI)	EAIControllerState		InitialAIState;
 var(DefaultAI)	EchelonEnums.GoalType	InitialGoalType;				// Initial Goal : Type (guard / patrol recommended)
-var(DefaultAI)	Name					InitialGoalTag;				
+var(DefaultAI)	Name					InitialGoalTag;
 var(DefaultAI)	bool					InitialGoalFlag;
 var(DefaultAI)	float					InitialGoalValue;
 var(DefaultAI)	MoveFlags				InitialGoalMoveFlags;
@@ -202,7 +202,7 @@ var(Vision)		float					m_MaxPeripheralVisionDistance;  // how far maximum can we
 var(Vision)		bool					bUseTransitionTable;
 
 var(Hearing)	NoiseType				IgnoreGroupNoiseType;			// if we receive noise from our group, ignore any with type LESS THAN OR EQUAL to this value
-var(Hearing)	NoiseType				IgnoreNPCNoiseType;				// ignore noises LESS THAN OR EQUAL to this if they come from other NPCs 
+var(Hearing)	NoiseType				IgnoreNPCNoiseType;				// ignore noises LESS THAN OR EQUAL to this if they come from other NPCs
 var(Hearing)	NoiseType				IgnoreAllNoiseType;				// ignore all noises up to this noise type
 
 
@@ -340,11 +340,11 @@ var		vector					TargetLocation;			// position at which we are aiming (presently 
 // blending
 var(Movement)	int				YawTurnSpeed;			// used for player and for upper body rotations for NPC
 var(Movement)	int				TurnSpeed_Default;		// specify different general turning speeds per AI state
-var(Movement)	int				TurnSpeed_Aware;		
-var(Movement)	int				TurnSpeed_Alert;		
+var(Movement)	int				TurnSpeed_Aware;
+var(Movement)	int				TurnSpeed_Alert;
 var(Movement)	float			MaxAimAngle_Default;	// maximum angles for aiming by state
-var(Movement)	float			MaxAimAngle_Aware;	
-var(Movement)	float			MaxAimAngle_Alert;	
+var(Movement)	float			MaxAimAngle_Aware;
+var(Movement)	float			MaxAimAngle_Alert;
 
 // Animation RESERVED Channel
 
@@ -499,7 +499,7 @@ var		name					AWait,
 								ARadioBegin,
 								ARadio,
 								ARadioEnd;
- 
+
 
 // for state s_Transition:
 
@@ -519,7 +519,7 @@ struct STransitionInfo
 	var float					TransitionTime;					// how long to transition for, if not the length of the animation
 	var float					TransitionTween;				// tween time during non-root motion transition
 	var bool					bRootMotionTransition;			// does transition anim use root motion?
-	var bool					bTransitionWithRotation;		// should we allowing turning when PlayWaitingBlend is called during s_Tran?	
+	var bool					bTransitionWithRotation;		// should we allowing turning when PlayWaitingBlend is called during s_Tran?
 	var bool					bBackwards;						// play animation backwards
 	var ETransitionNotifyType	NotifyType;						// if transition handles a Notify, specify type here.
 };
@@ -541,7 +541,7 @@ struct SampleBrightness4Bones
     var float Brightness;
 };
 
-var() Array<SampleBrightness4Bones> PawnSampleBrightness;	
+var() Array<SampleBrightness4Bones> PawnSampleBrightness;
 
 // PILL STUFF
 
@@ -601,7 +601,7 @@ function name GetFireBone(int i)
 {
 	switch (i)
 	{
-	case 0: 
+	case 0:
 		if (FRand() > 0.5)
 			return 'B Spine1';
 		else
@@ -652,7 +652,7 @@ function CatchOnFire()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		AttenuationChances	1 is 100% chances of killing all flames
 //		FlameToDelete		Number of flames that are killed .. no chance factor
 //------------------------------------------------------------------------
@@ -666,7 +666,7 @@ function AttenuateFire(float AttenuationChances, optional int FlameToDelete)
 	{
 		if (FRand() <= AttenuationChances || FlameToDelete > 0)
 		{
-			//Log("Killing Flame["$i$"]"); 
+			//Log("Killing Flame["$i$"]");
 			BodyFlames[i].Kill();
 			BodyFlames.Remove(i,1);
 
@@ -681,7 +681,7 @@ function AttenuateFire(float AttenuationChances, optional int FlameToDelete)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Turn on/off head light if Pawn can use it
 //------------------------------------------------------------------------
 event ToggleHeadLight(bool bTurnOn)
@@ -712,13 +712,13 @@ event ToggleHeadLight(bool bTurnOn)
 
 
 
-// NATIVE FUNCTIONS 
+// NATIVE FUNCTIONS
 
 native(1503) final function bool ReachedDestination(vector Direction, Actor GoalActor);
 native(1537) final function ExitRootMotion(name TargetAnim);
 native(1534) final function ForceAnimParams(int Channel, name AnimSequence, float AnimFrame, float AnimRate);						// TODO : Move to Actor?
 native(1540) final function bool IsSequenceInCurrentAnim(name AnimSequence);														// TODO : Move to Actor?
-native(1541) final function BlendAnims(int SourceChannel, name SourceAnim, float SourceTweenTime, 
+native(1541) final function BlendAnims(int SourceChannel, name SourceAnim, float SourceTweenTime,
 									   int TargetChannel, name TargetAnim, float TargetTweenTime, float BlendAlpha);				// TODO : Move to Actor?
 native(1546) final function bool IsPawnTalking();
 native(1548) final function name ChooseDeathAnimation(int PillTag, vector momentum);
@@ -751,7 +751,7 @@ event SpecialTick(float DeltaTime)
 	local float CumulativeDamage;
 	local class<DamageType> Type;
 	local Pawn	Instigator;
-	
+
 	// If Npc is dead .. reduce HeatIntensity
 	if (Health <= 0)
 	{
@@ -780,7 +780,7 @@ event SpecialTick(float DeltaTime)
 
 	ResidualAmbientDamage += CumulativeDamage * DeltaTime;
 	DamageThisTick = ResidualAmbientDamage;
-	
+
 	//Log(self$" SpecialTick ambientDam["$AmbientDamagePerSeconds$"] AmbientFire["$AmbientDamageFromFire$"] ResidualAmbientDamage["$ResidualAmbientDamage$"] DamageThisTick["$DamageThisTick$"]");
 
 	if (DamageThisTick > 0)
@@ -873,10 +873,10 @@ function plog(coerce string S)
 }
 
 //---------------------------------------[David Kalina - 10 Apr 2001]-----
-// 
+//
 // Description
 //		Initialization (pre-controller possession)
-// 
+//
 //------------------------------------------------------------------------
 function PreBeginPlay()
 {
@@ -891,15 +891,15 @@ function PostBeginPlay()
 {
 	local int i;
 
-	// set up anims 
+	// set up anims
 	InitAnims();
 
 	BaseMoveFlags = InitialGoalMoveFlags;
 	if (BaseMoveFlags == MOVE_NotSpecified)
 		BaseMoveFlags = MOVE_WalkRelaxed;
 
-	SwitchAnims();			
-		
+	SwitchAnims();
+
 	Super.PostBeginPlay();
 
 	m_climbingUpperHand = CHNONE;
@@ -960,10 +960,10 @@ function LookUpSatchel()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Do a Table lookup on the current Visibility Factor.
 //		GetVisibilityFactor() will only compute if necessary for a given frame.
-//		
+//
 //------------------------------------------------------------------------
 event VisibilityRating GetActorVisibility()
 {
@@ -971,7 +971,7 @@ event VisibilityRating GetActorVisibility()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Show actor stealth and lighting info
 //------------------------------------------------------------------------
 function show_lighting_debug_info(Canvas Canvas)
@@ -981,44 +981,44 @@ function show_lighting_debug_info(Canvas Canvas)
 	offset_x = 20;
 	offset_y = 20;
 	inc_y = 10;
-	
+
 	Canvas.Font = Canvas.ETextFont;
-	Canvas.SetPos(offset_x, offset_y);			       
+	Canvas.SetPos(offset_x, offset_y);
 	Canvas.DrawText("Actor Visibility: " $ VisibilityTableLookup(VisibilityFactor),false);
 	offset_y = offset_y + inc_y;
-		
+
 	Canvas.SetPos(offset_x, offset_y);
 	Canvas.DrawText("Base Visibility: " $ VisibilityFactor,false);
 	offset_y = offset_y + inc_y;
-		    
-	Canvas.SetPos(offset_x, offset_y);	
+
+	Canvas.SetPos(offset_x, offset_y);
 	Canvas.DrawText("Number of Light: " $ RelevantLights.Length,false);
 	offset_y = offset_y + inc_y;
-	
-	Canvas.SetPos(offset_x, offset_y);	
+
+	Canvas.SetPos(offset_x, offset_y);
 	Canvas.DrawText("Ambient Light Color: R="$RelevantAmbientColor.R$" G="$RelevantAmbientColor.G$" B="$RelevantAmbientColor.B$" A=" $ RelevantAmbientColor.A,false);
 	offset_y = offset_y + inc_y;
 
 	for (i = 0;i < RelevantLights.Length;i++)
-	{		  	    
+	{
 	    Canvas.SetPos(offset_x, offset_y);
 		Canvas.DrawText("Light Name: " $ RelevantLights[i].Name,false);
 		offset_y = offset_y + inc_y;
 	}
 
 	offset_y = offset_y + inc_y;
-	Canvas.SetPos(offset_x, offset_y);	
+	Canvas.SetPos(offset_x, offset_y);
 	Canvas.DrawText("Last Noise Radius: " $ LastNoiseRadius, false);
 	offset_y = offset_y + inc_y;
 }
 
 
 //---------------------------------------[David Kalina - 22 Oct 2001]-----
-// 
+//
 // Description
 //		Return a wait cycle depending on the current MoveFlags.
 //		Should be redefined in subclasses.
-// 
+//
 //------------------------------------------------------------------------
 
 event GetRandomWaitAnim(out name ReturnName)
@@ -1091,7 +1091,7 @@ function SetVolumeZone(bool bEntering, EVolume Volume)
 //************************************************************************
 //************************************************************************
 //---------------------------------------[David Kalina - 20 Aug 2001]-----
-// 
+//
 // Description
 //		Get appropriate SurfaceNoiseInfo struct from EchelonGameInfo.
 //
@@ -1100,7 +1100,7 @@ function SetVolumeZone(bool bEntering, EVolume Volume)
 //
 // Output
 //		function SurfaceNoiseInfo : Noise Info class of surface.
-// 
+//
 //------------------------------------------------------------------------
 
 function SurfaceNoiseInfo GetFootstepNoiseInfo(SurfaceNoiseType ntype)
@@ -1124,10 +1124,10 @@ function SpawnDust(name Bone)
 }
 
 //---------------------------------------[David Kalina - 25 Apr 2001]-----
-// 
+//
 // Description
 //		Called by Notifications in animations.
-// 
+//
 //------------------------------------------------------------------------
 
 function Touch(Actor Other)
@@ -1137,7 +1137,7 @@ function Touch(Actor Other)
 	local EPawn Touched;
 
 	Super.Touch(Other);
-	
+
 	// While EVolumeTrigger is not a volume
 	volume			= EVolume(Other);
 	volumeTrigger	= EVolumeTrigger(Other);
@@ -1168,15 +1168,15 @@ function UnTouch(Actor Other)
 	local EPawn Touched;
 
 	Super.Touch(Other);
-	
+
 	// While EVolumeTrigger is not a volume
 	volume			= EVolume(Other);
 	volumeTrigger	= EVolumeTrigger(Other);
-	Touched         = ePawn(Other);	
+	Touched         = ePawn(Other);
 
 	if ((volumeTrigger != None && volumeTrigger.iDirtynessFactor != 0) ||
 	   (volume != None && volume.iDirtynessFactor != 0))
-	{		
+	{
 		currentDirtynessFactor = 0;
 	}
 
@@ -1196,11 +1196,11 @@ function ProcessFootPrint(bool rightFoot, out int footDirtyness, coords footCoor
 	local vector		HitLocation, HitNormal;
 	local Material		HitMaterial;
 	local Actor			hitActor;
-		
+
 	local EFootPrint	footPrint;
 	local int			slice;
 	local int			i;
-	
+
 	footStepRotator = OrthoRotation(footCoord.XAxis, footCoord.YAxis, footCoord.ZAxis);
 
 	if (currentDirtynessFactor != 0)
@@ -1209,13 +1209,13 @@ function ProcessFootPrint(bool rightFoot, out int footDirtyness, coords footCoor
 	}
 
 	hitActor = TraceBone(pill,
-					   HitLocation, 
-					   HitNormal, 
-					   footCoord.Origin + vect(0, 0, -100), 
+					   HitLocation,
+					   HitNormal,
+					   footCoord.Origin + vect(0, 0, -100),
 				       footCoord.Origin,
 					   HitMaterial,
 					   false);
-	
+
 	while (Modifier(HitMaterial) != none)
 	{
 		HitMaterial = Modifier(HitMaterial).Material;
@@ -1235,7 +1235,7 @@ function ProcessFootPrint(bool rightFoot, out int footDirtyness, coords footCoor
 					break;
 				}
 			}
-			
+
 			if (i != Level.FootStepSurfaceToSubTexLink.Length)
 			{
 				if (!rightFoot)
@@ -1270,7 +1270,7 @@ function PlayRightHand()
 {
 	CurrentFoot = true;
 	PlaySound(Sound'FisherFoley.Play_Switch_FisherLedgeHand', SLOT_SFX);
-	
+
 	SpawnDust('B R hand');
 }
 
@@ -1278,7 +1278,7 @@ function PlayLeftHand()
 {
 	CurrentFoot = false;
 	PlaySound(Sound'FisherFoley.Play_Switch_FisherLedgeHand', SLOT_SFX);
-	
+
 	SpawnDust('B L Hand');
 }
 
@@ -1329,7 +1329,7 @@ function PlayFenceVibration()
 		PlaySound(Sound'FisherFoley.Play_Random_FisherFenceVib', SLOT_SFX);
 	else if (EPlayerController(Controller).LastFenceType == SURFACE_FenceVine)
 		PlaySound(Sound'FisherFoley.Play_Random_VineVibration', SLOT_SFX);
-}		
+}
 
 function PlayGearRun()
 {
@@ -1385,7 +1385,7 @@ function PlayPivot()
 {
 	//Needed a flag and this variable isnt used for SAM
 	Bark_Type = BARK_AboutToDie;
-	PlaySound(Sounds_Move, SLOT_SFX);	
+	PlaySound(Sounds_Move, SLOT_SFX);
 }
 
 function PlayAttackMove()
@@ -1395,7 +1395,7 @@ function PlayAttackMove()
 
 function PlayAttackGetDown()
 {
-    PlaySound(Sounds_AttackGetDown, SLOT_Barks);    
+    PlaySound(Sounds_AttackGetDown, SLOT_Barks);
 }
 
 function PlayAttackStop()
@@ -1418,10 +1418,10 @@ function PlaySneeze()
 }
 
 //-------------------------------[Matthew Clarke - August 16th 2002]-----
-// 
+//
 // Description
 //
-// 
+//
 //------------------------------------------------------------------------
 event bool ICanBark()
 {
@@ -1444,7 +1444,7 @@ event bool ICanBark()
 //************************************************************************
 
 //------------------------------------------------------------------------
-// 
+//
 // Description
 //		Called when Pawn anim state changes - also called to setup
 //		initial animations.  MUST BE DEFINED IN SUBCLASS.
@@ -1457,16 +1457,16 @@ function SwitchAnims() {}
 
 
 //---------------------------------------[David Kalina - 19 Jun 2001]-----
-// 
+//
 // Description
 //		Makes sure BaseMoveFlags and current AMove<..> anim set are coherent.
 //		Check for potential transition animation and goto transition state
 //		if necessary.
-// 
+//
 // Input
 //		NewMoveFlags : Current set of movement animations to choose.
 //		bForceUpdate : will update even if MoveFlags are the same (called when changing weapons, e.g.)
-// 
+//
 //------------------------------------------------------------------------
 
 event UpdateAnimationSet(MoveFlags NewMoveFlags, optional bool bForceUpdate)
@@ -1483,7 +1483,7 @@ event UpdateAnimationSet(MoveFlags NewMoveFlags, optional bool bForceUpdate)
 	NewMoveFlags = UpdateMoveFlagState(NewMoveFlags, EAIController(Controller).bRequestAwareState);
 
 	if (BaseMoveFlags != NewMoveFlags || bForceUpdate)
-	{		
+	{
 
 		// will add ETransitionInfo's to the TransitionQueue if necessary
 		//log("Dans UpdateAnimationSet checkfortransition NewMoveFlag: "$NewMoveFlags$" BaseMoveFlags: "$BaseMoveFlags);
@@ -1495,7 +1495,7 @@ event UpdateAnimationSet(MoveFlags NewMoveFlags, optional bool bForceUpdate)
 		BaseMoveFlags = NewMoveFlags;
 		SwitchAnims();
 	}
-	
+
     //reset anim flag
     if (!Controller.bIsPlayer)
         EAIController(Controller).bRequestAwareState = false;
@@ -1506,20 +1506,20 @@ event UpdateAnimationSet(MoveFlags NewMoveFlags, optional bool bForceUpdate)
 }
 
 //---------------------------------------[David Kalina - 27 May 2002]-----
-// 
+//
 // Description
-//		
-// 
+//
+//
 //------------------------------------------------------------------------
 
 
 
 //----------------------------------------[David Kalina - 9 Apr 2001]-----
-// 
+//
 // Description
 //		Get a weapon (appropriate to the situation?) from our inventory.
 //		If bWeaponInit is true, just place the weapon in hand.
-// 
+//
 //------------------------------------------------------------------------
 
 function SelectWeapon(optional bool bWeaponInit)
@@ -1529,11 +1529,11 @@ function SelectWeapon(optional bool bWeaponInit)
 	// Parse Extras Category and if find a weapon, select it
 
 	NewItem = FullInventory.GetItemByClass('EWeapon');
-	if (NewItem != none) 
+	if (NewItem != none)
 	{
 		HandItem		= NewItem;
 		CurrentWeapon	= EWeapon(NewItem);
-		
+
 		if (NewItem.IsA('EOneHandedWeapon'))
 			WeaponHandedness = 1;
 		else
@@ -1551,47 +1551,47 @@ function SelectWeapon(optional bool bWeaponInit)
 	// place weapon in hand immediately if initializing
 	if (bWeaponInit)
 		InitWeaponAttach();
-	
+
 	// update anim set after getting weapon
 	UpdateAnimationSet(BaseMoveFlags, true);
 }
 
 
 //---------------------------------------[David Kalina - 25 Sep 2001]-----
-// 
+//
 // Description
-//		Intended to check EAIController state and ensure that our 
+//		Intended to check EAIController state and ensure that our
 //		MoveFlags match the current state.
 //
 //		Redefined in EAIPawn.
 //
 // Input
-//		NewMoveFlags : 
+//		NewMoveFlags :
 //
 //------------------------------------------------------------------------
 
 event MoveFlags UpdateMoveFlagState(MoveFlags NewMoveFlags , optional bool _bForceAware)
 {
-	
+
 	return NewMoveFlags;
 }
 
 //---------------------------------------[David Kalina - 25 Mar 2002]-----
-// 
+//
 // Description
 //		Return appropriate Reaction Animation based on character and anim state.
-// 
+//
 //------------------------------------------------------------------------
 
 function GetReactionAnim(out name Anim, out name AnimB, out float BlendAlpha, optional eReactionAnimGroup ReactionGroup) {}
 
 
 //---------------------------------------[David Kalina - 13 Aug 2001]-----
-// 
+//
 // Description
-//		Check for possible transition animation between 
+//		Check for possible transition animation between
 //		our current BaseMoveFlags and the input NewMoveFlags.
-// 
+//
 //------------------------------------------------------------------------
 
 event CheckForTransition(MoveFlags NewMoveFlags);
@@ -1614,7 +1614,7 @@ function PlayAnimOnly(name Sequence, optional float Rate, optional float TweenTi
 
 	// NOTE : Don't kill PERSONALITYCHANNEL here, should be done separately
 	//Log("PlayAnimOnly"@Sequence@Rate@TweenTime@bBackward@bNoResetAction);
-	
+
 	AnimBlendParams(BLENDMOVEMENTCHANNEL,0,0,0);
 	ForceAnimParams(BLENDMOVEMENTCHANNEL, AnimSequence, 0.f, 0.f);
 	AnimBlendParams(REFPOSECHANNEL,0,0,0);
@@ -1849,20 +1849,20 @@ function PlayFenceBlend()
 }
 
 //---------------------------------------[David Kalina - 25 Apr 2001]-----
-// 
+//
 // Description
-//		For EAIController - calls PlayAnimOnly and makes sure the 
+//		For EAIController - calls PlayAnimOnly and makes sure the
 //		character stops moving.
 //
-//		Returns TRUE if animation gets played.  
-// 
+//		Returns TRUE if animation gets played.
+//
 //------------------------------------------------------------------------
 
 event bool PlayAnimNoMovement(name Sequence, optional float Rate, optional float TweenTime, optional bool bBackward)
 {
 	Acceleration = vect(0,0,0);       // stop moving dammit
 	GroundSpeed  = 0;
-	
+
 	if (Sequence == '')
 		PlayAnimOnly(AWait, Rate, TweenTime, bBackward);
 	else
@@ -1874,17 +1874,17 @@ event bool PlayAnimNoMovement(name Sequence, optional float Rate, optional float
 
 
 //---------------------------------------[David Kalina - 11 Jun 2001]-----
-// 
+//
 // Description
 //		Take anim Sequence and blend it over any and all existing channels.
 // Input
-//		Sequence : 
-//		Rate : 
-//		TweenTime : 
-// 
+//		Sequence :
+//		Rate :
+//		TweenTime :
+//
 //------------------------------------------------------------------------
 
-event BlendAnimOverCurrent(name Sequence, optional float BlendStrength, optional name BoneName, 
+event BlendAnimOverCurrent(name Sequence, optional float BlendStrength, optional name BoneName,
 						    optional float Rate, optional float TweenTime, optional int Channel, optional bool bBackward)
 {
 	// default values for optional vars
@@ -1923,12 +1923,12 @@ function vector GetCrouchExtent()
 }
 
 //---------------------------------------[Joshua - 4 Dec 2025]------------
-// 
+//
 // Description
 //		Returns the sort priority for an inventory item class.
 //		Lower values appear at the bottom of the inventory list.
 //		Items are grouped by category and sorted within each category.
-// 
+//
 //------------------------------------------------------------------------
 function int GetInventorySortPriority(class<EInventoryItem> ItemClass)
 {
@@ -1964,11 +1964,11 @@ function int GetInventorySortPriority(class<EInventoryItem> ItemClass)
 }
 
 //---------------------------------------[Joshua - 4 Dec 2025]------------
-// 
+//
 // Description
 //		Sorts the DynInitialInventory array so items appear in a consistent
 //		order in the inventory.
-// 
+//
 //------------------------------------------------------------------------
 function SortDynInitialInventory()
 {
@@ -2004,11 +2004,11 @@ function SortDynInitialInventory()
 }
 
 //----------------------------------------[David Kalina - 9 Apr 2001]-----
-// 
+//
 // Description
 //		Called after Controller possesses us so we know it's time to initialize.
 //		Spawn & Add Inventory to Controller.
-// 
+//
 //------------------------------------------------------------------------
 function PossessedBy(Controller C)
 {
@@ -2051,7 +2051,7 @@ function PossessedBy(Controller C)
 }
 
 //----------------------------------------[David Kalina - 5 Apr 2001]-----
-// 
+//
 // Description
 //		Rotates Pawn towards target rotator - only affects YAW.
 //
@@ -2073,7 +2073,7 @@ event bool RotateTowardsRotator(rotator Target, optional int TurnSpeed, optional
 
 	NewRotation = Target;
 	NewRotation.Yaw = InterpolateRotatorValue(TurnSpeed * Level.m_dt, Rotation.Yaw, Target.Yaw);
-	
+
 	if (Damping > 0.0)
 	{
 		NewRotation = InterpolateRotator(Damping, NewRotation, Rotation);
@@ -2082,32 +2082,32 @@ event bool RotateTowardsRotator(rotator Target, optional int TurnSpeed, optional
 	NewRotation.Pitch = Rotation.Pitch;
 	NewRotation.Roll = Rotation.Roll;
 	SetRotation(NewRotation);
-	
+
 	// are we sufficiently close?	TODO : should this maybe be based on prevRotation?
-	if ((Rotation.Yaw & 65535) == (Target.Yaw & 65535)) 
+	if ((Rotation.Yaw & 65535) == (Target.Yaw & 65535))
 		return true;
-	
+
 	return false;	// haven't finished rotating
 }
 
 //----------------------------------------[David Kalina - 6 Apr 2001]-----
-// 
+//
 // Description
-//		Given position, rotate Pawn around Z so that it is oriented 
+//		Given position, rotate Pawn around Z so that it is oriented
 //		towards that position.
 //
 // Input
 //		Target : position of target
-//		deltaTime : 
+//		deltaTime :
 //
 //------------------------------------------------------------------------
 event bool RotateTowardsPosition(vector Target, optional int TurnSpeed)
 {
 	local vector vDirection;
-	
+
 	vDirection		= Target - location;		// get difference between our position and target position
 	vDirection		= Normal(vDirection);		// normalize
-	
+
 	return RotateTowardsRotator(Rotator(vDirection), TurnSpeed);
 }
 
@@ -2122,7 +2122,7 @@ event bool RotateTowardsPosition(vector Target, optional int TurnSpeed)
 //************************************************************************
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Quick wrapper around old AnimSequence
 //------------------------------------------------------------------------
 function name GetAnimName(optional int Channel)
@@ -2135,8 +2135,8 @@ function name GetAnimName(optional int Channel)
 
 //---------------------------------------[ Alain Turcotte @ 30 mai 2001 ]-
 // Prototype		PlayWait
-// 
-// Description		
+//
+// Description
 //------------------------------------------------------------------------
 function PlayWait(float turnSpeed, optional float waitTween)
 {
@@ -2160,13 +2160,13 @@ function PlayWait(float turnSpeed, optional float waitTween)
 		{
 			if (bEWs)
 				waitTween = 0.3;
-			else 
+			else
 				waitTween = 0;
 			PlayAnim(AWaitCrouchIn, 1.2, waitTween);
 		}
 		else
 		{
-			if (Abs(turnSpeed) > 10000.0 && 
+			if (Abs(turnSpeed) > 10000.0 &&
 				((IsWaiting() && CurrentAnimSeq != AWaitCrouchIn && !IsTweening(0)) || CurrentAnimSeq == ATurnRightCrouch))
 			{
 				if (turnSpeed > 0)
@@ -2188,7 +2188,7 @@ function PlayWait(float turnSpeed, optional float waitTween)
 			// Or finished his wait animation
 			else if (!IsWaiting() || !IsAnimating())
 			{
-				// If a special anim has just ended, means the player didn't touch anything 
+				// If a special anim has just ended, means the player didn't touch anything
 				// so loop to next special anim faster
 				if (bEW)
 				{
@@ -2226,7 +2226,7 @@ function PlayWait(float turnSpeed, optional float waitTween)
 		{
 			if (bEWc)
 				waitTween = 0.3;
-			else 
+			else
 				waitTween = 0;
 			PlayAnim(AWaitCrouchIn,1.2,waitTween,,true);
 		}
@@ -2254,7 +2254,7 @@ function PlayWait(float turnSpeed, optional float waitTween)
 			// Or finished his wait animation
 			else if (!IsWaiting() || !IsAnimating())
 			{
-				// If a special anim has just ended, means the player didn't touch anything 
+				// If a special anim has just ended, means the player didn't touch anything
 				// so loop to next special anim faster
 				if (bEW)
 				{
@@ -2282,7 +2282,7 @@ function PlayWait(float turnSpeed, optional float waitTween)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Play a special wait anim after a cycle time
 //------------------------------------------------------------------------
 function bool ShouldPlaySpecialWait()
@@ -2290,20 +2290,20 @@ function bool ShouldPlaySpecialWait()
 	return WeaponStance == 0	&&		// Pevent the case where it would continue to loop an extra anim with gun in hand
 		   !IsExtraWaiting()	&&
 		   !IsPawnTalking()		&&
-		   !EPlayerController(Controller).bStopInput && 
+		   !EPlayerController(Controller).bStopInput &&
 			IdleTime != 0		&&
 			Level.TimeSeconds - IdleTime > 60.f;
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Is playing specific waiting anims
 //		f = 0 stand or crouch, f = 1 stand only, f = 2 crouch only
 //------------------------------------------------------------------------
 function bool IsExtraWaiting(optional int f);
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		is playing any waiting anims
 //------------------------------------------------------------------------
 function bool IsWaiting()
@@ -2312,19 +2312,19 @@ function bool IsWaiting()
 	CurrentAnimSeq = GetAnimName();
 
 	return (IsExtraWaiting()					||
-			CurrentAnimSeq == AWait				|| 
-			CurrentAnimSeq == AWaitCrouch		|| 
+			CurrentAnimSeq == AWait				||
+			CurrentAnimSeq == AWaitCrouch		||
 			CurrentAnimSeq == AWaitCrouchIn);
 }
 
 
 //---------------------------------------[David Kalina - 29 Aug 2001]-----
-// 
+//
 // Description
 //
 //		For the NPC : Wait while facing Focus with body oriented on ForwardRotation.
 //		Handles turning, etcetera.
-// 
+//
 //------------------------------------------------------------------------
 
 event PlayWaitingBlend(vector ForwardDirection, vector FocusDirection, float YawDiff, float TweenTime)
@@ -2346,10 +2346,10 @@ event PlayWaitingBlend(vector ForwardDirection, vector FocusDirection, float Yaw
 		// tweening to wait anims
 		AddTransition('s_Waiting', AWait,, 0.275f, 0.3f,,true);
 	}
-		
-	if (TransitionQueue.Length > 0) 
+
+	if (TransitionQueue.Length > 0)
 		GotoState('s_Transition');
-	
+
 }
 
 function PlayMoveTo(Rotator ViewRotation, optional Actor ViewTarget)
@@ -2367,7 +2367,7 @@ function DoJumping()
 
     // if we are on a platform
 	if (Base != None && Base.bIsMover)
-		Velocity.Z += Base.Velocity.Z; 
+		Velocity.Z += Base.Velocity.Z;
 }
 
 function bool IsJumpingForward()
@@ -2496,7 +2496,7 @@ function bool PlayLanding()
 	local float TweenTime;
 	local name CurrentAnimSeq;
 	CurrentAnimSeq = GetAnimName();
-	
+
 	horiSpeed = Velocity;
 	horiSpeed.Z = 0;
 
@@ -2529,12 +2529,12 @@ function bool PlayLanding()
 		PlayAnimOnly(AnimName,,TweenTime,,,EPlayerController(Controller).bInGunTransition);
 		return true;
 	}
-	else 
+	else
 		return false;
 }
 
 function PlayDoorOpen(optional bool RightSide)
-{		
+{
 	if (RightSide)
 	{
 		if (!bIsCrouched)
@@ -2572,7 +2572,7 @@ event bool IsReloading()
 {
 	local name CurrentAnimSeq;
 	CurrentAnimSeq = GetAnimName(ACTIONCHANNEL);
-	
+
 	return ((CurrentAnimSeq == AReload || CurrentAnimSeq == AReloadCrouch) && IsAnimating(ACTIONCHANNEL));
 }
 
@@ -2751,7 +2751,7 @@ function PlayZipLineTransition(bool crouched)
 {
 	local name CurrentAnimSeq;
 	CurrentAnimSeq = GetAnimName();
-	
+
 	if (crouched && CurrentAnimSeq != 'ZippCrAlBg0')
 		PlayAnimOnly('ZippCrAlBg0');
 	else if (!crouched && CurrentAnimSeq != 'ZippCrAlEd0')
@@ -2817,7 +2817,7 @@ function PlayRoll()
 {
 	local name CurrentAnimSeq;
 	local float CurrentFrame, CurrentRate;
-	
+
 	GetAnimParams(0, CurrentAnimSeq, CurrentFrame, CurrentRate);
 
 	if (CurrentFrame > 0.25 && CurrentFrame < 0.75)
@@ -2867,17 +2867,17 @@ function int GetApproxPillFromHit(Vector HitLocation)
 	// Head zone
 	if (Percent > 0.68)
 		PillTag = P_Head;
-	
+
 	// Middle zone .. Check for chest(front) or arms(left/right)
 	else if (Percent >= 0)
 	{
 		// Chest
-		if (DotY < 0) 
+		if (DotY < 0)
 			PillTag = P_LBody;
 		else
 			PillTag = P_RBody;
 	}
-	
+
 	// legs
 	else
 	{
@@ -2889,7 +2889,7 @@ function int GetApproxPillFromHit(Vector HitLocation)
 
 	if (PillTag == 0)
 		Log("ERROR in GetApproxBoneFromHit to calculate pill from cylinder");
-	
+
 	return PillTag;
 }
 
@@ -2904,9 +2904,9 @@ function SpawnWallHit(Actor HitActor, vector HitLocation, vector HitNormal, Mate
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		This version of TakeDamage uses the PillTag for its basic damage
-//		treatment.  
+//		treatment.
 //------------------------------------------------------------------------
 function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag)
 {
@@ -2943,7 +2943,7 @@ function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector Hi
 		Spawn(class'EBloodSplat', self,, HitLocation, Rotator(Normal(momentum)));
     }
 
-	if (instigatedBy == self) 
+	if (instigatedBy == self)
 		flatMomentum *= 0.6;
 	flatMomentum = flatMomentum / Mass;
 
@@ -2955,7 +2955,7 @@ function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector Hi
 
 	// Gives real damage depending on the hit zone
 	ResolveDamage(damage, PillTag, damageType);
-	
+
 	//Play HitSound depending on the pill
 	if (damageType == None)
 	{
@@ -2989,16 +2989,16 @@ function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector Hi
 	if (Health > 0)
 	{
 		// animation
-		if ((Level.TimeSeconds - EAIController(Controller).DamageTimer > 1.5f)  && 
+		if ((Level.TimeSeconds - EAIController(Controller).DamageTimer > 1.5f)  &&
            (Controller.GetStateName() != 's_alarmswitch') && (Controller.GetStateName() != 's_Groggy') &&
 		   damageType == None)
 			PlayHitE(PillTag, HitLocation, momentum);
 
-		MakeNoise(500.0, NOISE_Scream, CollisionHeight * 2.0f); 
+		MakeNoise(500.0, NOISE_Scream, CollisionHeight * 2.0f);
 
 		// resolve other damage types
 		ResolveDamageType(PillTag, momentum, damageType);
-			
+
 		if (instigatedBy != Self && Controller != None && (Controller.GetStateName() != 's_alarmswitch'))
 		{
 			//plog("passing damage to controller.");
@@ -3049,7 +3049,7 @@ function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector Hi
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Resolves damage depending on damagetype and hitlocation
 //------------------------------------------------------------------------
 function ResolveDamage(out int Damage, out int PillTag, out class<DamageType> damageType)
@@ -3080,7 +3080,7 @@ function ResolveDamage(out int Damage, out int PillTag, out class<DamageType> da
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Sends Pawn & controller in different state
 //------------------------------------------------------------------------
 function ResolveDamageType(int PillTag, vector Momentum, class<DamageType> DamageType)
@@ -3095,23 +3095,23 @@ function ResolveDamageType(int PillTag, vector Momentum, class<DamageType> Damag
 	switch (DamageType.name)
 	{
 		case 'EKnocked':
-			Knocked(PillTag, Momentum); 
+			Knocked(PillTag, Momentum);
 			break;
-		
+
 		case 'EElectrocuted':
-			Electrocuted(); 
+			Electrocuted();
 			break;
-		
+
 		case 'ESleepingGas':
 			if (Speed < 0.7f * GetMoveSpeed(MOVE_JogAlert) || Health <= 50)
 				Stunned('Gassed');
 			break;
-		
+
 		case 'EBurned':
 			if (Speed < 0.7f * GetMoveSpeed(MOVE_JogAlert) || Health <= 70)
 				Stunned('Burned');
 			break;
-		
+
 		case 'EStunned':
 			Stunned('Stunned');
 			break;
@@ -3119,7 +3119,7 @@ function ResolveDamageType(int PillTag, vector Momentum, class<DamageType> Damag
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Play Damage depending on hit bone
 //		Redefined in EAIPawn for special NPC handling.
 //------------------------------------------------------------------------
@@ -3195,7 +3195,7 @@ function PlayHitE(int PillTag, Vector HitLocation, Vector Momentum)
 			//log("left leg");
 			AnimName = ADamageLegLeft;
 			break;
-			
+
 		case P_LFoot :
 			AnimName = AHurtFootLeft;
 			break;
@@ -3210,7 +3210,7 @@ function PlayHitE(int PillTag, Vector HitLocation, Vector Momentum)
 			AnimName = AHurtFootRight;
 			break;
 	}
-	
+
 	//Log(self$" Playhit animation "$AnimName);
 	if (bInTransition)
 		PlayAnimOnly(AnimName,,0.30);
@@ -3220,7 +3220,7 @@ function PlayHitE(int PillTag, Vector HitLocation, Vector Momentum)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Should only and maybe not even depend on Bone hit to properly play
 //		Velocity falling
 //------------------------------------------------------------------------
@@ -3240,7 +3240,7 @@ function PlayDyingE(int PillTag, vector momentum)
 	// in case anim is not set (bad pilltag, etc.)
 	if (Anim == '')
 		Anim = ADeathDown;
-	
+
 	else if (Anim == ADeathLadder)
 		bFallToDeath = true;
 
@@ -3249,7 +3249,7 @@ function PlayDyingE(int PillTag, vector momentum)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Same as Died, but for unconscious
 //------------------------------------------------------------------------
 function Knocked(int PillTag, vector momentum)
@@ -3278,7 +3278,7 @@ function FallDeadLadder()
 	GotoState('s_FallToDeath');
 }
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Same as Died, but for electrification
 //------------------------------------------------------------------------
 function Electrocuted()
@@ -3301,7 +3301,7 @@ function Electrocuted()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Same as Died, but for stunned
 //------------------------------------------------------------------------
 function Stunned(name Label)
@@ -3318,7 +3318,7 @@ function Stunned(name Label)
 
 //---------------------------------------[ Alain Turcotte @ 18 Jul 2001 ]-
 // Prototype		Died
-// 
+//
 // Description		Shortcut to controller change state
 //------------------------------------------------------------------------
 function DiedE(Controller Killer, int PillTag, vector momentum)
@@ -3337,7 +3337,7 @@ function DiedE(Controller Killer, int PillTag, vector momentum)
 	PlayDyingE(PillTag, momentum);
 
 	StopAllSoundsActor(true);
-	
+
 	if (!Controller.bIsPlayer)
 	{
 		if (bIsDog)
@@ -3370,7 +3370,7 @@ function DiedE(Controller Killer, int PillTag, vector momentum)
             EAIController(Killer).NotifyKilledPlayer(self);
 
 
-		TriggerEvent(Event, self, Killer.Pawn);			
+		TriggerEvent(Event, self, Killer.Pawn);
 	}
 	else
 		TriggerEvent(Event, self, None);
@@ -3404,16 +3404,16 @@ function DiedE(Controller Killer, int PillTag, vector momentum)
 
 
 //----------------------------------------[David Kalina - 5 Feb 2002]-----
-// 
+//
 // Description
 //		TableAnims interface.
-// 
+//
 //------------------------------------------------------------------------
 
 function SitDown(bool RightSide, optional bool bUsingTable)
 {
 	//plog("SitDown called : bRightSide?  " $ RightSide);
-	
+
 	LockRootMotion(1, true);					// lock the root with root rotation enabled
 
 	if (!bUsingTable)
@@ -3442,7 +3442,7 @@ function StandUp(bool RightSide, optional bool bUsingTable)
 		SwitchAnims();
 
 	LockRootMotion(1, true);					// lock the root with root rotation enabled
-	
+
 	if (!bUsingTable)
 	{
 		Transition_RootMotion('DefaultState', AStandUpF, AWait);
@@ -3461,7 +3461,7 @@ function StandUp(bool RightSide, optional bool bUsingTable)
 
 
 //----------------------------------------[David Kalina - 5 Dec 2001]-----
-// 
+//
 // Description
 //		Should return the current Pawn MoveSpeed (max. speed)
 //		Based on MoveFlags for NPC.
@@ -3477,10 +3477,10 @@ event float GetMoveSpeed(MoveFlags MoveFlags)
 
 
 //---------------------------------------[David Kalina - 20 Nov 2001]-----
-// 
+//
 // Description
 //		Choose appropriate transition animation for an NPC throwing a grenade.
-// 
+//
 //------------------------------------------------------------------------
 
 function PlayThrowGrenade(vector ThrowVelocity)
@@ -3495,7 +3495,7 @@ function PlayThrowGrenade(vector ThrowVelocity)
 
 //---------------------------------------[David Kalina - 24 Oct 2001]-----
 //
-// CoverPeek* 
+// CoverPeek*
 //
 // Description
 //		EAIController interface for managing NPC cover peek animations.
@@ -3507,9 +3507,9 @@ function CoverPeekLeft()
 	if (!bCoverPeeking)
 	{
 		bCoverPeeking  = true;
-		
+
 		AWait			= APeekLeft;
-		
+
 		Transition_Standard(APeekLeftBegin, 0.3f, false);
 
 		GotoState('s_Transition');
@@ -3522,7 +3522,7 @@ function CoverPeekRight()
 	if (!bCoverPeeking)
 	{
 		bCoverPeeking  = true;
-				
+
 		AWait			= APeekRight;
 
 		Transition_Standard(APeekRightBegin, 0.3f, false);
@@ -3540,9 +3540,9 @@ function CoverPeekUp()
 		AWait			= 'waitStAlFd2';
 
 		CheckForTransition(MOVE_WalkAlert);		// set transition for standing
-				
+
 		SwitchAnims();
-		
+
 		if (TransitionQueue.Length > 0)
 			GotoState('s_Transition');
 	}
@@ -3552,20 +3552,20 @@ function CoverPeekEnd()
 {
 	local name CurrentAnimSeq;
 	CurrentAnimSeq = GetAnimName();
-	
+
 	if (bCoverPeeking)
 	{
 		bCoverPeeking = false;
-			
+
 		SwitchAnims();		// will reset to AWait appropriate for current MoveFlag
-		
+
 		if (CurrentAnimSeq == APeekLeft)
 			Transition_Standard(APeekLeftBegin, 0.3f, false, true);
 
 		else if (CurrentAnimSeq == APeekRight)
 			Transition_Standard(APeekRightBegin, 0.3f, false, true);
 
-		if (TransitionQueue.Length > 0)			
+		if (TransitionQueue.Length > 0)
 			GotoState('s_Transition');
 	}
 }
@@ -3573,11 +3573,11 @@ function CoverPeekEnd()
 
 
 //----------------------------------------[David Kalina - 6 Mar 2002]-----
-// 
+//
 // Description
 //		Called when shot narrowly misses Pawn (e.g. hat shot off of our head)
 //		Forward event to EAIController in EAIPawn
-// 
+//
 //------------------------------------------------------------------------
 
 function NotifyShotJustMissed(Pawn Instigator) {}
@@ -3673,7 +3673,7 @@ function SetFenceZones()
 //
 // NPC WEAPON / ITEM SELECTION
 // Note that weapon is always effectively "selected" for an EAIPawn.
-// Also, the WeaponStance variable is used to tell us what type of weapon we have available -- 
+// Also, the WeaponStance variable is used to tell us what type of weapon we have available --
 // it does not necessarily correspond with our actual stance, as NPC's in default alertness
 // will have their weapons at their sides when the game begins.
 //
@@ -3684,7 +3684,7 @@ function SetFenceZones()
 
 
 //---------------------------------------[David Kalina - 30 Apr 2002]-----
-// 
+//
 // Description
 //		Wrapper for adding Transition that will select our current weapon.
 //
@@ -3703,16 +3703,16 @@ event Transition_WeaponSelect()
 }
 
 //---------------------------------------[David Kalina - 30 Apr 2002]-----
-// 
+//
 // Description
 //		Wrapper for adding Transition that will de-select our current weapon.
-// 
+//
 //------------------------------------------------------------------------
 
 event Transition_WeaponAway()
 {
 	// if a weapon is in our hands, add the corresponding transition
-	if (WeaponStance > 0) 
+	if (WeaponStance > 0)
 	{
 		plog("			Transition_WeaponAway.");
 
@@ -3728,25 +3728,25 @@ event Transition_WeaponAway()
 
 
 //----------------------------------------[David Kalina - 2 May 2002]-----
-// 
+//
 // Description
 //		Item selection goes through same process as weapon selection,
 //		except PendingItem is set so transition code knows to select item, not weapon.
-// 
+//
 //------------------------------------------------------------------------
 
 event Transition_ItemSelect(EInventoryItem NewItem)
-{	
+{
 	PendingItem = NewItem;
 	plog("			Transition_ItemSelect.");
-	AddTransition('s_Waiting',,,,0.2f,,true,TRANN_ItemSelect);	
+	AddTransition('s_Waiting',,,,0.2f,,true,TRANN_ItemSelect);
 }
 
 
 //---------------------------------------[David Kalina - 30 Apr 2002]-----
-// 
+//
 // Description
-//		Attach selected weapon to appropriate bone location based on 
+//		Attach selected weapon to appropriate bone location based on
 //		InitialAIState.
 //
 //------------------------------------------------------------------------
@@ -3755,13 +3755,13 @@ function InitWeaponAttach()
 {
 	switch (InitialAIState)
 	{
-		case EAIS_Default : 
+		case EAIS_Default :
 
 			AttachWeaponAway();
 			break;
 
-		case EAIS_Aware : 
-		case EAIS_Alert : 
+		case EAIS_Aware :
+		case EAIS_Alert :
 
 			AttachWeaponToHand();
 			break;
@@ -3770,11 +3770,11 @@ function InitWeaponAttach()
 
 
 //----------------------------------------[David Kalina - 2 May 2002]-----
-// 
+//
 // Description
 //		Called when playing a transition with a NotifyType specified.
 //		Attach / Detach weapon or item depending on NotifyType.
-// 
+//
 //------------------------------------------------------------------------
 
 event AI_AttachNotify()
@@ -3787,17 +3787,17 @@ event AI_AttachNotify()
 	else
 	{
 		// if we're playing the animation backwards, call AttachWeaponAway
-		switch (TransitionQueue[0].NotifyType) 
+		switch (TransitionQueue[0].NotifyType)
 		{
-			case TRANN_WeaponSelect : 
+			case TRANN_WeaponSelect :
 				AttachWeaponToHand();
 				break;
-			
+
 			case TRANN_WeaponAway :
 				AttachWeaponAway();
 				break;
 
-			case TRANN_ItemSelect : 
+			case TRANN_ItemSelect :
 				AttachItemToHand();
 				break;
 		}
@@ -3809,22 +3809,22 @@ event AI_AttachNotify()
 
 
 //---------------------------------------[David Kalina - 30 Apr 2002]-----
-// 
+//
 // Description
 //		Attachs weapon to "Away" bone location.
 //
 //		Re-define in sub-classes for special cases.
-// 
+//
 //------------------------------------------------------------------------
 
-function AttachWeaponAway()	
+function AttachWeaponAway()
 {
 	// Equip whatever we have in hand -- we are only looking for weapons in this function
 	if (CurrentWeapon != None)
-	{	
+	{
 		plog("		Pre AttachWeaponAway -- CurrentWeapon  " $ CurrentWeapon $ "  HandItem  " $ HandItem $ "  PendingItem  " $ PendingItem $  "  WeaponStance " $ WeaponStance);
 
-		if (WeaponHandedness == 1) 
+		if (WeaponHandedness == 1)
 		{
 			FullInventory.UnEquipItem(FullInventory.GetSelectedItem());
 			AttachToBone(CurrentWeapon, 'OneHandAwayBone');
@@ -3839,13 +3839,13 @@ function AttachWeaponAway()
 
 		CurrentWeapon.bHidden = false;	// make sure unequipping item doesn't hide it
 		WeaponStance = 0;
-		
+
 		plog("		Post AttachWeaponAway -- CurrentWeapon  " $ CurrentWeapon $ "  HandItem  " $ HandItem $ "  PendingItem  " $ PendingItem $  "  WeaponStance " $ WeaponStance);
 	}
 }
 
 //---------------------------------------[David Kalina - 30 Apr 2002]-----
-// 
+//
 // Description
 //		Equips weapon by attaching it to WeaponBone.
 //
@@ -3855,17 +3855,17 @@ function AttachWeaponToHand()
 {
 	// Equip Current Weapon by placing it in hand
 	if (CurrentWeapon != None)
-	{		
+	{
 		plog("		AttachWeaponToHand -- CurrentWeapon  " $ CurrentWeapon $ "  HandItem  " $ HandItem $ "  PendingItem  " $ PendingItem $  "  WeaponStance " $ WeaponStance);
 
 		FullInventory.SetSelectedItem(CurrentWeapon);
 
 		HandItem = CurrentWeapon;
 
-		AttachToBone(CurrentWeapon, 'WeaponBone');		
+		AttachToBone(CurrentWeapon, 'WeaponBone');
 		CurrentWeapon.SetRelativeLocation(vect(0,0,0));
 		CurrentWeapon.SetRelativeRotation(rot(0,0,0));
-		CurrentWeapon.bHidden = false;			
+		CurrentWeapon.bHidden = false;
 
 		WeaponStance = WeaponHandedness;
 
@@ -3878,10 +3878,10 @@ function AttachWeaponToHand()
 
 
 //----------------------------------------[David Kalina - 2 May 2002]-----
-// 
+//
 // Description
 //		Attach PendingItem to our hand and set as selected item.
-// 
+//
 //------------------------------------------------------------------------
 
 function AttachItemToHand()
@@ -3893,14 +3893,14 @@ function AttachItemToHand()
 
 		FullInventory.SetSelectedItem(PendingItem);
 
-		// Remove previous attachment and replace with GameplayObj		
+		// Remove previous attachment and replace with GameplayObj
 		HandItem = PendingItem;
-		
+
 		AttachToBone(PendingItem, 'WeaponBone');
 		PendingItem.SetRelativeLocation(Vect(0,0,0));
 
 		PendingItem = none;
-		
+
 		SwitchAnims();
 
 		plog("		Post AttachItemToHand -- CurrentWeapon  " $ CurrentWeapon $ "  HandItem  " $ HandItem $ "  PendingItem  " $ PendingItem $  "  WeaponStance " $ WeaponStance);
@@ -3909,10 +3909,10 @@ function AttachItemToHand()
 
 
 //----------------------------------------[David Kalina - 1 May 2002]-----
-// 
+//
 // Description
 //		Return the appropriate Weapon Selection animation for this NPC.
-// 
+//
 //------------------------------------------------------------------------
 
 function name GetWeaponSelectAnim()
@@ -3921,26 +3921,26 @@ function name GetWeaponSelectAnim()
 }
 
 //----------------------------------------[David Kalina - 2 May 2002]-----
-// 
+//
 // Description
 //		Return current appropriate item selection animation.
-// 
+//
 //------------------------------------------------------------------------
 
 function name GetItemSelectAnim();
 
 
 //---------------------------------------[David Kalina - 14 May 2002]-----
-// 
+//
 // Description
 //		Try to get distance we wish to be within from weapon.
 //		Otherwise return default property value.
-// 
+//
 //------------------------------------------------------------------------
 
 function float GetPlayerFarDistance()
 {
-	if (CurrentWeapon != none)	
+	if (CurrentWeapon != none)
 		return CurrentWeapon.NPCPreferredDistance;
 	else
 		return PlayerFarDistance;
@@ -3997,20 +3997,20 @@ function FindFallSpot()
 state s_Falling
 {
 	Ignores PlayBlend, UpdateAnimationSet, PlayWaitingBlend;
-	
+
 	function BeginState()
 	{
 		PlayAnim(AFall,,0.2);
 		setPhysics(PHYS_Falling);
 	}
-	
+
 	function Landed(vector HitNormal)
 	{
 		//log("S_FALLING ---- LANDED??");
 		setPhysics(PHYS_Walking);
 		GotoState('DefaultState');
 	}
-	
+
 }
 
 //
@@ -4040,10 +4040,10 @@ state s_Waiting
 	}
 
 	//---------------------------------------[David Kalina - 17 Dec 2001]-----
-	// 
+	//
 	// Description
 	//		s_Waiting version of PlayWaitingBlend assumes we have already come to a full stop.
-	// 
+	//
 	// Input
 	//		ForwardDirection : The direction our legs should be facing
 	//		FocusDirection :   Direction we should be looking at right now (body/head).
@@ -4057,7 +4057,7 @@ state s_Waiting
 		local float fDot, fRatio;
 
 
-		if (Abs(YawDiff) > 0) 
+		if (Abs(YawDiff) > 0)
 		{
 			if (!IsTweening(0))
 				RotateTowardsRotator(Rotator(ForwardDirection), Controller.GetTurnSpeed());
@@ -4085,7 +4085,7 @@ state s_Waiting
 					vCross = FocusDirection Cross ForwardDirection;
 
 					//log("	fRatio: " $ fRatio @ "   vCross : " $ vCross.Z);
-					
+
 					if (vCross.Z < 0.0)
 						SynchAnim(AWaitRight, BLENDMOVEMENTCHANNEL, TweenTime, fRatio);
 					else
@@ -4103,7 +4103,7 @@ state s_Waiting
 
 
 // ----------------------------------------------------------------------
-// state s_LadderClimbing 
+// state s_LadderClimbing
 //		should only be initiated when pawn is already in exact place to start
 // ----------------------------------------------------------------------
 
@@ -4113,10 +4113,10 @@ function ClimbLadder(bool bClimbingUp)
 	{
 		// set up root motion transition -- no rotation
 
-		LockRootMotion(1, false);							
+		LockRootMotion(1, false);
 
 		Transition_RootMotion('s_LadderClimbing', ANLInBottom, ANLWaitRight);
-				
+
 		GotoState('s_Transition');
 	}
 }
@@ -4133,7 +4133,7 @@ state s_LadderClimbing
 	{
 		if (bClimbingUp)
 		{
-			
+
 		}
 
 		PlayNarrowLadderWait(0.0f);
@@ -4145,13 +4145,13 @@ state s_LadderClimbing
 // ----------------------------------------------------------------------
 // state s_Transition
 //		Plays ATransition and waits for it to finish before returning
-//		to Default State.  
+//		to Default State.
 //
 //		Make sure you ignore any necessary incoming event calls!!!!!!
 // ----------------------------------------------------------------------
 
 function AddTransition(name TargetState, optional name TransitionAnim, optional name TargetAnimation, optional float Time, optional float TweenTime, optional bool bRootMotion, optional bool bAllowRotation, optional ETransitionNotifyType NotifyType, optional bool bBackwards)
-{	
+{
 	local int i;
 
 	TransitionQueue.Length = TransitionQueue.Length + 1;
@@ -4159,17 +4159,17 @@ function AddTransition(name TargetState, optional name TransitionAnim, optional 
 	TransitionQueue[TransitionQueue.Length - 1].TransitionState				= TargetState;
 	TransitionQueue[TransitionQueue.Length - 1].ATransition					= TransitionAnim;
 	TransitionQueue[TransitionQueue.Length - 1].ATransitionTarget				= TargetAnimation;
-	TransitionQueue[TransitionQueue.Length - 1].TransitionTime				= Time;		
-	TransitionQueue[TransitionQueue.Length - 1].TransitionTween				= TweenTime;		
-	TransitionQueue[TransitionQueue.Length - 1].bRootMotionTransition			= bRootMotion;		
-	TransitionQueue[TransitionQueue.Length - 1].bTransitionWithRotation		= bAllowRotation;	
+	TransitionQueue[TransitionQueue.Length - 1].TransitionTime				= Time;
+	TransitionQueue[TransitionQueue.Length - 1].TransitionTween				= TweenTime;
+	TransitionQueue[TransitionQueue.Length - 1].bRootMotionTransition			= bRootMotion;
+	TransitionQueue[TransitionQueue.Length - 1].bTransitionWithRotation		= bAllowRotation;
 	TransitionQueue[TransitionQueue.Length - 1].NotifyType					= NotifyType;
 	TransitionQueue[TransitionQueue.Length - 1].bBackwards					= bBackwards;
 
 	for (i = 0; i < TransitionQueue.Length; i++)
-		plog("TransitionQueue[ " $ i $ "] ==> " 
-			@ TransitionQueue[i].TransitionState 
-			@ TransitionQueue[i].ATransition 
+		plog("TransitionQueue[ " $ i $ "] ==> "
+			@ TransitionQueue[i].TransitionState
+			@ TransitionQueue[i].ATransition
 			@ TransitionQueue[i].ATransitionTarget
 			@ TransitionQueue[i].TransitionTime
 			@ TransitionQueue[i].TransitionTween
@@ -4185,9 +4185,9 @@ function AddTransition(name TargetState, optional name TransitionAnim, optional 
 
 
 //----------------------------------------[David Kalina - 1 May 2002]-----
-// 
+//
 // Description
-//		Adds standard root motion type transition -- 
+//		Adds standard root motion type transition --
 //		Root motion transitions must enable root motion, disable turning,
 //		specify a target animation, and not tween.
 //
@@ -4201,10 +4201,10 @@ function Transition_RootMotion(name TargetState, name TransitionAnim, name Targe
 
 
 //----------------------------------------[David Kalina - 1 May 2002]-----
-// 
+//
 // Description
 //		No Frills, "Standard" type transition used for most MoveFlag transitions.
-// 
+//
 //------------------------------------------------------------------------
 
 function Transition_Standard(name TransitionAnim, float TweenTime, bool bAllowRotation, optional bool bBackwards)
@@ -4220,7 +4220,7 @@ state s_Transition
 	Ignores PlayThrowGrenade, UpdateAnimationSet, PlayBlend,		// must ignore function calls that can cause another s_Transition
 		CoverPeekLeft, CoverPeekRight, CoverPeekUp, CoverPeekEnd;
 
-	function BeginState()	
+	function BeginState()
 	{
 		local float AnimTime;
 
@@ -4232,26 +4232,26 @@ state s_Transition
 			GotoState('DefaultState');
 			return;
 		}
-		
-		// if TransitionNotify type specified, use that to get animation 
+
+		// if TransitionNotify type specified, use that to get animation
 
 		switch (TransitionQueue[0].NotifyType)
 		{
-			case TRANN_WeaponSelect : 
-			case TRANN_WeaponAway : 
-				TransitionQueue[0].ATransition = GetWeaponSelectAnim();		
+			case TRANN_WeaponSelect :
+			case TRANN_WeaponAway :
+				TransitionQueue[0].ATransition = GetWeaponSelectAnim();
 				if (CurrentWeapon.IsA('EOneHandedWeapon'))
 					PlaySound(Sound'FisherEquipement.Play_FisherPistolAim', SLOT_SFX);
 				else
 					PlaySound(Sound'FisherEquipement.Play_FN2000Aim', SLOT_SFX);
 				break;
 
-			case TRANN_ItemSelect : 
+			case TRANN_ItemSelect :
 				TransitionQueue[0].ATransition = GetItemSelectAnim();
 				break;
 		}
 
-		// make sure selected animation is valid 
+		// make sure selected animation is valid
 
 		AnimTime = GetAnimTime(TransitionQueue[0].ATransition);
 
@@ -4267,7 +4267,7 @@ state s_Transition
 		// everything should be set here ..
 
 		plog("-------- BEGIN STATE ATransition : " $ TransitionQueue[0].ATransition $ "   ATransitionTarget : " $ TransitionQueue[0].ATransitionTarget);
-				
+
 		if (TransitionQueue[0].TransitionTime > 0.0f)
 			SetTimer(TransitionQueue[0].TransitionTime, false);
 		else
@@ -4276,12 +4276,12 @@ state s_Transition
 			if (AnimTime != 0.0f)
 				SetTimer(AnimTime + 0.05f, false);
 		}
-		
+
 		bInTransition = true;
-		
+
 		// root motion -- play anim before setting physics
 		if (TransitionQueue[0].bRootMotionTransition)
-		{	
+		{
 			// don't PlayAnimOnly as we might want to blend over the root motion
 			bCollideWorld = false;
 			PlayAnim(TransitionQueue[0].ATransition, RandomizedAnimRate, 0.0f, 0);
@@ -4290,10 +4290,10 @@ state s_Transition
 
 		// phys_walking - no movement during transition
 		else
-		{				
+		{
 			// PlayAnimOnly because we must make sure to stop any active movement channels
-			Acceleration = vect(0,0,0);				
-			
+			Acceleration = vect(0,0,0);
+
 			// Weapon Away Transitions are weapon select animations played backwards
 			if (TransitionQueue[0].NotifyType == TRANN_WeaponAway || TransitionQueue[0].bBackwards)
 				PlayAnimOnly(TransitionQueue[0].ATransition,,TransitionQueue[0].TransitionTween,true);
@@ -4329,22 +4329,22 @@ state s_Transition
 	}
 
 	function TransitionEnd()
-	{	
+	{
 		SetTimer(0, false);
 
 		if (TransitionQueue[0].bRootMotionTransition)
-		{	
+		{
 			// teleport based on difference between initial root offset and current root offset
-			
+
 			if (TransitionQueue[0].ATransitionTarget != '')
 			{
 				// get the offset between current anim and anim we're switching to
 				ExitRootMotion(TransitionQueue[0].ATransitionTarget);
 				bCollideWorld = true;
-			}			
+			}
 		}
 
-		// inform controller 
+		// inform controller
 		Controller.TransitionEnd();
 
 		if (Health - TmpDamage <= 0)
@@ -4355,7 +4355,7 @@ state s_Transition
 				DiedE(none, 1,vect(0,0,0));
 
 			}
-				
+
 			return;
 		}
 
@@ -4395,9 +4395,9 @@ state s_Transition
 				RotateTowardsRotator(Rotator(ForwardDirection), Controller.GetTurnSpeed());
 		}
 	}
- 
+
 	// s_Transition must end when Transition Anim finishes.  AIController must send us the AnimEnd event
-	event AnimEnd(int Channel) 
+	event AnimEnd(int Channel)
 	{
 		if (Channel == 0)
 		{
@@ -4430,7 +4430,7 @@ state s_Transition
 			if (EAIController(Controller).Pawn.IsA('EWilkes') || EAIController(Controller).Pawn.IsA('EFrances'))
 				return;
 		}
-		
+
 		// don't play animations or go back to default state if in root motion animation
         if (TransitionQueue.Length > 0)
         {
@@ -4457,7 +4457,7 @@ state s_Transition
 			    return;
             }
         }
-		
+
 
 
 		global.TakeDamage(Damage, InstigatedBy, HitLocation, HitNormal, momentum, damageType, pillTag);
@@ -4483,13 +4483,13 @@ state s_Sitting
 	ignores PlayWaitingBlend, PlayBlend;
 
 	function BeginState()
-	{	
+	{
 		bCanFallWalk = false;
 		//SetRotation(Chair.Rotation);
 	}
 
 	function EndState()
-	{	
+	{
 		bCanFallWalk = true;
 	}
 
@@ -4511,7 +4511,7 @@ state s_Sitting
 		}
 
 		bAlreadyDead = (Health <= 0);
-		
+
 		//log("SIT TAKE DAMAGE : " $ Damage @ instigatedBy @ Hitlocation @ "**MOMENTUM** : " @ momentum @ " type: " @ damageType @ " pilltag: " @ PillTag);
 
 		// Blood effect
@@ -4519,12 +4519,12 @@ state s_Sitting
 		{
 			Spawn(class'EBloodSplat', self,, HitLocation, Rotator(Normal(momentum)));
 		}
-		
+
 
 		// Check to be sure there is a pill .. else, use body pill
 		if (PillTag == 0)
 			PillTag = GetApproxPillFromHit(HitLocation);
-		
+
 		// Gives real damage depending on the hit zone
 		ResolveDamage(damage, PillTag, damageType);
 
@@ -4552,7 +4552,7 @@ state s_Sitting
 		if (Health > 0)
 		{
 			// sound
-			MakeNoise(500.0, NOISE_Scream, CollisionHeight * 2.0f); 
+			MakeNoise(500.0, NOISE_Scream, CollisionHeight * 2.0f);
 
 			// resolve other damage types
 			ResolveDamageType(PillTag, momentum, damageType);
@@ -4562,7 +4562,7 @@ state s_Sitting
 				//plog("passing damage to controller.");
 				Controller.damageAttitudeTo(instigatedBy, Damage, damageType);
 			}
-			
+
 			if (instigatedBy != Self && Controller != None && !bIsPlayerPawn && instigatedBy != None && instigatedBy.bIsPlayerPawn && !EAIController(Controller).bWasInjured && !EAIController(Controller).bNotInStats)
 			{
 				if (!EAIController(Controller).bWasKnockedOut)
@@ -4594,12 +4594,12 @@ state s_Sitting
 			}
 			if (instigatedBy != None)
 				Killer = instigatedBy.Controller;
-			
+
 			LastDamageType = damageType;
 			DiedE(Killer, PillTag, momentum);
 		}
 	}
-		
+
 	function ResolveDamageType(int PillTag, vector Momentum, class<DamageType> DamageType)
 	{
 		//Log("s_Sitting ResolveDamageType"@PillTag@Momentum@DamageType);
@@ -4624,7 +4624,7 @@ state s_Sitting
 	}
 
 	//------------------------------------------------------------------------
-	// Description		
+	// Description
 	//		Dying while seated slightly different from standard.
 	//------------------------------------------------------------------------
 
@@ -4646,13 +4646,13 @@ state s_Sitting
 		if (GetAnimName() != Anim)
 			PlayAnimOnly(Anim,, 0.1);
 	}
-	
+
 	function bool PlayAnimNoMovement(name Sequence, optional float Rate, optional float TweenTime, optional bool bBackward)
 	{
-		// should return true if Sequence is in current (Table.PSA) MeshAnimation 
+		// should return true if Sequence is in current (Table.PSA) MeshAnimation
 
 		if (IsSequenceInCurrentAnim(Sequence))
-		{	
+		{
 			Global.PlayAnimNoMovement(Sequence, Rate, TweenTime);
 			return true;
 		}
@@ -4725,26 +4725,26 @@ state s_Stunned
 		{
 			case 'EKnocked' :		Knocked(PillTag, Momentum); break;
 			case 'EElectrocuted' :	Electrocuted(); break;
-			
+
 			case 'ESleepingGas' :
-				if (IsOnFire())	
+				if (IsOnFire())
 					return;
-				if (bInTransition)	
+				if (bInTransition)
 					SetTimer(3, false);
 				else
 					GotoState(,'Gassed');
 				break;
-			
+
 			case 'EBurned' :
 				// Stay until all flames are gone. Anim time.
-				/*if (bInTransition)	
+				/*if (bInTransition)
 					SetTimer(3, false);
 				else
 					GotoState(,'Burned');*/
 				break;
-			
+
 			case 'EStunned' :
-				if (bInTransition)	
+				if (bInTransition)
 					SetTimer(3, false);
 				else
 					GotoState(,'Stunned');
@@ -4886,8 +4886,8 @@ function RandInertStance()
 		PlayAnimOnly(ADeathLeftNtrl);
 	else
 		PlayAnimOnly(ADeathRightNtrl);
-	
-	PlayAnim(CurrentAnimSeq,,,BLENDMOVEMENTCHANNEL);									// Init channel 
+
+	PlayAnim(CurrentAnimSeq,,,BLENDMOVEMENTCHANNEL);									// Init channel
 	AnimBlendParams(BLENDMOVEMENTCHANNEL, 1.0);											// Set Blend to 100%
 	ForceAnimParams(BLENDMOVEMENTCHANNEL, CurrentAnimSeq, CurrentFrame, CurrentRate);	// Set frame and rate
 	AnimBlendToAlpha(BLENDMOVEMENTCHANNEL, 0.0, 0.3);									// Fade to 0
@@ -4932,17 +4932,17 @@ state s_Inert
 		if (Satchel != None)
 			Satchel.Throw(Controller, vect(0,0,0));
 		Satchel = None;
-		
+
 		// Cigaret
 		if (Cigaret != None)
 			Cigaret.Throw(Controller, vect(0,0,0));
 		Cigaret = None;
-		
+
 		// Cellular
 		if (Cellular != None)
 			Cellular.Throw(Controller, vect(0,0,0));
 		Cellular = None;
-		
+
 		// Remove hat
 		if (Hat != None)
 			Hat.TakeDamage(0, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), class'Crushed');
@@ -5026,7 +5026,7 @@ state s_Inert
 	}
 
 ResetInter:
-	ENpcZoneInteraction(Interaction).ResetInert(); 
+	ENpcZoneInteraction(Interaction).ResetInert();
 	Stop;
 
 FallFromChair:
@@ -5087,7 +5087,7 @@ state s_Unconscious extends s_Inert
 		Super.EndState();
 		SetTimer(0.0, false);
 	}
-	
+
 	function PlayHitE(int PillTag, Vector HitLocation, Vector Momentum)
 	{
 		if (!IsAnimating())
@@ -5163,7 +5163,7 @@ state s_Dying extends s_Inert
 			Controller.PawnDied();
 		else
 		{
-            // 
+            //
             EAIController(Controller).RemoveReferencesInPatrolInfo();
 			// Destroy controller
 			Controller.Destroy();
@@ -5226,11 +5226,11 @@ state s_InitiallyDead extends s_Dying
 state s_FallToDeath
 {
 	Ignores Trigger, Bump, HitWall, PhysicsVolumeChange, Falling, ResolveDamageType;
-	
+
 	function Landed(vector HitNormal)
 	{
 		setPhysics(PHYS_None);
-		PlayAnimOnly('LandStNmXX0');		
+		PlayAnimOnly('LandStNmXX0');
 		GotoState('s_Dying');
 	}
 
@@ -5297,7 +5297,7 @@ state s_Grabbed
 		// If knocked but not on head
 		else if (damageType.name == 'EKnocked' && PillTag != P_Head)
 			damageType = None;
-		
+
 		if (damageType != None && damageType.name == 'EBurned')
 			CatchOnFire();
 
@@ -5307,7 +5307,7 @@ state s_Grabbed
 		// play damage animations
 		if (Health > 0)
 		{
-			MakeNoise(500.0, NOISE_Scream, CollisionHeight * 2.0f); 
+			MakeNoise(500.0, NOISE_Scream, CollisionHeight * 2.0f);
 
 			// other damage types
 			if (damageType != none && damageType.Name == 'EKnocked')
@@ -5371,10 +5371,10 @@ function SetupNPCCarry(EPawn p)
 	dest.Z += (CollisionHeight - p.CollisionHeight);
 	SetLocation(dest);
 	SetCollision(true, false, false);
-	
+
 	PlayAnimOnly('CaryCrAlUp0', , 0.1);
-	
-	PlayAnim(CurrentAnimSeq,,,BLENDMOVEMENTCHANNEL);									// Init channel 
+
+	PlayAnim(CurrentAnimSeq,,,BLENDMOVEMENTCHANNEL);									// Init channel
 	AnimBlendParams(BLENDMOVEMENTCHANNEL, 1.0);											// Set Blend to 100%
 	ForceAnimParams(BLENDMOVEMENTCHANNEL, CurrentAnimSeq, CurrentFrame, CurrentRate);	// Set frame and rate
 	AnimBlendToAlpha(BLENDMOVEMENTCHANNEL, 0.0, 0.5);									// Fade to 0
@@ -5452,7 +5452,7 @@ state s_Carried
 
 		// Gives real damage depending on the hit zone
 		ResolveDamage(damage, PillTag, damageType);
-		
+
 		//Play HitSound depending on the pill
 		if (damageType == None)
 		{
@@ -5493,12 +5493,12 @@ state s_Carried
 	function DiedE(Controller Killer, int PillTag, vector momentum)
 	{
 		StopAllSoundsActor(true);
-		
+
 		if (Killer != None)
 		{
 			if (Killer.bIsPlayer)
 				bKilledByPlayer = true;
-			TriggerEvent(Event, self, Killer.Pawn);			
+			TriggerEvent(Event, self, Killer.Pawn);
 		}
 		else
 			TriggerEvent(Event, self, None);
@@ -5519,7 +5519,7 @@ state s_Electrocuted extends s_Inert
 			return;
 
 		if (Interaction != None)
-			ENpcZoneInteraction(Interaction).ResetInert(); 
+			ENpcZoneInteraction(Interaction).ResetInert();
 	}
 
 	function BeginState()
@@ -5534,7 +5534,7 @@ Begin:
     PlaySound(Sounds_Barks,SLOT_Barks);
 	LoopAnimOnly('ElecStAlNt0',, 0.1);
 	Sleep(1.0f);
-	
+
 	// So fall on ground animation
 	PlayDyingE(0, Vect(0,0,0));
 

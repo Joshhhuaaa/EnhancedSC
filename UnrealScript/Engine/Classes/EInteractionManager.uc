@@ -58,7 +58,7 @@ function bool SelectNextItem()
 }
 
 function bool SelectPreviousItem()
-{	
+{
 	if (SelectedInteractions > 0)
 	{
 		SelectedInteractions--;
@@ -96,13 +96,13 @@ function Calc(EInteractObject Obj, out float Dot, out float Dist)
 	Dist = VSize(interactionDir);
 
 	interactionDir = Normal(interactionDir);
-	
+
 	// get dot result
 	Dot = interactionDir DOT Vector(Obj.InteractionPlayerController.Pawn.Rotation);
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		0 - return, 1 - insert, 2 - replace, 3 - do nothing
 //------------------------------------------------------------------------
 function int CheckPriority(EInteractObject CurrentObj, EInteractObject NewObj)

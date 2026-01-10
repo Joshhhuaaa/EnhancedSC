@@ -59,7 +59,7 @@ BOsip:
     ResetGroupGoals();
     ChangeGroupState('s_default');
 Dispatch:
-    JumpRandom('BLoop', 0.50, 'CLoop', 1.00, , , , , ,); 
+    JumpRandom('BLoop', 0.50, 'CLoop', 1.00, , , , , ,);
 BLoop:
     Log("");
     Teleport(1, 'Area2ioA');

@@ -1,5 +1,5 @@
 //=============================================================================
-//  EPCLevelListBox.uc : List box with locks 
+//  EPCLevelListBox.uc : List box with locks
 //  Copyright 2002 Ubi Soft, Inc. All Rights Reserved.
 //
 //  Revision history:

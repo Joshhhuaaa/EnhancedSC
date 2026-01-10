@@ -10,7 +10,7 @@ class EDynamicNavPoint extends NavigationPoint
 
 
 //----------------------------------------[David Kalina - 2 May 2001]-----
-// 
+//
 // Description
 //		Code exists solely to make points visible when debugging nav points.
 //		It checks the flag bDebugNavPoints in the EPlayerController
@@ -20,8 +20,8 @@ class EDynamicNavPoint extends NavigationPoint
 function PostBeginPlay()
 {
 	/*local EchelonGameInfo gameinfo;
-		
-	if (Level != none && Level.Game != none) 
+
+	if (Level != none && Level.Game != none)
 	{
 		gameinfo = EchelonGameInfo(Level.Game);
 

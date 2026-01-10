@@ -21,7 +21,14 @@ function Select(EInventory Inv)
 	local int	HealthPoint;
 	local EPlayerController Epc;
 	Epc = EPlayerController(Controller);
-	
+
+	// Joshua - Don't use medkit if Sam is dead
+	if (Epc.ePawn.Health <= 0)
+	{
+		EPawn(Controller.Pawn).FullInventory.SetPreviousConfig();
+		return;
+	}
+
 	if (Epc.ePawn.Health == Epc.ePawn.InitialHealth)
 	{
 		Epc.SendTransmissionMessage(Localize("Transmission", "MedKitNotUsed", "Localization\\HUD"), TR_CONSOLE);
@@ -35,7 +42,7 @@ function Select(EInventory Inv)
 	if (Epc.ePawn.InitialHealth - Epc.Pawn.Health < HealthPoint)
 	{
 		Epc.SendTransmissionMessage(Localize("Transmission", "MedKitUsed", "Localization\\HUD"), TR_CONSOLE);
-		Epc.Pawn.Health = Epc.ePawn.InitialHealth;			
+		Epc.Pawn.Health = Epc.ePawn.InitialHealth;
 		Epc.playerStats.AddStat("MedkitUsed");
 	}
 	else

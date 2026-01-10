@@ -1,4 +1,4 @@
-class EPorteMetal extends EGameplayObject; 
+class EPorteMetal extends EGameplayObject;
 
 defaultproperties
 {

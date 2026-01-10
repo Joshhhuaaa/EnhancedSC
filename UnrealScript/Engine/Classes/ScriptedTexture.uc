@@ -2,7 +2,7 @@
 // ScriptedTexture: A scriptable Unreal texture
 // This is a built-in Unreal class and it shouldn't be modified.
 //=============================================================================
-class ScriptedTexture extends Texture 
+class ScriptedTexture extends Texture
 	//native noexport;
 	safereplace;
 

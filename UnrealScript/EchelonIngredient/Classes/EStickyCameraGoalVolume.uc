@@ -17,7 +17,7 @@ function PostBeginPlay()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Wrapper to deactivate the volume after goal completed
 //------------------------------------------------------------------------
 function TriggerGoal()

@@ -12,7 +12,7 @@ function PostBeginPlay()
 	SpawnPart(Vect(-5.984,-10.215,-6.231), DrawScale);
 	SpawnPart(Vect(-11.817,-0.001,-6.231), DrawScale);
 	SpawnPart(Vect(-5.924,10.209,-6.231), DrawScale);
-	
+
 	// Remove linked lights once distributed among parts.
 	ObjectLights.Remove(0,ObjectLights.Length);
 

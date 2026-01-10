@@ -83,7 +83,7 @@ function BeforePaint(Canvas C, float X, float Y)
 		VertSB.WinTop = 0;
 		VertSB.WinLeft = WinWidth - LookAndFeel.Size_ScrollbarWidth;
 		VertSB.WinWidth = LookAndFeel.Size_ScrollbarWidth;
-		if (bShowHorizSB) 
+		if (bShowHorizSB)
 		{
 			BRBitmap.ShowWindow();
 			BRBitmap.WinWidth = LookAndFeel.Size_ScrollbarWidth;
@@ -102,13 +102,13 @@ function BeforePaint(Canvas C, float X, float Y)
 			VertSB.WinHeight = WinHeight - FixedHeight;
 		}
 
-		VertSB.SetRange(0, ClientHeight, VertSB.WinHeight, 10);	
+		VertSB.SetRange(0, ClientHeight, VertSB.WinHeight, 10);
 	}
 	else
 	{
 		BRBitmap.HideWindow();
 		VertSB.HideWindow();
-		VertSB.Pos = 0;		
+		VertSB.Pos = 0;
 	}
 
 	if (bShowHorizSB)
@@ -122,12 +122,12 @@ function BeforePaint(Canvas C, float X, float Y)
 		else
 			HorizSB.WinWidth = WinWidth;
 
-		HorizSB.SetRange(0, ClientWidth, HorizSB.WinWidth, 10);	
+		HorizSB.SetRange(0, ClientWidth, HorizSB.WinWidth, 10);
 	}
 	else
 	{
 		HorizSB.HideWindow();
-		HorizSB.Pos = 0;		
+		HorizSB.Pos = 0;
 	}
 
 	ClientArea.WinLeft = -HorizSB.Pos;
@@ -145,7 +145,7 @@ function BeforePaint(Canvas C, float X, float Y)
 }
 
 function GetDesiredDimensions(out float W, out float H)
-{	
+{
 	Super(UWindowWindow).GetDesiredDimensions(W, H);
 }
 

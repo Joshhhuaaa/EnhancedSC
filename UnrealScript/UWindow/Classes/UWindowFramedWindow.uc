@@ -47,7 +47,7 @@ function bool IsActive()
 }
 
 function BeforePaint(Canvas C, float X, float Y)
-{	
+{
 	Super.BeforePaint(C, X, Y);
 	Resized();
 	LookAndFeel.FW_SetupFrameButtons(Self, C);
@@ -76,7 +76,7 @@ function LMouseDown(float X, float Y)
 		return;
 	}
 
-	if (bSizable) 
+	if (bSizable)
 	{
 		switch (H)
 		{
@@ -91,7 +91,7 @@ function LMouseDown(float X, float Y)
 		case HT_SW:
 			bBLSizing = true;
 			Root.CaptureMouse();
-			return;		
+			return;
 		case HT_SE:
 			bBRSizing = true;
 			Root.CaptureMouse();
@@ -131,7 +131,7 @@ function Resized()
 	ClientArea.WinLeft = R.X;
 	ClientArea.WinTop = R.Y;
 
-	if ((R.W != ClientArea.WinWidth) || (R.H != ClientArea.WinHeight)) 
+	if ((R.W != ClientArea.WinWidth) || (R.H != ClientArea.WinHeight))
 	{
 		ClientArea.SetSize(R.W, R.H);
 	}
@@ -177,19 +177,19 @@ function MouseMove(float X, float Y)
 			Cursor = Root.NSCursor;
 			break;
 		}
-	}	
+	}
 
 	// Top Left
 	if (bTLSizing && bMouseDown)
 	{
-		Cursor = Root.DiagCursor1;	
+		Cursor = Root.DiagCursor1;
 		OldW = WinWidth;
 		OldH = WinHeight;
 		SetSize(Max(MinWinWidth, WinWidth - X), Max(MinWinHeight, WinHeight - Y));
 		WinLeft = Int(WinLeft + OldW - WinWidth);
 		WinTop = Int(WinTop + OldH - WinHeight);
 	}
-	else 
+	else
 		bTLSizing = false;
 
 
@@ -201,7 +201,7 @@ function MouseMove(float X, float Y)
 		SetSize(WinWidth, Max(MinWinHeight, WinHeight - Y));
 		WinTop = Int(WinTop + OldH - WinHeight);
 	}
-	else 
+	else
 		bTSizing = false;
 
 	// Top Right
@@ -212,7 +212,7 @@ function MouseMove(float X, float Y)
 		SetSize(Max(MinWinWidth, X), Max(MinWinHeight, WinHeight - Y));
 		WinTop = Int(WinTop + OldH - WinHeight);
 	}
-	else 
+	else
 		bTRSizing = false;
 
 
@@ -224,7 +224,7 @@ function MouseMove(float X, float Y)
 		SetSize(Max(MinWinWidth, WinWidth - X), WinHeight);
 		WinLeft = Int(WinLeft + OldW - WinWidth);
 	}
-	else 
+	else
 		bLSizing = false;
 
 	// Right
@@ -233,7 +233,7 @@ function MouseMove(float X, float Y)
 		Cursor = Root.WECursor;
 		SetSize(Max(MinWinWidth, X), WinHeight);
 	}
-	else 
+	else
 		bRSizing = false;
 
 	// Bottom Left
@@ -244,7 +244,7 @@ function MouseMove(float X, float Y)
 		SetSize(Max(MinWinWidth, WinWidth - X), Max(MinWinHeight, Y));
 		WinLeft = Int(WinLeft + OldW - WinWidth);
 	}
-	else 
+	else
 		bBLSizing = false;
 
 	// Bottom
@@ -253,7 +253,7 @@ function MouseMove(float X, float Y)
 		Cursor = Root.NSCursor;
 		SetSize(WinWidth, Max(MinWinHeight, Y));
 	}
-	else 
+	else
 		bBSizing = false;
 
 	// Bottom Right
@@ -272,7 +272,7 @@ function ToolTip(string strTip)
 	StatusBarText = strTip;
 }
 
-function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) 
+function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
 {
 	if (Msg == WM_Paint || !WaitModal())
 		Super.WindowEvent(Msg, C, X, Y, Key);

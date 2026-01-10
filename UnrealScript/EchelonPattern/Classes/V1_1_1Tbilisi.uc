@@ -3,10 +3,10 @@
 //=============================================================================
 class V1_1_1Tbilisi extends EVariable;
 
-var int GoalBlackBox; 
-var int GoalFollow; 
-var int GoalStreets; 
-var int OKtoKODrunk; 
+var int GoalBlackBox;
+var int GoalFollow;
+var int GoalStreets;
+var int OKtoKODrunk;
 
 
 function PostBeginPlay()

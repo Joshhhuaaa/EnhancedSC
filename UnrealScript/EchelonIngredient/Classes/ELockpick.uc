@@ -29,7 +29,7 @@ state s_Selected
 		local EInteractObject	InteractObj;
 		local ESwingingDoor		Door;
 		local EPlayerController Epc;
-		
+
 		Epc = EPlayerController(Controller);
 		if (!Epc.IManager.IsPresent(class'EDoorInteraction', InteractObj))
 		{
@@ -55,7 +55,7 @@ state s_Selected
 			log("Door linked to keypad/retinal scanner.");
 			return;
 		}
-		
+
 		// Spawn my interaction
 		Interaction = spawn(class'EPickLockInteraction');
 		EPickLockInteraction(Interaction).Set(Door, self);

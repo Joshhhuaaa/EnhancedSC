@@ -1,6 +1,6 @@
 class ESBRopeActor extends ESoftBodyActor native placeable;
 
-#exec OBJ LOAD FILE=..\textures\ETexIngredient.utx 
+#exec OBJ LOAD FILE=..\textures\ETexIngredient.utx
 
 var(SBRope) float		scaleU;
 var(SBRope) float		lengthV;

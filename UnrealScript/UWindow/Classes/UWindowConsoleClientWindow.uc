@@ -7,10 +7,10 @@ function Created()
 {
 	TextArea = UWindowConsoleTextAreaControl(CreateWindow(class'UWindowConsoleTextAreaControl', 0, 0, WinWidth, WinHeight));
 	EditControl = UWindowEditControl(CreateControl(class'UWindowEditControl', 0, WinHeight - 16, WinWidth, 16));
-	EditControl.SetFont(F_Normal);	
+	EditControl.SetFont(F_Normal);
 	EditControl.SetNumericOnly(False);
 	EditControl.SetMaxLength(400);
-	EditControl.SetHistory(True);	
+	EditControl.SetHistory(True);
 }
 
 function Notify(UWindowDialogControl C, byte E)

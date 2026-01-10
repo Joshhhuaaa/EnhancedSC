@@ -12,17 +12,17 @@ function string	GetDescription()
 		return Localize("GameplayObject", string(EGameplayObject(Owner).ObjectName), "Localization\\HUD");
 	else
 		return string(Owner.class.name);
-		
+
 }
 
 function InitInteract(Controller Instigator)
-{	
+{
 	local float				PickupHeight;
 	local EPlayerController Epc;
 	local EInventoryItem	Item;
 	Item = EInventoryItem(Owner);
 
-	// If it's a EGameplayObject, just pick it up and leave in hands 
+	// If it's a EGameplayObject, just pick it up and leave in hands
 	// If it's an inventoryItem and enough space in inventory
 	if (Item == None || EPawn(Instigator.Pawn).FullInventory.CanAddItem(Item))
 	{

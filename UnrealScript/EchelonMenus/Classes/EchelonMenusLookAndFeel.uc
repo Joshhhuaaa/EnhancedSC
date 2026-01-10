@@ -27,7 +27,7 @@ const BRSIZEBORDER = 15;
 /* Combo Drawing Functions */
 function Combo_SetupSizes(UWindowComboControl W, Canvas C)
 {
-  	
+
     W.EditAreaDrawX = 0;
     W.EditBoxWidth = W.WinWidth;
 
@@ -42,12 +42,12 @@ function ComboList_DrawItem(UWindowComboList Combo, Canvas C, float X, float Y, 
 	}
     else
         C.DrawColor = SelectedTextColor;
-        
-    
+
+
 	Combo.ClipText(C, X + Combo.TextBorder + 2, Y + 3, Text);
 }
 
- 
+
 
 
 /* Framed Window Drawing Functions */
@@ -66,30 +66,30 @@ function FW_DrawWindowFrame(UWindowFramedWindow W, Canvas C)
 	W.DrawStretchedTextureSegment(C, 0, 0, R.W, R.H, R.X, R.Y, R.W, R.H, T);
 
 	R = FrameT;
-	W.DrawStretchedTextureSegment(C, FrameTL.W, 0, 
+	W.DrawStretchedTextureSegment(C, FrameTL.W, 0,
 									W.WinWidth - FrameTL.W
 									- FrameTR.W,
 									R.H, R.X, R.Y, R.W, R.H, T);
 
 	R = FrameTR;
 	W.DrawStretchedTextureSegment(C, W.WinWidth - R.W, 0, R.W, R.H, R.X, R.Y, R.W, R.H, T);
-	
+
 
 	if (W.bStatusBar)
 		Temp = FrameSBL;
 	else
 		Temp = FrameBL;
-	
+
 	R = FrameL;
 	W.DrawStretchedTextureSegment(C, 0, FrameTL.H,
-									R.W,  
+									R.W,
 									W.WinHeight - FrameTL.H
 									- Temp.H,
 									R.X, R.Y, R.W, R.H, T);
 
 	R = FrameR;
 	W.DrawStretchedTextureSegment(C, W.WinWidth - R.W, FrameTL.H,
-									R.W,  
+									R.W,
 									W.WinHeight - FrameTL.H
 									- Temp.H,
 									R.X, R.Y, R.W, R.H, T);
@@ -103,7 +103,7 @@ function FW_DrawWindowFrame(UWindowFramedWindow W, Canvas C)
 	if (W.bStatusBar)
 	{
 		R = FrameSB;
-		W.DrawStretchedTextureSegment(C, FrameBL.W, W.WinHeight - R.H, 
+		W.DrawStretchedTextureSegment(C, FrameBL.W, W.WinHeight - R.H,
 										W.WinWidth - FrameSBL.W
 										- FrameSBR.W,
 										R.H, R.X, R.Y, R.W, R.H, T);
@@ -111,7 +111,7 @@ function FW_DrawWindowFrame(UWindowFramedWindow W, Canvas C)
 	else
 	{
 		R = FrameB;
-		W.DrawStretchedTextureSegment(C, FrameBL.W, W.WinHeight - R.H, 
+		W.DrawStretchedTextureSegment(C, FrameBL.W, W.WinHeight - R.H,
 										W.WinWidth - FrameBL.W
 										- FrameBR.W,
 										R.H, R.X, R.Y, R.W, R.H, T);
@@ -121,7 +121,7 @@ function FW_DrawWindowFrame(UWindowFramedWindow W, Canvas C)
 		R = FrameSBR;
 	else
 		R = FrameBR;
-	W.DrawStretchedTextureSegment(C, W.WinWidth - R.W, W.WinHeight - R.H, R.W, R.H, R.X, R.Y, 
+	W.DrawStretchedTextureSegment(C, W.WinWidth - R.W, W.WinHeight - R.H, R.W, R.H, R.X, R.Y,
 									R.W, R.H, T);
 
 
@@ -132,10 +132,10 @@ function FW_DrawWindowFrame(UWindowFramedWindow W, Canvas C)
 		C.DrawColor = FrameInactiveTitleColor;
 
 
-	W.ClipTextWidth(C, FrameTitleX, FrameTitleY, 
+	W.ClipTextWidth(C, FrameTitleX, FrameTitleY,
 					W.WindowTitle, W.WinWidth - 22);
 
-	if (W.bStatusBar) 
+	if (W.bStatusBar)
 	{
 		C.DrawColor.r = 0;
 		C.DrawColor.g = 0;
@@ -179,7 +179,7 @@ function Region FW_GetClientArea(UWindowFramedWindow W)
 	R.X = FrameL.W;
 	R.Y	= FrameT.H;
 	R.W = W.WinWidth - (FrameL.W + FrameR.W);
-	if (W.bStatusBar) 
+	if (W.bStatusBar)
 		R.H = W.WinHeight - (FrameT.H + FrameSB.H);
 	else
 		R.H = W.WinHeight - (FrameT.H + FrameB.H);
@@ -192,11 +192,11 @@ function FrameHitTest FW_HitTest(UWindowFramedWindow W, float X, float Y)
 {
 //	if ((X >= 3) && (X <= W.WinWidth - 3) && (Y >= 3) && (Y <= 14))
 //		return HT_TitleBar;
-//	if ((X < BRSIZEBORDER && Y < SIZEBORDER) || (X < SIZEBORDER && Y < BRSIZEBORDER)) 
+//	if ((X < BRSIZEBORDER && Y < SIZEBORDER) || (X < SIZEBORDER && Y < BRSIZEBORDER))
 //		return HT_NW;
 //	if ((X > W.WinWidth - SIZEBORDER && Y < BRSIZEBORDER) || (X > W.WinWidth - BRSIZEBORDER && Y < SIZEBORDER))
 //		return HT_NE;
-//	if ((X < BRSIZEBORDER && Y > W.WinHeight - SIZEBORDER)|| (X < SIZEBORDER && Y > W.WinHeight - BRSIZEBORDER)) 
+//	if ((X < BRSIZEBORDER && Y > W.WinHeight - SIZEBORDER)|| (X < SIZEBORDER && Y > W.WinHeight - BRSIZEBORDER))
 //		return HT_SW;
 //	if ((X > W.WinWidth - BRSIZEBORDER) && (Y > W.WinHeight - BRSIZEBORDER))
 //		return HT_SE;
@@ -206,11 +206,11 @@ function FrameHitTest FW_HitTest(UWindowFramedWindow W, float X, float Y)
 //		return HT_S;
 //	if (X < SIZEBORDER)
 //		return HT_W;
-//	if (X > W.WinWidth - SIZEBORDER)	
+//	if (X > W.WinWidth - SIZEBORDER)
 //		return HT_E;
 
 
-	return HT_None;	
+	return HT_None;
 }
 
 /* Client Area Drawing Functions */

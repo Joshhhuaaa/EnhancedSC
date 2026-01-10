@@ -23,7 +23,7 @@ function Show(float P)
 	if (P < 0) return;
 	if (P > MaxPos + MaxVisible) return;
 
-	while (P < Pos) 
+	while (P < Pos)
 		if (!Scroll(-1))
 			break;
 	while (P - Pos > MaxVisible - 1)
@@ -77,9 +77,9 @@ function CheckRange()
 		ThumbStart = ((Pos - MinPos) * (WinHeight - (2 * LookAndFeel.Size_ScrollbarButtonHeight))) / (MaxPos + MaxVisible - MinPos);
 		ThumbHeight = (MaxVisible * (WinHeight - (2 * LookAndFeel.Size_ScrollbarButtonHeight))) / (MaxPos + MaxVisible - MinPos);
 
-		if (ThumbHeight < LookAndFeel.Size_MinScrollbarHeight) 
+		if (ThumbHeight < LookAndFeel.Size_MinScrollbarHeight)
 			ThumbHeight = LookAndFeel.Size_MinScrollbarHeight;
-		
+
 		if (ThumbHeight + ThumbStart > WinHeight - (2 * LookAndFeel.Size_ScrollbarButtonHeight))
 		{
 			ThumbStart = WinHeight - (2 * LookAndFeel.Size_ScrollbarButtonHeight) - ThumbHeight;
@@ -89,7 +89,7 @@ function CheckRange()
 }
 
 function Created()
-{	
+{
 	UpButton = UWindowSBUpButton(CreateWindow(class'UWindowSBUpButton', 0, 0, LookAndFeel.Size_ScrollbarWidth, LookAndFeel.Size_ScrollbarButtonHeight));
 	DownButton = UWindowSBDownButton(CreateWindow(class'UWindowSBDownButton', 0, WinHeight - LookAndFeel.Size_ScrollbarButtonHeight, LookAndFeel.Size_ScrollbarWidth, LookAndFeel.Size_ScrollbarButtonHeight));
 }
@@ -109,7 +109,7 @@ function BeforePaint(Canvas C, float X, float Y)
 	CheckRange();
 }
 
-function Paint(Canvas C, float X, float Y) 
+function Paint(Canvas C, float X, float Y)
 {
     if (isHidden())
             return;
@@ -178,7 +178,7 @@ function Tick(float Delta)
 		bUp = (Y < ThumbStart);
 		bDown = (Y > ThumbStart + ThumbHeight);
 	}
-	
+
 	if (bMouseDown && (NextClickTime > 0) && (NextClickTime < GetTime())  && bUp)
 	{
 		Scroll(-(MaxVisible - 1));
@@ -209,7 +209,7 @@ function MouseMove(float X, float Y)
 		while (Y > (ThumbStart + DragY) && Pos < MaxPos)
 		{
 			Scroll(1);
-		}	
+		}
 	}
 	else
 		bDragging = false;

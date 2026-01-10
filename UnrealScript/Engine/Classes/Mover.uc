@@ -99,13 +99,13 @@ var           float       PhysRate;        // Interpolation rate per second.
 var       NavigationPoint  myMarker;
 var		  bool			bOpening, bDelaying, bClientPause;
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * dkalina (22 Nov 2001)
 // * Purpose : adding bClosing so NPCs can detect when a door is on the way shut
 // ***********************************************************************************************
 var		  bool			bClosing;	// on its way to a closed position (opposite of bOpening);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * dkalina (22 Nov 2001)
 // ***********************************************************************************************
 var		  bool			bClosed;	// mover is in closed position, and no longer moving
@@ -123,7 +123,7 @@ var		int				ClientUpdate;
 /* StartInterpolation()
 when this function is called, the actor will start moving along an interpolation path
 beginning at Dest
-*/	
+*/
 function StartInterpolation()
 {
 	GotoState('');
@@ -136,7 +136,7 @@ function Timer()
 	if (Velocity != vect(0,0,0))
 	{
 		bClientPause = false;
-		return;		
+		return;
 	}
 	RealPosition = Location;
 	RealRotation = Rotation;
@@ -251,7 +251,7 @@ function FinishedClosing()
 // ***********************************************************************************************
 // * BEGIN UBI MODIF mlaforce
 // ***********************************************************************************************
-	PlaySound(ClosedSound, SLOT_SFX); 
+	PlaySound(ClosedSound, SLOT_SFX);
 	if (ClosedSoundEvents.Length != 0)
 	{
         for (iSoundNb = 0; iSoundNb < ClosedSoundEvents.Length; iSoundNb++)
@@ -260,9 +260,9 @@ function FinishedClosing()
         }
     }
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
-	
+
 	// Notify our triggering actor that we have completed.
 	if (SavedTrigger != None)
 		SavedTrigger.EndEvent();
@@ -272,7 +272,7 @@ function FinishedClosing()
 		MyMarker.MoverClosed();
 	bClosing = false;				// UBI MODIF
 	bClosed = true;
-	FinishNotify(); 
+	FinishNotify();
 }
 
 // Handle when the mover finishes opening.
@@ -280,8 +280,8 @@ function FinishedOpening()
 {
 	bOpening = false;	// UBI MODIF - if we are finished opening FUCKING TURN THE FLAG OFF
 
-	PlaySound(OpenedSound, SLOT_SFX); 
-	
+	PlaySound(OpenedSound, SLOT_SFX);
+
 	// Trigger any chained movers.
 	TriggerEvent(Event, Self, Instigator);
 
@@ -344,7 +344,7 @@ function BeginPlay()
 function PostBeginPlay()
 {
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // ***********************************************************************************************
 /*	local mover M;
 
@@ -362,7 +362,7 @@ function PostBeginPlay()
 	}
 
 	if (Leader == None)
-	{	
+	{
 		Leader = self;
 		ForEach DynamicActors(class'Mover', M)
 			if ((M != self) && (M.ReturnGroup == ReturnGroup))
@@ -377,7 +377,7 @@ function PostBeginPlay()
 
 	Super.PostBeginPlay();
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 }
 
@@ -403,7 +403,7 @@ function MakeGroupReturn(Actor Other)
 	if (Follower != None)
 		Follower.MakeGroupReturn(self);
 }
-		
+
 // Return true to abort, false to continue.
 function bool EncroachingOn(actor Other)
 {
@@ -457,7 +457,7 @@ function Bump(actor Other, optional int Pill)
 	{
 		Trigger(P,P);
 		P.Controller.WaitForMover(self);
-	}	
+	}
 	if ((BumpType != BT_AnyBump) && (P == None))
 		return;
 	if ((BumpType == BT_PlayerBump) && !P.IsPlayerPawn())
@@ -469,7 +469,7 @@ function Bump(actor Other, optional int Pill)
 }
 
 // When damaged
-function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, vector HitNormal, 
+function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, vector HitNormal,
 						Vector momentum, class<DamageType> damageType, optional int PillTag) // UBI MODIF - Additional parameter
 {
 	if (bDamageTriggered && (Damage >= DamageThreshold))
@@ -505,7 +505,7 @@ Open:
 		AddSoundRequest(OpeningSound, SLOT_SFX, 0.2f);
 		if (!bQuietMover && SavedTrigger != None && SavedTrigger.bIsPlayerPawn)
 			MakeNoise(DoorNoiseRadius, NOISE_DoorOpening);
-			
+
 			if (OpeningSoundEvents.Length != 0)
 			{
 				for (iSoundNb = 0; iSoundNb < OpeningSoundEvents.Length; iSoundNb++)
@@ -656,7 +656,7 @@ Open:
 	if (SavedTrigger != None)
 		SavedTrigger.EndEvent();
 	Stop;
-Close:		
+Close:
 	DoClose();
 	FinishInterpolation();
 	FinishedClosing();
@@ -725,7 +725,7 @@ Open:
 	if (bTriggerOnceOnly)
 		GotoState('');
 	Stop;
-Close:		
+Close:
 	DoClose();
 	FinishInterpolation();
 	FinishedClosing();

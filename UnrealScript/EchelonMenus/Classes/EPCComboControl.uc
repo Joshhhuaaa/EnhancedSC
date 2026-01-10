@@ -23,20 +23,20 @@ function DropDown()
 function Created()
 {
 	Super.Created();
-	
-	EditBox = UWindowEditBox(CreateWindow(class'EPCComboEditBox', 0, 0, WinWidth - LookAndFeel.Size_ComboButtonWidth, WinHeight, self)); 
+
+	EditBox = UWindowEditBox(CreateWindow(class'EPCComboEditBox', 0, 0, WinWidth - LookAndFeel.Size_ComboButtonWidth, WinHeight, self));
 	EditBox.NotifyOwner = Self;
 	EditBoxWidth = WinWidth / 2;
 	EditBox.bTransient = true;
 
-	Button = UWindowComboButton(CreateWindow(class'EPCComboButton', WinWidth - LookAndFeel.Size_ComboButtonWidth, 0, LookAndFeel.Size_ComboButtonWidth, WinHeight, self)); 
+	Button = UWindowComboButton(CreateWindow(class'EPCComboButton', WinWidth - LookAndFeel.Size_ComboButtonWidth, 0, LookAndFeel.Size_ComboButtonWidth, WinHeight, self));
 	Button.Owner = Self;
-	
-	List = UWindowComboList(Root.CreateWindow(ListClass, 0, 0, 100, 100)); 
+
+	List = UWindowComboList(Root.CreateWindow(ListClass, 0, 0, 100, 100));
 	List.LookAndFeel = LookAndFeel;
 	List.Owner = Self;
 	List.Setup();
-	
+
 	List.HideWindow();
 	bListVisible = false;
 
@@ -57,7 +57,7 @@ function AfterPaint(Canvas C, float X, float Y)
 function MouseWheelDown(FLOAT X, FLOAT Y)
 {
 	local UWindowWindow W;
-	
+
 	// Find the listbox in our owner window and pass the scroll event to it
 	if (NotifyWindow != None)
 	{
@@ -77,7 +77,7 @@ function MouseWheelDown(FLOAT X, FLOAT Y)
 function MouseWheelUp(FLOAT X, FLOAT Y)
 {
 	local UWindowWindow W;
-	
+
 	// Find the listbox in our owner window and pass the scroll event to it
 	if (NotifyWindow != None)
 	{

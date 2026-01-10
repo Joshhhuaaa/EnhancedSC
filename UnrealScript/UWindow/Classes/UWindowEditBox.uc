@@ -1,4 +1,4 @@
-// UWindowEditBox - simple edit box, for use in other controls such as 
+// UWindowEditBox - simple edit box, for use in other controls such as
 // UWindowComboxBoxControl, UWindowEditBoxControl etc.
 
 class UWindowEditBox extends UWindowDialogControl;
@@ -39,7 +39,7 @@ var BOOL                    bShowLog;
 
 function Created()
 {
-	Super.Created();	
+	Super.Created();
 
 	LastDrawTime = GetTime();
 }
@@ -60,8 +60,8 @@ function SetHistory(bool bInHistory)
 		HistoryList = None;
 		CurrentHistory = None;
 	}
-  
- 
+
+
 }
 
 function SetEditable(bool bEditable)
@@ -75,12 +75,12 @@ function SetValue(string NewValue, optional string NewValue2, optional bool noUp
 	Value2 = NewValue2;
 
 	if (CaretOffset > Len(Value))
-		CaretOffset = Len(Value);		
+		CaretOffset = Len(Value);
 
     if (!bHistory)
     {
         OldValue = Value;
-    }    
+    }
     else  if (!noUpdateHistory)
 	{
 		if (Value != "")
@@ -111,7 +111,7 @@ function Clear()
 function SelectAll()
 {
     if (bShowLog)log("SelectAll");
-	
+
     if (bCanEdit)
     {
         m_CurrentlyEditing = true;
@@ -159,7 +159,7 @@ function bool Insert(byte C)
 
 	NewValue = Left(Value, CaretOffset) $ Chr(C) $ Mid(Value, CaretOffset);
 
-	if (Len(NewValue) > MaxLength) 
+	if (Len(NewValue) > MaxLength)
 		return False;
 
 	CaretOffset++;
@@ -212,7 +212,7 @@ function bool WordLeft()
 	LastDrawTime = GetTime();
 	bShowCaret = true;
 
-	return True;	
+	return True;
 }
 
 function bool MoveLeft()
@@ -223,7 +223,7 @@ function bool MoveLeft()
 	LastDrawTime = GetTime();
 	bShowCaret = true;
 
-	return True;	
+	return True;
 }
 
 function bool MoveRight()
@@ -234,7 +234,7 @@ function bool MoveRight()
 	LastDrawTime = GetTime();
 	bShowCaret = true;
 
-	return True;	
+	return True;
 }
 
 function bool WordRight()
@@ -247,7 +247,7 @@ function bool WordRight()
 	LastDrawTime = GetTime();
 	bShowCaret = true;
 
-	return True;	
+	return True;
 }
 
 function bool MoveHome()
@@ -257,7 +257,7 @@ function bool MoveHome()
 	LastDrawTime = GetTime();
 	bShowCaret = true;
 
-	return True;	
+	return True;
 }
 
 function bool MoveEnd()
@@ -267,7 +267,7 @@ function bool MoveEnd()
 	LastDrawTime = GetTime();
 	bShowCaret = true;
 
-	return True;	
+	return True;
 }
 
 function EditCopy()
@@ -308,7 +308,7 @@ function KeyType(int Key, float MouseX, float MouseY)
 
     if (bShowLog)log("UWindowEditBox::KeyType bCanEdit"@bCanEdit@"bKeyDown"@bKeyDown@"m_CurrentlyEditing"@m_CurrentlyEditing);
 
-        
+
     if (bCanEdit && bKeyDown && m_CurrentlyEditing)
 	{
 		if (!bControlDown)
@@ -320,7 +320,7 @@ function KeyType(int Key, float MouseX, float MouseY)
 
 			if (bNumericOnly)
 			{
-				if (Key >= 0x30 && Key <= 0x39)  
+				if (Key >= 0x30 && Key <= 0x39)
 				{
 					Insert(Key);
 				}
@@ -329,7 +329,7 @@ function KeyType(int Key, float MouseX, float MouseY)
 			{
 				//clauzon 11/29/2002, validate aditional characters
 				result = GetPlayerOwner().ConsoleCommand("VALIDATECHAR CHAR=" $ Key);
-					
+
 				if (Key >= 0x20 && Key < 0x80 && result=="TRUE")
 				{
 					Insert(Key);
@@ -357,9 +357,9 @@ function KeyUp(int Key, float X, float Y)
 function KeyDown(int Key, float X, float Y)
 {
 
-	
+
 	bKeyDown = true;
-	
+
 	switch (Key)
 	{
 	case Root.Console.EInputKey.IK_Ctrl:
@@ -370,23 +370,23 @@ function KeyDown(int Key, float X, float Y)
 		break;
 	case Root.Console.EInputKey.IK_Escape:
         if (bCanEdit && m_CurrentlyEditing)
-		{			
+		{
             if (bShowLog)log("Escape pressed");
 
             if (!bHistory)
             {
-                SetValue(OldValue, "",true);	                                
+                SetValue(OldValue, "",true);
             }
 			else if (CurrentHistory != None && CurrentHistory.Next != None)
 			{
                 if (bShowLog)log("CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
                 if (bShowLog)log("CurrentHistory.Next.HistoryText"@UWindowEditBoxHistory(CurrentHistory.Next).HistoryText);
 
-				SetValue(UWindowEditBoxHistory(CurrentHistory.Next).HistoryText, "",true);	                
-			}            
-            MoveEnd();                
+				SetValue(UWindowEditBoxHistory(CurrentHistory.Next).HistoryText, "",true);
+			}
+            MoveEnd();
             DropSelection();
-		}         
+		}
 		break;
 	case Root.Console.EInputKey.IK_Enter:
 		if (bCanEdit && m_CurrentlyEditing)
@@ -405,7 +405,7 @@ function KeyDown(int Key, float X, float Y)
 				}
 				CurrentHistory = HistoryList;
 			}
-            MoveEnd();                
+            MoveEnd();
             DropSelection();
 			Notify(DE_EnterPressed);
 		}
@@ -420,17 +420,17 @@ function KeyDown(int Key, float X, float Y)
 		break;
 
 	case Root.Console.EInputKey.IK_Right:
-		if (bCanEdit && m_CurrentlyEditing) 
+		if (bCanEdit && m_CurrentlyEditing)
 		{
 			if (bControlDown)
 				WordRight();
 			else
 				MoveRight();
-            
+
 
             bAllSelected = false;
 		}
-		
+
 		break;
 	case Root.Console.EInputKey.IK_Left:
 		if (bCanEdit && m_CurrentlyEditing)
@@ -452,7 +452,7 @@ function KeyDown(int Key, float X, float Y)
 			if (CurrentHistory != None && CurrentHistory.Next != None)
 			{
 				CurrentHistory = UWindowEditBoxHistory(CurrentHistory.Next);
-				SetValue(CurrentHistory.HistoryText,"",true);	                
+				SetValue(CurrentHistory.HistoryText,"",true);
 				MoveEnd();
 			}
 		}
@@ -464,7 +464,7 @@ function KeyDown(int Key, float X, float Y)
 			if (CurrentHistory != None && CurrentHistory.Prev != None)
 			{
 				CurrentHistory = UWindowEditBoxHistory(CurrentHistory.Prev);
-				SetValue(CurrentHistory.HistoryText,"",true);	                
+				SetValue(CurrentHistory.HistoryText,"",true);
 				MoveEnd();
 			}
 		}
@@ -474,14 +474,14 @@ function KeyDown(int Key, float X, float Y)
         {
 			MoveHome();
 		bAllSelected = false;
-        }			
+        }
 		break;
 	case Root.Console.EInputKey.IK_End:
 		if (bCanEdit && m_CurrentlyEditing)
         {
 			MoveEnd();
 		bAllSelected = false;
-        }			
+        }
 		break;
 	case Root.Console.EInputKey.IK_Backspace:
 		if (bCanEdit && m_CurrentlyEditing)
@@ -532,7 +532,7 @@ function KeyDown(int Key, float X, float Y)
 			else
 				Super.KeyDown(Key, X, Y);
 		}
-	
+
 		break;
 	}
 }
@@ -556,8 +556,8 @@ function Paint(Canvas C, float X, float Y)
 	local float W, H;
 	local float TextY;
     local float fCurrentTime;
-	
-	C.Font = Root.Fonts[Font];	
+
+	C.Font = Root.Fonts[Font];
 
 	if (m_bUseNewPaint)
 	{
@@ -599,7 +599,7 @@ function Paint(Canvas C, float X, float Y)
 	    TextY = (WinHeight - H) / 2;
 
 	    TextSize(C, Left(Value, CaretOffset), W, H);
-	    
+
 	    if (W + Offset < 0)
 		    Offset = -W;
 
@@ -626,11 +626,11 @@ function Paint(Canvas C, float X, float Y)
     fCurrentTime = GetTime();
 	// show the caret
 	if ((!m_CurrentlyEditing) || (!bHasKeyboardFocus) || (!bCanEdit))
-    {        
+    {
         bShowCaret = false;
-    }		
+    }
 	else
-	{       
+	{
 		if ((fCurrentTime > LastDrawTime + 0.3) || (fCurrentTime < LastDrawTime))
 		{
         	LastDrawTime = fCurrentTime;
@@ -639,10 +639,10 @@ function Paint(Canvas C, float X, float Y)
 	}
 
 	if (bShowCaret)
-    {        
+    {
         ClipText(C, m_ILeftBorderOffset + Offset + W - 1, TextY, "|");
-    }       
-		
+    }
+
 
 	// draw the editbox border
 	if (m_bDrawEditBorders)
@@ -670,13 +670,13 @@ function FocusOtherWindow(UWindowWindow W)
 function DoubleClick(float X, float Y)
 {
 	Super.DoubleClick(X, Y);
-	SelectAll();    
+	SelectAll();
 }
 
 function KeyFocusEnter()
 {
    if (bShowLog)log("UWindowEditBox::KeyFocusEnter");
-    
+
 	if (bSelectOnFocus && !bHasKeyboardFocus)
 		SelectAll();
 
@@ -687,11 +687,11 @@ function KeyFocusExit()
 {
     if (bShowLog)log("KeyFocusExit");
     if (bCanEdit && m_CurrentlyEditing)
-	{        
+	{
         if (!bHistory)
-        {            
+        {
             OldValue = Value;
-        }    
+        }
         else
 		{
 			if (Value != "")
@@ -708,15 +708,15 @@ function KeyFocusExit()
 }
 
 function DropSelection()
-{    
+{
     if (m_CurrentlyEditing)
     {
         if (bChangePending)
 {
 		    bChangePending = false;
 		    Notify(DE_Change);
-	    }     
-    }   
+	    }
+    }
 	bAllSelected = false;
     m_CurrentlyEditing = false;
     bKeyDown = false;

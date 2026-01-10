@@ -14,12 +14,12 @@ function Created()
     LookAndFeel.SB_SetupDownButton(Self);
 }
 
-function Paint(Canvas C, float X, float Y) 
+function Paint(Canvas C, float X, float Y)
 {
     if (bDisabled && m_bHideSBWhenDisable)
             return;
 
-    Super.Paint(C, X, Y);   
+    Super.Paint(C, X, Y);
 }
 
 function LMouseDown(float X, float Y)

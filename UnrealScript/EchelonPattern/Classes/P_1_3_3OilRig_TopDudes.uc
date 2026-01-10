@@ -75,7 +75,7 @@ IncomingDeux:
 RJump:
     CheckIfAllMembersDead('DoNothing');
     SetFlags(Skip,TRUE);
-    JumpRandom('SOne', 0.18, 'STwo', 0.34, 'COne', 0.56, 'CTwo', 0.78, 'CThree', 1.00); 
+    JumpRandom('SOne', 0.18, 'STwo', 0.34, 'COne', 0.56, 'CTwo', 0.78, 'CThree', 1.00);
 DoNothing:
     End();
 SOne:

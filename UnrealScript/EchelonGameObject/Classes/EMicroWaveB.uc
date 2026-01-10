@@ -15,7 +15,7 @@ function PostBeginPlay()
 	display.SpawnableObjects[1].SpawnClass = Class'EchelonEffect.ESparkEmitter';
 	display.SpawnableObjects[1].SpawnAtDamagePercent = 100;
 	display.SpawnableObjects[1].SpawnOnImpact = true;
-	
+
 	Super.PostBeginPlay();
 }
 

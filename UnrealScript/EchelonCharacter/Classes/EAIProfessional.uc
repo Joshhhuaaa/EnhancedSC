@@ -408,10 +408,10 @@ class EAIProfessional extends EAIPawn
 #exec MESH PILLCOPY			MESH1=RookieAMesh				MESH2=ChineseColonelMesh
 
 
-// 
+//
 //
 //	Anim Flags
-//  
+//
 //
 
 #exec ANIM CLEARFLAGS		ANIM=proAnims
@@ -482,7 +482,7 @@ class EAIProfessional extends EAIPawn
 
 // look / sign anims -- will they be used?
 #exec ANIM FLAG ANIM=proAnims		SEQ=waitStAlLt2 FLAG=AF_UseHeadBone
-#exec ANIM FLAG ANIM=proAnims		SEQ=waitStAlRt2 FLAG=AF_UseHeadBone	
+#exec ANIM FLAG ANIM=proAnims		SEQ=waitStAlRt2 FLAG=AF_UseHeadBone
 
 
 // look around anims

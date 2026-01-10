@@ -40,13 +40,13 @@ function Created()
 {
 	ListClass = class'UWindowComboListItem';
 	bAlwaysOnTop = true;
-	bTransient = true;	
+	bTransient = true;
 	ItemHeight = 15;
 	VBorder = 3;
 	HBorder = 3;
 	TextBorder = 9;
 	Super.Created();
-    
+
 }
 
 function int FindItemIndex(string Value, optional bool bIgnoreCase)
@@ -56,7 +56,7 @@ function int FindItemIndex(string Value, optional bool bIgnoreCase)
 
 	I = UWindowComboListItem(Items.Next);
 	Count = 0;
-		
+
 	while (I != None)
 	{
 		if (bIgnoreCase && I.Value ~= Value) return Count;
@@ -76,7 +76,7 @@ function int FindItemIndex2(string Value2, optional bool bIgnoreCase)
 
 	I = UWindowComboListItem(Items.Next);
 	Count = 0;
-		
+
 	while (I != None)
 	{
 		if (bIgnoreCase && I.Value2 ~= Value2) return Count;
@@ -96,7 +96,7 @@ function string GetItemValue(int Index)
 
 	I = UWindowComboListItem(Items.Next);
 	Count = 0;
-		
+
 	while (I != None)
 	{
 		if (Count == Index) return I.Value;
@@ -118,7 +118,7 @@ function RemoveItem(int Index)
 
 	I = UWindowComboListItem(Items.Next);
 	Count = 0;
-		
+
 	while (I != None)
 	{
 		if (Count == Index)
@@ -139,7 +139,7 @@ function string GetItemValue2(int Index)
 
 	I = UWindowComboListItem(Items.Next);
 	Count = 0;
-		
+
 	while (I != None)
 	{
 		if (Count == Index) return I.Value2;
@@ -190,11 +190,11 @@ function SetSelected(float X, float Y)
 
 	if (NewSelected != Selected)
 	{
-		if (NewSelected == None) 
+		if (NewSelected == None)
 			Selected = None;
 		else
 			Selected = NewSelected;
-	}	
+	}
 }
 
 function MouseMove(float X, float Y)
@@ -229,7 +229,7 @@ function BeforePaint(Canvas C, float X, float Y)
 	local UWindowComboListItem I;
 	local float ListX, ListY;
 	local float ExtraWidth;
-		
+
 	C.Font = Root.Fonts[F_Normal];
 	C.SetPos(0, 0);
 
@@ -257,7 +257,7 @@ function BeforePaint(Canvas C, float X, float Y)
 
 	WinWidth = MaxWidth;
 
-	ListX = Owner.EditAreaDrawX + Owner.EditBoxWidth - WinWidth;    
+	ListX = Owner.EditAreaDrawX + Owner.EditBoxWidth - WinWidth;
 	ListY = Owner.Button.WinTop + Owner.Button.WinHeight;
 
 	if (Count > MaxVisible)
@@ -280,10 +280,10 @@ function BeforePaint(Canvas C, float X, float Y)
 function Paint(Canvas C, float X, float Y)
 {
 	local int Count;
-	local UWindowComboListItem I;    
+	local UWindowComboListItem I;
 
 	DrawMenuBackground(C);
-	
+
 	Count = 0;
 
 	for (I = UWindowComboListItem(Items.Next);I != None; I = UWindowComboListItem(I.Next))
@@ -315,7 +315,7 @@ function ExecuteItem(UWindowComboListItem I)
 	CloseUp();
 }
 
-function CloseUp() 
+function CloseUp()
 {
 	Owner.CloseUp();
 }

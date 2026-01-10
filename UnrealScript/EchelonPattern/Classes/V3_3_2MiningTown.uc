@@ -3,12 +3,12 @@
 //=============================================================================
 class V3_3_2MiningTown extends EVariable;
 
-var int GameplayJunkyardAlerted; 
-var int GameplayMaintenanceAlerted; 
-var int GameplayMineFirstAlerted; 
-var int GameplayOreBottomAlerted; 
-var int GameplayServersAlerted; 
-var int NoKillOneDone; 
+var int GameplayJunkyardAlerted;
+var int GameplayMaintenanceAlerted;
+var int GameplayMineFirstAlerted;
+var int GameplayOreBottomAlerted;
+var int GameplayServersAlerted;
+var int NoKillOneDone;
 
 
 function PostBeginPlay()

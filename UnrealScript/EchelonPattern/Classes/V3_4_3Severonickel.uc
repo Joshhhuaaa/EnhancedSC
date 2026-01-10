@@ -3,12 +3,12 @@
 //=============================================================================
 class V3_4_3Severonickel extends EVariable;
 
-var int AlarmStarted; 
-var int AllSAMActive; 
-var int OneSAMActive; 
-var int SafeToKillMasse; 
-var int ServerActive; 
-var int TwoSAMActive; 
+var int AlarmStarted;
+var int AllSAMActive;
+var int OneSAMActive;
+var int SafeToKillMasse;
+var int ServerActive;
+var int TwoSAMActive;
 
 
 function PostBeginPlay()

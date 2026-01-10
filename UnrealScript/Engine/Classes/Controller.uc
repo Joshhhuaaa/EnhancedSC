@@ -1,16 +1,16 @@
 //=============================================================================
 // Controller, the base class of players or AI.
 //
-// Controllers are non-physical actors that can be attached to a pawn to control 
-// its actions.  PlayerControllers are used by human players to control pawns, while 
-// AIControFllers implement the artificial intelligence for the pawns they control.  
-// Controllers take control of a pawn using their Possess() method, and relinquish 
+// Controllers are non-physical actors that can be attached to a pawn to control
+// its actions.  PlayerControllers are used by human players to control pawns, while
+// AIControFllers implement the artificial intelligence for the pawns they control.
+// Controllers take control of a pawn using their Possess() method, and relinquish
 // control of the pawn by calling UnPossess().
 //
-// Controllers receive notifications for many of the events occuring for the Pawn they 
-// are controlling.  This gives the controller the opportunity to implement the behavior 
-// in response to this event, intercepting the event and superceding the Pawn's default 
-// behavior.  
+// Controllers receive notifications for many of the events occuring for the Pawn they
+// are controlling.  This gives the controller the opportunity to implement the behavior
+// in response to this event, intercepting the event and superceding the Pawn's default
+// behavior.
 //
 // This is a built-in Unreal class and it shouldn't be modified.
 //=============================================================================
@@ -47,7 +47,7 @@ var input byte
 var const	Controller		nextController; // chained Controller list
 
 var		float 		Stimulus;			// Strength of stimulus - Set when stimulus happens
-var     float		Skill;				// skill, scaled by game difficulty (add difficulty to this value)	
+var     float		Skill;				// skill, scaled by game difficulty (add difficulty to this value)
 var		float		TacticalOffset;		// C++ timer used if bAdvancedTactics is true (to call UpdateTactics)
 
 
@@ -68,7 +68,7 @@ var		Actor		GoalList[4];	// used by navigation AI - list of intermediate goals
 
 var NavigationPoint home;			// set when begin play, used for retreating and attitude checks
 var	 	float		MinHitWall;		// Minimum HitNormal dot Velocity.Normal to get a HitWall from the physics
- 
+
 // Route Cache for Navigation
 var Actor RouteCache[16];
 var Actor	RouteGoal; //final destination for current route
@@ -90,7 +90,7 @@ var class<Pawn> PawnClass;	// class of pawn to spawn (for players)
 var NavigationPoint StartSpot;  // where player started the match
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // ***********************************************************************************************
 var	name	NextState; //for queueing states
 var name	NextLabel; //for queueing states
@@ -100,7 +100,7 @@ event		int		GetTurnSpeed();
 function			GetReactionAnim(out name Anim, out name AnimB, out float BlendAlpha, optional eReactionAnimGroup ReactionGroup);
 
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * dkalina (5 Feb 2002)
 // ***********************************************************************************************
 
@@ -114,14 +114,14 @@ native(502) final latent function MoveToward(actor NewTarget, optional Actor Vie
 native(508) final latent function FinishRotation();
 
 // native AI functions
-/* LineOfSightTo() returns true if any of several points of Other is visible 
+/* LineOfSightTo() returns true if any of several points of Other is visible
   (origin, top, bottom)
 */
-native(514) final function bool LineOfSightTo(actor Other); 
+native(514) final function bool LineOfSightTo(actor Other);
 
 /* CanSee() similar to line of sight, but also takes into account Pawn's peripheral vision
 */
-native(533) final function bool CanSee(Pawn Other); 
+native(533) final function bool CanSee(Pawn Other);
 
 //Navigation functions - return the next path toward the goal
 native(518) final function Actor FindPathTo(vector aPoint, optional bool bClearPaths);
@@ -158,7 +158,7 @@ native(531) final function pawn PickTarget(out float bestAim, out float bestDist
 native(534) final function actor PickAnyTarget(out float bestAim, out float bestDist, vector FireDir, vector projStart);
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // ***********************************************************************************************
 native(1100) final latent function MoveToDestination(float speed, optional bool walking);
 function vector GetTargetPosition();
@@ -180,7 +180,7 @@ function Vector AdjustTarget(Vector ShotDirection)
 event PlayerCalcEye(out vector EyeLocation, out rotator EyeRotation);
 
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 
@@ -208,7 +208,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 	Canvas.SetPos(4, YPos);
 }
 
-/* Reset() 
+/* Reset()
 reset actor to initial state
 */
 function Reset()
@@ -220,18 +220,18 @@ function Reset()
 }
 
 /* AIHearSound()
-Called when AI controlled pawn would hear a sound.  Default AI implementation uses MakeNoise() 
+Called when AI controlled pawn would hear a sound.  Default AI implementation uses MakeNoise()
 interface for hearing appropriate sounds instead
 */
 // ***********************************************************************************************
-// * BEGIN UBI MODIF mlaforce 
+// * BEGIN UBI MODIF mlaforce
 // ***********************************************************************************************
 event AIHearSound (
-	actor Actor,  
-	sound S 
+	actor Actor,
+	sound S
 );
 // ***********************************************************************************************
-// * END UBI MODIF mlaforce 
+// * END UBI MODIF mlaforce
 // ***********************************************************************************************
 
 function Possess(Pawn aPawn)
@@ -269,16 +269,16 @@ function Restart()
 event LongFall(); // called when latent function WaitForLanding() doesn't return after 4 seconds
 
 // notifications of pawn events (from C++)
-// if return true, then pawn won't get notified 
+// if return true, then pawn won't get notified
 event bool NotifyPhysicsVolumeChange(PhysicsVolume NewVolume);
 event bool NotifyHeadVolumeChange(PhysicsVolume NewVolume);
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * dchabot (7 Dec 2001)
 // ***********************************************************************************************
 event bool NotifyLanded(vector HitNormal, Actor HitActor);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * dchabot (7 Dec 2001)
 // ***********************************************************************************************
 event bool NotifyHitWall(vector HitNormal, actor Wall);
@@ -289,16 +289,16 @@ event NotifyHitMover(vector HitNormal, mover Wall);
 function NotifyTakeHit(pawn InstigatedBy, vector HitLocation, int Damage, class<DamageType> damageType, vector Momentum)
 {
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * ATurcotte (MTL) (15 Dec 2001)
 // ***********************************************************************************************
 	if ((instigatedBy != None) && (instigatedBy != pawn))
 		damageAttitudeTo(instigatedBy, Damage, damageType);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * ATurcotte (MTL) (15 Dec 2001)
 // ***********************************************************************************************
-} 
+}
 
 function SetFall();	//about to fall
 function PawnIsInPain(PhysicsVolume PainVolume);	// called when pawn is taking pain volume damage
@@ -310,7 +310,7 @@ event PreBeginPlay()
 	if (bDeleteMe)
 		return;
 
-	SightCounter = 0.2 * FRand();  //offset randomly 
+	SightCounter = 0.2 * FRand();  //offset randomly
 }
 
 event Destroyed()
@@ -320,7 +320,7 @@ event Destroyed()
 	Super.Destroyed();
 }
 
-/* AdjustView() 
+/* AdjustView()
 by default, check and see if pawn still needs to update eye height
 (only if some playercontroller still has pawn as its viewtarget)
 Overridden in playercontroller
@@ -336,7 +336,7 @@ function AdjustView(float DeltaTime)
 	Pawn.bUpdateEyeHeight = false;
 	Pawn.Eyeheight = Pawn.BaseEyeheight;
 }
-			
+
 function ClientGameEnded()
 {
 	GotoState('GameEnded');

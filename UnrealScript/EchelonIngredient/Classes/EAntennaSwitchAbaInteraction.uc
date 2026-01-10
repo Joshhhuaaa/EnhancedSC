@@ -35,11 +35,11 @@ function Interact(Controller Instigator)
 {
 	// Trigger the switch owner
 	Owner.Trigger(Self, Instigator.Pawn);
-	
+
 	// Destroy the object
 	if (Owner.IsA('EGameplayObject'))
 		EGameplayObject(Owner).DestroyObject();
-	
+
 	// Continue to finish animation and return to walking
 	if (Instigator.bIsPlayer)
 		Instigator.GotoState(,'FinishInteraction');
@@ -48,7 +48,7 @@ function Interact(Controller Instigator)
 function PostInteract(Controller Instigator)
 {
 	Instigator.Interaction = None;
-	
+
 	if (Instigator.bIsPlayer)
 		EPlayerController(Instigator).ReturnFromInteraction();
 
@@ -61,18 +61,18 @@ function SetInteractLocation(Pawn InteractPawn)
 {
 	local Vector X, Y, Z, MovePos;
 	local EPawn InteractEPawn;
-	
+
 	InteractEPawn = EPawn(InteractPawn);
 	if (InteractEPawn == none)
 		return;
 
 	// Get object rotation axes for positioning
 	GetAxes(Owner.Rotation, X, Y, Z);
-	
+
 	MovePos = Owner.Location;
 	MovePos += 1.1f * InteractEPawn.CollisionRadius * X;
 	MovePos.Z = InteractEPawn.Location.Z;
-	
+
 	InteractEPawn.m_locationStart	= InteractEPawn.Location;
 	InteractEPawn.m_orientationStart= InteractEPawn.Rotation;
 	InteractEPawn.m_locationEnd		= MovePos;

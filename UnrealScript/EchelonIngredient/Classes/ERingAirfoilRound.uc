@@ -51,14 +51,14 @@ state s_Flying
 function Select(EInventory Inv)
 {
 	Super.Select(Inv);
-	
+
 	// Joshua - Don't play sound during silent restore (sorting)
 	if (!Inv.bSilentRestore)
 		PlaySound(Sound'Interface.Play_FisherEquipSpMunition', SLOT_Interface);
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Do treatment depending on light vars (50% of the visibility)
 //------------------------------------------------------------------------
 event VisibilityRating GetActorVisibility()

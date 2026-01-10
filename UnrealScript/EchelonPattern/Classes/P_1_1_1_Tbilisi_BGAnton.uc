@@ -83,7 +83,7 @@ DAnton:
     ChangeGroupState('s_default');
     ResetGroupGoals();
 Randomizer:
-    JumpRandom('Dapart', 0.60, 'Dalley', 1.00, , , , , ,); 
+    JumpRandom('Dapart', 0.60, 'Dalley', 1.00, , , , , ,);
 Dapart:
     Log("");
     Teleport(1, 'Anton10Apt');

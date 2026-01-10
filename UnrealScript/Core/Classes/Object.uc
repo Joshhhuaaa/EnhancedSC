@@ -21,7 +21,7 @@ var(Object) native const editconst class Class;
 // ***********************************************************************************************
 var native private const int DName;
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 //=============================================================================
@@ -36,7 +36,7 @@ const RF_NotForServer	= 0x00200000; // Don't load for game server.
 const RF_NotForEdit		= 0x00400000; // Don't load for editor.
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * dchabot (4 juin 2001)
 // * Purpose : Log with flags
 // ***********************************************************************************************
@@ -75,7 +75,7 @@ const LUNUSED6			= 0x40000000;
 const LUNUSED7			= 0x80000000;
 const LALL				= 0xFFFFFFFF;
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * dchabot (4 juin 2001)
 // ***********************************************************************************************
 
@@ -151,11 +151,11 @@ enum ECamOrientation
 };
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // ***********************************************************************************************
 enum ELeaveGame
 {
-    LG_MainMenu      
+    LG_MainMenu
 };
 
 enum EInputAction
@@ -174,19 +174,19 @@ enum ESurfaceType
 	SURFACE_RoofCanevas,
 	SURFACE_SnowPowder,
 	SURFACE_Grass,
-	SURFACE_ConcreteHard,	
-	SURFACE_ConcreteDirt,	
-	SURFACE_WoodHard,		
+	SURFACE_ConcreteHard,
+	SURFACE_ConcreteDirt,
+	SURFACE_WoodHard,
 	SURFACE_WoodBoomy,
 	SURFACE_RoofTile,
 	SURFACE_Conveyor,
 	SURFACE_Scaffolding,
 	SURFACE_WaterPuddle,
 	SURFACE_Snow,
-	SURFACE_MetalHard,		
+	SURFACE_MetalHard,
 	SURFACE_DeepWater,
 	SURFACE_MetalReverb,
-	SURFACE_MetalSheet,	
+	SURFACE_MetalSheet,
 	SURFACE_MediumWater,
 	SURFACE_BreakingGlass,
 	SURFACE_Gravel,
@@ -198,7 +198,7 @@ enum ESurfaceType
 };
 
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 
@@ -329,7 +329,7 @@ native(247) static final function     float Lerp  (float Alpha, float A, float B
 native(248) static final function     float Smerp (float Alpha, float A, float B);
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * dkalina (5 Apr 2001)
 // * Purpose : It was missing
 // ***********************************************************************************************
@@ -345,7 +345,7 @@ native(1135) static final function int		DampInt(int value, int targetValue, floa
 native(1136) static final function vector	DampVec(vector value, vector targetValue, float speed, float dt);
 
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * dkalina (5 Oct 2001)
 // ***********************************************************************************************
 
@@ -430,11 +430,11 @@ native(255) static final operator(26) bool != (name A, name B);
 
 // Logging.
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // ***********************************************************************************************
 native(231) final static function Log(coerce string S, optional name Tag, optional int Flag);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 native(232) final static function Warn(coerce string S);
 native static function string Localize(string SectionName, string KeyName, string PackageName);
@@ -471,7 +471,7 @@ native static final function StaticSaveConfig();
 // ***********************************************************************************************
 native static final function ResetConfig(optional string VarNameToReset);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 
@@ -493,6 +493,6 @@ event BeginState();
 //
 // Called immediately before going out of the current state,
 // while within the GotoState call that caused the state change.
-// 
+//
 event EndState();
 

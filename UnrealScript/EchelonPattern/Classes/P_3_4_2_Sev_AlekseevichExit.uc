@@ -51,7 +51,7 @@ Begin:
 HitTheLights:
     Log("Activates or deactivates the elaborate lighting system.");
     DisableMessages(TRUE, TRUE);
-    JumpRandom('LightCascadeOne', 0.20, 'LightCascadeTwo', 0.40, 'LightCascadeThree', 0.60, 'LightCascadeFour', 0.80, 'LightCascadeFive', 1.00); 
+    JumpRandom('LightCascadeOne', 0.20, 'LightCascadeTwo', 0.40, 'LightCascadeThree', 0.60, 'LightCascadeFour', 0.80, 'LightCascadeFive', 1.00);
 LightCascadeOne:
     Log("First light cascade configuration.");
     SendUnrealEvent('FunkLightOne');
@@ -119,7 +119,7 @@ CascadeDone:
 HitTheTechLights:
     Log("Activates or deactivates the elaborate lighting system in the Tech room.");
     DisableMessages(TRUE, TRUE);
-    JumpRandom('TechCascadeOne', 0.20, 'TechCascadeTwo', 0.40, 'TechCascadeThree', 0.60, 'TechCascadeFour', 0.80, 'TechCascadeFive', 1.00); 
+    JumpRandom('TechCascadeOne', 0.20, 'TechCascadeTwo', 0.40, 'TechCascadeThree', 0.60, 'TechCascadeFour', 0.80, 'TechCascadeFive', 1.00);
 TechCascadeOne:
     Log("");
     SendUnrealEvent('TechRoomLightOne');
@@ -187,7 +187,7 @@ TechCascadeDone:
 HittheTroisLights:
     Log("");
     DisableMessages(TRUE, TRUE);
-    JumpRandom('TroisCascadeOne', 0.20, 'TroisCascadeTwo', 0.40, 'TroisCascadeThree', 0.60, 'TroisCascadeFour', 0.80, 'TroisCascadeFive', 1.00); 
+    JumpRandom('TroisCascadeOne', 0.20, 'TroisCascadeTwo', 0.40, 'TroisCascadeThree', 0.60, 'TroisCascadeFour', 0.80, 'TroisCascadeFive', 1.00);
 TroisCascadeOne:
     Log("");
     SendUnrealEvent('TroisLightsOne');

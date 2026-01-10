@@ -46,14 +46,14 @@ event Destroyed()
 }
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * ATurcotte (MTL) (28 Jan 2002)
-// * Purpose : 
+// * Purpose :
 // ***********************************************************************************************
 function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta);
 function  RealKeyEvent(string RealKeyValue, EInputAction Action, FLOAT Delta);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * ATurcotte (MTL) (28 Jan 2002)
 // ***********************************************************************************************
 

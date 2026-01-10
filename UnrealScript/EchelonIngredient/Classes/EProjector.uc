@@ -26,7 +26,7 @@ function PostBeginPlay()
 	if (ProjectorPoints.Length > 0)
     {
 		SetRotation(Rotator(ProjectorPoints[CurrentPoint].Location - Location));
-        
+
         // Set the desired rotation to the first patrol point
         DesiredRotation = Rotator(ProjectorPoints[CurrentPoint].Location - Location);
     }
@@ -46,7 +46,7 @@ function SetSensorRotation(Rotator NewRotation)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Gets next patrol point in array
 //------------------------------------------------------------------------
 function int GetNextPoint()
@@ -58,7 +58,7 @@ function int GetNextPoint()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Check if support groups see the player
 //------------------------------------------------------------------------
 function bool GroupsSeePlayer()
@@ -73,13 +73,13 @@ function bool GroupsSeePlayer()
         {
             return true;
         }
-    } 
+    }
 
     return false;
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Toggle projector's light beam
 //------------------------------------------------------------------------
 event Trigger(Actor other, Pawn EventInstigator, optional name InTag)
@@ -103,7 +103,7 @@ function bool IsRotationValid(vector TargetLocation)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Patrol between projector points
 //------------------------------------------------------------------------
 auto state s_ProjectorPatrol
@@ -126,13 +126,13 @@ auto state s_ProjectorPatrol
 			return;
 
 		// Check if point is reached
-		if ((Rotation.Pitch&65535) == (DesiredRotation.Pitch&65535) && 
+		if ((Rotation.Pitch&65535) == (DesiredRotation.Pitch&65535) &&
 			(Rotation.Yaw&65535) == (DesiredRotation.Yaw&65535)		&&
-			(Rotation.Roll&65535) == (DesiredRotation.Roll&65535)	&& 
+			(Rotation.Roll&65535) == (DesiredRotation.Roll&65535)	&&
 			TimerRate == 0)
 		{
 			//Log("Point "$ProjectorPoints[CurrentPoint]$" found");
-			
+
 			// If this patrol point wants the projector to wait, else move to next
 			if (ProjectorPoints[CurrentPoint].PatrolWaitTime > 0)
 			{
@@ -142,7 +142,7 @@ auto state s_ProjectorPatrol
 			else
 				Timer();
 		}
-		
+
 		if (FollowUponDetection &&
 			(GroupsSeePlayer() && IsRotationValid(EchelonGameInfo(Level.Game).pPlayer.EPawn.Location)) ||
 			(FrustumScanning(Target,,,SensorDetectionType)) && IsRotationValid(Target.Location))
@@ -163,7 +163,7 @@ auto state s_ProjectorPatrol
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //  When the player is seen
 //------------------------------------------------------------------------
 state s_ProjectorAlert
@@ -193,7 +193,7 @@ state s_ProjectorAlert
 			//Log("Group see player");
             DesiredRotation = Rotator(EchelonGameInfo(Level.Game).pPlayer.EPawn.Location - Location);
         }
-        
+
         // If Target can not be seen, pause then go back to patrol
 		else if (FrustumScanning(Target,,,SensorDetectionType) && IsRotationValid(Target.Location))
 		{
@@ -231,7 +231,7 @@ state s_ProjectorAlert
 	}
 
     //------------------------------------------------------------------------
-    // Description		
+    // Description
     //  Goes back to s_ProjectorPatrol
     //------------------------------------------------------------------------
 	function Timer()

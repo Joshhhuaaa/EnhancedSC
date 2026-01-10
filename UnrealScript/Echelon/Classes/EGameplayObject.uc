@@ -2,8 +2,8 @@ class EGameplayObject extends Actor
 	placeable
 	native;
 
-#exec OBJ LOAD FILE=..\StaticMeshes\generic_obj.usx 
-#exec OBJ LOAD FILE=..\textures\ETexRenderer.utx 
+#exec OBJ LOAD FILE=..\StaticMeshes\generic_obj.usx
+#exec OBJ LOAD FILE=..\textures\ETexRenderer.utx
 #exec OBJ LOAD FILE=..\StaticMeshes\LightGenOBJ.usx
 
 enum EGOMsgEvent
@@ -19,7 +19,7 @@ enum ELinkType
 	EAlarm_None,
 	EAlarm_Trigger,
 	EAlarm_Object,
-}; 
+};
 
 enum EScannedActorType
 {
@@ -125,15 +125,15 @@ var			EObjectHUD			ObjectHud;
 
 var(AI) enum ECanTriggerType
 {
-	PlayerTriggered,	
-	NPCTriggered,	    
+	PlayerTriggered,
+	NPCTriggered,
 	PawnTriggered,
     NoRestriction
 
 } TriggerType;
 
 // Native functions
-native(1230) final function bool FrustumScanning(out	   Actor				FoundActor, 
+native(1230) final function bool FrustumScanning(out	   Actor				FoundActor,
 												  optional EDetectionType		DetectionType,
 												  optional float				DetectionThreshold,
 												  optional EScannedActorType	ActorDetectionType);
@@ -167,7 +167,7 @@ function PreBeginPlay()
 
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Prepare object (inventory, alarm and lights)
 //------------------------------------------------------------------------
 function PostBeginPlay()
@@ -182,7 +182,7 @@ function PostBeginPlay()
 	{
 		Switch (AlarmLinkType)
 		{
-		case EAlarm_Trigger : 
+		case EAlarm_Trigger :
 			Alarm.LinkTrigger(self);
 			break;
 
@@ -209,14 +209,14 @@ function PostBeginPlay()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Base function for use and fire
 //------------------------------------------------------------------------
 function Use();
 function bool Scope();
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		When an object is picked up on ground
 //------------------------------------------------------------------------
 function bool NotifyPickup(Controller Instigator)
@@ -233,7 +233,7 @@ function name GetHandAttachTag()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Changes my state and adds object to ChangedActor list IF thrown by player.
 //
 // Input
@@ -241,12 +241,12 @@ function name GetHandAttachTag()
 //		ThrowVelocity:  Speed applied to object immediately.
 //------------------------------------------------------------------------
 function Throw(Controller Thrower, vector ThrowVelocity)
-{	
+{
 	local vector HitLocation, HitNormal, Extent;
 	local Actor HitActor;
 
 	Velocity = ThrowVelocity;
-	
+
 	if (ChangeListWhenThrown && Thrower.bIsPlayer)
 		Level.AddChange(self, CHANGE_Object);
 
@@ -258,7 +258,7 @@ function Throw(Controller Thrower, vector ThrowVelocity)
 	// Do it before the gotoState because throwing an inv.item might put the next in queue in pawn's hand
 	if (Epawn(thrower.Pawn).handitem == self)
 		Epawn(thrower.Pawn).handitem = None;
-	
+
 	if (Base != None)
 		Base.DetachFromBone(self);
 
@@ -276,7 +276,7 @@ function Throw(Controller Thrower, vector ThrowVelocity)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Send to object when stopped moving (PHYS_None)
 //------------------------------------------------------------------------
 function StoppedMoving()
@@ -312,8 +312,8 @@ function HitFakeBackDrop()
 function BaseChange()
 {
 	//Log(self$" Changing base to Base["$Base$"] bCollideActors["$bCollideActors$"/"$default.bCollideActors$"] bBlockActors["$bBlockActors$"/"$default.bBlockActors$"] bBlockPlayers["$bBlockPlayers$"/"$default.bBlockPlayers$"] bCollideWorld["$bCollideWorld$"/"$default.bCollideWorld$"]");
-	if (Base == None && 
-		(bCollideActors || default.bCollideActors) && 
+	if (Base == None &&
+		(bCollideActors || default.bCollideActors) &&
 		((bBlockActors || default.bBlockActors) || (bBlockPlayers || default.bBlockPlayers)))
 	{
 		bCollideWorld = true;
@@ -330,7 +330,7 @@ function BaseChange()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Do treatment depending on light vars
 //------------------------------------------------------------------------
 event VisibilityRating GetActorVisibility()
@@ -339,7 +339,7 @@ event VisibilityRating GetActorVisibility()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Called when this actor has no more HitPoints
 //------------------------------------------------------------------------
 event Destructed()
@@ -379,7 +379,7 @@ event Destructed()
 			break;
 		}
 	}
-	
+
 	// send event to GroupAI when destroyed
 	if (GroupAI != None && DestroyedJumpLabel != '')
 		GroupAI.SendJumpEvent(DestroyedJumpLabel, false, false);
@@ -400,7 +400,7 @@ event Destructed()
 }
 
 //---------------------------------------[David Kalina - 28 Nov 2001]-----
-// 
+//
 // Description
 //		For objects that have bShatterable == true upon destruction.
 //
@@ -413,7 +413,7 @@ final function Shatter()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Any explosion should call this.
 //------------------------------------------------------------------------
 final function Explode()
@@ -426,7 +426,7 @@ final function Explode()
 
 	// Sound
 	PlaySound(ExplosionSound, SLOT_SFX);
-	
+
 	// Noise
 	MakeNoise(ExplosionNoiseRadius, NOISE_Explosion);
 
@@ -438,7 +438,7 @@ final function Explode()
 	if (bHurtEntry) // prevent take damage recursion
 		return;
 
-	if (ExplosionDamage == 0) 
+	if (ExplosionDamage == 0)
 		return;
 
 	// Joshua - If this explosion comes from an EGameplayObjectPattern, clear the Instigator
@@ -466,7 +466,7 @@ final function Explode()
 			//Log(explosiondamage@damagescale);
 			//Log(self$" HURT radius processing damage["$damageScale*explosiondamage$"] to: "$victims$" at dist="$dist$" with damageScale="$damageScale);
 
-			dir = dir / dist; 
+			dir = dir / dist;
 
  			// Joshua - Scaling damage as NPCs have 150 HP on Hard diffculty
 			dam = damageScale * ExplosionDamage;
@@ -483,16 +483,16 @@ final function Explode()
 				(damageScale * ExplosionMomentum * dir),
 				ExplosionDamageClass
 );
-		} 
+		}
 	}
-	
+
 	// Joshua - Restore original instigator
 	Instigator = OriginalInstigator;
 	bHurtEntry = false;
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Manage take damage
 //------------------------------------------------------------------------
 function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag)
@@ -512,8 +512,8 @@ function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector
 		TakeHit();
 
 	// If object is to be destroyed with this damage and not bDestroyOnlyByExplosion only
-	if (bDestroyOnlyByExplosion && 
-		HitPoints - Damage <= 0 && 
+	if (bDestroyOnlyByExplosion &&
+		HitPoints - Damage <= 0 &&
 		(DamageType == None || (DamageType.Name != 'Crushed' && DamageType.Name != 'EBurned')))
 	{
 		//Log(self$"bDestroyOnlyByExplosion true ignoring destructor damage");
@@ -537,7 +537,7 @@ event BulletWentTru(Actor Instigator, vector HitLocation, vector HitNormal, vect
 
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Wrapper around ProcessDamage
 //------------------------------------------------------------------------
 final function DestroyObject()
@@ -546,7 +546,7 @@ final function DestroyObject()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Damage processing from Takedamage or destroy
 //------------------------------------------------------------------------
 function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocation, Vector HitNormal)
@@ -559,7 +559,7 @@ function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocat
 	local bool		bObjectModifed;
 	local bool		bPlayBounce;
 	local EVolume	V;
-	
+
 	bPlayBounce = true;
 
 
@@ -593,7 +593,7 @@ function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocat
 		// If Current level of damage >= Object damage value
 		if (DamagePercent >= SpawnableObjects[i].SpawnAtDamagePercent)
 		{
-			// check spawn location, in case damage direct only 
+			// check spawn location, in case damage direct only
 			if (SpawnableObjects[i].SpawnOnImpact && DamageType == None)
 			{
 				SpawnLocation = HitLocation;
@@ -609,8 +609,8 @@ function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocat
 			if (SpawnableObjects[i].SpawnOffset != Vect(0,0,0))
 			{
 				GetAxes(Rotation, X,Y,Z);
-				SpawnLocation += SpawnableObjects[i].SpawnOffset.X * X + 
-								 SpawnableObjects[i].SpawnOffset.Y * Y + 
+				SpawnLocation += SpawnableObjects[i].SpawnOffset.X * X +
+								 SpawnableObjects[i].SpawnOffset.Y * Y +
 								 SpawnableObjects[i].SpawnOffset.Z * Z;
 			}
 
@@ -638,9 +638,9 @@ function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocat
 				i--;
 			}
 
-			// Joshua - Avoid setting this if an EGO's SpawnableObject is null, 
+			// Joshua - Avoid setting this if an EGO's SpawnableObject is null,
 			// it would disable the light even though the mesh hasn't changed
-			//bObjectModifed = true; 
+			//bObjectModifed = true;
 		}
 	}
 
@@ -668,7 +668,7 @@ function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocat
 				//Log("		- Could use this mesh for Delta["$Delta$"] smaller than SmallestDelta="$SmallestDelta);
 				// keep this delta to be able to find a more accurate mesh in the array
 				SmallestDelta = Delta;
-				
+
 				// use the most accurate mesh
 				SetStaticMesh(DamagedMeshes[i].StaticMesh);
 				// change collision mesh if specified
@@ -694,7 +694,7 @@ function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocat
 			}
 
 			if (bPlayBounce)
-				PlaySound(BounceSound, SLOT_SFX);		
+				PlaySound(BounceSound, SLOT_SFX);
 		}
 		else
 		{
@@ -711,7 +711,7 @@ function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocat
 	}
 	else
 	{
-		if (!(IsA('EGamePlayObjectLight') && (HitPoints > 0))) 
+		if (!(IsA('EGamePlayObjectLight') && (HitPoints > 0)))
 		{
 		if (HitSound.Length > 0)
 			PlaySound(HitSound[0], SLOT_SFX);
@@ -730,7 +730,7 @@ function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocat
 		{
 			if (ObjectLights[i] == None)
 				continue;
-			
+
 			//Log("Destroying upon damage light"@i@"from"@self);
 			ObjectLights[i].TurnOff(CHANGE_LightShotOut,Instigator);
 			ObjectLights[i] = None;
@@ -757,12 +757,12 @@ function ProcessDamage(int Damage, class<DamageType> DamageType, Vector HitLocat
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Send event to pattern on Trigger .. may be called from sub-classes
 //------------------------------------------------------------------------
 function TriggerPattern(optional Pawn TriggerInvestigator)
 {
-    
+
     if (!CanTrigger(TriggerInvestigator))
     {
         // Incorrect TriggerType, return
@@ -780,7 +780,7 @@ function TriggerPattern(optional Pawn TriggerInvestigator)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Checks if Pattern can be triggered based on TriggerType
 //------------------------------------------------------------------------
 function bool CanTrigger(Pawn TriggerInvestigator)
@@ -807,7 +807,7 @@ function bool CanTrigger(Pawn TriggerInvestigator)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		utility somwhere ...
 //------------------------------------------------------------------------
 function Trigger(actor Other, pawn EventInstigator, optional name InTag)
@@ -835,7 +835,7 @@ function Trigger(actor Other, pawn EventInstigator, optional name InTag)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Push if pushable upon bump
 //------------------------------------------------------------------------
 function Bump(actor Other, optional int Pill)
@@ -843,7 +843,7 @@ function Bump(actor Other, optional int Pill)
 	local float speed, oldZ;
 	local bool bPlayBounce;
 	local EVolume V;
-	
+
 	bPlayBounce = true;
 
 	CheckSBOwner(Other.Velocity * default.Mass / Mass * Other.Mass / Mass);
@@ -854,7 +854,7 @@ function Bump(actor Other, optional int Pill)
 		speed = VSize(Other.Velocity);
 		if (speed > 0.0)
 			Velocity = Other.Velocity * FMin(120.0, 20 + speed) / speed;
-		if (Physics == PHYS_None) 
+		if (Physics == PHYS_None)
 			Velocity.Z = 25;
 		else
 			Velocity.Z = oldZ;
@@ -933,10 +933,10 @@ state s_Flying
 		bBounce				= true;
 		bFixedRotationDir	= true;
 
-		if (abs(RotationRate.Pitch)<10000) 
+		if (abs(RotationRate.Pitch)<10000)
 			RotationRate.Pitch=10000;
-		if (abs(RotationRate.Roll)<10000) 
-			RotationRate.Roll=10000;			
+		if (abs(RotationRate.Roll)<10000)
+			RotationRate.Roll=10000;
 
 		SetCollision(true, true, false);
 		SetPhysics(PHYS_Falling);
@@ -1011,7 +1011,7 @@ state s_Flying
 		// Maybe not needed...
 		if (VSize(Velocity) > 2000.0)
 			Velocity = Normal(Velocity) * 2000.0;
-		
+
 		Speed = VSize(Velocity);
 		if (Wall.bIsMover)
 			Velocity += Wall.Velocity;
@@ -1054,7 +1054,7 @@ state s_Flying
 
 			StoppedMoving();
 		}
-		else if (speed > 40) 
+		else if (speed > 40)
 		{
 			bPlayBounce = true;
 
@@ -1069,7 +1069,7 @@ state s_Flying
 		}
 
 		if (HitNoiseRadius > 0)
-		{			
+		{
 			MakeNoise(HitNoiseRadius, NOISE_Object_Falling, 250.0f);
 		}
 	}
@@ -1080,7 +1080,7 @@ state s_Flying
 
 		RotationRate.Yaw	= spinRate * 2 *FRand() - spinRate;
 		RotationRate.Pitch	= spinRate * 2 *FRand() - spinRate;
-		RotationRate.Roll	= spinRate * 2 *FRand() - spinRate;	
+		RotationRate.Roll	= spinRate * 2 *FRand() - spinRate;
 	}
 }
 
@@ -1102,7 +1102,7 @@ state s_Dying
 
 	function Timer()
 	{
-		if (!PlayerCanSeeMe()) 
+		if (!PlayerCanSeeMe())
 			Destroy();
 	}
 }

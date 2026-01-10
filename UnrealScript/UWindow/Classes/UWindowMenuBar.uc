@@ -32,14 +32,14 @@ function UWindowMenuBarItem AddItem(string Caption)
 	I = UWindowMenuBarItem(Items.Append(class'UWindowMenuBarItem'));
 	I.Owner = Self;
 	I.SetCaption(Caption);
-	
+
 	return I;
 }
 
 function ResolutionChanged(float W, float H)
 {
 	local UWindowMenuBarItem I;
-	
+
 	if (Items != none)
 	{
 		for (I = UWindowMenuBarItem(Items.Next);I != None; I = UWindowMenuBarItem(I.Next))
@@ -71,7 +71,7 @@ function Paint(Canvas C, float MouseX, float MouseY)
 		{
 			DrawItem(C, I, X, 1, W + Spacing, 14);
 			X = X + W + Spacing;
-		}		
+		}
 	}
 }
 
@@ -157,7 +157,7 @@ function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H
 
 
 	C.SetDrawColor(255, 255, 255);
-	
+
 	UWindowMenuBarItem(Item).ItemLeft = X;
 	UWindowMenuBarItem(Item).ItemWidth = W;
 
@@ -171,7 +171,7 @@ function DrawMenuBar(Canvas C)
 
 function CloseUp()
 {
-	if (Selected != None) 
+	if (Selected != None)
 	{
 		Selected.DeSelect();
 		Selected = None;
@@ -201,7 +201,7 @@ function bool HotKeyDown(int Key, float X, float Y)
 		// Check for hotkeys in each menu item
 		for (I = UWindowMenuBarItem(Items.Next);I != None; I = UWindowMenuBarItem(I.Next))
 		{
-			if (Key == I.HotKey) 
+			if (Key == I.HotKey)
 			{
 				if (Selected != None)
 					Selected.DeSelect();
@@ -212,7 +212,7 @@ function bool HotKeyDown(int Key, float X, float Y)
 				return True;
 			}
 		}
-	}		
+	}
 	return False;
 }
 
@@ -236,7 +236,7 @@ function KeyDown(int Key, float X, float Y)
 			I = UWindowMenuBarItem(Items.Last);
 
 		if (Selected != None)
-			Selected.DeSelect();	
+			Selected.DeSelect();
 
 		Selected = I;
 		Selected.Select();
@@ -251,13 +251,13 @@ function KeyDown(int Key, float X, float Y)
 
 		if (Selected != None)
 			Selected.DeSelect();
-		
+
 
 		Selected = I;
 		Selected.Select();
 
 		Select(Selected);
-		
+
 		break;
 	}
 }
@@ -281,7 +281,7 @@ function MenuCmd(int Menu, int Item)
 			return;
 		}
 		j++;
-	}	
+	}
 }
 
 function MenuItemSelected(UWindowBase Sender, UWindowBase Item)

@@ -8,13 +8,13 @@
 class EPCCheckBox extends UWindowButton
 				native;
 
-function Click(float X, float Y) 
+function Click(float X, float Y)
 {
     if (bDisabled)
         return;
 
     m_bSelected = !m_bSelected;
-    
+
 	Notify(DE_Click);
 
 	Root.PlayClickSound();
@@ -24,7 +24,7 @@ function Click(float X, float Y)
 function MouseWheelDown(FLOAT X, FLOAT Y)
 {
 	local UWindowWindow W;
-	
+
 	// Joshua - Find the listbox in our owner window and pass the scroll event to it
 	if (NotifyWindow != None)
 	{
@@ -45,7 +45,7 @@ function MouseWheelDown(FLOAT X, FLOAT Y)
 function MouseWheelUp(FLOAT X, FLOAT Y)
 {
 	local UWindowWindow W;
-	
+
 	// Joshua - Find the listbox in our owner window and pass the scroll event to it
 	if (NotifyWindow != None)
 	{

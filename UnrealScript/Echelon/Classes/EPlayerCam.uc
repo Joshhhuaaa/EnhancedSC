@@ -208,7 +208,7 @@ state s_Fixed
 	{
 		UpdateView(m_EPC.Rotation, false);
 	}
-	
+
 	function CalcView(actor ViewActor, out vector CameraLocation, out rotator CameraRotation)
 	{
 	}

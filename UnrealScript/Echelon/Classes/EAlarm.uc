@@ -27,10 +27,10 @@ var	  bool				bAlreadyTriggered;
 var   bool				bForceUpdatePos;
 
 //----------------------------------------[Frederic Blais - 1 Aout 2001]-----
-// 
+//
 // Description
 //		Create clean EAIEvent object for communication with group object.
-// 
+//
 //------------------------------------------------------------------------
 function PostBeginPlay()
 {
@@ -39,8 +39,8 @@ function PostBeginPlay()
 }
 
 //------------------------------------------------------------------------
-// Description		
-//		
+// Description
+//
 //------------------------------------------------------------------------
 function LinkTrigger(Actor A)
 {
@@ -48,8 +48,8 @@ function LinkTrigger(Actor A)
 }
 
 //------------------------------------------------------------------------
-// Description		
-//		
+// Description
+//
 //------------------------------------------------------------------------
 function LinkObject(Actor A)
 {
@@ -57,8 +57,8 @@ function LinkObject(Actor A)
 }
 
 //------------------------------------------------------------------------
-// Description		
-//		
+// Description
+//
 //------------------------------------------------------------------------
 function EnableAlarm(Actor Instigator, Controller Triggerer, optional bool _bForceUpdatePos)
 {
@@ -91,8 +91,8 @@ function EnableAlarm(Actor Instigator, Controller Triggerer, optional bool _bFor
 }
 
 //------------------------------------------------------------------------
-// Description		
-//		
+// Description
+//
 //------------------------------------------------------------------------
 function DisableAlarm(Actor Instigator)
 {
@@ -156,7 +156,7 @@ state() s_On
 					//}
 				}
 			}
-			
+
 			if (bUseObjectLocation)
 			{
 			OffSet = (vect(50, 0, 0) >> InstigatorActor.Rotation);
@@ -165,10 +165,10 @@ state() s_On
 			Pos = InstigatorActor.Location;
 			Pos.Z = TriggerActor.Pawn.Location.Z;
 
-			AIEvent.EventLocation = Pos + OffSet;	
+			AIEvent.EventLocation = Pos + OffSet;
 		}
 
-			
+
 		}
 		else
 		{
@@ -251,7 +251,7 @@ state s_Off
 		AIEvent.EventTarget   = Instigator;
 
 		if (Instigator != None)
-			AIEvent.EventLocation = Instigator.Location;	
+			AIEvent.EventLocation = Instigator.Location;
 
 		for (i = 0; i < PrimaryGroups.Length; i++)
 		{

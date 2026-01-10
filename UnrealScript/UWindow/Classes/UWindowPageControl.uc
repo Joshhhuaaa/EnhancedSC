@@ -7,7 +7,7 @@ function ResolutionChanged(float W, float H)
 	for (I = UWindowPageControlPage(Items.Next); I != None; I = UWindowPageControlPage(I.Next))
 		if (I.Page != None && I != SelectedTab)
 			I.Page.ResolutionChanged(W, H);
-	
+
 	if (SelectedTab != None)
 		UWindowPageControlPage(SelectedTab).Page.ResolutionChanged(W, H);
 }
@@ -43,7 +43,7 @@ function GetDesiredDimensions(out float W, out float H)
 {
 	local float MaxW, MaxH, TW, TH;
 	local UWindowPageControlPage I;
-	
+
 	MaxW = 0;
 	MaxH = 0;
 
@@ -83,12 +83,12 @@ function UWindowPageControlPage AddPage(string Caption, class<UWindowPageWindow>
 {
 	local UWindowPageControlPage P;
 	P = UWindowPageControlPage(AddTab(Caption));
-	P.Page = UWindowPageWindow(CreateWindow(PageClass, 0, 
-				TabArea.WinHeight - (LookAndFeel.TabSelectedM.H - LookAndFeel.TabUnselectedM.H), 
+	P.Page = UWindowPageWindow(CreateWindow(PageClass, 0,
+				TabArea.WinHeight - (LookAndFeel.TabSelectedM.H - LookAndFeel.TabUnselectedM.H),
 				WinWidth, WinHeight - (TabArea.WinHeight - (LookAndFeel.TabSelectedM.H - LookAndFeel.TabUnselectedM.H)),,,ObjectName));
 	P.Page.OwnerTab = P;
 
-	if (P != SelectedTab) 
+	if (P != SelectedTab)
 		P.Page.HideWindow();
 	else
 	if (UWindowPageControlPage(SelectedTab) != None && WindowIsVisible())
@@ -108,12 +108,12 @@ function UWindowPageControlPage InsertPage(UWindowPageControlPage BeforePage, st
 		return AddPage(Caption, PageClass);
 
 	P = UWindowPageControlPage(InsertTab(BeforePage, Caption));
-	P.Page = UWindowPageWindow(CreateWindow(PageClass, 0, 
-				TabArea.WinHeight - (LookAndFeel.TabSelectedM.H - LookAndFeel.TabUnselectedM.H), 
+	P.Page = UWindowPageWindow(CreateWindow(PageClass, 0,
+				TabArea.WinHeight - (LookAndFeel.TabSelectedM.H - LookAndFeel.TabUnselectedM.H),
 				WinWidth, WinHeight - (TabArea.WinHeight - (LookAndFeel.TabSelectedM.H - LookAndFeel.TabUnselectedM.H)),,,ObjectName));
 	P.Page.OwnerTab = P;
 
-	if (P != SelectedTab) 
+	if (P != SelectedTab)
 		P.Page.HideWindow();
 	else
 	if (UWindowPageControlPage(SelectedTab) != None && WindowIsVisible())
@@ -157,7 +157,7 @@ function GotoTab(UWindowTabControlItem NewSelected, optional bool bByUser)
 	for (I = UWindowPageControlPage(Items.Next);I != None;I = UWindowPageControlPage(I.Next))
 	{
 		if (I != NewSelected)
-			I.Page.HideWindow();			
+			I.Page.HideWindow();
 	}
 
 	if (UWindowPageControlPage(NewSelected) != None)

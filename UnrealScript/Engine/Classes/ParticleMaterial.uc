@@ -19,7 +19,7 @@ var const int				AlphaTest;
 var const int				AlphaRef;
 var const int				ZTest;
 var const int				ZWrite;
-var const int				Wireframe;		
+var const int				Wireframe;
 
 var transient bool							AcceptsProjectors;
 var transient const int						NumProjectors;

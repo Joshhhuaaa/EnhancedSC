@@ -4,8 +4,8 @@ class EEventTrigger extends Actor
 
 var() enum EProximity
 {
-	PlayerProximity,	
-	NPCProximity,	    
+	PlayerProximity,
+	NPCProximity,
 	PawnProximity
 
 } ProximityType;
@@ -38,9 +38,9 @@ function bool IsRelevant(actor Other)
 			if (!Other.bIsPawn || EAIController(Pawn(Other).controller) == None)
 				return false;
 			// Joshua - Reject unconscious, carried, or dead NPCs
-			if (bNPCMustBeConscious && 
-				!((EAIController(Pawn(Other).controller).GetStateName() != 's_Unconscious') && 
-				  (EAIController(Pawn(Other).controller).GetStateName() != 's_Carried') && 
+			if (bNPCMustBeConscious &&
+				!((EAIController(Pawn(Other).controller).GetStateName() != 's_Unconscious') &&
+				  (EAIController(Pawn(Other).controller).GetStateName() != 's_Carried') &&
 				  (Pawn(Other).Health > 0)))
 				return false;
 			return true;
@@ -78,10 +78,10 @@ function Touch(actor Other)
 			foreach DynamicActors(class'EGroupAI', Group, GroupTag)
 			{
 				Group.SendJumpEvent(JumpLabel,bAffectLastZone,bForceJump);
-				break; 
-			}			
+				break;
+			}
 		}
-		
+
 	}
 }
 

@@ -10,7 +10,7 @@ const EJECT_DELAY = 0.04;
 #exec OBJ LOAD FILE=..\Sounds\FisherEquipement.uax
 
 function PostBeginPlay()
-{	
+{
     Super.PostBeginPlay();
 
     HUDTex       = EchelonLevelInfo(Level).TICON.qi_ic_maingun;
@@ -60,7 +60,7 @@ function bool SwitchROF()
 	{
 		switch (eROFMode)
 		{
-			case ROF_Single : 
+			case ROF_Single :
 				if (EPC.bF2000BurstFire)  // Joshua - Restoring burst fire from early Splinter Cell builds
 					eROFMode = ROF_Burst;
 				else

@@ -2,23 +2,23 @@ class EReconMapKalinatek extends ERecon;
 
 function InitRecon()
 {
-	
+
     ReconType        = 2;
 	ReconName        = "ReconNameMapKali";
 	ReconPicName     = Texture'HUD.RECON.rc_2_2_mapkalinatek';
 	ReconPreviewText = "ReconPTMapKali";
 	ReconText        = "";
-	
+
 	NbrOfCoord = 6;
-		
+
 	// Add manualy because of defined structure
 	ReconDynMapArray.Length = ReconDynMapArray.Length + NbrOfCoord;
-		
+
 	// Map COORDinates for Tbilisi MAP
 	ReconDynMapArray[0].x = 175;
 	ReconDynMapArray[0].y = 214;
 	ReconDynMapArray[0].RoomDesc = "ReconMapKaliRoom1";
-		
+
 	ReconDynMapArray[1].x = 352;
 	ReconDynMapArray[1].y = 184;
 	ReconDynMapArray[1].RoomDesc = "ReconMapKaliRoom2";

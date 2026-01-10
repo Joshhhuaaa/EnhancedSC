@@ -22,7 +22,7 @@ function TraceFire()
 
 	// get basic start and end positions
 	StartTrace	= GetFireStart();
-	EndTrace = StartTrace + Controller.AdjustTarget(GetFireEnd() - StartTrace);	
+	EndTrace = StartTrace + Controller.AdjustTarget(GetFireEnd() - StartTrace);
 	ShotDirection = Normal(EndTrace - StartTrace);
 
 	for (i = 0; i < NbFrags; i++)
@@ -35,13 +35,13 @@ function TraceFire()
 		// Be sure that the intention of the NPC is not to shoot another NPC
 		if (!Controller.bIsPlayer && EAIController(Controller).TargetActorToFire != HitActor)
 			HitActor = None;
-		
+
 		if (HitActor == none)
 			continue;
 
 		SpawnWallHit(HitActor, HitLocation, HitNormal, HitMaterial);
-		
-		if (HitActor != self && HitActor != Controller.Pawn && !HitActor.bWorldGeometry) 
+
+		if (HitActor != self && HitActor != Controller.Pawn && !HitActor.bWorldGeometry)
 			HitActor.TakeDamage(BaseDamage, Controller.Pawn, HitLocation, HitNormal, Normal(HitLocation - GetFireStart()) * BaseMomentum, None, PillTag);
 	}
 }
@@ -50,10 +50,10 @@ event bool IsROFModeAvailable(ERateOfFireMode rof)
 {
 	switch (rof)
 	{
-	case ROF_Single : 
+	case ROF_Single :
 		return true;
-	case ROF_Burst : 
-	case ROF_Auto :	
+	case ROF_Burst :
+	case ROF_Auto :
 		return false;
 	}
 }

@@ -3,7 +3,7 @@ class ESlidingDoor extends EDoorMover;
 var bool	HasBeenCrackedOpened;
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Make it open if the door has already been opened by Sam
 //------------------------------------------------------------------------
 function bool CanOpenSpecial()

@@ -66,7 +66,7 @@ BoomTwo:
     End();
 Boom:
     Log("Explosion generator internal 50/50 random function.");
-    JumpRandom('BoomOne', 0.50, 'BoomTwo', 1.00, , , , , ,); 
+    JumpRandom('BoomOne', 0.50, 'BoomTwo', 1.00, , , , , ,);
 
 }
 

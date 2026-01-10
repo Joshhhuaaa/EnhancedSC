@@ -10,7 +10,7 @@ class Engine extends Subsystem
 // Drivers.
 var(Drivers) config class<AudioSubsystem> AudioDevice;
 var(Drivers) config class<Interaction>    Console;				// The default system console
-var(Drivers) config class<Interaction>	  DefaultMenu;			// The default system menu 
+var(Drivers) config class<Interaction>	  DefaultMenu;			// The default system menu
 var(Drivers) config class<Interaction>	  DefaultPlayerMenu;	// The default player menu
 var(Drivers) config class<Language>       Language;
 
@@ -36,7 +36,7 @@ var int bShowMatineeStats;	// Show Matinee specific information
 var int bShowLightStats;
 var int bShowSkinningStats;
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 var int TickCycles, GameCycles, ClientCycles;

@@ -5,7 +5,7 @@
 //  sub-system is responsible for tunneling input and Pre/Post rendering
 //  time to individual viewports and interactions.
 //
-// (c) 2001, Epic Games, Inc.  All Rights Reserved  
+// (c) 2001, Epic Games, Inc.  All Rights Reserved
 // ====================================================================
 
 class Interactions extends Object
@@ -14,7 +14,7 @@ class Interactions extends Object
 
 //-----------------------------------------------------------------------------
 // Input.
-		
+
 
 // Input system states.
 //enum EInputAction
@@ -95,5 +95,5 @@ enum EInputKey
 /*FC*/	IK_NoName		,IK_PA1			,IK_OEMClear
 };
 
-		
-		
+
+

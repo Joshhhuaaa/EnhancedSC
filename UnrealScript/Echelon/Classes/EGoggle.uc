@@ -29,9 +29,9 @@ function Activate()
 	Epc.SetCameraMode(Epc, CurrentMode);
 
 	if (CurrentMode == REN_ThermalVision)
-	{     
+	{
 		Epc.ThermalTexture = Level.pThermalTexture_A;
-        Epc.bBigPixels = false;		
+        Epc.bBigPixels = false;
 	}
 }
 
@@ -97,7 +97,7 @@ auto state GoggleUp
 		CurrentMode = NewRenderingMode;
 
 		// do nothing if no change in rendering needed
-		if (CurrentMode == REN_DynLight) 
+		if (CurrentMode == REN_DynLight)
 			return;
 
 		AddSoundRequest(Sound'Interface.Play_FisherEquipGoggle', SLOT_Interface, 0.5f);

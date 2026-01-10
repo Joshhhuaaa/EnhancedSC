@@ -25,7 +25,7 @@ function UWindowPulldownMenu CreateSubMenu(class<UWindowPulldownMenu> MenuClass,
 
 function Select()
 {
-	if (SubMenu != None) 
+	if (SubMenu != None)
 	{
 		SubMenu.WinLeft = Owner.WinLeft + Owner.WinWidth - Owner.HBORDER;
 		SubMenu.WinTop = ItemTop - Owner.VBORDER;
@@ -39,7 +39,7 @@ function SetCaption(string C)
 	local string Junk, Junk2;
 
 	Caption = C;
-	HotKey = Owner.ParseAmpersand(C, Junk, Junk2, False);	
+	HotKey = Owner.ParseAmpersand(C, Junk, Junk2, False);
 }
 
 function DeSelect()

@@ -38,7 +38,7 @@ function InitPattern()
             Characters[2] = P.controller;
     }
 
-    
+
     if (!bInit)
     {
         // Joshua - Replace NPC skins for variety

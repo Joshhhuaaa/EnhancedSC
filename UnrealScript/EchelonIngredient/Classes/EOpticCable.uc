@@ -25,8 +25,8 @@ function PostBeginPlay()
 // same as Normalize for a rotator but for an int only
 function int CenterToZero(int v)
 {
-	v = v & 65535; 
-	if (v >= 32769) 
+	v = v & 65535;
+	if (v >= 32769)
 		v -= 65536;
 	return v;
 }
@@ -39,7 +39,7 @@ function bool IsInRange(int iStart, int iRange, int iCur)
 }
 
 //---------------------------------------[Matthew Clarke - June 23 2002]-----
-// 
+//
 // Description
 //		Send a msg to Door's Group AI when optic cable is FINISHED using
 //
@@ -61,7 +61,7 @@ function UsedOnDoor(ESwingingDoor ESD)
 }
 
 //-----------------------------------[Matthew Clarke - August 13th 2002]-----
-// 
+//
 // Description
 //		Send a msg to Door's Group AI when optic cable is STARTING use
 //
@@ -117,7 +117,7 @@ function AddedToInventory()
 function Select(EInventory Inv)
 {
 	Super.Select(Inv);
-	
+
 	// Joshua - Don't play sound during silent restore (sorting)
 	if (!Inv.bSilentRestore)
 		PlaySound(Sound'Interface.Play_FisherEquipEspionCam', SLOT_Interface);
@@ -134,7 +134,7 @@ function HudView(bool bIn)
 		Epc.SetLocation(start_location);
 		// Camera rotation
 		Epc.SetRotation(camera_rotation);
-		
+
 		if (!Epc.bOpticCableVisions)
 			Epc.SetCameraMode(self, REN_NightVision);
 		Epc.iRenderMask = 2;
@@ -216,7 +216,7 @@ state s_Sneaking
 	{
 		local EPlayerController Epc;
 		Epc = EPlayerController(Controller);
-		
+
 		Disable('Tick');
 		EMainHUD(Epc.myHud).Slave(self);
 		ObjectHud.GotoState('s_Sneaking');
@@ -227,7 +227,7 @@ state s_Sneaking
 		// Joshua - This is the original behavior of SC1, replacing it with the "Begin" state label
 		// PlaySound(Sound'FisherEquipement.Play_CamEspionRun', SLOT_SFX);
 	}
-	
+
 	function EndState()
 	{
 		local EPlayerController Epc;
@@ -264,7 +264,7 @@ state s_Sneaking
 		clamped_yaw		= previous_yaw;
 		clamped_yaw	   += delta_damping;
 		clamped_yaw		= CenterToZero(clamped_yaw);
-		
+
 		//Log("start["$start_yaw$"] range["$65535/4$"] clamped_yaw["$clamped_yaw$"] IsInRange"@IsInRange(start_yaw, 65535/4, clamped_yaw));
 		/*
 		if (IsInRange(start_yaw, valid_range, clamped_yaw))
@@ -279,7 +279,7 @@ state s_Sneaking
 		else
 			noised_rotation			= camera_rotation;
 		 */
-		
+
 		// Joshua - Clamp to boundary if out of range, so fast mouse flicks still reach the edge
 		if (!IsInRange(start_yaw, valid_range, clamped_yaw))
 		{
@@ -288,7 +288,7 @@ state s_Sneaking
 			else
 				clamped_yaw = CenterToZero(start_yaw - valid_range + 1);
 		}
-		
+
 		// Joshua - Use actual movement for roll
 		actual_delta = CenterToZero(clamped_yaw - previous_yaw);
 		camera_rotation.Yaw = clamped_yaw;

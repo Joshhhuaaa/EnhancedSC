@@ -11,8 +11,8 @@ function PostBeginPlay()
 
 	if (bIsInRainVolume == 0)
 	{
-		bHidden = true; 
-		// we should also shut down the emitter from processing, 
+		bHidden = true;
+		// we should also shut down the emitter from processing,
 		// even though its not being drawn anymore.
 		GotoState('s_Dry');
 	}
@@ -35,7 +35,7 @@ state s_Rain
 		if (bIsInRainVolume == 0)
 		{
 			bHidden = true;
-			// we should also shut down the emitter from processing, 
+			// we should also shut down the emitter from processing,
 			// even though its not being drawn anymore.
 			GotoState('s_Dry');
 		}

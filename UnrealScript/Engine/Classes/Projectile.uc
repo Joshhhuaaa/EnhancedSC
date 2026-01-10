@@ -16,8 +16,8 @@ var		float   MaxSpeed;            // Limit on speed of projectile (0 means no li
 var		float	TossZ;
 
 // Damage attributes.
-var   float    Damage; 
-var	  float	   DamageRadius;        
+var   float    Damage;
+var	  float	   DamageRadius;
 var   float	   MomentumTransfer; // Momentum magnitude imparted by impacting projectile.
 var   class<DamageType>	   MyDamageType;
 
@@ -35,7 +35,7 @@ function bool EncroachingOn(actor Other)
 {
 	if ((Other.Brush != None) || (Brush(Other) != None))
 		return true;
-		
+
 	return false;
 }
 
@@ -55,7 +55,7 @@ singular function Touch(Actor Other)
 			ProcessTouch(Other,Location);
 			return;
 		}
-		
+
 		//get exact hitlocation - trace back along velocity vector
 		bBeyondOther = ((Velocity Dot (Location - Other.Location)) > 0);
 		VelDir = Normal(Velocity);
@@ -68,7 +68,7 @@ singular function Touch(Actor Other)
 
 	 	HitActor = Trace(HitLocation, HitNormal, Location, Location - 1.1 * BackDist * VelDir, true);
 		if (HitActor == Other)
-			ProcessTouch(Other, HitLocation); 
+			ProcessTouch(Other, HitLocation);
 		else if (bBeyondOther)
 			ProcessTouch(Other, Other.Location - Other.CollisionRadius * VelDir);
 		else
@@ -110,7 +110,7 @@ final function RandSpin(float spinRate)
 	DesiredRotation = RotRand();
 	RotationRate.Yaw = spinRate * 2 *FRand() - spinRate;
 	RotationRate.Pitch = spinRate * 2 *FRand() - spinRate;
-	RotationRate.Roll = spinRate * 2 *FRand() - spinRate;	
+	RotationRate.Roll = spinRate * 2 *FRand() - spinRate;
 }
 
 static function vector GetTossVelocity(Pawn P, Rotator R)
@@ -124,14 +124,14 @@ static function vector GetTossVelocity(Pawn P, Rotator R)
 }
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * dkalina (9 Apr 2001)
 // * Purpose : So Weapon can always send an Eject() message .. maybe not necessary
 // * but it simplifies things for the time being
 // ***********************************************************************************************
 function Eject(Vector Vel);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * dkalina (9 Apr 2001)
 // ***********************************************************************************************
 

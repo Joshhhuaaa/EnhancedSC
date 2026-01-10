@@ -41,7 +41,7 @@ function PostBeginPlay()
 }
 
 function Jammed()
-{   //Lil Hitpoint hack to stop the ambient sound of the cam when jammed. 
+{   //Lil Hitpoint hack to stop the ambient sound of the cam when jammed.
 	//Actors with 0 Hitpoints don't get checked for ambient sound triggering.
 	StopAllSoundsActor(false);
 	bInAmbientRange = false;
@@ -64,7 +64,7 @@ function ReceiveMessage(EGameplayObject Sender, EGOMsgEvent Event)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		May be called from a Pattern to deactivate camera
 //------------------------------------------------------------------------
 function Trigger(Actor Other, Pawn EventInstigator, optional name InTag)
@@ -73,7 +73,7 @@ function Trigger(Actor Other, Pawn EventInstigator, optional name InTag)
 
 	if (!Other.IsA('EPattern'))
 		return;
-	
+
 	ChangeListWhenDamaged = false;
 	GotoState('s_Deactivated');
 }

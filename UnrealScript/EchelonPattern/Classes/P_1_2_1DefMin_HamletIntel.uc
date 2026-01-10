@@ -98,7 +98,7 @@ InterroSecond:
     End();
 InterroLast:
     Log("InterroLast");
-    JumpRandom('RandomBarkFinalOne', 0.50, 'RandomBarkFinalTwo', 1.00, , , , , ,); 
+    JumpRandom('RandomBarkFinalOne', 0.50, 'RandomBarkFinalTwo', 1.00, , , , , ,);
     End();
 RandomBarkFinalOne:
     Log("RandomOne");

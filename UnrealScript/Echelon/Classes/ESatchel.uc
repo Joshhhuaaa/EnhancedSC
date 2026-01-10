@@ -65,8 +65,8 @@ function bool NotifyPickup(Controller Instigator)
 		}
 
 		if (EPlayerController(Instigator) != None)
-			EPlayerController(Instigator).SendTransmissionMessage(Localize("GameplayObject", string(FoundMems[0].ObjectName), "Localization\\HUD") $ 
-																  Localize("Transmission", "SatchelFind", "Localization\\HUD"), 
+			EPlayerController(Instigator).SendTransmissionMessage(Localize("GameplayObject", string(FoundMems[0].ObjectName), "Localization\\HUD") $
+																  Localize("Transmission", "SatchelFind", "Localization\\HUD"),
 																  TR_INVENTORY);
 	}
 

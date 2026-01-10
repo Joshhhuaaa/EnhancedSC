@@ -128,7 +128,7 @@ function CreateTextMesh()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		When you push an elevator button (floor)
 //------------------------------------------------------------------------
 function RequestElevator(EElevatorButton Button)
@@ -154,7 +154,7 @@ function RequestElevator(EElevatorButton Button)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Show selected
 //------------------------------------------------------------------------
 function GlowSelected()
@@ -177,7 +177,7 @@ function GlowSelected()
 	}
 }
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Auto choose what floor
 //------------------------------------------------------------------------
 function KeyPushed()
@@ -209,7 +209,7 @@ function KeyPushed()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Send elevator to selected floor
 //------------------------------------------------------------------------
 function SendElevator(int SentFloor, optional bool bAutomatic)
@@ -218,9 +218,9 @@ function SendElevator(int SentFloor, optional bool bAutomatic)
 	PendingFloor = -1;
 
 	// Try to remove panel when button is pushed
-	if (!bAutomatic && 
-		Interaction != None && 
-		EElevatorInteraction(Interaction).InteractionController != None && 
+	if (!bAutomatic &&
+		Interaction != None &&
+		EElevatorInteraction(Interaction).InteractionController != None &&
 		EElevatorInteraction(Interaction).InteractionController.bIsPlayer)
 	{
 		Interaction.PostInteract(EElevatorInteraction(Interaction).InteractionController);
@@ -257,7 +257,7 @@ function SendElevator(int SentFloor, optional bool bAutomatic)
 
 	// TriggerControl always sends to key 1 .. so take saved pos and put it in key 1
 	Elevator.KeyPos[1] = Floors[SelectedFloor].SavedKeyPosition;
-	
+
 	// Trigger elevator move
 	Elevator.Trigger(self, None);
 
@@ -289,7 +289,7 @@ function CheckDoorEndEvents()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		When the elevator/doors finishes it's move
 //------------------------------------------------------------------------
 function EndEvent()
@@ -322,7 +322,7 @@ function EndEvent()
 	Floors[SelectedFloor].FloorButton.UnTrigger(self,None);
 
 	// Set this value when elevator gets to floor.
-	// Floor doors will now each send an EndEvent to self, 
+	// Floor doors will now each send an EndEvent to self,
 	// after all doors close, elevator gets its control unlocked to change floor
 	DoorEndEvents = Floors[SelectedFloor].FloorElevatorDoors.Length + ElevatorDoors.Length;
 	// Lock elevator panel
@@ -406,13 +406,13 @@ function Tick(float DeltaTime)
 	{
 		// Update start time
 		StartTime += TimeBetweenEachFloor;
-		
+
 		// fond new floor
 		if (Floors[PreviousFloor].FloorNumber < Floors[SelectedFloor].FloorNumber)
 			InterpolatingFloor++;
 		else
 			InterpolatingFloor--;
-		
+
 		// Update screens
 		UpdateDisplays(InterpolatingFloor);
 	}
@@ -423,8 +423,8 @@ auto state s_Idle
 	function BeginState()
 	{
 		// No special display if not player
-		if (Interaction != None && 
-			EElevatorInteraction(Interaction).InteractionController != None && 
+		if (Interaction != None &&
+			EElevatorInteraction(Interaction).InteractionController != None &&
 			EElevatorInteraction(Interaction).InteractionController.bIsPlayer)
 		{
 		bRenderAtEndOfFrame = false;
@@ -537,7 +537,7 @@ state s_Use
 
 	function bool CoordinateWithin(EPlayerController Epc, float x, float y, int w, int h)
 	{
-		return Epc.m_FakeMouseX > x && Epc.m_FakeMouseX < x + w && 
+		return Epc.m_FakeMouseX > x && Epc.m_FakeMouseX < x + w &&
 			   Epc.m_FakeMouseY > y && Epc.m_FakeMouseY < y + h;
 	}
 }

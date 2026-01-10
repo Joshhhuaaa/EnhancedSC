@@ -24,7 +24,7 @@ function Created()
 
 	Items = New ListClass;
 	Items.Last = Items;
-	Items.Next = None;	
+	Items.Next = None;
 	Items.Prev = None;
 	Items.Sentinel = Items;
 }

@@ -9,7 +9,7 @@ var sound ShellSound;
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
-	
+
 	if (Level.bDropDetail)
 	{
 		bCollideWorld = false;
@@ -28,9 +28,9 @@ function AddShellCaseToLevel()
 {
 	local EchelonLevelInfo eLevel;
 	local Projectile OldestShell;
-	
+
 	eLevel = EchelonLevelInfo(Level);
-	
+
 	if (eLevel != None)
 	{
 		// If we're at capacity, destroy the oldest shell case
@@ -38,11 +38,11 @@ function AddShellCaseToLevel()
 		{
 			OldestShell = eLevel.AllShellCases[0];
 			eLevel.AllShellCases.Remove(0, 1);
-			
+
 			if (OldestShell != None)
 				OldestShell.Destroy();
 		}
-		
+
 		eLevel.AllShellCases[eLevel.AllShellCases.Length] = self;
 	}
 }
@@ -52,9 +52,9 @@ function Destroyed()
 {
 	local EchelonLevelInfo eLevel;
 	local int i;
-	
+
 	eLevel = EchelonLevelInfo(Level);
-	
+
 	// Find and remove this shell case from the tracking array
 	for (i = 0; i < eLevel.AllShellCases.Length; i++)
 	{
@@ -64,7 +64,7 @@ function Destroyed()
 			break;
 		}
 	}
-	
+
 	Super.Destroyed();
 }
 
@@ -91,7 +91,7 @@ function HitWall(vector HitNormal, actor Wall)
 	RealHitNormal = HitNormal;
 	HitNormal = Normal(HitNormal + 0.4 * VRand());
 	if ((HitNormal Dot RealHitNormal) < 0)
-		HitNormal *= -0.5; 
+		HitNormal *= -0.5;
 	Velocity = 0.5 * (Velocity - 2 * HitNormal * (Velocity Dot HitNormal));
 	RandSpin(100000);
 	bHasBounced = true;
@@ -112,7 +112,7 @@ function Landed(vector HitNormal)
 		Destroy();
 		return;
 	}
-	
+
 	SetPhysics(PHYS_None);
 	RandRot = Rotation;
 	RandRot.Pitch = 0;

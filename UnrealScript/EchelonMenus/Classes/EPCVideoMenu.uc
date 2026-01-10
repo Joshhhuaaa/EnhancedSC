@@ -36,7 +36,7 @@ function Paint(Canvas C, float MouseX, float MouseY)
 	{
 		EndVideo();
 	}
-	
+
 }
 
 function KeyDown(int Key, float X, float Y)

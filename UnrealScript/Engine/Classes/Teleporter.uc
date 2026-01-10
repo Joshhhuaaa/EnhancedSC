@@ -39,7 +39,7 @@ function Touch(actor Other)
 
 function Actor SpecialHandling(Pawn Other)
 {
-	return None;			
-}	
-	
+	return None;
+}
+
 

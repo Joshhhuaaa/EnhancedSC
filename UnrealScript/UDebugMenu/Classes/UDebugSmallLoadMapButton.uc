@@ -18,10 +18,10 @@ function Click(float X, float Y)
 	local string MapName,NetworkName, URL;
 	local UDebugMapListCW CW;
 	local UDebugMapListWindow LW;
-	
+
 	LW = UDebugMapListWindow(GetParent(class'UDebugMapListWindow'));
 	CW = UDEbugMapListCW(LW.ClientArea);
-	
+
 	if (CW != None)
 	{
 		if (CW.MapList.SelectedItem == None)
@@ -36,15 +36,15 @@ function Click(float X, float Y)
         {
             //Alex Root.Master.Travel(""$URL$"?Listen");
             Root.Console.Master.Travel(""$URL$"?Listen");
-        }			
+        }
 		else
-        {   
+        {
             //Root.Master.Travel(URL);
             Root.Console.Master.Travel(URL);
         }
-			
+
 	}
-	
+
 	Super.Click(x,y);
 }
 

@@ -35,7 +35,7 @@ state s_Camera
 	function Tick(float DeltaTime)
 	{
 		Super.Tick(DeltaTime);
-       
+
         // Diversion Cam specific stuff
 		if (Epc.eGame.bUseController) // Joshua - Adding controller support for Diversion Cameras
 		{

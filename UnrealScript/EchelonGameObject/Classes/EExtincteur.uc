@@ -1,4 +1,4 @@
-class EExtincteur extends EGameplayObject; 
+class EExtincteur extends EGameplayObject;
 
 defaultproperties
 {

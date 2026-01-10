@@ -3,12 +3,12 @@
 //=============================================================================
 class V3_4_1Severonickel extends EVariable;
 
-var int DishDone; 
-var int GennyOn; 
-var int Interrogated; 
-var int OkToKOVasilii; 
-var int SafeAlarm; 
-var int UPSOff; 
+var int DishDone;
+var int GennyOn;
+var int Interrogated;
+var int OkToKOVasilii;
+var int SafeAlarm;
+var int UPSOff;
 
 
 function PostBeginPlay()

@@ -1,7 +1,7 @@
 class EGenerator extends ESwitchObject;
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Treatment upon take damage
 //------------------------------------------------------------------------
 function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag)

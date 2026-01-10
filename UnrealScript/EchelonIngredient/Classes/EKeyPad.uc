@@ -5,7 +5,7 @@ class EKeyPad extends EDoorOpener;
 
 var			EKeyButton		KeyButtons[12];		// All KeyPad buttons
 var			EGameplayObject MeshCode[6];
-var			EGameplayObject	RedLight, 
+var			EGameplayObject	RedLight,
 							GreenLight,
 							dDenied,
 							dGranted;
@@ -115,7 +115,7 @@ function CreateTextMesh()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Simple comparison on unique access code
 //------------------------------------------------------------------------
 function bool ProcessAccessCode()
@@ -134,8 +134,8 @@ function bool ProcessAccessCode()
 }
 
 //------------------------------------------------------------------------
-// Description		
-//		
+// Description
+//
 //------------------------------------------------------------------------
 function GlowSelected()
 {
@@ -163,7 +163,24 @@ function GlowSelected()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
+//		Joshua - Check if any alarm in the level is currently active
+//------------------------------------------------------------------------
+function bool IsAlarmActive()
+{
+	local EAlarm Alarm;
+
+	foreach AllActors(class'EAlarm', Alarm)
+	{
+		if (Alarm.IsInState('s_On'))
+			return true;
+	}
+
+	return false;
+}
+
+//------------------------------------------------------------------------
+// Description
 //		key was pushed, process it
 //------------------------------------------------------------------------
 function KeyPushed()
@@ -191,6 +208,13 @@ function KeyPushed()
 	else
 		PlaySound(Sound'Electronic.Play_keyPadButton', SLOT_SFX);
 
+	// Joshua - Check if any alarm is currently active
+	if (IsAlarmActive())
+	{
+		// Alarm is active, deny keypad
+		GotoState('s_AccessDenied');
+		return;
+	}
 
 	// RESET button
 	if (SelectedButton == 9)
@@ -264,8 +288,8 @@ auto state s_Idle
 	function BeginState()
 	{
 		// No special display if not player
-		if (Interaction != None && 
-			EKeyPadInteraction(Interaction).InteractionController != None && 
+		if (Interaction != None &&
+			EKeyPadInteraction(Interaction).InteractionController != None &&
 			EKeyPadInteraction(Interaction).InteractionController.bIsPlayer)
 		{
 			bRenderAtEndOfFrame = false;
@@ -320,7 +344,7 @@ state s_Use
 		local EKeyPadInteraction KeyPadInteraction;
 
 		Epc = EPlayerController(EKeyPadInteraction(Interaction).InteractionController);
-		
+
 		OldSelectedButton = SelectedButton;
 
 		if (Epc == None)
@@ -398,7 +422,7 @@ state s_Use
 			if (OldSelectedButton != SelectedButton)
 				GlowSelected();
 		}
-		
+
 		// Joshua - Keypad hint
 		Super.Tick(DeltaTime);
 
@@ -413,7 +437,7 @@ state s_Use
 
 	function bool CoordinateWithin(EPlayerController Epc, float x, float y, int w, int h)
 	{
-		return Epc.m_FakeMouseX > x && Epc.m_FakeMouseX < x + w && 
+		return Epc.m_FakeMouseX > x && Epc.m_FakeMouseX < x + w &&
 			   Epc.m_FakeMouseY > y && Epc.m_FakeMouseY < y + h;
 	}
 }
@@ -474,7 +498,7 @@ state s_AccessGranted extends s_Access
 		local EPlayerController EPC; // Joshua - Keypad hint
 
 		bShouldDestroy = EKeyPadInteraction(Interaction).InteractionController.bIsPlayer;
-		
+
 		// destroy keypad interaction once successfully used by player only
 		if (bShouldDestroy)
 			Interaction.SetCollision(false);

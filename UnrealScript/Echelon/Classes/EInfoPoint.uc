@@ -1,6 +1,6 @@
 //=============================================================================
 // EInfoPoint
-//		
+//
 //		Marker class used by Level Designers to specify points of interest
 //		for AI Non-Player Characters.
 //
@@ -29,10 +29,10 @@ var(AI_Info) float 		ForcedFocusTime;		// will attempt to make NPC use this focu
 var(AI_Info) float		FocusMaxDistance;		// max distance at which an NPC will take this point
 
 var			 float		InternalFocusTimer,		// internal timer used to countdown until NPC should release its focus
-						TimeStamp;				// set whenever locked so we don't keep looking at the same focus points	
-					
-	
-	
+						TimeStamp;				// set whenever locked so we don't keep looking at the same focus points
+
+
+
 
 var EInfoPoint NextInfoPoint;			// maintain list of AI info points in a map (not all Keypoints are included in this)
 

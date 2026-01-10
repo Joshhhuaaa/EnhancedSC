@@ -1,4 +1,4 @@
-class EComputerExplodeClavier extends EGameplayObject; 
+class EComputerExplodeClavier extends EGameplayObject;
 
 defaultproperties
 {

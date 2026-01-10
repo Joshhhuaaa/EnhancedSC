@@ -5,7 +5,7 @@ const szTextArraySize = 80;
 
 var Font   TextFontArea[szTextArraySize];
 var color  TextColorArea[szTextArraySize];
-var string TextArea[szTextArraySize]; //array of string? 
+var string TextArea[szTextArraySize]; //array of string?
 
 var string Prompt;
 var Font   AbsoluteFont;
@@ -186,7 +186,7 @@ function AddText(string _szNewLine, Color _TextColor, Font _Font)
 
 function AddTextWithCanvas(Canvas C, FLOAT _fXOffSet, FLOAT _fYOffset, string NewLine, Font _Font, Color FontColor)
 {
-    // the reason to fill an array of string, it's because you don't want to clip the text every frame, do it the 
+    // the reason to fill an array of string, it's because you don't want to clip the text every frame, do it the
     // first time and use the array after that
 
     local string szTempTextArea[szTextArraySize];
@@ -213,7 +213,7 @@ function AddTextWithCanvas(Canvas C, FLOAT _fXOffSet, FLOAT _fYOffset, string Ne
     Temp = Caps(NewLine); // convert all caracter in capital, only for the special search (\N)
     szTempTextArea[iNbLineTemp] = NewLine;
 
-    i = InStr(Temp, "\\N"); // \N means carriage return 
+    i = InStr(Temp, "\\N"); // \N means carriage return
 
 	while (i != -1)
 	{
@@ -261,7 +261,7 @@ function AddTextWithCanvas(Canvas C, FLOAT _fXOffSet, FLOAT _fYOffset, string Ne
 
 		// Find the word boundary.
 		WordPos = InStr(Out, " ");
-		
+
 		// Get the current word.
 		if (WordPos == -1)
         {
@@ -270,7 +270,7 @@ function AddTextWithCanvas(Canvas C, FLOAT _fXOffSet, FLOAT _fYOffset, string Ne
         }
 		else
 			Temp = Left(Out, WordPos)$" ";
-   
+
         // specify this font for this word (in fact, the same font is keep for all the line)
         // if we need to add different font in the same line, a new design is need in this fct
         C.Font = _Font;
@@ -282,7 +282,7 @@ function AddTextWithCanvas(Canvas C, FLOAT _fXOffSet, FLOAT _fYOffset, string Ne
 			if (XWordPos == _fXOffSet) // this happen if the word is too big for the width of the window
 			{
 				Temp = szTSResult;			// textsize already cut the word for available space
-				WordPos = Len(Temp);		
+				WordPos = Len(Temp);
 				Out = Mid(Out, WordPos);	// remove the word from current sentence
 	    		TotalPos += WordPos;
 	            TotalLinePos += WordPos;
@@ -319,7 +319,7 @@ function AddTextWithCanvas(Canvas C, FLOAT _fXOffSet, FLOAT _fYOffset, string Ne
 //                log("Prev Pos: "$PrevPos);
 //                log("Total line pos: "$TotalLinePos);
                 Temp = Mid(szTempTextArea[iNbLineTemp], PrevPos);//Mid(NewLine, PrevPos);
-                TextArea[Lines] = left(Temp, TotalLinePos);
+                TextArea[Lines] = Left(Temp, TotalLinePos);
 
 //                log("TextArea[] : "$TextArea[Lines]);
                 TextColorArea[Lines] = FontColor;
@@ -382,7 +382,7 @@ function Clear(optional bool _bClearArrayOnly, optional bool _bWrapText)
 
     if (bScrollable) // if a scroll bar exist
         VertSB.Pos = 0; // if you change the text, the scroll bar need to be place at top at beginning
-    
+
     if (_bWrapText)
     {
         m_bWrapClipText = true;
@@ -422,7 +422,7 @@ native(128) static final function string Left   (coerce string S, int i);
         ASSERT(s.Left(2) == _T("ab"));
 
 native(234) static final function string Right  (coerce string S, int i);
-    Specifies the number of characters to extract from this CString object. 
+    Specifies the number of characters to extract from this CString object.
     ex: CString s(_T("abcdef"));
         ASSERT(s.Right(2) == _T("ef"));
 

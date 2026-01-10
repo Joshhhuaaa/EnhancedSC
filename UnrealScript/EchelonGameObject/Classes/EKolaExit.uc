@@ -1,4 +1,4 @@
-class EKolaExit extends EGameplayObject; 
+class EKolaExit extends EGameplayObject;
 
 defaultproperties
 {

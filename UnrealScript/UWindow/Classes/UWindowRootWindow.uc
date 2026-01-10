@@ -2,7 +2,7 @@
 // UWindowRootWindow - the root window.
 //
 // This Window should be subclassed for each different type of menuing system.
-// In many cases, there should be at least 1 UWindowRootWindow that contains 
+// In many cases, there should be at least 1 UWindowRootWindow that contains
 // at the very least the console.
 //=============================================================================
 class UWindowRootWindow extends UWindowWindow
@@ -58,14 +58,14 @@ enum eGameWidgetID
 	WidgetID_Intro,
     WidgetID_FakeWindow,
     WidgetID_Previous,
-    WidgetID_None    
+    WidgetID_None
 };
 
-function ChangeCurrentWidget(eGameWidgetID widgetID); 
+function ChangeCurrentWidget(eGameWidgetID widgetID);
 function ResetMenus();
 function PlayClickSound();
 
-function BeginPlay() 
+function BeginPlay()
 {
 	Root = Self;
 	MouseWindow = Self;
@@ -96,12 +96,12 @@ function UWindowLookAndFeel GetLookAndFeel(String LFClassName)
 }
 
 
-function Created() 
+function Created()
 {
     LookAndFeel = GetLookAndFeel(LookAndFeelClass);
-	
+
     SetupFonts();
-	
+
 	NormalCursor.tex = Texture'MouseCursor';
 	NormalCursor.HotX = 0;
 	NormalCursor.HotY = 0;
@@ -111,12 +111,12 @@ function Created()
 	MoveCursor.HotX = 8;
 	MoveCursor.HotY = 8;
 	MoveCursor.WindowsCursor = Console.ViewportOwner.IDC_SIZEALL;
-	
+
 	DiagCursor1.tex = Texture'MouseDiag1';
 	DiagCursor1.HotX = 8;
 	DiagCursor1.HotY = 8;
 	DiagCursor1.WindowsCursor = Console.ViewportOwner.IDC_SIZENWSE;
-	
+
 	HandCursor.tex = Texture'MouseHand';
 	HandCursor.HotX = 11;
 	HandCursor.HotY = 1;
@@ -150,7 +150,7 @@ function Created()
 	WaitCursor.tex = Texture'MouseWait';
 	WECursor.HotX = 6;
 	WECursor.HotY = 9;
-	WECursor.WindowsCursor = Console.ViewportOwner.IDC_WAIT;     
+	WECursor.WindowsCursor = Console.ViewportOwner.IDC_WAIT;
 
 	HotkeyWindows = New class'UWindowHotkeyWindowList';
 	HotkeyWindows.Last = HotkeyWindows;
@@ -165,7 +165,7 @@ function MoveMouse(float X, float Y)
 	local float tx, ty;
 
 	MouseX = X;
-	MouseY = Y;	
+	MouseY = Y;
 
 	if (!bMouseCapture)
 		NewMouseWindow = FindWindowUnder(X, Y);
@@ -189,13 +189,13 @@ function MoveMouse(float X, float Y)
 	}
 }
 
-function DrawMouse(Canvas C) 
+function DrawMouse(Canvas C)
 {
 	local float X, Y;
 
 	if (bDisableMouseDisplay)
 		return;
-	
+
 
 	if (Console.ViewportOwner.bWindowsMouseAvailable)
 	{
@@ -203,12 +203,12 @@ function DrawMouse(Canvas C)
 		Console.ViewportOwner.SelectedCursor = MouseWindow.Cursor.WindowsCursor;
 	}
 	else
-	{		
+	{
 		C.SetDrawColor(255, 255, 255);
-		
+
 		C.SetPos(MouseX * GUIScale - MouseWindow.Cursor.HotX, MouseY * GUIScale - MouseWindow.Cursor.HotY);
 		C.DrawIcon(MouseWindow.Cursor.tex, 1.0);
-		
+
 	}
 
 }
@@ -250,7 +250,7 @@ function CaptureMouse(optional UWindowWindow W)
 {
 	bMouseCapture = true;
 	if (W != None)
-		MouseWindow = W;	
+		MouseWindow = W;
 }
 
 
@@ -294,10 +294,10 @@ function BOOL IsAHotKeyWindow(UWindowWindow W)
 	return false;
 }
 
-function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) 
+function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
     {
 	switch (Msg) {
-    case WM_Paint:    
+    case WM_Paint:
         Paint(C, X, Y);
 		PaintClients(C, X, Y);
         AfterPaint(C, X, Y);
@@ -320,7 +320,7 @@ function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
 			return;
 		break;
 	}
-	
+
 	Super.WindowEvent(Msg, C, X, Y, Key);
 }
 
@@ -330,7 +330,7 @@ function bool HotKeyDown(int Key, float X, float Y)
 	local UWindowHotkeyWindowList l;
 
 	l = UWindowHotkeyWindowList(HotkeyWindows.Next);
-	while (l != None) 
+	while (l != None)
 	{
 		if (l.Window != Self && l.Window.HotKeyDown(Key, X, Y)) return True;
 		l = UWindowHotkeyWindowList(l.Next);
@@ -344,7 +344,7 @@ function bool HotKeyUp(int Key, float X, float Y)
 	local UWindowHotkeyWindowList l;
 
 	l = UWindowHotkeyWindowList(HotkeyWindows.Next);
-	while (l != None) 
+	while (l != None)
 	{
 		if (l.Window != Self && l.Window.HotKeyUp(Key, X, Y)) return True;
 		l = UWindowHotkeyWindowList(l.Next);
@@ -358,7 +358,7 @@ function bool MouseUpDown(int Key, float X, float Y)
 	local UWindowHotkeyWindowList l;
 
 	l = UWindowHotkeyWindowList(HotkeyWindows.Next);
-	while (l != None) 
+	while (l != None)
 	{
 		if (l.Window != Self && l.Window.MouseUpDown(Key, X, Y)) return True;
 		l = UWindowHotkeyWindowList(l.Next);
@@ -412,7 +412,7 @@ function SetupFonts()
 		Fonts[F_Bold] = Font(DynamicLoadObject("UWindowFonts.TahomaB10", class'Font'));
 		Fonts[F_Large] = Font(DynamicLoadObject("UWindowFonts.Tahoma20", class'Font'));
 		Fonts[F_LargeBold] = Font(DynamicLoadObject("UWindowFonts.TahomaB20", class'Font'));
-	}	
+	}
 }
 
 /*

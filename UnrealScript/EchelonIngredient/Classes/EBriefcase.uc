@@ -19,7 +19,7 @@ function name GetHandAttachTag()
 function PhysicsVolumeChange(PhysicsVolume NewVolume)
 {
 	local EVolume Vol;
-	
+
 	Super.PhysicsVolumeChange(NewVolume);
 
 	Vol = EVolume(NewVolume);

@@ -23,7 +23,7 @@ function PostBeginPlay()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Treatment upon take damage
 //------------------------------------------------------------------------
 function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag)
@@ -34,7 +34,7 @@ function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Trigger all defined objects
 //------------------------------------------------------------------------
 function TriggerAll()
@@ -55,7 +55,7 @@ auto state() s_On
 		// For alarm stuff
 		if (Alarm != None && mEventInstigator != None)
 			Alarm.EnableAlarm(self, mEventInstigator.Controller);
-     
+
 		TriggerAll();
 	}
 
@@ -68,7 +68,7 @@ auto state() s_On
 				return;
 			TriggerTime = Level.TimeSeconds;
 		}
-		
+
 		Super.Trigger(Other, EventInstigator, InTag);
 
 		// If trigger only once, destroy interaction
@@ -89,7 +89,7 @@ state() s_Off
 		// For alarm stuff
 		if (Alarm != None)
 			Alarm.DisableAlarm(self);
-	
+
 		TriggerAll();
 	}
 

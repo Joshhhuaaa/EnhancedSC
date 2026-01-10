@@ -3,31 +3,31 @@ class EBReakerBoxMTown extends EGenerator;
 var(Damage) float ShutDownPercent;
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Treatment upon take damage
 //------------------------------------------------------------------------
 function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, class<DamageType> DamageType, optional int PillTag)
-{	
+{
 	Super(EGameplayObject).TakeDamage(Damage, EventInstigator, Hitlocation, HitNormal, Momentum, DamageType, PillTag);
 
 	if (bDamageable)
-	{					
+	{
         if (DamagePercent >= ShutDownPercent)
-        {                    
-          GotoState('s_Destructed');                   
+        {
+          GotoState('s_Destructed');
         }
-        
+
 		Instigator = EventInstigator;
 		Level.AddChange(self, CHANGE_BrokenObject);
-	}	
+	}
 }
 
 state() s_Destructed
-{    
+{
 	function BeginState()
 	{
 		TriggerAll();
-	}	
+	}
 }
 
 defaultproperties

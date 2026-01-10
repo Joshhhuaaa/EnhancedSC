@@ -1,4 +1,4 @@
-class EComputerExplodeTour extends EGameplayObject; 
+class EComputerExplodeTour extends EGameplayObject;
 
 defaultproperties
 {

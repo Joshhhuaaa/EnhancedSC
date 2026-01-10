@@ -117,7 +117,7 @@ function KeyDown(int Key, float X, float Y)
 	switch (Key)
 	{
 	case P.Player.Console.EInputKey.IK_Tab:
-		
+
 		if (TabNext != None)
 		{
 			N = TabNext;

@@ -34,9 +34,9 @@ struct ParticleBeamScale
 	var () float		RelativeLength;
 };
 
-var (Beam)			range						BeamDistanceRange;	
+var (Beam)			range						BeamDistanceRange;
 var (Beam)			array<ParticleBeamEndPoint>	BeamEndPoints;
-var (Beam)			EBeamEndPointType			DetermineEndPointBy;		
+var (Beam)			EBeamEndPointType			DetermineEndPointBy;
 var (Beam)			float						BeamTextureUScale;
 var (Beam)			float						BeamTextureVScale;
 var (Beam)			int							RotatingSheets;

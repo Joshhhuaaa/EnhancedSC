@@ -92,7 +92,7 @@ BasementCarryB:
     Teleport(2, 'TelFrontGuyOne');
     Teleport(3, 'TelFrontGuyTwo');
     ChangeGroupState('s_alert');
-    JumpRandom('AttackRandomOne', 0.33, 'AttackRandomTwo', 0.67, 'AttackRandomThree', 1.00, , , ,); 
+    JumpRandom('AttackRandomOne', 0.33, 'AttackRandomTwo', 0.67, 'AttackRandomThree', 1.00, , , ,);
     End();
 AttackRandomOne:
     Log("AttackRandomOne");

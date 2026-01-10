@@ -38,21 +38,21 @@ var Color   m_OverTextColor;
 
 function Created()
 {
-	Super.Created();	
+	Super.Created();
 	RegionScale = 1;
 }
 
 function SetButtonText(string _Text, ECanvas.ETextAligned _Align)
 {
-    text = _Text;    
-    Align = _Align;    
+    text = _Text;
+    Align = _Align;
 }
 
 
 function Paint(Canvas C, float X, float Y)
-{    
+{
 
-    Render(C , X, Y);    
+    Render(C , X, Y);
 
     if (m_bDrawButtonBorders)
 	{
@@ -61,33 +61,33 @@ function Paint(Canvas C, float X, float Y)
 }
 
 
-function Click(float X, float Y) 
+function Click(float X, float Y)
 {
     if (bDisabled)
         return;
 
 	Notify(DE_Click);
 
-//R6CODE    
+//R6CODE
 //    log("CLICK Sound =" @ DownSound);
     if (DownSound != None)
 		GetPlayerOwner().PlaySound(DownSound, SLOT_Interface);
-//END R6CODE        
+//END R6CODE
 }
 
-function DoubleClick(float X, float Y) 
+function DoubleClick(float X, float Y)
 {
     if (!bDisabled)
 	Notify(DE_DoubleClick);
 }
 
-function RClick(float X, float Y) 
+function RClick(float X, float Y)
 {
     if (!bDisabled)
 	Notify(DE_RClick);
 }
 
-function MClick(float X, float Y) 
+function MClick(float X, float Y)
 {
     if (!bDisabled)
 	Notify(DE_MClick);

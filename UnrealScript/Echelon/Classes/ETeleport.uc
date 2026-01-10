@@ -20,7 +20,7 @@ var()  int              LimitClips;
 |                                                            |
 \*-----------------------------------------------------------*/
 function PostBeginPlay()
-{ 
+{
 	bAlreadyVisited = false;
 	if (TargetTag != '')
 	{
@@ -35,7 +35,7 @@ function GiveTeleportInventory(actor Other)
 	local EPawn PlayerPawn;
 	local int i;
 	local EWeapon			WeaponItem;
-	
+
 	// fill up the player's inventory
 	PlayerPawn = EPawn(Other);
 	if (PlayerPawn != None)
@@ -55,7 +55,7 @@ function GiveTeleportInventory(actor Other)
 				}
 				else
 				{
-					// if the item is a weapon, and already in the inventory, just reset its ammo.                    
+					// if the item is a weapon, and already in the inventory, just reset its ammo.
                     if (LimitBullets != -1)
                     {
 					    WeaponItem.Ammo = LimitBullets;
@@ -73,11 +73,11 @@ function GiveTeleportInventory(actor Other)
                     {
                         WeaponItem.ClipAmmo = WeaponItem.ClipMaxAmmo;
                     }
-					
+
 					// skip to the next inventory item
 					continue;
 				}
-				
+
 				if (spawnedItem != none)
 				{
 					// validate if the inventory can hold more of the item we spawned.
@@ -149,13 +149,13 @@ function ProcessZoning()
 		for (i = 0; i < DisableGroupTags.Length; i++)
 		{
 			if (NPC.m_GroupTag == DisableGroupTags[i])
-			{				
+			{
 				//log("NPC "$NPC$" was disabled...");
 				NPC.bDisableAI = true;
 				NPC.bDisableAIforSound = true;
 			}
 		}
-	}		
+	}
 }
 
 
@@ -193,7 +193,7 @@ function Touch(actor Other)
 				{
 					Group.SendJumpEvent(JumpLabel,false,false);
 					break;
-				}	
+				}
 			}
 
 			//reset all changed actors

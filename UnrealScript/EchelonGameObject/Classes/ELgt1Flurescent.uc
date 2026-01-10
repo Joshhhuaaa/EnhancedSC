@@ -1,4 +1,4 @@
-class ELgt1Flurescent extends EGameplayObjectLight; 
+class ELgt1Flurescent extends EGameplayObjectLight;
 
 defaultproperties
 {

@@ -68,7 +68,7 @@ function InitPattern()
                 Volume.GroupTag = 'FanSystem';
             }
         }
-    
+
         // Joshua - Adjusting timer for Elite mode
         if (IsEliteMode())
         {

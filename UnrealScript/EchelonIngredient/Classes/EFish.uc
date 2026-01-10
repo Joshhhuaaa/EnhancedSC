@@ -1,6 +1,6 @@
 class EFish extends EGameplayObject;
 
-#exec OBJ LOAD FILE=..\textures\ETexIngredient.utx 
+#exec OBJ LOAD FILE=..\textures\ETexIngredient.utx
 #exec OBJ LOAD FILE=..\Animations\ESkelIngredients.ukx
 
 function rotator GetStillRotation(vector HitNormal)
@@ -11,7 +11,7 @@ function rotator GetStillRotation(vector HitNormal)
 function StoppedMoving()
 {
 	Super.StoppedMoving();
-	
+
 	SetTimer(FRand() * 25.f,false);
 }
 
@@ -35,7 +35,7 @@ auto state s_Swimming
 	{
 		if (Base == None || Other != Owner)
 			return;
-		
+
 		SetBase(None);
 	}
 }

@@ -25,7 +25,7 @@ function SpawnShellCase()
 	ejectLoc = boneCoords.Origin + (35.0f * boneCoords.ZAxis);
 	ejectRot = Rotator(boneCoords.XAxis);
 
-	s = Spawn(class'EShellCaseTurret', self, , ejectLoc, ejectRot);	
+	s = Spawn(class'EShellCaseTurret', self, , ejectLoc, ejectRot);
 	if (s != None)
 	{
 		ejectVel = boneCoords.YAxis * (150.0 + (FRand() * 40.0 - 20.0));

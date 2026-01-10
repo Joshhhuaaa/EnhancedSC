@@ -61,7 +61,7 @@ function InitPattern()
         // Joshua - Laptops should have 400 hitpoints
         ForEach AllActors(class'ELaptop', Laptop)
         {
-            
+
             if (Laptop.name == 'ELaptop0')
             {
                 Laptop.InitialHitPoints = 400;

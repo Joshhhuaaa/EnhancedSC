@@ -113,7 +113,7 @@ function ResetNpcVars()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Unlocks a door .. done from pick lock
 //------------------------------------------------------------------------
 function Unlock()
@@ -147,7 +147,7 @@ function SetInteraction(class<EInteractObject> ClassName)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Check side of the pawn, set First key before calling the Trigger
 //------------------------------------------------------------------------
 function SetOpeningDirection(EPawn Pawn)
@@ -167,7 +167,7 @@ function SetOpeningDirection(EPawn Pawn)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Returns true if linked to something
 //------------------------------------------------------------------------
 function bool HasSpecialOpener()
@@ -176,7 +176,7 @@ function bool HasSpecialOpener()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Movement abortion need to inform Controller
 //------------------------------------------------------------------------
 function MakeGroupReturn(Actor Other)
@@ -194,7 +194,7 @@ function MakeGroupReturn(Actor Other)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		We have to overload to choose opening direction
 //------------------------------------------------------------------------
 function DoOpen()
@@ -221,21 +221,21 @@ function DoOpen()
 	TmpOpenGroupAi = OpenGroupAi;
 	if (GetStateName() == 'TriggerToggle')
 		OpenGroupAi = None;
-	
+
 	Super.DoOpen();
-	
+
 	// Restore Group Ai
 	OpenGroupAi = TmpOpenGroupAi;
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Pass event if door is unlocked
 //------------------------------------------------------------------------
 function Bump(actor Other, optional int Pill)
 {
 	local EPawn Pawn;
-	
+
 	if (Locked || !bClosed)
 	{
 		//Log(self$" is locked");
@@ -251,7 +251,7 @@ function Bump(actor Other, optional int Pill)
 	}
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Door openers only unlocks door + procesing for both Player and Npcs
 //------------------------------------------------------------------------
 function OpenerTrigger(EDoorOpener Other, Pawn EventInstigator)
@@ -267,7 +267,7 @@ function OpenerTrigger(EDoorOpener Other, Pawn EventInstigator)
 			// Using the opener unlocks the door
 			Locked = false;
 
-			// Once unlocked by player, assign myknob to this door 
+			// Once unlocked by player, assign myknob to this door
 			FrontOpener = MyKnob;
 			BackOpener	= MyKnob;
 		}
@@ -280,7 +280,7 @@ function OpenerTrigger(EDoorOpener Other, Pawn EventInstigator)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Check if door can be opened
 //------------------------------------------------------------------------
 function bool CanDoTrigger(Actor Other, Pawn EventInstigator)
@@ -327,9 +327,9 @@ function StayOpen(Actor Other, bool pawnOpen, bool playerOpen)
 function RandomizeLockPattern()
 {
     local int i;
-    
+
     // Skip if all combinations are PL_None
-    if (Combinaison[0] == PL_None && 
+    if (Combinaison[0] == PL_None &&
        Combinaison[1] == PL_None &&
        Combinaison[2] == PL_None &&
        Combinaison[3] == PL_None &&

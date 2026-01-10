@@ -7,16 +7,16 @@
 
 class UDebugRootWindow extends UWindowRootWindow;
 
-var class<UWindowMenuBar> MenuBarClass;				
-var UDebugMenuBar		 MenuBar;					  
+var class<UWindowMenuBar> MenuBarClass;
+var UDebugMenuBar		 MenuBar;
 
-function Created() 
+function Created()
 {
 	Super.Created();
 
 	MenuBar = UDebugMenuBar(CreateWindow(class'UDebugMenuBar', 50, 0, 500, 16));
 	//MenuBar.HideWindow();
-    
+
 
 	Resized();
 }
@@ -25,7 +25,7 @@ function Created()
 function Resized()
 {
 	Super.Resized();
-	
+
 	MenuBar.WinLeft = 0;;
 	MenuBar.WinTop = 0;
 	MenuBar.WinWidth = WinWidth;;
@@ -51,7 +51,7 @@ function bool KeyEvent(out Console.EInputKey Key, out Console.EInputAction Actio
 		GotoState('UWindows');
 		return true;
 	}
-	
+
 	return Super.KeyEvent(Key,Action,Delta);
 }
 */
@@ -62,18 +62,18 @@ state UWindows
 	{
 		if (!bAllowConsole)
 			MenuBar.ShowWindow();
-			
+
 		Super.BeginState();
-		
+
 	}
-	
+
 	function EndState()
 	{
 		MenuBar.HideWindow();
-		Super.EndState();			
+		Super.EndState();
 	}
 
-}	
+}
 */
 
 //Alex

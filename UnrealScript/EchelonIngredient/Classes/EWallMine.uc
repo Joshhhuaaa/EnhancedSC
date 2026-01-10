@@ -7,7 +7,7 @@ var() int	DetectionRadius,
 var() float	ExplosionDelay;			// Time left before explosion, may be set in editor .. must not be modified while playing
 var() float ActivationDelay;		// Time before wallmine activates on wall
 var() int	MovementThreshold;
-var() float TickNoiseRadius;		// how far noise of WallMineTick travels 
+var() float TickNoiseRadius;		// how far noise of WallMineTick travels
 var	  bool	Emitting;				// True if emitting
 var Controller Defuser;
 
@@ -78,7 +78,7 @@ function BaseChange()
 	{
 		Planter = PreviousBase.Instigator.Controller;
 	}
-	
+
 	Super.BaseChange();
 }
 
@@ -132,7 +132,7 @@ function bool CheckWallInFront()
 function Select(EInventory Inv)
 {
 	Super.Select(Inv);
-	
+
 	// Joshua - Don't play sound during silent restore (sorting)
 	if (GetStateName() != 's_Selected' && !Inv.bSilentRestore)
 		PlaySound(Sound'Interface.Play_FisherEquipWallMine', SLOT_Interface);
@@ -198,7 +198,7 @@ state s_PawnPlacement
 		// Check if there's a wall near
 		GetAxes(Controller.Pawn.Rotation, X, Y, Z);
 
-		if (Controller.bIsPlayer) 
+		if (Controller.bIsPlayer)
 		{
 			start	= Location - (X * 10.f); // Start will be just behind hand wallmine to prevent sticking it over another wallmine
 			end		= Location + (X * (Controller.Pawn.CollisionRadius * 2.0));
@@ -296,7 +296,7 @@ state() s_OnWall
 	function EndState()
 	{
 		SetTimer(0.f, false);
-		
+
 		Skins[1]=Material'ETexIngredient.Object.wallminegreenGLW';
 		LastTimeChange = Level.TimeSeconds;
 		HeatIntensity = 0;
@@ -355,7 +355,7 @@ state() s_OnWall
 		{
 			Skins[1]=Material'ETexIngredient.Object.wallminegreenGLW';
 		}
-		
+
 		LastTimeChange = Level.TimeSeconds;
 	}
 }
@@ -368,7 +368,7 @@ state() s_Activated
 
 		// Play detected sound
 		PlaySound(Sound'FisherEquipement.Play_Sq_WallMineWarning', SLOT_SFX);
-		
+
 		// Make Noise for AI detection.
 		MakeNoise(TickNoiseRadius, NOISE_WallMineTick);
 

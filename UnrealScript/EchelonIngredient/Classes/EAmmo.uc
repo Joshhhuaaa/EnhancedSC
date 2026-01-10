@@ -24,13 +24,13 @@ function bool NotifyPickup(Controller Instigator)
 	GetAmmoWeapon(Epc).Ammo = Min(GetAmmoWeapon(Epc).Ammo + Ammo, GetAmmoWeapon(Epc).default.MaxAmmo);
 	// Update box qty
 	Ammo -= TransferedBullets;
-	
+
 	//Log("Is"@Ammo@GetAmmoWeapon(Epc).Ammo);
 
 	// Joshua - Improvement: Only show pickup message if ammo was transfered
 	if (TransferedBullets > 0)
 		Epc.SendTransmissionMessage(Localize("InventoryItem", ItemName, "Localization\\HUD") $ Localize("Transmission", "PickUp", "Localization\\HUD"), TR_INVENTORY);
-	
+
 
 	if (Ammo <= 0)
 		Destroy();

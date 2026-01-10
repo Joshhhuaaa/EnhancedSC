@@ -23,7 +23,7 @@ function SetCaption(string C)
 	local string Junk, Junk2;
 
 	Caption = C;
-	HotKey = Owner.ParseAmpersand(C, Junk, Junk2, False);	
+	HotKey = Owner.ParseAmpersand(C, Junk, Junk2, False);
 }
 
 function UWindowPulldownMenu CreateMenu(Class<UWindowPulldownMenu> MenuClass)

@@ -1,7 +1,7 @@
 //=============================================================================
-//  ESoundVolume.uc : This class allow to have sound when the player enter 
+//  ESoundVolume.uc : This class allow to have sound when the player enter
 //					   and leave a Volume.  All other volume should derive this
-//                     class in order to allow sound designer to reuse other 
+//                     class in order to allow sound designer to reuse other
 //                     volume already placed by a level designer
 //
 //  Copyright 2001 Ubi Soft, Inc. All Rights Reserved.
@@ -23,7 +23,7 @@ event PawnEnteredVolume(Pawn Other)
 	Super.PawnEnteredVolume(Other);
 
     if (Other.IsHumanControlled() || NPCTrigger)
-	{        
+	{
         for (iSoundIndex = 0; iSoundIndex < m_EntrySound.Length; iSoundIndex++)
         {
             PlaySound(m_EntrySound[iSoundIndex], m_eSoundSlot);
@@ -35,7 +35,7 @@ event PawnLeavingVolume(Pawn Other)
 {
     local INT iSoundIndex;
 	Super.PawnLeavingVolume(Other);
-    
+
     if (Other.IsHumanControlled() || NPCTrigger)
 	{
 		for (iSoundIndex = 0; iSoundIndex < m_ExitSound.Length; iSoundIndex++)

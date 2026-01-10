@@ -1,4 +1,4 @@
-class ELgtGlobe3_yellow extends EGameplayObjectLight; 
+class ELgtGlobe3_yellow extends EGameplayObjectLight;
 
 defaultproperties
 {

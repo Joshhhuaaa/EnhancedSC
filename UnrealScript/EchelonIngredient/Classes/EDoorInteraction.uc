@@ -20,7 +20,7 @@ function PostBeginPlay()
 	if (StealthInteraction == None)
     	StealthInteraction = Spawn(class'EDoorStealthInteraction', Owner);
     StealthInteraction.MyDoor = MyDoor;
-    
+
     // Spawn break lock interaction
     if (BreakLockInteraction == None)
         BreakLockInteraction = Spawn(class'EDoorBreakLockInteraction', Owner);
@@ -140,7 +140,7 @@ function InitInteract(Controller Instigator)
 		if (Instigator.bIsPlayer &&  MyDoor.Locked)
 		{
 			EPlayerController(Instigator).GotoState('s_PlayerWalking');
-			
+
 			// Check for regular lockpick first
 			LockpickItem = ELockpick(EPawn(Instigator.Pawn).FullInventory.GetItemByClass('ELockpick'));
 			if (LockpickItem != None)
@@ -167,7 +167,7 @@ function InitInteract(Controller Instigator)
 			else if (self == OpticalInteraction)
 			{
 				OpticCableItem = EOpticCable(EPawn(Instigator.Pawn).FullInventory.GetItemByClass('EOpticCable'));
-				if (OpticCableItem != None)	
+				if (OpticCableItem != None)
 				{
 					// Unequip current weapon if any
 					if (EPawn(Instigator.Pawn).WeaponStance > 0)
@@ -191,7 +191,7 @@ function InitInteract(Controller Instigator)
 				if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
 				{
 					EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
-					
+
 					if (LeftSideInteraction)
 						Instigator.GotoState('s_OpenDoor', 'HolsterThenLockedLt');
 					else
@@ -210,7 +210,7 @@ function InitInteract(Controller Instigator)
 				if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
 				{
 					EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
-					
+
 					// Joshua - Holstering weapon before opening door
 					if (LeftSideInteraction)
 						Instigator.GotoState('s_OpenDoor', 'HolsterThenOpenLt');
@@ -248,7 +248,7 @@ function InitInteract(Controller Instigator)
 			if (Instigator.bIsPlayer && Instigator.GetStateName() == 's_FirstPersonTargeting')
 			{
 				EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
-				
+
 				if (LeftSideInteraction)
 					Instigator.GotoState('s_OpenDoor', 'HolsterThenLockedLt');
 				else
@@ -336,7 +336,7 @@ function SetInteractLocation(Pawn InteractPawn)
 	// switch Y angle
 	if (!bLeftSide)
 		Y = -Y;
-	
+
 	MovePos	= Owner.Location;
 	if (InteractEPawn.bIsPlayerPawn)
 	{
@@ -361,7 +361,7 @@ function SetInteractLocation(Pawn InteractPawn)
 			MovePos = HitLocation;
 		}
 	}
-	
+
 	InteractEPawn.m_locationStart	= InteractEPawn.Location;
 	InteractEPawn.m_orientationStart= InteractEPawn.Rotation;
 	InteractEPawn.m_locationEnd		= MovePos;
@@ -383,10 +383,10 @@ function Touch(actor Other)
         {
             // Joshua - Add main door interaction for unlocked doors (always available)
             // or for locked doors when weapon is not drawn (or carrying a body) and player has lockpick
-			if (!MyDoor.Locked || 
-				(P.Controller.GetStateName() != 's_FirstPersonTargeting' && 
+			if (!MyDoor.Locked ||
+				(P.Controller.GetStateName() != 's_FirstPersonTargeting' &&
 				P.Controller.GetStateName() != 's_Carry' &&
-				ELockpick(EPawn(P).FullInventory.GetItemByClass('ELockpick')) != None && 
+				ELockpick(EPawn(P).FullInventory.GetItemByClass('ELockpick')) != None &&
 				!MyDoor.HasSpecialOpener()))
             {
                 InteractionPlayerController.IManager.AddInteractionObj(Self);
@@ -443,21 +443,21 @@ function UnTouch(actor Other)
 function RefreshInteractions()
 {
     local Pawn P;
-    
+
     // Only refresh if there's a player currently in range
     if (InteractionPlayerController == None)
         return;
-    
+
     P = InteractionPlayerController.Pawn;
     if (P == None || !P.bIsPlayerPawn)
         return;
-    
+
     // Remove all existing interactions first
     InteractionPlayerController.IManager.RemoveInteractionObj(Self);
     InteractionPlayerController.IManager.RemoveInteractionObj(StealthInteraction);
     InteractionPlayerController.IManager.RemoveInteractionObj(BreakLockInteraction);
 	InteractionPlayerController.IManager.RemoveInteractionObj(OpticalInteraction);
-    
+
 	// Add interactions based on current settings
 	if (MyDoor.bClosed && InteractionPlayerController.CanAddInteract(self) && IsAvailable())
 	{
@@ -465,9 +465,9 @@ function RefreshInteractions()
 		{
 			// Add main door interaction for unlocked doors (always available)
 			// or for locked doors when weapon is not drawn and player has lockpick
-			if (!MyDoor.Locked || 
-				(P.Controller.GetStateName() != 's_FirstPersonTargeting' && 
-				 ELockpick(EPawn(P).FullInventory.GetItemByClass('ELockpick')) != None && 
+			if (!MyDoor.Locked ||
+				(P.Controller.GetStateName() != 's_FirstPersonTargeting' &&
+				 ELockpick(EPawn(P).FullInventory.GetItemByClass('ELockpick')) != None &&
 				 !MyDoor.HasSpecialOpener()))
 			{
 				InteractionPlayerController.IManager.AddInteractionObj(Self);
@@ -482,7 +482,7 @@ function RefreshInteractions()
 					InteractionPlayerController.IManager.AddInteractionObj(BreakLockInteraction);
 				}
 			}
-			
+
 			// Add Optic Cable interaction if player doesn't have weapon drawn or carrying a body
 			if (EOpticCable(EPawn(P).FullInventory.GetItemByClass('EOpticCable')) != None
 			&& P.Controller.GetStateName() != 's_FirstPersonTargeting'

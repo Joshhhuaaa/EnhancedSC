@@ -3,9 +3,9 @@
 //=============================================================================
 class V1_7_1_1VselkaInfiltration extends EVariable;
 
-var int BobDone; 
-var int ContDoorsOpen; 
-var int DisableDoor; 
+var int BobDone;
+var int ContDoorsOpen;
+var int DisableDoor;
 
 
 function PostBeginPlay()

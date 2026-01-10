@@ -1,6 +1,6 @@
 class ERetinalSafe extends EGameplayObject;
 
-#exec OBJ LOAD FILE=..\textures\ETexIngredient.utx 
+#exec OBJ LOAD FILE=..\textures\ETexIngredient.utx
 #exec OBJ LOAD FILE=..\Animations\ESkelIngredients.ukx
 #exec OBJ LOAD FILE=..\Sounds\Door.uax
 

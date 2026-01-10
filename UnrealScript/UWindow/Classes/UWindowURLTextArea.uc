@@ -35,7 +35,7 @@ function TextAreaClipText(Canvas C, float DrawX, float DrawY, coerce string S, o
 		else
 		{
 			C.SetDrawColor(255, 255, 255);
-		}		
+		}
 
 		GetMouseXY(ClickX, ClickY);
 		bOverLink = bLink != 0 && DrawX < ClickX && DrawX + W > ClickX && DrawY < ClickY && DrawY + H > ClickY;
@@ -155,7 +155,7 @@ function ProcessText(Canvas C, out string Text, out string NextBlock, out float 
 		{
 			NextBlock = Left(Text, i);
 			Text = Mid(Text, i);
-		}				
+		}
 	}
 	else
 	{

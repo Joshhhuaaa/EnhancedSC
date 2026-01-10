@@ -53,7 +53,7 @@ function SetInteractLocation(Pawn InteractPawn)
 	local Vector X, Y, Z, MovePos;
 	local EPawn InteractEPawn;
 	local int YawAligner;
-	
+
 	InteractEPawn = EPawn(InteractPawn);
 	if (InteractEPawn == None)
 		return;
@@ -66,7 +66,7 @@ function SetInteractLocation(Pawn InteractPawn)
 		Y = -Y;
 		YawAligner = -YawAligner;
 	}
-	
+
 	MovePos	 = Pick.Door.MyKnob.Location;
 	MovePos -= 1.3f * InteractEPawn.CollisionRadius * Y;
 	MovePos -= 0.7f * InteractEPawn.CollisionRadius * X;

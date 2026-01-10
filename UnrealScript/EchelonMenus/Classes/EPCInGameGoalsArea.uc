@@ -13,7 +13,7 @@ var   BOOL              m_bGoals;
 
 var   INT               m_IGoalCurScroll, m_IGoalNbScroll, m_INoteCurScroll, m_INoteNbScroll;
 
-var   BOOL              m_bCompute; 
+var   BOOL              m_bCompute;
 
 function Created()
 {
@@ -24,19 +24,18 @@ function ShowGoals(Bool _ShoGoals)
 {
     m_bGoals = _ShoGoals;
 
-    if (_ShoGoals)    
+    if (_ShoGoals)
     {
-        m_INoteCurScroll = m_ScrollBar.Pos;       
+        m_INoteCurScroll = m_ScrollBar.Pos;
         m_ScrollBar.SetRange(0, m_IGoalNbScroll,1);
         m_ScrollBar.Pos = m_IGoalCurScroll;
-    }        
+    }
     else
     {
         m_IGoalCurScroll = m_ScrollBar.Pos;
         m_ScrollBar.SetRange(0, m_INoteNbScroll,1);
         m_ScrollBar.Pos = m_INoteCurScroll;
-    }            
-    
+    }
 }
 
 
@@ -50,7 +49,7 @@ function MouseWheelUp(FLOAT X, FLOAT Y)
 {
     if (m_ScrollBar != None)
         m_ScrollBar.MouseWheelUp(X,Y);
-	    
+
 }
 
 function Init()
@@ -63,11 +62,11 @@ function Init()
 function Paint(Canvas C, FLOAT X, FLOAT Y)
 {
     Render(C, X, Y);
-    
+
     if (m_bCompute)
     {
         ShowGoals(m_bGoals);
         m_bCompute = false;
     }
- 
+
 }

@@ -22,7 +22,7 @@ function BeforePaint(Canvas C, float X, float Y)
 
 	if (!bSetupSize)
 	{
-		SetSize(200, WinHeight);		
+		SetSize(200, WinHeight);
 		R = LookAndFeel.FW_GetClientArea(Self);
 		SetSize(200, (WinHeight - R.H) + UWindowMessageBoxCW(ClientArea).GetHeight(C));
 		WinLeft = int((Root.WinWidth - WinWidth) / 2);
@@ -40,7 +40,7 @@ function AfterPaint(Canvas C, float X, float Y)
 	if (TimeOut != 0)
 	{
 		FrameCount++;
-		
+
 		if (FrameCount >= 5)
 		{
 			TimeOutTime = GetTime() + TimeOut;

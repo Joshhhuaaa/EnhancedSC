@@ -40,7 +40,7 @@ function Created()
 
 	CenterWidth = (WinWidth / 4) * 3;
 	CenterPos = (WinWidth - CenterWidth) / 2;
-	
+
 
 	// Resolution
 	ResolutionCombo = UWindowComboControl(CreateControl(class'UWindowComboControl', CenterPos, ControlOffset, CenterWidth, 1));
@@ -81,11 +81,11 @@ function LoadAvailableSettings()
 	// Load available video drivers and current video driver here.
 
 	ResolutionCombo.Clear();
-	
-/* - GetRes isn't working	
+
+/* - GetRes isn't working
 	ParseString = GetPlayerOwner().ConsoleCommand("GetRes");
 	P = InStr(ParseString, " ");
-	while (P != -1) 
+	while (P != -1)
 	{
 		ResolutionCombo.AddItem(Left(ParseString, P));
 		ParseString = Mid(ParseString, P + 1);
@@ -186,7 +186,7 @@ function MessageBoxDone(UWindowWindow W, MessageBoxResult Result)
 		if (Result != MR_Yes)
 		{
 			GetPlayerOwner().ConsoleCommand("SetRes "$OldSettings);
-			LoadAvailableSettings();			
+			LoadAvailableSettings();
 			MessageBox(ConfirmSettingsCancelTitle, ConfirmSettingsCancelText, MB_OK, MR_OK, MR_OK);
 		}
 	}

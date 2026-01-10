@@ -8,9 +8,9 @@ function PostBeginPlay()
 {
 	local MeshAnimation Anim;
 
-	
+
 	Super(EAIPawn).PostBeginPlay();
-	
+
 	// load mitch anim package
 
 	if (Mesh != None)
@@ -55,7 +55,7 @@ function InitAnims()
 
 	ADamageHeadShotForward		= 'PainStAlCf0';
 	ADamageHeadShotBack			= 'PainStAlCb0';
-	
+
 	ADamageChestForward			= 'PainStAlCf0';
 	ADamageChestBack			= 'PainStAlCb0';
 	ADamageChestLeft			= 'PainStAlCl0';
@@ -91,7 +91,7 @@ function SwitchAnims()
 	switch (lmoveflag)
 	{
 		case MOVE_WalkRelaxed:
-		case MOVE_WalkNormal: 
+		case MOVE_WalkNormal:
 		case MOVE_WalkAlert:
 			bNoBlending = true;
 
@@ -101,13 +101,13 @@ function SwitchAnims()
 
 		case MOVE_JogAlert:
 		case MOVE_JogNoWeapon:
-			
+
 			AWait					 = 'WaitStAlFd0';
 			ABlendMovement.m_forward = 'JoggStAlFd0';
 			SoundWalkingRatio = 1.0;
 			break;
 
-		case MOVE_CrouchWalk: 
+		case MOVE_CrouchWalk:
 			break;
 
 		case MOVE_CrouchJog:
@@ -123,8 +123,8 @@ function SwitchAnims()
 			bNoBlending = true;
 
 			AWait							= 'MitcStNmNt0';
-			ABlendMovement.m_forward		= 'MitcStNmFd0';	
-			
+			ABlendMovement.m_forward		= 'MitcStNmFd0';
+
 			return;
 	}
 }
@@ -143,35 +143,35 @@ event float GetMoveSpeed(MoveFlags MoveFlags)
 		case MOVE_DesignerWalk:
 			return 85.0f;
 			break;
-			
+
 		case MOVE_WalkNormal:
 			return 85.0f;
 			break;
-			
+
 		case MOVE_Search:
 			return 85.0f;
 			break;
-			
+
 		case MOVE_Snipe:
 			return 85.0f;
 			break;
-			
+
 		case MOVE_WalkAlert:
 			return 85.0f;
 			break;
-			
+
 		case MOVE_JogAlert:
 			return 350.0f;
 			break;
-			
+
 		case MOVE_JogNoWeapon:
 			return 350.0f;
 			break;
-			
+
 		case MOVE_CrouchWalk:
 			return 85.0f;
 			break;
-			
+
 		case MOVE_CrouchJog:
 			return 200.0f;
 			break;
@@ -196,29 +196,29 @@ event float GetMoveSpeed(MoveFlags MoveFlags)
 				   float		tweenTime,
 				   optional bool noloop)
 {
-	
+
 	// apply speed based on move flag
 	switch (BaseMoveFlags)
 	{
-		case MOVE_CrouchWalk :	
-		case MOVE_CrouchJog : 	
+		case MOVE_CrouchWalk :
+		case MOVE_CrouchJog :
 		case MOVE_WalkAlert :
-		case MOVE_WalkRelaxed : 
-		case MOVE_WalkNormal : 
-		case MOVE_Search : 
+		case MOVE_WalkRelaxed :
+		case MOVE_WalkNormal :
+		case MOVE_Search :
 		case MOVE_Snipe :
-			
+
 			GroundSpeed = WalkSpeed;
 			break;
-						
+
 		case MOVE_JogAlert :
-		case MOVE_JogNoWeapon : 
+		case MOVE_JogNoWeapon :
 
 			GroundSpeed = RunSpeed;
 			break;
 
 	}
-	
+
 	Super.PlayBlend(anims, lookDir, moveDir, minForwardRatio, tweenTime);
 }*/
 

@@ -11,10 +11,10 @@ class EPCHScrollBar extends UWindowHScrollBar
 var     INT          m_IScrollHeight; //The scroll Bar height
 
 function Created()
-{    
+{
     m_IScrollHeight = WinHeight;
     LeftButton = UWindowSBLeftButton(CreateWindow(class'EPCSBLeftButton', 0, 0, LookAndFeel.Size_HScrollbarButtonWidth, LookAndFeel.Size_HScrollbarHeight));
-	RightButton = UWindowSBRightButton(CreateWindow(class'EPCSBRightButton', WinWidth - LookAndFeel.Size_HScrollbarButtonWidth, 0, LookAndFeel.Size_HScrollbarButtonWidth, LookAndFeel.Size_HScrollbarHeight));    
+	RightButton = UWindowSBRightButton(CreateWindow(class'EPCSBRightButton', WinWidth - LookAndFeel.Size_HScrollbarButtonWidth, 0, LookAndFeel.Size_HScrollbarButtonWidth, LookAndFeel.Size_HScrollbarHeight));
 }
 
 function SetScrollHeight(INT _iScrollHeight)
@@ -25,16 +25,16 @@ function SetScrollHeight(INT _iScrollHeight)
 
 }
 
-function Paint(Canvas C, float X, float Y) 
+function Paint(Canvas C, float X, float Y)
 {
-	Render(C , X, Y);    
+	Render(C , X, Y);
 }
 
 // Joshua - Allow page scrolling when mouse is over the scrollbar
 function MouseWheelDown(FLOAT X, FLOAT Y)
 {
 	local UWindowWindow W;
-	
+
 	// Joshua - Find the listbox in our owner window and pass the scroll event to it
 	if (NotifyWindow != None)
 	{
@@ -55,7 +55,7 @@ function MouseWheelDown(FLOAT X, FLOAT Y)
 function MouseWheelUp(FLOAT X, FLOAT Y)
 {
 	local UWindowWindow W;
-	
+
 	// Joshua - Find the listbox in our owner window and pass the scroll event to it
 	if (NotifyWindow != None)
 	{

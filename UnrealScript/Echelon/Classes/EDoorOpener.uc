@@ -7,7 +7,7 @@ var bool			bIsRetinalScanner;	// flags for quickly checking type of door opener
 var bool			bIsKeypad;
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Since we may want more than one door for an opener (ex.: 2 sliding doors for a keypad)
 //------------------------------------------------------------------------
 function LinkActor(EDoorMover LinkedActor)
@@ -16,7 +16,7 @@ function LinkActor(EDoorMover LinkedActor)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Triggers all actor in the list (from an opener)
 //------------------------------------------------------------------------
 function TriggerLinkedActors(Pawn PawnInstigator)
@@ -27,7 +27,7 @@ function TriggerLinkedActors(Pawn PawnInstigator)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Turn on/off interaction(s)
 //------------------------------------------------------------------------
 function ToggleInteraction(bool bOn)

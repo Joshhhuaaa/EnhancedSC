@@ -68,7 +68,7 @@ function UpdateSniperNoise(float DeltaTime)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		I need to overload every tick so that the noise is persistent even
 //		when we change state
 //------------------------------------------------------------------------
@@ -120,7 +120,7 @@ state s_Reloading
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Only return SniperNoisedRotation when updated in DrawView
 //------------------------------------------------------------------------
 event Vector GetFireEnd()
@@ -166,10 +166,10 @@ function ZoomIn(optional bool bInit)
     local float factor;
     local EPlayerController EPC;
 	local int oldFOVIndex;
-    
+
     EPC = EPlayerController(Controller);
 	oldFOVIndex = FOVIndex;
-    
+
     if (bInit)
     {
         if (EPC != None && !EPC.bF2000ZoomLevels)
@@ -194,7 +194,7 @@ function ZoomIn(optional bool bInit)
     if (Controller != None && Controller.bIsPlayer)
     {
         EPC.SetCameraFOV(Controller, GetZoom());
-        
+
         factor = EPC.DesiredFOV / GetZoom();
         // Only play sound if the zoom level actually changed
         if (EPC.bF2000ZoomLevels && FOVIndex != oldFOVIndex)
@@ -207,19 +207,19 @@ function ZoomOut()
     local float factor;
     local EPlayerController EPC;
 	local int oldFOVIndex;
-    
+
     EPC = EPlayerController(Controller);
 	oldFOVIndex = FOVIndex;
-    
+
     // If bF2000ZoomLevels is false, don't allow zooming out
     if (EPC != None && !EPC.bF2000ZoomLevels)
         return;
-        
+
     if (FOVIndex <= 0)
         return;
 
     FOVIndex--;
-	
+
 	// Joshua - SCPT zoom flash cycle animation
 	bStartFirstFlashCycle = true;
 	bStartSecondFlashCycle = false;
@@ -253,7 +253,7 @@ function float GetZoom()
 function SetSniperMode(bool bIsSniping)
 {
 	bSniperMode = bIsSniping;
-	
+
 	// if in sniper mode, allow only single fire
 	if (bSniperMode)
 	{
@@ -262,7 +262,7 @@ function SetSniperMode(bool bIsSniping)
 
 		GotoState('s_Selected');
 
-		
+
 		eROFMode_old = eROFMode; // Joshua - Switch back to previous RoF when leaving sniper mode
 		eROFMode = ROF_Single;
 

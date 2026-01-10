@@ -6,9 +6,9 @@ var bool bShowMenu;
 
 function Created()
 {
-    
+
 	Super.Created();
-	
+
 	GameItem = AddItem("&Game");
 	Game = GameItem.CreateMenu(class 'UWindowPulldownMenu');
 	Game.MyMenuBar = self;
@@ -49,7 +49,7 @@ function Created()
 // ***********************************************************************************************
 	Rend.AddMenuItem("&Pill",none);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 	StatsItem = AddItem("&Stats");
@@ -68,7 +68,7 @@ function Created()
 // ***********************************************************************************************
 	Stats.AddMenuItem("&Fps",None);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 	ShowItem = AddItem("Sho&w Commands");
@@ -91,7 +91,7 @@ function Created()
 	Show.AddMenuItem("Show FastTrace",None);
 	Show.AddMenuItem("Show Bounding",None);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 	OptionsItem = AddItem("&Options");
@@ -103,7 +103,7 @@ function Created()
 
 	bShowMenu = true;
 	Spacing = 12;
-	
+
 }
 
 function SetHelp(string NewHelpText)
@@ -121,7 +121,7 @@ function BeforePaint(Canvas C, float X, float Y)
 
 function DrawItem(Canvas C, UWindowList Item, float X, float Y, float W, float H)
 {
-	C.SetDrawColor(255, 255, 255);	
+	C.SetDrawColor(255, 255, 255);
 	if (UWindowMenuBarItem(Item).bHelp) W = W - 16;
 
 	UWindowMenuBarItem(Item).ItemLeft = X;
@@ -181,13 +181,13 @@ function MenuCmd(int Menu, int Item)
 	Super.MenuCmd(Menu, Item);
 }
 
-function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) 
+function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
 {
-	switch (Msg) 
+	switch (Msg)
 	{
 		case WM_KeyDown:
-		
-		
+
+
 			if (Key == 27) // GRR
 			{
 				if (Selected == None)
@@ -200,9 +200,9 @@ function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
 			break;
 	}
 	Super.WindowEvent(Msg, C, X, Y, Key);
-	
+
 }
-	
+
 function Paint(Canvas C, float MouseX, float MouseY)
 {
 	local float X,xl,yl;
@@ -215,7 +215,7 @@ function Paint(Canvas C, float MouseX, float MouseY)
 	{
 		C.Font = Root.Fonts[F_Normal];
 		TextSize(C, RemoveAmpersand(I.Caption), W, H);
-	
+
 		if (I.bHelp)
 		{
 			DrawItem(C, I, (WinWidth - (W + Spacing)), 1, W + Spacing, 14);
@@ -224,7 +224,7 @@ function Paint(Canvas C, float MouseX, float MouseY)
 		{
 			DrawItem(C, I, X, 1, W + Spacing, 14);
 			X = X + W + Spacing;
-		}		
+		}
 	}
 }
 
@@ -232,7 +232,7 @@ function MenuItemSelected(UWindowBase Sender, UWindowBase Item)
 {
 	local UWindowPulldownMenu Menu;
 	local UWindowPulldownMenuItem I;
-	
+
 	Menu = UWindowPulldownMenu(Sender);
 	I = UWindowPulldownMenuItem(Item);
 
@@ -246,15 +246,15 @@ function MenuItemSelected(UWindowBase Sender, UWindowBase Item)
 					case 1 :
 						// Open the Map Menu
 						Root.ShowModal(Root.CreateWindow(class'UDebugMapListWindow', (Root.WinWidth / 2) - 200, (Root.WinHeight / 2) - 107, 400, 214, self));
-						return;						
+						return;
 						break;
-					
+
 					case 3 :
 						// Open the Map Menu
 						Root.ShowModal(Root.CreateWindow(class'UDebugOpenWindow', (Root.WinWidth / 2) - 150,(Root.WinHeight / 2) - 45, 300,90, self));
-						return;						
+						return;
 						break;
-										
+
 					case 5 : GetLevel().ConsoleCommand("Shot"); break;
 					case 6 : GetLevel().ConsoleCommand("Flush"); break;
 // ***********************************************************************************************
@@ -262,7 +262,7 @@ function MenuItemSelected(UWindowBase Sender, UWindowBase Item)
 // ***********************************************************************************************
 					case 7 : GetLevel().ConsoleCommand("DumpMapToRaw"); break;
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 					case 9 : GetLevel().ConsoleCommand("Quit"); break;
 				}
@@ -272,56 +272,56 @@ function MenuItemSelected(UWindowBase Sender, UWindowBase Item)
 					GetLevel().ConsoleCommand("RMode "$I.Tag);
 				else if (I.Tag >9)
 					GetLevel().ConsoleCommand("RMode "$I.Tag + 3);
-					
+
 				break;
-				
+
 			case Rend:
 				switch (I.Tag)
 				{
-					case 1 : GetLevel().ConsoleCommand("rend blend"); break;    
-					case 2 : GetLevel().ConsoleCommand("rend bone"); break;    
+					case 1 : GetLevel().ConsoleCommand("rend blend"); break;
+					case 2 : GetLevel().ConsoleCommand("rend bone"); break;
 					case 3 : GetLevel().ConsoleCommand("rend skin"); break;
 // ***********************************************************************************************
 // * BEGIN UBI MODIF dchabot (25 janv. 2002)
 // ***********************************************************************************************
 					case 4 : GetLevel().ConsoleCommand("rend pill"); break;
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 				}
 				break;
-			
+
 			case Stats:
 				switch (I.Tag)
 				{
-					case 1 : GetLevel().ConsoleCommand("stat All");break;     
-					case 2 : GetLevel().ConsoleCommand("stat NONE");break;     
-					case 4 : GetLevel().ConsoleCommand("stat RENDER");break;     
-					case 5 : GetLevel().ConsoleCommand("stat GAME");break;     
-					case 6 : GetLevel().ConsoleCommand("stat HARDWARE");break;     
-					case 7 : GetLevel().ConsoleCommand("stat NET");break;     
+					case 1 : GetLevel().ConsoleCommand("stat All");break;
+					case 2 : GetLevel().ConsoleCommand("stat NONE");break;
+					case 4 : GetLevel().ConsoleCommand("stat RENDER");break;
+					case 5 : GetLevel().ConsoleCommand("stat GAME");break;
+					case 6 : GetLevel().ConsoleCommand("stat HARDWARE");break;
+					case 7 : GetLevel().ConsoleCommand("stat NET");break;
 					case 8 : GetLevel().ConsoleCommand("stat ANIM");break;
 // ***********************************************************************************************
 // * BEGIN UBI MODIF dchabot (25 janv. 2002)
 // ***********************************************************************************************
 					case 9 : GetLevel().ConsoleCommand("stat fps");break;
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 				}
 				break;
-				
+
 			case Show:
 				switch (I.Tag)
 				{
-					case 1 : GetLevel().ConsoleCommand("show Actors"); break;  
-					case 2 : GetLevel().ConsoleCommand("show StaticMeshes"); break;  
-					case 3 : GetLevel().ConsoleCommand("show Terrain"); break;  
-					case 4 : GetLevel().ConsoleCommand("show Fog"); break;  
-					case 5 : GetLevel().ConsoleCommand("show Sky"); break;  
-					case 6 : GetLevel().ConsoleCommand("show Coronas"); break;  
-					case 7 : GetLevel().ConsoleCommand("show Particles"); break;  
+					case 1 : GetLevel().ConsoleCommand("show Actors"); break;
+					case 2 : GetLevel().ConsoleCommand("show StaticMeshes"); break;
+					case 3 : GetLevel().ConsoleCommand("show Terrain"); break;
+					case 4 : GetLevel().ConsoleCommand("show Fog"); break;
+					case 5 : GetLevel().ConsoleCommand("show Sky"); break;
+					case 6 : GetLevel().ConsoleCommand("show Coronas"); break;
+					case 7 : GetLevel().ConsoleCommand("show Particles"); break;
 // ***********************************************************************************************
 // * BEGIN UBI MODIF dchabot (17 janv. 2002)
 // ***********************************************************************************************
@@ -332,18 +332,18 @@ function MenuItemSelected(UWindowBase Sender, UWindowBase Item)
 					case 12 : GetLevel().ConsoleCommand("show fastlinecheck"); break;
 					case 13 : GetLevel().ConsoleCommand("rend bound"); break;
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 				}
 				break;
-			
+
 			case Options:
 				switch (I.tag)
 				{
 					case 1 : // Video Menu
-								
+
 						Root.ShowModal(Root.CreateWindow(class'UDebugVideoWindow', Options.WinLeft, 20, 220, 100, self));
-						return;						
+						return;
 						break;
 
 					case 2 : break; // Audio Menu
@@ -353,6 +353,6 @@ function MenuItemSelected(UWindowBase Sender, UWindowBase Item)
 		}
 	}
 	Root.GotoState('');
- 
+
 }
 

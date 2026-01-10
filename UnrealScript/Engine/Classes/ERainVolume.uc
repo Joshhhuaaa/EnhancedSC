@@ -1,8 +1,8 @@
-class ERainVolume extends Actor 
+class ERainVolume extends Actor
 	noexport
 	native
 	placeable;
-   
+
 
 
 var(RainVolume) Float			m_RainThickness;

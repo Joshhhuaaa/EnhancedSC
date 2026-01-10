@@ -37,7 +37,7 @@ function Timer()
 
 	switch (SoundTriggerNoiseType)
 	{
-		case ST_UseNoiseRadiusOnly : 
+		case ST_UseNoiseRadiusOnly :
 
 			PawnInstigator.MakeNoise(Radius, NOISE_Object_Falling);
 			return;

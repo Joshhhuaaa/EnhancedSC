@@ -1,4 +1,4 @@
-class ETVDinnerExplode extends EGameplayObject; 
+class ETVDinnerExplode extends EGameplayObject;
 
 defaultproperties
 {

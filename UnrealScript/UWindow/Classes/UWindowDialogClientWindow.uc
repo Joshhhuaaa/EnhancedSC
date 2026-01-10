@@ -21,9 +21,9 @@ function UWindowDialogControl CreateControl(class<UWindowDialogControl> ControlC
 {
 	local UWindowDialogControl C;
 
-	
+
 	C = UWindowDialogControl(CreateWindow(ControlClass, X, Y, W, H, OwnerWindow));
-	
+
 	C.Register(Self);
 	C.Notify(C.DE_Created);
 

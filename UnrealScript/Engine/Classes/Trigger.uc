@@ -1,5 +1,5 @@
 //=============================================================================
-// Trigger: senses things happening in its proximity and generates 
+// Trigger: senses things happening in its proximity and generates
 // sends Trigger/UnTrigger to actors whose names match 'EventName'.
 //=============================================================================
 class Trigger extends Triggers
@@ -57,13 +57,13 @@ function PostBeginPlay()
 		bHidden = false;
 		SetDrawType(DT_None);
 	}
-		
+
 	bSavedInitialActive = bInitiallyActive;
 	bSavedInitialCollision = bCollideActors;
 	Super.PostBeginPlay();
 }
 
-/* Reset() 
+/* Reset()
 reset actor to initial state - used when restarting level without reloading.
 */
 function Reset()
@@ -73,7 +73,7 @@ function Reset()
 	// collision, bInitiallyactive
 	bInitiallyActive = bSavedInitialActive;
 	SetCollision(bSavedInitialCollision, bBlockActors, bBlockPlayers);
-}	
+}
 
 
 function FindTriggerActor()
@@ -114,7 +114,7 @@ function Actor SpecialHandling(Pawn Other)
 			FindTriggerActor();
 		if (TriggerActor == None)
 			return None;
-		if ((TriggerActor2 != None) 
+		if ((TriggerActor2 != None)
 			&& (VSize(TriggerActor2.Location - Other.Location) < VSize(TriggerActor.Location - Other.Location)))
 			return TriggerActor2;
 		else
@@ -234,8 +234,8 @@ function Touch(actor Other)
 					Pawn(Other).Controller.GoalList[i] = None;
 					break;
 				}
-		}	
-				
+		}
+
 		if (bTriggerOnceOnly)
 			// Ignore future touches.
 			SetCollision(False);
@@ -263,7 +263,7 @@ function Timer()
 		SetTimer(RepeatTriggerTime, false);
 }
 
-function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, vector HitNormal, 
+function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, vector HitNormal,
 						Vector momentum, class<DamageType> damageType, optional int PillTag) // UBI MODIF - Additional parameter
 {
 	if (bInitiallyActive && (TriggerType == TT_Shoot) && (Damage >= DamageThreshold) && (instigatedBy != None))

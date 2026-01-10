@@ -46,7 +46,7 @@ function SetValue(float NewValue, optional bool bNoNotify)
 	{
 		// Notify
 		Notify(DE_Change);
-	}	
+	}
 }
 
 
@@ -54,9 +54,9 @@ function float CheckValue(float Test)
 {
 	local float TempF;
 	local float NewValue;
-	
+
 	NewValue = Test;
-	
+
 	if (Step != 0)
 	{
 		TempF = NewValue / Step;
@@ -76,12 +76,12 @@ function float CheckValue(float Test)
 function BeforePaint(Canvas C, float X, float Y)
 {
 	local float W, H;
-	
+
 	Super.BeforePaint(C, X, Y);
-	
+
 	TextSize(C, Text, W, H);
 	WinHeight = H + 1;
-	
+
 	switch (Align)
 	{
 	case TXT_LEFT:
@@ -89,7 +89,7 @@ function BeforePaint(Canvas C, float X, float Y)
 		TextX = 0;
 		break;
 	case TXT_RIGHT:
-		SliderDrawX = 0;	
+		SliderDrawX = 0;
 		TextX = WinWidth - W;
 		break;
 	case TXT_CENTER:
@@ -119,7 +119,7 @@ function Paint(Canvas C, float X, float Y)
 		ClipText(C, TextX, TextY, Text);
 		C.SetDrawColor(255, 255, 255);
 	}
-	
+
 	R = LookAndFeel.HLine;
 	DrawStretchedTextureSegment(C, SliderDrawX, SliderDrawY, SliderWidth, R.H, R.X, R.Y, R.W, R.H, T);
 
@@ -149,7 +149,7 @@ function LMouseDown(float X, float Y)
 		else
 			SetValue(Value - 1);
 	}
-	
+
 	if (X > TrackStart + TrackWidth && X < SliderDrawX + SliderWidth)
 	{
 		if (Step != 0)
@@ -157,7 +157,7 @@ function LMouseDown(float X, float Y)
 		else
 			SetValue(Value + 1);
 	}
-	
+
 }
 
 function MouseMove(float X, float Y)

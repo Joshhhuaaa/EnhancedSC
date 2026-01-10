@@ -60,20 +60,20 @@ function InitInteract(Controller Instigator)
 }
 
 //---------------------------------------[David Kalina - 18 Nov 2001]-----
-// 
+//
 // Description
-//		If called, the wall mine is successfully defused.  
+//		If called, the wall mine is successfully defused.
 //		NPC has a random chance of failure.
 //		After this function is called, the WallMine becomes inactive and resets the Pickup Interaction.
-// 
+//
 //------------------------------------------------------------------------
 function Defuse(Controller Instigator)
 {
 	local EAIController AI;
-	
-	// check for defuse success from 
+
+	// check for defuse success from
 	AI = EAIController(Instigator);
-	
+
 	if (AI != none && AI.EPawn != none)
 	{
 		if (FRand() < AI.EPawn.DefuseMinePercentage)
@@ -91,7 +91,7 @@ function Interact(Controller Instigator)
 	AI = EAIController(Instigator);
 	if (AI != none)
 		Defuse(AI);
-	// Will activate or deactivate wall mine ONLY if interacted with 
+	// Will activate or deactivate wall mine ONLY if interacted with
 	else
 	{
 		bInteractedWith = true;
@@ -143,7 +143,7 @@ function PostInteract(Controller Instigator)
 		// Success but wallmine couldn't be carried
 		else if (DefuseSuccessful)
 		{
-			EPlayerController(Instigator).SendTransmissionMessage(Localize("Transmission", "NoPickUp", "Localization\\HUD") $ Localize("InventoryItem", WallMine.ItemName, "Localization\\HUD"), TR_INVENTORY);			
+			EPlayerController(Instigator).SendTransmissionMessage(Localize("Transmission", "NoPickUp", "Localization\\HUD") $ Localize("InventoryItem", WallMine.ItemName, "Localization\\HUD"), TR_INVENTORY);
 		}
 
 		Destroy();
@@ -153,7 +153,7 @@ function PostInteract(Controller Instigator)
 		// Wallmine will be idle on wall + give back pickup interaction
 		WallMine.InteractionClass = class'EPickupInteraction';
 		WallMine.Interaction = Spawn(WallMine.InteractionClass, WallMine);
-		
+
 		Destroy();
 	}
 }
@@ -173,14 +173,14 @@ function SetInteractLocation(Pawn InteractPawn)
     {
 		Log("EWallMineInteraction problem with Owner");
     }
-	
+
 	InteractEPawn = EPawn(InteractPawn);
 	if (InteractEPawn == none)
 		return;
 
 	// get WallMine object rotation axes for positioning
 	GetAxes(WallMine.Rotation, X, Y, Z);
-	
+
 	MovePos = WallMine.Location;
 		MovePos += InteractEPawn.CollisionRadius * X;
 
@@ -196,7 +196,7 @@ function SetInteractLocation(Pawn InteractPawn)
 			MovePos = HitLocation;
 		}
 	}
-	
+
 	InteractEPawn.m_locationStart	= InteractEPawn.Location;
 	InteractEPawn.m_orientationStart= InteractEPawn.Rotation;
 	InteractEPawn.m_locationEnd		= MovePos;

@@ -8,7 +8,7 @@
 class EGameMenuHUD extends EMenuHUD native;
 
 /*-----------------------------------------------------------------------------
-                        T Y P E   D E F I N I T I O N S 
+                        T Y P E   D E F I N I T I O N S
 -----------------------------------------------------------------------------*/
 const MAX_SECTION_TITLES = 4;
 const NB_MISSION_NOISE_LINE = 6;
@@ -16,10 +16,10 @@ const NB_MISSION_NOISE_LINE = 6;
 var int UCONST_NB_GAMEMENU_MAINMENU_SECTION;
 
 /*-----------------------------------------------------------------------------
-                        M E M B E R   V A R I A B L E S 
+                        M E M B E R   V A R I A B L E S
 -----------------------------------------------------------------------------*/
 var int MenuSection;        // 0 = Inventory, 1 = Goals And Notes, 2 = MainMenu
-var int TitleSection;       
+var int TitleSection;
 var int SubTitleSection;
 
 
@@ -46,7 +46,7 @@ var	EInventory	 EpcInventory;
 var eInvCategory CurrentCategory;
 var int ItemPos;
 var int InvMenuDepth;
-var int TitleSectionInv;    // (Yanick Mimee) June-13-2002 
+var int TitleSectionInv;    // (Yanick Mimee) June-13-2002
 var bool bCheckVideo;
 var bool bErrorIsCatch;
 var bool bShowDesc;
@@ -163,7 +163,7 @@ native(2335) final function Tick_s_MissionComplete(float DeltaTime);
 /*-----------------------------------------------------------------------------
      Function:      PostBeginPlay
 
-     Description:   
+     Description:
 -----------------------------------------------------------------------------*/
 function PostBeginPlay()
 {
@@ -182,7 +182,7 @@ function PostBeginPlay()
 -----------------------------------------------------------------------------*/
 function DrawConfirmationBox(ECanvas Canvas, string sMessage)
 {
-	local int xPos, yPos, iNbrOfLine, iBoxHeight, iBoxWidth;    	
+	local int xPos, yPos, iNbrOfLine, iBoxHeight, iBoxWidth;
 	local float xLen, yLen;
 	local int yesX, yesY, yesW, yesH;
 	local int noX, noY, noW, noH;
@@ -201,13 +201,13 @@ function DrawConfirmationBox(ECanvas Canvas, string sMessage)
 
 	xPos = 320 - iBoxWidth / 2;
 	yPos = 240 - iBoxHeight / 2;
-	
+
 	// Yes/No button regions
 	yesX = xPos + (iBoxWidth / 4) - 50;
 	yesY = yPos + iBoxHeight - 40;
 	yesW = 100;
 	yesH = 40;
-	
+
 	noX = xPos + (iBoxWidth * 3 / 4) - 50;
 	noY = yPos + iBoxHeight - 40;
 	noW = 100;
@@ -217,7 +217,7 @@ function DrawConfirmationBox(ECanvas Canvas, string sMessage)
 	if (!Epc.eGame.bUseController)
 	{
 		oldSelection = int(Epc.bMissionFailedConfirmYes);
-		
+
 		if (Epc.m_FakeMouseX > yesX && Epc.m_FakeMouseX < yesX + yesW &&
 			Epc.m_FakeMouseY > yesY && Epc.m_FakeMouseY < yesY + yesH)
 		{
@@ -233,14 +233,14 @@ function DrawConfirmationBox(ECanvas Canvas, string sMessage)
 			Epc.bMissionFailedConfirmYes = false;
 		}
 	}
-	
+
 	Canvas.Style = ERenderStyle.STY_Alpha;
 
     // FILL BACKGROUND //
     Canvas.DrawLine(xPos + 2, yPos + 2, iBoxWidth - 4, iBoxHeight - 4, Canvas.white, -1, eLevel.TGAME);
 
     Canvas.SetDrawColor(128, 128, 128);
-	
+
     // CORNERS //
     // TOP LEFT CORNER //
     Canvas.SetPos(xPos, yPos);
@@ -275,17 +275,17 @@ function DrawConfirmationBox(ECanvas Canvas, string sMessage)
     // RIGHT BORDER //
     Canvas.SetPos(xPos + iBoxWidth - 5, yPos + 7);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v, 5, iBoxHeight - 14, 5, 0, -5, 1);
-	
-    // INSIDE BORDERS //	
-    Canvas.DrawRectangle(xPos + 5, yPos + 6, iBoxWidth - 10, iBoxHeight - 12, 1, Canvas.black, 77, eLevel.TGAME);	
+
+    // INSIDE BORDERS //
+    Canvas.DrawRectangle(xPos + 5, yPos + 6, iBoxWidth - 10, iBoxHeight - 12, 1, Canvas.black, 77, eLevel.TGAME);
 
 	Canvas.SetDrawColor(64, 64, 64, 255);
     Canvas.Style = ERenderStyle.STY_Modulated;
 
     Canvas.SetPos(xPos + 5, yPos + 6);
-    Canvas.DrawTile(Texture'HUD.HUD.ETMenuBar', iBoxWidth - 10, iBoxHeight - 12, 0, 0, 128, 2);	
+    Canvas.DrawTile(Texture'HUD.HUD.ETMenuBar', iBoxWidth - 10, iBoxHeight - 12, 0, 0, 128, 2);
 
-	// Draw message text			
+	// Draw message text
 	Canvas.SetDrawColor(128, 128, 128, 255);
 	Canvas.DrawColor = Canvas.TextBlack;
 	Canvas.SetClip(iBoxWidth - 100, yLen);
@@ -295,7 +295,7 @@ function DrawConfirmationBox(ECanvas Canvas, string sMessage)
 
 	// Draw Yes/No options
 	Canvas.Font = Canvas.ETextFont;
-	
+
 	// Yes option
 	Canvas.SetPos(xPos + (iBoxWidth / 4), yPos + iBoxHeight - 30);
 	if (Epc.bMissionFailedConfirmYes)
@@ -330,13 +330,13 @@ function int IsMouseInConfirmButton(ECanvas Canvas)
 	local string sMessage;
 
 	iBoxWidth = 400;
-	
+
 	// Get the message text to calculate height
 	if (Epc.iMissionFailedConfirmAction == 1)
 		sMessage = Localize("MissionFailed", "RestartMission_Confirm", "Localization\\Enhanced");
 	else
 		sMessage = Localize("MissionFailed", "Quit_Confirm", "Localization\\Enhanced");
-	
+
 	// Calculate box height
 	Canvas.Font = Canvas.ETextFont;
 	Canvas.SetClip(iBoxWidth - 100, yLen);
@@ -344,23 +344,23 @@ function int IsMouseInConfirmButton(ECanvas Canvas)
 	Canvas.TextSize(sMessage, xLen, yLen);
 	iNbrOfLine = Canvas.GetNbStringLines(sMessage, 1.0f);
 	Canvas.SetClip(640, 480);
-	
+
 	iBoxHeight = (iNbrOfLine * yLen) + 80;
-	
+
 	xPos = 320 - iBoxWidth / 2;
 	yPos = 240 - iBoxHeight / 2;
-	
+
 	// Calculate button regions
 	yesX = xPos + (iBoxWidth / 4) - 50;
 	yesY = yPos + iBoxHeight - 40;
 	yesW = 100;
 	yesH = 40;
-	
+
 	noX = xPos + (iBoxWidth * 3 / 4) - 50;
 	noY = yPos + iBoxHeight - 40;
 	noW = 100;
 	noH = 40;
-	
+
 	// Check if mouse is in Yes button
 	if (Epc.m_FakeMouseX > yesX && Epc.m_FakeMouseX < yesX + yesW &&
 		Epc.m_FakeMouseY > yesY && Epc.m_FakeMouseY < yesY + yesH)
@@ -373,7 +373,7 @@ function int IsMouseInConfirmButton(ECanvas Canvas)
 	{
 		return 2; // No button
 	}
-	
+
 	return 0; // None
 }
 
@@ -453,11 +453,11 @@ function string GetInputPrompt(int ButtonType)
 function string FormatPromptString(string LocalizedString, string ButtonName)
 {
 	local int pos;
-	
+
 	pos = InStr(LocalizedString, "{0}");
 	if (pos >= 0)
 		return Left(LocalizedString, pos) $ ButtonName $ Mid(LocalizedString, pos + 3);
-	
+
 	return LocalizedString;
 }
 
@@ -483,7 +483,7 @@ state s_QuickSave
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_QuickSave(Key, Action, Delta);}
 
 	function PostRender(ECanvas Canvas)	{PostRender_s_QuickSave(Canvas);}
-    
+
     function BeginState() {BeginState_s_QuickSave();}
 }
 
@@ -496,7 +496,7 @@ state s_QuickLoad
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_QuickLoad(Key, Action, Delta);}
 
 	function PostRender(ECanvas Canvas)	{PostRender_s_QuickLoad(Canvas);}
-    
+
     function BeginState() {BeginState_s_QuickLoad();}
 }
 
@@ -504,15 +504,17 @@ state s_QuickLoad
 /*=============================================================================
  State :        s_Inventory
 =============================================================================*/
-auto state s_Inventory // Joshua - Controller function
+auto state s_Inventory
 {
+/*
 	function PostRender(ECanvas Canvas)	{PostRender_s_Inventory(Canvas);}
 
-    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_Inventory(Key, Action, Delta);}	
-    
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_Inventory(Key, Action, Delta);}
+
     function BeginState() {BeginState_s_Inventory();}
 
 	function EndState() {EndState_s_Inventory();}
+*/
 }
 
 /*=============================================================================
@@ -523,7 +525,7 @@ state s_GameInfo
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_GameInfo(Key, Action, Delta);}
 
 	function PostRender(ECanvas Canvas)	{PostRender_s_GameInfo(Canvas);}
-    
+
     function BeginState() {BeginState_s_GameInfo();}
 }
 
@@ -535,7 +537,7 @@ state s_MainMenu
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_MainMenu(Key, Action, Delta);}
 
 	function PostRender(ECanvas Canvas)	{PostRender_s_MainMenu(Canvas);}
-    
+
     function BeginState() {BeginState_s_MainMenu();}
 }
 
@@ -593,8 +595,7 @@ state s_MissionFailed
 
             Canvas.DrawLine(xOffset - 1, yPos - 3, Canvas.SizeX + 1, (lineHeight * 4) + 6, Canvas.black, int(100.0 * (Epc.MissionQuickMenuAlpha / 255.0)), eLevel.TMENU);
 
-            // Joshua - We must use the PlayStation font to display controller icons
-            Canvas.Font = Canvas.ETextFontPS2;
+            Canvas.Font = Canvas.ETextFont;
             Canvas.SetDrawColor(255, 255, 255, Epc.MissionQuickMenuAlpha);
 
             Canvas.SetPos(320, yPos);
@@ -634,26 +635,26 @@ state s_MissionFailed
             }
         }
     }
-    
-    function BeginState() 
+
+    function BeginState()
     {
         Epc.MissionQuickMenuTimer = 0.0;
         Epc.MissionQuickMenuAlpha = 0;
         BeginState_s_MissionFailed();
     }
 
-    function Tick(float DeltaTime) 
+    function Tick(float DeltaTime)
     {
         local int buttonRegion;
         local ECanvas Canvas;
-        
+
         Canvas = ECanvas(class'Actor'.static.GetCanvas());
-        
+
         // Joshua - Update quick menu timer and alpha for fade-in effect
         if (Epc.bMissionFailedQuickMenu)
         {
             Epc.MissionQuickMenuTimer += DeltaTime;
-            
+
             if (Epc.MissionQuickMenuTimer < 2.0)
             {
                 // Joshua - Still in the 2 second delay, keep alpha at 0
@@ -669,19 +670,19 @@ state s_MissionFailed
                 Epc.MissionQuickMenuAlpha = 255;
             }
         }
-                
+
         // Joshua - Handle mouse clicks in confirmation dialog
         if (Epc.bMissionFailedShowConfirmation && Epc.m_FakeMouseClicked)
         {
             // Joshua - Check which button the mouse is actually clicking on
             buttonRegion = IsMouseInConfirmButton(Canvas);
-            
+
             if (buttonRegion == 1)
             {
                 // Clicked Yes button
                 Epc.FakeMouseToggle(false);
                 Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
-                
+
                 if (Epc.iMissionFailedConfirmAction == 1)
                 {
                     Epc.bMissionFailedQuickMenu = false;
@@ -701,10 +702,10 @@ state s_MissionFailed
                 Epc.bMissionFailedShowConfirmation = false;
                 Epc.iMissionFailedConfirmAction = 0;
             }
-            
+
             Epc.m_FakeMouseClicked = false;
         }
-        
+
         Tick_s_MissionFailed(DeltaTime);
     }
 
@@ -737,7 +738,7 @@ state s_MissionComplete
 	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_MissionComplete(Key, Action, Delta);}
 
 	function PostRender(ECanvas Canvas)	{PostRender_s_MissionComplete(Canvas);}
-    
+
     function BeginState() {BeginState_s_MissionComplete();}
 
     function Tick(float DeltaTime) { Tick_s_MissionComplete(DeltaTime);}
@@ -764,7 +765,7 @@ state s_TrainingFailed
     {
         Canvas.DrawLine(0, 0, 640, 480, Canvas.black, blackAlpha, TGAME);
     }
-    
+
     function BeginState()
     {
         bIncrease = true;
@@ -804,7 +805,7 @@ state s_TrainingFailed
                 OwnerGotoStateSafe('MainHUD');
             }
         }
-    }    
+    }
 }
 
 

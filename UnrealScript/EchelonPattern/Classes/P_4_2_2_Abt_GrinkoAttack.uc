@@ -48,7 +48,7 @@ function InitPattern()
             {
                 Inv.Skins[0] = Texture'ETexIngredient.Weapons.ak47_Grinko';
             }
-            
+
             EAIController(Characters[1]).bAllowKill = true;
             EAIController(Characters[1]).bAllowKnockout = true;
             EAIController(Characters[1]).bWasFound = true;
@@ -81,10 +81,10 @@ Main:
     SendPatternEvent('EGroupAI28','KillGrinko');
 Action:
     Log("");
-    JumpRandom('PositionA', 0.50, 'PositionB', 1.00, , , , , ,); 
+    JumpRandom('PositionA', 0.50, 'PositionB', 1.00, , , , , ,);
 PositionA:
     Log("");
-    JumpRandom('PosAstanding', 0.40, 'PosAcrouch', 1.00, , , , , ,); 
+    JumpRandom('PosAstanding', 0.40, 'PosAcrouch', 1.00, , , , , ,);
 PosAstanding:
     Log("");
     ResetGoals(1);
@@ -92,7 +92,7 @@ PosAstanding:
     WaitForGoal(1,GOAL_MoveAndAttack,);
     Goal_Default(1,GOAL_Attack,8,,,'PLAYER','PathNode261',,TRUE,,MOVE_WalkAlert,,MOVE_WalkAlert);
     Sleep(3);
-    JumpRandom('PositionA2', 0.30, 'PositionB', 0.80, 'PosAcrouch', 1.00, , , ,); 
+    JumpRandom('PositionA2', 0.30, 'PositionB', 0.80, 'PosAcrouch', 1.00, , , ,);
 PosAcrouch:
     Log("");
     ResetGoals(1);
@@ -100,10 +100,10 @@ PosAcrouch:
     WaitForGoal(1,GOAL_MoveAndAttack,);
     Goal_Default(1,GOAL_Attack,8,,,'PLAYER','PathNode261',,TRUE,,MOVE_CrouchJog,,MOVE_CrouchJog);
     Sleep(3);
-    JumpRandom('PositionA2', 0.30, 'PositionB', 0.80, 'PosAstanding', 1.00, , , ,); 
+    JumpRandom('PositionA2', 0.30, 'PositionB', 0.80, 'PosAstanding', 1.00, , , ,);
 PositionA2:
     Log("");
-    JumpRandom('PosA2standing', 0.40, 'PosA2crouch', 1.00, , , , , ,); 
+    JumpRandom('PosA2standing', 0.40, 'PosA2crouch', 1.00, , , , , ,);
 PosA2standing:
     Log("");
     ResetGoals(1);
@@ -111,7 +111,7 @@ PosA2standing:
     WaitForGoal(1,GOAL_MoveAndAttack,);
     Goal_Default(1,GOAL_Attack,8,,,'PLAYER','PathNode254',,TRUE,,MOVE_WalkAlert,,MOVE_WalkAlert);
     Sleep(3);
-    JumpRandom('PositionA', 0.70, 'PosA2crouch', 1.00, , , , , ,); 
+    JumpRandom('PositionA', 0.70, 'PosA2crouch', 1.00, , , , , ,);
 PosA2crouch:
     Log("");
     ResetGoals(1);
@@ -119,10 +119,10 @@ PosA2crouch:
     WaitForGoal(1,GOAL_MoveAndAttack,);
     Goal_Default(1,GOAL_Attack,8,,,'PLAYER','PathNode254',,TRUE,,MOVE_WalkAlert,,MOVE_CrouchWalk);
     Sleep(3);
-    JumpRandom('PositionA', 0.70, 'PosA2standing', 1.00, , , , , ,); 
+    JumpRandom('PositionA', 0.70, 'PosA2standing', 1.00, , , , , ,);
 PositionB:
     Log("");
-    JumpRandom('PosBstanding', 0.40, 'PosBcrouch', 1.00, , , , , ,); 
+    JumpRandom('PosBstanding', 0.40, 'PosBcrouch', 1.00, , , , , ,);
 PosBstanding:
     Log("");
     ResetGoals(1);
@@ -130,7 +130,7 @@ PosBstanding:
     WaitForGoal(1,GOAL_MoveAndAttack,);
     Goal_Default(1,GOAL_Attack,8,,,'PLAYER','PathNode258',,TRUE,,MOVE_WalkAlert,,MOVE_WalkAlert);
     Sleep(3);
-    JumpRandom('PositionA', 0.45, 'PositionB2', 0.70, 'PositionC', 0.85, 'PosBcrouch', 1.00, ,); 
+    JumpRandom('PositionA', 0.45, 'PositionB2', 0.70, 'PositionC', 0.85, 'PosBcrouch', 1.00, ,);
 PosBcrouch:
     Log("");
     ResetGoals(1);
@@ -138,10 +138,10 @@ PosBcrouch:
     WaitForGoal(1,GOAL_MoveAndAttack,);
     Goal_Default(1,GOAL_Attack,8,,,'PLAYER','PathNode258',,TRUE,,MOVE_CrouchJog,,MOVE_CrouchJog);
     Sleep(3);
-    JumpRandom('PositionA', 0.45, 'PositionB2', 0.70, 'PositionC', 0.85, 'PosBstanding', 1.00, ,); 
+    JumpRandom('PositionA', 0.45, 'PositionB2', 0.70, 'PositionC', 0.85, 'PosBstanding', 1.00, ,);
 PositionB2:
     Log("");
-    JumpRandom('PosB2standing', 0.40, 'PosB2crouch', 1.00, , , , , ,); 
+    JumpRandom('PosB2standing', 0.40, 'PosB2crouch', 1.00, , , , , ,);
 PosB2standing:
     Log("");
     ResetGoals(1);
@@ -149,7 +149,7 @@ PosB2standing:
     WaitForGoal(1,GOAL_MoveAndAttack,);
     Goal_Default(1,GOAL_Attack,8,,,'PLAYER','PathNode260',,TRUE,,MOVE_WalkAlert,,MOVE_WalkAlert);
     Sleep(3);
-    JumpRandom('PositionB', 0.40, 'PositionC', 0.80, 'PosB2crouch', 1.00, , , ,); 
+    JumpRandom('PositionB', 0.40, 'PositionC', 0.80, 'PosB2crouch', 1.00, , , ,);
 PosB2crouch:
     Log("");
     ResetGoals(1);
@@ -157,7 +157,7 @@ PosB2crouch:
     WaitForGoal(1,GOAL_MoveAndAttack,);
     Goal_Default(1,GOAL_Attack,8,,,'PLAYER','PathNode260',,TRUE,,MOVE_WalkAlert,,MOVE_CrouchWalk);
     Sleep(3);
-    JumpRandom('PositionB', 0.40, 'PositionC', 0.80, 'PosB2standing', 1.00, , , ,); 
+    JumpRandom('PositionB', 0.40, 'PositionC', 0.80, 'PosB2standing', 1.00, , , ,);
 PositionC:
     Log("");
     ResetGoals(1);
@@ -169,7 +169,7 @@ PositionC:
     ResetGoals(1);
     Goal_Set(1,GOAL_MoveAndAttack,7,,,'PLAYER','PathNode269',,FALSE,,MOVE_JogAlert,,MOVE_JogAlert);
     WaitForGoal(1,GOAL_MoveAndAttack,);
-    JumpRandom('PosCstanding', 0.40, 'PosCcrouch', 1.00, , , , , ,); 
+    JumpRandom('PosCstanding', 0.40, 'PosCcrouch', 1.00, , , , , ,);
 PosCstanding:
     Log("");
     Goal_Default(1,GOAL_Attack,5,,,'PLAYER','PathNode269',,TRUE,,MOVE_WalkAlert,,MOVE_WalkAlert);
@@ -186,7 +186,7 @@ JumpOut:
     ResetGoals(1);
     Goal_Set(1,GOAL_MoveAndAttack,8,,,'PLAYER','PathNode331',,FALSE,,MOVE_JogAlert,,MOVE_JogAlert);
     WaitForGoal(1,GOAL_MoveAndAttack,);
-    JumpRandom('PositionA', 0.30, 'PositionB', 0.50, 'PositionB2', 1.00, , , ,); 
+    JumpRandom('PositionA', 0.30, 'PositionB', 0.50, 'PositionB2', 1.00, , , ,);
 Fin:
     Log("");
     SetFlags(V4_2_2_Abattoir(Level.VarObject).DeadGrinko,TRUE);

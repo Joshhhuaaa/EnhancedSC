@@ -1,4 +1,4 @@
-class UWindowBase extends Object 
+class UWindowBase extends Object
         native;
 
 // Fonts array constants
@@ -129,7 +129,7 @@ function Region GetRegion(TexRegion T)
 static function int InStrAfter(string Text, string Match, int Pos)
 {
 	local int i;
-	
+
 	i = InStr(Mid(Text, Pos), Match);
 	if (i != -1)
 		return i + Pos;
@@ -142,7 +142,7 @@ static function Object BuildObjectWithProperties(string Text)
 	local string ObjectClass, PropertyName, PropertyValue, Temp;
 	local class<Object> C;
 	local Object O;
-	
+
 	i = InStr(Text, ",");
 	if (i == -1)
 	{
@@ -154,7 +154,7 @@ static function Object BuildObjectWithProperties(string Text)
 		ObjectClass = Left(Text, i);
 		Text = Mid(Text, i + 1);
 	}
-	
+
 	//Log("Class: "$ObjectClass);
 
 	C = class<Object>(DynamicLoadObject(ObjectClass, class'Class'));
@@ -184,11 +184,11 @@ static function Object BuildObjectWithProperties(string Text)
 				return O;
 			}
 			PropertyValue = Mid(Text, 1, i - 1);
-			
+
 			Temp = Mid(Text, i + 1, 1);
 			if (Temp != "" && Temp != ",")
 				Log("Missing comma after close quote for "$ObjectClass$"."$PropertyName);
-			Text = Mid(Text, i + 2);	
+			Text = Mid(Text, i + 2);
 		}
 		else
 		{
@@ -204,7 +204,7 @@ static function Object BuildObjectWithProperties(string Text)
 				Text = Mid(Text, i + 1);
 			}
 		}
-				
+
 		//Log("Property: "$PropertyName$" => "$PropertyValue);
 		O.SetPropertyText(PropertyName, PropertyValue);
 	}

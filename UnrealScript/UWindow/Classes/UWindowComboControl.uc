@@ -14,26 +14,26 @@ var UWindowComboList	List;
 
 var bool				bListVisible;
 var bool				bCanEdit;
-var bool				bButtons;    
+var bool				bButtons;
 var bool                bSetupSize;
 
 function Created()
 {
 	Super.Created();
-	
-	EditBox = UWindowEditBox(CreateWindow(class'UWindowEditBox', 0, 0, WinWidth - LookAndFeel.Size_ComboButtonWidth, WinHeight, self)); 
+
+	EditBox = UWindowEditBox(CreateWindow(class'UWindowEditBox', 0, 0, WinWidth - LookAndFeel.Size_ComboButtonWidth, WinHeight, self));
 	EditBox.NotifyOwner = Self;
 	EditBoxWidth = WinWidth / 2;
 	EditBox.bTransient = true;
 
-	Button = UWindowComboButton(CreateWindow(class'UWindowComboButton', WinWidth - LookAndFeel.Size_ComboButtonWidth, 0, LookAndFeel.Size_ComboButtonWidth, WinHeight, self)); 
+	Button = UWindowComboButton(CreateWindow(class'UWindowComboButton', WinWidth - LookAndFeel.Size_ComboButtonWidth, 0, LookAndFeel.Size_ComboButtonWidth, WinHeight, self));
 	Button.Owner = Self;
-	
-	List = UWindowComboList(Root.CreateWindow(ListClass, 0, 0, 100, 100)); 
+
+	List = UWindowComboList(Root.CreateWindow(ListClass, 0, 0, 100, 100));
 	List.LookAndFeel = LookAndFeel;
 	List.Owner = Self;
 	List.Setup();
-	
+
 	List.HideWindow();
 	bListVisible = false;
 
@@ -184,7 +184,7 @@ function BeforePaint(Canvas C, float X, float Y)
         LookAndFeel.Combo_SetupSizes(Self, C);
         bSetupSize = false;
     }
-	
+
 	List.bLeaveOnscreen = bListVisible && bLeaveOnscreen;
 }
 

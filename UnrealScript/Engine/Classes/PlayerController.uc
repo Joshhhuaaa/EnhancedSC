@@ -50,7 +50,7 @@ var input byte bStrafe, bStepOneFrame;
 var EInteractionManager	  IManager;
 var Actor				  MicroTarget;	// if this is not None, use it in Dare to get sound from
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 // Camera info.
@@ -76,12 +76,12 @@ var const actor ViewTarget;
 
 var globalconfig float DesiredFOV;
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * dchabot (28 nov. 2001)
 // ***********************************************************************************************
 var(Camera) globalconfig float DefaultFOV;
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * dchabot (28 nov. 2001)
 // ***********************************************************************************************
 var float		ZoomLevel;
@@ -103,12 +103,12 @@ native(4011) final function string GetActionKey(BYTE Key);
 native(4012) final function string GetEnumName(BYTE Key);
 native(4013) final function SetKey(string szKeyAndAction, string szKeyToReplace);
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * ATurcotte (MTL) (13 juin 2001)
 // * Purpose : Process Key
 // ***********************************************************************************************
@@ -142,7 +142,7 @@ event bool CanGoBackToGame();
 
 function UpdateCameraRotation(actor ViewActor);	// handle in EPlayerController
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * ATurcotte (MTL) (13 juin 2001)
 // ***********************************************************************************************
 
@@ -160,7 +160,7 @@ native(544) final function ResetKeyboard();
 native(4017) final function SaveKeyboard();
 native(4018) final function LoadKeyboard();
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 native final function SetViewTarget(Actor NewViewTarget);
 native event ClientTravel(string URL, ETravelType TravelType, bool bItems);
@@ -180,8 +180,8 @@ event PostBeginPlay()
 	iErrorMsg = -3;
 	playerInfo = Spawn(class'EPlayerInfo', self);
 }
-	
-/* Reset() 
+
+/* Reset()
 reset actor to initial state - used when restarting level without reloading.
 */
 function Reset()
@@ -268,14 +268,14 @@ exec function FOV(float F)
 function HandleWalking()
 {
 	if (Pawn != None)
-		Pawn.SetWalking((bRun != 0) || (bDuck != 0)); 
+		Pawn.SetWalking((bRun != 0) || (bDuck != 0));
 }
 
 //function SetFOVAngle(float newFOV)
 //{
 //	FOVAngle = newFOV;
 //}
-	 
+
 function damageAttitudeTo(pawn Other, float Damage, class<DamageType> damageType,optional int PillTag) //UBI MODIF - Additional parameter
 {
 	if ((Other != None) && (Other != Pawn) && (Damage > 0))
@@ -326,7 +326,7 @@ function ClientRestart()
 	}
 	Pawn.ClientRestart();
 	SetViewTarget(Pawn);
-	EnterStartState();	
+	EnterStartState();
 }
 
 event PlayerTick(float DeltaTime)
@@ -343,7 +343,7 @@ function PlayerMove(float DeltaTime);
 event PlayerCalcView(out actor ViewActor, out vector CameraLocation, out rotator CameraRotation);
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // ***********************************************************************************************
 event PlayerCalcEye(out vector EyeLocation, out rotator EyeRotation)
 {
@@ -355,7 +355,7 @@ event PlayerCalcEye(out vector EyeLocation, out rotator EyeRotation)
 	EyeLocation += X * Pawn.CollisionRadius / 2;
 }
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 defaultproperties

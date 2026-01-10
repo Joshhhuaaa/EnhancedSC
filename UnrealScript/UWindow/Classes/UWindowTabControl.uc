@@ -14,8 +14,8 @@ function Created()
 
 	SelectedTab = None;
 
-	TabArea = UWindowTabControlTabArea(CreateWindow(class'UWindowTabControlTabArea', 
-					0, 0, WinWidth - LookAndFeel.Size_ScrollbarWidth 
+	TabArea = UWindowTabControlTabArea(CreateWindow(class'UWindowTabControlTabArea',
+					0, 0, WinWidth - LookAndFeel.Size_ScrollbarWidth
 						- LookAndFeel.Size_ScrollbarWidth - 10,
 					 LookAndFeel.Size_TabAreaHeight + LookAndFeel.Size_TabAreaOverhangHeight));
 
@@ -47,7 +47,7 @@ function SetMultiLine(bool InMultiLine)
 	bMultiLine = InMultiLine;
 
 	if (bMultiLine)
-	{	
+	{
 		LeftButton.HideWindow();
 		RightButton.HideWindow();
 	}
@@ -77,9 +77,9 @@ function UWindowTabControlItem AddTab(string Caption)
 	I.Owner = Self;
 	I.SetCaption(Caption);
 
-	if (SelectedTab == None) 
+	if (SelectedTab == None)
 		SelectedTab = I;
-	
+
 	return I;
 }
 
@@ -92,9 +92,9 @@ function UWindowTabControlItem InsertTab(UWindowTabControlItem BeforeTab, string
 	I.Owner = Self;
 	I.SetCaption(Caption);
 
-	if (SelectedTab == None) 
+	if (SelectedTab == None)
 		SelectedTab = I;
-	
+
 	return I;
 }
 
@@ -114,14 +114,14 @@ function UWindowTabControlItem GetTab(string Caption)
 		if (I.Caption == Caption) return I;
 	}
 
-	return None;		
+	return None;
 }
 
 function DeleteTab(UWindowTabControlItem Tab)
 {
 	local UWindowTabControlItem NextTab;
 	local UWindowTabControlItem PrevTab;
-	
+
 	NextTab = UWindowTabControlItem(Tab.Next);
 	PrevTab = UWindowTabControlItem(Tab.Prev);
 	Tab.Remove();
@@ -133,7 +133,7 @@ function DeleteTab(UWindowTabControlItem Tab)
 			Tab = NextTab;
 			if (Tab == None)
 				Tab = PrevTab;
-			
+
 			GotoTab(Tab);
 		}
 		else

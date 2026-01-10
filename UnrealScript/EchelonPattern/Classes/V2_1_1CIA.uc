@@ -3,8 +3,8 @@
 //=============================================================================
 class V2_1_1CIA extends EVariable;
 
-var int F2000get; 
-var int ServerDone; 
+var int F2000get;
+var int ServerDone;
 
 
 function PostBeginPlay()

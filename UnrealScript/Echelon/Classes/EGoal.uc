@@ -14,11 +14,11 @@ var		EGoal					Next;					// pointer to next goal in list
 // data that can be used for executing different goaltypes
 
 var		Vector					GoalLocation;			// typically movement destination
-var		Vector					GoalFocus;				// vector representing what we're looking at / focusing on 
+var		Vector					GoalFocus;				// vector representing what we're looking at / focusing on
 var		Vector					GoalDirection;			// directional component of goal - can indicate a direction noise came in, etc..
 var		Actor					GoalTarget;				// actor that represents our target
 var		Actor					GoalSubject;			// actor representing something other than target (squad leader, defend location, etc.)
-var		Name					GoalTag;				
+var		Name					GoalTag;
 var		Sound					GoalSound;
 var		Name					GoalAnim;
 var		Name					GoalAnimB;
@@ -36,10 +36,10 @@ var		byte					Priority;				// goal priority (0 = lowest, 10 = highest, can chang
 
 
 //---------------------------------------[David Kalina - 18 Apr 2001]-----
-// 
+//
 // Description
 //		Clears / Re-initalizes a Goal by resetting its data
-// 
+//
 //------------------------------------------------------------------------
 function Clear()
 {

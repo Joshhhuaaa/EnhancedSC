@@ -3,17 +3,17 @@
 //=============================================================================
 class V1_6_1_1KolaCell extends EVariable;
 
-var int BigDoorInOpen; 
-var int BigDoorOutOpen; 
-var int FirstLazer; 
-var int KillObj; 
-var int Lazerz; 
-var int PCObj; 
-var int PreServerLazer; 
-var int RetinalObj; 
-var int ServerDoorClosed; 
-var int ServerObj; 
-var int SweepCancel; 
+var int BigDoorInOpen;
+var int BigDoorOutOpen;
+var int FirstLazer;
+var int KillObj;
+var int Lazerz;
+var int PCObj;
+var int PreServerLazer;
+var int RetinalObj;
+var int ServerDoorClosed;
+var int ServerObj;
+var int SweepCancel;
 
 
 function PostBeginPlay()

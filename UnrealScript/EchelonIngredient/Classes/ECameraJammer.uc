@@ -32,12 +32,12 @@ function PostBeginPlay()
 }
 
 function DrawAdditionalInfo(HUD Hud, ECanvas Canvas)
-{	
+{
     //ObjectHUD.DrawView(Hud, Canvas);
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Charge/Spend battery juice
 //------------------------------------------------------------------------
 function ModifyCharge(float c)
@@ -64,7 +64,7 @@ function UnJam()
 	if (JammedCamera != None)
 	{
 		PlaySound(Sound'FisherEquipement.Stop_CameraJammerRun', SLOT_SFX);
-		JammedCamera.UnJammed();		
+		JammedCamera.UnJammed();
 	}
 	JammedCamera = None;
 
@@ -74,7 +74,7 @@ function UnJam()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Return the first camera within angle
 //------------------------------------------------------------------------
 function EBaseCam CamInCone()
@@ -97,8 +97,8 @@ function EBaseCam CamInCone()
             break;
 		else
 			Camera = None;
-	}			
-	
+	}
+
 	return Camera;
 }
 
@@ -107,7 +107,7 @@ state s_Inventory
 	function Tick(float DeltaTime)
 	{
 		Super.Tick(DeltaTime);
-		
+
 		// Restore batteryCharge over time at 1/4 the speed
 		ModifyCharge(0.5f * DeltaTime);
 	}
@@ -122,7 +122,7 @@ state s_Inventory
 function Select(EInventory Inv)
 {
 	Super.Select(Inv);
-	
+
 	// Joshua - Don't play sound during silent restore (sorting)
 	if (!Inv.bSilentRestore)
 		PlaySound(Sound'Interface.Play_FisherEquipCamJammer', SLOT_Interface);
@@ -137,7 +137,7 @@ state s_Selected
 	}
 
 	function Tick(float DeltaTime)
-	{		
+	{
 		Super.Tick(DeltaTime);
 
 		// Restore batteryCharge over time at 1/4 the speed
@@ -148,19 +148,19 @@ state s_Selected
 state s_Jamming
 {
 	function BeginState()
-	{		
+	{
 		Controller.GotoState('s_CameraJammerTargeting');
 	}
 
 	function EndState()
-	{		
+	{
         UnJam();
 		PlaySound(Sound'FisherEquipement.Stop_CameraJammerRun', SLOT_SFX);
 		EPlayerController(Controller).ReturnFromInteraction();
 	}
 
 	function bool Scope()
-	{		
+	{
 		GotoState('s_Selected');
 		return true;
 	}
@@ -169,7 +169,7 @@ state s_Jamming
 	{
 		local EBaseCam	Camera;
 
-		// No jamming while jammer not ready 
+		// No jamming while jammer not ready
 		if (EPlayerController(Controller) == None || EPlayerController(Controller).bInTransition)
 			return;
 

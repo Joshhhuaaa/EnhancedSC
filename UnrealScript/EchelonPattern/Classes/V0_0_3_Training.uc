@@ -3,11 +3,11 @@
 //=============================================================================
 class V0_0_3_Training extends EVariable;
 
-var int ShootBurstActive; 
-var int ShootFinished; 
-var int ShootGenActive; 
-var int ShootNormalActive; 
-var int ShootSnipeActive; 
+var int ShootBurstActive;
+var int ShootFinished;
+var int ShootGenActive;
+var int ShootNormalActive;
+var int ShootSnipeActive;
 
 
 function PostBeginPlay()

@@ -1,6 +1,6 @@
 class EWallHit extends Actor;
 
-#exec OBJ LOAD FILE=..\textures\ETexSFX.utx 
+#exec OBJ LOAD FILE=..\textures\ETexSFX.utx
 
 var() float RicochetNoiseRadius;
 
@@ -22,7 +22,7 @@ function Noise()
     if (hitMaterial != None)
     {
         // MClarke: August 8th 2002
-        // Drown based on surface type 
+        // Drown based on surface type
         if ((hitMaterial.SurfaceType == SURFACE_ConcreteHard)        // Resonating
          ||(hitMaterial.SurfaceType == SURFACE_WoodHard)
          ||(hitMaterial.SurfaceType == SURFACE_WoodBoomy)
@@ -33,8 +33,8 @@ function Noise()
          ||(hitMaterial.SurfaceType == SURFACE_BreakingGlass)
          ||(hitMaterial.SurfaceType == SURFACE_FenceMetal))
         {
-            MakeNoise(RicochetNoiseRadius, NOISE_Ricochet);  
-        }        
+            MakeNoise(RicochetNoiseRadius, NOISE_Ricochet);
+        }
         else if ((hitMaterial.SurfaceType == SURFACE_Grass)          // Absorbing
               ||(hitMaterial.SurfaceType == SURFACE_ConcreteDirt)
               ||(hitMaterial.SurfaceType == SURFACE_Carpet)
@@ -44,18 +44,18 @@ function Noise()
               ||(hitMaterial.SurfaceType == SURFACE_MediumWater)
               ||(hitMaterial.SurfaceType == SURFACE_Sand)
               ||(hitMaterial.SurfaceType == SURFACE_Bush)
-              ||(hitMaterial.SurfaceType == SURFACE_FenceVine))    
+              ||(hitMaterial.SurfaceType == SURFACE_FenceVine))
         {
-            MakeNoise(RicochetNoiseRadius - 700.f, NOISE_Ricochet);  
+            MakeNoise(RicochetNoiseRadius - 700.f, NOISE_Ricochet);
         }
         else                                                        // Normal
         {
-            MakeNoise(RicochetNoiseRadius - 400.f, NOISE_Ricochet);  
+            MakeNoise(RicochetNoiseRadius - 400.f, NOISE_Ricochet);
         }
     }
     else
     {
-	    MakeNoise(RicochetNoiseRadius, NOISE_Ricochet);    
+	    MakeNoise(RicochetNoiseRadius, NOISE_Ricochet);
     }
 
     if ((HitActor != None) && (HitActor.bIsMover))
@@ -124,7 +124,7 @@ function Emit()
 
 		if (i != Level.ImpactSurfaceToSubTexLink.Length)
 		{
-			GetAxes(Rotation, x, y, z);			
+			GetAxes(Rotation, x, y, z);
 			Level.AddImpact(Location, OrthoRotation(-x, -y, -z), false, false, i);
 		}
 	}

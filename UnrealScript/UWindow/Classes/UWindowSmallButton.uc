@@ -17,7 +17,7 @@ function AutoWidth(Canvas C)
 {
 	local float W, H;
 	C.Font = Root.Fonts[Font];
-	
+
 	TextSize(C, RemoveAmpersand(Text), W, H);
 
 	if (WinWidth < W + 10)
@@ -28,7 +28,7 @@ function BeforePaint(Canvas C, float X, float Y)
 {
 	local float W, H;
 	C.Font = Root.Fonts[Font];
-	
+
 	TextSize(C, RemoveAmpersand(Text), W, H);
 
 	TextX = (WinWidth - W) / 2;
@@ -38,7 +38,7 @@ function BeforePaint(Canvas C, float X, float Y)
 	{
 		TextX += 1;
 		TextY += 1;
-	}		
+	}
 }
 
 function Paint(Canvas C, float X, float Y)

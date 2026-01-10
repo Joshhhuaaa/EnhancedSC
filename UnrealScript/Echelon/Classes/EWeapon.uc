@@ -42,7 +42,7 @@ var	const int				NPCPreferredDistance;	// if beyond this distance, NPC group wil
 var	const class<Projectile>	EjectedClass;			// if we want to eject some cartridge / shell from weapon...
 var const vector			EjectedOffset;
 var const vector			EjectedVel;
-var	const class<Actor>		MuzzleFlashClass;		// effect 
+var	const class<Actor>		MuzzleFlashClass;		// effect
 var	const Vector			MuzzleOffset;			// Offset of the end of the muzzle (for flash, particle, etc ...)
 var EWeaponMagazine			Magazine;
 var const StaticMesh		MagazineMesh;
@@ -97,7 +97,7 @@ function Destroyed()
 {
 	if (Magazine != None)
 		Magazine.Destroy();
-	
+
 	Super.Destroyed();
 }
 
@@ -111,10 +111,10 @@ event SetSecondaryAmmo(EInventoryItem Item);
 function ResetController()
 {
 	local EPawn OwnerPawn;
-	
+
 	// Reset OwnerPawn's CurrentWeapon property
 	if (Controller != none)
-	{		
+	{
 		OwnerPawn = EPawn(Controller.Pawn);
 		if (OwnerPawn != none)
 		{
@@ -128,12 +128,12 @@ function ResetController()
 function bool NotifyPickup(Controller Instigator)
 {
 	Super.NotifyPickup(Instigator);
-	
+
 	return false;
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Reset magazine values
 //------------------------------------------------------------------------
 function ResetMagazine()
@@ -150,7 +150,7 @@ function ResetMagazine()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Shouldn't add any weapon except for AIController
 //------------------------------------------------------------------------
 function bool CanAddThisItem(EInventoryItem ItemToAdd)
@@ -159,7 +159,7 @@ function bool CanAddThisItem(EInventoryItem ItemToAdd)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Pulling the trigger
 //------------------------------------------------------------------------
 event Fire()
@@ -179,7 +179,7 @@ event Fire()
 			ClipAmmo = ClipMaxAmmo - 1;
 			Ammo = 100;
 		}
-		
+
 		 if (eROFMode == ROF_Single)
 		{
 			if (Ammo > 0)
@@ -193,13 +193,13 @@ event Fire()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Not clear what to do here
 //------------------------------------------------------------------------
 function AltFire();
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Reload weapon
 //------------------------------------------------------------------------
 function bool Reload()
@@ -229,7 +229,7 @@ function SpawnShellCase()
 {
 	local Projectile s;
 	local vector localVel;
-	
+
 	if (EjectedClass != None)
 	{
 		s = Spawn(EjectedClass, self, , ToWorld(EjectedOffset));
@@ -245,7 +245,7 @@ function SpawnShellCase()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Firing base functions
 //------------------------------------------------------------------------
 final function FireWeapon()
@@ -277,7 +277,7 @@ final function FireWeapon()
 		f.SetBase(self);
 		// Make it live for 1 frame
 		f.LifeSpan = 0.01;
-	} 
+	}
 
 	//
 	// Do Fire
@@ -291,13 +291,13 @@ final function FireWeapon()
 
 	// Reduce ammo
 	if (ClipAmmo > 0)
-	{		
+	{
 		ClipAmmo--;
 		Ammo--;
 		if ((Controller != none) && (Controller.bIsPlayer))
 		{
 			if (EPlayerController(Controller).bFullAmmo)
-			{	
+			{
 				++ClipAmmo;
 				++Ammo;
 			}
@@ -411,7 +411,7 @@ function TraceFire()
 
 		//If the bullet hit the geometry, check if it went trough Sam's cylinder
 		//If yes, play a bullet whistle sound effect
-		if (HitActor != None && HitActor.bWorldGeometry && 
+		if (HitActor != None && HitActor.bWorldGeometry &&
 			DistancePointToLine(EchelonGameInfo(Level.Game).pPlayer.EPawn.GetBoneCoords(EchelonGameInfo(Level.Game).pPlayer.EPawn.EyeBoneName).Origin, StartTrace, EndTrace) < 22)
 		{
 			EchelonGameInfo(Level.Game).pPlayer.EPawn.PlaySound(Sound'GunCommon.Play_Random_BulletWhistle', SLOT_SFX);
@@ -431,7 +431,7 @@ function TraceFire()
     // If it's Sam firing at NPC, add hit location and time to hit array
     if (Controller.bIsPlayer)
 		EPlayerController(Controller).AddHit(HitLocation, Level.TimeSeconds);
-	
+
 	if (HitActor != self && HitActor != Controller.Pawn && !HitActor.bWorldGeometry)
 	{
 		//Log("["$Controller.Pawn$"] deals damage["$InflictedDamage$"] to ["$HitActor$"]");
@@ -450,32 +450,32 @@ function CheckBulletNearMiss(vector StartTrace, vector EndTrace, Actor HitActor)
 	local float Distance;
 	local vector HeadLocation;
 	local EchelonGameInfo eGame;
-	
+
 	eGame = EchelonGameInfo(Level.Game);
 
 	if (eGame == None)
 		return;
-	
+
 	foreach DynamicActors(class'EPawn', CheckPawn)
 	{
 		// Skip if this is the player, a dead NPC, or if the bullet actually hit them
 		if (CheckPawn.bIsPlayerPawn || CheckPawn.Health <= 0 || CheckPawn == HitActor)
 			continue;
-			
+
 		// Skip if NPC has no controller
 		if (CheckPawn.Controller == None || !CheckPawn.Controller.IsA('EAIController'))
 			continue;
-		
+
 		// Get the NPC's head/eye position for accurate near-miss detection
 		HeadLocation = CheckPawn.GetBoneCoords(CheckPawn.EyeBoneName).Origin;
-		
+
 		// If bone coords fail, use approximate head position
 		if (HeadLocation == vect(0,0,0))
 			HeadLocation = CheckPawn.Location + vect(0,0,1) * CheckPawn.CollisionHeight * 0.85;
-		
+
 		// Calculate distance from head to bullet trajectory
 		Distance = DistancePointToLine(HeadLocation, StartTrace, EndTrace);
-		
+
 		// Close enough to be threatening but not a direct hit
 		if (Distance < 50.0)
 		{
@@ -495,8 +495,8 @@ function bool SwitchROF()
 {
 	switch (eROFMode)
 	{
-		case ROF_Single: 
-			eROFMode = ROF_Burst; 
+		case ROF_Single:
+			eROFMode = ROF_Burst;
 			return true;
 		case ROF_Burst:
 			eROFMode = ROF_Auto;
@@ -516,11 +516,11 @@ function int GetNbBulletsFromROF()
 {
 	switch (eROFMode)
 	{
-		case ROF_Single: 
+		case ROF_Single:
 			return 1;
-		case ROF_Burst: 
+		case ROF_Burst:
 			return Min(3, ClipAmmo);
-		case ROF_Auto:	
+		case ROF_Auto:
 			return ClipAmmo;
 	}
 }
@@ -535,7 +535,7 @@ state s_Flying
 	function BeginState()
 	{
 		Super.BeginState();
-		
+
 		bBounce				= false;
 		bFixedRotationDir	= false;
 		bRotateToDesired	= true;
@@ -600,7 +600,7 @@ state s_Selected
 	{
 		if (Controller.Pawn.PressingFire())
 			return false;
-		
+
 		return Global.SwitchROF();
 	}
 
@@ -613,7 +613,7 @@ state s_Selected
 	function Tick(float DeltaTime)
 	{
         Super.Tick(DeltaTime);
-		
+
 		if (WeaponReticle != None)
 			WeaponReticle.ObjectHudTick(DeltaTime);
 
@@ -718,13 +718,13 @@ state s_Firing
 
 		switch (eROFMode)
 		{
-			case ROF_Single: 
+			case ROF_Single:
 				PlaySound(FireSingleShotSound, SLOT_SFX);
 				break;
-			case ROF_Burst: 
+			case ROF_Burst:
 				PlaySound(FireAutomaticSound, SLOT_SFX); // Joshua - Originally played no sound, restored for burst fire
 				break;
-			case ROF_Auto:	
+			case ROF_Auto:
 				PlaySound(FireAutomaticSound, SLOT_SFX);
 				break;
 		}
@@ -774,7 +774,7 @@ state s_Dying
 
 	function Timer()
 	{
-		if (!PlayerCanSeeMe()) 
+		if (!PlayerCanSeeMe())
 			Destroy();
 	}
 }

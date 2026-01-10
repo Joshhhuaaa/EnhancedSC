@@ -5,7 +5,7 @@ class EPCGameOptions extends Object
 //Video
 var config BYTE     ShadowLevel;         //0 = Low, 1 = Medium, 2 = High
 var config BYTE     ShadowResolution;    //0 = Low, 1 = Medium, 2 = High, 3 = Very High
-var config String   Resolution;             
+var config String   Resolution;
 var config BYTE     Brightness;			 // Values from 0-100
 var config BYTE     Gamma;				 // Values from 0-100, Joshua - Ubisoft mislabeled this as Gamma, it actually controls Contrast in SplinterCell.ini
 var config BYTE		EffectsQuality;		 //0 = Low, 1 = Medium, 2 = High, 3 = Very High
@@ -55,29 +55,29 @@ native(4016) final function UpdateEngineSettings(optional bool Sound);
 //=========================================
 function ResetGraphicsToDefault()
 {
-	ResetConfig("AnimatedGeometry");	
-	ResetConfig("ShadowLevel");			
-	ResetConfig("ShadowResolution");		
+	ResetConfig("AnimatedGeometry");
+	ResetConfig("ShadowLevel");
+	ResetConfig("ShadowResolution");
     ResetConfig("Resolution");
 	ResetConfig("Brightness");
 	ResetConfig("Gamma");
 	ResetConfig("EffectsQuality");
 	ResetConfig("AntiAliasing");
-}	
+}
 
 //=========================================
 // ResetGameToDefault: Reset the game options, use default.ini value
 //=========================================
 function ResetSoundToDefault()
 {
-	ResetConfig("AmbiantVolume");	
-	ResetConfig("VoicesVolume");	
-	ResetConfig("MusicVolume");		
+	ResetConfig("AmbiantVolume");
+	ResetConfig("VoicesVolume");
+	ResetConfig("MusicVolume");
     ResetConfig("SFXVolume");
-	ResetConfig("AudioVirt");		
-	ResetConfig("Sound3DAcc");		
-	ResetConfig("EAX");	    
-    
+	ResetConfig("AudioVirt");
+	ResetConfig("Sound3DAcc");
+	ResetConfig("EAX");
+
 }
 
 //=========================================

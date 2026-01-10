@@ -3,20 +3,20 @@
 //=============================================================================
 class V2_2_2_Kalinatek extends EVariable;
 
-var int BarkA; 
-var int BarkB; 
-var int ConversationA; 
-var int DefuseBombDone; 
-var int FindIvanDone; 
-var int FireAlarmDone; 
-var int FirstWallMine; 
-var int FuseBoxDone; 
-var int HostagesDone; 
-var int MafiosoKill; 
-var int MafiosoKilledHostages; 
-var int SecondWallMine; 
-var int TechDyingFirstConversation; 
-var int WallMinesOff; 
+var int BarkA;
+var int BarkB;
+var int ConversationA;
+var int DefuseBombDone;
+var int FindIvanDone;
+var int FireAlarmDone;
+var int FirstWallMine;
+var int FuseBoxDone;
+var int HostagesDone;
+var int MafiosoKill;
+var int MafiosoKilledHostages;
+var int SecondWallMine;
+var int TechDyingFirstConversation;
+var int WallMinesOff;
 
 
 function PostBeginPlay()

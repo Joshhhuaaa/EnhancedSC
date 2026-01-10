@@ -27,8 +27,8 @@ function SizeTabsSingleLine(Canvas C)
 	TabCount = 0;
 	for (
 			I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
-			I != None; 
-			I = UWindowTabControlItem(I.Next) 
+			I != None;
+			I = UWindowTabControlItem(I.Next)
 )
 	{
 		LookAndFeel.Tab_GetTabSize(Self, C, RemoveAmpersand(I.Caption), W, H);
@@ -40,7 +40,7 @@ function SizeTabsSingleLine(Canvas C)
 	}
 
 	Selected = UWindowTabControl(ParentWindow).SelectedTab;
-	
+
 	while (True)
 	{
 		ItemX = LookAndFeel.Size_TabXOffset;
@@ -49,8 +49,8 @@ function SizeTabsSingleLine(Canvas C)
 		FirstShown = None;
 		for (
 				I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
-				I != None; 
-				I = UWindowTabControlItem(I.Next) 
+				I != None;
+				I = UWindowTabControlItem(I.Next)
 )
 		{
 			if (Count < TabOffset)
@@ -71,13 +71,13 @@ function SizeTabsSingleLine(Canvas C)
 
 		if (TabOffset > 0 && LastHidden != None && LastHidden.TabWidth + 5 < WinWidth - ItemX)
 			TabOffset--;
-		else 
-		if (bShowSelected && TabOffset < TabCount - 1 
-			&&	Selected != None &&	Selected != FirstShown 
+		else
+		if (bShowSelected && TabOffset < TabCount - 1
+			&&	Selected != None &&	Selected != FirstShown
 			&& Selected.TabLeft + Selected.TabWidth > WinWidth - 5
-) 
+)
 			TabOffset++;
-		else				
+		else
 			break;
 	}
 	bShowSelected = false;
@@ -96,7 +96,7 @@ function SizeTabsMultiLine(Canvas C)
 	local int TabCounts[10];
 	local int j;
 	local bool bTryAnotherRow;
-		
+
 	TabOffset = 0;
 	FirstShown = None;
 
@@ -104,18 +104,18 @@ function SizeTabsMultiLine(Canvas C)
 	bTryAnotherRow = true;
 
 	while (bTryAnotherRow && TabRows <= 10)
-	{	
+	{
 		bTryAnotherRow = false;
 		for (j = 0; j < TabRows; j++)
 		{
 			RowWidths[j] = 0;
-			TabCounts[j] = 0;		
+			TabCounts[j] = 0;
 		}
 
 		for (
 				I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
-				I != None; 
-				I = UWindowTabControlItem(I.Next) 
+				I != None;
+				I = UWindowTabControlItem(I.Next)
 )
 		{
 			LookAndFeel.Tab_GetTabSize(Self, C, RemoveAmpersand(I.Caption), W, H);
@@ -149,8 +149,8 @@ function SizeTabsMultiLine(Canvas C)
 	{
 		for (
 				I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
-				I != None; 
-				I = UWindowTabControlItem(I.Next) 
+				I != None;
+				I = UWindowTabControlItem(I.Next)
 )
 		{
 			I.TabWidth += (WinWidth - RowWidths[I.RowNumber]) / TabCounts[I.RowNumber];
@@ -162,8 +162,8 @@ function SizeTabsMultiLine(Canvas C)
 
 	for (
 			I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
-			I != None; 
-			I = UWindowTabControlItem(I.Next) 
+			I != None;
+			I = UWindowTabControlItem(I.Next)
 )
 	{
 		I.TabLeft = RowWidths[I.RowNumber];
@@ -191,7 +191,7 @@ function Paint(Canvas C, float X, float Y)
 	local int Count;
 	local int Row;
 	local float T;
-	
+
 	T = GetEntryLevel().TimeSeconds;
 
 	if (UnFlashTime < T)
@@ -203,14 +203,14 @@ function Paint(Canvas C, float X, float Y)
 		else
 			UnFlashTime = T + 0.3;
 	}
-	
+
 	for (Row = 0; Row < TabRows; Row++)
 	{
 		Count = 0;
 		for (
 				I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
-				I != None; 
-				I = UWindowTabControlItem(I.Next) 
+				I != None;
+				I = UWindowTabControlItem(I.Next)
 )
 		{
 			if (Count < TabOffset)
@@ -234,8 +234,8 @@ function LMouseDown(float X, float Y)
 	Count = 0;
 	for (
 			I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
-			I != None; 
-			I = UWindowTabControlItem(I.Next) 
+			I != None;
+			I = UWindowTabControlItem(I.Next)
 )
 	{
 		if (Count < TabOffset)
@@ -264,7 +264,7 @@ function MouseMove(float X, float Y)
 			TabOffset++;
 
 		if (X > DragTab.TabLeft + DragTab.TabWidth && TabOffset > 0)
-			TabOffset--;	
+			TabOffset--;
 	}
 	else
 		bDragging = false;
@@ -280,8 +280,8 @@ function RMouseDown(float X, float Y)
 	Count = 0;
 	for (
 			I = UWindowTabControlItem(UWindowTabControl(ParentWindow).Items.Next);
-			I != None; 
-			I = UWindowTabControlItem(I.Next) 
+			I != None;
+			I = UWindowTabControlItem(I.Next)
 )
 	{
 		if (Count < TabOffset)

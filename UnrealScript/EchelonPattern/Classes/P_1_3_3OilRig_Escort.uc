@@ -540,11 +540,11 @@ WhatWasThat:
     SendPatternEvent('HOSERS','EscortTimer');
     ePawn(Characters[3].Pawn).Bark_Type = BARK_HeardFoot;
     Talk(ePawn(Characters[3].Pawn).Sounds_Barks, 3, 0, false);
-    JumpRandom('TierOne', 0.50, 'TierTwo', 1.00, , , , , ,); 
+    JumpRandom('TierOne', 0.50, 'TierTwo', 1.00, , , , , ,);
     End();
 TierOne:
     Log("WhatWasThat Stop Randomizer Tier 1.");
-    JumpRandom('WWTSCOne', 0.20, 'WWTSCTwo', 0.40, 'WWTSCThree', 0.60, 'WWTSCFour', 0.80, 'WWTSCFive', 1.00); 
+    JumpRandom('WWTSCOne', 0.20, 'WWTSCTwo', 0.40, 'WWTSCThree', 0.60, 'WWTSCFour', 0.80, 'WWTSCFive', 1.00);
     End();
 WWTSCOne:
     Log("WhatWasThat Stop Config 1.");
@@ -630,7 +630,7 @@ WWTSC2Five:
     End();
 TierTwo:
     Log("WhatWasThat Stop Randomizer Tier 1.");
-    JumpRandom('WWTSC2One', 0.20, 'WWTSC2Two', 0.40, 'WWTSC2Three', 0.60, 'WWTSC2Four', 0.80, 'WWTSC2Five', 1.00); 
+    JumpRandom('WWTSC2One', 0.20, 'WWTSC2Two', 0.40, 'WWTSC2Three', 0.60, 'WWTSC2Four', 0.80, 'WWTSC2Five', 1.00);
     End();
 CancelStop:
     Log("Breaks the escort out of stop.");

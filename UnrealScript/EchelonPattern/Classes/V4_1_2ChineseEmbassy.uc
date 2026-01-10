@@ -3,11 +3,11 @@
 //=============================================================================
 class V4_1_2ChineseEmbassy extends EVariable;
 
-var int GateGuardInPosition; 
-var int GatePosition; 
-var int LaserMicCompleted; 
-var int LastMikDone; 
-var int LimoAtFrontGate; 
+var int GateGuardInPosition;
+var int GatePosition;
+var int LaserMicCompleted;
+var int LastMikDone;
+var int LimoAtFrontGate;
 
 
 function PostBeginPlay()

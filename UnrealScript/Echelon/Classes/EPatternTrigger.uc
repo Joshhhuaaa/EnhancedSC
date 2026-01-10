@@ -19,7 +19,7 @@ var EPattern			 Pattern;
 |                                                            |
 \*-----------------------------------------------------------*/
 function PostBeginPlay()
-{ 
+{
 	bAlreadyVisited = false;
 
 	if (!bLinkedToAGroup)
@@ -86,12 +86,12 @@ function Touch(actor Other)
 							//try to find the groupAI
 							foreach DynamicActors(class'EGroupAI', Group, GroupTag)
 							{
-								log("Group "$Group$" found...");						
+								log("Group "$Group$" found...");
 								Group.RequestPatternChange(PatternClass,bEventExclusivity);
-								break; 
-							}			
+								break;
+							}
 						}
-						
+
 					}
 				}
 			}

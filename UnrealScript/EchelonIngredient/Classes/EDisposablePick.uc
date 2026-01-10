@@ -16,7 +16,7 @@ function PostBeginPlay()
 
 function PlaceOnDoor()
 {
-	local Emitter E; 
+	local Emitter E;
 	local Vector X,Y,Z;
 	GetAxes(Door.MyKnob.Rotation, X, Y, Z);
 	// switch Y angle
@@ -40,7 +40,7 @@ state s_Selected
 	{
 		local EInteractObject	InteractObj;
 		local EPlayerController Epc;
-		
+
 		Epc = EPlayerController(Controller);
 		if (!Epc.IManager.IsPresent(class'EDoorInteraction', InteractObj))
 		{
@@ -66,7 +66,7 @@ state s_Selected
 			log("Door linked to keypad/retinal scanner.");
 			return;
 		}
-		
+
 		Interaction = spawn(class'EBreakLockInteraction', self);
 		Interaction.InitInteract(Controller);
 	}

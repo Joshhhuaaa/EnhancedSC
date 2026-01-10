@@ -45,7 +45,7 @@ var string				OldLevel;
 
 var config EInputKey	UWindowKey;
 
-//ORIGINAL UNREAL CONSOLE var UWindowConsoleWindow ConsoleWindow; 
+//ORIGINAL UNREAL CONSOLE var UWindowConsoleWindow ConsoleWindow;
 
 
 
@@ -90,7 +90,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 		break;
 	}
 
-	return False; 
+	return False;
 	//!! because of ConsoleKey
 	//!! return Super.KeyEvent(Key, Action, Delta);
 }
@@ -158,7 +158,7 @@ state UWindow
 			switch (k)
 			{
 			case EInputKey.IK_LeftMouse:
-				if (Root != None) 
+				if (Root != None)
 					Root.WindowEvent(WM_LMouseUp, None, MouseX, MouseY, k);
 				break;
 			case EInputKey.IK_RightMouse:
@@ -230,7 +230,7 @@ state UWindow
 			case IK_MouseY:
 				// Joshua - Made mouse sensitivity frame rate independent by using a consistent DeltaTime
 				MouseY = MouseY; // - (MouseScale * Delta);
-				break;					
+				break;
 			}
 		default:
 			break;
@@ -288,9 +288,9 @@ function CreateRootWindow(Canvas Canvas)
 		OldClipX = 0;
 		OldClipY = 0;
 	}
-	
+
 	Log("Creating root window: "$RootWindow);
-	
+
 	Root = New(None) class<UWindowRootWindow>(DynamicLoadObject(RootWindow, class'Class'));
 
 	Root.BeginPlay();
@@ -358,7 +358,7 @@ function RenderUWindow(Canvas Canvas)
 		MouseY = ViewportOwner.WindowsMouseY / Root.GUIScale;
 	}
 
-	if (!bCreatedRoot) 
+	if (!bCreatedRoot)
 		CreateRootWindow(Canvas);
 
 	Root.bWindowVisible = true;
@@ -369,7 +369,7 @@ function RenderUWindow(Canvas Canvas)
 	{
 		OldClipX = Canvas.ClipX;
 		OldClipY = Canvas.ClipY;
-		
+
 		Root.WinTop = 0;
 		Root.WinLeft = 0;
 		Root.WinWidth = Canvas.ClipX / Root.GUIScale;
@@ -388,7 +388,7 @@ function RenderUWindow(Canvas Canvas)
 
 	//if (MouseX > Root.WinWidth) MouseX = Root.WinWidth;
 	//if (MouseY > Root.WinHeight) MouseY = Root.WinHeight;
-	
+
 	// Joshua - Dynamic mouse bounds based on aspect ratio
 	CurrentRes = ViewportOwner.Actor.ConsoleCommand("GETCURRENTRES");
 	i = InStr(CurrentRes, "x");
@@ -397,19 +397,19 @@ function RenderUWindow(Canvas Canvas)
 		ResX = int(Left(CurrentRes, i)  );
 		ResY = int(Mid(CurrentRes, i + 1));
 		AspectRatio = float(ResX) / float(ResY);
-		
+
 		// 4:3: MinMouseX = 0, MaxMouseX = 629 (640 - 11)
 		// 16:9: MinMouseX = -106, MaxMouseX = 736
 		MaxMouseX = 629 + ((736 - 629) * (AspectRatio - (4.0 / 3.0)) / ((16.0 / 9.0) - (4.0 / 3.0)));
 		MinMouseX = 0 + ((-106 - 0) * (AspectRatio - (4.0 / 3.0)) / ((16.0 / 9.0) - (4.0 / 3.0)));
 	}
-	else 
+	else
 	{
 		// Couldn't parse GetCurrentRes call, using fallback values
 		MaxMouseX = 629;
 		MinMouseX = 0;
 	}
-		
+
 	if (MouseX > MaxMouseX) MouseX = MaxMouseX;
 	if (MouseY > 466) MouseY = 466; // Joshua - Increased from 461 to be closer to screen edge
 	if (MouseX < MinMouseX) MouseX = MinMouseX;
@@ -420,12 +420,12 @@ function RenderUWindow(Canvas Canvas)
 
 	if (NewFocusWindow != Root.KeyFocusWindow)
 	{
-		Root.KeyFocusWindow.KeyFocusExit();		
+		Root.KeyFocusWindow.KeyFocusExit();
 		Root.KeyFocusWindow = NewFocusWindow;
 		Root.KeyFocusWindow.KeyFocusEnter();
 	}
 
-	
+
 
 	Root.MoveMouse(MouseX, MouseY);
 	Root.WindowEvent(WM_Paint, Canvas, MouseX, MouseY, 0);
@@ -485,7 +485,7 @@ function NotifyAfterLevelChange()
 {
     log("WindowConsole NotifyAfterLevelChange");
 	if (bLevelChange && Root != None)
-	{	
+	{
 	    bLevelChange = false;
 		Root.NotifyAfterLevelChange();
 	}

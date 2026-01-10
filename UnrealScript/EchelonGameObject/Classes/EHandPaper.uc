@@ -1,4 +1,4 @@
-class EHandPaper extends EGameplayObject; 
+class EHandPaper extends EGameplayObject;
 
 defaultproperties
 {

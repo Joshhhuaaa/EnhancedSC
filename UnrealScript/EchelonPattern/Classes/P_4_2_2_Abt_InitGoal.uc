@@ -100,7 +100,7 @@ function InitPattern()
                 ZoneAI.EnableGroupTags[8] = 'EGroupAI10';
                 ZoneAI.DisableGroupTags[2] = 'EGroupAI1';
             }
-            
+
             if (ZoneAI.name == 'EZoneAI4')
             {
                 ZoneAI.DisableGroupTags.Length = 0;

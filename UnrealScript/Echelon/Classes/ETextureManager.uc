@@ -1,7 +1,7 @@
 class ETextureManager extends Actor
 	abstract native;
 /******************************************************************************
- 
+
  Class:         ETextureManager
 
  Description:   -
@@ -16,7 +16,7 @@ class ETextureManager extends Actor
 -----------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------
-                      T Y P E   D E F I N I T I O N S 
+                      T Y P E   D E F I N I T I O N S
 -----------------------------------------------------------------------------*/
 struct EPos
 {
@@ -39,7 +39,7 @@ var() array<ETextureInfo> ArrayTexture;
 var int pixel;
 
 /*-----------------------------------------------------------------------------
-                               C O D E 
+                               C O D E
 -----------------------------------------------------------------------------*/
 
 native(1305) final function DrawTileFromManager(ECanvas Canvas, int TextureIndex, float XL, float YL, float U, float V, float UL, float VL);

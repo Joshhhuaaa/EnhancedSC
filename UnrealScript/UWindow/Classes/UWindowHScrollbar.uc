@@ -22,7 +22,7 @@ function Show(float P)
 	if (P < 0) return;
 	if (P > MaxPos + MaxVisible) return;
 
-	while (P < Pos) 
+	while (P < Pos)
 		if (!Scroll(-1))
 			break;
 	while (P - Pos > MaxVisible - 1)
@@ -30,10 +30,10 @@ function Show(float P)
 			break;
 }
 
-function bool Scroll(float Delta) 
+function bool Scroll(float Delta)
 {
 	local float OldPos;
-	
+
 	OldPos = Pos;
 	Pos = Pos + Delta;
 	CheckRange();
@@ -54,7 +54,7 @@ function SetRange(float NewMinPos, float NewMaxPos, float NewMaxVisible, optiona
 	CheckRange();
 }
 
-function CheckRange() 
+function CheckRange()
 {
 	if (Pos < MinPos)
 	{
@@ -78,9 +78,9 @@ function CheckRange()
 		ThumbStart = ((Pos - MinPos) * (WinWidth - (2 * LookAndFeel.Size_HScrollbarButtonWidth))) / (MaxPos + MaxVisible - MinPos);
 		ThumbWidth = (MaxVisible * (WinWidth - (2 * LookAndFeel.Size_HScrollbarButtonWidth))) / (MaxPos + MaxVisible - MinPos);
 
-		if (ThumbWidth < LookAndFeel.Size_HMinScrollbarWidth) 
+		if (ThumbWidth < LookAndFeel.Size_HMinScrollbarWidth)
 			ThumbWidth = LookAndFeel.Size_HMinScrollbarWidth;
-		
+
 		if (ThumbWidth + ThumbStart > WinWidth - 2 * LookAndFeel.Size_HScrollbarButtonWidth)
 		{
 			ThumbStart = WinWidth - 2 * LookAndFeel.Size_HScrollbarButtonWidth - ThumbWidth;
@@ -90,7 +90,7 @@ function CheckRange()
 	}
 }
 
-function Created() 
+function Created()
 {
 	Super.Created();
 	LeftButton = UWindowSBLeftButton(CreateWindow(class'UWindowSBLeftButton', 0, 0, LookAndFeel.Size_HScrollbarButtonWidth, LookAndFeel.Size_HScrollbarHeight));
@@ -113,7 +113,7 @@ function BeforePaint(Canvas C, float X, float Y)
 	CheckRange();
 }
 
-function Paint(Canvas C, float X, float Y) 
+function Paint(Canvas C, float X, float Y)
 {
 	LookAndFeel.SB_HDraw(Self, C);
 }
@@ -147,7 +147,7 @@ function LMouseDown(float X, float Y)
 }
 
 
-function Tick(float Delta) 
+function Tick(float Delta)
 {
 	local bool bLeft, bRight;
 	local float X, Y;
@@ -163,7 +163,7 @@ function Tick(float Delta)
 		bLeft = (X < ThumbStart);
 		bRight = (X > ThumbStart + ThumbWidth);
 	}
-	
+
 	if (bMouseDown && (NextClickTime > 0) && (NextClickTime < GetTime())  && bLeft)
 	{
 		Scroll(-(MaxVisible - 1));
@@ -194,7 +194,7 @@ function MouseMove(float X, float Y)
 		while (X > (ThumbStart + DragX) && Pos < MaxPos)
 		{
 			Scroll(1);
-		}	
+		}
 	}
 	else
 		bDragging = false;

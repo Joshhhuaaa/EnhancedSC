@@ -35,7 +35,7 @@ function PostBeginPlay()
 		GroupTag = 'LambertAI';
 		JumpLabel = 'InitGoals';
 	}
-	
+
 	super.PostBeginPlay();
 }
 
@@ -72,8 +72,8 @@ function SendInitialPattern()
 		foreach DynamicActors(class'EGroupAI', Group, GroupTag)
 		{
 			Group.SendJumpEvent(JumpLabel,false,false);
-			break; 
-		}	
+			break;
+		}
 	}
 }
 

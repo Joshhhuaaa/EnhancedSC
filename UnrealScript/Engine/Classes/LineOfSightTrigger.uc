@@ -11,7 +11,7 @@ class LineOfSightTrigger extends Triggers
 var() float MaxViewDist;	// maximum distance player can be from this trigger to trigger it
 var   float OldTickTime;
 var() bool  bEnabled;
-var	  bool  bTriggered;		
+var	  bool  bTriggered;
 var() name	SeenActorTag;	// tag of actor which triggers this trigger when seen
 var	  actor SeenActor;
 var() int MaxViewAngle;		// how directly a player must be looking at SeenActor center (in degrees)

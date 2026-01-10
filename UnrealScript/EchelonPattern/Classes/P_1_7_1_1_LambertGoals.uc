@@ -36,7 +36,7 @@ function InitPattern()
     local EAlarmLight AlarmLight;
 
     Super.InitPattern();
-    
+
     // Joshua - Adding the camera that is missing in the PC version
     if (!bInit)
     {
@@ -84,7 +84,7 @@ function InitPattern()
         // Adding a new Alarm light as the Cafeteria camera has none assigned
         AlarmLight = Spawn(class'EAlarmLight', , , vect(9694, -3696.6, -634.5), rot(0, 0, 0));
         AlarmLight.SetDrawScale(0.70f);
-        
+
         ForEach AllActors(class'EAlarm', Alarm)
         {
             if (Alarm.name == 'EAlarm0')

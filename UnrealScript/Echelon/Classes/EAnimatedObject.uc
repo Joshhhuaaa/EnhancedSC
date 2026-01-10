@@ -89,7 +89,7 @@ state s_Idle
 
 		SetPhysics(PHYS_None);
 		PlayAnim(TriggeredAnimations[CurrentAnimIndex]);
-		
+
 		if (!bNoRootMotionFirstAnim || CurrentAnimIndex > 0)
 		{
 			LockRootMotion(1, true);
@@ -125,7 +125,7 @@ state s_Animating
 
 				SetPhysics(PHYS_None);
 				PlayAnim(TriggeredAnimations[CurrentAnimIndex]);
-				
+
 				if (!bNoRootMotionFirstAnim || CurrentAnimIndex > 0)
 				{
 					LockRootMotion(1, true);
@@ -155,7 +155,7 @@ state s_Animating
 }
 
 
-state s_Finished 
+state s_Finished
 {
 	function BeginState()
 	{

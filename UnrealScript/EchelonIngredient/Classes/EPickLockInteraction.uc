@@ -60,7 +60,7 @@ function SetInteractLocation(Pawn InteractPawn)
 	local Vector X, Y, Z, MovePos;
 	local EPawn InteractEPawn;
 	local bool isSideFront;
-	
+
 	InteractEPawn = EPawn(InteractPawn);
 	if (InteractEPawn == None)
 		return;
@@ -70,7 +70,7 @@ function SetInteractLocation(Pawn InteractPawn)
 	isSideFront = MyDoor.GetPawnSide(InteractPawn) == ESide_Front;
 	if (!isSideFront)
 		Y = -Y;
-	
+
 	MovePos	 = MyDoor.MyKnob.Location;
 	MovePos	-= 1.2f * InteractEPawn.CollisionRadius * Y;
 	MovePos -= 0.8f * InteractEPawn.CollisionRadius * X;

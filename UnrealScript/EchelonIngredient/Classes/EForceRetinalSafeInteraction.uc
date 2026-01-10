@@ -10,8 +10,8 @@ function PostInteract(Controller Instigator)
 	local EPawn InteractEPawn;
 
 	// Only set everything if granted class is valid on scanner
-	if (Instigator.bIsPlayer && 
-		EPlayerController(Instigator).m_AttackTarget != None && 
+	if (Instigator.bIsPlayer &&
+		EPlayerController(Instigator).m_AttackTarget != None &&
 		Scanner.IsValid(EPlayerController(Instigator).m_AttackTarget))
 	{
 		// Set JumpLabel so as soon as the out of scan is finished, he's gonna turn around and release the guy.

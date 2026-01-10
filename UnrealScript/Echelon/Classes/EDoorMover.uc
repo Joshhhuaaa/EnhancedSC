@@ -17,7 +17,7 @@ var			bool		bInUse;				// optic cable, stealth
 var			bool		bTempNoCollide;		// used during path building
 var			Controller	UsingController;	// Controller who is using us
 var(Door)	EDoorOpener	FrontOpener,
-						BackOpener;			// Controller (EKeyPad or ERetinalScanner .. 
+						BackOpener;			// Controller (EKeyPad or ERetinalScanner ..
 var(Door)	EDoorMover	LinkedDoor;			// In case double door and wants to remove open interaction
 
 // used for generating EDoorMarker at appropriate location
@@ -65,7 +65,7 @@ function PostBeginPlay()
 }
 
 //---------------------------------------[Matthew Clarke - Sept 9 2002]-----
-// 
+//
 // Description
 //
 //------------------------------------------------------------------------
@@ -75,12 +75,12 @@ function SetUsable (bool _bUsable)
 
     if (myMarker != None)
     {
-        myMarker.bBlocked = !_bUsable; 
+        myMarker.bBlocked = !_bUsable;
     }
 }
 
 //---------------------------------------[David Kalina - 28 Nov 2001]-----
-// 
+//
 // Description
 //		Returns which side of the door the pawn is on given the CURRENT LOCATION/ROTATION of the door.
 //
@@ -103,7 +103,7 @@ function EDoorSide GetPawnSide(Pawn A)
 }
 
 //---------------------------------------[David Kalina - 28 Nov 2001]-----
-// 
+//
 // Description
 //		Returns which side of the door an actor is on given the INITIAL LOCATION / ROTATION of the door.
 //------------------------------------------------------------------------
@@ -111,7 +111,7 @@ function EDoorSide GetPawnSide(Pawn A)
 event EDoorSide GetActorSide(Actor A)
 {
 	// NOTE : using BaseRot and BasePos instead of Rotation and Location (because they change during gameplay)
-	
+
 	if (((Vect(1,0,0) >> BaseRot) Cross (A.Location - BasePos)).Z <= 0)
 	{
 		//Log("Bump in front"@FrontOpener);
@@ -125,11 +125,11 @@ event EDoorSide GetActorSide(Actor A)
 }
 
 //----------------------------------------[David Kalina - 9 May 2002]-----
-// 
+//
 // Description
 //		Checking an open door to see what side of the frame it's on.
 //		Results are invalid if the door is closed, so it shouldn't be called in that situation.
-// 
+//
 //------------------------------------------------------------------------
 
 event EDoorSide GetDoorSide()
@@ -152,7 +152,7 @@ function EInteractObject GetInteraction(Pawn InteractPawn)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Returns true if linked to something
 //------------------------------------------------------------------------
 function bool HasSpecialOpener()
@@ -161,7 +161,7 @@ function bool HasSpecialOpener()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Allow special processing in subclasses
 //------------------------------------------------------------------------
 function bool CanOpenSpecial()
@@ -170,7 +170,7 @@ function bool CanOpenSpecial()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Allow opener processing on sub-classes independently of Trigger availability
 //------------------------------------------------------------------------
 function OpenerTrigger(EDoorOpener Other, Pawn EventInstigator)
@@ -179,7 +179,7 @@ function OpenerTrigger(EDoorOpener Other, Pawn EventInstigator)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Allow special trigger processing in subclasses
 //------------------------------------------------------------------------
 function bool CanDoTrigger(Actor Other, Pawn EventInstigator)
@@ -188,7 +188,7 @@ function bool CanDoTrigger(Actor Other, Pawn EventInstigator)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Will manually call a trigger on the door
 // Conditions:
 //		Will work in default state (TriggerOpenTimed)
@@ -197,7 +197,7 @@ function bool CanDoTrigger(Actor Other, Pawn EventInstigator)
 function Bump(actor Other, optional int Pill)
 {
 	local EPawn  P;
-	
+
 	//Log(Other$" Bumps in Door mover "$self);
 
 	// if door locked
@@ -309,7 +309,7 @@ function FinishedClosing()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Leave Global Trigger here .. call from any other states
 //------------------------------------------------------------------------
 function Trigger(Actor Other, Pawn EventInstigator, optional name Intag)
@@ -342,7 +342,7 @@ state s_StayOpen
 	Ignores Trigger;
 
 	function BeginState()
-	{		
+	{
 		if (bClosed)
 			Log(self$" In s_StayOpen but closes PROBLEM!!!!");
 		SetTimer(StayOpenTime, false);
@@ -378,7 +378,7 @@ state TriggerOpenTimed
 {
 	function Trigger(Actor Other, Pawn EventInstigator, optional name Intag)
 	{
-		// Do not move this to global.trigger, since Super.Trigger will call the non-existant mover global.trigger function. 
+		// Do not move this to global.trigger, since Super.Trigger will call the non-existant mover global.trigger function.
 		// So wouldn't do anything!
 		if (CanDoTrigger(Other, EventInstigator))
 			Super.Trigger(Other, EventInstigator, Intag);

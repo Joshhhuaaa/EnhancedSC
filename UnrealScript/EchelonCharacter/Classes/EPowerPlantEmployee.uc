@@ -1,5 +1,5 @@
 //===============================================================================
-//  [EPowerPlantEmployee] 
+//  [EPowerPlantEmployee]
 //===============================================================================
 
 class EPowerPlantEmployee extends EAINonHostile

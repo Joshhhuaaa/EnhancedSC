@@ -19,7 +19,7 @@ var int bHiding;
 function CheckAlarms()
 {
 	local EAIController     AI;
-    local EAlarmPanelObject BestPanel;	
+    local EAlarmPanelObject BestPanel;
 	local vector            OffSet;
     local vector            Pos;
 
@@ -59,12 +59,12 @@ function CheckAlarms()
 auto state idle
 {
 	//----------------------------------------[David Kalina - 5 Oct 2001]-----
-	// 
+	//
 	// Description
-	//		No need to override here.  Example. 
-	//	
+	//		No need to override here.  Example.
+	//
 	//------------------------------------------------------------------------
-	
+
 	function GotoPatternLabel(name label)
 	{
 		GotoState('Idle', label);
@@ -84,23 +84,23 @@ auto state idle
 
 
 	//---------------------------------------[David Kalina - 10 Oct 2001]-----
-	// 
+	//
 	// Description
 	//		All Events sent through here.
 	//		This function sets HIGH-PRIORITY Goals (all Action?)
 	//		So that the AI will respond to certain things regardless of whether or
 	//		not it is running a DEFAULT or a SCRIPTED pattern.
 	//
-	//		TODO : How do we change the default patterns state when a 
+	//		TODO : How do we change the default patterns state when a
 	//		scripted pattern is running???
 	//
 	//		Add this / distinguish in each state
 	//
 	// Input
-	//		Event : 
-	// 
+	//		Event :
+	//
 	//------------------------------------------------------------------------
-	
+
 	function ReflexCallBack(EAIEvent Event)
 	{
 		if (!CheckGoalPriority(50) && !bDisableMessages)
@@ -115,11 +115,11 @@ auto state idle
 					break;
 
 			case AI_HEAR_SOMETHING :
-				
+
 				switch (Event.EventNoiseType)
 				{
-					case NOISE_GrenadeWarning : 
-						
+					case NOISE_GrenadeWarning :
+
 						//Goal_Action(...);
 						return;
 
@@ -134,14 +134,14 @@ auto state idle
                             fLastReflexTime = Level.TimeSeconds;
                         }
 						return;
-						
+
 					case NOISE_DyingGasp :
-					case NOISE_Explosion :	
+					case NOISE_Explosion :
 
 						Reaction(1, 55, Event.EventLocation, REACT_ImmediateThreat);
 						return;
 				}
-				
+
 				break;
 		}
 	}
@@ -149,18 +149,18 @@ auto state idle
 
 
 	//----------------------------------------[Frederic Blais - 5 Oct 2001]-----
-	// 
+	//
 	// Description
 	//		Communication callback
-	// 
+	//
 	//------------------------------------------------------------------------
 	function CommunicationCallBack(AIEventType eType){}
 
 	//------------------------------------------------------------------------
-	// 
+	//
 	// Description
 	//
-	//	
+	//
 	//------------------------------------------------------------------------
 	function EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
@@ -174,7 +174,7 @@ auto state idle
 					break;
 
 				case AI_SEE_PLAYER_SURPRISED:
-					
+
 					EventJump('SeePlayerSurprised');
 					break;
 
@@ -198,23 +198,23 @@ auto state idle
 					break;
 
 				case AI_HEAR_SOMETHING:
-					
+
 					switch (Event.EventNoiseType)
 					{
 						case NOISE_LightFootstep :
-														
+
 							EventJump('HearSomethingQuiet');
 							break;
 
-						case NOISE_Object_Falling :						
+						case NOISE_Object_Falling :
 						case NOISE_HeavyFootstep :
 						case NOISE_Object_Breaking :
-							
+
 							EventJump('HearSomethingInvestigate');
 							break;
 
 						case NOISE_DoorOpening :
-							
+
 							EventJump('HearDoorOpening');
 							break;
 
@@ -231,22 +231,22 @@ auto state idle
 
 
 						case NOISE_Gunfire :
-											
+
 							EventJump('HearGunshot');
 							break;
 
 						case NOISE_Ricochet :
-							
+
 							EventJump('HearRicochet');
 							break;
-							
+
 						case NOISE_WallMineTick :
 
 							EventJump('HearWallMineTick');
 							break;
 
 						case NOISE_Explosion :
-							
+
 							EventJump('HearExplosion');
 							break;
 
@@ -328,7 +328,7 @@ auto state idle
 
 
 				/*******  INTERNAL EVENTS  ********************************************/
-				
+
 				case AI_SEE_PLAYER_AGAIN:
 					EventJump('SeePlayer');
 					break;
@@ -360,7 +360,7 @@ SeePlayer:
 	log("SeePlayer -- Bureaucrat - "$Characters[1],,LPATTERN);
 	PlayerIdentified();
     Broadcast(1, BC_BACKUP_BARK_ATTACK);
-	CheckFlags(bPlayerSeenOnce, true, 'RunAndHide');	
+	CheckFlags(bPlayerSeenOnce, true, 'RunAndHide');
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_SeePlayer;
     Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
 	Reaction(1, 50, TriggerEvent.EventLocation, REACT_Surprised);
@@ -391,7 +391,7 @@ SeeUnconsciousBody:
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_SeeUnconscious;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
     Reaction(1, 50, TriggerEvent.EventLocation, REACT_SeeBody);
-	Broadcast(1, BC_INFO_BARK_AWARE);	
+	Broadcast(1, BC_INFO_BARK_AWARE);
 	if (!ePawn(TriggerEvent.EventTarget).bNoUnconsciousRevival)
 		Goal(1, GOAL_InteractWith, 35,,,TriggerEvent.EventTarget,,,,,,MOVE_JogAlert);
 	Jump('Search_Location');
@@ -410,14 +410,14 @@ SeeLiveGrenade:
 
 
 SeeDeadBody:
-	
+
 	plog("SeeDeadBody");
 	if (!EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats)
 	{
 		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BodyFound");
 		EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound = true;
 	}
-	if (EPawn(TriggerEvent.EventTarget) != none) 
+	if (EPawn(TriggerEvent.EventTarget) != none)
 	{
 		plog("   Time Since Death :  " $ Level.TimeSeconds - EPawn(TriggerEvent.EventTarget).TimeOfDeath);
 		if (Level.TimeSeconds - EPawn(TriggerEvent.EventTarget).TimeOfDeath < 10f)
@@ -434,7 +434,7 @@ SeeJustDied:
 	plog("JustDied");
 	ResetGoals(1);
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_SeeCorpse;
-	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);	
+	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
 	Reaction(1, 50, TriggerEvent.EventLocation, REACT_SeeBody);
     Broadcast(1, BC_INFO_BARK_ALERT);
 	Jump('FirstTimeAlerted');
@@ -474,7 +474,7 @@ LightsTurnedOff:
         }
         else    // s_On
         {
-	        ePawn(Characters[1].Pawn).Bark_Type = BARK_Mystified;        
+	        ePawn(Characters[1].Pawn).Bark_Type = BARK_Mystified;
         }
 
 	    Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
@@ -485,7 +485,7 @@ LightsTurnedOff:
 	CheckSwitchAlreadyLocked(1, TriggerEvent.EventTarget.owner);
     if ((iSuggestedBehavior & SEARCH_BIT) == SEARCH_BIT)
     {
-	    Jump('Search_Location');        
+	    Jump('Search_Location');
     }
 	End();
 
@@ -506,13 +506,13 @@ LightsShotOut:
     if ((iSuggestedBehavior & SEARCH_BIT) == SEARCH_BIT)
     {
         //log("SEARCH_BIT was on jumping to Search_Directional");
-	    Jump('Search_Location');        
+	    Jump('Search_Location');
     }
 	End();
 
 
 SeeObject:
-	
+
 	plog("SeeObject - watch it for a second and then search");
 	ResetGoals(1);
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_Mystified;
@@ -556,10 +556,10 @@ SeeAnotherNPCInterrogated:
 
 // ----- Audio Stimuli -----
 
-	
+
 HearSomethingQuiet:
 
-	plog("HearSomethingQuiet"); 
+	plog("HearSomethingQuiet");
 	Reaction(1, 50, TriggerEvent.EventLocation, REACT_CuriousNoise);
 	Broadcast(1, BC_SELF_DIRECTED);
 	End();
@@ -600,11 +600,11 @@ HearGunshot:
 
 
 HearRicochet:
-	
+
 	plog("HearRicochet");
 	PlayerIdentified();
-	ResetGoals(1);	
-	ForceUpdatePlayerLocation(1);	
+	ResetGoals(1);
+	ForceUpdatePlayerLocation(1);
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_UnderFire;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
 	Broadcast(1, BC_BACKUP_BARK_ATTACK);
@@ -627,7 +627,7 @@ HearExplosion:
 
 HearGrenadeWarning:
 
-	plog("HearGrenadeWarning"); 
+	plog("HearGrenadeWarning");
 	ResetGoals(1);
 	//Goal_Action(1, 15,TriggerEvent.EventLocation, 'ReacStNmCC0');	 // do we take time to react?
 	Jump('RunAndHide');
@@ -635,8 +635,8 @@ HearGrenadeWarning:
 
 HearFriendlyScream:
 
-	plog("HearFriendlyScream"); 
-	ResetGoals(1);	
+	plog("HearFriendlyScream");
+	ResetGoals(1);
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_Mystified;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
     Reaction(1, 50, TriggerEvent.EventLocation, REACT_ImmediateThreat);
@@ -648,7 +648,7 @@ HearFriendlyScream:
 HearWallMineTick:
 
 	plog("HearWallMineTick");
-	ResetGoals(1);	
+	ResetGoals(1);
 	Broadcast(1, BC_SELF_DIRECTED);
 	Jump('RunAndHide');
 
@@ -662,7 +662,7 @@ TakeDamage:
 	ePawn(Characters[1].Pawn).StopAllVoicesActor();
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_HitByBullet;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
-	CheckFlags(bPlayerSeenOnce, true, 'RunAndHide');	
+	CheckFlags(bPlayerSeenOnce, true, 'RunAndHide');
 	Broadcast(1, BC_BACKUP_BARK_ATTACK);
 	Jump('FirstTimeAlerted');
 
@@ -716,7 +716,7 @@ RunAndHide:
 	GotoPatternState('RunAway', 'StartRun');
 
 ReachArmedNPC:
-	
+
 	plog("ReachArmedNPC");
 	GotoPatternState('RunAway', 'ReachArmedNPC');
 
@@ -765,10 +765,10 @@ AttackRequestFromGroupMember:
 state Search
 {
 	//------------------------------------------------------------------------
-	// 
+	//
 	// Description
 	//
-	//	
+	//
 	//------------------------------------------------------------------------
 	function BeginState()
 	{
@@ -780,23 +780,23 @@ state Search
 	}
 
 	//----------------------------------------[David Kalina - 12 Oct 2001]-----
-	// 
+	//
 	// Description
 	//		OVERRIDEN Function so GotoPatternLabel calls are done w/in this state.
-	//	
+	//
 	//------------------------------------------------------------------------
-	
+
 	function GotoPatternLabel(name label)
 	{
 		GotoState('Search', label);
 	}
 
 	//------------------------------------------------------------------------
-	// 
+	//
 	// Description
 	//
-	//	
-	//------------------------------------------------------------------------	
+	//
+	//------------------------------------------------------------------------
 	function ReflexCallBack(EAIEvent Event)
 	{
 		if (!CheckGoalPriority(50) && !bDisableMessages)
@@ -811,7 +811,7 @@ state Search
 					return;
 
 			case AI_HEAR_SOMETHING :
-				
+
 				switch (Event.EventNoiseType)
 				{
 					case NOISE_Ricochet:
@@ -819,31 +819,31 @@ state Search
 						EAIController(Characters[1]).GotoStateSafe('s_alert');
 						return;
 
-					case NOISE_GrenadeWarning : 
-						
+					case NOISE_GrenadeWarning :
+
 						//Goal_Action(...);
 						return;
-						
+
 					case NOISE_DyingGasp :
-						
+
 						Goal_Action(1, 50, Event.EventLocation, 'BoomStHu2');
-						
+
 						return;
 				}
-				
+
 				break;
 		}
 	}
 	}
-	
+
 
 	//----------------------------------------[David Kalina - 5 Oct 2001]-----
-	// 
+	//
 	// Description
-	//		Handle incoming AIEvents by jumping to the appropriate label. 
-	// 
+	//		Handle incoming AIEvents by jumping to the appropriate label.
+	//
 	//------------------------------------------------------------------------
-	
+
 	function EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
 		if (!bDisableMessages)
@@ -857,7 +857,7 @@ state Search
 					break;
 
 				case AI_SEE_PLAYER_SURPRISED:
-					
+
 					EventJump('SeePlayerSurprised');
 					break;
 
@@ -889,11 +889,11 @@ state Search
                     switch (Event.EventNoiseType)
 					{
 						case NOISE_LightFootstep :
-						case NOISE_Object_Falling :						
+						case NOISE_Object_Falling :
 						case NOISE_HeavyFootstep :
 						case NOISE_Object_Breaking :
 						case NOISE_DoorOpening :
-							
+
 							EventJump('UpdateSearch');
 							break;
 
@@ -910,22 +910,22 @@ state Search
 
 						case NOISE_Explosion :
 						case NOISE_Gunfire :
-											
+
 							EventJump('HearViolentNoise');
 							break;
 
 						case NOISE_Ricochet :
-							
+
 							EventJump('HearRicochet');
 							break;
-							
+
 						case NOISE_WallMineTick :
 
 							EventJump('HearWallMineTick');
 							break;
 
 
-							
+
 							EventJump('HearExplosion');
 							break;
 
@@ -943,7 +943,7 @@ state Search
 
 						case NOISE_BackUpBarkAttack:
 							EventJump('AttackRequestFromGroupMember');
-							break;                     
+							break;
                     }
                     break;
 
@@ -960,7 +960,7 @@ state Search
 							EventJump('SeeWallMine');
 							break;
 
-						case CHANGE_Footprints :						
+						case CHANGE_Footprints :
 						case CHANGE_Flare :
 						case CHANGE_BrokenObject :
 						case CHANGE_BrokenDoor :
@@ -981,7 +981,7 @@ state Search
 						case CHANGE_LightShotOut :
 							EventJump('LightsShotOut');
 							break;
-							
+
 						case CHANGE_Unconscious :
 							EventJump('SeeUnconsciousBody');
 							break;
@@ -998,7 +998,7 @@ state Search
 
                 default:
                     break;
-        
+
 			}
 		}
 	}
@@ -1031,15 +1031,15 @@ UpdateSearch:
 UpdateSearchB:
 
 	plog("UpdateSearchB "); // depending on incoming event, might be good to stop the NPC and turn him around?
-	UpdateSearchTimer(1, 10.0f);   // add 10 seconds to search 
-	UpdateSearchGoal(1, TriggerEvent.EventLocation, false, true); // set new search location, disable focus switching, reset timer		
+	UpdateSearchTimer(1, 10.0f);   // add 10 seconds to search
+	UpdateSearchGoal(1, TriggerEvent.EventLocation, false, true); // set new search location, disable focus switching, reset timer
 	Jump('WaitSearch');
 
 
 UpdateSearchTime:
 
 	plog("UpdateSearchTime");
-	UpdateSearchTimer(1, 10.0f);   // add 10 seconds to search 
+	UpdateSearchTimer(1, 10.0f);   // add 10 seconds to search
 	Jump('WaitSearch');
 
 
@@ -1058,7 +1058,7 @@ SearchFailedAfterPlayerSeen:
 	Reaction(1, 50,, REACT_SearchFailed);
 	WaitForGoal(1, GOAL_Action);
 	ResetGoals(1);
-	GotoPatternState('Idle');	
+	GotoPatternState('Idle');
 
 
 ////////////////////////////////
@@ -1114,7 +1114,7 @@ LightsTurnedOff:
         }
         else    // s_On
         {
-	        ePawn(Characters[1].Pawn).Bark_Type = BARK_Mystified;        
+	        ePawn(Characters[1].Pawn).Bark_Type = BARK_Mystified;
         }
 	    Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
         Reaction(1, 50, TriggerEvent.EventTarget.Location, REACT_SeeLightsOut);
@@ -1139,7 +1139,7 @@ LightsShotOut:
 	Jump('UpdateSearch');
 
 SeeUnconsciousBody:
-	
+
 	plog("SeeUnconsciousBody -- EventTarget:  " $ TriggerEvent.EventTarget);
 	if (!EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats)
 	{
@@ -1153,16 +1153,16 @@ SeeUnconsciousBody:
 	Goal(1, GOAL_InteractWith, 35,,,TriggerEvent.EventTarget,,,,,,MOVE_JogAlert);
     Broadcast(1, BC_INFO_RADIO_AWARE);
 	Jump('UpdateSearch');
-	
+
 SeeDeadBody:
-	
+
 	plog("SeeDeadBody");
 	if (!EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound && !EAIController(EPawn(TriggerEvent.EventTarget).Controller).bNotInStats)
 	{
 		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("BodyFound");
 		EAIController(EPawn(TriggerEvent.EventTarget).Controller).bWasFound = true;
 	}
-	if (EPawn(TriggerEvent.EventTarget) != none) 
+	if (EPawn(TriggerEvent.EventTarget) != none)
 	{
 		plog("   Time Since Death :  " $ Level.TimeSeconds - EPawn(TriggerEvent.EventTarget).TimeOfDeath);
 		if (Level.TimeSeconds - EPawn(TriggerEvent.EventTarget).TimeOfDeath < 2.0f)
@@ -1181,23 +1181,23 @@ SeeJustDied:
 	ResetGoals(1);
     ChangeState(1,'s_alert');
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_SeeCorpse;
-	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);	
+	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
 	Reaction(1, 50, TriggerEvent.EventLocation, REACT_SeeBody);
     Broadcast(1, BC_INFO_BARK_ALERT);
 	Jump('FirstTimeAlerted');
 
 SeeDeadBodyCold:
-	
+
 	plog("SeeDeadBodyCold");
 	ResetGoals(1);
     ePawn(Characters[1].Pawn).Bark_Type = BARK_SeeCorpse;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
 	Reaction(1, 50, TriggerEvent.EventLocation, REACT_SeeBody);
     Broadcast(1, BC_INFO_RADIO_ALERT);
-	Jump('FirstTimeAlerted');   
+	Jump('FirstTimeAlerted');
 
 SeeAnotherNPCInterrogated:
-	
+
 	plog("SeeAnotherNPCInterrogated -- NOT HANDLED YET.");
 	ePawn(Characters[1].Pawn).Bark_Type = BARK_DropHim;
 	Talk(ePawn(Characters[1].Pawn).Sounds_Barks,1,0,false);
@@ -1213,15 +1213,15 @@ SeeAnotherNPCInterrogated:
 
 HearGrenadeWarning:
 
-	plog("HearGrenadeWarning"); 
-	ResetGoals(1);  
+	plog("HearGrenadeWarning");
+	ResetGoals(1);
 	Jump('RunAndHide');
 
 
 HearWallMineTick:
 
 	plog("HearWallMineTick");
-	ResetGoals(1);	
+	ResetGoals(1);
 	Broadcast(1, BC_INFO_BARK_COVER);
 	Jump('RunAndHide');
 
@@ -1231,10 +1231,10 @@ HearViolentNoise:
 	plog("HearViolentNoise");
     CheckIfThreatNearby(1,'HearRicochet');
     Jump('Search_Location');
-    
+
 
 HearRicochet:
-	
+
 	plog("HearRicochet");
 	PlayerIdentified();
 	ResetGoals(1);
@@ -1250,7 +1250,7 @@ HearRicochet:
 
 HearFriendlyScream:
 
-	plog("HearFriendlyScream"); 
+	plog("HearFriendlyScream");
 	ResetGoals(1);
     ChangeState(1,'s_alert');
 	Reaction(1, 50, TriggerEvent.EventLocation, REACT_ImmediateThreat);
@@ -1278,7 +1278,7 @@ FirstTimeAlerted:
 
 
 ReachArmedNPC:
-	
+
 	plog("ReachArmedNPC");
 	GotoPatternState('RunAway', 'ReachArmedNPC');
 
@@ -1297,7 +1297,7 @@ RunToAlarm:
 
 
 Search_Location:
-	
+
 	plog("Search_Location -- Search at Event Location THEN in Random Direction");
 	Goal_Search(1, 15, TriggerEvent.EventLocation,,false);
 	Jump('WaitSearch');
@@ -1353,7 +1353,7 @@ AlarmBegin:
 	plog("AlarmBegin");
 	GotoPatternState('RunAway', 'StartRun');
 
-	
+
 }
 
 
@@ -1368,10 +1368,10 @@ AlarmBegin:
 state Hide
 {
 	//------------------------------------------------------------------------
-	// 
+	//
 	// Description
 	//
-	//	
+	//
 	//------------------------------------------------------------------------
 	function BeginState()
 	{
@@ -1382,12 +1382,12 @@ state Hide
 	}
 
 	//----------------------------------------[David Kalina - 12 Oct 2001]-----
-	// 
+	//
 	// Description
 	//		OVERRIDEN Function so GotoPatternLabel calls are done w/in this state.
-	//	
+	//
 	//------------------------------------------------------------------------
-	
+
 	function GotoPatternLabel(name label)
 	{
 		GotoState('Hide', label);
@@ -1395,10 +1395,10 @@ state Hide
 
 
 	//----------------------------------------[David Kalina - 5 Oct 2001]-----
-	// 
+	//
 	// Description
-	//		Handle incoming AIEvents by jumping to the appropriate label. 
-	// 
+	//		Handle incoming AIEvents by jumping to the appropriate label.
+	//
 	//------------------------------------------------------------------------
 	function EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
@@ -1426,7 +1426,7 @@ state Hide
 PlayerVeryClose:
 	plog("PlayerVeryClose");
     if (BegForLife(1))
-    {   
+    {
         ePawn(Characters[1].Pawn).Bark_Type = BARK_BegForLife;
 	    Talk(ePawn(Characters[1].Pawn).Sounds_Barks, 1 , 0, false);
         Reaction(1, 50, Characters[0].Pawn.Location, REACT_AboutToDie);
@@ -1443,7 +1443,7 @@ WaitHide:
 	Jump('StartHide');
 
 StartHide:
-		
+
 	plog("StartHide");
 	SetHideGoal(1);
 	//Goal_Stop(1, 14, 2.0f +  RandBias(0.50, 5.75f),,MOVE_CrouchJog);
@@ -1493,10 +1493,10 @@ state RunAway
 	}
 
     //------------------------------------------------------------------------
-	// 
+	//
 	// Description
 	//
-	//	
+	//
 	//------------------------------------------------------------------------
 	function BeginState()
 	{
@@ -1509,12 +1509,12 @@ state RunAway
 	}
 
 	//----------------------------------------[David Kalina - 12 Oct 2001]-----
-	// 
+	//
 	// Description
 	//		OVERRIDEN Function so GotoPatternLabel calls are done w/in this state.
-	//	
+	//
 	//------------------------------------------------------------------------
-	
+
 	function GotoPatternLabel(name label)
 	{
 		GotoState('RunAway', label);
@@ -1522,12 +1522,12 @@ state RunAway
 
 
 	//----------------------------------------[David Kalina - 5 Oct 2001]-----
-	// 
+	//
 	// Description
-	//		Handle incoming AIEvents by jumping to the appropriate label. 
-	// 
+	//		Handle incoming AIEvents by jumping to the appropriate label.
+	//
 	//------------------------------------------------------------------------
-	
+
 	function EventCallBack(EAIEvent Event,Actor TriggerActor)
 	{
 		if (!bDisableMessages)
@@ -1542,8 +1542,8 @@ state RunAway
 				case AI_TAKE_DAMAGE:
 					break;
 
-                
-                // MClarke : experimental 
+
+                // MClarke : experimental
                case AI_SHOT_BLOCKED:
                     log("BureaucratPattern - state RunAway - AI_SHOT_BLOCKED");
                     GotoPatternLabel('RunFailed');
@@ -1613,7 +1613,7 @@ RunFailed:
 
     plog("RunFailed"); // Most probably because Sam was in our way. Choose another Hide Point
     if (BegForLife(1))
-    {   
+    {
         ePawn(Characters[1].Pawn).Bark_Type = BARK_BegForLife;
 	    Talk(ePawn(Characters[1].Pawn).Sounds_Barks, 1 , 0, false);
         Reaction(1, 50, Characters[0].Pawn.Location, REACT_AboutToDie);

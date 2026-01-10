@@ -161,7 +161,7 @@ Telegize:
     CheckFlags(SpecialDoor,TRUE,'Jojo');
     SetFlags(Trippin,TRUE);
     SendUnrealEvent('FenceDoor');
-    JumpRandom('Tele1', 0.37, 'Tele2', 0.70, 'Tele3', 1.00, , , ,); 
+    JumpRandom('Tele1', 0.37, 'Tele2', 0.70, 'Tele3', 1.00, , , ,);
 Tele1:
     Teleport(1, 'Piotr_900');
     Jump('RunLikeHell');

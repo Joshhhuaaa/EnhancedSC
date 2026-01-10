@@ -1,6 +1,6 @@
 //=============================================================================
 // FocusPoint
-//		
+//
 //		Marker class used by Level Designers to specify points of interest
 //		for patrolling / investigating NPCs.
 //

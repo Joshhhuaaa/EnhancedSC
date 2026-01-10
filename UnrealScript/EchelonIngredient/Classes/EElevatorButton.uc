@@ -5,7 +5,7 @@ class EElevatorButton extends EGameplayObject;
 var	EElevatorPanel	ControllerPanel;
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Setup form Panel
 //------------------------------------------------------------------------
 function SetController(EElevatorPanel Panel)
@@ -17,7 +17,7 @@ function SetController(EElevatorPanel Panel)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Called from Interaction when button is pushed
 //------------------------------------------------------------------------
 function Trigger(Actor Other, Pawn EventInstigator, name InTag)
@@ -39,7 +39,7 @@ function Trigger(Actor Other, Pawn EventInstigator, name InTag)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Called from Panel when elevator is at current button floor
 //------------------------------------------------------------------------
 function UnTrigger(Actor Other, Pawn EventInstigator, optional name InTag)

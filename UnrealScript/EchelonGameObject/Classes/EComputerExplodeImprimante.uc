@@ -1,4 +1,4 @@
-class EComputerExplodeImprimante extends EGameplayObject; 
+class EComputerExplodeImprimante extends EGameplayObject;
 
 defaultproperties
 {

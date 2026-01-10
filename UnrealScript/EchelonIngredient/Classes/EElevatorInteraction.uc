@@ -12,11 +12,11 @@ function InitInteract(Controller Instigator)
 	Panel = EElevatorPanel(Owner);
 	if (Panel == None)
 		Log("ERROR: problem with EElevatorInteraction owner "$Owner);
-	
+
 	if (Panel.bPowered)
 	{
 		Super.InitInteract(Instigator);
-		
+
 		if (Instigator.bIsPlayer)
 		{
 		Instigator.GotoState('s_KeyPadInteract');
@@ -38,14 +38,14 @@ function SetInteractLocation(Pawn InteractPawn)
 {
 	local Vector X, Y, Z, MovePos;
 	local EPawn InteractEPawn;
-	
+
 	InteractEPawn = EPawn(InteractPawn);
-	
+
 	if (InteractEPawn != none)
-	{		
+	{
 		// get owner rotation axes for positioning
 		GetAxes(Owner.Rotation, X, Y, Z);
-		
+
 		MovePos = Owner.Location;
 		MovePos -= (0.5 * InteractEPawn.CollisionRadius) * Y;
 		MovePos += (1.25 * InteractEPawn.CollisionRadius) * X;
@@ -57,18 +57,18 @@ function SetInteractLocation(Pawn InteractPawn)
         {
             MovePos.Z = Owner.Location.Z;
         }
-		
+
 		InteractEPawn.m_locationStart	= InteractEPawn.Location;
 		InteractEPawn.m_orientationStart= InteractEPawn.Rotation;
 		InteractEPawn.m_locationEnd		= MovePos;
 		InteractEPawn.m_orientationEnd	= Rotator(-X);
-	}	
+	}
 }
 
 function KeyEvent(String Key, EInputAction Action, float Delta, optional bool bAuto)
 {
 	// Joshua - Adding controller support for elevators.
-	local EPlayerController EPC; 
+	local EPlayerController EPC;
 	EPC = EPlayerController(EElevatorInteraction(Interaction).InteractionController);
 
 	// Process Npc interaction
@@ -98,7 +98,7 @@ function KeyEvent(String Key, EInputAction Action, float Delta, optional bool bA
 			if (Panel.SelectedButton > 0)
 				Panel.SelectedButton--;
 			break;
-		
+
 		case "Interaction" :
 			if (!EPC.eGame.bUseController) // Joshua - Adding controller support for elevators
 				if (bAuto)

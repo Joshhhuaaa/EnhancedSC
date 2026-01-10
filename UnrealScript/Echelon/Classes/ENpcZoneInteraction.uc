@@ -10,7 +10,7 @@ var EPattern				ConversationPattern;
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
-	
+
 	Npc = ePawn(Owner);
 	if (Npc == None)
 		Log("Problem with ENpcZoneInteraction owner");
@@ -27,13 +27,13 @@ function SetInteractLocation(Pawn InteractPawn)
 	local Vector X,Y,Z, MovePos, SearchLocation;
 	local Rotator SearchDir;
 	local vector HitLocation, HitNormal;
-	
+
 	MovePos = Npc.Location;
-	
+
 	SearchDir = Npc.Rotation;
 	SearchDir.Yaw += 16000;
-	
-	
+
+
 	if (InteractPawn.bIsPlayerPawn)
 	{
 		MovePos.Z	= InteractPawn.Location.Z;									// keep on same Z
@@ -49,7 +49,7 @@ function SetInteractLocation(Pawn InteractPawn)
 
 	InteractPawn.m_locationStart		= InteractPawn.Location;
 	InteractPawn.m_orientationStart		= InteractPawn.Rotation;
-	
+
 	InteractPawn.m_locationEnd			= MovePos;
 	InteractPawn.m_orientationEnd.Yaw	= SearchDir.Yaw;
 	InteractPawn.m_orientationEnd.Pitch	= 0;
@@ -73,9 +73,9 @@ function Touch(Actor Other)
     EAI = EAIController(NPC.Controller);
     ENZIOther = ENPCZoneInteraction(Other);
 
-    if ((ENZIOther != None) 
-    && (ENZIOther.NPC != None) 
-    && (EAI != None) 
+    if ((ENZIOther != None)
+    && (ENZIOther.NPC != None)
+    && (EAI != None)
     && (EAI.AIEvent != None)
     && (EAI.Group != None))
     {
@@ -84,7 +84,7 @@ function Touch(Actor Other)
          ||(ENZIOther.NPC.GetStateName() == 's_Dying')
          ||(ENZIOther.NPC.GetStateName() == 's_Unconscious'))
         {
-            // Don't want to greet dead ppl, we're not making Resident Evil here 
+            // Don't want to greet dead ppl, we're not making Resident Evil here
             Super.Touch(Other);
             return;
         }
@@ -92,11 +92,11 @@ function Touch(Actor Other)
         vRotNPC = Vector(NPC.Rotation);
         vRotOtherNPC = Vector(ENZIOther.NPC.Rotation);
         fDot = vRotNPC dot vRotOtherNPC;
-        
+
         if (fDot < -0.707) // Check if NPCs are facing each other
         {
             EAI.AIEvent.Reset();
-		    EAI.AIEvent.EventType			= AI_SEE_NPC;	
+		    EAI.AIEvent.EventType			= AI_SEE_NPC;
 		    EAI.AIEvent.EventTarget			= ENZIOther.NPC;
 
 		    EAI.Group.AIEventCallBack(EAI, EAI.AIEvent);
@@ -113,7 +113,7 @@ function name GetValidState(optional bool bByPassGrabCheck)
 	// In any case, we should go into grab
 	if (Npc.bCanBeGrabbed && (bByPassGrabCheck || Npc.GetStateName() != 's_Grabbed'))
 		return 's_NpcGrabInteraction';
-	
+
 	// We have a conversation
 	else if (ConversationPattern != None)
 		return 's_NpcTalkInteraction';
@@ -124,7 +124,7 @@ function name GetValidState(optional bool bByPassGrabCheck)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Reset this conversation
 //------------------------------------------------------------------------
 function ResetConversation()
@@ -134,7 +134,7 @@ function ResetConversation()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Npc is now freed
 //------------------------------------------------------------------------
 function Release()
@@ -147,7 +147,7 @@ function Release()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		When a Npc gets grabbed (from EAIController)
 //------------------------------------------------------------------------
 function NpcGrabbed()
@@ -163,7 +163,7 @@ function NpcGrabbed()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		When an Npc gets inert
 //------------------------------------------------------------------------
 function ResetInert()
@@ -173,7 +173,7 @@ function ResetInert()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Completely delete a conversation
 //------------------------------------------------------------------------
 function EndEvent()
@@ -223,7 +223,7 @@ state s_NpcGrabInteraction
 
         if (EAIPawn(NPC).AI.IsInState('s_RetinalScanner'))
         {
-            return false;           
+            return false;
         }
 
 		if (InteractionPlayerController.Pawn.bIsCrouched)
@@ -414,7 +414,7 @@ state s_NpcTalking
 
 // ----------------------------------------------------------------------
 // state s_Disabled - used to temporarily turn off interaction
-//		useful, e.g. when an NPC is killed - don't want to be able to 
+//		useful, e.g. when an NPC is killed - don't want to be able to
 //		grab him anymore, but don't want to enable pickup/search right away
 // ----------------------------------------------------------------------
 state s_Disabled
@@ -451,7 +451,7 @@ state s_NpcInert
 
 		Pos = Npc.Location;
 		Pos.Z -= (Npc.CollisionHeight - InteractionHeight);
-		
+
 		if (!Npc.bNoPickupInteraction)
 		{
 			SetCollision(true);

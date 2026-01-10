@@ -2,7 +2,7 @@ class EGlassParticle extends Emitter
 	notplaceable;
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Special treatment, since the mesh may vary, calculate size to spawn
 //		particle in a real manner
 //------------------------------------------------------------------------

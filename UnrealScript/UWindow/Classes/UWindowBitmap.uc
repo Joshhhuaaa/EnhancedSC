@@ -9,13 +9,13 @@ var bool	bCenter;
 function Paint(Canvas C, float X, float Y)
 {
     // *************************************************************************
-    // * BEGIN UBI MODIF 
+    // * BEGIN UBI MODIF
     // * MClarke (15 Jan 2003)
     // * Purpose : EAX Logo in Sound configs
     // *************************************************************************
     C.Style = GetLevel().ERenderStyle.STY_Alpha;
     // *************************************************************************
-    // * END UBI MODIF 
+    // * END UBI MODIF
     // * MClarke (15 Jan 2003)
     // *************************************************************************
 

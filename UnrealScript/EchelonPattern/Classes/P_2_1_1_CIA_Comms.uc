@@ -53,7 +53,7 @@ function InitPattern()
             {
                 ZoneAI.DisableGroupTags.Length = 0;
             }
-            
+
             if (ZoneAI.name == 'EZoneAI9')
             {
                 ZoneAI.DisableGroupTags[2] = 'twoagents';
@@ -102,7 +102,7 @@ comm2120:
     SetFlags(V2_1_1CIA(Level.VarObject).ServerDone,TRUE);
     GoalCompleted('GoalServer');
     // Joshua - Enhanced change: Removing the one alarm limit, player has accessed CIA central server
-    if (IsEliteMode()) 
+    if (IsEliteMode())
     {
         GoalCompleted('GoalAlarm');
         EchelonLevelInfo(Level).bOneAlarmLevel = false;

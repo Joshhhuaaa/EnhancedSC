@@ -10,8 +10,8 @@ function Created()
 	local Color C;
 
 	Super.Created();
-	
-	EditBox = UWindowEditBox(CreateWindow(class'UWindowEditBox', 0, 0, WinWidth, WinHeight)); 
+
+	EditBox = UWindowEditBox(CreateWindow(class'UWindowEditBox', 0, 0, WinWidth, WinHeight));
 	EditBox.NotifyOwner = Self;
 	EditBox.bSelectOnFocus = true;
 
@@ -68,7 +68,7 @@ function string GetValue()
 
 function SetValue(string NewValue)
 {
-	EditBox.SetValue(NewValue);	
+	EditBox.SetValue(NewValue);
 }
 
 function SetMaxLength(int MaxLength)
@@ -89,7 +89,7 @@ function BeforePaint(Canvas C, float X, float Y)
 
 }
 
- 
+
 function SetDelayedNotify(bool bDelayedNotify)
 {
 	Editbox.bDelayedNotify = bDelayedNotify;

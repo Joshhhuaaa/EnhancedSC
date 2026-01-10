@@ -1,7 +1,7 @@
 //=============================================================================
 // Player start location.
 //=============================================================================
-class PlayerStart extends NavigationPoint 
+class PlayerStart extends NavigationPoint
 	placeable
 	native;
 

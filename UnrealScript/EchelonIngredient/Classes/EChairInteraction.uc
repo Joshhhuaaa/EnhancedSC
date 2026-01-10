@@ -8,17 +8,17 @@ var bool BackupCollideActors,
 		 BackupBlockPlayers;
 
 //----------------------------------------[David Kalina - 5 Feb 2002]-----
-// 
+//
 // Description
 //		Player can not interact with chair.
-// 
+//
 //------------------------------------------------------------------------
 
 function Touch(actor Other)
 {
 	if (Other.bIsPlayerPawn)
 		return;
-	
+
 	Super.UnTouch(Other);
 }
 
@@ -32,7 +32,7 @@ function UnTouch(actor Other)
 
 
 //----------------------------------------[David Kalina - 1 Feb 2002]-----
-// 
+//
 // Description
 //		Sets EPawn's MoveTo parameters for subsequent MoveToLocation call.
 //
@@ -42,11 +42,11 @@ function UnTouch(actor Other)
 //
 // PostConditions
 //		The InteractPawn's following vars must be set:
-//			m_locationStart	
-//			m_orientationStart	
-//			m_locationEnd		
+//			m_locationStart
+//			m_orientationStart
+//			m_locationEnd
 //			m_orientationEnd
-// 
+//
 //------------------------------------------------------------------------
 
 function SetInteractLocation(Pawn InteractPawn)
@@ -58,11 +58,11 @@ function SetInteractLocation(Pawn InteractPawn)
 	Chair = EChair(Owner);
 	if (Chair == None)
 		Log("EChairInteraction problem with Owner");
-	
+
 	InteractEPawn = EPawn(InteractPawn);
-	
+
 	if (InteractEPawn != none)
-	{	
+	{
 		MovePos		= Chair.Location;
 
 		// TODO : MovePos calculated based on side of InteractPawn relative to chair's forward x axis
@@ -105,7 +105,7 @@ function SetInteractLocation(Pawn InteractPawn)
 				MovePos = HitLocation;
 			}
 		}
-		
+
 		InteractEPawn.m_locationStart		= InteractEPawn.Location;
 		InteractEPawn.m_orientationStart	= InteractEPawn.Rotation;
 		InteractEPawn.m_locationEnd			= MovePos;
@@ -113,10 +113,10 @@ function SetInteractLocation(Pawn InteractPawn)
 }
 
 //----------------------------------------[David Kalina - 1 Feb 2002]-----
-// 
+//
 // Description
 //		Trigger controller state change.
-// 
+//
 //------------------------------------------------------------------------
 
 
@@ -149,10 +149,10 @@ function InitInteract(Controller Instigator)
 }
 
 //----------------------------------------[David Kalina - 5 Feb 2002]-----
-// 
+//
 // Description
 //		Called after NPC gets up from chair - re-enable collision on chair.
-// 
+//
 //------------------------------------------------------------------------
 
 function PostInteract(Controller Instigator)

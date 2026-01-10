@@ -3,21 +3,21 @@
 //=============================================================================
 class V2_1_2CIA extends EVariable;
 
-var int ChattyDone; 
-var int ConversationOver; 
-var int CopOut; 
-var int DickIsAlert; 
-var int DickIsTeled; 
-var int InWelcome; 
-var int LambertTalks; 
-var int MichWentHiding; 
-var int mitchcomp; 
-var int MitchReachSmoke; 
-var int MitchThere; 
-var int ordertokidnap; 
-var int PutINafterWelcome; 
-var int SamThere; 
-var int WelcomeDone; 
+var int ChattyDone;
+var int ConversationOver;
+var int CopOut;
+var int DickIsAlert;
+var int DickIsTeled;
+var int InWelcome;
+var int LambertTalks;
+var int MichWentHiding;
+var int mitchcomp;
+var int MitchReachSmoke;
+var int MitchThere;
+var int ordertokidnap;
+var int PutINafterWelcome;
+var int SamThere;
+var int WelcomeDone;
 
 
 function PostBeginPlay()

@@ -13,7 +13,7 @@ function PostBeginPlay()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Valid from EAlarm only
 //------------------------------------------------------------------------
 event Trigger(Actor Other, Pawn EventInstigator, optional name InTag)
@@ -34,7 +34,7 @@ event Trigger(Actor Other, Pawn EventInstigator, optional name InTag)
 
 	Switch (Alarm.Event)
 	{
-	case AE_ENABLE_ALARM : 
+	case AE_ENABLE_ALARM :
 		if (GetStateName() != 's_Alert')
 			GotoState('s_Alert');
 		else
@@ -79,7 +79,7 @@ state s_Alert
 	{
 		// Blast light
 		Enable('Tick');
-		
+
 		LightBrightness = 255;
 		HeatIntensity	= 1;
 		LastTimeChange	= Level.TimeSeconds;

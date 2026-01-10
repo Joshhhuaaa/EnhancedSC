@@ -3,7 +3,7 @@
 //=============================================================================
 class V0_0_2_Training extends EVariable;
 
-var int BoxTipPlayed; 
+var int BoxTipPlayed;
 
 
 function PostBeginPlay()

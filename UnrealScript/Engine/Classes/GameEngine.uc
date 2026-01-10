@@ -18,7 +18,7 @@ struct URL
 	var string			Portal;		// Portal to enter through, default is "".
 	var bool			Valid;
 };
- 
+
 var Level			GLevel,
 					GEntry;
 var URL				LastURL;

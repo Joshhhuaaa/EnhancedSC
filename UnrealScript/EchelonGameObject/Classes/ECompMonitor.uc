@@ -1,4 +1,4 @@
-class ECompMonitor extends EGameplayObject; 
+class ECompMonitor extends EGameplayObject;
 
 defaultproperties
 {

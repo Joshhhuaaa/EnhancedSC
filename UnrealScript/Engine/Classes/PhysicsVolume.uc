@@ -114,7 +114,7 @@ function PlayExitSplash(Actor Other)
 		PlaySound(ExitSound, SLOT_SFX);
 	if (ExitActor != None)
 	{
-		splash = Spawn(ExitActor); 
+		splash = Spawn(ExitActor);
 		if (splash != None)
 			splash.SetDrawScale(splashSize);
 	}
@@ -131,10 +131,10 @@ function CausePainTo(Actor Other)
 
 	if (DamagePerSec > 0)
 	{
-		Other.TakeDamage(int(DamagePerSec * depth), None, Location, vect(0,0,0), vect(0,0,0), DamageType); 
+		Other.TakeDamage(int(DamagePerSec * depth), None, Location, vect(0,0,0), vect(0,0,0), DamageType);
 		if ((P != None) && (P.Controller != None))
 			P.Controller.PawnIsInPain(self);
-	}	
+	}
 	else
 	{
 		if ((P != None) && (P.Health < P.Default.Health))

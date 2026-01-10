@@ -20,7 +20,7 @@ native function bool Encompasses(Actor Other); // returns true if center of acto
 // ***********************************************************************************************
 final native(1551) function bool EncompLoc(Vector _Loc); // returns true if Loc is within volume
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 function PostBeginPlay()
@@ -30,7 +30,7 @@ function PostBeginPlay()
 		ForEach AllActors(class'Actor',AssociatedActor, AssociatedActorTag)
 			break;
 }
-	
+
 function SetAssociatedActor(Actor Other)
 {
 	AssociatedActor = Other;

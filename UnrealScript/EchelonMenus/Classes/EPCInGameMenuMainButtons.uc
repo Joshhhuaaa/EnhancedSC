@@ -12,7 +12,7 @@ var Texture     m_BackGroundTexture;
 
 function SetupTextures(INT _TextureId)
 {
-    
+
     UpRegion.X = EchelonLevelInfo(GetLevel()).TICON.ArrayTexture[_TextureId].Origin.X;
     UpRegion.Y = EchelonLevelInfo(GetLevel()).TICON.ArrayTexture[_TextureId].Origin.Y;
     UpRegion.W = EchelonLevelInfo(GetLevel()).TICON.ArrayTexture[_TextureId].Size.X;
@@ -35,7 +35,7 @@ function SetupTextures(INT _TextureId)
     ImageY = (WinHeight - UpRegion.H) /2;
 }
 
-function Click(float X, float Y) 
+function Click(float X, float Y)
 {
 	Super.Click(X, Y);
 	Root.PlayClickSound();

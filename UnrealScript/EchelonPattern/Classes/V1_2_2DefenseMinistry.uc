@@ -3,17 +3,17 @@
 //=============================================================================
 class V1_2_2DefenseMinistry extends EVariable;
 
-var int AlarmSentByWindow; 
-var int CPUaccessOnce; 
-var int CPUbeingAccessedFirst; 
-var int ElevatorAlerted; 
-var int FilesDownloadDone; 
-var int GangWayAlerted; 
-var int LastAlarmFlag; 
-var int LastParkingGuyState; 
-var int NikoLight; 
-var int ThreesomeAlerted; 
-var int WilkesKikinAss; 
+var int AlarmSentByWindow;
+var int CPUaccessOnce;
+var int CPUbeingAccessedFirst;
+var int ElevatorAlerted;
+var int FilesDownloadDone;
+var int GangWayAlerted;
+var int LastAlarmFlag;
+var int LastParkingGuyState;
+var int NikoLight;
+var int ThreesomeAlerted;
+var int WilkesKikinAss;
 
 
 function PostBeginPlay()

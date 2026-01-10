@@ -1,4 +1,4 @@
-class EMoniteurExplode extends EGameplayObject; 
+class EMoniteurExplode extends EGameplayObject;
 
 defaultproperties
 {

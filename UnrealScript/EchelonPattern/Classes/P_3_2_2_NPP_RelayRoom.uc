@@ -65,21 +65,21 @@ DuckHunt:
     Goal_Set(1,GOAL_Attack,9,,'PLAYER','PLAYER',,,FALSE,,,,);
     Goal_Set(2,GOAL_Attack,9,,'PLAYER','PLAYER',,,FALSE,,,,);
     Goal_Set(3,GOAL_Attack,9,,'PLAYER','PLAYER',,,FALSE,,,,);
-    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,); 
+    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,);
     End();
 Randomize1:
     Log("First set of 3 selected.");
     Sleep(0.75);
-    JumpRandom('SlotOneUp', 0.40, 'SlotOneDown', 0.60, 'SlotTwoUp', 1.00, , , ,); 
+    JumpRandom('SlotOneUp', 0.40, 'SlotOneDown', 0.60, 'SlotTwoUp', 1.00, , , ,);
     End();
 Randomize2:
     Log("Second set of 3 selected.");
     Sleep(0.75);
-    JumpRandom('SlotTwoDown', 0.30, 'SlotThreeUp', 0.65, 'SlotThreeDown', 1.00, , , ,); 
+    JumpRandom('SlotTwoDown', 0.30, 'SlotThreeUp', 0.65, 'SlotThreeDown', 1.00, , , ,);
     End();
 SlotOneUp:
     Log("Triggers ShutterDude1 to shoot standing.");
-    JumpRandom('SlotOneUpTeleport1', 0.33, 'SlotOneUpTeleport2', 0.67, 'SlotOneUpTeleport3', 1.00, , , ,); 
+    JumpRandom('SlotOneUpTeleport1', 0.33, 'SlotOneUpTeleport2', 0.67, 'SlotOneUpTeleport3', 1.00, , , ,);
 SlotOneUpX:
     CheckIfIsDead(1,'Mortus');
     CheckIfIsUnconscious(1,'Mortus');
@@ -88,7 +88,7 @@ SlotOneUpX:
     CheckIfIsDead(1,'Mortus');
     CheckIfIsUnconscious(1,'Mortus');
     SendUnrealEvent('CafeShutter1');
-    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,); 
+    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,);
     End();
 SlotOneUpTeleport1:
     Log("Teleport.");
@@ -116,7 +116,7 @@ SlotOneUpTeleport3:
     End();
 SlotOneDown:
     Log("Triggers ShutterDude1 to shoot crouched.");
-    JumpRandom('SlotOneDownTeleport1', 0.30, 'SlotOneDownTeleport2', 0.70, 'SlotOneDownTeleport3', 1.00, , , ,); 
+    JumpRandom('SlotOneDownTeleport1', 0.30, 'SlotOneDownTeleport2', 0.70, 'SlotOneDownTeleport3', 1.00, , , ,);
 SlotOneDownX:
     CheckIfIsDead(1,'Mortus');
     CheckIfIsUnconscious(1,'Mortus');
@@ -125,7 +125,7 @@ SlotOneDownX:
     CheckIfIsDead(1,'Mortus');
     CheckIfIsUnconscious(1,'Mortus');
     SendUnrealEvent('CafeShutter1');
-    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,); 
+    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,);
     End();
 SlotOneDownTeleport1:
     Log("Teleport.");
@@ -153,7 +153,7 @@ SlotOneDownTeleport3:
     End();
 SlotTwoUp:
     Log("Triggers ShutterDude2 to shoot standing.");
-    JumpRandom('SlotTwoUpTeleport1', 0.30, 'SlotTwoUpTeleport2', 0.70, 'SlotTwoUpTeleport3', 1.00, , , ,); 
+    JumpRandom('SlotTwoUpTeleport1', 0.30, 'SlotTwoUpTeleport2', 0.70, 'SlotTwoUpTeleport3', 1.00, , , ,);
 SlotTwoUpX:
     CheckIfIsDead(2,'Mortus');
     CheckIfIsUnconscious(2,'Mortus');
@@ -162,7 +162,7 @@ SlotTwoUpX:
     CheckIfIsDead(2,'Mortus');
     CheckIfIsUnconscious(2,'Mortus');
     SendUnrealEvent('CafeShutter2');
-    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,); 
+    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,);
     End();
 SlotTwoUpTeleport1:
     Log("Teleport.");
@@ -190,7 +190,7 @@ SlotTwoUpTeleport3:
     End();
 SlotTwoDown:
     Log("Triggers ShutterDude2 to shoot crouched.");
-    JumpRandom('SlotTwoDownTeleport1', 0.30, 'SlotTwoDownTeleport2', 0.70, 'SlotTwoDownTeleport3', 1.00, , , ,); 
+    JumpRandom('SlotTwoDownTeleport1', 0.30, 'SlotTwoDownTeleport2', 0.70, 'SlotTwoDownTeleport3', 1.00, , , ,);
 SlotTwoDownX:
     CheckIfIsDead(2,'Mortus');
     CheckIfIsUnconscious(2,'Mortus');
@@ -199,7 +199,7 @@ SlotTwoDownX:
     CheckIfIsDead(2,'Mortus');
     CheckIfIsUnconscious(2,'Mortus');
     SendUnrealEvent('CafeShutter2');
-    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,); 
+    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,);
     End();
 SlotTwoDownTeleport1:
     Log("Teleport.");
@@ -227,7 +227,7 @@ SlotTwoDownTeleport3:
     End();
 SlotThreeUp:
     Log("Triggers ShutterDude3 to shoot standing.");
-    JumpRandom('SlotThreeUpTeleport1', 0.30, 'SlotThreeUpTeleport2', 0.70, 'SlotThreeUpTeleport3', 1.00, , , ,); 
+    JumpRandom('SlotThreeUpTeleport1', 0.30, 'SlotThreeUpTeleport2', 0.70, 'SlotThreeUpTeleport3', 1.00, , , ,);
 SlotThreeUpX:
     CheckIfIsDead(3,'Mortus');
     CheckIfIsUnconscious(3,'Mortus');
@@ -236,7 +236,7 @@ SlotThreeUpX:
     CheckIfIsDead(3,'Mortus');
     CheckIfIsUnconscious(3,'Mortus');
     SendUnrealEvent('CafeShutter3');
-    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,); 
+    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,);
     End();
 SlotThreeUpTeleport1:
     Log("Teleport.");
@@ -264,7 +264,7 @@ SlotThreeUpTeleport3:
     End();
 SlotThreeDown:
     Log("Triggers ShutterDude3 to shoot crouched.");
-    JumpRandom('SlotThreeDownTeleport1', 0.30, 'SlotThreeDownTeleport2', 0.70, 'SlotThreeDownTeleport3', 1.00, , , ,); 
+    JumpRandom('SlotThreeDownTeleport1', 0.30, 'SlotThreeDownTeleport2', 0.70, 'SlotThreeDownTeleport3', 1.00, , , ,);
 SlotThreeDownX:
     CheckIfIsDead(3,'Mortus');
     CheckIfIsUnconscious(3,'Mortus');
@@ -273,7 +273,7 @@ SlotThreeDownX:
     CheckIfIsDead(3,'Mortus');
     CheckIfIsUnconscious(3,'Mortus');
     SendUnrealEvent('CafeShutter3');
-    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,); 
+    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,);
     End();
 SlotThreeDownTeleport1:
     Log("Teleport.");
@@ -354,7 +354,7 @@ AnnaleeCall:
     SetFlags(Reinforce,TRUE);
     SendPatternEvent('RelayBackupAI','Backup');
 Loop:
-    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,); 
+    JumpRandom('Randomize1', 0.50, 'Randomize2', 1.00, , , , , ,);
     End();
 Implode:
     Log("Sam has gotten close to the doors, kill the pattern.");

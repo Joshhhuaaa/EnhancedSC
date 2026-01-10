@@ -1,14 +1,14 @@
 //=============================================================================
 // Pawn, the base class of all actors that can be controlled by players or AI.
 //
-// Pawns are the physical representations of players and creatures in a level.  
-// Pawns have a mesh, collision, and physics.  Pawns can take damage, make sounds, 
-// and hold weapons and other inventory.  In short, they are responsible for all 
+// Pawns are the physical representations of players and creatures in a level.
+// Pawns have a mesh, collision, and physics.  Pawns can take damage, make sounds,
+// and hold weapons and other inventory.  In short, they are responsible for all
 // physical interaction between the player or AI and the world.
 //
 // This is a built-in Unreal class and it shouldn't be modified.
 //=============================================================================
-class Pawn extends Actor 
+class Pawn extends Actor
 	abstract
 	native
 	placeable;
@@ -39,14 +39,14 @@ var const bool	bNoVelocityUpdate;	// used by C++ physics
 var	bool		bCanFallWalk;	// Can go into falling when walking
 var(AI) bool	bDontPossess;		// if true, Pawn won't be possessed at game start
 
-var bool bPhysicsAnimUpdate;	
+var bool bPhysicsAnimUpdate;
 var bool bWasCrouched;
 var bool bWasWalking;
 var bool bWasOnGround;
 var bool bInitializeAnimation;
 
 // AI basics.
-var 	byte	Visibility;			//How visible is the pawn? 0 = invisible, 128 = normal, 255 = highly visible 
+var 	byte	Visibility;			//How visible is the pawn? 0 = invisible, 128 = normal, 255 = highly visible
 var		float	DesiredSpeed;
 var		float	MaxDesiredSpeed;
 
@@ -84,7 +84,7 @@ var PhysicsVolume	HeadVolume;		// physics volume of head
 var(AI) int			Health;         // Health: 100 = normal maximum
 var class<DamageType> ReducedDamageType; // which damagetype this creature is protected from (used by AI)
 
-var localized  string MenuName; // Name used for this pawn type in menus (e.g. player selection) 
+var localized  string MenuName; // Name used for this pawn type in menus (e.g. player selection)
 
 // shadow decal
 var Projector Shadow;
@@ -98,7 +98,7 @@ var vector OldAcceleration;
 var Actor ControlledActor;		// Actor being controlled by Pawn e.g. KVehicle, WeaponTurret
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // ***********************************************************************************************
 var				float			LinearSpeed;					// Linear speed for use in physLinear
 
@@ -163,11 +163,11 @@ var		float		m_CurrentFeetRadius;
 var		bool		m_LegdeInFeet;
 var		bool		m_LegdePushing;
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 
-/* Reset() 
+/* Reset()
 reset actor to initial state - used when restarting level without reloading.
 */
 function Reset()
@@ -192,7 +192,7 @@ function PossessedBy(Controller C)
 }
 
 function UnPossessed()
-{	
+{
 	SetOwner(None);
 	Controller = None;
 }
@@ -238,7 +238,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 	else
 		Controller.DisplayDebug(Canvas,YL,YPos);
 }
-		 		
+
 //***************************************
 // Interface to Pawn's Controller
 
@@ -281,7 +281,7 @@ final function bool PressingAltFire()
 function bool LineOfSightTo(actor Other)
 {
 	return ((Controller != None) && Controller.LineOfSightTo(Other));
-} 
+}
 
 function Trigger(actor Other, pawn EventInstigator, optional name InTag) // UBI MODIF - Additional parameter
 {
@@ -359,10 +359,10 @@ event bool EncroachingOn(actor Other)
 {
 	if ((Other.Brush != None) || (Brush(Other) != None))
 		return true;
-		
+
 	if (((Controller == None) || !Controller.bIsPlayer) && (Pawn(Other) != None))
 		return true;
-		
+
 	return false;
 }
 
@@ -409,7 +409,7 @@ event UpdateEyeHeight(float DeltaTime)
 		OldEyeHeight = EyeHeight;
 		EyeHeight = FClamp((EyeHeight - Location.Z + OldZ) * (1 - smooth) + BaseEyeHeight * smooth,
 							-0.5 * CollisionHeight,
-							CollisionHeight + FClamp((OldZ - Location.Z), 0.0, MAXSTEPHEIGHT)); 
+							CollisionHeight + FClamp((OldZ - Location.Z), 0.0, MAXSTEPHEIGHT));
 	}
 	else
 	{
@@ -517,7 +517,7 @@ event Falling()
 //=============================================================================
 // Animation interface for controllers
 
-/* PlayXXX() function called by controller to play transient animation actions 
+/* PlayXXX() function called by controller to play transient animation actions
 */
 event PlayDying(class<DamageType> DamageType, vector HitLoc)
 {
@@ -529,7 +529,7 @@ event PlayDying(class<DamageType> DamageType, vector HitLoc)
 }
 
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // ***********************************************************************************************
 
 native(1104) final function bool CheckFence(out vector normal, out actor wall, vector pos);
@@ -538,7 +538,7 @@ native(1116) final function UnCrouch(bool bTest);
 native(1121) final function bool IsCrouch();
 
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // ***********************************************************************************************
 
 defaultproperties

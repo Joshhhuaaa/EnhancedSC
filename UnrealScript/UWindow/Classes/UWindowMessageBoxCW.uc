@@ -163,7 +163,7 @@ function Notify(UWindowDialogControl C, byte E)
 		{
 		case YesButton:
 			P.Result = MR_Yes;
-			P.Close();			
+			P.Close();
 			break;
 		case NoButton:
 			P.Result = MR_No;

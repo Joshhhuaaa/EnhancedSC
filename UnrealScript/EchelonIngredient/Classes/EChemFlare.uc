@@ -77,11 +77,11 @@ state s_Selected
 
 		Used = true;
 		bGlowDisplay = true;
-		
+
 		// Joshua - Initialize GlowTime and ScaleGlow
-		GlowTime = default.GlowTime; 
+		GlowTime = default.GlowTime;
 		ScaleGlow = default.ScaleGlow;
-		
+
 		HeatIntensity = default.HeatIntensity; // Joshua - Chem Flare will now generate heat
 
 		if (Level.Game.PlayerC.ShadowMode == 0)

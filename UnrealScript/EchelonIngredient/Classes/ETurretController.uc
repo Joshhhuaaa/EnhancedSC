@@ -4,12 +4,12 @@ class ETurretController extends EGameplayObject;
 #exec new TrueTypeFontFactory Name=Verdana9 FontName="Verdana" Height=9 AntiAlias=0 CharactersPerPage=64
 
 /*-----------------------------------------------------------------------------
-                      T Y P E   D E F I N I T I O N S 
+                      T Y P E   D E F I N I T I O N S
 -----------------------------------------------------------------------------*/
 // Turret general //
 const SCREEN_END_X              = 640;
 
-const LBAR_WIDTH                = 17; // Width of lifebar 
+const LBAR_WIDTH                = 17; // Width of lifebar
 
 const TURRET_WIDTH              = 208;
 const TURRET_HEIGHT             = 144;
@@ -92,7 +92,7 @@ function bool CoordinateWithin(EPlayerController Epc, float x, float y, int w, i
 {
 	// Joshua - Adjust coordinates based on turret position offset for different aspect ratios
 	local float adjustedX, adjustedY;
-	
+
 	// Joshua - Adjust position for horizontal lifebar (place under lifebar on right edge)
 	if (Epc.bHorizontalLifeBar)
 	{
@@ -104,14 +104,14 @@ function bool CoordinateWithin(EPlayerController Epc, float x, float y, int w, i
 		adjustedX = x + (SCREEN_END_X - eGame.HUD_OFFSET_X - LBAR_WIDTH - TURRET_WIDTH);
 		adjustedY = y + eGame.HUD_OFFSET_Y;
 	}
-	
-	return Epc.m_FakeMouseX > adjustedX && Epc.m_FakeMouseX < adjustedX + w && 
+
+	return Epc.m_FakeMouseX > adjustedX && Epc.m_FakeMouseX < adjustedX + w &&
 		   Epc.m_FakeMouseY > adjustedY && Epc.m_FakeMouseY < adjustedY + h;
 }
 
 
 function Tick(float DeltaTime)
-{  
+{
     local int OldCurPos;
     local EPlayerController Epc;
     Epc = EPlayerController(ETurretInteraction(Interaction).User);
@@ -259,12 +259,12 @@ function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 			    break;
 		}
 	}
-    
+
     return false;
 }
 
 //---------------------------------------[David Kalina - 13 Nov 2001]-----
-// 
+//
 // Description
 //		Turn on Friend-or-Foe detection (triggered by NPCs)
 //
@@ -292,7 +292,7 @@ function DrawView(HUD hud, ECanvas Canvas)
 }
 
 /*-----------------------------------------------------------------------------
-    Function :      DrawBackGround 
+    Function :      DrawBackGround
 
     Description:    -
 -----------------------------------------------------------------------------*/
@@ -300,7 +300,7 @@ function DrawBackGround(ECanvas Canvas, bool bHorizontalLifeBar)
 {
 	local int xPos, yPos;
 
-    Canvas.SetDrawColor(128, 128, 128);	
+    Canvas.SetDrawColor(128, 128, 128);
 
     // Joshua - Adjust position for horizontal lifebar (place under lifebar on right edge)
     if (bHorizontalLifeBar)
@@ -348,7 +348,7 @@ function DrawBackGround(ECanvas Canvas, bool bHorizontalLifeBar)
 
     // FILL BACKGROUND IN BLACK //
     Canvas.DrawLine(xPos - TURRET_WIDTH + TURRET_BORDER_WIDTH, yPos + TURRET_BORDER_WIDTH,
-                     TURRET_WIDTH - TURRET_BORDER_WIDTH * 2, TURRET_HEIGHT - TURRET_BORDER_WIDTH * 2, Canvas.black, -1, eLevel.TGAME);	
+                     TURRET_WIDTH - TURRET_BORDER_WIDTH * 2, TURRET_HEIGHT - TURRET_BORDER_WIDTH * 2, Canvas.black, -1, eLevel.TGAME);
 }
 
 /*-----------------------------------------------------------------------------
@@ -496,7 +496,7 @@ function DrawInfo(ECanvas Canvas, bool bHorizontalLifeBar)
 	local float xLen, yLen;
 
     Canvas.Font = Canvas.ETextFont;
-	
+
     // Joshua - Adjust position for horizontal lifebar (place under lifebar on right edge)
     if (bHorizontalLifeBar)
     {
@@ -515,9 +515,9 @@ function DrawInfo(ECanvas Canvas, bool bHorizontalLifeBar)
     if (CursorPos == EXIT)
         Canvas.DrawLine(xPos + INSIDE_BOX_OFFSET_X + 1, yPos + INSIDE_BOX_OFFSET_Y1, MIDDLEBOX_WIDTH - 2 * (INSIDE_BOX_OFFSET_X + 1), INSIDE_BOX_HEIGHT1, Canvas.black, 255 * 0.20f, eLevel.TGAME);
     else
-        Canvas.DrawLine(xPos + INSIDE_BOX_OFFSET_X + 1, yPos + INSIDE_BOX_OFFSET_Y2, MIDDLEBOX_WIDTH - 2 * (INSIDE_BOX_OFFSET_X + 1), INSIDE_BOX_HEIGHT2, Canvas.black, 255 * 0.20f, eLevel.TGAME);	
-    
-    // ACTIVATE ~ DEACTIVATE //   
+        Canvas.DrawLine(xPos + INSIDE_BOX_OFFSET_X + 1, yPos + INSIDE_BOX_OFFSET_Y2, MIDDLEBOX_WIDTH - 2 * (INSIDE_BOX_OFFSET_X + 1), INSIDE_BOX_HEIGHT2, Canvas.black, 255 * 0.20f, eLevel.TGAME);
+
+    // ACTIVATE ~ DEACTIVATE //
     if (LinkedTurret.GetStateName() == 's_Deactivated')
         DrawCheckBox(Canvas, xPos + TEXT_POS_X, yPos + TEXT_DEACTIVATE_Y + 1, true);
     else
@@ -529,28 +529,28 @@ function DrawInfo(ECanvas Canvas, bool bHorizontalLifeBar)
 	Canvas.TextSize(Canvas.LocalizeStr("DEACTIVATE"), xLen, yLen);
 
     if (CursorPos == DEACTIVATE)
-    {   		
-        Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2 - 8, 
+    {
+        Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2 - 8,
 			           yPos + TEXT_DEACTIVATE_Y - 2);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.tu_select_cote, 8, 16, 8, 0, -8, 15); // Joshua - 8, 15 -> 8, 16 for symmetrical selection
 
-		Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2, 
+		Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2,
 			          yPos + TEXT_DEACTIVATE_Y - 2);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.tu_select_mil, xLen, 16, 0, 0, 8, 15); // Joshua - xLen, 15 -> xLen, 16 for symmetrical selection
 
-        Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 + xLen / 2, 
+        Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 + xLen / 2,
 			           yPos + TEXT_DEACTIVATE_Y - 2);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.tu_select_cote, 8, 16, 0, 0, 8, 15); // Joshua - 8, 15 -> 8, 16 for symmetrical selection
-        
-        
-		
+
+
+
 
         Canvas.DrawColor = Canvas.white;
     }
     else
         Canvas.DrawColor = Canvas.TextGreen;
 
-    Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2, 
+    Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2,
 		           yPos + TEXT_DEACTIVATE_Y - 2);
 	Canvas.DrawText(Canvas.LocalizeStr("DEACTIVATE"));
 
@@ -566,27 +566,27 @@ function DrawInfo(ECanvas Canvas, bool bHorizontalLifeBar)
 	Canvas.TextSize(Canvas.LocalizeStr("DISABLEIFF"), xLen, yLen);
 
     if (CursorPos == DISABLE_IFF)
-    {  
-        Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2 - 8, 
+    {
+        Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2 - 8,
 			           yPos + TEXT_DISABLE_Y - 2);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.tu_select_cote, 8, 16, 8, 0, -8, 15); // Joshua - 8, 15 -> 8, 16 for symmetrical selection
 
-		Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2, 
+		Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2,
 			           yPos + TEXT_DISABLE_Y - 2);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.tu_select_mil, xLen, 16, 0, 0, 8, 15); // Joshua - xLen, 15 -> xLen, 16 for symmetrical selection
 
-        Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 + xLen / 2, 
+        Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 + xLen / 2,
 			           yPos + TEXT_DISABLE_Y - 2);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.tu_select_cote, 8, 16, 0, 0, 8, 15); // Joshua - 8, 15 -> 8, 16 for symmetrical selection
-        
-        
+
+
 
         Canvas.DrawColor = Canvas.white;
     }
     else
         Canvas.DrawColor = Canvas.TextGreen;
 
-    Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2 , 
+    Canvas.SetPos(xPos + 10 + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2 ,
 		           yPos + TEXT_DISABLE_Y - 2);
     Canvas.DrawText(Canvas.LocalizeStr("DISABLEIFF"));
 
@@ -595,28 +595,28 @@ function DrawInfo(ECanvas Canvas, bool bHorizontalLifeBar)
 	Canvas.TextSize(Canvas.LocalizeStr("EXIT"), xLen, yLen);
 
     if (CursorPos == EXIT)
-    {        
+    {
 		// Left side of selector
-        Canvas.SetPos(xPos + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2 - 8, 
+        Canvas.SetPos(xPos + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2 - 8,
 			           yPos + TEXT_EXIT);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.tu_select_cote, 8, 16, 8, 0, -8, 15); // Joshua - 8, 15 -> 8, 16 for symmetrical selection
 
 		// Middle part of selector
-		Canvas.SetPos(xPos + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2, 
+		Canvas.SetPos(xPos + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2,
 			           yPos + TEXT_EXIT);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.tu_select_mil, xLen , 16, 0, 0, 8, 15); // Joshua - xLen, 15 -> xLen, 16 for symmetrical selection
 
 		// Right part of selector
-        Canvas.SetPos(xPos + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 + xLen / 2, 
+        Canvas.SetPos(xPos + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 + xLen / 2,
 			           yPos + TEXT_EXIT);
         eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.tu_select_cote, 8, 16, 0, 0, 8, 15); // Joshua - 8, 15 -> 8, 16 for symmetrical selection
-        
+
         Canvas.DrawColor = Canvas.white;
     }
     else
         Canvas.DrawColor = Canvas.TextGreen;
-    
-    
+
+
 
     Canvas.SetPos(xPos + (TURRET_WIDTH - (TURRET_BORDER_WIDTH * 2) - (MIDDLEBOX_OFFSET_X * 2)) / 2 - xLen / 2, yPos + TEXT_EXIT);
     Canvas.DrawText(Canvas.LocalizeStr("EXIT"));

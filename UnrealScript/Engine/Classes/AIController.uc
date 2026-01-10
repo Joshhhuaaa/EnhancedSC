@@ -1,8 +1,8 @@
 //=============================================================================
 // AIController, the base class of AI.
 //
-// Controllers are non-physical actors that can be attached to a pawn to control 
-// its actions.  AIControllers implement the artificial intelligence for the pawns they control.  
+// Controllers are non-physical actors that can be attached to a pawn to control
+// its actions.  AIControllers implement the artificial intelligence for the pawns they control.
 //
 // This is a built-in Unreal class and it shouldn't be modified.
 //=============================================================================
@@ -17,11 +17,11 @@ event PreBeginPlay()
 		return;
 
 	if (Level.Game != None)
-		Skill += Level.Game.Difficulty; 
+		Skill += Level.Game.Difficulty;
 	Skill = FClamp(Skill, 0, 3);
 }
 
-/* Reset() 
+/* Reset()
 reset actor to initial state - used when restarting level without reloading.
 */
 function Reset()
@@ -33,7 +33,7 @@ function Reset()
 		Destroy();
 }
 
-	
+
 /* DisplayDebug()
 list important controller attributes on canvas
 */
@@ -44,14 +44,14 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 
 	Super.DisplayDebug(Canvas,YL, YPos);
 
-	Canvas.DrawColor.B = 255;	
+	Canvas.DrawColor.B = 255;
 
 	/*** UBI MODIF : removing unnecessary debug shit
 
 	Canvas.DrawText("      NAVIGATION MoveTarget "$GetItemName(String(MoveTarget))$" PendingMover "$PendingMover$" MoveTimer "$MoveTimer, false);
 	YPos += YL;
 	Canvas.SetPos(4,YPos);
-	
+
 	Canvas.DrawText("      Destination "$Destination$" Focus "$GetItemName(string(Focus)), false);
 	YPos += YL;
 	Canvas.SetPos(4,YPos);
@@ -77,7 +77,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 }
 
 
-/* UpdateTactics() - called every 0.5 seconds if bAdvancedTactics is true and is 
+/* UpdateTactics() - called every 0.5 seconds if bAdvancedTactics is true and is
 performing a latent MoveToward() */
 event UpdateTactics()
 {

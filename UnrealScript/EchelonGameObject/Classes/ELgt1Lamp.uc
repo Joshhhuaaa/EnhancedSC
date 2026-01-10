@@ -1,4 +1,4 @@
-class ELgt1Lamp extends EGameplayObjectLight; 
+class ELgt1Lamp extends EGameplayObjectLight;
 
 defaultproperties
 {

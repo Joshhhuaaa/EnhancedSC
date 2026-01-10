@@ -104,7 +104,7 @@ var const localized ShowAMPM;
 /// List of TimeToMap fields which should be exposed for editing in this locale.
 var const localized array<string> EditableTimeFields;
 
-/// Format string for generating human-readable time in AM/PM and 24-hour formats; 
+/// Format string for generating human-readable time in AM/PM and 24-hour formats;
 /// may be ignored by Locale subclasses who display times using a different calendar,
 /// for example Chinese.
 var const localized string
@@ -148,12 +148,12 @@ function string TimeToString(long T, bool Brief, bool Countdown)
 	if (Brief)
 	{
 		if (ShowAMPM) S = BriefTimeFormatAMPM;
-		else           S = BriefTimeFormat24Hour, 
+		else           S = BriefTimeFormat24Hour,
 	}
 	else if (!Countdown)
 	{
 		if (ShowAMPM) S = TimeFormatAMPM;
-		else           S = TimeFormat24Hour, 
+		else           S = TimeFormat24Hour,
 	}
 	else
 	{

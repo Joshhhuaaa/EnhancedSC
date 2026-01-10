@@ -3,17 +3,17 @@
 //=============================================================================
 class V3_3_1MiningTown extends EVariable;
 
-var int BridgeAlerted; 
-var int DormitoryAlerted; 
-var int FirstHousesAlerted; 
-var int GhettoAlerted; 
-var int InsideHQAlerted; 
-var int InterroAlerted; 
-var int LeadTechDone; 
-var int OneNoKillDone; 
-var int OutsideHQAlerted; 
-var int PowerHouseAlerted; 
-var int SecondPlazaAlerted; 
+var int BridgeAlerted;
+var int DormitoryAlerted;
+var int FirstHousesAlerted;
+var int GhettoAlerted;
+var int InsideHQAlerted;
+var int InterroAlerted;
+var int LeadTechDone;
+var int OneNoKillDone;
+var int OutsideHQAlerted;
+var int PowerHouseAlerted;
+var int SecondPlazaAlerted;
 
 
 function PostBeginPlay()

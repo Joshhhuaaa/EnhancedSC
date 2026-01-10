@@ -13,7 +13,7 @@ function MouseWheelDown(FLOAT X, FLOAT Y)
 		Super.MouseWheelDown(X, Y);
 		return;
 	}
-	
+
 	// Otherwise, pass to parent so the page can scroll
 	if (ParentWindow != None)
 		ParentWindow.MouseWheelDown(X, Y);
@@ -27,7 +27,7 @@ function MouseWheelUp(FLOAT X, FLOAT Y)
 		Super.MouseWheelUp(X, Y);
 		return;
 	}
-	
+
 	// Otherwise, pass to parent so the page can scroll
 	if (ParentWindow != None)
 		ParentWindow.MouseWheelUp(X, Y);

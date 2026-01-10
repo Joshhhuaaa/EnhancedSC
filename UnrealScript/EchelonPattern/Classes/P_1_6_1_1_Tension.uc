@@ -67,7 +67,7 @@ MilestoneTension:
 CarryOn:
     Log("CarryOn");
     ToggleGroupAI(TRUE, 'LoneTense', 'UNUSED_GROUP_TAG__', 'UNUSED_GROUP_TAG__', 'UNUSED_GROUP_TAG__', 'UNUSED_GROUP_TAG__', 'UNUSED_GROUP_TAG__');
-    JumpRandom('CarryOnA', 0.50, 'CarryOnB', 1.00, , , , , ,); 
+    JumpRandom('CarryOnA', 0.50, 'CarryOnB', 1.00, , , , , ,);
     End();
 CarryOnA:
     Log("CarryOnA");

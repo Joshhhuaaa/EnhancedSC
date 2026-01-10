@@ -59,7 +59,7 @@ BLazar:
     ResetGroupGoals();
     ChangeGroupState('s_default');
 LazarSwitch:
-    JumpRandom('DRoute', 0.50, 'ERoute', 1.00, , , , , ,); 
+    JumpRandom('DRoute', 0.50, 'ERoute', 1.00, , , , , ,);
 DRoute:
     Log("");
     Teleport(1, 'LazAgainPt');
@@ -81,7 +81,7 @@ CLazar:
     ChangeGroupState('s_default');
     ResetGroupGoals();
 Map:
-    JumpRandom('AStreet', 0.34, 'BStreet', 0.67, 'CStreet', 1.00, , , ,); 
+    JumpRandom('AStreet', 0.34, 'BStreet', 0.67, 'CStreet', 1.00, , , ,);
 AStreet:
     Log("");
     Teleport(1, 'Lazar10Pattern');
@@ -114,7 +114,7 @@ LazarFinal:
     ResetGroupGoals();
     ChangeGroupState('s_default');
 LazarUS:
-    JumpRandom('BldgA', 0.34, 'BldgB', 0.68, 'ToChurch', 0.84, 'FromChurch', 1.00, ,); 
+    JumpRandom('BldgA', 0.34, 'BldgB', 0.68, 'ToChurch', 0.84, 'FromChurch', 1.00, ,);
 BldgA:
     Log("Lazar in building A");
     Teleport(1, 'LazarioX');

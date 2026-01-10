@@ -122,6 +122,6 @@ Disturbed:
 ReachedRooftop:
     SetFlags(V4_3_0ChineseEmbassy(Level.VarObject).LambertKeypadReady,TRUE); // Joshua - Notify LambertComms that the keypad is ready for dialogue
     End();
-    
+
 }
 

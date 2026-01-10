@@ -22,7 +22,7 @@ var depreciated texture DetailTexture;	// Detail texture to apply.
 var depreciated texture EnvironmentMap;// Environment map for this texture
 
 // Surface properties.
-var depreciated enum EEnvMapTransformType 
+var depreciated enum EEnvMapTransformType
 {
 	EMTT_ViewSpace,
 	EMTT_WorldSpace,

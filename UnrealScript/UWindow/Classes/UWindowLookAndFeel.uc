@@ -2,8 +2,8 @@ class UWindowLookAndFeel extends UWindowBase;
 
 var() Texture	Active;			// Active widgets, window frames, etc.
 var() Texture	Inactive;		// Inactive Widgets, window frames, etc.
-var() Texture	ActiveS;		
-var() Texture	InactiveS;		
+var() Texture	ActiveS;
+var() Texture	InactiveS;
 
 var() Texture	Misc;			// Miscellaneous: backgrounds, bevels, etc.
 
@@ -13,7 +13,7 @@ var() Region	FrameTR;
 
 var() Region	FrameL;
 var() Region	FrameR;
-	
+
 var() Region	FrameBL;
 var() Region	FrameB;
 var() Region	FrameBR;
@@ -32,7 +32,7 @@ var() Region	BevelUpTR;
 
 var() Region	BevelUpL;
 var() Region	BevelUpR;
-	
+
 var() Region	BevelUpBL;
 var() Region	BevelUpB;
 var() Region	BevelUpBR;

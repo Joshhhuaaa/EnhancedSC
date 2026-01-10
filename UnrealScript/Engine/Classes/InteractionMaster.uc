@@ -9,7 +9,7 @@
 // 	are the only Interactions the IM routes directly too.  A new stub is
 // 	created in order to limit the number of C++ -> Uscript switches.
 //
-// (c) 2001, Epic Games, Inc.  All Rights Reserved 
+// (c) 2001, Epic Games, Inc.  All Rights Reserved
 // ====================================================================
 
 class InteractionMaster extends Interactions
@@ -19,7 +19,7 @@ class InteractionMaster extends Interactions
 var transient Client CLient;
 var transient bool bZoufff;
 
-var transient const Interaction BaseMenu;	// Holds a pointer to the base menu system 
+var transient const Interaction BaseMenu;	// Holds a pointer to the base menu system
 var transient const Interaction Console;	// Holds the special Interaction that acts as the console
 var transient array<Interaction> GlobalInteractions;	// Holds a listing of all global Interactions
 
@@ -33,17 +33,17 @@ event Interaction AddInteraction(string InteractionName, optional Player AttachT
 {
 	local Interaction NewInteraction;
 	local class<Interaction> NewInteractionClass;
-	
+
 	NewInteractionClass = class<Interaction>(DynamicLoadObject(InteractionName, class'Class'));
-	
+
 	if (NewInteractionClass != None)
 	{
 		NewInteraction = new NewInteractionClass;
 		if (NewInteraction != None)
 		{
-			
+
 			// Place the Interaction in the proper array
-	
+
 			if (AttachTo != None)	// Handle location Interactions
 			{
 				AttachTo.LocalInteractions.Length = AttachTo.LocalInteractions.Length + 1;
@@ -57,22 +57,22 @@ event Interaction AddInteraction(string InteractionName, optional Player AttachT
 			}
 
 			// Initialize the Interaction
-			
+
 			NewInteraction.Initialize();
 			NewInteraction.Master = Self;
 
 			return NewInteraction;
-			
+
 		}
 		else
   			Log("Could not create interaction ["$InteractionName$"]",'IMaster');
-			
+
 	}
 	else
 		Log("Could not load interaction ["$InteractionName$"]",'IMaster');
 
-	return none;	 	
-	
+	return none;
+
 } // AddInteraction
 
 event RemoveInteraction(interaction RemoveMe)			// Removes a Interaction
@@ -104,8 +104,8 @@ event RemoveInteraction(interaction RemoveMe)			// Removes a Interaction
 
 	Log("Could not remove interaction ["$RemoveMe$"] (Not Found)", 'IMaster');
 
-} // RemoveInteraction				
-  	
+} // RemoveInteraction
+
 // ====================================================================
 // SetFocusTo - This function will cause a window to adjust it's position
 // in it's array so that it processes input first and displays last.
@@ -116,19 +116,19 @@ event SetFocusTo(Interaction Inter, optional Player ViewportOwner)
 	local array<Interaction> InteractionArray;
 	local Interaction temp;
 	local int i,iIndex;
-	
-	
+
+
 	if (ViewportOwner != none)
 		InteractionArray = ViewportOwner.LocalInteractions;
 	else
 		InteractionArray = GlobalInteractions;
-		
+
 	if (InteractionArray.Length == 0)
 	{
 		Log("Attempt to SetFocus on an empty Array.",'IMaster');
 		return;
 	}
-	
+
 	// Search for the Interaction
 
 	iIndex = -1;
@@ -136,13 +136,13 @@ event SetFocusTo(Interaction Inter, optional Player ViewportOwner)
 	{
 		if (InteractionArray[i] == Inter)
 		{
-			iIndex = i; 
+			iIndex = i;
 			break;
 		}
 	}
 
 	// Was it found?
-	
+
 	if (iIndex < 0)
 	{
 		log("Interaction "$Inter$" is not in "$ViewportOwner$".",'IMaster');
@@ -150,39 +150,39 @@ event SetFocusTo(Interaction Inter, optional Player ViewportOwner)
 	}
 	else if (iIndex == 0)
 		return;					// Already has focus
-	
 
-	// Move it to the top.		
-		
+
+	// Move it to the top.
+
 	temp = InteractionArray[iIndex];
 	for (i = 0; i < iIndex; i++)
 		InteractionArray[i + 1] = InteractionArray[i];
-		
+
 	InteractionArray[0] = temp;
 	InteractionArray[0].bActive = true;		// Give it Input
-	InteractionArray[0].bVisible = true;	// Make it visible	
+	InteractionArray[0].bVisible = true;	// Make it visible
 
-} // SetFocusTo				
-	
+} // SetFocusTo
+
 // ====================================================================
 // Input Functions
 //
-// The Process functions are here to limit the # of switches from C++ to Script. 
+// The Process functions are here to limit the # of switches from C++ to Script.
 // ====================================================================
-		
+
 event bool Process_KeyType(array<Interaction> InteractionArray, out EInputKey Key) // Process a single key press
 {
 	local int Index;
-	
+
 	// Chain through the Interactions
-	
-	for (Index = 0; Index < InteractionArray.Length; Index++) 
+
+	for (Index = 0; Index < InteractionArray.Length; Index++)
 	{
 		// Give each Interaction the chance to process the key event
 
-		if ((InteractionArray[Index].bActive) && (InteractionArray[Index].KeyType(key)))	
+		if ((InteractionArray[Index].bActive) && (InteractionArray[Index].KeyType(key)))
 			return true;				// and break the chain if processed
-	
+
 	}
 	return false;	// Keep processing
 
@@ -194,7 +194,7 @@ event bool Process_KeyEvent(array<Interaction> InteractionArray,
 	local int Index;
 
 	// Chain through the Interactions
-	
+
 	for (Index = 0; Index < InteractionArray.Length; Index++)
 	{
 		// Give each Interaction the chance to process the key event
@@ -203,16 +203,16 @@ event bool Process_KeyEvent(array<Interaction> InteractionArray,
 		{
 			return true;						// and break the chain if processed
 		}
-	
+
 	}
-	return false; 
+	return false;
 
 } // Process_KeyEvent
 
 // ====================================================================
 // Render functions only occure on local interactions.  The process
 // the array in reverse order so that the objects that have focus
-// are drawn last. 
+// are drawn last.
 // ====================================================================
 
 event Process_PreRender(array<Interaction> InteractionArray, Canvas Canvas)
@@ -225,8 +225,8 @@ event Process_PreRender(array<Interaction> InteractionArray, Canvas Canvas)
 	{
 		if (InteractionArray[Index - 1].bVisible)
 			InteractionArray[Index - 1].PreRender(Canvas);
-	}			
-		
+	}
+
 } // Process_PreRender
 
 event Process_PostRender(array<Interaction> InteractionArray, Canvas Canvas)
@@ -239,7 +239,7 @@ event Process_PostRender(array<Interaction> InteractionArray, Canvas Canvas)
 	{
 		if (InteractionArray[Index - 1].bVisible)
 			InteractionArray[Index - 1].PostRender(Canvas);
-	}			
+	}
 
 } // Process_PostRender
 
@@ -250,18 +250,18 @@ event Process_PostRender(array<Interaction> InteractionArray, Canvas Canvas)
 event Process_Tick(array<Interaction> InteractionArray, float DeltaTime)
 {
 	local int Index;
-	
+
 	// Chain through the Interactions
 
-	for (Index = 0; Index < InteractionArray.Length; Index++) 
+	for (Index = 0; Index < InteractionArray.Length; Index++)
 	{
 		// Give each Interaction that requires it tick
 
 		if (InteractionArray[Index].bRequiresTick)
-			InteractionArray[Index].Tick(DeltaTime);	
+			InteractionArray[Index].Tick(DeltaTime);
 	}
 
-}	
+}
 
 // ====================================================================
 // Message - The IM is responsible for sending Message events to all
@@ -271,14 +271,14 @@ event Process_Tick(array<Interaction> InteractionArray, float DeltaTime)
 event Process_Message(coerce string Msg, float MsgLife, array<Interaction> InteractionArray)
 {
 	local int Index;
-	
+
 	// Chain through the Interactions
 
-	for (Index = 0; Index < InteractionArray.Length; Index++) 
+	for (Index = 0; Index < InteractionArray.Length; Index++)
 	{
 		// Give each Interaction the message
 
-		InteractionArray[Index].Message(Msg, MsgLife);	
+		InteractionArray[Index].Message(Msg, MsgLife);
 	}
 
 } // Message

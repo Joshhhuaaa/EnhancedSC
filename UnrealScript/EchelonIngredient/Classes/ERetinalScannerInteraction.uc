@@ -62,7 +62,7 @@ function SetInteractLocation(Pawn InteractPawn)
 	local vector MovePos, X,Y,Z;
 	local EPawn InteractEPawn;
 	local vector HitLocation, HitNormal;
-	
+
 	if (Scanner == none)
 		GetScanner();
 
@@ -98,7 +98,7 @@ function SetInteractLocation(Pawn InteractPawn)
 			MovePos = HitLocation;
 		}
 	}
-	
+
 	InteractEPawn.m_locationStart		= InteractEPawn.Location;
 	InteractEPawn.m_orientationStart	= InteractEPawn.Rotation;
 	InteractEPawn.m_locationEnd			= MovePos;

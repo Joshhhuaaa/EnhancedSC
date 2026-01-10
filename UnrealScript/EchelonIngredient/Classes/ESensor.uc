@@ -4,8 +4,8 @@ class ESensor extends EGameplayObject
 
 struct DegRot
 {
-	var() int PitchDegreeModifier, 
-			  YawDegreeModifier, 
+	var() int PitchDegreeModifier,
+			  YawDegreeModifier,
 			  RollDegreeModifier;
 };
 
@@ -27,7 +27,7 @@ var()	bool	ShootUponDetection;		// FollowUponDetection must be true. True will d
 var()	float	ShootDetectionDelay;	// Number of seconds elapsing from the time the Target is detected to its shooting
 var(AI)	float	AlarmDetectionDelay;	// Number of seconds elapsing from the time the Target is detected before sending a message to group AI
 var()	float	BulletsPerMinute;		// Number of bullet per minutes
-var()	int		BulletDamage;			// Damage each bullet does 
+var()	int		BulletDamage;			// Damage each bullet does
 var()	int		DamageMinAmount;		// If bDamageable, the min amount of damage it takes to actually give damage
 
 // INTERNAL VARS.
@@ -54,7 +54,7 @@ struct DPInfo // detected pawn info
 var array<DPInfo> DetectedActors;		// Ignore ChangedActors
 
 // Audio
-var		Sound	Sound_Rot_Loop, 
+var		Sound	Sound_Rot_Loop,
 				Sound_Rot_End,
 				SoundAlert,
 				SoundFire,
@@ -126,14 +126,14 @@ function PostBeginPlay()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Check if rotation is within defined range
 //------------------------------------------------------------------------
 function bool IsWithinRotationRange(Rotator WantedRotation)
 {
     local rotator Delta, Range;
 	Delta = Normalize(WantedRotation - InitialRotation);
-    
+
 	Range = RealPatrolAngle / 2 * Rot(1,1,0);
 
 	//Log("Delta"@Delta@"-- Range"@Range@(Abs(Delta.Yaw) < Range.Yaw && Abs(Delta.Pitch) < Range.Pitch));
@@ -144,7 +144,7 @@ function bool IsWithinRotationRange(Rotator WantedRotation)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Prevent the camera from rotating more than its RotationVelocity per seconds
 //------------------------------------------------------------------------
 function AdjustTrajectory(float DeltaTime, Rotator WantedRotation, bool PlayScan)
@@ -152,7 +152,7 @@ function AdjustTrajectory(float DeltaTime, Rotator WantedRotation, bool PlayScan
 	local int Delta, y,p;
 	local int Ymin, Ymax, Pmin, Pmax;
 	local float distance;
-	
+
 	Delta = DeltaTime * RotationVelocity;
 
 	WantedRotation.Pitch= InterpolateRotatorValue(Delta, CurrentRotation.Pitch, WantedRotation.Pitch);
@@ -191,7 +191,7 @@ function AdjustTrajectory(float DeltaTime, Rotator WantedRotation, bool PlayScan
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		To be redefined in subclasses not using bones
 //------------------------------------------------------------------------
 event Vector GetSensorPosition()
@@ -208,7 +208,7 @@ function SetSensorRotation(Rotator NewRotation)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Takes a rotation, and makes it within or closer to valid range
 //------------------------------------------------------------------------
 function RotateIntoValidRange(float DeltaTime)
@@ -258,7 +258,7 @@ function RotateIntoValidRange(float DeltaTime)
 			aRotation.Yaw = High;
 		}
 	}
-	
+
 	// ResetPitch to make it go back gradually to initial position
 	aRotation.Pitch = InitialRotation.Pitch;
 
@@ -269,8 +269,8 @@ function RotateIntoValidRange(float DeltaTime)
 function SpawnShellCase();
 
 //---------------------------------------[ Alain Turcotte @ 6 avr. 2001 ]-
-// 
-// Description		
+//
+// Description
 //
 //------------------------------------------------------------------------
 function CheckLineTrace(float DeltaTime)
@@ -283,7 +283,7 @@ function CheckLineTrace(float DeltaTime)
 	local Rotator	projRot;
 	local vector	X, Y, Z;
 	local Pawn		Instigator;  // Joshua - Added for PlayerStats
-	
+
 	// Do nothing if can't pawn bullet
 	if (fBulletElapsedTime < (60.0f / BulletsPerMinute))
 		return;
@@ -330,7 +330,7 @@ function CheckLineTrace(float DeltaTime)
 				Instigator = EchelonGameInfo(Level.Game).pPlayer.ePawn;
 			else
 				Instigator = None;
-				
+
 			// momentum almost null to prevent flares and change object to be pushed ayway by turret firing
 			Other.TakeDamage(BulletDamage, Instigator, HitLocation, HitNormal, Normal(HitLocation - BonePos) /** 300.f*/, None, PillTag);
 		}
@@ -364,14 +364,14 @@ function SpawnWallHit(Actor HitActor, vector HitLocation, vector HitNormal, Mate
 		Spark				= spawn(class'EWallHit', self,, HitLocation + HitNormal, projRot);
 		Spark.HitMaterial	= HitMaterial;
 		Spark.HitActor		= HitActor;
-		Spark.SndBullet		= BulletSound;	
+		Spark.SndBullet		= BulletSound;
 		Spark.Emit();
 		Spark.Noise();
 	}
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Manage take damage
 //------------------------------------------------------------------------
 function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, vector HitNormal, Vector momentum, class<DamageType> damageType, optional int PillTag)
@@ -381,7 +381,7 @@ function TakeDamage(int Damage, Pawn instigatedBy, Vector hitlocation, vector Hi
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Add a found pawn to prevent stopping on him again.
 //------------------------------------------------------------------------
 function bool ProcessDetectedPawn()
@@ -512,7 +512,7 @@ state s_Alert
 		local vector hitl, hitn;
         local Vector	SpecificLocation;
         local Rotator	rSeekingDir;
-     
+
 		//Log("ESensor in s_Alert");
 
 		// Update time
@@ -578,7 +578,7 @@ state s_Alert
 					{
 						AddOneVoice();
 						EchelonGameInfo(Level.Game).pPlayer.EPawn.PlaySound(BodySound, SLOT_Voice);
-						
+
 						// Joshua - Add to the BodyFound stat when a body is detected by a camera
 						if (EPawn(Target) != None && !EAIController(EPawn(Target).Controller).bWasFound && !EAIController(EPawn(Target).Controller).bNotInStats)
 						{
@@ -591,7 +591,7 @@ state s_Alert
 				Alarm.EnableAlarm(Target, None);
 				bAlarmMsgSent = true;
 			}
-			
+
 			if (Target.bIsPawn && !Target.bIsPlayerPawn)
 			{
 				if (ProcessDetectedPawn())
@@ -652,7 +652,7 @@ state() s_Test
 state s_Deactivated
 {
 	Ignores TakeDamage;
-    
+
 	function BeginState()
 	{
 		StopFireSound();

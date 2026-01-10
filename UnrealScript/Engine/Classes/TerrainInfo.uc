@@ -68,7 +68,7 @@ struct DecoInfo
 	var vector	TempScale;
 	var color	Color;
 	var int		Distance;
-}; 
+};
 
 struct DecoSectorInfo
 {

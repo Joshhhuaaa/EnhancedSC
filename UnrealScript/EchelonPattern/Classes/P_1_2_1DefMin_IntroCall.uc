@@ -55,7 +55,7 @@ function InitPattern()
                 SoundVolume.m_eSoundSlot = SLOT_SFX;
         }
     }
-    
+
     if (!bInit)
     {
     bInit=TRUE;

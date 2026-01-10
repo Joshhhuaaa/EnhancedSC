@@ -3,10 +3,10 @@
 //=============================================================================
 class V5_1_2_PresidentialPalace extends EVariable;
 
-var int ArkObtained; 
-var int DarknessVault; 
-var int NikoDEAD; 
-var int NowSurrounded; 
+var int ArkObtained;
+var int DarknessVault;
+var int NikoDEAD;
+var int NowSurrounded;
 
 
 function PostBeginPlay()

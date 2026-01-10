@@ -1,4 +1,4 @@
-class EPorteBois2 extends EGameplayObject; 
+class EPorteBois2 extends EGameplayObject;
 
 defaultproperties
 {

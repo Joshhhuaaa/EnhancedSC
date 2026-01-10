@@ -32,13 +32,13 @@ function PostBeginPlay()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Treatment when a volume informs me its hit
 //------------------------------------------------------------------------
 function ProcessFlaskTrigger(Pawn EventInstigator);
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Calculate hit level in percent on whole object hit surface
 //------------------------------------------------------------------------
 function float GetHitLevel(vector hit_location)
@@ -124,11 +124,11 @@ auto state s_Normal
 
 		if (!Other.IsA('EVolumeTrigger'))
 			return;
-		
+
 		ProcessFlaskTrigger(EventInstigator);
 	}
 
-	function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum, 
+	function TakeDamage(int Damage, Pawn EventInstigator, vector HitLocation, vector HitNormal, vector Momentum,
 						 class<DamageType> DamageType, optional int PillTag)
 	{
 		local Rotator			LiquidRotation;
@@ -141,7 +141,7 @@ auto state s_Normal
 
 		// If damage comes from an explosion, destroy me!
 		// If damage comes from an Npc .. destroy me!
-		if ((DamageType == class'Crushed' || DamageType == class'EBurned') || 
+		if ((DamageType == class'Crushed' || DamageType == class'EBurned') ||
 			(DamageType == None && EventInstigator != None && !EventInstigator.Controller.bIsPlayer))
 		{
 			// set for damage call
@@ -162,7 +162,7 @@ auto state s_Normal
 				liquid_dir = Normal(HitNormal);
 				liquid_dir.Z = 0;
 				LiquidRotation = Rotator(liquid_dir);
-				
+
 				// Spawn spill
 				Spills.Length = Spills.Length + 1;
 				Spills[Spills.Length - 1].Spill = spawn(SpillEmitterClass, self,, HitLocation, LiquidRotation);
@@ -244,7 +244,7 @@ auto state s_Normal
 			{
 				Spills[i].IsDying = true;
 				Spills[i].Spill.GotoState('s_DyingSpill');
-				
+
 				//Log("Spill["$i$"] dying at level="$Spills[i].Level$" and liquid="$LiquidLevel);
 
 				break;

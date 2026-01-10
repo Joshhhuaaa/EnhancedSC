@@ -25,12 +25,12 @@ function bool IsAvailable()
     }
 
     // Find the main door interaction and checking if it's available
-    if (MyDoor.MyKnob != None && MyDoor.MyKnob.Interaction != None && 
+    if (MyDoor.MyKnob != None && MyDoor.MyKnob.Interaction != None &&
         EDoorInteraction(MyDoor.MyKnob.Interaction) != None)
     {
         return EDoorInteraction(MyDoor.MyKnob.Interaction).IsAvailable();
     }
-    
+
     return Super.IsAvailable();
 }
 
@@ -57,7 +57,7 @@ function InitInteract(Controller Instigator)
 		{
 			// Joshua - Disable re-drawing weapon after Open Door Stealth
 			//EPlayerController(Instigator).JumpLabel = 'BackToFirstPerson';
-			
+
 			if (LeftSideInteraction)
 				Instigator.GotoState('s_OpenDoor', 'HolsterThenLockedLt');
 			else
@@ -237,7 +237,7 @@ function SetInteractLocation(Pawn InteractPawn)
 	// switch Y angle
 	if (!LeftSideInteraction)
 		Y = -Y;
-	
+
 	MovePos	= Owner.Location;
 	if (InteractEPawn.bIsPlayerPawn)
 	{
@@ -262,7 +262,7 @@ function SetInteractLocation(Pawn InteractPawn)
 			MovePos = HitLocation;
 		}
 	}
-	
+
 	InteractEPawn.m_locationStart	= InteractEPawn.Location;
 	InteractEPawn.m_orientationStart= InteractEPawn.Rotation;
 	InteractEPawn.m_locationEnd		= MovePos;

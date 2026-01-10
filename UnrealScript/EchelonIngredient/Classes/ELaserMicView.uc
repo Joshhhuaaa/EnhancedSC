@@ -47,7 +47,7 @@ state s_Use
             DrawCrosshair(Canvas);
 
         if (Epc.bShowScope && Epc.bShowHUD) // Joshua - Show scope toggle
-            DrawBlackMask(Canvas);	
+            DrawBlackMask(Canvas);
 
 		Canvas.Style = ERenderStyle.STY_Normal;
 	}
@@ -62,11 +62,11 @@ function DrawCrosshair(ECanvas Canvas)
 	iRefX = 0;
 	iRefY = 0;
 	bDrawCorner = false;
-	
+
 	if (Locked())
 	{
 		color = EHC_ALPHA_RED;
-		bDrawCorner = true;		
+		bDrawCorner = true;
 	}
 	else
 		color = EHC_ALPHA_WHITE;
@@ -91,7 +91,7 @@ function DrawCrosshair(ECanvas Canvas)
 		// upper left corner
 		DrawLine(iRefX - 10, iRefY - 10, iRefX, iRefY - 9, EHC_ALPHA_RED, Canvas);
 		DrawLine(iRefX - 10, iRefY - 9, iRefX - 9, iRefY, EHC_ALPHA_RED, Canvas);
-				
+
 		// upper right corner
 		DrawLine(iRefX + 10 + CROSS_CENTER, iRefY - 10, iRefX + CROSS_CENTER, iRefY - 9, EHC_ALPHA_RED, Canvas);
 		DrawLine(iRefX + 10 + CROSS_CENTER, iRefY - 9, iRefX + 9 + CROSS_CENTER, iRefY, EHC_ALPHA_RED, Canvas);
@@ -102,7 +102,7 @@ function DrawCrosshair(ECanvas Canvas)
 
 		// bottom right corner
 		DrawLine(iRefX + 10 + CROSS_CENTER, iRefY + 10 + CROSS_CENTER, iRefX + CROSS_CENTER, iRefY + 9 + CROSS_CENTER, EHC_ALPHA_RED, Canvas);
-		DrawLine(iRefX + 10 + CROSS_CENTER, iRefY + 9 + CROSS_CENTER, iRefX + 9 + CROSS_CENTER, iRefY + CROSS_CENTER, EHC_ALPHA_RED, Canvas);		
+		DrawLine(iRefX + 10 + CROSS_CENTER, iRefY + 9 + CROSS_CENTER, iRefX + 9 + CROSS_CENTER, iRefY + CROSS_CENTER, EHC_ALPHA_RED, Canvas);
 	}
 }
 
@@ -119,7 +119,7 @@ function DrawTopBar(ECanvas Canvas)
                   1, EHC_BLACK, Canvas);
     DrawRectangle(SCREEN_X + SIDEBAR_WIDTH, TOP_SCREEN_Y + 1, SCREEN_END_X - SCREEN_X - SIDEBAR_WIDTH, TOP_SCREEN_Y + TOPBAR_HEIGHT - 1,
                   1, EHC_GREEN, Canvas);
-    DrawLine(SCREEN_X + SIDEBAR_WIDTH + 1, TOP_SCREEN_Y + 2, SCREEN_END_X - SCREEN_X - SIDEBAR_WIDTH - 1, TOP_SCREEN_Y + TOPBAR_HEIGHT - 2, 
+    DrawLine(SCREEN_X + SIDEBAR_WIDTH + 1, TOP_SCREEN_Y + 2, SCREEN_END_X - SCREEN_X - SIDEBAR_WIDTH - 1, TOP_SCREEN_Y + TOPBAR_HEIGHT - 2,
 			 EHC_ALPHA_GREEN, Canvas);
 
 	// Sound equalizer
@@ -132,7 +132,7 @@ function DrawTopBar(ECanvas Canvas)
 		value = 6.f * (1 - Abs((eqHalfRange - i) / eqHalfRange));
 		value -= 6.f * FRand();
 		value = Clamp(value, 0, 5.5);
-		
+
 		for (j = 0; j < 6; j++)
 		{
 			u = eqStart + i;
@@ -141,7 +141,7 @@ function DrawTopBar(ECanvas Canvas)
 
 			if (cValue < 0.2f || Value < j || !Locked())
 				c = EHC_ALPHA_BLACK;
-			else				
+			else
 				c = EHC_ALPHA_GREEN;
 
 			DrawLine(u, v, u + 4, v + 2, c, Canvas);
@@ -168,11 +168,11 @@ function DrawBottomBar(ECanvas Canvas)
                   1, EHC_BLACK, Canvas);
     DrawRectangle(SCREEN_X + SIDEBAR_WIDTH, SCREEN_END_Y - BOTTOM_SCREEN_Y - BOTTOMBAR_HEIGHT + 1, SCREEN_END_X - SCREEN_X - SIDEBAR_WIDTH, SCREEN_END_Y - BOTTOM_SCREEN_Y - 1,
                   1, EHC_GREEN, Canvas);
-    DrawLine(SCREEN_X + SIDEBAR_WIDTH + 1, SCREEN_END_Y - BOTTOM_SCREEN_Y - BOTTOMBAR_HEIGHT + 2, SCREEN_END_X - SCREEN_X - SIDEBAR_WIDTH - 1, SCREEN_END_Y - BOTTOM_SCREEN_Y - 2, 
+    DrawLine(SCREEN_X + SIDEBAR_WIDTH + 1, SCREEN_END_Y - BOTTOM_SCREEN_Y - BOTTOMBAR_HEIGHT + 2, SCREEN_END_X - SCREEN_X - SIDEBAR_WIDTH - 1, SCREEN_END_Y - BOTTOM_SCREEN_Y - 2,
 		     EHC_ALPHA_GREEN, Canvas);
 
     Canvas.Font = Font'EHUDFont';
-    Canvas.DrawColor = Black;	
+    Canvas.DrawColor = Black;
 
 	// ZOOM
     // Joshua - Zoom functionality
@@ -266,7 +266,7 @@ function DrawNoiseBars(ECanvas Canvas)
 
     // Hack for Defense Ministry
     // Joshua - This shifts the compass by 90 degrees so the East Wing of the map point towards East on the binoculars
-	if (left(GetCurrentMapName(), 3) == "1_2")
+	if (Left(GetCurrentMapName(), 3) == "1_2")
 		pRotation += 0.25;
 	if (pRotation >= 1.0)
 		pRotation -= 1.0;
@@ -329,7 +329,7 @@ function DrawNoiseBars(ECanvas Canvas)
     }
 
     // Draw Compass Coordinates //
-    Canvas.DrawColor = Green;	
+    Canvas.DrawColor = Green;
     Canvas.Font = Font'EHUDFont';
 
     Canvas.SetPos(SCREEN_HALF_X - rPos, yPos - 16);
@@ -349,12 +349,12 @@ function DrawNoiseBars(ECanvas Canvas)
     Canvas.DrawText(".");
 
     // Draw noise bars //
-    DrawNoiseBar(SCREEN_X + SIDEBAR_WIDTH               , yPos - 4, 
-                 SCREEN_END_X - SCREEN_X - SIDEBAR_WIDTH, yPos, 
+    DrawNoiseBar(SCREEN_X + SIDEBAR_WIDTH               , yPos - 4,
+                 SCREEN_END_X - SCREEN_X - SIDEBAR_WIDTH, yPos,
                  rPos % 126, Canvas);
-    DrawNoiseBar(SCREEN_X + SIDEBAR_WIDTH               , yPos + 2, 
-                 SCREEN_END_X - SCREEN_X - SIDEBAR_WIDTH, yPos + 6, 
-                 -rPos % 126, Canvas);    
+    DrawNoiseBar(SCREEN_X + SIDEBAR_WIDTH               , yPos + 2,
+                 SCREEN_END_X - SCREEN_X - SIDEBAR_WIDTH, yPos + 6,
+                 -rPos % 126, Canvas);
 }
 
 function DrawNoiseBar(int AX, int AY, int BX, int BY, int OffsetX, ECanvas Canvas)
@@ -362,7 +362,7 @@ function DrawNoiseBar(int AX, int AY, int BX, int BY, int OffsetX, ECanvas Canva
     Canvas.DrawColor = White;
 
     Canvas.SetPos(AX, AY);
-    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_anim_border, 630, abs(BY - AY), OffsetX, 0, 630, 4); 
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_anim_border, 630, abs(BY - AY), OffsetX, 0, 630, 4);
 }
 
 function DrawBlackMask(ECanvas Canvas)

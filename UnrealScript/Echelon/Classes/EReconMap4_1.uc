@@ -2,23 +2,23 @@ class EReconMap4_1 extends ERecon;
 
 function InitRecon()
 {
-	
+
     ReconType        = 2;
 	ReconName        = "ReconNameMapChine";
 	ReconPicName     = Texture'HUD.RECON.rc_4_1map';
 	ReconPreviewText = "ReconPTMapChine";
 	ReconText        = "";
-	
+
 	NbrOfCoord = 7;
-		
+
 	// Add manualy because of defined structure
 	ReconDynMapArray.Length = ReconDynMapArray.Length + NbrOfCoord;
-		
+
 	// Map COORDinates for Chinese embassy MAP
 	ReconDynMapArray[0].x = 213;
 	ReconDynMapArray[0].y = 209;
 	ReconDynMapArray[0].RoomDesc = "ReconMapChineRoom1";
-		
+
 	ReconDynMapArray[1].x = 255;
 	ReconDynMapArray[1].y = 194;
 	ReconDynMapArray[1].RoomDesc = "ReconMapChineRoom2";

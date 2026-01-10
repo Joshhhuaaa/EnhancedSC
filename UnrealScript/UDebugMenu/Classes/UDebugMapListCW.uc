@@ -16,7 +16,7 @@ function Created()
 	WinHeight = Min(210, Root.WinHeight - 50);
 
 	Super.Created();
-	
+
 	MapList = UDebugMapListBox(CreateWindow(class'UDebugMapListBox', 0, 0, 100, 100, Self));
 	LoadMapList();
 
@@ -39,7 +39,7 @@ function Created()
 		index = GameCombo.List.FindItemIndex(LastGameType);
 		GameCombo.SetSelectedIndex(Index);
 	}
-	else	
+	else
 		GameCombo.SetSelectedIndex(0);
 
 	NetworkCombo   = UWindowComboControl(CreateWindow(class'UWindowComboControl', 5, WinHeight - 20, WinWidth - 130,16));
@@ -62,7 +62,7 @@ function Paint(Canvas C, float X, float Y)
 	local Texture T;
 
 	Super.Paint(C, X, Y);
-	
+
 	T = GetLookAndFeelTexture();
 	DrawUpBevel(C, 0, WinHeight - 46, WinWidth, 46, T);
 }
@@ -84,7 +84,7 @@ function Resized()
 	NetworkCombo.WinTop = WinHeight - 21;
 	NetworkCombo.WinWidth = WinWidth - 130;
 	NetworkCombo.EditBoxWidth = GameCombo.WinWidth - 75;
-	
+
 }
 
 function LoadMapList()
@@ -129,7 +129,7 @@ function Notify(UWindowDialogControl C, byte E)
 	}
 }
 
-function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key) 
+function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
 {
 	if (Msg == WM_KeyDown)
 	{
@@ -137,10 +137,10 @@ function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
 			MapList.VertSB.Scroll(-1);
 		else if (Key == 237)
 			MapList.VertSB.Scroll(+1);
-			
+
 		return;
 	}
-		
+
 	Super.WindowEvent(MSg,C,X,Y,Key);
-}	
-	
+}
+

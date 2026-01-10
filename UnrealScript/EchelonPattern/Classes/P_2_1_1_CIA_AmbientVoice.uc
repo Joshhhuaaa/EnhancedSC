@@ -85,7 +85,7 @@ Pos3:
     SetFlags(Position3,TRUE);
 Start:
     Log("");
-    JumpRandom('Occurrence1', 0.34, 'Occurrence2', 0.67, 'Occurrence3', 1.00, , , ,); 
+    JumpRandom('Occurrence1', 0.34, 'Occurrence2', 0.67, 'Occurrence3', 1.00, , , ,);
     End();
 Occurrence1:
     Log("");

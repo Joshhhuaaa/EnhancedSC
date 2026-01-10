@@ -57,7 +57,7 @@ function SetInteractLocation(Pawn InteractPawn)
 	if (InteractEPawn != none)
 	{
 		MoveRot.Yaw	= Owner.Rotation.Yaw;
-		
+
 		InteractEPawn.m_locationStart		= InteractEPawn.Location;
 		InteractEPawn.m_orientationStart	= InteractEPawn.Rotation;
 		InteractEPawn.m_locationEnd			= Owner.ToWorld(vect(-135.0,-15,89.0));

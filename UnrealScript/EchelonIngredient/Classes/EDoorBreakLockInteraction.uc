@@ -16,21 +16,21 @@ function bool IsAvailable()
     {
         return true;
     }
-    
+
     return false;
 }
 
 function InitInteract(Controller Instigator)
 {
     local EDisposablePick PickItem;
-    
+
     // Set controller's interaction
     Instigator.Interaction = self;
     ActiveController = Instigator;
 
     // Get door opening direction
     LeftSideInteraction = MyDoor.GetPawnSide(EPawn(Instigator.Pawn)) == ESide_Front;
-          
+
     if (Instigator.bIsPlayer)
     {
         EPlayerController(Instigator).GotoState('s_PlayerWalking');
@@ -41,7 +41,7 @@ function InitInteract(Controller Instigator)
             // Unequip current weapon if any
 			if (EPawn(Instigator.Pawn).WeaponStance > 0)
 	            EPawn(Instigator.Pawn).Transition_WeaponAway();
-                
+
             PickItem.GotoState('s_Selected', 'AutoUse');
         }
     }
@@ -62,7 +62,7 @@ function SetInteractLocation(Pawn InteractPawn)
     // switch Y angle
     if (!LeftSideInteraction)
         Y = -Y;
-    
+
     MovePos = Owner.Location;
     if (InteractEPawn.bIsPlayerPawn)
     {
@@ -86,7 +86,7 @@ function SetInteractLocation(Pawn InteractPawn)
             MovePos = HitLocation;
         }
     }
-    
+
     InteractEPawn.m_locationStart = InteractEPawn.Location;
     InteractEPawn.m_orientationStart = InteractEPawn.Rotation;
     InteractEPawn.m_locationEnd = MovePos;

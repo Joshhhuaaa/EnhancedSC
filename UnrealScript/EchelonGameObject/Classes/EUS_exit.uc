@@ -1,4 +1,4 @@
-class EUS_exit extends EGameplayObjectLight; 
+class EUS_exit extends EGameplayObjectLight;
 
 defaultproperties
 {

@@ -12,14 +12,14 @@ function string GetDescription()
 function InitInteract(Controller Instigator)
 {
     local EOpticCable OpticCableItem;
-    
+
     // Set controller's interaction
     Instigator.Interaction = self;
     ActiveController = Instigator;
 
     // Get door opening direction
     LeftSideInteraction = MyDoor.GetPawnSide(EPawn(Instigator.Pawn)) == ESide_Front; // PT did not use this?
-          
+
     if (Instigator.bIsPlayer)
     {
         //EPlayerController(Instigator).GotoState('s_PlayerWalking');
@@ -30,7 +30,7 @@ function InitInteract(Controller Instigator)
             // Unequip current weapon if any
             if (EPawn(Instigator.Pawn).WeaponStance > 0)
                 EPawn(Instigator.Pawn).Transition_WeaponAway();
-                
+
             OpticCableItem.Door = MyDoor;
             OpticCableItem.GotoState('s_InteractSelected','AutoUse');
         }
@@ -57,7 +57,7 @@ function SetInteractLocation(Pawn InteractPawn)
     // switch Y angle
     if (!LeftSideInteraction)
         Y = -Y;
-    
+
     MovePos = Owner.Location;
     if (InteractEPawn.bIsPlayerPawn)
     {
@@ -81,7 +81,7 @@ function SetInteractLocation(Pawn InteractPawn)
             MovePos = HitLocation;
         }
     }
-    
+
     InteractEPawn.m_locationStart = InteractEPawn.Location;
     InteractEPawn.m_orientationStart = InteractEPawn.Rotation;
     InteractEPawn.m_locationEnd = MovePos;

@@ -26,7 +26,7 @@ state s_Flying
 	function Touch(Actor Other)
 	{
 		local EPawn				P;
-		local EVolume			Volume;	
+		local EVolume			Volume;
 		local EVolumeTrigger	VolumeTrigger;
 
 		// While EVolumeTrigger is not a volume
@@ -102,7 +102,7 @@ state s_Flying
 function Select(EInventory Inv)
 {
 	Super.Select(Inv);
-	
+
 	// Joshua - Don't play sound during silent restore (sorting)
 	if (!Inv.bSilentRestore)
 		PlaySound(Sound'Interface.Play_FisherEquipSpMunition', SLOT_Interface);

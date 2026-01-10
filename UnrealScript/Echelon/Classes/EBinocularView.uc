@@ -67,7 +67,7 @@ function DrawNoiseBars(ECanvas Canvas)
 
     // Hack for Defense Ministry
     // Joshua - This shifts the compass by 90 degrees so the East Wing of the map point towards East on the binoculars
-	if (left(GetCurrentMapName(), 3) == "1_2")
+	if (Left(GetCurrentMapName(), 3) == "1_2")
 		pRotation += 0.25;
 	if (pRotation >= 1.0)
 		pRotation -= 1.0;
@@ -251,7 +251,7 @@ function DrawDistanceMeter(ECanvas Canvas)
 	fDistDistance = VSize(Epc.m_targetLocation - Epc.Location);
     strFormattedDistance = string (fDistDistance / 100.0);
     iDecimal = InStr(strFormattedDistance, ".");
-    strFormattedDistance = left(strFormattedDistance, iDecimal + 3);
+    strFormattedDistance = Left(strFormattedDistance, iDecimal + 3);
     strFormattedDistance = strFormattedDistance $ "M";
 
     // If trace didnt return anything, just draw a dash.

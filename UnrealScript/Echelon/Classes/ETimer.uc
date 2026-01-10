@@ -95,10 +95,10 @@ function PostRender(ECanvas Canvas)
     local string szTimer;
     local float xLen, yLen;
 
-	
+
     // Set Timer pos //
     xPos = eGame.HUD_OFFSET_X + TIMER_X_OFFSET;
-	yPos = eGame.HUD_OFFSET_Y + TIMER_Y_OFFSET; 		
+	yPos = eGame.HUD_OFFSET_Y + TIMER_Y_OFFSET;
 
     DrawBox(Canvas, xPos, yPos, boxWidth, TIMER_HEIGHT);
 
@@ -122,7 +122,7 @@ function PostRender(ECanvas Canvas)
             szTimer = szTimer$"0"$min;
         else
             szTimer = szTimer$min;
-    
+
         if (sec < 10)
             szTimer = szTimer$":0"$sec;
         else

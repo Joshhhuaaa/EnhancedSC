@@ -1,4 +1,4 @@
-class ELgtburmalamp extends EGameplayObjectLight; 
+class ELgtburmalamp extends EGameplayObjectLight;
 
 defaultproperties
 {

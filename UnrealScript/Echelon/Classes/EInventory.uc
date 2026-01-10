@@ -39,17 +39,17 @@ native(1215) final function EInventoryItem GetItemByClass(Name ClassName);
 native(1216) final function bool Possesses(EInventoryItem Item);
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Call this instead of calling GetSelected == item
 //------------------------------------------------------------------------
 event bool IsSelected(EInventoryItem Item)
 {
-	return Item == BackPackPrimSelectedItem || 
+	return Item == BackPackPrimSelectedItem ||
 		   Item == BackPackSecSelectedItem;
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Use last selected item
 //------------------------------------------------------------------------
 function SetPreviousConfig()
@@ -72,10 +72,10 @@ function SetPreviousConfig()
 			UnEquipItem(GetSelectedItem());
 		}
 	}
-}	
+}
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Select the item in the right package
 //------------------------------------------------------------------------
 event SetSelectedItem(EInventoryItem Item)
@@ -121,13 +121,13 @@ event SetSelectedItem(EInventoryItem Item)
 			UnEquipItem(BackPackSecSelectedItem, false, Item);
 
 		BackPackSecSelectedItem = Item;
-		
+
 		Item.Select(self);
 	}
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Get the current selected item (hie never used i think)
 //------------------------------------------------------------------------
 function EInventoryItem GetSelectedItem(optional int hie)
@@ -139,12 +139,12 @@ function EInventoryItem GetSelectedItem(optional int hie)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Unequip the current selected item
 //------------------------------------------------------------------------
 event UnEquipItem(EInventoryItem Item, optional bool bNoUpdate, optional EInventoryItem NewItem)
 {
-	if (Item == None) 
+	if (Item == None)
 		return;
 
 	//Log("UnEquipItem"@Item@bNoUpdate@NewItem);
@@ -180,7 +180,7 @@ event UnEquipItem(EInventoryItem Item, optional bool bNoUpdate, optional EInvent
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Viva le dynamisme et la flexibilite
 //------------------------------------------------------------------------
 event int GetNumberOfCategories()
@@ -188,7 +188,7 @@ event int GetNumberOfCategories()
 	return NumberOfCat;
 }
 event string GetPackageName()
-{	
+{
 	return Localize("HUD", "BACKPACK", "Localization\\HUD");
 }
 event string GetCategoryName(eInvCategory Category)
@@ -202,19 +202,19 @@ event string GetCategoryName(eInvCategory Category)
 }
 
 //---------------------------------------[Joshua - 4 Dec 2025]------------
-// 
+//
 // Description
 //		Returns the sort priority for an inventory item.
 //		Lower values appear at the bottom of the inventory list.
-// 
+//
 //------------------------------------------------------------------------
 function int GetInventorySortPriority(EInventoryItem Item)
 {
 	local Name ClassName;
-	
+
 	if (Item == None)
 		return 999;
-	
+
 	ClassName = Item.class.Name;
 
 	// CAT_MAINGUN
@@ -246,11 +246,11 @@ function int GetInventorySortPriority(EInventoryItem Item)
 }
 
 //---------------------------------------[Joshua - 4 Dec 2025]------------
-// 
+//
 // Description
 //		Sorts a single category of the inventory so items appear in
 //		a consistent order.
-// 
+//
 //------------------------------------------------------------------------
 function SortCategory(eInvCategory Category)
 {
@@ -261,7 +261,7 @@ function SortCategory(eInvCategory Category)
 	local bool bSwapped;
 
 	NumItems = GetNbItemInCategory(Category);
-	
+
 	if (NumItems <= 1)
 		return;
 
@@ -306,10 +306,10 @@ function SortCategory(eInvCategory Category)
 }
 
 //---------------------------------------[Joshua - 4 Dec 2025]------------
-// 
+//
 // Description
 //		Sorts all categories in the inventory.
-// 
+//
 //------------------------------------------------------------------------
 function SortInventory()
 {

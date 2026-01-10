@@ -18,7 +18,7 @@ function PostBeginPlay()
 		SetStaticMesh(default.StaticMesh);
 	else
 		SetStaticMesh(StaticMesh'EMeshIngredient.weapon.ConcussionGrenade');
-    
+
 	HUDTex       = EchelonLevelInfo(Level).TICON.qi_ic_concussiongrenade;
     InventoryTex = EchelonLevelInfo(Level).TICON.inv_ic_concussiongrenade;
     ItemName     = "ConcussionGrenade";
@@ -28,7 +28,7 @@ function PostBeginPlay()
 }
 
 //---------------------------------------[David Kalina - 26 Nov 2001]-----
-// 
+//
 // Description
 //		Thrower wants to throw us at specified velocity.
 //
@@ -52,7 +52,7 @@ state s_Flying
 		bPickable = false;
 		SetTimer(ExplodeTimer, false);
 	}
-	
+
 	function Timer()
 	{
 		local Actor Victims;

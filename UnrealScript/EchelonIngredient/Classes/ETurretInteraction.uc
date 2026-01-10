@@ -27,7 +27,7 @@ function InitInteract(Controller Instigator)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Npc only
 //------------------------------------------------------------------------
 function Interact(Controller Instigator)
@@ -47,19 +47,19 @@ function SetInteractLocation(Pawn InteractPawn)
 {
 	local Vector X, Y, Z, MovePos;
 	local EPawn InteractEPawn;
-	
-	InteractEPawn = EPawn(InteractPawn);	
+
+	InteractEPawn = EPawn(InteractPawn);
 	if (InteractEPawn == None)
 		return;
 
 	// get MyKeyPad object rotation axes for positioning
 	GetAxes(Owner.Rotation, X, Y, Z);
-		
+
 	MovePos = Owner.Location;
 	MovePos += (1.9f * InteractEPawn.CollisionRadius) * X;
 	//MovePos += (0.75f * InteractEPawn.CollisionRadius) * Y;
 	MovePos.Z = InteractEPawn.Location.Z;
-	
+
 	InteractEPawn.m_locationStart	= InteractEPawn.Location;
 	InteractEPawn.m_orientationStart= InteractEPawn.Rotation;
 	InteractEPawn.m_locationEnd		= MovePos;

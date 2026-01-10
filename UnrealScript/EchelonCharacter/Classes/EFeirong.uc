@@ -1,5 +1,5 @@
 //===============================================================================
-//  [EFeirong] 
+//  [EFeirong]
 //===============================================================================
 
 class EFeirong extends EAINonHostile
@@ -84,13 +84,13 @@ function SwitchAnims()
 		{
 			// one handed weapon :
 			case 1:
-				switch (lmoveflag)		
+				switch (lmoveflag)
 				{
 					case MOVE_WalkRelaxed:
-					case MOVE_WalkNormal: 
+					case MOVE_WalkNormal:
 					case MOVE_WalkAlert:
 					case MOVE_Search:
-					case MOVE_Snipe: 
+					case MOVE_Snipe:
 						bNoBlending = true;
 						AWait							= 'FeirStNmNt0';
 						ABlendMovement.m_forward		= 'FeirStNmFd0';
@@ -116,19 +116,19 @@ event float GetMoveSpeed(MoveFlags MoveFlags)
 			case MOVE_WalkAlert:
 				return 85.0f;
 				break;
-				
+
 			case MOVE_JogAlert:
 				return 350.0f;
 				break;
-				
+
 			case MOVE_JogNoWeapon:
 				return 350.0f;
 				break;
-				
+
 			case MOVE_CrouchWalk:
 				return 85.0f;
 				break;
-				
+
 			case MOVE_CrouchJog:
 				return 200.0f;
 				break;

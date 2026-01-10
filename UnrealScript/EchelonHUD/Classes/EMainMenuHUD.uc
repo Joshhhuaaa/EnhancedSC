@@ -7,7 +7,7 @@
 class EMainMenuHUD extends EMenuHUD native;
 
 /*-----------------------------------------------------------------------------
-                        M E M B E R   V A R I A B L E S 
+                        M E M B E R   V A R I A B L E S
 -----------------------------------------------------------------------------*/
 var bool bEdit;
 
@@ -26,7 +26,7 @@ var int  iLoadPredBadSkip;
 var int PlayerMenuDepth;
 var int topPlayerMenuDepth;
 var bool bStartTimer;
-var float fDisplayTime;		
+var float fDisplayTime;
 
 
 // SAVEGAME MENU
@@ -68,10 +68,10 @@ var bool bIsOnLevel;
 var bool bLoadingGame;
 var bool bLoadingGameBad;
 var bool bLoadingGameSkipFrame;
-var int iStartPos; 
+var int iStartPos;
 var int iOldStartPos;
 var int iEndPos;
-var int iOldEndPos;	
+var int iOldEndPos;
 var bool bScrollUp;
 var bool bScrollDown;
 var string SelectedDownloadMap;
@@ -105,7 +105,7 @@ var float DemoTimer;
 var name prevState;
 
 // EXTRA FEATURES
-var int iMenuDepth;       
+var int iMenuDepth;
 var int iMenuSceneDepth;
 var int iMenuRdmFactDepth;
 var int iMenuUbiGameDepth;
@@ -116,10 +116,10 @@ var string tExBhdTheScene[9];
 var string tExUbiGame[4];
 var string tExSamFisher[2];
 
-var bool bStopBhdTheSceneVideo;			
+var bool bStopBhdTheSceneVideo;
 var bool bBhdTheSceneVideoPlaying;
 
-var bool bStopUbiGameVideo;		
+var bool bStopUbiGameVideo;
 var bool bUbiGameVideoPlaying;
 
 var bool bStopSamFisherVideo;
@@ -152,7 +152,7 @@ enum eMapExistCode
 {
 	eMAP_NO,
 	eMAP_YES,
-	eMAP_YES_DOWNLOAD	
+	eMAP_YES_DOWNLOAD
 };
 
 
@@ -263,7 +263,7 @@ native(1739) final function bool KeyEvent_s_RandomFact(string Key, EInputAction 
 function PostBeginPlay()
 {
     Super.PostBeginPlay();
-    
+
     if (EchelonMainHUD(owner) != None)
         myEchelonMainHUDOwner = EchelonMainHUD(owner);
 
@@ -303,7 +303,7 @@ event OwnerDrawHUD(bool bDraw)
 }
 
 event StopRender(bool bSet)
-{	
+{
 	Epc.bStopRenderWorld = bSet;
 }
 
@@ -340,9 +340,9 @@ state s_MainMenu
 {
 	function PostRender(ECanvas Canvas) {PostRender_s_MainMenu(Canvas);}
 
-    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_MainMenu(Key, Action, Delta);}    
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_MainMenu(Key, Action, Delta);}
 
-    function BeginState() {BeginState_s_MainMenu();}	
+    function BeginState() {BeginState_s_MainMenu();}
 
 	function EndState() {EndState_s_MainMenu();}
 }
@@ -408,7 +408,7 @@ state s_SavePlayerInfo
 state s_Download
 {
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_Download(Key, Action, Delta);}
-    
+
     function PostRender(ECanvas Canvas) {PostRender_s_Download(Canvas);}
 
     function BeginState() {BeginState_s_Download();}
@@ -421,7 +421,7 @@ state s_Credit
 {
 	function PostRender(ECanvas Canvas) {PostRender_s_Credit(Canvas);}
 
-    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_Credit(Key, Action, Delta);}       
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_Credit(Key, Action, Delta);}
 
     function BeginState() {BeginState_s_Credit();}
 }
@@ -432,13 +432,13 @@ state s_Credit
 state s_PlayerMenu
 {
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_PlayerMenu(Key, Action, Delta);}
-    
+
     function PostRender(ECanvas Canvas) {PostRender_s_PlayerMenu(Canvas);}
 
     function BeginState() {BeginState_s_PlayerMenu();}
 
-	function Tick(float DeltaTime) 
-	{ 
+	function Tick(float DeltaTime)
+	{
 		Global.Tick(DeltaTime);
 		Tick_s_PlayerMenu(DeltaTime);
 	}
@@ -455,7 +455,7 @@ state s_PlayerSettings
 
     function BeginState() {BeginState_s_PlayerSettings();}
 
-	function EndState() {EndState_s_PlayerSettings();}	
+	function EndState() {EndState_s_PlayerSettings();}
 }
 
 /*=============================================================================
@@ -480,7 +480,7 @@ state s_Controller
  State :        s_SaveGame
 =============================================================================*/
 state s_SaveGame
-{	
+{
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_SaveGame(Key, Action, Delta);}
 
     function PostRender(ECanvas Canvas) {PostRender_s_SaveGame(Canvas);}
@@ -500,7 +500,7 @@ state s_SaveGame
  State :        s_LoadGame
 =============================================================================*/
 state s_LoadGame
-{		
+{
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_LoadGame(Key, Action, Delta);}
 
     function PostRender(ECanvas Canvas) {PostRender_s_LoadGame(Canvas);}
@@ -525,8 +525,8 @@ state s_SettingsMenu
 
     function BeginState() {BeginState_s_SettingsMenu();}
 
-	function Tick(float DeltaTime) 
-	{ 
+	function Tick(float DeltaTime)
+	{
 		Global.Tick(DeltaTime);
 		Tick_s_SettingsMenu(DeltaTime);
 	}
@@ -544,7 +544,7 @@ state s_SetHUDPosition
     function BeginState() {BeginState_s_SetHUDPosition();}
 
     function EndState() {EndState_s_SetHUDPosition();}
-    
+
 }
 
 /*=============================================================================
@@ -567,7 +567,7 @@ state s_SetBrightness
 state s_PlayDemo
 {
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_PlayDemo(Key, Action, Delta);}
-    
+
     function PostRender(ECanvas Canvas) {PostRender_s_PlayDemo(Canvas);}
 
     function BeginState() {BeginState_s_PlayDemo();}
@@ -579,7 +579,7 @@ state s_PlayDemo
 state s_Inactivity
 {
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_Inactivity(Key, Action, Delta);}
-    
+
     function PostRender(ECanvas Canvas) {PostRender_s_Inactivity(Canvas);}
 
     function BeginState() {BeginState_s_Inactivity();}
@@ -591,7 +591,7 @@ state s_Inactivity
 state s_BehindTheScene
 {
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_BehindTheScene(Key, Action, Delta);}
-    
+
     function PostRender(ECanvas Canvas) {PostRender_s_BehindTheScene(Canvas);}
 
     function BeginState() {BeginState_s_BehindTheScene();}
@@ -604,7 +604,7 @@ state s_BehindTheScene
 state s_UbiGame
 {
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_UbiGame(Key, Action, Delta);}
-    
+
     function PostRender(ECanvas Canvas) {PostRender_s_UbiGame(Canvas);}
 
     function BeginState() {BeginState_s_UbiGame();}
@@ -616,7 +616,7 @@ state s_UbiGame
 state s_RandomFact
 {
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_RandomFact(Key, Action, Delta);}
-    
+
     function PostRender(ECanvas Canvas) {PostRender_s_RandomFact(Canvas);}
 
     function BeginState() {BeginState_s_RandomFact();}

@@ -27,12 +27,12 @@ function UWindowPulldownMenuItem AddMenuItem(string C, Texture G)
 	local UWindowPulldownMenuItem I;
 
 	I = UWindowPulldownMenuItem(Items.Append(class'UWindowPulldownMenuItem'));
-	
+
 	I.Owner = Self;
 	I.SetCaption(C);
 	I.Graphic = G;
-	I.Tag = Items.Count(); 
-	
+	I.Tag = Items.Count();
+
 	return I;
 }
 
@@ -72,17 +72,17 @@ function PerformSelect(UWindowPulldownMenuItem NewSelected)
 {
 	if (Selected != None && NewSelected != Selected) Selected.DeSelect();
 
-	if (NewSelected == None) 
+	if (NewSelected == None)
 	{
 		Selected = None;
 	}
 	else
-	{	
+	{
 		if (Selected != NewSelected && NewSelected.Caption != "-" && !NewSelected.bDisabled)
 			LookAndFeel.PlayMenuSound(Self, MS_MenuItem);
-						
+
 		Selected = NewSelected;
-		if (Selected != None) 
+		if (Selected != None)
 		{
 			Selected.Select();
 			Select(Selected);
@@ -133,8 +133,8 @@ function BeforePaint(Canvas C, float X, float Y)
 	local float W, H, MaxWidth;
 	local int Count;
 	local UWindowPulldownMenuItem I;
-	
-	
+
+
 	MaxWidth = 100;
 	Count = 0;
 
@@ -161,7 +161,7 @@ function BeforePaint(Canvas C, float X, float Y)
 	if (UWindowPulldownMenuItem(Owner) != None)
 	{
 		I = UWindowPulldownMenuItem(Owner);
-		
+
 		if (WinWidth + WinLeft > ParentWindow.WinWidth)
 			WinLeft = I.Owner.WinLeft + I.Owner.HBORDER - WinWidth;
 	}
@@ -173,7 +173,7 @@ function Paint(Canvas C, float X, float Y)
 	local UWindowPulldownMenuItem I;
 
 	DrawMenuBackground(C);
-	
+
 	Count = 0;
 
 	for (I = UWindowPulldownMenuItem(Items.Next);I != None; I = UWindowPulldownMenuItem(I.Next))
@@ -231,7 +231,7 @@ function FocusOtherWindow(UWindowWindow W)
 {
 	Super.FocusOtherWindow(W);
 
-	if (Selected != None) 
+	if (Selected != None)
 		if (W == Selected.SubMenu) return;
 
 	if (UWindowPulldownMenuItem(Owner) != None)
@@ -260,7 +260,7 @@ function KeyDown(int Key, float X, float Y)
 
 		if (I == None)
 			I = UWindowPulldownMenuItem(Items.Last);
-		else 
+		else
 			if (I.Caption == "-")
 				I = UWindowPulldownMenuItem(I.Prev);
 
@@ -309,7 +309,7 @@ function KeyDown(int Key, float X, float Y)
 			Selected = None;
 			PerformSelect(I);
 			I.SubMenu.Selected = UWindowPulldownMenuItem(I.SubMenu.Items.Next);
-		} 
+		}
 		else
 		{
 			if (UWindowPulldownMenuItem(Owner) != None)
@@ -319,7 +319,7 @@ function KeyDown(int Key, float X, float Y)
 			}
 			if (UWindowMenuBarItem(Owner) != None)
 				UWindowMenuBarItem(Owner).Owner.KeyDown(Key, X, Y);
-		}	
+		}
 		break;
 	case 0x0D: // Enter
 		if (I.SubMenu != None)
@@ -335,19 +335,19 @@ function KeyDown(int Key, float X, float Y)
 			}
 		break;
 	default:
-	}		
+	}
 }
 
 function KeyUp(int Key, float X, float Y)
 {
 	local UWindowPulldownMenuItem I;
-		
+
 	if (Key >= 0x41 && Key <= 0x60)
-	{	
+	{
 		// Check for hotkeys in each menu item
 		for (I = UWindowPulldownMenuItem(Items.Next);I != None; I = UWindowPulldownMenuItem(I.Next))
 		{
-			if (Key == I.HotKey) 
+			if (Key == I.HotKey)
 			{
 				PerformSelect(I);
 				if (I != None && I.Caption != "-" && !I.bDisabled)
@@ -364,7 +364,7 @@ function MenuCmd(int Item)
 {
 	local int j;
 	local UWindowPulldownMenuItem I;
-		
+
 	for (I = UWindowPulldownMenuItem(Items.Next);I != None; I = UWindowPulldownMenuItem(I.Next))
 	{
 		if (j == Item)

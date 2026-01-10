@@ -51,7 +51,7 @@ state Pattern
 Begin:
 LongDan:
     Log("");
-    JumpRandom('talk1', 0.34, 'talk2', 0.67, 'talk3', 1.00, , , ,); 
+    JumpRandom('talk1', 0.34, 'talk2', 0.67, 'talk3', 1.00, , , ,);
     End();
 talk1:
     Log("");

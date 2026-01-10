@@ -3,12 +3,12 @@
 
 //=============================================================================
 class Console extends Interaction;
-	
+
 // BEGIN UBI MODIF
 #exec TEXTURE IMPORT NAME=ConsoleBK FILE=TEXTURES\Black.PCX
 #exec TEXTURE IMPORT NAME=ConsoleBdr FILE=TEXTURES\White.PCX
 // END UBI MODIF
-	
+
 // Constants.
 const MaxHistory = 16;		// # of command history to remember.
 
@@ -37,7 +37,7 @@ function Type()
 		GotoState('Typing');
 	}
 }
- 
+
 //-----------------------------------------------------------------------------
 // Message - By default, the console ignores all output.
 //-----------------------------------------------------------------------------
@@ -56,10 +56,10 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 		Type();
 		return true;
 	}
-	else 
+	else
 		return false;
 
-} 
+}
 
 //-----------------------------------------------------------------------------
 // State used while typing a command on the console.
@@ -80,12 +80,12 @@ state Typing
 			return true;
 		}
 	}
-	
+
 	function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 	{
 		local string Temp;
 		local int i;
-	
+
 		if (Key == IK_Escape)
 		{
 			if (TypedStr!="")
@@ -111,7 +111,7 @@ state Typing
 				// Initial backspace
 				if (Len(TypedStr) > 0)
 					TypedStr = Left(TypedStr, Len(TypedStr) - 1);
-				
+
 				bBackspaceHeld = true;
 				BackspaceTimer = 0.5; // Repeat delay
 				return true;
@@ -137,7 +137,7 @@ state Typing
 
 				History[HistoryTop] = TypedStr;
 				HistoryTop = (HistoryTop + 1) % MaxHistory;
-				
+
 				if ((HistoryBot == -1) || (HistoryBot == HistoryTop))
 					HistoryBot = (HistoryBot + 1) % MaxHistory;
 
@@ -146,16 +146,16 @@ state Typing
 				// Make a local copy of the string.
 				Temp = TypedStr;
 				TypedStr="";
-				
+
 				if (!ConsoleCommand(Temp))
 					Message(Localize("Errors","Exec","Core"), 6.0);
-					
+
 				Message("", 6.0);
 				GotoState('');
 			}
 			else
 				GotoState('');
-				
+
 			return true;
 		}
 		else if (Key == IK_Up)
@@ -170,7 +170,7 @@ state Typing
 					if (HistoryCur < 0)
 						HistoryCur = MaxHistory - 1;
 				}
-				
+
 				TypedStr = History[HistoryCur];
 			}
 			return True;
@@ -183,14 +183,14 @@ state Typing
 					HistoryCur = HistoryBot;
 				else
 					HistoryCur = (HistoryCur + 1) % MaxHistory;
-					
+
 				TypedStr = History[HistoryCur];
-			}			
+			}
  			return true;
 		}
 		return true;
 	}
-	
+
 	function PostRender(Canvas Canvas)
 	{
 			local float xl,yl;
@@ -206,7 +206,7 @@ state Typing
 			Canvas.SetDrawColor(0, 0, 0);
 			Canvas.DrawTile(Texture'ConsoleBK', 600, yl + 6, 0, 0, 32, 32);
 
-			Canvas.SetPos(10,436);	
+			Canvas.SetPos(10,436);
 			Canvas.SetDrawColor(0, 255, 0);
 			Canvas.DrawTile(Texture'ConsoleBdr', 600, 2, 0, 0, 32, 32);
 
@@ -215,7 +215,7 @@ state Typing
 			Canvas.SetDrawColor(128, 128, 128);
 			Canvas.DrawText(OutStr, false);
 	}
-	
+
 	function BeginState()
 	{
 		bTyping = true;
@@ -231,7 +231,7 @@ state Typing
 	{
 		bTyping = false;
 		bVisible = false;
-		
+
 		// Joshua - Add support to hold backspace key to continuously delete characters
         bBackspaceHeld = false;
         BackspaceTimer = 0;
@@ -249,7 +249,7 @@ state Typing
                 BackspaceTimer = BackspaceRepeatRate;
             }
         }
-        
+
         Super.Tick(DeltaTime);
 	}
 }

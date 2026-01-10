@@ -1,4 +1,4 @@
-class EGlassLamp_PAL extends EGameplayObjectLight; 
+class EGlassLamp_PAL extends EGameplayObjectLight;
 
 defaultproperties
 {

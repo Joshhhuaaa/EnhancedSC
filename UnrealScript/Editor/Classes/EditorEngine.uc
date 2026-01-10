@@ -66,14 +66,14 @@ var(RotationGrid) config rotator RotGridSize;
 var(Advanced) config bool UseSizingBox;
 var(Advanced) config bool UseAxisIndicator;
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * dchabot (23 nov. 2001)
 // ***********************************************************************************************
 var(Advanced) config bool UseTagDisplay;
 var(Advanced) config bool ShowNavMarkers;
 var actor m_currentActor;
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * dchabot (23 nov. 2001)
 // ***********************************************************************************************
 var(Advanced) config float FovAngleDegrees;

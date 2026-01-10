@@ -33,8 +33,8 @@ Layout procedure
 1.  Calculate minimum (desired) row height by asking
     controls
 2.  For each column, work out the minimum (desired) width for this column.
-    Then add these up and 
-	
+    Then add these up and
+
 	.
 2.	If this is less than WinHeight, space cells to fit.
 3.	If this is more than WinHeight, adjust parent
@@ -52,7 +52,7 @@ function PerformLayout()
 	for (R = UWindowLayoutRow(RowList.Next); R != None; R = UWindowLayoutRow(R.Next))
 		TotalHeight += R.CalcMinHeight();
 
-	
+
 		TotalWidth += R.CalcMinHeight();
 
 

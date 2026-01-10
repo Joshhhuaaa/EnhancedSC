@@ -22,7 +22,7 @@ function Tick(float DeltaTime)
 	if (bTurning && RotationRate.Pitch < MaxSpeed)
 	{
 		RotationRate += DeltaSpeed * Rot(1,0,0) * DeltaTime;
-		
+
 		Clamp(RotationRate.Pitch, 0, MaxSpeed);
 		Clamp(RotationRate.Yaw, 0, MaxSpeed);
 		Clamp(RotationRate.Roll, 0, MaxSpeed);
@@ -30,7 +30,7 @@ function Tick(float DeltaTime)
 	else if (!bTurning && RotationRate.Pitch > 0)
 	{
 		RotationRate -= DeltaSpeed * Rot(1,0,0) * DeltaTime;
-	
+
 		Clamp(RotationRate.Pitch, 0, MaxSpeed);
 		Clamp(RotationRate.Yaw, 0, MaxSpeed);
 		Clamp(RotationRate.Roll, 0, MaxSpeed);

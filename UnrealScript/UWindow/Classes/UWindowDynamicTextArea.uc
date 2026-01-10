@@ -66,7 +66,7 @@ function SetTextColor(Color C)
 
 function TextAreaClipText(Canvas C, float DrawX, float DrawY, coerce string S, optional bool bCheckHotkey)
 {
-	ClipText(C, DrawX, DrawY, S, bCheckHotkey);	
+	ClipText(C, DrawX, DrawY, S, bCheckHotkey);
 }
 
 function TextAreaTextSize(Canvas C, string Text, out float W, out float H)
@@ -204,16 +204,16 @@ function UWindowDynamicTextRow AddText(string NewLine)
 	local int i;
 
 	bDirty = true;
-	
+
 	i = InStr(NewLine, "\\n");
 	if (i != -1)
 	{
 		Temp = Mid(NewLine, i + 2);
-		NewLine = Left(NewLine, i);		
+		NewLine = Left(NewLine, i);
 	}
 	else
 		Temp = "";
-	
+
 
 	// reuse a row if possible
 	L = CheckMaxRows();

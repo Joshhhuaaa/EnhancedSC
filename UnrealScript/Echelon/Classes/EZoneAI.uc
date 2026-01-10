@@ -83,7 +83,7 @@ function ProcessZoning()
 		for (i = 0; i < DisableGroupTags.Length; i++)
 		{
 			if (NPC.m_GroupTag == DisableGroupTags[i])
-			{	
+			{
 				//check if the NPC is inert
 				if ((NPC.GetStateName() == 's_Unconscious') || (NPC.GetStateName() == 's_Dying'))
 				{
@@ -118,7 +118,7 @@ function ProcessZoning()
 		}
 
 	}
-	
+
 
 
 
@@ -170,8 +170,8 @@ function Touch(actor Other)
 			//if (FastTrace(Other.Location, Location))
 			//{
 //			log("ProcessZoning pour "@Other);
-				ProcessZoning();		
-			//}		
+				ProcessZoning();
+			//}
 	}
 }
 

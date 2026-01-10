@@ -96,7 +96,7 @@ RandomStart:
     ResetGoals(1);
     Goal_Set(1,GOAL_Action,9,,'SnowEvadeAAA','SnowEvadeAAA','TopMine1','CiggStNmEd0',FALSE,,MOVE_WalkNormal,,MOVE_WalkNormal);
     WaitForGoal(1,GOAL_Action,);
-    JumpRandom('RandomStart', 0.50, 'RandomEnd', 1.00, , , , , ,); 
+    JumpRandom('RandomStart', 0.50, 'RandomEnd', 1.00, , , , , ,);
 RandomEnd:
     Goal_Default(1,GOAL_Patrol,9,,,,'TopMine1',,FALSE,,MOVE_WalkNormal,,MOVE_WalkNormal);
     End();

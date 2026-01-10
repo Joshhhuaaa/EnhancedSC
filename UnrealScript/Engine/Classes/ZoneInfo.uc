@@ -1,7 +1,7 @@
 //=============================================================================
 // ZoneInfo, the built-in Unreal class for defining properties
 // of zones.  If you place one ZoneInfo actor in a
-// zone you have partioned, the ZoneInfo defines the 
+// zone you have partioned, the ZoneInfo defines the
 // properties of the zone.
 // This is a built-in Unreal class and it shouldn't be modified.
 //=============================================================================
@@ -24,7 +24,7 @@ var() const bool   bFogZone;     // Zone is fog-filled.
 var()		bool   bTerrainZone;	// There is terrain in this zone.
 var()		bool   bDistanceFog;	// There is distance fog in this zone.
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * dchabot (12 nov. 2001)
 // ***********************************************************************************************
 var(Sound)  bool PlayFightMusic;
@@ -34,7 +34,7 @@ var()		bool	bFlashlightZone;	// NPCs should use flashlights when in this zone
 var(Camera)	EVolumeSize VolumeSize;
 var() array<Actor>				CustomEchelonLightExclusion;
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * dchabot (12 nov. 2001)
 // ***********************************************************************************************
 

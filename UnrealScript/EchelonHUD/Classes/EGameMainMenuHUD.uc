@@ -73,7 +73,7 @@ state s_SettingsMenu
 =============================================================================*/
 state s_PlayerSettings
 {
-    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_PlayerSettings_MainMenu(Key, Action, Delta);}	
+    function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_PlayerSettings_MainMenu(Key, Action, Delta);}
 }
 
 /*=============================================================================
@@ -84,7 +84,7 @@ state s_SavePlayerInfo
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta) {return KeyEvent_s_SavePlayerInfo_MainMenu(Key, Action, Delta);}
 
     function Tick(float DeltaTime)
-    {		
+    {
         Global.Tick(DeltaTime);
         Tick_s_SavePlayerInfo_MainMenu(DeltaTime);
     }
@@ -102,7 +102,7 @@ state s_Controller
     function BeginState() {BeginState_s_ControllerInGame();}
 
     function Tick(float DeltaTime)
-    {		
+    {
         Global.Tick(DeltaTime);
         Tick_s_ControllerInGame(DeltaTime);
     }

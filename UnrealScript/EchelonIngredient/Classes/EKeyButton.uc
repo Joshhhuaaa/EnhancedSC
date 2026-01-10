@@ -15,12 +15,12 @@ function PostBeginPlay()
 
 function Tick(float DeltaTime)
 {
-	if (!bFading) 
+	if (!bFading)
 		return;
 
 	HeatIntensity -= DeltaTime / 5;
 
-	if (HeatIntensity > 0) 
+	if (HeatIntensity > 0)
 		return;
 
 	HeatIntensity = 0;

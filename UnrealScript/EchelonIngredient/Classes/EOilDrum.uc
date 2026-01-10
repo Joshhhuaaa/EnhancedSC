@@ -3,7 +3,7 @@ class EOilDrum extends ELiquidContainer;
 #exec OBJ LOAD FILE=..\Sounds\DestroyableObjet.uax
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		For now, destroy drum, could be replaced with destroyed mesh
 //------------------------------------------------------------------------
 /*function Destructed()

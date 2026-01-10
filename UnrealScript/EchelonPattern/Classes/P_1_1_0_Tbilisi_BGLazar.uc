@@ -57,7 +57,7 @@ ALazar:
     ResetGroupGoals();
     ChangeGroupState('s_default');
 JRLazLoop:
-    JumpRandom('ARoute', 0.34, 'BRoute', 0.67, 'CRoute', 1.00, , , ,); 
+    JumpRandom('ARoute', 0.34, 'BRoute', 0.67, 'CRoute', 1.00, , , ,);
 ARoute:
     Log("");
     Teleport(1, 'Start2io');

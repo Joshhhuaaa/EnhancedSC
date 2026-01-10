@@ -3,10 +3,10 @@
 //=============================================================================
 class VGame extends EVariable;
 
-var int GameVar1; 
-var int GameVar2; 
-var int GameVar3; 
-var int GameVar4; 
+var int GameVar1;
+var int GameVar2;
+var int GameVar3;
+var int GameVar4;
 
 
 function PostBeginPlay()

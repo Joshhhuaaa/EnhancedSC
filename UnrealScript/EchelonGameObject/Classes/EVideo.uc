@@ -12,7 +12,7 @@ function PostBeginPlay()
 	display.SpawnableObjects[0].SpawnClass = Class'EchelonEffect.EGlassSmallParticle';
 	display.SpawnableObjects[0].SpawnAtDamagePercent = 100;
 	display.SpawnableObjects[0].SpawnOnImpact = true;
-	
+
 	Super.PostBeginPlay();
 }
 

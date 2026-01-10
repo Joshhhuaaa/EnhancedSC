@@ -47,7 +47,7 @@ function Init(Controller Instigator, EPickLockInteraction plint)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Move picks around
 //------------------------------------------------------------------------
 function MoveAxis(float aUpDown, float aLeftRight)
@@ -118,19 +118,19 @@ function EPickLockQuadrant FindCurrentQuadrant(float aUpDown, float aLeftRight)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Playing in the same quadrant
 //------------------------------------------------------------------------
 function Tilt(EPickLockQuadrant Q, float UpDown, float LeftRight);
 
 //------------------------------------------------------------------------
-// Description		
-//		Changing quadrant .. 
+// Description
+//		Changing quadrant ..
 //------------------------------------------------------------------------
 function ChangeQuadrant(EPickLockQuadrant Q);
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Victory over CurrentPin, switch to next
 //------------------------------------------------------------------------
 function ClickNext()
@@ -156,7 +156,7 @@ function ClickNext()
 
 		// Get down to new pin
 		CurrentPin--;
-		
+
 		PlaySound(PLI.LockPick.ReleasePine, SLOT_Interface);
 
 		GotoState('s_TryLock');
@@ -246,7 +246,7 @@ state s_Picked
 		EPlayerController(PickLocker).bStopInput = true;
 
 		EchelonGameInfo(Level.Game).pPlayer.playerStats.AddStat("LockPicked");
-		
+
 		// Unlock door as soon as picked
 		PLI.Interact(PickLocker);
 	}
@@ -254,7 +254,7 @@ state s_Picked
 	function AnimEnd(optional int Channel)
 	{
 		PLI.PostInteract(PickLocker);
-		
+
 		// Joshua - Hack to prevent interrupting the animation
 		EPlayerController(PickLocker).bStopInput = false;
 	}

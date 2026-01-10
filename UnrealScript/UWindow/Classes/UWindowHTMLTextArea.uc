@@ -150,7 +150,7 @@ function WrapRow(Canvas C, UWindowDynamicTextRow L)
 		R.StyleString = "";
 
 		CurrentStyle = R.StartStyle;
-		
+
 		Input = R.Text;
 		while (Input != "")
 		{
@@ -169,7 +169,7 @@ function WrapRow(Canvas C, UWindowDynamicTextRow L)
 		}
 
 		R = UWindowHTMLTextRow(R.Next);
-	}	
+	}
 }
 
 function float DrawTextLine(Canvas C, UWindowDynamicTextRow L, float Y)
@@ -209,7 +209,7 @@ function float DrawTextLine(Canvas C, UWindowDynamicTextRow L, float Y)
 		{
 			i = ReadStyleText(UWindowHTMLTextRow(L).StyleString, StylePos, CurrentStyle);
 			S = Mid(UWindowHTMLTextRow(L).DisplayString, DisplayPos, i);
-			DisplayPos += i;					
+			DisplayPos += i;
 			SetCanvasStyle(C, CurrentStyle);
 
 			TextAreaTextSize(C, S, W, H);
@@ -238,7 +238,7 @@ function float DrawTextLine(Canvas C, UWindowDynamicTextRow L, float Y)
 			}
 
 			if (CurrentStyle.BGColor != BGColor)
-			{	
+			{
 				OldColor = C.DrawColor;
 				C.DrawColor = CurrentStyle.BGColor;
 				DrawStretchedTexture(C, X, Y, W, H, Texture'WhiteTexture');
@@ -338,7 +338,7 @@ function RemoveNextWord(out string Text, out string NextWord)
 	local int i;
 	local bool bInsideTag;
 	local string Ch;
-	
+
 	bInsideTag = false;
 
 	for (i = 0; i < Len(Text); i++)
@@ -352,7 +352,7 @@ function RemoveNextWord(out string Text, out string NextWord)
 			break;
 	}
 	while (Mid(Text, i, 1) == " ")
-		i++;	
+		i++;
 	NextWord = Left(Text, i);
 	Text = Mid(Text, i);
 }
@@ -395,7 +395,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 	while (Input != "")
 	{
 		ParseHTML(Input, LeftText, HTML, RightText);
-		
+
 		switch (GetTag(HTML))
 		{
 		// multiline HTML tags
@@ -462,7 +462,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 			UWindowHTMLTextRow(L).EndStyle = CurrentStyle;
 			CurrentStyle.bCenter = false;
 			StartStyle = CurrentStyle;
-			break;			
+			break;
 		// Inline HTML tags
 		case "H1":
 			if ((Output $ LeftText) != "")
@@ -482,7 +482,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 			UWindowHTMLTextRow(L).EndStyle = CurrentStyle;
 			CurrentStyle.bHeading = false;
 			StartStyle = CurrentStyle;
-			break;			
+			break;
 		case "FONT":
 			Output = Output $ LeftText $ HTML;
 			Temp = GetOption(HTML, "COLOR=");
@@ -561,7 +561,7 @@ function UWindowDynamicTextRow AddText(string NewLine)
 function ParseHTML(string Input, out string LeftText, out string HTML, out string RightText)
 {
 	local int i;
-	
+
 	i = InStr(Input, "<");
 	if (i == -1)
 	{
@@ -582,7 +582,7 @@ function ParseHTML(string Input, out string LeftText, out string HTML, out strin
 	}
 
 	RightText = Mid(HTML, i + 1);
-	HTML = Left(HTML, i + 1);	
+	HTML = Left(HTML, i + 1);
 }
 
 function float CalcHTMLTextWidth(Canvas C, string Text, out HTMLStyle CurrentStyle)
@@ -599,7 +599,7 @@ function float CalcHTMLTextWidth(Canvas C, string Text, out HTMLStyle CurrentSty
 		SetCanvasStyle(C, CurrentStyle);
 		TextAreaTextSize(C, LeftText, W, H);
 		Width += W;
-					
+
 		ProcessInlineHTML(HTML, CurrentStyle);
 
 		Input = RightText;
@@ -613,7 +613,7 @@ function ProcessInlineHTML(string HTML, out HTMLStyle CurrentStyle)
 {
 	local string Temp;
 
-	if (HTML == "")	
+	if (HTML == "")
 		return;
 
 	switch (GetTag(HTML))
@@ -623,7 +623,7 @@ function ProcessInlineHTML(string HTML, out HTMLStyle CurrentStyle)
 		break;
 	case "/H1":
 		CurrentStyle.bHeading = false;
-		break;			
+		break;
 	case "FONT":
 		Temp = GetOption(HTML, "COLOR=");
 		if (Temp != "")
@@ -674,7 +674,7 @@ function ProcessInlineHTML(string HTML, out HTMLStyle CurrentStyle)
 // update the current style based on some text input
 function HTMLUpdateStyle(string Input, out HTMLStyle CurrentStyle)
 {
-	local string LeftText, HTML, RightText; 
+	local string LeftText, HTML, RightText;
 
 	while (Input != "")
 	{
@@ -688,10 +688,10 @@ function string GetOption(string HTML, string Option)
 {
 	local int i, j;
 	local string s;
-	
+
 	i = InStr(Caps(HTML), Caps(Option));
 
-	if (i == 1 || Mid(HTML, i - 1, 1) == " ") 
+	if (i == 1 || Mid(HTML, i - 1, 1) == " ")
 	{
 		s = Mid(HTML, i + Len(Option));
 		j = FirstMatching(InStr(s, ">"), InStr(s, " "));
@@ -747,17 +747,17 @@ function int GetHexDigit(string D)
 	case "2": return 2;
 	case "3": return 3;
 	case "4": return 4;
-	case "5": return 5; 
-	case "6": return 6; 
-	case "7": return 7; 
-	case "8": return 8; 
-	case "9": return 9; 
-	case "A": return 10; 
-	case "B": return 11; 
-	case "C": return 12; 
-	case "D": return 13; 
-	case "E": return 14; 
-	case "F": return 15; 
+	case "5": return 5;
+	case "6": return 6;
+	case "7": return 7;
+	case "8": return 8;
+	case "9": return 9;
+	case "A": return 10;
+	case "B": return 11;
+	case "C": return 12;
+	case "D": return 13;
+	case "E": return 14;
+	case "F": return 15;
 	}
 
 	return 0;
@@ -800,7 +800,7 @@ function string WriteStyleText(HTMLStyle CurrentStyle, int CharCount)
 
 	Temp = string(CharCount);
 	Output = Left(Pad, 4 - Len(Temp)) $ Temp;
-		
+
 	Temp = string(Len(CurrentStyle.LinkDestination));
 	Output = Output $ Left(Pad, 4 - Len(Temp)) $ Temp $ CurrentStyle.LinkDestination;
 
@@ -860,14 +860,14 @@ function int ReadStyleText(string StyleString, out int StylePos, out HTMLStyle C
 {
 	local string Temp;
 	local int CharCount;
-	local int i;	
+	local int i;
 
 	CharCount = Int(Mid(StyleString, StylePos, 4));
 	StylePos += 4;
 
 	i = Int(Mid(StyleString, StylePos, 4));
 	StylePos += 4;
-		
+
 	CurrentStyle.LinkDestination = Mid(StyleString, StylePos, i);
 	StylePos += i;
 

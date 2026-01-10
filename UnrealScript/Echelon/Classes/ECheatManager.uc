@@ -17,7 +17,7 @@ exec function Fly()
     // Joshua - Prevent noclip commands when dead to avoid softlock
     if (Outer.IsInState('s_Dead'))
         return;
-    
+
     Outer.PlayerStats.bCheatsActive = true;
     Super.Fly();
 }
@@ -27,7 +27,7 @@ exec function Walk()
     // Joshua - Prevent noclip commands when dead to avoid softlock
     if (Outer.IsInState('s_Dead'))
         return;
-    
+
     Outer.PlayerStats.bCheatsActive = true;
     Super.Walk();
 }
@@ -37,7 +37,7 @@ exec function ToggleGhost()
     // Joshua - Prevent noclip commands when dead to avoid softlock
     if (Outer.IsInState('s_Dead'))
         return;
-    
+
     Outer.PlayerStats.bCheatsActive = true;
     Super.ToggleGhost();
 }
@@ -47,7 +47,7 @@ exec function Ghost()
     // Joshua - Prevent noclip commands when dead to avoid softlock
     if (Outer.IsInState('s_Dead'))
         return;
-    
+
     Outer.PlayerStats.bCheatsActive = true;
     Super.Ghost();
 }

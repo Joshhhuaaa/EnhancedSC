@@ -11,7 +11,7 @@ function SetFrame(UWindowWindow W)
 function BeforePaint(Canvas C, float X, float Y)
 {
 	if (Framed != None)
-		LookAndFeel.ControlFrame_SetupSizes(Self, C);		
+		LookAndFeel.ControlFrame_SetupSizes(Self, C);
 }
 
 function Paint(Canvas C, float X, float Y)

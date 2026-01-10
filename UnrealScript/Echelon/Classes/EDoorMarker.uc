@@ -21,11 +21,11 @@ var	EDoorMover Door;		// pointer to the door mover which we refer to
 
 
 //---------------------------------------[David Kalina - 27 Nov 2001]-----
-// 
+//
 // Description
 //		Notification when a Pawn is entering our radius.
 //		Send a message to the EAIController.
-// 
+//
 //------------------------------------------------------------------------
 
 function PawnEnteringRadius(ePawn TouchingPawn)
@@ -46,11 +46,11 @@ function PawnEnteringRadius(ePawn TouchingPawn)
 }
 
 //---------------------------------------[David Kalina - 27 Nov 2001]-----
-// 
+//
 // Description
 //		Notification when a Pawn is leaving our radius.
 //		Send a message to the EAIController.
-// 
+//
 //------------------------------------------------------------------------
 
 function PawnLeavingRadius(ePawn LeavingPawn)
@@ -64,7 +64,7 @@ function PawnLeavingRadius(ePawn LeavingPawn)
 }
 
 //---------------------------------------[David Kalina - 25 Nov 2001]-----
-// 
+//
 // Description
 //		Whenever a Pawn comes into our range, we send an impulse
 //		to the Door to tell it to stay open for now.
@@ -76,9 +76,9 @@ auto state s_Untouched
 	event Touch(Actor Other)
 	{
 		local Actor A;
-		
+
 		if (Other.bIsPawn /*&& !Other.bIsPlayerPawn*/)
-		{			
+		{
 			// EPawn is entering our radius
 			PawnEnteringRadius(ePawn(Other));
 
@@ -94,11 +94,11 @@ state s_Touched
 	event Touch(Actor Other)
 	{
 		local Actor A;
-		
+
 		if (Other.bIsPawn)
-		{			
+		{
 			//plog("Touched by : " $ Other);
-			
+
 			// EPawn is entering our radius
 			PawnEnteringRadius(ePawn(Other));
 		}
@@ -107,7 +107,7 @@ state s_Touched
 	Event UnTouch(Actor Other)
 	{
 		local Actor A;
-		
+
 		if (Other.bIsPawn)
 		{
 			//plog("Untouched by : " $ Other);
@@ -123,7 +123,7 @@ state s_Touched
 				return;
 			}
 		}
-		
+
 		GotoState('s_Untouched');
 	}
 
@@ -138,7 +138,7 @@ state s_Touched
 		if (Door != none && Door.IsOpened() && !Door.bOpening && !Door.bClosing)
 		{
 			//plog("STAY OPEN DOOR!");
-			
+
             // Force staying open if there is an Pawn touching the DoorMarker
  			foreach TouchingActors(class'EPawn', EP)
 			{

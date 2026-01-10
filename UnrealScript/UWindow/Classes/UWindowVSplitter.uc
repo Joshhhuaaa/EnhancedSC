@@ -13,7 +13,7 @@ var float					OldWinHeight;
 var bool					bBottomGrow;
 var bool					bSizable;
 
-function Created() 
+function Created()
 {
 	Super.Created();
 	bAlwaysBehind = true;
@@ -23,7 +23,7 @@ function Created()
 	OldWinHeight = WinHeight;
 }
 
-function Paint(Canvas C, float X, float Y) 
+function Paint(Canvas C, float X, float Y)
 {
 	local Texture T;
 
@@ -31,7 +31,7 @@ function Paint(Canvas C, float X, float Y)
 	DrawUpBevel(C, 0, SplitPos, WinWidth, 7, T);
 }
 
-function BeforePaint(Canvas C, float X, float Y) 
+function BeforePaint(Canvas C, float X, float Y)
 {
 	local float NewW, NewH;
 
@@ -69,7 +69,7 @@ function LMouseDown(float X, float Y)
 {
 	Super.LMouseDown(X, Y);
 
-	if (bSizable && (Y >= SplitPos) && (Y <= SplitPos + 7)) 
+	if (bSizable && (Y >= SplitPos) && (Y <= SplitPos + 7))
 	{
 		bSizing = true;
 		Root.CaptureMouse();
@@ -79,7 +79,7 @@ function LMouseDown(float X, float Y)
 function MouseMove(float X, float Y)
 {
 
-	if (bSizable && (Y >= SplitPos) && (Y <= SplitPos + 7)) 
+	if (bSizable && (Y >= SplitPos) && (Y <= SplitPos + 7))
 		Cursor = Root.VSplitCursor;
 	else
 		Cursor = Root.NormalCursor;

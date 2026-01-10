@@ -3,12 +3,12 @@
 //=============================================================================
 class V4_2_1_Abattoir extends EVariable;
 
-var int AlreadySwitched; 
-var int RoofLightPass; 
-var int Room1Pass1; 
-var int SpetzOnRoof; 
-var int SwitchActive; 
-var int TowerTeleported; 
+var int AlreadySwitched;
+var int RoofLightPass;
+var int Room1Pass1;
+var int SpetzOnRoof;
+var int SwitchActive;
+var int TowerTeleported;
 
 
 function PostBeginPlay()

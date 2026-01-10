@@ -1,4 +1,4 @@
-class ECameraTrigger extends PhysicsVolume 
+class ECameraTrigger extends PhysicsVolume
 	placeable;
 
 

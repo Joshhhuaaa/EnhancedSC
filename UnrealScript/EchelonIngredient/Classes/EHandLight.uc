@@ -45,7 +45,7 @@ state s_Rotating
 		// Maybe not needed...
 		if (VSize(Velocity) > 2000.0)
 			Velocity = Normal(Velocity) * 2000.0;
-		
+
 		Speed = VSize(Velocity);
 
 		// if pawn, will slow down on its reflected trajectory
@@ -66,7 +66,7 @@ state s_Rotating
 
 			StoppedMoving();
 		}
-		else if (speed > 40) 
+		else if (speed > 40)
 		{
 			bPlayBounce = true;
 
@@ -81,7 +81,7 @@ state s_Rotating
 		}
 
 		if (HitNoiseRadius > 0)
-		{			
+		{
 			MakeNoise(HitNoiseRadius, NOISE_Object_Falling, 250.0f);
 		}
 	}

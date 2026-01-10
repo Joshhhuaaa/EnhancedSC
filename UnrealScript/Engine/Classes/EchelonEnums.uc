@@ -2,11 +2,11 @@
 // EchelonEnums
 //		UC file kept in Engine package to store any enums we need to find
 //		globally in the Echelon package.
-//		
+//
 //		Enums must be referred to with class identifier, e.g.:
 //			EchelonEnums.SOUND_SawSomething;
 //
-//		Easier than placing an enum in a base Actor class .. 
+//		Easier than placing an enum in a base Actor class ..
 //		but I have no idea if there are performance issues.
 //
 //=============================================================================
@@ -19,10 +19,10 @@ class EchelonEnums extends Object
 
 // GOAL enums ..
 
-enum GoalStatus 
+enum GoalStatus
 {
-	GS_Executing, 
-	GS_Complete, 
+	GS_Executing,
+	GS_Complete,
 	GS_Failure,
 	GS_Continue
 };
@@ -32,12 +32,12 @@ enum GoalType
 {
 	GOAL_Guard,
 	GOAL_Defend,
-	GOAL_Patrol,					
-	GOAL_Action,  				
-	GOAL_MoveTo,					
+	GOAL_Patrol,
+	GOAL_Action,
+	GOAL_MoveTo,
 	GOAL_Search,
 	GOAL_Attack,
-	GOAL_InteractWith,				
+	GOAL_InteractWith,
 	GOAL_Transmission,
 	GOAL_Wait,
 	GOAL_Follow,
@@ -142,7 +142,7 @@ enum eKEY_BIND
     KEY_MOVE_LEFT,
     KEY_MOVE_RIGHT,
     KEY_LOOK_UP,
-    KEY_LOOK_DOWN,    
+    KEY_LOOK_DOWN,
     KEY_LOOK_LEFT,
     KEY_LOOK_RIGHT,
     KEY_INTERACTION,

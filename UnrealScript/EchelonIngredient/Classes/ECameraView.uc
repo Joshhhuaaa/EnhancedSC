@@ -10,7 +10,7 @@
 class ECameraView extends EObjectHud;
 
 /*-----------------------------------------------------------------------------
-                        T Y P E   D E F I N I T I O N S 
+                        T Y P E   D E F I N I T I O N S
 -----------------------------------------------------------------------------*/
 // CAMERA VIEW SIZE //
 const CAM_X                 = 43;
@@ -33,7 +33,7 @@ const FILTER_HEIGHT         = 64;
 const BUTTONBAR_HEIGHT = 30;
 
 /*-----------------------------------------------------------------------------
-                        M E M B E R   V A R I A B L E S 
+                        M E M B E R   V A R I A B L E S
 -----------------------------------------------------------------------------*/
 var float           fDistance;
 var int             fFilterY;
@@ -46,7 +46,7 @@ function DrawIcon(ECanvas Canvas);
 function UpdateDistanceMeter(float DeltaTime);
 
 /*-----------------------------------------------------------------------------
-    Function :      PostBeginPlay  
+    Function :      PostBeginPlay
 
     Description:    -
 -----------------------------------------------------------------------------*/
@@ -54,7 +54,7 @@ function PostBeginPlay()
 {
     Super.PostBeginPlay();
 
-    fFilterY = TOP_CAM_Y - FILTER_HEIGHT;    
+    fFilterY = TOP_CAM_Y - FILTER_HEIGHT;
 
 	Camera = EAirCamera(Owner);
 	if (Camera == None)
@@ -62,12 +62,12 @@ function PostBeginPlay()
 }
 
 /*=============================================================================
-    State :      s_Online  
+    State :      s_Online
 =============================================================================*/
 state s_Online
 {
     /*-----------------------------------------------------------------------------
-        Function :      Tick  
+        Function :      Tick
 
         Description:    -
     -----------------------------------------------------------------------------*/
@@ -83,7 +83,7 @@ state s_Online
 	}
 
     /*-----------------------------------------------------------------------------
-        Function :      DrawView  
+        Function :      DrawView
 
         Description:    -
     -----------------------------------------------------------------------------*/
@@ -101,9 +101,9 @@ state s_Online
             DrawIcon(Canvas);
             DrawTopAndBottomBars(Canvas);
         }
-        
+
         if (EPC.bShowCrosshair && EPC.bShowHUD) // Joshua - Show crosshair toggle
-                DrawCrosshair(Canvas);        
+                DrawCrosshair(Canvas);
 
         if (EPC.bShowScope && EPC.bShowHUD)
             DrawBlackMask(Canvas);
@@ -111,7 +111,7 @@ state s_Online
 }
 
 /*-----------------------------------------------------------------------------
-    Function :      DrawPitchBars  
+    Function :      DrawPitchBars
 
     Description:    -
 -----------------------------------------------------------------------------*/
@@ -126,7 +126,7 @@ function DrawPitchBars(ECanvas Canvas)
 }
 
 /*-----------------------------------------------------------------------------
-    Function :      DrawNoiseBars  
+    Function :      DrawNoiseBars
 
     Description:    -
 -----------------------------------------------------------------------------*/
@@ -144,7 +144,7 @@ function DrawNoiseBars(ECanvas Canvas)
 
     // Hack for Defense Ministry
     // Joshua - This shifts the compass by 90 degrees so the East Wing of the map point towards East on the binoculars
-	if (left(GetCurrentMapName(), 3) == "1_2")
+	if (Left(GetCurrentMapName(), 3) == "1_2")
 		pRotation += 0.25;
 	if (pRotation >= 1.0)
 		pRotation -= 1.0;
@@ -232,20 +232,20 @@ function DrawNoiseBars(ECanvas Canvas)
 }
 
 /*-----------------------------------------------------------------------------
-    Function :      DrawNoiseBar    
+    Function :      DrawNoiseBar
 
     Description:    Draw the "info" bar at top and bottom of the sniper view
 -----------------------------------------------------------------------------*/
 function DrawNoiseBar(int AX, int AY, int BX, int BY, int OffsetX, ECanvas Canvas)
 {
     Canvas.DrawColor = White;
-	
+
     Canvas.SetPos(AX, AY);
-    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_anim_border, 630, abs(BY - AY), OffsetX, 0, 630, 4); 
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sc_anim_border, 630, abs(BY - AY), OffsetX, 0, 630, 4);
 }
 
 /*-----------------------------------------------------------------------------
-    Function :      DrawFilm 
+    Function :      DrawFilm
 
     Description:    Draws noisy film effect on cam
 -----------------------------------------------------------------------------*/
@@ -255,7 +255,7 @@ function DrawFilm(ECanvas Canvas)
 	Canvas.Style = ERenderStyle.STY_Alpha;
 
     Canvas.SetPos(CAM_X + SIDEBAR_WIDTH, fFilterY);
-    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sb_filtre, SCREEN_END_X - CAM_X * 2 - SIDEBAR_WIDTH * 2, 64, 0, 0, 1, 64);	
+    eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.sb_filtre, SCREEN_END_X - CAM_X * 2 - SIDEBAR_WIDTH * 2, 64, 0, 0, 1, 64);
 }
 
 /*-----------------------------------------------------------------------------
@@ -292,7 +292,7 @@ function DrawSideBars(ECanvas Canvas)
 }
 
 /*-----------------------------------------------------------------------------
-    Function :      DrawButtons  
+    Function :      DrawButtons
 
     Description:    -
 -----------------------------------------------------------------------------*/
@@ -310,7 +310,7 @@ function DrawButtons(ECanvas Canvas)
 }
 
 /*-----------------------------------------------------------------------------
-    Function :      DrawTopAndBottomBars 
+    Function :      DrawTopAndBottomBars
 
     Description:    -
 -----------------------------------------------------------------------------*/

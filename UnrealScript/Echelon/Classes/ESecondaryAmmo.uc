@@ -7,7 +7,7 @@ var EMainGun	OwnerGun;
 var int         HUDTexSD;
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Do own treatment when equipped as current item
 //------------------------------------------------------------------------
 function Select(EInventory Inv)
@@ -28,7 +28,7 @@ function Select(EInventory Inv)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Weapon has been put away / deselected
 //------------------------------------------------------------------------
 function UnSelect(EInventory Inv)

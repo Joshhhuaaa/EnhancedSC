@@ -3,22 +3,22 @@
 //=============================================================================
 class V4_3_2ChineseEmbassy extends EVariable;
 
-var int CanKillKeypadB; 
-var int CanKillKeypadC; 
-var int FeirongCanDie; 
-var int FeirongObjectiveDone; 
-var int KeypadBColonelSwitch; 
-var int KeypadBDoorClosed; 
-var int KeypadBExpiredToggle; 
-var int KeypadCColonelSwitch; 
-var int KeypadCDoorClosed; 
-var int KeypadCExpiredToggle; 
-var int KeypadCLastDoorCrossed; 
-var int NPCwentInElev; 
-var int SamInElevator; 
-var int SamSwitch; 
-var int SamSwitchC; 
-var int TruckObjectiveDone; 
+var int CanKillKeypadB;
+var int CanKillKeypadC;
+var int FeirongCanDie;
+var int FeirongObjectiveDone;
+var int KeypadBColonelSwitch;
+var int KeypadBDoorClosed;
+var int KeypadBExpiredToggle;
+var int KeypadCColonelSwitch;
+var int KeypadCDoorClosed;
+var int KeypadCExpiredToggle;
+var int KeypadCLastDoorCrossed;
+var int NPCwentInElev;
+var int SamInElevator;
+var int SamSwitch;
+var int SamSwitchC;
+var int TruckObjectiveDone;
 
 
 function PostBeginPlay()

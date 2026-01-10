@@ -1,4 +1,4 @@
-class EServerScreen extends EGameplayObject; 
+class EServerScreen extends EGameplayObject;
 
 defaultproperties
 {

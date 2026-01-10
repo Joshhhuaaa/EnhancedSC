@@ -16,7 +16,7 @@ enum EFrameBufferBlending
 var() EFrameBufferBlending FrameBufferBlending;
 var() bool ZWrite;
 // ***********************************************************************************************
-// * BEGIN UBI MODIF 
+// * BEGIN UBI MODIF
 // * yletourneau (28 Nov 2001)
 // * Purpose : <Unspecified>
 // ***********************************************************************************************
@@ -29,7 +29,7 @@ enum EZTest
 
 var() EZTest ZTest;
 // ***********************************************************************************************
-// * END UBI MODIF 
+// * END UBI MODIF
 // * yletourneau (28 Nov 2001)
 // ***********************************************************************************************
 var() bool AlphaTest;

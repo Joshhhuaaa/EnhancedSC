@@ -2,7 +2,7 @@ class UWindowConsoleWindow extends UWindowFramedWindow;
 
 var float OldParentWidth, OldParentHeight;
 
-function Created() 
+function Created()
 {
 	Super.Created();
 	bSizable = true;

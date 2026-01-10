@@ -26,7 +26,7 @@ function Destroyed()
 function Select(EInventory Inv)
 {
 	Super.Select(Inv);
-	
+
 	// Joshua - Don't play sound during silent restore (sorting)
 	if (!Inv.bSilentRestore)
 		PlaySound(Sound'Interface.Play_FisherEquipPistol', SLOT_Interface);
@@ -53,14 +53,14 @@ function AddedToInventory()
 function bool NotifyPickup(Controller Instigator)
 {
 	local EPlayerController Epc;
-	
+
 	Super.NotifyPickup(Instigator);
 
 	// Set as Player HandGun
 	Epc = EPlayerController(Controller);
 	Epc.ePawn.FullInventory.SetSelectedItem(self);
 	Epc.DoSheath();
-	
+
 	return false;
 }
 
@@ -77,7 +77,7 @@ state s_Firing
 	function EndState()
 	{
 		Super.EndState();
-		
+
 		if (ClipAmmo > 0)
 			Slider.SetRelativeLocation(SliderOffset);
 	}
@@ -88,7 +88,7 @@ state s_Reloading
 	function EndState()
 	{
 		Super.EndState();
-		
+
 		if (Slider.RelativeLocation != SliderOffset)
 			Slider.SetRelativeLocation(SliderOffset);
 	}

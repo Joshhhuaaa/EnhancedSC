@@ -1,5 +1,5 @@
 //===============================================================================
-//  [sam] 
+//  [sam]
 //===============================================================================
 class ESam extends EPawn;
 
@@ -217,20 +217,20 @@ function PostBeginPlay()
         case "0_0_3_Training":
 			SetSamMesh(EchelonGameInfo(Level.Game).ESam_Training);
             break;
-            
+
         case "1_1_0Tbilisi":
-        case "1_1_1Tbilisi": 
+        case "1_1_1Tbilisi":
         case "1_1_2Tbilisi":
 			SetSamMesh(EchelonGameInfo(Level.Game).ESam_Tbilisi);
             break;
 
 		case "1_2_1DefenseMinistry":
-        case "1_2_2DefenseMinistry": 
+        case "1_2_2DefenseMinistry":
 			SetSamMesh(EchelonGameInfo(Level.Game).ESam_DefenseMinistry);
             break;
 
 		case "1_3_2CaspianOilRefinery":
-        case "1_3_3CaspianOilRefinery": 
+        case "1_3_3CaspianOilRefinery":
 			SetSamMesh(EchelonGameInfo(Level.Game).ESam_CaspianOilRefinery);
             break;
 
@@ -239,15 +239,15 @@ function PostBeginPlay()
 		case "2_1_2CIA":
 			SetSamMesh(EchelonGameInfo(Level.Game).ESam_CIA);
             break;
-            
+
         case "2_2_1_Kalinatek":
-        case "2_2_2_Kalinatek": 
+        case "2_2_2_Kalinatek":
         case "2_2_3_Kalinatek":
 			SetSamMesh(EchelonGameInfo(Level.Game).ESam_Kalinatek);
             break;
 
 		case "3_2_1_PowerPlant":
-        case "3_2_2_PowerPlant": 
+        case "3_2_2_PowerPlant":
 			SetSamMesh(EchelonGameInfo(Level.Game).ESam_PowerPlant);
             break;
 
@@ -255,14 +255,14 @@ function PostBeginPlay()
         case "3_4_3Severonickel":
 			SetSamMesh(EchelonGameInfo(Level.Game).ESam_Severonickel);
             break;
-            
+
         case "4_1_1ChineseEmbassy":
-        case "4_1_2ChineseEmbassy": 
+        case "4_1_2ChineseEmbassy":
 			SetSamMesh(EchelonGameInfo(Level.Game).ESam_ChineseEmbassy);
             break;
 
 		case "4_2_1_Abattoir":
-        case "4_2_2_Abattoir": 
+        case "4_2_2_Abattoir":
 			SetSamMesh(EchelonGameInfo(Level.Game).ESam_Abattoir);
             break;
 
@@ -271,18 +271,18 @@ function PostBeginPlay()
 		case "4_3_2ChineseEmbassy":
 			SetSamMesh(EchelonGameInfo(Level.Game).ESam_ChineseEmbassy2);
             break;
-            
+
 		case "5_1_1_PresidentialPalace":
-        case "5_1_2_PresidentialPalace": 
+        case "5_1_2_PresidentialPalace":
 			SetSamMesh(EchelonGameInfo(Level.Game).ESam_PresidentialPalace);
-            break;			
-            
+            break;
+
 		case "1_6_1_1KolaCell":
 			SetSamMesh(EchelonGameInfo(Level.Game).ESam_KolaCell);
-            break;	
+            break;
 
 		case "1_7_1_1VselkaInfiltration":
-        case "1_7_1_2Vselka": 
+        case "1_7_1_2Vselka":
 			SetSamMesh(EchelonGameInfo(Level.Game).ESam_Vselka);
             break;
 
@@ -295,7 +295,7 @@ function PostBeginPlay()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Called from Epawn to play special animations after an idle time
 //------------------------------------------------------------------------
 event GetRandomWaitAnim(out name ReturnName)
@@ -329,12 +329,12 @@ function bool IsExtraWaiting(optional int f)
 {
 	local name CurrentAnimSeq;
 	CurrentAnimSeq = GetAnimName();
-	
+
 	switch (f)
 	{
 	case 0:
 		return CurrentAnimSeq == EPlayerController(Controller).SpecialWaitAnim ||
-			   CurrentAnimSeq == 'prsostalaa0' || 
+			   CurrentAnimSeq == 'prsostalaa0' ||
 		   CurrentAnimSeq == 'prsostalbb0' ||
 		   CurrentAnimSeq == 'prsostalcc0' ||
 		   CurrentAnimSeq == 'prsostaldd0' ||
@@ -344,7 +344,7 @@ function bool IsExtraWaiting(optional int f)
 
 	case 1:
 		return CurrentAnimSeq == EPlayerController(Controller).SpecialWaitAnim ||
-			   CurrentAnimSeq == 'prsostalaa0' || 
+			   CurrentAnimSeq == 'prsostalaa0' ||
 			   CurrentAnimSeq == 'prsostalbb0' ||
 			   CurrentAnimSeq == 'prsostalcc0' ||
 			   CurrentAnimSeq == 'prsostaldd0';
@@ -358,10 +358,10 @@ function bool IsExtraWaiting(optional int f)
 }
 
 //---------------------------------------[David Kalina - 10 Apr 2001]-----
-// 
+//
 // Description
 //		Set up Player Animations
-// 
+//
 //------------------------------------------------------------------------
 function InitAnims()
 {
@@ -567,7 +567,7 @@ function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector Hi
 
 	// Gives real damage depending on the hit zone
 	ResolveDamage(damage, PillTag, damageType);
-	
+
 	//Play HitSound depending on the pill
 	if (damageType == none)
 	{
@@ -593,7 +593,7 @@ function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector Hi
 	{
 
 		if (damageType == None || damageType.Name == 'EKnocked' || damageType.Name == 'EElectrocuted' || damageType.Name == 'Crushed' || damageType.Name == 'EBurned')
-		{	
+		{
 			if (!IsPlaying(Sound'FisherVoice.Play_Random_FisherHitWeapon'))
 				PlaySound(Sound'FisherVoice.Play_Random_FisherHitWeapon', SLOT_Barks);
 		}
@@ -601,7 +601,7 @@ function TakeDamage(int Damage, Pawn instigatedBy, Vector Hitlocation, vector Hi
 		{
 			if (!IsPlaying(Sound'FisherVoice.Play_Random_FisherCough'))
 				PlaySound(Sound'FisherVoice.Play_Random_FisherCough', SLOT_Barks);
-		}	
+		}
 	}
 	else if (!bAlreadyDead)
 	{
