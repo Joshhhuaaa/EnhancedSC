@@ -5,6 +5,7 @@ class EGameInteraction extends EInteraction;
 var EInteractObject ExitInteraction;
 var bool bInteracting;
 var bool bForceExited; // Joshua - Force exit the interaction menu when the player dies
+var bool bDefaultBindsChecked; // Joshua - Track if default key bindings have been checked
 
 function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 {
@@ -27,7 +28,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			Key == IK_JoyU  || Key == IK_JoyV  || Key == IK_AnalogUp || Key == IK_AnalogDown ||
 			Key == IK_AnalogLeft || Key == IK_AnalogRight)
 		{
-			if (!Epc.eGame.bUseController) 
+			if (!Epc.eGame.bUseController)
 			{
 				Epc.eGame.bUseController = true;
 				Epc.m_curWalkSpeed = 5;
@@ -73,9 +74,9 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 				{
 					Epc.FakeMouseToggle(false);
 				}
-				
+
 				// Joshua - Toggle Yes/No selecton
-				if (actionName == "StrafeLeft" || actionName== "StrafeRight" || actionName == "DPadLeft" || actionName == "DPadRight") 
+				if (actionName == "StrafeLeft" || actionName== "StrafeRight" || actionName == "DPadLeft" || actionName == "DPadRight")
 				{
 					Epc.bMissionFailedConfirmYes = !Epc.bMissionFailedConfirmYes;
 					return true;
@@ -85,12 +86,12 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 				else if (Key == IK_Space || Key == IK_Enter || Key == IK_Joy1)
 				{
 					Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
-										
+
 					if (Epc.bMissionFailedConfirmYes)
 					{
 						// Joshua - Turn off fake mouse before restarting or quitting
 						Epc.FakeMouseToggle(false);
-						
+
 						if (Epc.iMissionFailedConfirmAction == 1)
 						{
 							Epc.bMissionFailedQuickMenu = false;
@@ -110,7 +111,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 						Epc.bMissionFailedShowConfirmation = false;
 						Epc.iMissionFailedConfirmAction = 0;
 					}
-					
+
 					return true;
 				}
 				// Joshua - Cancel confirmation
@@ -126,7 +127,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 				{
 					return false;
 				}
-				
+
 				return true;
 			}
 
@@ -172,7 +173,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 		}
 		return true;
 	}
-	
+
 	// Joshua - Adding NumPad support for keypads
 	if (Action == IST_Press)
 	{
@@ -252,18 +253,18 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 		//clauzon 9/17/2002 replaced a switch checking the key pressed by the mapped action test.
 		if (actionName == "Interaction")
 		{
-			if (Epc.IManager.GetNbInteractions() > 0 && 
+			if (Epc.IManager.GetNbInteractions() > 0 &&
 				Epc.CanInteract() &&
 				!Epc.bStopInput) // Prevent interacting in cinematic
-			{			
+			{
 				bInteracting = true;
 
 				// Go into GameInteraction menu
 				//Log("Interaction pressed with"$Epc.IManager.GetNbInteractions()$" interaction on stack");
 				GotoState('s_GameInteractionMenu');
-				 
+
 				return true; // Grabbed
-			}		
+			}
 		}
 	}
 
@@ -360,7 +361,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			Epc.SetKey("JoyY \"Axis aForward DeadZone=0.3\"", "");
 			Epc.SetKey("JoyZ \"Axis aTurn DeadZone=0.3\"", "");
 			Epc.SetKey("JoyV \"Axis aLookUp DeadZone=0.3\"", "");
-			
+
 			if (Epc.GetStateName() == 's_PlayerBTWTargeting')
 			{
 				if (Epc.bWhistle)
@@ -472,16 +473,22 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 		Epc.SetKey("Joy1 LoadLastSave", "");
 		Epc.SetKey("Joy2 QuitToMainMenu", "");
 		Epc.SetKey("Joy4 Interaction", "");
-		
+
 	}*/
 
-	BindZoomToggle();
-	BindWhistle();
-	BindToggleHUD();
-	BindPreviousGadget();
-	BindNextGadget();
-	BindPlayerStats();
-	
+	// Joshua - Only check default bindings once per level
+	if (!bDefaultBindsChecked)
+	{
+		BindZoomToggle();
+		BindWhistle();
+		BindToggleHUD();
+		BindPreviousGadget();
+		BindNextGadget();
+		BindPlayerStats();
+		BindSwitchCam();
+		bDefaultBindsChecked = true;
+	}
+
 	return false; // continue input processing
 }
 
@@ -495,7 +502,7 @@ state s_GameInteractionMenu
 			Epc.PlayerInput.bStopInputAlternate = true;
 
 		Epc.IManager.SelectedInteractions = 1;
-		
+
 		// Add exit button, spawn it only the first time in
 		if (ExitInteraction == None)
 			ExitInteraction = Epc.IManager.spawn(class'EExitInteraction', Epc.IManager);
@@ -525,7 +532,7 @@ state s_GameInteractionMenu
 		{
 			bForceExited = false;
 		}
-		
+
 		Epc.IManager.SelectedInteractions = -1;
 
 		// Remove exit button
@@ -547,7 +554,7 @@ state s_GameInteractionMenu
 			bInteracting = false;
 			GotoState('');
 		}
-		
+
 		if (Action == IST_Press)
 		{
 			//clauzon 9/17/2002 replaced a switch checking the key pressed by the mapped action test.
@@ -558,7 +565,7 @@ state s_GameInteractionMenu
 				{
 					//Log("Interaction menu UP");
 					Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
-				}				
+				}
 			}
 			else if (actionName == "MoveBackward" || Key == IK_MouseWheelDown || actionName == "DPadDown") // Joshua - Adding controller support for interaction box
 			{
@@ -581,7 +588,7 @@ state s_GameInteractionMenu
 			}
 		}
 		return true;
-	} 
+	}
 }
 
 // Joshua - Force exit the interaction menu when the player dies
@@ -750,6 +757,39 @@ function BindNextGadget()
 		}
 	}
 }
+
+// Joshua - Function to bind SwitchCam to 6 key
+// Bind SwitchCam to 6 key if it's not already bound elsewhere
+/*
+function BindSwitchCam()
+{
+	local byte SwitchCamKeyByte;
+	local byte Num6KeyByte;
+	local string BoundAction;
+	local bool bSwitchCamBound;
+
+	Num6KeyByte = 54; // Value for '6'
+
+	// Check if already bound to a key
+	SwitchCamKeyByte = Epc.GetKey("SwitchCam", false);
+
+	// Don't consider controller keys (196-215) as bindings
+	if (SwitchCamKeyByte != 0 && !(SwitchCamKeyByte >= 196 && SwitchCamKeyByte <= 215))
+	{
+		bSwitchCamBound = true;
+	}
+
+	if (!bSwitchCamBound)
+	{
+		BoundAction = Epc.GetActionKey(Num6KeyByte);
+
+		if (BoundAction == "" || BoundAction == "None")
+		{
+			Epc.SetKey("6 SwitchCam", "");
+		}
+	}
+}
+*/
 
 // Joshua - Function to bind PlayerStats to Tab key
 // Bind ToggleStats to Tab key if it's not already bound elsewhere
