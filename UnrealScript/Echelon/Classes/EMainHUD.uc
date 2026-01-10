@@ -23,7 +23,7 @@ var ECommunicationBox	CommunicationBox;       // Cannot move cause referenced di
                                                 // Could move if used virtual Get/Set Function
                                                 // BUT class ECommunicationBox definition needs to stay in Echelon Package
 
-var EGameplayObject		hud_master;             // Cannot move cause referenced directly in script; 
+var EGameplayObject		hud_master;             // Cannot move cause referenced directly in script;
                                                 // Could move if used virtual Get/Set Function
 
 var ETimer              TimerView;
@@ -38,7 +38,7 @@ var bool                bShowCtrl; // Display controller help splash
 /*-----------------------------------------------------------------------------
                               M E T H O D S
 -----------------------------------------------------------------------------*/
-// "Pure virtual" functions of "abstract" class  
+// "Pure virtual" functions of "abstract" class
 function SetRenderState(ECanvas Canvas);
 event SetInitialState();
 event UpdateProfile();
@@ -53,7 +53,7 @@ event LoadTInfo(int tab);
 -----------------------------------------------------------------------------*/
 function PostBeginPlay()
 {
-	CommunicationBox		= spawn(class'ECommunicationBox', self);	
+	CommunicationBox		= spawn(class'ECommunicationBox', self);
 
 	Super.PostBeginPlay();
 }
@@ -74,11 +74,13 @@ function NormalView()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		FullInventory in any state will get in .. in s_GameMenu, will get out. Look for oeverride and Ignores.
 //------------------------------------------------------------------------
 function FullInventory()
 {
+	return;
+	/*
 	// Don't process the START button if we are displaying controller help splash
 	if ((!bShowCtrl) && (EPlayerController(Owner).EPawn.Health > 0) && (!IsGameOver()))
 	{
@@ -93,6 +95,7 @@ function FullInventory()
 		SaveState();
 		GotoState('s_GameMenu');
     }
+	*/
 }
 
 function SaveState()

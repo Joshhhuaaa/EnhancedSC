@@ -23,9 +23,9 @@ var config BOOL HideMenusAtStart;
 var Sound   MenuMusic;
 
 event Initialized()
-{  
+{
    if (StartMenus == true)
-        LaunchMainMenu();   
+        LaunchMainMenu();
 }
 
 event GameSaved(bool success)
@@ -34,7 +34,7 @@ event GameSaved(bool success)
     if (success)
         UpdateLastSaveName();
 
-    if (EPCMainMenuRootWindow(Root) != None)   
+    if (EPCMainMenuRootWindow(Root) != None)
         EPCMainMenuRootWindow(Root).GameSaved(success);
 }
 
@@ -93,7 +93,7 @@ function string GetOldestCheckpointName()
     local String CheckpointNames[3];
     local int CheckpointExists[3];
     local String CheckpointTimes[3];
-    
+
     EPC = EPlayerController(ViewportOwner.Actor);
     if (EPC == None)
         return Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "1";
@@ -109,16 +109,16 @@ function string GetOldestCheckpointName()
     CheckpointNames[0] = class'Actor'.static.Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "1";
     CheckpointNames[1] = class'Actor'.static.Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "2";
     CheckpointNames[2] = class'Actor'.static.Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "3";
-    
+
     Path = "..\\Save\\"$PlayerInfo.PlayerName$"\\*.en3";
     FileManager.DetailedFindFiles(Path);
-    
+
     // Check which checkpoints exist and get their timestamps
     for (i = 0; i < FileManager.m_pDetailedFileList.Length; i++)
     {
         Name = FileManager.m_pDetailedFileList[i].Filename;
         Name = Left(Name, Len(Name) - 4); // Remove .en3 extension
-        
+
         if (Name == CheckpointNames[0])
         {
             CheckpointExists[0] = 1;
@@ -135,18 +135,18 @@ function string GetOldestCheckpointName()
             CheckpointTimes[2] = FileManager.m_pDetailedFileList[i].FileCompletTime;
         }
     }
-    
+
     // If not all checkpoints exist, return the first non-existing one
     for (i = 0; i < 3; i++)
     {
         if (CheckpointExists[i] == 0)
             return CheckpointNames[i];
     }
-    
+
     // All checkpoints exist, find the oldest by timestamp
     OldestName = CheckpointNames[0];
     OldestTime = CheckpointTimes[0];
-    
+
     for (i = 1; i < 3; i++)
     {
         if (CheckpointTimes[i] < OldestTime)
@@ -155,7 +155,7 @@ function string GetOldestCheckpointName()
             OldestName = CheckpointNames[i];
         }
     }
-    
+
     return OldestName;
 }
 
@@ -182,7 +182,7 @@ event GameLoaded(bool success)
         }
     }
 
-    if (EPCMainMenuRootWindow(Root) != None)   
+    if (EPCMainMenuRootWindow(Root) != None)
         EPCMainMenuRootWindow(Root).GameLoaded(success);
 }
 
@@ -207,7 +207,7 @@ event ShowMainMenu()
 
 // Joshua - This isn't great, it's very easy to break sound
 // As an alternative, implement Pause on Focus Loss directly in the ASI patch
-/* 
+/*
 event ExitAltTab()
 {
 	if (bMainMenuActive)
@@ -240,7 +240,7 @@ event ShowGameMenu(bool GoToSaveLoadArea)
 event EnterAltTab()
 {
 	if (bMainMenuActive)
-	{	
+	{
 		MouseX = Root.WinWidth / 2;
 		MouseY = Root.WinHeight / 2;
 		bMusicPlaying = false;
@@ -256,7 +256,7 @@ event EnterAltTab()
 			MouseX = Root.WinWidth / 2;
 			MouseY = Root.WinHeight / 2;
 		}
-		
+
 		ViewportOwner.Actor.ResumeSound(true);
 	}
 }
@@ -303,18 +303,18 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			return true;
 		}
     }
-    else if ((Key == ConsoleKey) && (Action == IST_Press)) 
+    else if ((Key == ConsoleKey) && (Action == IST_Press))
     {
         if (bLocked)
             return true;
 
         Type();
         return true;
-     
+
     }
-    else 
+    else
         return false;
-		
+
 
 }
 
@@ -328,41 +328,25 @@ function PostRender(Canvas Canvas)
 {
 	if (Root == None)
 		CreateRootWindow(Canvas);
-	
-	// Joshua - Handles the transition from the Xbox pause screen to the PC menus
-	if (ViewportOwner != None && 
-		ViewportOwner.Actor != None && 
-		EPlayerController(ViewportOwner.Actor) != None &&
-		EPlayerController(ViewportOwner.Actor).bPCMenuPending &&
-		ViewportOwner.Actor.Level.Pauser == None &&
-		Root != None)
-	{
-		EPlayerController(ViewportOwner.Actor).bPCMenuPending = false;
-		bLaunchWasCalled = false;
-		bReturnToMenu = false;
-		GotoState('UWindow');
-		Root.ChangeCurrentWidget(WidgetID_InGameMenu);
-		EPCMainMenuRootWindow(Root).m_InGameMenu.CheckSubMenu();
-	}
-	
-	if (bShowLog) log("ERROR!!!!!!!!!!!!!!!!!!! IN R6Console >> PostRender");
+	if (bShowLog)
+        log("ERROR!!!!!!!!!!!!!!!!!!! IN R6Console >> PostRender");
 }
 
 state FakeWindow extends UWindow
 {
     function BeginState()
     {
-        if (Root != None)    
+        if (Root != None)
             Root.ChangeCurrentWidget(WidgetID_FakeWindow);
     }
-    
+
     function PostRender(Canvas Canvas)
-    { 
+    {
         if (Root != None)
             Root.bUWindowActive = true;
-        RenderUWindow(Canvas);        
+        RenderUWindow(Canvas);
     }
- 
+
     // Joshua - This isn't great, it's very easy to break sound
     // As an alternative, implement Pause on Focus Loss directly in the ASI patch
     /*
@@ -386,30 +370,30 @@ state FakeWindow extends UWindow
     */
 
     function bool KeyEvent(EInputKey eKey, EInputAction eAction, FLOAT fDelta)
-    {        
+    {
 
         local byte k;
-        k = eKey;                
-        
+        k = eKey;
+
         if (bShowLog)log("Console state FakeWindow KeyEvent eAction"@eAction@"Key"@eKey);
-        
+
         switch (eAction)
         {
         case IST_Release:
-            
+
             ///////////////////////////////////////////////////
             //---------------  No Root  -----------------------
             if (Root == None)
                 return false;
             //-------------------------------------------------
-            ///////////////////////////////////////////////////            
-            
+            ///////////////////////////////////////////////////
+
             switch (eKey)
             {
             case EInputKey.IK_LeftMouse:
                 Root.WindowEvent(WM_LMouseUp, None, MouseX, MouseY, k);
                 break;
-            case EInputKey.IK_RightMouse:				
+            case EInputKey.IK_RightMouse:
                 Root.WindowEvent(WM_RMouseUp, None, MouseX, MouseY, k);
                 break;
             case EInputKey.IK_MiddleMouse:
@@ -420,94 +404,94 @@ state FakeWindow extends UWindow
 				if (EPCMainMenuRootWindow(Root) != None && EPCMainMenuRootWindow(Root).m_FakeWidget != None)
 	                EPCMainMenuRootWindow(Root).m_FakeWidget.Click(0.0, 0.0);
                 break;
-            default:				
+            default:
                 return false;   //We only wan'to handle mouse input so return false when receiving any other input
                 break;
             }
             break;
-            
-            
+
+
             case IST_Press:
                 if (k == ConsoleKey)
                 {
                     if (bLocked)
                         return true;
-                    
+
                     Type();
                     return true;
-                }            
+                }
                 ///////////////////////////////////////////////////
                 //---------------  No Root  -----------------------
                 if (Root == None)
                     return false;
                 //-------------------------------------------------
                 ///////////////////////////////////////////////////
-                
+
                 switch (k)
                 {
-                case EInputKey.IK_LeftMouse:				                
-                    Root.WindowEvent(WM_LMouseDown, None, MouseX, MouseY, k);   
+                case EInputKey.IK_LeftMouse:
+                    Root.WindowEvent(WM_LMouseDown, None, MouseX, MouseY, k);
                     break;
                 case EInputKey.IK_RightMouse:
-                    Root.WindowEvent(WM_RMouseDown, None, MouseX, MouseY, k);				
+                    Root.WindowEvent(WM_RMouseDown, None, MouseX, MouseY, k);
                     break;
                 case EInputKey.IK_MiddleMouse:
-                    Root.WindowEvent(WM_MMouseDown, None, MouseX, MouseY, k);				
+                    Root.WindowEvent(WM_MMouseDown, None, MouseX, MouseY, k);
                     break;
                 case EInputKey.IK_MouseWheelDown:
-                    Root.WindowEvent(WM_MouseWheelDown, None, MouseX, MouseY, k);				
+                    Root.WindowEvent(WM_MouseWheelDown, None, MouseX, MouseY, k);
                     break;
                 case EInputKey.IK_MouseWheelUp:
-                    Root.WindowEvent(WM_MouseWheelUp, None, MouseX, MouseY, k);				
+                    Root.WindowEvent(WM_MouseWheelUp, None, MouseX, MouseY, k);
                     break;
-                default:                    
-                    return false;   //We only wan'to handle mouse input so return false when receiving any other input                                    
+                default:
+                    return false;   //We only wan'to handle mouse input so return false when receiving any other input
                     break;
                 }
                 break;
-                case IST_Axis:         
-                    
+                case IST_Axis:
+
                     switch (k)
                     {
                     case EInputKey.IK_MouseX:
-                        MouseX = MouseX + (MouseScale * fDelta);                
+                        MouseX = MouseX + (MouseScale * fDelta);
                         break;
-                    case EInputKey.IK_MouseY:			    
-                        MouseY = MouseY + (MouseScale * fDelta);                
-                        break;					
+                    case EInputKey.IK_MouseY:
+                        MouseY = MouseY + (MouseScale * fDelta);
+                        break;
                     }
                     break;
-                    
+
                     ///////////////////////////////////////////////////
                     //---------------  No Root  -----------------------
                     if (Root == None)
                         return false;
                     //-------------------------------------------------
                     ///////////////////////////////////////////////////
-                    
+
                     default:
                         break;
         }
-        
+
         return true; //We have a root we keep the input
     }
-    
-    
+
+
     function EndState()
     {
-        if (Root != None)    
+        if (Root != None)
             Root.ChangeCurrentWidget(WidgetID_None);
     }
-    
+
 }
 
 // A window is displayed, trapping all the input
 state UWindow
-{   
+{
     function PostRender(Canvas Canvas)
-	{    
+	{
         if (ViewportOwner.Actor != None)
-        {        
+        {
             ViewportOwner.Actor.SetPause(true);           //Pause Game
             ViewportOwner.Actor.bStopRenderWorld = true;    //Stop Rendering World
 
@@ -523,24 +507,24 @@ state UWindow
         }
 
         if (bReturnToMenu == true && Root != None)
-        {          
-            bReturnToMenu = false; 
+        {
+            bReturnToMenu = false;
 
-            //Force Menu Res       
+            //Force Menu Res
 
             switch (m_eNextStep)
             {
             case LG_MainMenu:
                 //Go to Next Level
                 Root.ChangeCurrentWidget(WidgetID_MainMenu);
-                break;            
-            }            
-        
+                break;
+            }
+
         }
-        
+
         if (bLaunchWasCalled == true && Root != None)
-        {                     
-           ReturnToGame();           
+        {
+           ReturnToGame();
            bLaunchWasCalled = false;
 
         }
@@ -549,9 +533,9 @@ state UWindow
             if (Root != None)
 			    Root.bUWindowActive = true;
 
-		    RenderUWindow(Canvas);                       
-                
-        }	
+		    RenderUWindow(Canvas);
+
+        }
 
 	}
 
@@ -560,7 +544,7 @@ state UWindow
         local byte k;
         local EMainMenuHUD MenuHUD;
         k = eKey;
-        
+
         if (bShowLog)
             log("Console state Uwindow KeyEvent eAction"@eAction@"Key"@eKey);
 
@@ -580,37 +564,37 @@ state UWindow
         switch (eAction)
         {
 		case IST_Release:
-            
+
             ///////////////////////////////////////////////////
             //---------------  No Root  -----------------------
             if (Root == None)
                 return false;
             //-------------------------------------------------
-            ///////////////////////////////////////////////////            
+            ///////////////////////////////////////////////////
 
 			switch (eKey)
 			{
 //            case EInputKey.IK_O:
 //           		LaunchGame();
-//           		break; 
-//           
- 
+//           		break;
+//
+
 			case EInputKey.IK_LeftMouse:
-				Root.WindowEvent(WM_LMouseUp, None, MouseX, MouseY, k);                    
+				Root.WindowEvent(WM_LMouseUp, None, MouseX, MouseY, k);
                 break;
-			case EInputKey.IK_RightMouse:				
-                Root.WindowEvent(WM_RMouseUp, None, MouseX, MouseY, k);				                    
+			case EInputKey.IK_RightMouse:
+                Root.WindowEvent(WM_RMouseUp, None, MouseX, MouseY, k);
                 break;
 			case EInputKey.IK_MiddleMouse:
-				Root.WindowEvent(WM_MMouseUp, None, MouseX, MouseY, k);				                				                    
+				Root.WindowEvent(WM_MMouseUp, None, MouseX, MouseY, k);
                 break;
-			default:				
-                Root.WindowEvent(WM_KeyUp, None, MouseX, MouseY, k);				    
+			default:
+                Root.WindowEvent(WM_KeyUp, None, MouseX, MouseY, k);
 				break;
 			}
 			break;
 
-            
+
         case IST_Press:
             if (k == ConsoleKey)
             {
@@ -619,7 +603,7 @@ state UWindow
 
                 Type();
                 return true;
-            }            
+            }
             ///////////////////////////////////////////////////
             //---------------  No Root  -----------------------
             if (Root == None)
@@ -629,36 +613,36 @@ state UWindow
 
             switch (k)
             {
-			case EInputKey.IK_LeftMouse:				                
-			    Root.WindowEvent(WM_LMouseDown, None, MouseX, MouseY, k);   
+			case EInputKey.IK_LeftMouse:
+			    Root.WindowEvent(WM_LMouseDown, None, MouseX, MouseY, k);
                 break;
 			case EInputKey.IK_RightMouse:
-				Root.WindowEvent(WM_RMouseDown, None, MouseX, MouseY, k);				
+				Root.WindowEvent(WM_RMouseDown, None, MouseX, MouseY, k);
                 break;
 			case EInputKey.IK_MiddleMouse:
-				Root.WindowEvent(WM_MMouseDown, None, MouseX, MouseY, k);				
+				Root.WindowEvent(WM_MMouseDown, None, MouseX, MouseY, k);
                 break;
 			case EInputKey.IK_MouseWheelDown:
-				Root.WindowEvent(WM_MouseWheelDown, None, MouseX, MouseY, k);				
+				Root.WindowEvent(WM_MouseWheelDown, None, MouseX, MouseY, k);
                 break;
 			case EInputKey.IK_MouseWheelUp:
-				Root.WindowEvent(WM_MouseWheelUp, None, MouseX, MouseY, k);				
+				Root.WindowEvent(WM_MouseWheelUp, None, MouseX, MouseY, k);
                 break;
-			default:                    
-				Root.WindowEvent(WM_KeyDown, None, MouseX, MouseY, k);                                    
+			default:
+				Root.WindowEvent(WM_KeyDown, None, MouseX, MouseY, k);
 				break;
 			}
 			break;
-		case IST_Axis:         
+		case IST_Axis:
 
             switch (k)
 		    {
 		    case EInputKey.IK_MouseX:
-			    MouseX = MouseX + (MouseScale * fDelta);                
+			    MouseX = MouseX + (MouseScale * fDelta);
 			    break;
-		    case EInputKey.IK_MouseY:			    
-                MouseY = MouseY + (MouseScale * fDelta);                
-			    break;					
+		    case EInputKey.IK_MouseY:
+                MouseY = MouseY + (MouseScale * fDelta);
+			    break;
 		    }
             break;
 
@@ -684,7 +668,7 @@ state UWindow
 			ViewportOwner.Actor.Level != None &&
 			!ViewportOwner.Actor.Level.bIsStartMenu)
 			ViewportOwner.Actor.PauseSound(false);
-	}    
+	}
 
 	function EndState()
 	{
@@ -703,7 +687,7 @@ state UWindow
 			ViewportOwner.Actor.SkipPresent(1);
         }
 
-        C = class'Actor'.static.GetCanvas();       
+        C = class'Actor'.static.GetCanvas();
         C.VideoStop();
 
         if (bShowFakeWindow)
@@ -727,13 +711,13 @@ function LaunchMainMenu()
 	bVisible = true;
 
 	bQuickKeyEnable = false;
-	LaunchUWindow();   
+	LaunchUWindow();
 
 	if (Root != None)
     {
         //something wrong!!!!
 		Root.bWindowVisible = true;
-    }      
+    }
 }
 
 function CloseMainMenu()
@@ -745,21 +729,21 @@ function CloseMainMenu()
 event ResetMainMenu()
 {
 	ResetUWindow();
-	LaunchUWindow();   
+	LaunchUWindow();
 	bUWindowActive = true;
 	bVisible = true;
-	bLaunchWasCalled = true; 
+	bLaunchWasCalled = true;
 	HideMenusAtStart = false;
 	ReturnToGame();
 }
 
 event LeaveGame(ELeaveGame _bwhatToDo)
-{ 
+{
     //Go Back to menu
     if (bReturnToMenu)
         return;
 
-    bReturnToMenu   = true;    
+    bReturnToMenu   = true;
 
 	ViewportOwner.Actor.StopAllSounds();
 
@@ -767,28 +751,28 @@ event LeaveGame(ELeaveGame _bwhatToDo)
     LaunchMainMenu();
 
     switch (_bwhatToDo)
-    {      
-	    case LG_MainMenu:        
-		default: //Go back to main menu       
-			m_eNextStep = LG_MainMenu;        
+    {
+	    case LG_MainMenu:
+		default: //Go back to main menu
+			m_eNextStep = LG_MainMenu;
 			break;
     }
 }
 
 //This can be called to closed menus and return to game
 function LaunchGame()
-{   
+{
 	ViewportOwner.Actor.bStopRenderWorld = false; //Render World
-	bLaunchWasCalled = true; 
-	HideMenusAtStart = false;    
+	bLaunchWasCalled = true;
+	HideMenusAtStart = false;
 }
 
 
 //This should not be called except by Console Code
 function ReturnToGame() //used to return to game and hide menus as well
-{    
+{
     GotoState('');
- 
+
 }
 
 // ====================================================================
@@ -818,7 +802,7 @@ function string ConvertKeyToLocalisation(BYTE _Key, string _szEnumKeyName)
 	else
 	{
 		szResult = Localize("Interactions", "IK_"$_szEnumKeyName, "Localization\\HUD");
-		
+
 		// if the key is not define
 		if (szResult == Localize("Interactions", "IK_None", "Localization\\HUD"))
 		{

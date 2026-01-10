@@ -9,7 +9,7 @@
  Reference:     -
 
 ******************************************************************************/
-class EchelonMainHUD extends EMainHUD 
+class EchelonMainHUD extends EMainHUD
 	config(Enhanced) // Joshua - Class, configurable in Enhanced config
 	native;
 
@@ -21,11 +21,11 @@ class EchelonMainHUD extends EMainHUD
 #exec OBJ LOAD FILE=..\Sounds\CommonMusic.uax
 
 /*-----------------------------------------------------------------------------
-                      T Y P E   D E F I N I T I O N S 
+                      T Y P E   D E F I N I T I O N S
 -----------------------------------------------------------------------------*/
 
 // LifeBar //
-// (Yanick Mimee) June-27-2002 
+// (Yanick Mimee) June-27-2002
 const   LIFEBAR_WIDTH        = 17;
 const   LIFEBAR_HEIGHT       = 194;
 const   INTER_OFFSET_X       = 50;
@@ -35,7 +35,7 @@ const   MAX_INTER_NAME_LENGHT = 20;
 
 
 //////////////////////////////
-// Computer interface 
+// Computer interface
 //////////////////////////////
 const SCREEN_WIDTH    = 640;
 const SCREEN_HEIGHT   = 480;
@@ -58,7 +58,7 @@ const ERROR_BOX_WIDTH = 250;
 const SPACING_ERROR_BOX = 50;
 
 /*-----------------------------------------------------------------------------
-                          M E M B E R   V A R I A B L E S 
+                          M E M B E R   V A R I A B L E S
 -----------------------------------------------------------------------------*/
 // Menu //
 var EQInvHUD			QuickInvAndCurrentItems;
@@ -142,7 +142,7 @@ event SetPause(bool bSet)
 }
 
 event StopRender(bool bSet)
-{	
+{
 	Epc.bStopRenderWorld = bSet;
 }
 
@@ -170,7 +170,7 @@ function PostBeginPlay()
     QuickInvAndCurrentItems 	= spawn(class'EQInvHUD',self);
     GameMenuHUD             	= spawn(class'EGameMenuHUD',self);
     PlayerStatsHUD         		= spawn(class'EPlayerStatsHUD',self); // Joshua - Player statistics screen
-    
+
     // Joshua - Start of controller related
     MainMenuHUD            		= spawn(class'EMainMenuHUD', self);
 
@@ -179,13 +179,13 @@ function PostBeginPlay()
 	GameMenuHUD.TitleSectionInv = -1;
 	GameMenuHUD.TitleSectionMainMenu = -1;
 	GameMenuHUD.InvMenuDepth    = 0;
-    GameMenuHUD.ItemPos         = -1;    
+    GameMenuHUD.ItemPos         = -1;
     GameMenuHUD.CurrentCategory = CAT_NONE;
 
-		
+
 	if (!EchelonGameInfo(Level.Game).bDemoMode)
 	{
-		GameMenuHUD.nLastMenuPage = 's_Inventory';		
+		GameMenuHUD.nLastMenuPage = 's_Inventory';
 	}
 	else
 	{
@@ -193,14 +193,14 @@ function PostBeginPlay()
 	}
 
 	// (Yanick Mimee) June-13-2002
-	GameMenuHUD.TitleSectionGameInfo  = -1; 
+	GameMenuHUD.TitleSectionGameInfo  = -1;
 
-	// (Yanick Mimee) June-13-2002	
+	// (Yanick Mimee) June-13-2002
 	GameMenuHUD.bGadgetVideoIsPlaying = false;
-	GameMenuHUD.ReconDescScrollPos = 0;	
-		
+	GameMenuHUD.ReconDescScrollPos = 0;
+
 	GameMenuHUD.iIndexReconScroll = 0;
-	GameMenuHUD.iIndexCurRoom = 0;	
+	GameMenuHUD.iIndexCurRoom = 0;
 	GameMenuHUD.iIndexRecon = 0;
 
 	GameMenuHUD.bScrollUp   = true; // update the text the first time through
@@ -209,47 +209,47 @@ function PostBeginPlay()
 	GameMenuHUD.iStartPos = 0;
 	GameMenuHUD.iOldStartPos = 0;
 	GameMenuHUD.iEndPos = 0;
-	GameMenuHUD.iOldEndPos = 0;  
+	GameMenuHUD.iOldEndPos = 0;
 	GameMenuHUD.bReconSelected = false;
 
 	GameMenuHUD.bGameIsFinished = false;
 
 	MainMenuHUD.bInactVideoPlaying = false;
     // Joshua - End of controller related
-	// Testing recons system		
-	/*	
+	// Testing recons system
+	/*
 	Epc.AddRecon(class'EReconMapMinistry');
 	Epc.AddRecon(class'EReconMapKalinatek');
 	Epc.AddRecon(class'EReconMapTibilisi');
 	Epc.AddRecon(class'EReconMapCIA1');
 	Epc.AddRecon(class'EReconMapCIA2');
 	Epc.AddRecon(class'EReconMap4_1');
-	Epc.AddRecon(class'EReconMap3_2Cooling');	
-	
+	Epc.AddRecon(class'EReconMap3_2Cooling');
+
 
 	Epc.AddRecon(class'EReconPicGrinko');
 	Epc.AddRecon(class'EReconPicMasse');
 	Epc.AddRecon(class'EReconPicJackBaxter');
-	Epc.AddRecon(class'EReconPicMitDoughert');	
+	Epc.AddRecon(class'EReconPicMitDoughert');
 	Epc.AddRecon(class'EReconPicAlekseevich');
-	Epc.AddRecon(class'EReconPicCritavi');		
+	Epc.AddRecon(class'EReconPicCritavi');
 
 	Epc.AddRecon(class'EReconFullText3_2AF_A');
 	Epc.AddRecon(class'EReconFullText3_2AF_B');
-	Epc.AddRecon(class'EReconFullText5_1AF_A');	
-	Epc.AddRecon(class'EReconFullText5_1AF_B');	
+	Epc.AddRecon(class'EReconFullText5_1AF_A');
+	Epc.AddRecon(class'EReconFullText5_1AF_B');
 	Epc.AddRecon(class'EReconFullTextGugen');
 	Epc.AddRecon(class'EReconFullTextBlaust');
 	Epc.AddRecon(class'EReconFullTextMasse');
 	Epc.AddRecon(class'EReconFullTextMadison');
-	Epc.AddRecon(class'EReconFullTextJackBaxter');					   
+	Epc.AddRecon(class'EReconFullTextJackBaxter');
 	Epc.AddRecon(class'EReconFullTextMitDoughert');
 	Epc.AddRecon(class'EReconFullTextCall911');
-	Epc.AddRecon(class'EReconFullTextGrinko');	
+	Epc.AddRecon(class'EReconFullTextGrinko');
 	Epc.AddRecon(class'EReconFullTextUSAF');
 	Epc.AddRecon(class'EReconFullTextAlek');
 	Epc.AddRecon(class'EReconFullTextMissileDesc');
-	Epc.AddRecon(class'EReconFullProgDesc');		
+	Epc.AddRecon(class'EReconFullProgDesc');
 
 	Epc.AddRecon(class'EReconInfWaterValve');
 	Epc.AddRecon(class'EReconInfCrudeOilCircuit');
@@ -259,32 +259,32 @@ function PostBeginPlay()
 
 	bErrorFound = false;
 
-												
+
     eGame  = EchelonGameInfo(Level.Game);
     eLevel = EchelonLevelInfo(Level);
 
     Super.PostBeginPlay();
 
-	// Joshua - Controller related   
+	// Joshua - Controller related
 	if (Level.bIsStartMenu)
-	{			
+	{
 		if (Epc.iErrorMsg == -3)
-		{			
-			Epc.iErrorMsg = -2;		
+		{
+			Epc.iErrorMsg = -2;
 		}
         GotoState('s_MainMenu');
 	}
 	else
-	{				
+	{
 		Epc.iErrorMsg = 0;
         GotoState('MainHUD'); // Joshua - This was still used on PC
-		//GotoState('s_LoadingScreen');		
-	}	
+		//GotoState('s_LoadingScreen');
+	}
 }
 
 //------------------------------------------------------------------------
-// Description		
-//		
+// Description
+//
 //------------------------------------------------------------------------
 function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta);
 
@@ -292,7 +292,7 @@ function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta);
 function RealKeyEvent(string RealKeyValue, EInputAction Action, FLOAT Delta)
 {
 	//log("RealKeyEvent received in EchelonMainHUD " $ RealKeyValue);
-	
+
 	//To receive the message in the various Huds just pass the message
 	//to the MainMenuHUD or	GameMenuHUD classes as necessary.
 	//GameMenuHUD.RealKeyEvent(RealKeyValue, Action, Delta);
@@ -306,7 +306,7 @@ function DrawSaveLoadBox(ECanvas Canvas)
 		{
 			if (Epc.bCheckpoint)
 			{
-				DrawErrorMsgBox(Canvas, Localize("Common", "Checkpoint", "Localization\\Enhanced"));	
+				DrawErrorMsgBox(Canvas, Localize("Common", "Checkpoint", "Localization\\Enhanced"));
 			}
 			else
 				DrawErrorMsgBox(Canvas, Localize("HUD", "AUTOSAVING", "Localization\\HUD"));
@@ -323,13 +323,13 @@ function DrawSaveLoadBox(ECanvas Canvas)
 			DrawErrorMsgBox(Canvas, Localize("HUD", "LOADING", "Localization\\HUD"));
 		else
 			DrawErrorMsgBox(Canvas, Localize("HUD", "QUICKLOADING", "Localization\\HUD"));
-	}		
+	}
 }
 
 /*-----------------------------------------------------------------------------
  Function:      DrawDebugModeIndicator
 
- Description:   -
+ Description:   Joshua - Displays an indicator that Debug Mode is enabled.
 -----------------------------------------------------------------------------*/
 function DrawDebugModeIndicator(ECanvas Canvas)
 {
@@ -352,9 +352,9 @@ function DrawDebugModeIndicator(ECanvas Canvas)
  Description:   -
 -----------------------------------------------------------------------------*/
 function DrawDebugInfo(ECanvas Canvas)
-{    
+{
 	local float YL, YPos; // Joshua - Temporary PlayerStats debug
-	
+
 	if	(Epc.bDebugInput)
 	{
 		Canvas.Font = Font'SmallFont';
@@ -400,7 +400,7 @@ function DrawLifeBar(ECanvas Canvas)
 		DrawLifeBarHorizontal(Canvas);
 		return;
 	}
-	
+
 	Green.R = 98;
 	Green.G = 113;
 	Green.B = 79;
@@ -423,7 +423,7 @@ function DrawLifeBar(ECanvas Canvas)
     // TOP RIGHT CORNER //
     Canvas.SetPos(xPos + LIFEBAR_WIDTH - 8, yPos);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin2, 8, 4, 0, 4, 8, -4);
-    
+
     // BOTTOM RIGHT CORNER //
     Canvas.SetPos(xPos + LIFEBAR_WIDTH - 8, yPos + LIFEBAR_HEIGHT - 7);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_coin1, 8, 7, 8, 0, -8, 7);
@@ -431,11 +431,11 @@ function DrawLifeBar(ECanvas Canvas)
     // LEFT BORDER //
     Canvas.SetPos(xPos, yPos + 4);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v, 5, LIFEBAR_HEIGHT - 11, 0, 0, 5, 1);
-    
-    // RIGHT //    
+
+    // RIGHT //
     Canvas.SetPos(xPos + LIFEBAR_WIDTH - 5, yPos + 4);
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_v, 5, LIFEBAR_HEIGHT - 11, 5, 0, -5, 1);
-    
+
     // TOP //
     //Canvas.SetPos(xPos + 8, yPos);
     //eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_h2, LIFEBAR_WIDTH - 16, 4, 0, 0, 1, 4);
@@ -448,27 +448,27 @@ function DrawLifeBar(ECanvas Canvas)
     eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.qi_bord_h, LIFEBAR_WIDTH - 16, 6, 0, 0, 1, 6);
 	Canvas.Style = ERenderStyle.STY_Normal;
 
-    // BACKGROUND //		    	
+    // BACKGROUND //
 	Canvas.SetPos(xPos + 5, yPos + 4);
 	Canvas.DrawColor = Canvas.black;
 	Canvas.DrawColor.A = 40;
-	Canvas.Style = ERenderStyle.STY_Alpha;	
+	Canvas.Style = ERenderStyle.STY_Alpha;
 	eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.lf_niv_plein, 8, LIFEBAR_HEIGHT - 10, 0, 0, 7, 1);
-	
+
 
     // LIFE //
     if (Epc.Pawn != None && Epc.ePawn.Health > 0.0f)
     {
 		// (Yanick Mimee) June-27-2002
-		Canvas.SetDrawColor(128, 128 + (127 * (1 - (float(Epc.ePawn.Health) / Epc.ePawn.InitialHealth))), 128, 255);	
-		Canvas.Style = ERenderStyle.STY_Normal;	
+		Canvas.SetDrawColor(128, 128 + (127 * (1 - (float(Epc.ePawn.Health) / Epc.ePawn.InitialHealth))), 128, 255);
+		Canvas.Style = ERenderStyle.STY_Normal;
 		// Joshua - Fixed life bar size to fit the vertically better
 		//LifeBarSize = (LIFEBAR_HEIGHT - 10) * (float(Epc.ePawn.Health) / Epc.ePawn.InitialHealth);
 		LifeBarSize = (LIFEBAR_HEIGHT - 8) * (float(Epc.ePawn.Health) / Epc.ePawn.InitialHealth);
         //Canvas.SetPos(xPos + 4, yPos + LIFEBAR_HEIGHT - LifeBarSize - 7);
 		Canvas.SetPos(xPos + 4, yPos + LIFEBAR_HEIGHT - LifeBarSize - 5);
-        eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.lf_niv_plein, 8, LifeBarSize, 0, 0, 7, 1);		
-	}	
+        eLevel.TGAME.DrawTileFromManager(Canvas, eLevel.TGAME.lf_niv_plein, 8, LifeBarSize, 0, 0, 7, 1);
+	}
 }
 
 /*-----------------------------------------------------------------------------
@@ -1040,7 +1040,7 @@ state MainHUD
 	function EndState()
 	{
 		// Dismiss the controller splash if changing state
-		if (bShowCtrl) 
+		if (bShowCtrl)
 		{
 			bShowCtrl = false;
 			Epc.SetPause(false);
@@ -1049,7 +1049,7 @@ state MainHUD
 		}
 	}
 	 */
-	 
+
 	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
 		if (Action == IST_Press || Action == IST_Hold)
@@ -1076,29 +1076,29 @@ state MainHUD
 		}
 
 		return false; // continue input processing
-	} 
+	}
 
 	function PostRender(Canvas C)
 	{
 		local ECanvas Canvas;
-		
-		Canvas = ECanvas(C);
-    							
 
-		DrawMainHUD(Canvas);	
+		Canvas = ECanvas(C);
+
+
+		DrawMainHUD(Canvas);
 
 		// Draw item selected
 		if (hud_master != None)
 			hud_Master.DrawView(self,Canvas);
 
-			DrawInventoryItemInfo(Canvas);
+		DrawInventoryItemInfo(Canvas);
 
 		DrawSaveLoadBox(Canvas);
 
 		DrawDebugModeIndicator(Canvas);
-		
+
 		Super.PostRender(Canvas);
-		
+
 	}
 }
 
@@ -1132,13 +1132,13 @@ state s_Slavery
 	function PostRender(Canvas C)
 	{
 		local ECanvas Canvas;
-		Canvas = ECanvas(C);		
+		Canvas = ECanvas(C);
 
 		if (hud_master != None)
 			hud_master.DrawView(self, Canvas);
 
 		// Joshua - Persistent HUD
-		if (Epc.bPersistentHUD && 
+		if (Epc.bPersistentHUD &&
 			(Epc.GetStateName() == 's_OpticCable' ||
 			Epc.GetStateName() == 's_Zooming' ||
 			Epc.GetStateName() == 's_SplitZooming' ||
@@ -1169,7 +1169,7 @@ state s_Slavery
 
 		if (!Epc.bLockedCamera || Epc.bPersistentHUD)
 		{
-			if (Epc.GetStateName() == 's_FirstPersonTargeting'	|| 
+			if (Epc.GetStateName() == 's_FirstPersonTargeting'	||
 				Epc.GetStateName() == 's_CameraJammerTargeting'	||
 				Epc.GetStateName() == 's_RappellingTargeting'	||
 				Epc.GetStateName() == 's_PlayerBTWTargeting'	||
@@ -1193,7 +1193,7 @@ state s_Slavery
 						DrawLifeBar(Canvas);
 					}
 				}
-				
+
 				if (Epc.bShowHUD || GetStateName() == 'QuickInventory')
 				{
 					// Quick Inventory
@@ -1217,7 +1217,7 @@ state s_Slavery
 			if (TimerView != None)
 				TimerView.PostRender(Canvas);
 		}
-		
+
 
 		DrawSaveLoadBox(Canvas);
 
@@ -1231,15 +1231,15 @@ state s_Slavery
 
 	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
-		if (Action == IST_Press || 
+		if (Action == IST_Press ||
 			Action == IST_Hold)
 		{
 			switch (Key)
 			{
 			case "QuickInventory" :
 				if (Epc.CanAccessQuick() &&
-					!Epc.bStopInput && 
-					Level.Pauser == None && 
+					!Epc.bStopInput &&
+					Level.Pauser == None &&
 					(Epc.GetStateName() == 's_FirstPersonTargeting'	||
 					 Epc.GetStateName() == 's_RappellingTargeting'	||
 					 Epc.GetStateName() == 's_SplitTargeting'		||
@@ -1254,8 +1254,8 @@ state s_Slavery
 			case "PlayerStats" :
 				if (Epc.CanAccessPlayerStats() &&
 					Epc.PlayerStatsMode != SM_Disabled &&
-					!Epc.bStopInput && 
-					Level.Pauser == None && 
+					!Epc.bStopInput &&
+					Level.Pauser == None &&
 					(Epc.GetStateName() == 's_FirstPersonTargeting'	||
 					 Epc.GetStateName() == 's_GrabTargeting'		||
 					 Epc.GetStateName() == 's_RappellingTargeting'	||
@@ -1274,7 +1274,7 @@ state s_Slavery
 		}
 
 		return false; // continue input processing
-	} 
+	}
 }
 
 /*=============================================================================
@@ -1287,12 +1287,12 @@ state s_MainMenu
 	Ignores FullInventory;
 
 	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
-	{				
+	{
         MainMenuHUD.DemoTimer = 0.0f;
 		return MainMenuHUD.KeyEvent(Key,Action, Delta);
 	}
 
-	function PostRender(Canvas C)	
+	function PostRender(Canvas C)
 	{
 		Local ECanvas Canvas;
 		Canvas = ECanvas(C);
@@ -1302,8 +1302,8 @@ state s_MainMenu
         if (bDrawMainHUD)
             DrawConfigMainHUD(Canvas);
 
-		MainMenuHUD.PostRender(Canvas);         		
-        
+		MainMenuHUD.PostRender(Canvas);
+
         DrawDebugInfo(Canvas);
 		DrawDebugModeIndicator(Canvas);
 
@@ -1322,14 +1322,14 @@ state s_MainMenu
 		Epc.bStopRenderWorld = true;
 
 		if (GameMenuHUD.bGameIsFinished)
-		{			
+		{
 			GameMenuHUD.bGameIsFinished = false;
 			MainMenuHUD.GotoState('s_StartGame');
 		}
 		else
 		{
 			if (!EPC.bQuickLoad)
-			{				
+			{
 				MainMenuHUD.GotoState('s_StartGame');
 			}
 			else
@@ -1358,7 +1358,7 @@ state s_GameMenu
         return GameMenuHUD.KeyEvent(Key, Action, Delta);
 	}
 
-	function PostRender(Canvas C)	
+	function PostRender(Canvas C)
 	{
 		Local ECanvas Canvas;
 		Canvas = ECanvas(C);
@@ -1369,16 +1369,8 @@ state s_GameMenu
 
         GameMenuHUD.PostRender(Canvas);
 
-		// Joshua - Handles the transition from the Xbox pause screen to the PC menus
-		if (GameMenuHUD.MenuSection == 2 && GameMenuHUD.TitleSectionMainMenu != -1)
-		{
-			// Close the Xbox pause menu
-			Epc.bPCMenuPending = true;
-			GotoState(RestoreState());
-		}
-
         // Transmissions //
-	    CommunicationBox.DrawMenuSpeech(Canvas);		
+	    CommunicationBox.DrawMenuSpeech(Canvas);
 
         DrawDebugInfo(Canvas);
 		DrawDebugModeIndicator(Canvas);
@@ -1390,13 +1382,6 @@ state s_GameMenu
 
 	function BeginState()
 	{
-		// Joshua - Handles the transition from the Xbox pause screen to the PC menus
-		if (GameMenuHUD.nLastMenuPage == 's_MainMenu')
-			GameMenuHUD.nLastMenuPage = 's_GameInfo';
-
-		if (GameMenuHUD.TitleSectionMainMenu != 1)
-			GameMenuHUD.TitleSectionMainMenu = -1;
-
 		// Player just poped up game menu
         Epc.SetPause(true);
 
@@ -1407,7 +1392,7 @@ state s_GameMenu
 		Epc.SetKey("Joy1 Interaction", "");
 
 		Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
-		
+
 		// (Yanick Mimee) June-17-2002
 		// Go back to the last menu page access.
 		if (Epc.bNewGoal || Epc.bNewNote || Epc.bNewRecon)
@@ -1415,16 +1400,16 @@ state s_GameMenu
 			GameMenuHUD.bNbrOfSpotIsFound = false;
 			GameMenuHUD.bScrollUp   = true;  // update the text the first time through
 			GameMenuHUD.bScrollDown = false; // update the text the first time through
-			GameMenuHUD.iStartPos    = 0; 
+			GameMenuHUD.iStartPos    = 0;
 			GameMenuHUD.iOldStartPos = 0;
 			GameMenuHUD.iEndPos      = 0;
 			GameMenuHUD.iOldEndPos   = 0;
 			GameMenuHUD.iIndexRecon  = 0;
-			GameMenuHUD.ReconDescScrollPos = 0;			
+			GameMenuHUD.ReconDescScrollPos = 0;
 			GameMenuHUD.iIndexReconScroll = 0;
-			GameMenuHUD.iIndexCurRoom = 0;		
-			GameMenuHUD.bReconSelected = false;  
-			GameMenuHUD.bInsideSubMenu = false;  
+			GameMenuHUD.iIndexCurRoom = 0;
+			GameMenuHUD.bReconSelected = false;
+			GameMenuHUD.bInsideSubMenu = false;
 			GameMenuHUD.TitleSectionInv = -1;
 			GameMenuHUD.InvMenuDepth = 0;
 			GameMenuHUD.ItemPos = 0;
@@ -1440,15 +1425,15 @@ state s_GameMenu
 				if (Epc.bNewRecon)
 				{
 					GameMenuHUD.TitleSectionGameInfo = 2;
-				}			
+				}
 				else
 				{
 					GameMenuHUD.TitleSectionGameInfo = 1;
 				}
 			}
 		}
-				
-		GameMenuHUD.GoToState(GameMenuHUD.nLastMenuPage);		
+
+		GameMenuHUD.GoToState(GameMenuHUD.nLastMenuPage);
 	}
 
     function EndState()
@@ -1461,15 +1446,10 @@ state s_GameMenu
 
 	function FullInventory()
 	{
-		GameMenuHUD.bNbrOfSpotIsFound = false;		
+		GameMenuHUD.bNbrOfSpotIsFound = false;
 		ResumeSound();
 		Epc.bStopRenderWorld = false;
-		// Joshua - If still in a cinematic, return to s_Cinematic instead of the saved state
-		// The saved state prior to the cinematic should be preserved for when the cinematic ends
-		if (Epc.bInCinematic)
-			GotoState('s_Cinematic');
-		else
-			GotoState(RestoreState());
+		GotoState(RestoreState());
 	}
 }
 
@@ -1479,7 +1459,7 @@ state s_GameMenu
  Description:   -
 =============================================================================*/
 state s_QuickSaveMenu
-{	
+{
 	Ignores FullInventory;
 
 	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
@@ -1491,7 +1471,7 @@ state s_QuickSaveMenu
 			return GameMenuHUD.KeyEvent(Key, Action, Delta);
 	}
 
-	function PostRender(Canvas C)	
+	function PostRender(Canvas C)
 	{
 		Local ECanvas Canvas;
 		Canvas = ECanvas(C);
@@ -1508,14 +1488,14 @@ state s_QuickSaveMenu
 	}
 
 	function BeginState()
-	{		
+	{
         Epc.SetPause(true);
 		Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
 
 		if (!EchelonGameInfo(Level.Game).bDemoMode)
-			MainMenuHUD.GoToState('s_SaveGame');		
+			MainMenuHUD.GoToState('s_SaveGame');
 		else
-			GameMenuHUD.GoToState('s_QuickSave');		
+			GameMenuHUD.GoToState('s_QuickSave');
 	}
 
     function EndState()
@@ -1539,14 +1519,14 @@ state s_QuickLoadMenu
 	Ignores FullInventory;
 
 	function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
-	{       
+	{
 		if (!EchelonGameInfo(Level.Game).bDemoMode)
 			return MainMenuHUD.KeyEvent(Key, Action, Delta);
 		else
 			return GameMenuHUD.KeyEvent(Key, Action, Delta);
 	}
 
-	function PostRender(Canvas C)	
+	function PostRender(Canvas C)
 	{
 		Local ECanvas Canvas;
 		Canvas = ECanvas(C);
@@ -1565,12 +1545,12 @@ state s_QuickLoadMenu
 	function BeginState()
 	{
         Epc.SetPause(true);
-		Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);				
+		Epc.EPawn.PlaySound(Sound'Interface.Play_ActionChoice', SLOT_Interface);
 
 		if (!eGame.bDemoMode)
 			MainMenuHUD.GoToState('s_LoadGame');
 		else
-			GameMenuHUD.GoToState('s_QuickLoad');		
+			GameMenuHUD.GoToState('s_QuickLoad');
 	}
 
     function EndState()
@@ -1618,7 +1598,7 @@ state QuickInventory
 	       if (hud_master != None)
 		       hud_master.DrawView(self, Canvas);
 	       DrawInventoryItemInfo(Canvas);
-		   
+
 	       DrawMainHUD(Canvas);
 	       CheckError(Canvas, Epc.GetPause());
 		   DrawDebugModeIndicator(Canvas);
@@ -1673,16 +1653,16 @@ state s_Training
  State:         s_Loading
 =============================================================================*/
 state s_Loading
-{	
+{
 	Ignores FullInventory;
 
-	function PostRender(Canvas C)	
+	function PostRender(Canvas C)
 	{
 		local ECanvas Canvas;
 		Canvas = ECanvas(C);
 
 		Canvas.Style = ERenderStyle.STY_Normal;
-        
+
         MainMenuHUD.DrawLoading(Canvas);
 
 		DrawDebugModeIndicator(Canvas);
@@ -1701,7 +1681,7 @@ state s_Mission
 
     function bool KeyEvent(string Key, EInputAction Action, FLOAT Delta)
 	{
-        return GameMenuHUD.KeyEvent(Key, Action, Delta);        
+        return GameMenuHUD.KeyEvent(Key, Action, Delta);
 	}
 
 	function bool IsPlayerGameOver()
@@ -1709,17 +1689,17 @@ state s_Mission
 		return GameMenuHUD.GetStateName() == 's_MissionFailed';
 	}
 
-    function PostRender(Canvas C)	
+    function PostRender(Canvas C)
 	{
 		local ECanvas Canvas;
 		Canvas = ECanvas(C);
 
 		Canvas.Style     = ERenderStyle.STY_Normal;
-        
+
         GameMenuHUD.PostRender(Canvas);
 
 		PlayerStatsHUD.PostRender(Canvas);
-	
+
 		CheckError(Canvas, Epc.GetPause());
 
         DrawDebugInfo(Canvas);
@@ -1733,7 +1713,7 @@ state s_Mission
 
 Failed:
 	StartFadeOut(40.0f);
-	PlaySound(Sound'CommonMusic.Play_theme_Missionfailure', SLOT_Fisher);		
+	PlaySound(Sound'CommonMusic.Play_theme_Missionfailure', SLOT_Fisher);
 	StopRender(false);
     GameMenuHUD.GotoState('s_MissionFailed');
 	Stop;
@@ -1801,7 +1781,7 @@ state s_Cinematic
 
 		DrawDebugInfo(Canvas);
 		DrawDebugModeIndicator(Canvas);
-        
+
 		if (Epc.bShowHUD && bShowCommunicationBox)
 		{
 			// Transmissions
@@ -1814,8 +1794,8 @@ state s_Cinematic
 	}
 
     function BeginState()
-    {		
-        CommunicationBox.GotoState('s_Cinematic');        
+    {
+        CommunicationBox.GotoState('s_Cinematic');
     }
 
     function EndState()
@@ -1824,7 +1804,7 @@ state s_Cinematic
     }
 
 	// If Player is drawing weapon while cinematic starts, it will pop here ..
-	// saving as if he was in slavery before cinematic so that everything gets 
+	// saving as if he was in slavery before cinematic so that everything gets
 	// restored properly when coming back form cinematic
 	function Slave(EGameplayObject NewMaster)
 	{
@@ -1862,15 +1842,15 @@ state PlayerStats
 		local ECanvas Canvas;
 		Canvas = ECanvas(C);
 		Canvas.Style = ERenderStyle.STY_Normal;
-		
+
 		// Only show lifebar when stats are up
 		if (Epc.bShowHUD && bShowLifeBar)
 		{
 			DrawLifeBar(Canvas);
 		}
-		
+
 		PlayerStatsHUD.PostRender(C);
-		
+
 		CheckError(Canvas, Epc.GetPause());
 
 		DrawDebugModeIndicator(Canvas);
@@ -1899,15 +1879,15 @@ state s_FinalMapStats
         return PlayerStatsHUD.KeyEvent(Key, Action, Delta);
     }
 
-    function PostRender(Canvas C)	
+    function PostRender(Canvas C)
     {
         local ECanvas Canvas;
         Canvas = ECanvas(C);
 
         Canvas.Style = ERenderStyle.STY_Normal;
-        
+
         PlayerStatsHUD.PostRender(Canvas);
-    
+
         CheckError(Canvas, Epc.GetPause());
 
         DrawDebugInfo(Canvas);

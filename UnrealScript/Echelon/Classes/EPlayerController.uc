@@ -368,22 +368,16 @@ function bool IsInQuickInv()
 	return (myHUD != None && myHUD.GetStateName() == 'QuickInventory');
 }
 
-// Joshua - Track if Xbox game menu is being used to prevent saving/loading in it
-function bool IsInXboxGameMenu()
-{
-	return (myHUD != None && myHUD.GetStateName() == 's_GameMenu');
-}
-
 event bool CanSaveGame()
 {
 	// Joshua - Allow checkpoints during bStopInput, but not manual saves (necessary for Kalinatek hostages)
 	// Joshua - Block save game during cinematic
-	return (Pawn != None && Pawn.Health > 0 && !bInCinematic && (!bStopInput || bCheckpoint) && !PlayerInput.bStopInputAlternate && !Level.bIsStartMenu && !IsInQuickInv() && !IsInXboxGameMenu() && ((!eGame.bEliteMode || bDebugMode) || bAutoSaveLoad || bSavingTraining));
+	return (Pawn != None && Pawn.Health > 0 && !bInCinematic && (!bStopInput || bCheckpoint) && !PlayerInput.bStopInputAlternate && !Level.bIsStartMenu && !IsInQuickInv() && ((!eGame.bEliteMode || bDebugMode) || bAutoSaveLoad || bSavingTraining));
 }
 
 event bool CanLoadGame()
 {
-	return !IsInQuickInv() && !IsInXboxGameMenu() && ((!eGame.bEliteMode || bDebugMode) || bLoadingTraining); // Joshua - No quick loading in Elite mode
+	return !IsInQuickInv() && ((!eGame.bEliteMode || bDebugMode) || bLoadingTraining); // Joshua - No quick loading in Elite mode
 }
 
 // Joshua - Load the last save game tracked in LastSaveName

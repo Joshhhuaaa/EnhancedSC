@@ -13,7 +13,7 @@ class EMenuHUD extends Actor native;
 #exec OBJ LOAD FILE=..\Sounds\Interface.uax
 
 /*-----------------------------------------------------------------------------
-                        T Y P E   D E F I N I T I O N S 
+                        T Y P E   D E F I N I T I O N S
 -----------------------------------------------------------------------------*/
 
 const NB_NOISE_LINE = 3;
@@ -28,7 +28,7 @@ enum BKG_COLOR {BKG_NONE, BKG_REG, BKG_PALE, BKG_DARK};
 var int UCONST_NB_MAINMENU_ITEM;
 
 /*-----------------------------------------------------------------------------
-                        M E M B E R   V A R I A B L E S 
+                        M E M B E R   V A R I A B L E S
 -----------------------------------------------------------------------------*/
 var	EchelonGameInfo	    eGame;
 var EchelonLevelInfo    eLevel;
