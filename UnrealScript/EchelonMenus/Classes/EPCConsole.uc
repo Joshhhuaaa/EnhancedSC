@@ -268,23 +268,30 @@ function PopCD()
 	//GotoState('FakeWindow');
 	EPCMainMenuRootWindow(Root).PopCD();
 }
-	
+
 function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 {
-    
-    if (bShowLog)log("Maint KeyEvent Key"@Key@"Action"@Action);
-    
-    
+    // Joshua - If there's a new datastick, go directly to its details page
+    local EPlayerController EPC;
+    local ERecon MostRecentRecon;
+    local EListNode Node;
+    local ETransmissionObj TransObj;
+    local string CurrentTransmissionText;
+
+    if (bShowLog)
+        log("Maint KeyEvent Key"@Key@"Action"@Action);
+
+
 //
-//    if ((Key == EInputKey.IK_O) && (Action == IST_Release) && (Root != None)) 
+//    if ((Key == EInputKey.IK_O) && (Action == IST_Release) && (Root != None))
 //    {
 //                GotoState('UWindow');
-//                Root.ChangeCurrentWidget(WidgetID_MainMenu);        		
+//                Root.ChangeCurrentWidget(WidgetID_MainMenu);
 //                return true;
-//    }    
-//    else if ((Key == EInputKey.IK_P) && (Action == IST_Release) && (Root != None)) 
-//    
-//    
+//    }
+//    else if ((Key == EInputKey.IK_P) && (Action == IST_Release) && (Root != None))
+//
+//
 
     if ((Key == ViewportOwner.Actor.GetKey("FullInventory", false)) && 
         (EPlayerController(ViewportOwner.Actor).CanGoBackToGame()) && // Joshua - Prevent the PC menus during GameOver
@@ -299,7 +306,33 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			bReturnToMenu = false;
 			GotoState('UWindow');
 			Root.ChangeCurrentWidget(WidgetID_InGameMenu);
-			EPCMainMenuRootWindow(Root).m_InGameMenu.CheckSubMenu();
+
+			// Joshua - If transmission box is showing a recon related message, go directly to its details page
+			EPC = EPlayerController(ViewportOwner.Actor);
+			if (EPC != None && EPC.bQuickDataView)
+			{
+				// Get the currently displayed transmission from the communication box
+				Node = EMainHUD(EPC.myHUD).CommunicationBox.GetCurrentNode();
+				if (Node != None)
+				{
+					TransObj = ETransmissionObj(Node.Data);
+					if (TransObj != None)
+						CurrentTransmissionText = TransObj.Data;
+				}
+
+				if (InStr(CurrentTransmissionText, Localize("Transmission", "ComputerPickup", "Localization\\HUD")) != -1 ||
+					InStr(CurrentTransmissionText, Localize("Transmission", "SatchelFind", "Localization\\HUD")) != -1 ||
+                    InStr(CurrentTransmissionText, Localize("HUD", "Added", "Localization\\HUD")) != -1)
+				{
+					MostRecentRecon = EPC.GetMostRecentRecon();
+					// Only go if the most recent recon hasn't been read yet
+					if (MostRecentRecon != None && !MostRecentRecon.bIsRead)
+					{
+						EPCMainMenuRootWindow(Root).m_InGameMenu.GoToDataDetails(MostRecentRecon);
+						return true;
+					}
+				}
+			}			EPCMainMenuRootWindow(Root).m_InGameMenu.CheckSubMenu();
 			return true;
 		}
     }

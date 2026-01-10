@@ -89,7 +89,7 @@ var actor					LookActor;
 
 var float                   fLastBegForLife;
 var float                   fLastMasterOutOfRad;
-var float                   fLastReflexTime; 
+var float                   fLastReflexTime;
 
 var String					m_String;
 var Sound					m_Sound;
@@ -127,9 +127,9 @@ event CommunicationCallBack(AIEventType eType) {}
 
 
 //---------------------------------------[Frederic Blais]-----
-// 
+//
 // Timer
-// 
+//
 // Description:  Timer used for communication system
 //
 //------------------------------------------------------------------------
@@ -137,15 +137,15 @@ function Timer()
 {
 	local EPlayerController EPC;
 
-    EPC = EPlayerController(Characters[0]);	
+    EPC = EPlayerController(Characters[0]);
 
 	if (EPC != None && EPC.bSavingTraining)
-	{	
+	{
 		ConsoleCommand("SAVEGAME FILENAME=TEMP OVERWRITE=TRUE");
 	}
 	else if (EPC != None && EPC.bLoadingTraining)
-	{	
-		ConsoleCommand("LOADGAME FILENAME=TEMP");  
+	{
+		ConsoleCommand("LOADGAME FILENAME=TEMP");
 	}
 	else
 	{
@@ -155,9 +155,9 @@ function Timer()
 
 
 //---------------------------------------[Frederic Blais]-----
-// 
+//
 // SendCommunication
-// 
+//
 // Description: Send a communication to a NPC after a specific time
 //
 //------------------------------------------------------------------------
@@ -171,22 +171,22 @@ function SendCommunication(AIEventType eType, Actor Target, float time)
 }
 
 //---------------------------------------[Frederic Blais]-----
-// 
+//
 // PostBeginPlay
-// 
+//
 // Description: Post init.
 //
 //------------------------------------------------------------------------
 function PostBeginPlay()
 {
 	Super.PostBeginPlay();
-	TriggerEvent = spawn(class'EAIEvent');	
+	TriggerEvent = spawn(class'EAIEvent');
 }
 
 
 
 //---------------------------------------[David Kalina - 12 Oct 2001]-----
-// 
+//
 // Description
 //		Display Debug Information for Pattern.
 //
@@ -196,17 +196,17 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 	local String T;
 	local String S;
 
-	Canvas.DrawColor.B = 200;	
+	Canvas.DrawColor.B = 200;
 	Canvas.DrawColor.R = 170;
 	Canvas.DrawColor.G = 255;
-	
+
 	T = "PATTERN  State: " $ GetStateName() $ "  TriggerEvent:  ";
 
 	S = GetTriggerEventString();
 
 	T = T $ S;
-	
-	Canvas.DrawText(T,false);	
+
+	Canvas.DrawText(T,false);
 	YPos += YL;
 	Canvas.SetPos(4,YPos);
 }
@@ -214,7 +214,7 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 
 
 //---------------------------------------[David Kalina - 13 Oct 2001]-----
-// 
+//
 // Description
 //		Shortcut for LPATTERN log w/ standard information attached.
 //
@@ -222,12 +222,12 @@ function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 
 function plog(coerce string S)
 {
-	log("P => " $ Characters[1].Pawn.Name $ " -- STATE:  " $ GetStateName() $ " -- " $ S $ 
+	log("P => " $ Characters[1].Pawn.Name $ " -- STATE:  " $ GetStateName() $ " -- " $ S $
 		" -- " $ " EventTarget : " $ TriggerEvent.EventTarget $ " -- EventActor : " $ TriggerEvent.EventActor,,LPATTERN);
 }
 
 //---------------------------------------[David Kalina - 28 Nov 2001]-----
-// 
+//
 // Description
 //		Shortcut for logging the TriggerEvent's information.
 //
@@ -303,16 +303,16 @@ function String GetTriggerEventString()
         case AI_HEAR_RICOCHET               : return "AI_HEAR_RICOCHET"; break;
         case AI_COMMUNICATION_EVENTS        : return "AI_COMMUNICATION_EVENTS"; break;
         case AI_ARE_YOU_OK                  : return "AI_ARE_YOU_OK"; break;
-        case AI_LET_HIM_GO                  : return "AI_LET_HIM_GO"; break; 
+        case AI_LET_HIM_GO                  : return "AI_LET_HIM_GO"; break;
         case AI_MASTER_DEAD                 : return "AI_MASTER_DEAD"; break;
 		default : return "Unknown Type: " $ TriggerEvent.EventType;
 	}
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // Assign
-// 
+//
 // Description: Assign all the members to a pattern.
 //
 //------------------------------------------------------------------------
@@ -358,28 +358,28 @@ function Assign(ESlist Members,EAIController TriggerMember)
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // InitPattern
-// 
-// Description: Set the player, the communication box 
+//
+// Description: Set the player, the communication box
 //
 //------------------------------------------------------------------------
 function InitPattern()
 {
 	//default init
 	Characters[0] = EchelonGameInfo(Level.Game).pPlayer;
-	
+
 	//init commbox
-	Commbox = EMainHUD(EchelonGameInfo(Level.Game).pPlayer.myHUD).CommunicationBox;	
+	Commbox = EMainHUD(EchelonGameInfo(Level.Game).pPlayer.myHUD).CommunicationBox;
 }
 
 
 //----------------------------------------[David Kalina - 5 Oct 2001]-----
-// 
+//
 // Description
 //		By default we jump to the input label in state 'Pattern'
 //		Can be redefined by patterns that wish to use states.
-// 
+//
 //------------------------------------------------------------------------
 
 event GotoPatternLabel(name label)
@@ -390,16 +390,16 @@ event GotoPatternLabel(name label)
 
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // StartPattern
-// 
+//
 // Description: Initialize the pattern AND junmp at the start label
 //
 //------------------------------------------------------------------------
 function StartPattern(optional name Label)
-{ 
+{
 	InitPattern();
-	
+
 	bIsRunning = true;
 	bConversationRunning = true;
 
@@ -417,9 +417,9 @@ function StartPattern(optional name Label)
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // StopPattern
-// 
+//
 // Description: End the processing of the pattern
 //
 //------------------------------------------------------------------------
@@ -436,9 +436,9 @@ function StopPattern(optional bool bInterrupted)
 
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // PatternIsRunning
-// 
+//
 // Description: Check to see if the pattern is running
 //
 //------------------------------------------------------------------------
@@ -448,15 +448,15 @@ function bool PatternIsRunning()
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // Goal_Set
-// 
+//
 // Description: Goal used by the editor. That new function takes tags
 //				for focus and target.
 //
 //------------------------------------------------------------------------
 function Goal_Set(int							_CharacterIndex,
-				  EchelonEnums.GoalType			_Type, 
+				  EchelonEnums.GoalType			_Type,
 				  byte							_Priority,
 				  optional Vector				_Location,
 				  optional Name					_FocusTag,
@@ -478,7 +478,7 @@ function Goal_Set(int							_CharacterIndex,
 	//CurrentVolume = None;
 	_UpdatePlayerPos = false;
 	GrenadeLocation= vect(0.0f,0.0f,0.0f);
- 
+
 	AI =  EAIController(Characters[_CharacterIndex]);
 
 	AI.TargetLocation = vect(0.0f,0.0f,0.0f);
@@ -571,14 +571,14 @@ function Goal_Set(int							_CharacterIndex,
 
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // Goal_Default
-// 
+//
 // Description: Replace the default goal of a member
 //
 //------------------------------------------------------------------------
 function Goal_Default(int					_CharacterIndex,
-				  EchelonEnums.GoalType			_Type, 
+				  EchelonEnums.GoalType			_Type,
 				  byte							_Priority,
 				  optional Vector				_Location,
 				  optional Name					_FocusTag,
@@ -644,15 +644,15 @@ function Goal_Default(int					_CharacterIndex,
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // Goal
-// 
+//
 // Description: Add a goal to a member of the pattern
 //              Usually called by default patterns
 //
 //------------------------------------------------------------------------
 function Goal(int							_CharacterIndex,
-				 EchelonEnums.GoalType			_Type, 
+				 EchelonEnums.GoalType			_Type,
 				 byte							_Priority,
 				 optional Vector				_Location,
 				 optional Vector				_Focus,
@@ -718,12 +718,12 @@ function Goal(int							_CharacterIndex,
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //---------------------------------------[David Kalina - 18 Sep 2001]-----
-// 
+//
 // Goal_Action
 //
 // Description
 //		Wrapper function for adding action Goal.
-// 
+//
 //------------------------------------------------------------------------
 function Goal_Action(int CharIndex, int Priority, optional vector Focus, optional Name Anim, optional Sound Sounds, OPTIONAL float FrameRate, optional MoveFlags _MoveFlags)
 {
@@ -733,11 +733,11 @@ function Goal_Action(int CharIndex, int Priority, optional vector Focus, optiona
 }
 
 //---------------------------------------[David Kalina - 25 Mar 2002]-----
-// 
+//
 // Description
 //		Not really a goal -- sets goal action possibly with blending,
 //		depending on the input ReactionType.
-// 
+//
 //------------------------------------------------------------------------
 
 function Reaction(int CharIndex, int Priority, optional vector Focus, optional eReactionAnimGroup ReactionType, optional actor Target)
@@ -756,22 +756,22 @@ function Reaction(int CharIndex, int Priority, optional vector Focus, optional e
 }
 
 //---------------------------------------[David Kalina - 18 Sep 2001]-----
-// 
+//
 // Goal_Search
 //
 // Description
 //		Wrapper function for adding Search Goal.
 //		If Search goal already running, just update.
-// 
+//
 //------------------------------------------------------------------------
-function Goal_Search(int CharIndex, 
-					  int Priority, 
-					  optional vector SearchLocation,  
-					  optional vector SearchDirection, 
-					  optional bool bFocusSwitching, 
-					  optional float SearchTime, 
+function Goal_Search(int CharIndex,
+					  int Priority,
+					  optional vector SearchLocation,
+					  optional vector SearchDirection,
+					  optional bool bFocusSwitching,
+					  optional float SearchTime,
 					  optional MoveFlags _MoveFlags,
-					  optional actor  SearchTarget) 
+					  optional actor  SearchTarget)
 {
 	// check existing goal and make sure we don't add redundant search goal
 
@@ -805,10 +805,10 @@ function Goal_Search(int CharIndex,
 
 
 //---------------------------------------[David Kalina - 18 Sep 2001]-----
-// 
+//
 // Description
 //		Wrapper function for adding Attack Goal.
-// 
+//
 //------------------------------------------------------------------------
 
 //function Goal_Attack(int CharIndex, int Priority, vector AttackLocation, Actor AttackTarget, optional MoveFlags _MoveFlags, optional MoveFlags WaitFlags)
@@ -849,7 +849,7 @@ function Goal_Attack(int CharIndex, int Priority, float TimeToStop , Actor Attac
 }
 
 //------------------------------------------------------------------------
-// 
+//
 // Description
 //		Wrapper function
 //------------------------------------------------------------------------
@@ -861,7 +861,7 @@ function Goal_SprayFire(int CharIndex, int Priority, float TimeToStop , Actor At
 }
 
 //------------------------------------------------------------------------
-// 
+//
 // Description
 //		Wrapper function
 //------------------------------------------------------------------------
@@ -872,7 +872,7 @@ function Goal_Stop(int CharIndex, int Priority, float TimeToStop, optional Actor
 }
 
 //------------------------------------------------------------------------
-// 
+//
 // Description
 //		Wrapper function
 //------------------------------------------------------------------------
@@ -888,7 +888,7 @@ function Goal_MoveTo(int CharIndex, int Priority, vector Location, MoveFlags _Mo
 		_MoveFlags = MOVE_CrouchJog;
 		WaitFlags = MOVE_CrouchJog;
 	}
-	
+
 
 	// DONE MOVING?
 	//if (VSize(Location - EAIController(Characters[CharIndex]).ePawn.Location) > 100.0f)
@@ -902,7 +902,7 @@ function Goal_MoveTo(int CharIndex, int Priority, vector Location, MoveFlags _Mo
 
 
 //------------------------------------------------------------------------
-// 
+//
 // Description
 //------------------------------------------------------------------------
 function  bool ChooseStrategicPoint(EPlayerController P)
@@ -916,10 +916,10 @@ function  bool ChooseStrategicPoint(EPlayerController P)
 	BestDistance = 0.0f;
 	BestPoint = None;
 
-	//pick up one strategic point 
+	//pick up one strategic point
 	for (i = 0; i < P.CurrentVolume.StrategicPoints.Length; i++)
 	{
-		if ((P.CurrentVolume.StrategicPoints[i] != None) && 
+		if ((P.CurrentVolume.StrategicPoints[i] != None) &&
 			((!P.CurrentVolume.StrategicPoints[i].taken) || (EAIController(Characters[1]).TakenPoint == P.CurrentVolume.StrategicPoints[i])))
 		{
 
@@ -930,7 +930,7 @@ function  bool ChooseStrategicPoint(EPlayerController P)
 				if (CurDist >  EPawn(Characters[1].Pawn).DefendDistance)
 					continue;
 			}
-			
+
 			CurDist = VSize(P.CurrentVolume.StrategicPoints[i].Location - Characters[1].Pawn.Location);
 
 			CurNav  = P.CurrentVolume.StrategicPoints[i];
@@ -993,7 +993,7 @@ function  bool ChooseStrategicPoint(EPlayerController P)
 				if (EFocusPoint(CurrentVolume.GrenadePoints[Index]) != None)
 				{
 					GrenadeTime = EFocusPoint(CurrentVolume.GrenadePoints[Index]).GrenadeTime;
-				}	
+				}
 			}
 
 			return true;
@@ -1006,11 +1006,11 @@ function  bool ChooseStrategicPoint(EPlayerController P)
 }
 
 //------------------------------------------------------------------------
-// 
+//
 // Description
 //		Wrapper function
 //------------------------------------------------------------------------
-function Goal_Charge(int _CharIndex, int _Priority, Actor _Target, MoveFlags _MoveFlags, optional bool _flag, optional vector Loc, optional bool _DontUseVolume, optional float _value) 
+function Goal_Charge(int _CharIndex, int _Priority, Actor _Target, MoveFlags _MoveFlags, optional bool _flag, optional vector Loc, optional bool _DontUseVolume, optional float _value)
 {
 	//local bool bPointFound;
 	local EPlayerController P;
@@ -1039,7 +1039,7 @@ function Goal_Charge(int _CharIndex, int _Priority, Actor _Target, MoveFlags _Mo
 //End of wrappers ///////////////////////////////////////////////////////////////////////////////////////
 
 //------------------------------------------------------------------------
-// 
+//
 // Description
 //------------------------------------------------------------------------
 function CheckIfPlayerStillInZone(name JumpLabel)
@@ -1059,7 +1059,7 @@ function CheckIfPlayerStillInZone(name JumpLabel)
 }
 
 //------------------------------------------------------------------------
-// 
+//
 // Description
 //------------------------------------------------------------------------
 function CheckIfInZone(name JumpLabel)
@@ -1076,7 +1076,7 @@ function CheckIfInZone(name JumpLabel)
 			//log("Choosing Strategic point "$characters[1].Pawn);
 			GotoPatternLabel(JumpLabel);
 		}
-	
+
 		CurrentVolume = P.CurrentVolume;
 
 	}
@@ -1088,9 +1088,9 @@ function CheckIfInZone(name JumpLabel)
 }
 
 //--------------------------------------------------[Frederic Blais]------
-// 
+//
 // CheckIfGrabbed
-// 
+//
 // Description: check if the member is grabbed. Will be used for conversation.
 //				Jump to Label if the NPC is grabbed.
 //
@@ -1105,10 +1105,10 @@ function CheckIfGrabbed(int CharIndex, name JumpLabel)
 }
 
 /*-----------------------------------------------------------------------------
- 
+
  Function:      CheckIfIsUnconscious
- 
- Description:   check if the member is unconscious. 
+
+ Description:   check if the member is unconscious.
                 Will be used for conversation.
 				Jump to Label if the NPC is unconscious.
 
@@ -1125,9 +1125,9 @@ function CheckIfIsUnconscious(int CharIndex, name JumpLabel)
 }
 
 //--------------------------------------------------[Frederic Blais]------
-// 
+//
 // CheckIfIsDead
-// 
+//
 // Description: check if the member is dead.
 //				Jump to Label if the NPC is dead.
 //
@@ -1135,8 +1135,8 @@ function CheckIfIsUnconscious(int CharIndex, name JumpLabel)
 function CheckIfIsDead(int CharIndex, name JumpLabel)
 {
 	//check the health of the member
-    if ((EAIController(Characters[CharIndex]) == None) 
-     || (EAIController(Characters[CharIndex]).ePawn == None) 
+    if ((EAIController(Characters[CharIndex]) == None)
+     || (EAIController(Characters[CharIndex]).ePawn == None)
      || (EAIController(Characters[CharIndex]).ePawn.Health <= 0)
      || (EAIController(Characters[CharIndex]).ePawn.Controller == None))
 	{
@@ -1145,7 +1145,7 @@ function CheckIfIsDead(int CharIndex, name JumpLabel)
 }
 
 //------------------------------------------------------------------------
-// 
+//
 // Description
 //------------------------------------------------------------------------
 function CheckIfPlayerDead(name JumpLabel)
@@ -1158,7 +1158,7 @@ function CheckIfPlayerDead(name JumpLabel)
 }
 
 //------------------------------------------------------------------------
-// 
+//
 // Description
 //------------------------------------------------------------------------
 function CheckIfAllMembersDead(name JumpLabel)
@@ -1180,10 +1180,10 @@ function CheckIfAllMembersDead(name JumpLabel)
 
 
 //---------------------------------------[David Kalina - 19 Mar 2002]-----
-// 
+//
 // Description
 //		Are the sounds of war (gunshots, explosions) near enough to treat as "Nearby" threat?
-// 
+//
 //------------------------------------------------------------------------
 
 function CheckIfThreatNearby(int CharIndex, name JumpLabel)
@@ -1199,11 +1199,11 @@ function CheckIfThreatNearby(int CharIndex, name JumpLabel)
 	// otherwise, check if LOS to event location is clear
 
 	TraceActor = Trace(HitLocation, HitNormal, TriggerEvent.EventLocation, Characters[CharIndex].Pawn.Location, false);
-	
+
 	plog("CheckThreatNearby -- Dist to Event : " $ VSize(TriggerEvent.EventLocation - Characters[CharIndex].Pawn.Location) $ "    Trace HitLocation : " $ HitLocation $ " TRACE ACTOR : " $ TraceActor);
 
 	if (TraceActor == none || TraceActor == TriggerEvent.EventTarget)
-		GotoPatternLabel(JumpLabel);			
+		GotoPatternLabel(JumpLabel);
 }
 
 
@@ -1211,7 +1211,7 @@ function CheckIfThreatNearby(int CharIndex, name JumpLabel)
 
 
 //---------------------------------------[David Kalina - 15 Apr 2002]-----
-// 
+//
 // Description
 //		If in a new GOAL_Charge, continue charging even if the player is seen.
 //
@@ -1230,12 +1230,12 @@ function CheckIfChargeShouldContinue(int CharIndex, name JumpLabel)
 
 		if (G != none && G.m_GoalType == GOAL_Charge)
 		{
-			if (TargetAI.bPlayerSeen) 
+			if (TargetAI.bPlayerSeen)
 			{
 				// only continue checking timer if distance to player is greater than 150.0f
 				if ((VSize(Characters[0].Pawn.Location - TargetAI.Pawn.Location) > 150.0f))
 				{
-					GotoPatternLabel(JumpLabel);	
+					GotoPatternLabel(JumpLabel);
 				}
 			}
 			/*else
@@ -1248,7 +1248,7 @@ function CheckIfChargeShouldContinue(int CharIndex, name JumpLabel)
 }
 
 //---------------------------------------[David Kalina - 19 Mar 2002]-----
-// 
+//
 // Description
 //		If character specified by index is currently executing
 //		the specified goal type, jump to the input label.
@@ -1272,9 +1272,9 @@ function CheckIfExecutingGoal(int CharIndex, EchelonEnums.GoalType CheckGoalType
 }
 
 //--------------------------------------------------[Frederic Blais]------
-// 
+//
 // SetExclusivity
-// 
+//
 // Description:  Set the exlusivity flag of the pattern. The groupAI
 //				 always check that flag for the groupAI.
 //
@@ -1304,10 +1304,10 @@ function SetExclusivity(bool bEnable)
 }
 
 //--------------------------------------------------[Frederic Blais]------
-// 
+//
 // JumpToLastZoneTouched
-// 
-// Description: 
+//
+// Description:
 //
 //
 //------------------------------------------------------------------------
@@ -1320,9 +1320,9 @@ function JumpToLastZoneTouched()
 }
 
 //--------------------------------------------------[Frederic Blais]------
-// 
+//
 // ChangeState
-// 
+//
 // Description: Change state of a member of the pattern (default,aware, alert)
 //
 //------------------------------------------------------------------------
@@ -1344,7 +1344,7 @@ function ChangeState(int	_CharacterIndex, name StateLabel)
 }
 
 //------------------------------------------------------------------------
-// 
+//
 // Description
 //------------------------------------------------------------------------
 function ChangeGroupState(name StateLabel)
@@ -1357,11 +1357,11 @@ function ChangeGroupState(name StateLabel)
 }
 
 //---------------------------------------------------[Frederic Blais]-----
-// 
+//
 // Broadcast
-// 
+//
 // Description: Send signal to tell groupAI to broadcast resulting action
-//				(in response of a stimuli) to other members.  
+//				(in response of a stimuli) to other members.
 //
 //------------------------------------------------------------------------
 function Broadcast(int	_CharacterIndex, BroadCastType _BCType)
@@ -1370,7 +1370,7 @@ function Broadcast(int	_CharacterIndex, BroadCastType _BCType)
 	AI = EAIController(Characters[_CharacterIndex]);
 
 	plog("BROADCASTING TYPE : " $ _BCType);
-	
+
 	if ((EGroupAI(Owner) != None) && (!AI.EPawn.bDoesntBroadcast))
 	{
 		EGroupAI(Owner).Broadcast(EAIController(Characters[_CharacterIndex]),_BCType,TriggerEvent.EventLocation);
@@ -1378,9 +1378,9 @@ function Broadcast(int	_CharacterIndex, BroadCastType _BCType)
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // GetTargetLocation
-// 
+//
 // Description: Get the target location set by the GroupAI
 //
 //------------------------------------------------------------------------
@@ -1390,12 +1390,12 @@ function vector GetTargetLocation(int	_CharacterIndex)
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // AskGroupForPlayerPosition
-// 
+//
 // Description: If player is visible from the group, update the target location
 //				and jump at the specific label.
-// 
+//
 //------------------------------------------------------------------------
 function AskGroupForPlayerPosition(name JumpLabel)
 {
@@ -1430,9 +1430,9 @@ function AskGroupForPlayerPosition(name JumpLabel)
 }
 
 //-------------------------------------------------------[Frederic Blais]-----
-// 
+//
 // UpdateGoal
-// 
+//
 // Description: Update goal location, special flag, and the wait flag.
 //
 //----------------------------------------------------------------------------
@@ -1456,7 +1456,7 @@ function UpdateGoal(int							_CharacterIndex,
 
 			if (A != None)
 				Goal.GoalLocation	= A.Location;					// set its location
-		
+
 			//check if we are going to attack from a cover point
 			if (Goal.m_GoalType == GOAL_Attack)
 			{
@@ -1469,16 +1469,16 @@ function UpdateGoal(int							_CharacterIndex,
 		}
 
 		Goal.GoalFlag       = _Flag;
-		
+
 		if (_WaitFlag != MOVE_NotSpecified)
 			Goal.GoalWaitFlags  = _WaitFlag;
 	}
 }
 
 //------------------------------------------------------[Frederic Blais]-----
-// 
+//
 // UpdateGoalLoc
-// 
+//
 // Description: Update the goal location.
 //
 //---------------------------------------------------------------------------
@@ -1500,9 +1500,9 @@ function UpdateGoalMoveFlag(int	_CharacterIndex,  MoveFlags	_MoveFlag)
 
 
 //------------------------------------------------------[Frederic Blais]-----
-// 
+//
 // UpdateGoalLoc
-// 
+//
 // Description: Update the goal location.
 //
 //---------------------------------------------------------------------------
@@ -1519,44 +1519,44 @@ function UpdateGoalLoc(int _CharacterIndex,Vector _Location)
 
 
 //---------------------------------------[David Kalina - 16 Oct 2001]-----
-// 
+//
 // Description
 //		Update current Search goal according to specified parameters
-// 
+//
 // Input
 //		_CharIndex :   which character we are updating for
-//		GoalLocation : new location to search at 
+//		GoalLocation : new location to search at
 //		GoalFlag :     true = use focus switching
 //		bResetTimer :  true = reset timer so search will go on for longer period of time
-// 
+//
 //------------------------------------------------------------------------
 function UpdateSearchGoal(int _CharIndex, vector GoalLocation, bool GoalFlag, bool bResetTimer)
 {
 	local EAIController AI;
-	
+
 	//check if we are waiting for that goal
 	AI = EAIController(Characters[_CharIndex]);
-	
+
 	if (AI != none)
 		AI.UpdateSearchGoal(GoalLocation, GoalFlag, bResetTimer);
 }
 
 //---------------------------------------[David Kalina - 16 Oct 2001]-----
-// 
+//
 // Description
 //		For when we see something and wish to extend the search timer.
 //		Can also just reset the timer if we don't specify ExtraSeconds.
 //
 // Input
-//		_CharIndex : 
+//		_CharIndex :
 //		ExtraSeconds : How much we wish to add to search timer.
-// 
+//
 //------------------------------------------------------------------------
 function UpdateSearchTimer(int _CharIndex, optional float ExtraSeconds)
 {
 	local EGoal Goal;
 	local EAIController AI;
-	
+
 	//check if we are waiting for that goal
 	AI = EAIController(Characters[_CharIndex]);
 	Goal = AI.m_pGoalList.GetCurrent();
@@ -1571,22 +1571,22 @@ function UpdateSearchTimer(int _CharIndex, optional float ExtraSeconds)
         {
 			Goal.GoalValue = AI.EPawn.MinSearchTime;
         }
-	}  
+	}
 }
 
 
 
 //---------------------------------------[David Kalina - 15 Oct 2001]-----
-// 
+//
 // Description
-//		If cover is available, set CoverLocation and jump to 
+//		If cover is available, set CoverLocation and jump to
 //		specified Label.
 //
 // Input
 //		_CharIndex :	Character index searching for cover
 //		distance :		Maximum distance at which to accept cover
 //		Label :			Target label to jump to if cover is available
-// 
+//
 //------------------------------------------------------------------------
 function PossiblyTakeCover(int _CharIndex, float distance, name Label, optional vector TargetLocation)
 {
@@ -1602,7 +1602,7 @@ function PossiblyTakeCover(int _CharIndex, float distance, name Label, optional 
 	if (AI != none)
 	{
 		if (TargetLocation != vect(0,0,0))
-			CoverActor = AI.ChooseCoverPoint(distance,,TargetLocation);			
+			CoverActor = AI.ChooseCoverPoint(distance,,TargetLocation);
 		else
 		{
 			CoverActor = AI.ChooseCoverPoint(distance);
@@ -1613,15 +1613,15 @@ function PossiblyTakeCover(int _CharIndex, float distance, name Label, optional 
 				dotproduct = Normal(CoverActor.Location - Characters[1].Pawn.Location) dot Normal(Characters[0].Pawn.Location - Characters[1].Pawn.Location);
 
 				if (dotproduct < -0.6f)
-					CoverActor = None; 
-				
+					CoverActor = None;
+
 			}
 
 		}
-		
+
 		if (CoverActor != none)
 		{
-			
+
 			CoverLocation = CoverActor.Location;
 			GotoPatternLabel(Label);
 		}
@@ -1630,7 +1630,7 @@ function PossiblyTakeCover(int _CharIndex, float distance, name Label, optional 
 
 
 //---------------------------------------[David Kalina - 15 Oct 2001]-----
-// 
+//
 // Description
 //		Check EAIController variable to see if the corresponding
 //		controller has spotted the player once before.
@@ -1650,7 +1650,7 @@ function CheckPlayerSeenOnce(int _CharIndex, name Label)
 
 
 //------------------------------------------------------------------------
-// 
+//
 // Description
 //------------------------------------------------------------------------
 function CheckIfPlayerHasBeenSeenByGroup(name Label)
@@ -1665,9 +1665,9 @@ function CheckIfPlayerHasBeenSeenByGroup(name Label)
 }
 
 //---------------------------------------------------[Frederic Blais]-----
-// 
+//
 // CheckIfLastTimeSeenExpired
-// 
+//
 // Description: Check since how much time we did'nt see the player
 //
 //------------------------------------------------------------------------
@@ -1688,10 +1688,10 @@ function CheckIfLastTimeSeenExpired(int _CharIndex, float DeltaTime, name Label)
 
 
 //---------------------------------------------------[Frederic Blais]-----
-// 
+//
 // SetPostAttackBehavior
-// 
-// Description: 
+//
+// Description:
 //
 //------------------------------------------------------------------------
 function SetPostAttackBehavior(int _CharIndex)
@@ -1709,11 +1709,11 @@ function SetPostAttackBehavior(int _CharIndex)
 		//change the default behavior
 		Goal_Default(1,AI.ePawn.PostAttackGoalType,0,,AI.ePawn.PostAttackFocusTag,,AI.ePawn.PostAttackPointTag,AI.ePawn.PostAttackAnim,,,,,);
 	}
-	
+
 }
 
 //------------------------------------------------------------------------
-// 
+//
 // Description
 //------------------------------------------------------------------------
 function Name GetPostAttackPoint(int _CharIndex)
@@ -1727,21 +1727,21 @@ function Name GetPostAttackPoint(int _CharIndex)
 
 
 //----------------------------------------[David Kalina - 3 May 2002]-----
-// 
+//
 // Description
 //		Set a MoveTo for the input character in a proper hiding location.
 //		Generally intended for non-hostile behavior (bureaucrat pattern).
 //
 // Input
-//		_CharIndex : 
-//		Priority : 
-//		HideMoveFlags : 
+//		_CharIndex :
+//		Priority :
+//		HideMoveFlags :
 //
 //------------------------------------------------------------------------
 
 function SetHidePointMoveTo(int _CharIndex, int Priority, MoveFlags HideMoveFlags)
 {
-	local EGoal goal;	
+	local EGoal goal;
 	local name HideTag;
 	local NavigationPoint HidePoint;
 	local EAIController AI;
@@ -1750,11 +1750,11 @@ function SetHidePointMoveTo(int _CharIndex, int Priority, MoveFlags HideMoveFlag
 
 	AI = EAIController(Characters[_CharIndex]);
 	if (AI != none)
-	{			
+	{
 		if (HideTag != '')
         {
 			HidePoint = NavigationPoint(GetMatchingActor(HideTag));		// if hide point pre-specified, use it
-        
+
             if (!(AI.IsTimedOut(HidePoint)))
             {
                 AI.TimeoutHidePoint(HidePoint);
@@ -1764,7 +1764,7 @@ function SetHidePointMoveTo(int _CharIndex, int Priority, MoveFlags HideMoveFlag
                 HidePoint = AI.ChooseHidePoint();
             }
         }
-		else 
+		else
         {
 			HidePoint = AI.ChooseHidePoint();							// otherwise, get a HidePoint from the AI.
         }
@@ -1775,16 +1775,16 @@ function SetHidePointMoveTo(int _CharIndex, int Priority, MoveFlags HideMoveFlag
 			plog("Choosing Hide Point -- " $ HidePoint);
 
 			// add MoveTo goal directly -- do this because we want to set the GoalSubject explicitly as it will be used in pathfinding as the EndAnchor
-			goal = Spawn(class'EGoal');  
+			goal = Spawn(class'EGoal');
 
-			goal.Clear();										
+			goal.Clear();
 
-			goal.m_GoalType		= GOAL_MoveTo;					
-			goal.priority		= Priority;					
+			goal.m_GoalType		= GOAL_MoveTo;
+			goal.priority		= Priority;
 
 			goal.GoalSubject	= HidePoint;
-			goal.GoalLocation	= HidePoint.Location;		
-			goal.GoalMoveFlags  = HideMoveFlags;			
+			goal.GoalLocation	= HidePoint.Location;
+			goal.GoalMoveFlags  = HideMoveFlags;
 			goal.GoalWaitFlags  = HideMoveFlags;
             goal.GoalFlagB      = true;             // Fail if Sam is in the way
 
@@ -1794,18 +1794,18 @@ function SetHidePointMoveTo(int _CharIndex, int Priority, MoveFlags HideMoveFlag
 		}
 		else
         {
-			plog("Unable to choose a hide point. Will hide right here");	
-            
-            goal = Spawn(class'EGoal');  
-            
-			goal.Clear();										
+			plog("Unable to choose a hide point. Will hide right here");
 
-			goal.m_GoalType		= GOAL_MoveTo;					
-			goal.priority		= Priority;					
+            goal = Spawn(class'EGoal');
+
+			goal.Clear();
+
+			goal.m_GoalType		= GOAL_MoveTo;
+			goal.priority		= Priority;
 
 			goal.GoalSubject	= AI.EPawn;
-			goal.GoalLocation	= AI.EPawn.Location;		
-			goal.GoalMoveFlags  = HideMoveFlags;			
+			goal.GoalLocation	= AI.EPawn.Location;
+			goal.GoalMoveFlags  = HideMoveFlags;
 			goal.GoalWaitFlags  = HideMoveFlags;
 
             goal.GoalUpdatePlayerPos = true;        // Fail on stuck
@@ -1817,9 +1817,9 @@ function SetHidePointMoveTo(int _CharIndex, int Priority, MoveFlags HideMoveFlag
 
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // CheckIsAlive
-// 
+//
 // Description: Check if the specific member is alive. If not, jump to specific
 //				label.
 //
@@ -1832,9 +1832,9 @@ function CheckIsAlive(int i, name JumpLabel)
 }
 
 //---------------------------------------[Frederic Blais]-----
-// 
+//
 // DisableMessages
-// 
+//
 // Description: Prevent the event callback to process AIEvent messages.
 //
 //------------------------------------------------------------------------
@@ -1845,9 +1845,9 @@ function DisableMessages(bool bDisableAIEvents, optional bool bDisableTriggers)
 }
 
 //---------------------------------------[Frederic Blais]-----
-// 
+//
 // SetFlags
-// 
+//
 // Description: Set a variable value.
 //
 //------------------------------------------------------------------------
@@ -1858,10 +1858,10 @@ function SetFlags(out int Variable, bool bIsTrue)
 
 
 //---------------------------------------[Frederic Blais]-----
-// 
+//
 // CheckFlags
-// 
-// Description: Check variable value.  If it matches then jump to a 
+//
+// Description: Check variable value.  If it matches then jump to a
 //              specific label.
 //
 //------------------------------------------------------------------------
@@ -1875,9 +1875,9 @@ function CheckFlags(int Variable, bool bCheck, name JumpLabel)
 
 
 //-----------------------------------------------[Frederic Blais]-----
-// 
+//
 // Jump
-// 
+//
 // Description: Jump to a specific label in the pattern.
 //
 //----------------------------------------------------------------------
@@ -1888,9 +1888,9 @@ function Jump(name JumpLabel)
 
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // EventJump
-// 
+//
 // Description: Called from the eventcallback. Jump to a specific label
 //				in the pattern AND force that label to be executed immediatly.
 //
@@ -1909,9 +1909,9 @@ function EventJump(name JumpLabel)
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // GotoPatternState
-// 
+//
 // Description: Forced immediat change state
 //
 //------------------------------------------------------------------------
@@ -1922,9 +1922,9 @@ function GotoPatternState(name State, optional name JumpLabel)
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // JumpRandom
-// 
+//
 // Description: Jump to a random label
 //
 //------------------------------------------------------------------------
@@ -1975,9 +1975,9 @@ function JumpRandom(name JumpLabel1, float Limit1,
 
 
 //---------------------------------------------------[Frederic Blais]-----
-// 
+//
 // AddGoal
-// 
+//
 // Description: Add a player goal.
 //
 //------------------------------------------------------------------------
@@ -2000,9 +2000,9 @@ function AddGoal(name ID,
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // GoalCompleted
-// 
+//
 // Description: Set an existing player goal as completed.
 //
 //------------------------------------------------------------------------
@@ -2015,10 +2015,10 @@ function GoalCompleted(name ID)
 }
 
 //-----------------------------------------------[Francois Schelling]-----
-// 
+//
 // RemovePlayerGoalsAndNotes
-// 
-// Description: 
+//
+// Description:
 //
 //------------------------------------------------------------------------
 function RemovePlayerGoalsAndNotes(bool bClearGoals, name goalID, bool bClearNotes)
@@ -2056,9 +2056,9 @@ function RemovePlayerGoalsAndNotes(bool bClearGoals, name goalID, bool bClearNot
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // AddNote
-// 
+//
 // Description: Add player Note.
 //
 //------------------------------------------------------------------------
@@ -2070,9 +2070,9 @@ function AddNote(string Text, optional string Section, optional string Key, opti
 }
 
 //-----------------------------------------------[Francois Schelling]-----
-// 
+//
 // AddTrainingData
-// 
+//
 // Description: Add player Training Data.
 //
 //------------------------------------------------------------------------
@@ -2109,7 +2109,7 @@ function AddTrainingData(string Text, int gpMask, optional bool bHideController)
 
     if ((gpMask & KEY_LOOK_RIGHT_MASK) == KEY_LOOK_RIGHT_MASK)
         Keys[i++] = KEY_LOOK_RIGHT;
-    
+
     if ((gpMask & KEY_INTERACTION_MASK) == KEY_INTERACTION_MASK)
         Keys[i++] = KEY_INTERACTION;
 
@@ -2140,14 +2140,14 @@ function AddTrainingData(string Text, int gpMask, optional bool bHideController)
     if ((gpMask & KEY_RESETCAMERA_MASK) == KEY_RESETCAMERA_MASK)
         Keys[i++] = KEY_RESETCAMERA;
 
-	Epc.AddTrainingData(self, Text, Keys, bHideController);
+	Epc.AddTrainingData(self, Epc.Player.Console.ProcessKeyBindingText(Text), Keys, bHideController);
 }
 
 
 //-----------------------------------------------[Francois Schelling]-----
-// 
+//
 // PlayerMove
-// 
+//
 // Description: Stop player mouvement.
 //
 //------------------------------------------------------------------------
@@ -2205,7 +2205,7 @@ function InventoryManager(int index, bool bAdd, Name Tag, int Qty, optional bool
                 while (Qty > 0)
                 {
                     Item = Spawn(AddRemoveClass, EPC);
-                    
+
                     if (Item != None)
                     {
                         if (EPawn(EPC.Pawn).FullInventory.CanAddItem(Item))
@@ -2223,7 +2223,7 @@ function InventoryManager(int index, bool bAdd, Name Tag, int Qty, optional bool
                             Item.Destroy();
                             break;
                         }
-                    } 
+                    }
 
                     Qty--;
                 }
@@ -2235,7 +2235,7 @@ function InventoryManager(int index, bool bAdd, Name Tag, int Qty, optional bool
                 if (Item != None)
                 {
                     Item.Add(EPC, EPC, EPawn(EPC.Pawn).FullInventory);
-                }            
+                }
             }
 
 
@@ -2252,13 +2252,13 @@ function InventoryManager(int index, bool bAdd, Name Tag, int Qty, optional bool
                 else if (EPC.HandGun != None)
                 {
                     EPC.HandGun.Ammo = Max(EPC.HandGun.Ammo - Qty, 0);
-                    EPC.HandGun.ClipAmmo = Min(EPC.HandGun.Ammo, EPC.HandGun.ClipAmmo);                
+                    EPC.HandGun.ClipAmmo = Min(EPC.HandGun.Ammo, EPC.HandGun.ClipAmmo);
                 }
             }
             else if (bByClassName)
-            {       
+            {
                 //log("InventoryManager - Remove - By Class Name " $ Qty $ " x " $ AddRemoveClass);
-            
+
                 Item = EPawn(EPC.Pawn).FullInventory.GetItemByClass(AddRemoveClass.Name);
 
                 if (Item == None)
@@ -2302,10 +2302,10 @@ function InventoryManager(int index, bool bAdd, Name Tag, int Qty, optional bool
 }
 
 //---------------------------------------------------[Frederic Blais]-----
-// 
+//
 // ReloadWeapon
-// 
-// Description: 
+//
+// Description:
 //
 //------------------------------------------------------------------------
 function ReloadWeapon(int _index, float ratio)
@@ -2331,7 +2331,7 @@ function ReloadWeapon(int _index, float ratio)
 }
 
 //---------------------------------------------------[Frederic Blais]-----
-// 
+//
 //
 //------------------------------------------------------------------------
 function ResolveBlocked(int _index, name JumpLabel)
@@ -2340,7 +2340,7 @@ function ResolveBlocked(int _index, name JumpLabel)
 	local vector HitLocation, HitNormal;
 
 	AI = EAIController(Characters[_index]);
-	
+
 	//left
 	if (AI.ePawn.Trace(HitLocation,HitNormal,Characters[0].Pawn.Location,AI.ePawn.ToWorld(vect(0,-60,0)),true)  == Characters[0].Pawn)
 	{
@@ -2365,9 +2365,9 @@ function ResolveBlocked(int _index, name JumpLabel)
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // Close
-// 
+//
 // Description:  Close the speech set.
 //
 //------------------------------------------------------------------------
@@ -2375,7 +2375,7 @@ function Close(optional bool bInterrupted)
 {
 	if (CommBox.CurrentOwner == self)
 		CommBox.UnLock();
-	
+
 	// Close conversation segment
 	bConversationRunning = false;
 
@@ -2386,7 +2386,7 @@ function Close(optional bool bInterrupted)
 
 //--------------------------------------------------[Joshua]-----
 // Description:  Clears all NPC transmissions from the communication box.
-//				 Used to prevent visual glitches with overlapping text if an 
+//				 Used to prevent visual glitches with overlapping text if an
 //               NPC transmission is in progress before a Lambert warning.
 //------------------------------------------------------------------------
 function ClearNPCTransmissions()
@@ -2396,9 +2396,9 @@ function ClearNPCTransmissions()
 }
 
 //------------------------------------------------[Frederic Blais]-----
-// 
+//
 // Console
-// 
+//
 // Description:  Add console transmission to the communication box
 //
 //------------------------------------------------------------------------
@@ -2409,7 +2409,7 @@ function Console(String Text, byte Event)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Completely ends a conversation. To place at the end of every conversation
 //------------------------------------------------------------------------
 function EndConversation()
@@ -2421,9 +2421,9 @@ function EndConversation()
 }
 
 //---------------------------------------[Frederic Blais]-----
-// 
+//
 // End
-// 
+//
 // Description: End the processing of the pattern. Go to state Idle.
 //
 //------------------------------------------------------------------------
@@ -2441,10 +2441,10 @@ function End()
 }
 
 //---------------------------------------[Frederic Blais]-----
-// 
+//
 // StepForward
-// 
-// Description: Used in the conversation interaction to step 
+//
+// Description: Used in the conversation interaction to step
 //              forward in the conversation.
 //
 //------------------------------------------------------------------------
@@ -2456,9 +2456,9 @@ function StepForward()
 
 
 //-----------------------------------------------[Frederic Blais]-----
-// 
+//
 // GameOver
-// 
+//
 // Description:  Send a game over event at the player Controller.
 //---------------------------------------------------------------------
 function GameOver(optional bool bMissionComplete, optional int iFailureType)
@@ -2468,7 +2468,7 @@ function GameOver(optional bool bMissionComplete, optional int iFailureType)
 
 
 //-----------------------------[Matthew Clarke - August 20th 2002]-----
-// 
+//
 // ShakeCamera
 //
 //---------------------------------------------------------------------
@@ -2480,9 +2480,9 @@ function ShakeCamera(int iShakeValue1, int iShakeValue2, int iShakeValue3)
 }
 
 //-------------------------------------------------[Frederic Blais]-----
-// 
+//
 // ResetGroup
-// 
+//
 // Description: Reset the goals and the states of group.
 //
 //------------------------------------------------------------------------
@@ -2496,9 +2496,9 @@ function ResetGroup()
 }
 
 //--------------------------------[Matthew Clarke - August 26th 2002]-----
-// 
+//
 // ResetAllNPCs
-// 
+//
 // Description: Resets All NPCs, used when Sam dies
 //
 //------------------------------------------------------------------------
@@ -2508,11 +2508,11 @@ function ResetAllNPCs(int iCharIndex)
     local EAIController AI;
 
     // Circle through all Controllers
-    for (C = Level.ControllerList; C != None; C = C.nextController)  
+    for (C = Level.ControllerList; C != None; C = C.nextController)
     {
         AI = EAIController(C);
 
-        if ((AI != None) && (AI.EPawn != None) && (!AI.EPawn.bDisableAI))  
+        if ((AI != None) && (AI.EPawn != None) && (!AI.EPawn.bDisableAI))
         {
             //log("resetting"@AI.EPawn);
             // Reset Goals for this guy/gal
@@ -2522,8 +2522,8 @@ function ResetAllNPCs(int iCharIndex)
             AI.LockedSwitches.Remove(0, AI.LockedSwitches.Length);
 
             // Reset his/her default pattern
-            if ((AI.Pawn != None) 
-              && (AI.Pawn.Health > 0)  
+            if ((AI.Pawn != None)
+              && (AI.Pawn.Health > 0)
               && (AI != Characters[iCharIndex]))    // Do not reset our on pattern yet, we will do do that later)
             {
                 //log("resetting"@AI.EPawn@"'s pattern");
@@ -2534,7 +2534,7 @@ function ResetAllNPCs(int iCharIndex)
             if ((AI != None) && (AI.ePawn.PostAttackPointTag != ''))
 	        {
                 //log("setting post attack for"@AI.EPawn);
-		        AI.Pattern.Goal_Default(iCharIndex, 
+		        AI.Pattern.Goal_Default(iCharIndex,
                              AI.ePawn.PostAttackGoalType,
                              0,,AI.ePawn.PostAttackFocusTag,,
                              AI.ePawn.PostAttackPointTag,
@@ -2549,7 +2549,7 @@ function ResetAllNPCs(int iCharIndex)
 /*-----------------------------------------------------------------------------
  Function:
 
- Description: 
+ Description:
 -----------------------------------------------------------------------------*/
 function ResetDefaultPatterns()
 {
@@ -2558,9 +2558,9 @@ function ResetDefaultPatterns()
 }
 
 //---------------------------------------------------[Frederic Blais]-----
-// 
+//
 // ResetGroupGoals
-// 
+//
 // Description: Reset the goals for all members of the group
 //
 //------------------------------------------------------------------------
@@ -2572,9 +2572,9 @@ function ResetGroupGoals()
 
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // PlayerIsVisible
-// 
+//
 // Description: If the player is not visible jump to a specific label.
 //------------------------------------------------------------------------
 function PlayerIsVisible(int CharacterIndex, name JumpLabel)
@@ -2585,11 +2585,11 @@ function PlayerIsVisible(int CharacterIndex, name JumpLabel)
 
 
 //---------------------------------------------------[Frederic Blais]-----
-// 
+//
 // AllGroupLostPlayer
-// 
+//
 // Description: Check if all the group lost the player. If yes jump to
-//              a the given JumpLabel. 
+//              a the given JumpLabel.
 //
 //------------------------------------------------------------------------
 function AllGroupLostPlayer(name JumpLabel, optional actor triggerActor, optional name Label)
@@ -2629,25 +2629,25 @@ function AllGroupLostPlayer(name JumpLabel, optional actor triggerActor, optiona
 
 
 //-------------------------------------------------[Frederic Blais]-----
-// 
+//
 // Radio
-// 
+//
 //------------------------------------------------------------------------
 function Radio()
 {
 	local EPawn MyEpawn;
 
 	MyEpawn = ePawn(Characters[1].Pawn);
-	
+
 	Goal(1,GOAL_Action, 32,,,characters[0].Pawn,, MyEpawn.ARadioBegin,,,,MOVE_WalkNormal);
 	Goal(1,GOAL_Action, 31,,,characters[0].Pawn,, MyEpawn.ARadio,EPawn(Characters[1].Pawn).Sounds_Barks,,,MOVE_WalkNormal);
 	Goal(1,GOAL_Action, 30,,,characters[0].Pawn,, MyEpawn.ARadioEnd,,,,MOVE_WalkNormal);
 }
 
 //-------------------------------------------------[Frederic Blais]-----
-// 
+//
 // SetPlayerDeadAction
-// 
+//
 // Description: Eventually we will set different player dead reactions
 //
 //------------------------------------------------------------------------
@@ -2671,9 +2671,9 @@ function SetPlayerDeadAction(int	_Index)
 }
 
 //-------------------------------------------------[Frederic Blais]-----
-// 
+//
 // ResetGoals
-// 
+//
 // Description: Reset the goals for a specific member of the pattern.
 //------------------------------------------------------------------------
 function ResetGoals(int	_CharacterIndex)
@@ -2692,9 +2692,9 @@ function ResetGoals(int	_CharacterIndex)
 
 
 //---------------------------------------------------[Frederic Blais]-----
-// 
+//
 // ResetSector
-// 
+//
 // Description: Reset the last zone used in the groupAI.
 //
 //------------------------------------------------------------------------
@@ -2706,9 +2706,9 @@ function ResetSector()
 
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // PlayerIsInASector
-// 
+//
 // Description: check if the player is in a EZoneInfo
 //
 //------------------------------------------------------------------------
@@ -2720,9 +2720,9 @@ function PlayerIsInASector(name JumpLabel, optional bool bCheckPlayer)
 
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // PlayerIsInASector
-// 
+//
 // Description: check if the player is in a EZoneInfo
 //
 //------------------------------------------------------------------------
@@ -2747,17 +2747,17 @@ function CheckIfCanThrowGrenade(name JumpLabel)
 						GotoPatternLabel(JumpLabel);
 					}
 				}
-			}		
+			}
 		}
 	}
 }
 
 
 //-----------------------------------------------------[Frederic Blais]-----
-// 
+//
 // PlayerIsInAZone
 //
-// Description:  Check if the player is in a special Zone. 
+// Description:  Check if the player is in a special Zone.
 //----------------------------------------------------------------------------
 function PlayerIsInAZone(name JumpLabel, optional bool bCheckPlayer)
 {
@@ -2783,9 +2783,9 @@ function PlayerIsInAZone(name JumpLabel, optional bool bCheckPlayer)
 }
 
 //---------------------------------------[Frederic Blais]-----
-// 
+//
 // PlayZoneLocation
-// 
+//
 // Description:  Play zone location.
 //------------------------------------------------------------------------
 function PlayZoneLocation(int _CharacterIndex)
@@ -2801,9 +2801,9 @@ function PlayZoneLocation(int _CharacterIndex)
 }
 
 //---------------------------------------[Frederic Blais]-----
-// 
+//
 // PlayZoneLocation
-// 
+//
 // Description:  Play zone location.
 //------------------------------------------------------------------------
 function CheckIfCornerPeeking(int _CharacterIndex,name JumpLabel)
@@ -2822,14 +2822,14 @@ function CheckIfCornerPeeking(int _CharacterIndex,name JumpLabel)
 
 
 //-------------------------------------------------[Frederic Blais]-----
-// 
+//
 // CheckLightSwitchProximity
-// 
+//
 //
 //------------------------------------------------------------------------
 function CheckLightSwitchProximity(int _CharacterIndex, name JumpLabel, optional float MaxDist)
 {
-	local EGamePlayObject GObject, BestSwitch;	
+	local EGamePlayObject GObject, BestSwitch;
 	local float BestDistance;
 	local bool SwitchFound;
 
@@ -2837,7 +2837,7 @@ function CheckLightSwitchProximity(int _CharacterIndex, name JumpLabel, optional
 		MaxDist = 1000.0f;
 
 
-	foreach RadiusActors (class'EGamePlayObject', GObject, MaxDist, Characters[_CharacterIndex].Pawn.Location) 
+	foreach RadiusActors (class'EGamePlayObject', GObject, MaxDist, Characters[_CharacterIndex].Pawn.Location)
 	{
 		if (GObject.IsA('ELightSwitch'))
 		{
@@ -2883,10 +2883,10 @@ function CheckLightSwitchProximity(int _CharacterIndex, name JumpLabel, optional
 }
 
 //-------------------------------------------------[Matthew Clarke]-------
-// 
+//
 // CheckLightSwitchVolumeAndAdd
-//  Check for a light switch associated with the volume where the 
-//  event just happened 
+//  Check for a light switch associated with the volume where the
+//  event just happened
 //
 //------------------------------------------------------------------------
 function CheckLightSwitchVolumeAndAdd(int _CharacterIndex, Vector _Location)
@@ -2899,8 +2899,8 @@ function CheckLightSwitchVolumeAndAdd(int _CharacterIndex, Vector _Location)
         {
             //plog(itVol $ " Encompasses the Event");
 
-        	if (((itVol.LightSwitch.IsA('ELightSwitch') 
-                   || (itVol.LightSwitch.IsA('ELightSwitchKal')))) 
+        	if (((itVol.LightSwitch.IsA('ELightSwitch')
+                   || (itVol.LightSwitch.IsA('ELightSwitchKal'))))
              && (itVol.LightSwitch.GetStateName() != 's_On'))
 	        {
                 //plog(itVol $ " is chosen");
@@ -2912,7 +2912,7 @@ function CheckLightSwitchVolumeAndAdd(int _CharacterIndex, Vector _Location)
 }
 
 //-------------------------------------------------[Frederic Blais]-----
-// 
+//
 // GetNearestNavPoint
 //
 //------------------------------------------------------------------------
@@ -2939,7 +2939,7 @@ function vector GetNearestNavPointLocation()
 		NavStart = None;
 
 		//find the nearest nav point
-		foreach RadiusActors (class'NavigationPoint', tmpNav, 1000, Characters[0].Pawn.Location) 
+		foreach RadiusActors (class'NavigationPoint', tmpNav, 1000, Characters[0].Pawn.Location)
 		{
 			if (NavStart != None)
 			{
@@ -2981,33 +2981,33 @@ function vector GetNearestNavPointLocation()
 
 
 //-------------------------------------------------[Frederic Blais]-----
-// 
+//
 // CheckAlarmProximity
-// 
+//
 // Description: Check if an alarm panel is near. If yes jump to the given label.
 // If there are many AlarmPanels, the best one is chosen based on route length to panel
 //
 //------------------------------------------------------------------------
 function CheckAlarmProximity(int _CharacterIndex, name JumpLabel, optional float MaxDist)
 {
-	local EAlarmPanelObject Panel; 
-    local EAlarmPanelObject BestPanel;	
+	local EAlarmPanelObject Panel;
+    local EAlarmPanelObject BestPanel;
 	local vector            OffSet;
     local vector            Pos;
 	local float             BestDistance;
 	local bool              PanelFound;
 	local EAIController     AI;
 	local int               TempDist;
-    local NavigationPoint   NavStart; 
+    local NavigationPoint   NavStart;
     local NavigationPoint   NavEnd;
     local EZoneInfo         EZIPanel;
     local EZoneInfo         EZIPlayer;
-    
+
 	plog(self@"::CheckAlarmProximity()");
 
     AI = EAIController(Characters[_CharacterIndex]);
 
-	PanelFound = false;    
+	PanelFound = false;
 
 	if (MaxDist == 0)
     {
@@ -3042,22 +3042,22 @@ function CheckAlarmProximity(int _CharacterIndex, name JumpLabel, optional float
 
 				return;
 			}
-		
 
 
-			foreach RadiusActors (class'EAlarmPanelObject', Panel, MaxDist, Characters[_CharacterIndex].Pawn.Location) 
+
+			foreach RadiusActors (class'EAlarmPanelObject', Panel, MaxDist, Characters[_CharacterIndex].Pawn.Location)
 			{
 				//check if the Z is acceptable
 				if (Abs(Panel.Location.Z - Characters[_CharacterIndex].Pawn.Location.Z) <  Characters[_CharacterIndex].Pawn.CollisionHeight)
-				{	
+				{
 					//check if it's the first panel
 					if (!PanelFound && !Panel.Alarm.bAlreadyTriggered)
 					{
 						NavStart = AI.EPawn.GetAnchor();
 						NavEnd = AI.EPawn.GetAnchorForLocation(Panel.Location + (vect(50,0,0) >> Panel.Rotation));
 
-						BestDistance = AI.EPawn.ArePointsConnected(NavStart, NavEnd);  
-                    
+						BestDistance = AI.EPawn.ArePointsConnected(NavStart, NavEnd);
+
 						plog("BestDistance"@BestDistance);
 
 						if ((BestDistance != 0) || (NavStart == NavEnd))
@@ -3073,7 +3073,7 @@ function CheckAlarmProximity(int _CharacterIndex, name JumpLabel, optional float
 							NavStart = AI.EPawn.GetAnchor();
 							NavEnd = AI.EPawn.GetAnchorForLocation(Panel.Location + (vect(50,0,0) >> Panel.Rotation));
 
-							TempDist = AI.EPawn.ArePointsConnected(NavStart, NavEnd); 
+							TempDist = AI.EPawn.ArePointsConnected(NavStart, NavEnd);
 
 							plog("TempDist"@TempDist);
 
@@ -3089,7 +3089,7 @@ function CheckAlarmProximity(int _CharacterIndex, name JumpLabel, optional float
 					}
 				}
 			}
-            
+
 
 			if (PanelFound)
 			{
@@ -3104,7 +3104,7 @@ function CheckAlarmProximity(int _CharacterIndex, name JumpLabel, optional float
                     plog("Ignoring Panel because Sam is closer to the panel than we are");
                     plog("my dist : " $ BestDistance@"sams dist : "$ TempDist);
                     return;
-                }      
+                }
 
                 EZIPanel = EZoneInfo(BestPanel.Region.Zone);
 
@@ -3115,7 +3115,7 @@ function CheckAlarmProximity(int _CharacterIndex, name JumpLabel, optional float
                     {
                         return;
                     }
-    
+
                 }
 
 				//don't want to trigger the same alarm twice
@@ -3140,7 +3140,7 @@ function CheckAlarmProximity(int _CharacterIndex, name JumpLabel, optional float
 }
 
 /*-----------------------------------------------------------------------------
- Function: 
+ Function:
 
  Description:
 -----------------------------------------------------------------------------*/
@@ -3167,7 +3167,7 @@ function SendMasterOutOfRadius(actor MasterPawn, vector SlaveLocation)
 }
 
 /*-----------------------------------------------------------------------------
- Function: 
+ Function:
 
  Description:
 -----------------------------------------------------------------------------*/
@@ -3178,7 +3178,7 @@ function BroadcastToMaster()
 	if (EAIController(Characters[1]).Master != None)
 	{
 	AI = EAIController(EAIController(Characters[1]).Master.controller);
-	
+
 		if (AI != None && AI.group != None)
 	{
 		AI.group.Broadcast(EAIController(Characters[1]),BC_BACKUP_RADIO_ATTACK,Characters[0].Pawn.Location,true);
@@ -3187,7 +3187,7 @@ function BroadcastToMaster()
 }
 
 /*-----------------------------------------------------------------------------
- Function: 
+ Function:
 
  Description:
 -----------------------------------------------------------------------------*/
@@ -3206,7 +3206,7 @@ function CheckIfPeeking(int _CharacterIndex,name JumpLabel)
 }
 
 /*-----------------------------------------------------------------------------
- Function: 
+ Function:
 
  Description:
 -----------------------------------------------------------------------------*/
@@ -3242,7 +3242,7 @@ function CheckTouchingCoverPoints(int _CharacterIndex,name JumpLabel)
 /*-----------------------------------------------------------------------------
  Function:      CheckDistanceGreaterThan
 
- Description:  
+ Description:
 -----------------------------------------------------------------------------*/
 function CheckDistanceGreaterThan(int iIndex, name JumpLabel, float Distance)
 {
@@ -3259,12 +3259,12 @@ function SetFlashLight(int iIndex, bool TurnOn)
 {
 	local EPawn ePawn;
 	ePawn = EPawn(Characters[iIndex].Pawn);
-	
+
 	if (ePawn == None)
 		Log(self$" ERROR: Invalid Pawn in SetFlashLight");
 	if (!ePawn.MayUseGunLight)
 		Log("WARNING: Pattern Pawn is set to toggle flashLight with MayUseGunLight set to false"@self@ePawn);
-	
+
 	ePawn.ToggleHeadLight(TurnOn);
 }
 
@@ -3313,7 +3313,7 @@ function Teleport(int iIndex, Name Tag)
 	local int			i;
 
 	local vector HitLocation, HitNormal, endTrace;
-	
+
 
 	if (Tag != '')
 	{
@@ -3324,7 +3324,7 @@ function Teleport(int iIndex, Name Tag)
 	{
 		//teleport one NPC
 		EAI = EAIController(Characters[iIndex]);
-        
+
 		if ((Target != None) && (EAI.ePawn != None))
 		{
 			endTrace = Target.Location;
@@ -3346,7 +3346,7 @@ function Teleport(int iIndex, Name Tag)
                 }
 
                 EAI.EPawn.Anchor = None;
-                EAI.ClearRoutes(); 
+                EAI.ClearRoutes();
 
 				EAI.EPawn.RelevantLights.Remove(0, EAI.EPawn.RelevantLights.Length);
 			}
@@ -3411,26 +3411,26 @@ function AddToInventory(Name Tag, name JumpLabel)
         GotoPatternLabel(JumpLabel);
         return;
     }
-    
+
     // Verify if we can add the item
 	Item = EInventoryItem(TagActor);
 
     // Add to inventory
 	if (Item != None)
 	{
-		// If it's a EGameplayObject, just pick it up and leave in hands 
+		// If it's a EGameplayObject, just pick it up and leave in hands
 		// else, if it's an inventoryItem and enough space in inventory
 		if (! EPawn(EPC.Pawn).FullInventory.CanAddItem(Item))
 		{
 			EPC.SendTransmissionMessage(Localize("Transmission", "NoPickUp", "Localization\\HUD") $ Localize("InventoryItem", Item.ItemName, "Localization\\HUD"), TR_INVENTORY);
 			GotoPatternLabel(JumpLabel);
-			return;                
+			return;
 		}
-    
+
 		// Add to inventory
 		Item.Add(EPC, EPC, EPawn(EPC.Pawn).FullInventory);
 		EPC.SendTransmissionMessage(Localize("InventoryItem", Item.ItemName, "Localization\\HUD") $ Localize("Transmission", "PickUp", "Localization\\HUD"), TR_INVENTORY);
-		
+
 	}
     else
     {
@@ -3438,7 +3438,7 @@ function AddToInventory(Name Tag, name JumpLabel)
 
         // Item is None
         GotoPatternLabel(JumpLabel);
-        return; 
+        return;
     }
 }
 
@@ -3469,9 +3469,9 @@ function ToggleLights(Name oSwitchTag, bool bTurnOn)
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // ForceUpdatePlayerLocation
-// 
+//
 //------------------------------------------------------------------------
 function ForceUpdatePlayerLocation(int iIndex)
 {
@@ -3479,9 +3479,9 @@ function ForceUpdatePlayerLocation(int iIndex)
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // GetSmellDeltaTime
-// 
+//
 //------------------------------------------------------------------------
 function int GetSmellDeltaTime(int SmellIndexFound)
 {
@@ -3492,7 +3492,7 @@ function int GetSmellDeltaTime(int SmellIndexFound)
 	if (PC.CurrentSmellIndex > SmellIndexFound)
 	{
 		return (PC.CurrentSmellIndex - SmellIndexFound);
-	}	
+	}
 	else
 	{
 		return (20 - SmellIndexFound + PC.CurrentSmellIndex);
@@ -3501,13 +3501,13 @@ function int GetSmellDeltaTime(int SmellIndexFound)
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // CheckSmellPoint
-// 
+//
 //------------------------------------------------------------------------
 function CheckSmellPoints(int Index, name JumpLabel)
 {
-	local int i,SmellPointRadius,BestSmellPoint,BestDeltaTime; 
+	local int i,SmellPointRadius,BestSmellPoint,BestDeltaTime;
 	local EAIController AI;
 	local EPlayerController PC;
 
@@ -3546,10 +3546,10 @@ function CheckSmellPoints(int Index, name JumpLabel)
 }
 
 //--------------------------------------------------[Matthew Clarke]------
-// 
+//
 // RemoveUsedSmellPoint
 //  Removes a smell point we already used to start a MoveTo
-// 
+//
 //------------------------------------------------------------------------
 function RemoveUsedSmellPoint(int Index)
 {
@@ -3572,9 +3572,9 @@ function RemoveUsedSmellPoint(int Index)
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // LockDoor
-// 
+//
 //------------------------------------------------------------------------
 function LockDoor(Name matchTag, bool IsLocked, bool IsUsable)
 {
@@ -3596,9 +3596,9 @@ function LockDoor(Name matchTag, bool IsLocked, bool IsUsable)
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // SendTransmission
-// 
+//
 //------------------------------------------------------------------------
 function SendNPCTransmission(string Text, sound SoundData)
 {
@@ -3607,9 +3607,9 @@ function SendNPCTransmission(string Text, sound SoundData)
 
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // CheckIfDirectLine
-// 
+//
 //------------------------------------------------------------------------
 function CheckIfDirectLine(int iIndex, Actor target,name JumpLabel)
 {
@@ -3617,8 +3617,8 @@ function CheckIfDirectLine(int iIndex, Actor target,name JumpLabel)
 	local Actor Result;
 	local int PillTag;
 	local Material HitMaterial;
-   
-    //should be NPC_SHOT 
+
+    //should be NPC_SHOT
 	//Result = Characters[iIndex].Pawn.Trace(HitLocation,HitNormal,target.Location,Characters[iIndex].Pawn.Location,true);
 
 	//Result = Characters[iIndex].Pawn.TraceBone(PillTag, HitLocation, HitNormal, target.Location, Characters[iIndex].Pawn.Location, HitMaterial, false);
@@ -3637,7 +3637,7 @@ function CheckIfDirectLine(int iIndex, Actor target,name JumpLabel)
 // Joshua - Added bUseName parameter
 function Actor GetMatchingActor(Name MatchTag, optional bool bUseName)
 {
-    local Actor FoundAct; 
+    local Actor FoundAct;
 
 	if (MatchTag != '')
 	{
@@ -3663,9 +3663,9 @@ function Actor GetMatchingActor(Name MatchTag, optional bool bUseName)
 }
 
 //--------------------------------------------------[Frederic Blais]-----
-// 
+//
 // CheckNearestArmedNPC
-// 
+//
 //------------------------------------------------------------------------
 function CheckNearestArmedNPC(name JumpLabel)
 {
@@ -3685,19 +3685,19 @@ function CheckNearestArmedNPC(name JumpLabel)
     NearestArmedNPC = None; // Reset
 
 	foreach RadiusActors (class'EAIPawn', P, 2500, Characters[1].Pawn.Location)
-	{            
+	{
 		if ((P.Controller != None)
-         && (EAIController(P.Controller).Pattern.GetStateName() != 'attack') 
-         && (!P.bDisableAI)  
+         && (EAIController(P.Controller).Pattern.GetStateName() != 'attack')
+         && (!P.bDisableAI)
          && (P.IsA('EAIProfessional')))
 		{
 			NavEnd = Epawn(AI.Pawn).GetAnchorForLocation(P.Location);
 
 			if ((NavEnd != None) && (NavStart != None))
 			{
-				fTempDist = Epawn(AI.Pawn).ArePointsConnected(NavStart, NavEnd); 
+				fTempDist = Epawn(AI.Pawn).ArePointsConnected(NavStart, NavEnd);
 			}
-        
+
 			if (fTempDist != 0)
 			{
 				if ((fBestDist == -1) || (fTempDist < fBestDist))
@@ -3709,7 +3709,7 @@ function CheckNearestArmedNPC(name JumpLabel)
 			}
 		}
 	}
-    
+
     //log("NearestArmedNPC"@NearestArmedNPC);
     if (NearestArmedNPC != None)
     {
@@ -3718,11 +3718,11 @@ function CheckNearestArmedNPC(name JumpLabel)
 }
 
 //--------------------------------------------------[Matthew Clarke]-----
-// 
+//
 // CheckSwitchAlreadyLocked
 //   Check if ASwitch is already locked
 //      If it is, return
-//      If it is NOT, lock it and interact with it 
+//      If it is NOT, lock it and interact with it
 //------------------------------------------------------------------------
 function CheckSwitchAlreadyLocked(int CharIndex, Actor ASwitch)
 {
@@ -3739,7 +3739,7 @@ function CheckSwitchAlreadyLocked(int CharIndex, Actor ASwitch)
         return;
     }
 
-    for (C = Level.ControllerList; C != None; C = C.nextController)  
+    for (C = Level.ControllerList; C != None; C = C.nextController)
     {
         AI = EAIController(C);
 
@@ -3835,12 +3835,12 @@ function CinCamera(int bEndCinematic, optional Name pos, optional Name target, o
 -----------------------------------------------------------------------------*/
 function AlarmNPC(Pawn Target)
 {
-    
+
 
     if ((TriggerEvent != None) && (Target != None))
     {
 	    TriggerEvent.Reset();
-	    TriggerEvent.EventLocation = AlertLocation;	
+	    TriggerEvent.EventLocation = AlertLocation;
 
 	    EAIController(Target.controller).Group.StartAlarmBehavior(TriggerEvent);
     }
@@ -3863,7 +3863,7 @@ function EPawn GetNearestArmedNPC()
 
 
 //---------------------------------------[Frederic Blais - 23 Apr 2001]-----
-// 
+//
 // Description
 //		Returns true if a goal with that specific priority is existing
 //
@@ -3900,8 +3900,8 @@ function SendPatternEvent(name GroupTag, name JumpLabel)
 	foreach DynamicActors(class'EGroupAI', Group, GroupTag)
 	{
 		Group.SendJumpEvent(JumpLabel,false,false);
-		break; 
-	}			
+		break;
+	}
 }
 
 /*---------------------------------[Frederic Blais - 15 Feb 2002]---------
@@ -3925,8 +3925,8 @@ function StartAlarm(name AlarmTag, optional int StartAlarm)
 			Alarm.DisableAlarm(Characters[0].Pawn);
 		}
 
-		break; 
-	}			
+		break;
+	}
 }
 
 /*---------------------------------[Frederic Blais - 15 Feb 2002]---------
@@ -3975,14 +3975,14 @@ function ResetNPC(int _index, bool bResetInteraction,  optional name _tag)
 
 
 			//reset epawn
-			EAIController(Characters[_index]).ePawn.GotoState('DefaultState'); 
+			EAIController(Characters[_index]).ePawn.GotoState('DefaultState');
 
 			//reset controller state
 			if (!EAIController(Characters[_index]).ePawn.bKeepNPCAlive)
 			{
             if ((EAIController(Characters[_index]).GetStateName() == 's_Unconscious')
             ||  (EAIController(Characters[_index]).GetStateName() == 's_Grabbed')
-            ||  ((EAIController(Characters[_index]).GetStateName() == 's_Carried') 
+            ||  ((EAIController(Characters[_index]).GetStateName() == 's_Carried')
               && (EAIController(Characters[_index]).Pawn.Health > 0)))
             {
 			    EAIController(Characters[_index]).GotoState('s_Groggy');
@@ -4027,7 +4027,7 @@ function ResetNPC(int _index, bool bResetInteraction,  optional name _tag)
 }
 
 /*-----------------------------------------------------------------------------
- Function: 
+ Function:
 
  Description:
 -----------------------------------------------------------------------------*/
@@ -4071,7 +4071,7 @@ function LaserMicSession(int bEndLaserMic, optional Name target, optional float 
 
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Return touching Mic, use if (GetTouchingMic() == None) to check
 //		if a Micro is touching
 //------------------------------------------------------------------------
@@ -4081,10 +4081,10 @@ event bool MicIsTouchingSession()
 }
 
 //-----------------------------------[Matthew Clarke - June 5th 2002]-----
-// 
+//
 // Description
 //    Mostly a wrapper
-// 
+//
 //------------------------------------------------------------------------
 function int AddChangeAndSuggestBehavior(int _CharacterIndex, Vector Location, EChangeType ChangeType)
 {
@@ -4095,11 +4095,11 @@ function int AddChangeAndSuggestBehavior(int _CharacterIndex, Vector Location, E
 }
 
 //-----------------------------------[Matthew Clarke - July 3rd 2002]-----
-// 
+//
 // Description
 //    Pattern Editor Action, checks for a specific firing mode by the player
 //    TO be used in Training maps patterns
-// 
+//
 //------------------------------------------------------------------------
 function CheckFireMode(int iSnipeMode, int iBurstMode, Name JumpLabel)
 {
@@ -4122,18 +4122,18 @@ function CheckFireMode(int iSnipeMode, int iBurstMode, Name JumpLabel)
 
     if (iSnipeMode != -1)
     {
-        if (((iSnipeMode == 1) && (!ESG.bSniperMode)) || ((iSnipeMode == 0) && (ESG.bSniperMode))) 
+        if (((iSnipeMode == 1) && (!ESG.bSniperMode)) || ((iSnipeMode == 0) && (ESG.bSniperMode)))
         {
-            GotoPatternLabel(JumpLabel); 
+            GotoPatternLabel(JumpLabel);
         }
     }
 
     if (iBurstMode != -1)
     {
-        if (((iBurstMode == 1) && (ESG.eROFMode != ROF_Single)) || ((iBurstMode == 0) && (ESG.eROFMode != ROF_Auto))) 
+        if (((iBurstMode == 1) && (ESG.eROFMode != ROF_Single)) || ((iBurstMode == 0) && (ESG.eROFMode != ROF_Auto)))
         {
             GotoPatternLabel(JumpLabel);
-        }    
+        }
     }
 
     // Succeeded
@@ -4141,16 +4141,16 @@ function CheckFireMode(int iSnipeMode, int iBurstMode, Name JumpLabel)
 }
 
 //-----------------------------------[Matthew Clarke - July 9th 2002]-----
-// 
+//
 // Description
 //    Adds some recon information to Sam's PDA
-// 
+//
 //------------------------------------------------------------------------
 function AddRecon(class<ERecon> ReconClassName)
 {
     local EPlayerController EPC;
 
-    EPC = EPlayerController(Characters[0]);	
+    EPC = EPlayerController(Characters[0]);
 
 	if (EPC != None)
 	{
@@ -4160,10 +4160,10 @@ function AddRecon(class<ERecon> ReconClassName)
 }
 
 //-----------------------------------[Matthew Clarke - July 16th 2002]-----
-// 
+//
 // Description
 //    Checks if Sam has been unseen for X seconds
-// 
+//
 //------------------------------------------------------------------------
 function CheckIfPlayerUnseenWithin(float fMinimumUnseenTime, Name JumpLabel)
 {
@@ -4177,7 +4177,7 @@ function CheckIfPlayerUnseenWithin(float fMinimumUnseenTime, Name JumpLabel)
     }
 
     if (EAIC == None)
-    {   
+    {
         return;
     }
 
@@ -4188,10 +4188,10 @@ function CheckIfPlayerUnseenWithin(float fMinimumUnseenTime, Name JumpLabel)
 }
 
 //-----------------------------------[Matthew Clarke - July 29th 2002]-----
-// 
+//
 // Description
 //    Beg for life if haven't in last 10 secs
-// 
+//
 //------------------------------------------------------------------------
 function bool BegForLife(int _CharacterIndex)
 {
@@ -4200,7 +4200,7 @@ function bool BegForLife(int _CharacterIndex)
     EAIC = EAIController(Characters[1]);
 
     if (EAIC == None)
-    {   
+    {
         return false;
     }
 
@@ -4210,15 +4210,15 @@ function bool BegForLife(int _CharacterIndex)
 
         return true;
     }
-    
+
     return false;
 }
 
 //-----------------------------------[Matthew Clarke - July 30th 2002]-----
-// 
+//
 // Description
 //
-// 
+//
 //------------------------------------------------------------------------
 function IgnoreAlarmStage(bool bIgnore)
 {
@@ -4226,10 +4226,10 @@ function IgnoreAlarmStage(bool bIgnore)
 }
 
 //-----------------------------------[Matthew Clarke - August 1st 2002]-----
-// 
+//
 // Description
 //    Set a Stop Goal to hide. Set focus on player if seen
-// 
+//
 //------------------------------------------------------------------------
 function SetHideGoal(int _CharacterIndex)
 {
@@ -4238,7 +4238,7 @@ function SetHideGoal(int _CharacterIndex)
 
     // Find NPC's anchor
     oNP = EPawn(Characters[_CharacterIndex].Pawn).GetAnchorForLocation(Characters[_CharacterIndex].Pawn.Location);
-    
+
     if ((oNP != None) && (oNP.bDirectional))
     {
         // Anchor is directional, use its direction to hide
@@ -4254,22 +4254,22 @@ function SetHideGoal(int _CharacterIndex)
 }
 
 //--------------------------------[Matthew Clarke - August 25th 2002]-----
-// 
+//
 // Description
-//  This is used in the 0_0_3_Training map when the player fails a 
+//  This is used in the 0_0_3_Training map when the player fails a
 //  challenge. It saves/restore the challenge's initial state
-// 
+//
 //------------------------------------------------------------------------
 function QuickSaveLoad(bool bSave, bool bFade)
 {
 	local EPlayerController EPC;
 
     EPC = EPlayerController(Characters[0]);
-	
+
     if (bSave)
     {
 		if (EPC != None)
-		{	
+		{
 			EPC.bAutoSaveLoad = true;
 			EPC.bSavingTraining = true;
 			SetTimer(0.1f,false);
@@ -4281,23 +4281,23 @@ function QuickSaveLoad(bool bSave, bool bFade)
     }
     else
     {
-		if (EPC != None)		
-		{		
+		if (EPC != None)
+		{
 			EPC.bAutoSaveLoad = true;
 			EPC.bLoadingTraining = true;
 			SetTimer(0.1f,false);
 		}
     else
     {
-        ConsoleCommand("LOADGAME FILENAME=TEMP");    
+        ConsoleCommand("LOADGAME FILENAME=TEMP");
     }
 }
 }
 
 //--------------------------------[Matthew Clarke - August 29th 2002]-----
-// 
+//
 // Description
-// 
+//
 //------------------------------------------------------------------------
 function SetAlarmStage(int iNewStage)
 {
@@ -4317,22 +4317,22 @@ function SetAlarmStage(int iNewStage)
 }
 
 //--------------------------------[Matthew Clarke - August 30th 2002]-----
-// 
+//
 // Description
-// 
+//
 //------------------------------------------------------------------------
 function CheckIfShotAllCams(name JumpLabel)
 {
     local ESecondaryAmmo ESA;
     local EPlayerController EPC;
 
-    EPC = EPlayerController(Characters[0]);	
+    EPC = EPlayerController(Characters[0]);
 
     if (EPC == None)
     {
         return;
     }
-  
+
     // Check Number of cams in inventory
     if (EPawn(EPC.Pawn).FullInventory.GetNbItemInCategory(CAT_MAINGUN) > 1) // F2000 itself counts as 1
     {
@@ -4357,11 +4357,11 @@ function CheckIfShotAllCams(name JumpLabel)
 }
 
 //--------------------------------[Matthew Clarke - September 4th 2002]-----
-// 
+//
 // Description
-//  To be used in 5_1_1_PresidentialPalace. 
+//  To be used in 5_1_1_PresidentialPalace.
 //    Jumps to a label if player tries to attack
-// 
+//
 //------------------------------------------------------------------------
 function CheckPlayerPlan(Name JumpLabel)
 {
@@ -4377,17 +4377,18 @@ function CheckPlayerPlan(Name JumpLabel)
      || (EPC.GetStateName() == 's_PlayerSniping')
      || (EPC.GetStateName() == 's_Throw')
 	 || (EPC.GetStateName() == 's_ShortRangeAttack') // Joshua - Added short range attack
-	 || (EPC.GetStateName() == 's_Zooming')) // Joshua - Added binoculars
+	 || (EPC.GetStateName() == 's_Zooming') // Joshua - Added binoculars
+	 || (EPC.GetStateName() == 's_UsingPalm')) // Joshua - Added air cameras
     {
         GotoPatternLabel(JumpLabel);
     }
 }
 
 //--------------------[Matthew Clarke - January 20, 2003 - XBOX_LIVE]-----
-// 
+//
 // Description
 //  Enable disable EGroupAI's directly from patterns, just like a EZoneAI
-// 
+//
 //------------------------------------------------------------------------
 function ToggleGroupAI(bool bEnable, Name GroupTag0, Name GroupTag1, Name GroupTag2, Name GroupTag3,
                        Name GroupTag4, Name GroupTag5)
@@ -4406,7 +4407,7 @@ function ToggleGroupAI(bool bEnable, Name GroupTag0, Name GroupTag1, Name GroupT
     GroupTagsInArray[3] = GroupTag3;
     GroupTagsInArray[4] = GroupTag4;
     GroupTagsInArray[5] = GroupTag5;
-    
+
     if (bEnable) // We're putting a EGroupAI ON duty - Just enable AI + Modify their music
     {
     	// Try to find the NPCs
@@ -4416,7 +4417,7 @@ function ToggleGroupAI(bool bEnable, Name GroupTag0, Name GroupTag1, Name GroupT
 		    {
 			    if (NPC.m_GroupTag == GroupTagsInArray[i])
 			    {
-				    log("NPC "$NPC$" was reenabled...");				    
+				    log("NPC "$NPC$" was reenabled...");
 				    NPC.bDisableAI = false;
 				    NPC.bDisableAIforSound = false;
 
@@ -4440,7 +4441,7 @@ function ToggleGroupAI(bool bEnable, Name GroupTag0, Name GroupTag1, Name GroupT
             }
         }
     }
-    else        // We're putting a EGroupAI OFF duty - Check Alarms + Disable AI + Modify Music + Check Inert Bodies 
+    else        // We're putting a EGroupAI OFF duty - Check Alarms + Disable AI + Modify Music + Check Inert Bodies
     {
     	// Do a first pass to see if alarms are running
 	    foreach DynamicActors(class'EAIPawn', NPC)
@@ -4471,7 +4472,7 @@ function ToggleGroupAI(bool bEnable, Name GroupTag0, Name GroupTag1, Name GroupT
 		    for (i = 0; i < GroupTagsInArray.Length; i++)
 		    {
 			    if (NPC.m_GroupTag == GroupTagsInArray[i])
-			    {	
+			    {
 				    //check if the NPC is inert
 				    if ((NPC.GetStateName() == 's_Unconscious') || (NPC.GetStateName() == 's_Dying'))
 				    {
@@ -4506,7 +4507,7 @@ function ToggleGroupAI(bool bEnable, Name GroupTag0, Name GroupTag1, Name GroupT
             }
         }
 
-        // Report inert NPCs 
+        // Report inert NPCs
         if (bBodyFound)
 	    {
 		    log("** An Inert NPC was found **");
@@ -4576,9 +4577,9 @@ function PlayerIdentified()
 {
     local EAIController  MasterController, DogController;
     local EPawn MasterPawn;
-    
-    if (EGroupAI(Owner).bPlayerIdentifiedCounted || 
-       EAIController(Characters[1]).bBlockDetection || 
+
+    if (EGroupAI(Owner).bPlayerIdentifiedCounted ||
+       EAIController(Characters[1]).bBlockDetection ||
        EAIController(Characters[1]).bBlockJumpDetection ||
 	   EAIController(Characters[1]).bNotInStats)
     {

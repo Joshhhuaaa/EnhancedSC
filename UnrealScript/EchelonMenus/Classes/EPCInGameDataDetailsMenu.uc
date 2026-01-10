@@ -33,7 +33,9 @@ function SetDataInfo(ERecon Recon)
 {
     m_Recon = Recon;
 
-    if (m_Recon.ReconType == 4 || m_Recon.ReconType == 5) //Text Full screen    
+    // Joshua - Mark this recon as read when viewing details
+    if (m_Recon != None)
+        m_Recon.bIsRead = true;
 	{
         m_BInitScrollBar = true;		
 		m_ScrollBar.pos = 0;

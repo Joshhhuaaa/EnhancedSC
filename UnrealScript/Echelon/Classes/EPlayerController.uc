@@ -50,7 +50,7 @@ var input byte			bResetCamera, bJump, bDPadUp, bDPadDown, bDPadLeft, bDPadRight;
 var bool				bIncSpeedPressed;
 var bool				bDecSpeedPressed;
 var bool				bMustZoomIn;
-var bool				bMustZoomOut; 
+var bool				bMustZoomOut;
 var bool				bInteraction;
 
 // STATE VARS
@@ -87,16 +87,16 @@ var bool				bDebugNavPoints;				// turned on by exec statement:
 var bool				bDebugInput;                    // turned on by exec statement:  SHOWINPUT
 var bool				bDebugStealth;					// turned on by exec statement:  STEALTH
 var bool				bInvincible;					// turned on by exec statement:  INVINCIBLE
-var bool				bFullAmmo;					
+var bool				bFullAmmo;
 var bool				bVideoMode;
 
 // Timer tracking var
 var float				m_LPStartTime;					// Timer stamp for pushing against ladders and pipes
-var float				m_LastLedgeFenceTime;				// Timer stamp for letting go geo
-var float				m_LastHOHTime;					//
-var float				m_LastNLPipeTime;					//
-var float				m_LastZipLineTime;				//
-var float				m_LPSlideStartTime;		// Timer stamp for pull full back for slidding down pipes and ladders
+var float				m_LastLedgeFenceTime;			// Timer stamp for letting go geo
+var float				m_LastHOHTime;
+var float				m_LastNLPipeTime;
+var float				m_LastZipLineTime;
+var float				m_LPSlideStartTime;				// Timer stamp for pull full back for slidding down pipes and ladders
 var float				m_RunStartTime;
 var float				m_SMTemp;
 var float				m_HoistDeltaTime;
@@ -227,8 +227,6 @@ const MAX_REGULAR_MAP = 13;
 // Joshua - This is a native class. New variables must be added only after all original ones have been declared.
 // Do NOT add variables if this class is inherited by another native class, it will shift memory and cause issues!
 //=============================================================================
-var input byte bScope;
-
 var(EnhancedDebug) bool bDebugMode;
 var(EnhancedDebug) string sDebugString1;
 var(EnhancedDebug) string sDebugString2;
@@ -237,7 +235,7 @@ var(EnhancedDebug) bool bEnableBTWThrow;
 var bool bBTWThrow; // Joshua - Player is using BTW throw, swap animations
 var(EnhancedDebug) bool bEnableHOHFUTargeting;
 
-var bool bPCMenuPending; // Joshua - Handles the transition from the Xbox pause screen to the PC menus
+var input byte bScope;
 
 var bool bCheckpoint; // Joshua - New variable to mark a save as a checkpoint
 
@@ -249,7 +247,9 @@ var bool bMissionFailedConfirmYes;        	// Joshua - Current selection: true=Y
 var float MissionQuickMenuTimer;
 var int MissionQuickMenuAlpha;
 
-enum EInputMode 
+var(Enhanced) config bool bQuickDataView; // Joshua - Go directly to Data Details page for the most recent recon picked up
+
+enum EInputMode
 {
 	IM_Auto,
 	IM_Keyboard,
@@ -318,7 +318,7 @@ var EInventoryItem OpticCableItem; // Joshua - Optic Cable interaction
 var(Enhanced) config bool bOpticCableVisions; // Joshua - Allows the Optic Cable use all vision modes like Pandora Tomorrow
 
 // Joshua - Show keypad as goal
-var(Enhanced) config bool bShowKeypadGoal; 
+var(Enhanced) config bool bShowKeypadGoal;
 var bool bShowKeyNum;
 
 // Joshua - Track recent transmission messages to prevent duplicates
@@ -405,7 +405,7 @@ exec function bool LoadLastSave()
 
 	// Joshua - Store pending load name in Console (survives load) to restore after
 	C = ECanvas(class'Actor'.static.GetCanvas());
-	
+
 	C.Viewport.Console.PendingLoadSaveName = LastSaveName;
 
 	Error = ConsoleCommand("LOADGAME FILENAME=" $ LastSaveName $ ".en3");
@@ -416,12 +416,12 @@ exec function bool LoadLastSave()
 function string GetOldestCheckpointName()
 {
 	local ECanvas C;
-	
+
 	C = ECanvas(class'Actor'.static.GetCanvas());
 
 	if (C == None || C.Viewport == None || C.Viewport.Console == None)
 		return Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "1";
-	
+
 	return C.Viewport.Console.GetOldestCheckpointName();
 }
 
@@ -431,40 +431,40 @@ exec function RestartMission()
 
 	Mission = GetCurrentMapName();
 
-	if (left(GetCurrentMapName(), 3) == "0_0")
+	if (Left(GetCurrentMapName(), 3) == "0_0")
 		Mission = playerInfo.UnlockedMap[0];
-	else if (left(GetCurrentMapName(), 3) == "1_1")
+	else if (Left(GetCurrentMapName(), 3) == "1_1")
 		Mission = playerInfo.UnlockedMap[1];
-	else if (left(GetCurrentMapName(), 3) == "1_2")
+	else if (Left(GetCurrentMapName(), 3) == "1_2")
 		Mission = playerInfo.UnlockedMap[2];
-	else if (left(GetCurrentMapName(), 3) == "1_3")
+	else if (Left(GetCurrentMapName(), 3) == "1_3")
 		Mission = playerInfo.UnlockedMap[3];
-	else if (left(GetCurrentMapName(), 3) == "2_1")
+	else if (Left(GetCurrentMapName(), 3) == "2_1")
 		Mission = playerInfo.UnlockedMap[4];
-	else if (left(GetCurrentMapName(), 3) == "2_2")
+	else if (Left(GetCurrentMapName(), 3) == "2_2")
 		Mission = playerInfo.UnlockedMap[5];
-	else if (left(GetCurrentMapName(), 3) == "4_1")
+	else if (Left(GetCurrentMapName(), 3) == "4_1")
 		Mission = playerInfo.UnlockedMap[6];
-	else if (left(GetCurrentMapName(), 3) == "4_2")
+	else if (Left(GetCurrentMapName(), 3) == "4_2")
 		Mission = playerInfo.UnlockedMap[7];
-	else if (left(GetCurrentMapName(), 3) == "4_3")
+	else if (Left(GetCurrentMapName(), 3) == "4_3")
 		Mission = playerInfo.UnlockedMap[8];
-	else if (left(GetCurrentMapName(), 3) == "5_1")
+	else if (Left(GetCurrentMapName(), 3) == "5_1")
 		Mission = playerInfo.UnlockedMap[9];
-	else if (left(GetCurrentMapName(), 5) == "1_6_1")
+	else if (Left(GetCurrentMapName(), 5) == "1_6_1")
 		Mission = playerInfo.UnlockedMap[10];
-	else if (left(GetCurrentMapName(), 5) == "1_7_1")
+	else if (Left(GetCurrentMapName(), 5) == "1_7_1")
 		Mission = playerInfo.UnlockedMap[11];
-	else if (left(GetCurrentMapName(), 3) == "3_2")
+	else if (Left(GetCurrentMapName(), 3) == "3_2")
 		Mission = "3_2_1_PowerPlant";
-	else if (left(GetCurrentMapName(), 3) == "3_4")
+	else if (Left(GetCurrentMapName(), 3) == "3_4")
 		Mission = "3_4_2Severonickel";
 
 	ConsoleCommand("Open" @ Mission);
 }
 
 exec function QuitToMainMenu()
-{	
+{
 	ConsoleCommand("Open menu\\menu");
 }
 
@@ -775,7 +775,7 @@ function PostBeginPlay()
 	GoalList     = new class'ESList';
 	ReconList     = new class'ESList';
 	ProfileList  = new class'ESList';
-	
+
 	if (playerStats == None)
     	playerStats = Spawn(class'EPlayerStats', self);
 
@@ -811,8 +811,7 @@ event InitLoadGame()
 	local string QuickSaveName;
 
 	// Joshua - Clearing input after loading game
-	bFire = 0;
-	bAltFire = 0;
+	ResetInputButtons();
 
 	SetViewTarget(Pawn);
 
@@ -823,7 +822,7 @@ event InitLoadGame()
 	// Joshua - Set LastSaveName if we were loading from QuickLoad key
 	C = ECanvas(class'Actor'.static.GetCanvas());
 	QuickSaveName = Localize("HUD", "QUICKSAVENAME", "Localization\\HUD");
-	
+
 	// Check if the loaded save name matches the quicksave name
 	if (C.Viewport.Console.PendingLoadSaveName == QuickSaveName || C.Viewport.Console.PendingLoadSaveName == "")
 	{
@@ -909,7 +908,7 @@ function AddTrainingData(EPattern TrainingPattern, String TrainingDesc, array<Ec
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Close and cleanup
 //------------------------------------------------------------------------
 event CloseTrainingData()
@@ -955,7 +954,7 @@ event AddNote(string NoteString, string Section, string Key, string Package, boo
 
 //---------------------------------------[Yanick Mimee - 26 Juin 2002]-----
 //
-// Description: Add Recon to Recon List											
+// Description: Add Recon to Recon List
 //
 //
 //------------------------------------------------------------------------
@@ -963,14 +962,14 @@ event AddRecon(class<ERecon> _ClassName, optional bool Completed)
 {
 	local ERecon Recon;
 
-	//Create the object	
+	//Create the object
 	Recon = new _ClassName;
-	if (Recon != none) 
+	if (Recon != none)
 	{
 		// Set flag to true to display icon in HUD
 		bNewRecon = true;
 
-		Recon.InitRecon();	
+		Recon.InitRecon();
 		Recon.bIsRead = Completed;
 		ReconList.InsertAtEnd(Recon);
 	}
@@ -993,17 +992,41 @@ event AddReconText(string ObjName,
 {
 	local EReconDataStick DataStick;
 
-	//Create the object	
+	//Create the object
 	DataStick = new class'EReconDataStick';
 	if (DataStick != none)
 	{
 		// Set flag to true to display icon in HUD
 		bNewRecon = true;
+
 		DataStick.MakeText(ObjName, MemoryTextSection, From, To, SentStringID, SubjectStringID, MemoryTextID);
 		DataStick.bIsRead = bCompleted;
-		
+
 		ReconList.InsertAtEnd(DataStick);
-	}	
+	}
+}
+
+//---------------------------------------[Joshua - 9 Jan 2026]-----
+// Description: Get the most recently added recon (datastick) from the list.
+//              Returns None if the list is empty.
+//------------------------------------------------------------------------
+function ERecon GetMostRecentRecon()
+{
+	local EListNode Node;
+	local EListNode LastNode;
+
+	if (ReconList == None || ReconList.FirstNode == None)
+		return None;
+
+	// Iterate to find the last node (most recently added)
+	Node = ReconList.FirstNode;
+	while (Node != None)
+	{
+		LastNode = Node;
+		Node = Node.NextNode;
+	}
+
+	return ERecon(LastNode.Data);
 }
 
 //---------------------------------------[Frederic Blais - 23 Apr 2001]-----
@@ -1031,7 +1054,7 @@ event AddGoal(Name NameID, String GoalString, string GoalSection, string GoalKey
 		Goal.Note = GoalString;
 	}
 	else if (GoalSection != "" && GoalKey != "" && GoalPackage != "")
-	{		
+	{
 		Goal.Note = Localize(GoalSection, GoalKey, GoalPackage);
 	}
 	else
@@ -1082,21 +1105,21 @@ event AddGoal(Name NameID, String GoalString, string GoalSection, string GoalKey
 
             if (oTempGoal.iPriority >= Goal.iPriority)
             {
-                GoalList.InsertBefore(Goal, oTempGoal);				
+                GoalList.InsertBefore(Goal, oTempGoal);
                 break;
             }
 
             // Were at end, gotta insert!
             if (Node.NextNode == None)
-            {				
-                GoalList.InsertAtEnd(Goal);				
+            {
+                GoalList.InsertAtEnd(Goal);
                 break;
             }
         }
     }
     else
     {
-        GoalList.InsertAtEnd(Goal);		
+        GoalList.InsertAtEnd(Goal);
     }
 
 	// Find the high priority goal
@@ -1105,20 +1128,20 @@ event AddGoal(Name NameID, String GoalString, string GoalSection, string GoalKey
 	{
 		Goal = ENote(Node.Data);
 		if (!Goal.bCompleted)
-		{		
+		{
 			bGotNewGoal = true;
-			CurrentGoal = Goal.NoteShrink; 
-			CurrentGoal = Localize(Goal.SectionShrink, Goal.KeyShrink, Goal.PackageShrink);			
+			CurrentGoal = Goal.NoteShrink;
+			CurrentGoal = Localize(Goal.SectionShrink, Goal.KeyShrink, Goal.PackageShrink);
 			CurrentGoalSection = Goal.SectionShrink;
 			CurrentGoalKey     = Goal.KeyShrink;
 			CurrentGoalPackage = Goal.PackageShrink;
-			
+
 			break;
 		}
 		Node = Node.NextNode;
 	}
 	// If we didn`t find one, they`re all completed so display nothing
-	if (!bGotNewGoal) CurrentGoal = ""; 
+	if (!bGotNewGoal) CurrentGoal = "";
 }
 
 //---------------------------------[Francois Schelling - 4 June 2001]-----
@@ -1128,7 +1151,7 @@ event AddGoal(Name NameID, String GoalString, string GoalSection, string GoalKey
 //
 //------------------------------------------------------------------------
 event SetGoalStatus(Name ID, bool status)
-{	
+{
 	local EListNode Node;
 	local ENote		Note;
 	local bool      bChangeGoal;
@@ -1142,8 +1165,8 @@ event SetGoalStatus(Name ID, bool status)
 	{
 		Note = ENote(Node.Data);
 		if (Note.ID == ID)
-		{			
-			// We completed the current goal, we'll have to search for 
+		{
+			// We completed the current goal, we'll have to search for
 			// a new one to display
 			if (Note.NoteShrink == CurrentGoal)
 			{
@@ -1156,28 +1179,28 @@ event SetGoalStatus(Name ID, bool status)
 	}
 
 	// We need to display a new one, scan the list
-	if (bChangeGoal) 
+	if (bChangeGoal)
 	{
 		Node = GoalList.FirstNode;
 		while (Node != None)
 		{
 			Note = ENote(Node.Data);
 			if (!Note.bCompleted)
-			{		
+			{
 				bNewGoal = true;
 				bGotNewGoal = true;
-				CurrentGoal = Note.NoteShrink; 
+				CurrentGoal = Note.NoteShrink;
 				CurrentGoalSection = Note.SectionShrink;
 				CurrentGoalKey     = Note.KeyShrink;
-				CurrentGoalPackage = Note.PackageShrink;				
+				CurrentGoalPackage = Note.PackageShrink;
 				break;
 			}
 			Node = Node.NextNode;
 		}
 		// If we didn`t find one, they`re all completed so display nothing
-		if (!bGotNewGoal) 
+		if (!bGotNewGoal)
 		{
-			CurrentGoal = ""; 
+			CurrentGoal = "";
 			bNewGoal = false;
 		}
 	}
@@ -1247,7 +1270,7 @@ function Possess(Pawn aPawn)
 			if (EPlayerStart.DynInitialInventory[i].ItemClass == None ||
 				EPlayerStart.DynInitialInventory[i].Qty <= 0)
 				continue;
-			
+
 			// From the first (1) to Qty
 			for (j = 0; j < EPlayerStart.DynInitialInventory[i].Qty; j++)
 			{
@@ -1289,9 +1312,9 @@ function Possess(Pawn aPawn)
 	// Init PlayerInfo Stuff (TEMP for debuging) (Yanick Mimee)
 /*	if (playerInfo != None)
 	{
-		playerInfo.PlayerName = "";	
-		playerInfo.ControllerScheme = 1;		
-		playerInfo.Difficulty = 0; 
+		playerInfo.PlayerName = "";
+		playerInfo.ControllerScheme = 1;
+		playerInfo.Difficulty = 0;
 
 		if (eGame != None)
 		{
@@ -1302,7 +1325,7 @@ function Possess(Pawn aPawn)
 		}
 
 		playerInfo.GameSave[1] = "";
-		playerInfo.GameSave[2] = "";			
+		playerInfo.GameSave[2] = "";
 		playerInfo.MapCompleted = 22;
 		iCheatMask = 1;
 	}*/
@@ -1368,12 +1391,12 @@ function EnterStartState()
 	GotoState('s_PlayerWalking');
 }
 
-//	                                                                                                                        
-//	DDDD    EEEEE   BBBB    UU  U    GGGG            AAA    N   N   DDDD             CCCC   HH  H   EEEEE    AAA    TTTTT   
-//	DD DD   EE      BB  B   UU  U   GG              AA  A   NN  N   DD DD           CC      HH  H   EE      AA  A    TT     
-//	DD  D   EEEE    BBBB    UU  U   GG GG           AAAAA   N N N   DD  D           CC      HHHHH   EEEE    AAAAA    TT     
-//	DD DD   EE      BB  B   UU  U   GG  G           AA  A   N  NN   DD DD           CC      HH  H   EE      AA  A    TT     
-//	DDDD    EEEEE   BBBB    UUUUU    GGGG           AA  A   N   N   DDDD             CCCC   HH  H   EEEEE   AA  A    TT     
+//
+//	DDDD    EEEEE   BBBB    UU  U    GGGG            AAA    N   N   DDDD             CCCC   HH  H   EEEEE    AAA    TTTTT
+//	DD DD   EE      BB  B   UU  U   GG              AA  A   NN  N   DD DD           CC      HH  H   EE      AA  A    TT
+//	DD  D   EEEE    BBBB    UU  U   GG GG           AAAAA   N N N   DD  D           CC      HHHHH   EEEE    AAAAA    TT
+//	DD DD   EE      BB  B   UU  U   GG  G           AA  A   N  NN   DD DD           CC      HH  H   EE      AA  A    TT
+//	DDDD    EEEEE   BBBB    UUUUU    GGGG           AA  A   N   N   DDDD             CCCC   HH  H   EEEEE   AA  A    TT
 //
 
 // Joshua - Enhanced debug
@@ -1448,62 +1471,128 @@ function ShowDebugInput(Canvas Canvas, out float YL, out float YPos)
 {
     local string T;
     local float XL;
-    
+
     Canvas.SetDrawColor(255, 255, 255);
     Canvas.SetPos(4, YPos);
     Canvas.Style = ERenderStyle.STY_Normal;
-    
+
     Canvas.StrLen("TEST", XL, YL);
-    
+
     T = "[DebugInput]";
     Canvas.DrawText(T, false);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     //T = "aMouseX: " @ aMouseX @ " aMouseY: " @ aMouseY;
     //Canvas.DrawText(T, false);
     //YPos += YL;
     //Canvas.SetPos(4, YPos);
-    
+
     T = "aForward:" @ aForward;
     Canvas.DrawText(T, false);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "aStrafe:" @ aStrafe;
     Canvas.DrawText(T, false);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "aTurn:" @ aTurn;
     Canvas.DrawText(T, false);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "aLookUp:" @ aLookUp;
     Canvas.DrawText(T, false);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "bPressedJump:" @ bPressedJump;
     Canvas.DrawText(T, false);
     YPos += YL;
     Canvas.SetPos(4, YPos);
 
-	T = "bFire:" @ bFire @ 
-		"aFire:" @ aFire @ 
-		"bAltFire:" @ bAltFire @ 
+	T = "bFire:" @ bFire @
+		"aFire:" @ aFire @
+		"bAltFire:" @ bAltFire @
 		"aAltFire:" @ aAltFire;
 	Canvas.DrawText(T, false);
 	YPos += YL;
 	Canvas.SetPos(4, YPos);
-    
+
     T = "bInterpolating:" @ bInterpolating;
     Canvas.DrawText(T, false);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "ePawn.bInterpolating:" @ ePawn.bInterpolating;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4, YPos);
+
+	// Joshua - Adding inputs
+	T = "bInteraction:" @ bInteraction;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4, YPos);
+
+	T = "bDuck:" @ bDuck;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4, YPos);
+
+	T = "bScope:" @ bScope;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4, YPos);
+
+	T = "bJump:" @ bJump;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4, YPos);
+
+	T = "bDPadUp:" @ bDPadUp;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4, YPos);
+
+	T = "bDPadDown:" @ bDPadDown;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4, YPos);
+
+	T = "bDPadLeft:" @ bDPadLeft;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4, YPos);
+
+	T = "bDPadRight:" @ bDPadRight;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4, YPos);
+
+	T = "bResetCamera:" @ bResetCamera;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4, YPos);
+
+	T = "bIncSpeedPressed:" @ bIncSpeedPressed;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4, YPos);
+
+	T = "bDecSpeedPressed:" @ bDecSpeedPressed;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4, YPos);
+
+	T = "bMustZoomIn:" @ bMustZoomIn;
+    Canvas.DrawText(T, false);
+    YPos += YL;
+    Canvas.SetPos(4, YPos);
+
+	T = "bMustZoomOut:" @ bMustZoomOut;
     Canvas.DrawText(T, false);
     YPos += YL;
     Canvas.SetPos(4, YPos);
@@ -1515,13 +1604,13 @@ exec function FreezePawns()
 
 	if ((eGame.bEliteMode || eGame.bPermadeathMode) && !bDebugMode)
 		return;
-	
+
 	playerStats.bCheatsActive = true;
 
 	ForEach DynamicActors(class'EPawn', P)
 	{
 		if (!P.bIsPlayerPawn)
-			P.bDisableAI = true; 
+			P.bDisableAI = true;
 	}
 }
 
@@ -1653,14 +1742,14 @@ exec function SnipeZoomIn()
 	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
 
-	if (bF2000ZoomLevels 
-    && ActiveGun != None 
-    && ePawn.HandItem == ActiveGun 
-    && ActiveGun.GetStateName() != 's_Reloading' 
-    && ESniperGun(ActiveGun) != None 
-    && (GetStateName() == 's_PlayerSniping' 
-        || GetStateName() == 's_RappellingSniping' 
-        || GetStateName() == 's_SplitSniping')) 
+	if (bF2000ZoomLevels
+    && ActiveGun != None
+    && ePawn.HandItem == ActiveGun
+    && ActiveGun.GetStateName() != 's_Reloading'
+    && ESniperGun(ActiveGun) != None
+    && (GetStateName() == 's_PlayerSniping'
+        || GetStateName() == 's_RappellingSniping'
+        || GetStateName() == 's_SplitSniping'))
 		ESniperGun(ActiveGun).ZoomIn();
 }
 
@@ -1680,7 +1769,7 @@ exec function SnipeZoomOut()
 		&& ESniperGun(ActiveGun) != None
 		&& (GetStateName() == 's_PlayerSniping'
 			|| GetStateName() == 's_RappellingSniping'
-			|| GetStateName() == 's_SplitSniping')) 
+			|| GetStateName() == 's_SplitSniping'))
 	{
 		ESniperGun(ActiveGun).ZoomOut();
 	}
@@ -1734,10 +1823,10 @@ exec function ShowNavPoints()
 
 	for (nav = Level.NavigationPointList; nav != None; nav = nav.NextNavigationPoint)
 		nav.bHidden = bDebugNavPoints;
-	
+
 	for (key = eGame.ELevel.InfoPointList; key != none; key = key.NextInfoPoint)
 		key.bHidden = bDebugNavPoints;
-	
+
 }
 
 exec function Invincible()
@@ -1837,12 +1926,12 @@ function KillAllPawns(class<Pawn> aClass)
 		return;
 
 	playerStats.bCheatsActive = true;
-	
+
 	ForEach DynamicActors(class'Pawn', P)
 		if (ClassIsChildOf(P.Class, aClass)
 			&& !P.IsHumanControlled())
 		{
-			//P.TakeDamage(0, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), class'EBurned'); 
+			//P.TakeDamage(0, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), class'EBurned');
 			P.TakeDamage(P.Health, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), None);
 			if (P.Controller != None)
 				P.Controller.Destroy();
@@ -1927,12 +2016,12 @@ exec function NPP2()
 
 exec function XBLA()
 {
-	ConsoleCommand("Open XBLTestA");	
+	ConsoleCommand("Open XBLTestA");
 }
 
 exec function XBLB()
 {
-	ConsoleCommand("Open XBLTestB");	
+	ConsoleCommand("Open XBLTestB");
 }
 
 exec function SamA()
@@ -2042,61 +2131,61 @@ exec function RandStat()
 {
     playerStats.PlayerIdentified = 0;
     playerStats.AddStat("PlayerIdentified", 1 + rand(9999));
-    
+
     playerStats.BodyFound = 0;
     playerStats.AddStat("BodyFound", 1 + rand(9999));
-    
+
     playerStats.AlarmTriggered = 0;
     playerStats.AddStat("AlarmTriggered", 1 + rand(9999));
 
     playerStats.EnemyKnockedOut = 0;
     playerStats.AddStat("EnemyKnockedOut", 1 + rand(9999));
-    
+
     playerStats.EnemyKnockedOutRequired = 0;
     playerStats.AddStat("EnemyKnockedOutRequired", 1 + rand(9999));
-    
+
     playerStats.EnemyInjured = 0;
     playerStats.AddStat("EnemyInjured", 1 + rand(9999));
-    
+
     playerStats.EnemyKilled = 0;
     playerStats.AddStat("EnemyKilled", 1 + rand(9999));
-    
+
     playerStats.EnemyKilledRequired = 0;
     playerStats.AddStat("EnemyKilledRequired", 1 + rand(9999));
 
     playerStats.CivilianKnockedOut = 0;
     playerStats.AddStat("CivilianKnockedOut", 1 + rand(9999));
-    
+
     playerStats.CivilianKnockedOutRequired = 0;
     playerStats.AddStat("CivilianKnockedOutRequired", 1 + rand(9999));
-    
+
     playerStats.CivilianInjured = 0;
     playerStats.AddStat("CivilianInjured", 1 + rand(9999));
-    
+
     playerStats.CivilianKilled = 0;
     playerStats.AddStat("CivilianKilled", 1 + rand(9999));
-    
+
     playerStats.CivilianKilledRequired = 0;
     playerStats.AddStat("CivilianKilledRequired", 1 + rand(9999));
 
     playerStats.BulletFired = 0;
     playerStats.AddStat("BulletFired", 1 + rand(9999));
-    
+
     playerStats.LightDestroyed = 0;
     playerStats.AddStat("LightDestroyed", 1 + rand(9999));
-    
+
     playerStats.ObjectDestroyed = 0;
     playerStats.AddStat("ObjectDestroyed", 1 + rand(9999));
-    
+
     playerStats.LockPicked = 0;
     playerStats.AddStat("LockPicked", 1 + rand(9999));
-    
+
     playerStats.LockDestroyed = 0;
     playerStats.AddStat("LockDestroyed", 1 + rand(9999));
-    
+
     playerStats.MedkitUsed = 0;
     playerStats.AddStat("MedkitUsed", 1 + rand(9999));
-    
+
     playerStats.NPCsInterrogated = 0;
     playerStats.AddStat("NPCsInterrogated", 1 + rand(9999));
 
@@ -2112,13 +2201,13 @@ function ShowDebugStats(Canvas Canvas, out float YL, out float YPos)
 {
     local string T;
     local float XL;
-    
+
     Canvas.SetDrawColor(255, 255, 255);
     Canvas.SetPos(4, YPos);
     Canvas.Style = ERenderStyle.STY_Normal;
-    
+
     Canvas.StrLen("TEST", XL, YL);
-    
+
     T = "[EPlayerStats]";
     Canvas.DrawText(T);
     YPos += YL;
@@ -2138,118 +2227,118 @@ function ShowDebugStats(Canvas Canvas, out float YL, out float YPos)
     Canvas.DrawText(T);
     YPos += YL * 1.5;
     Canvas.SetPos(4, YPos);
-    
+
     Canvas.SetDrawColor(255, 100, 100);
     T = "PlayerIdentified: "$playerStats.PlayerIdentified;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "BodyFound: "$playerStats.BodyFound;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "AlarmTriggered: "$playerStats.AlarmTriggered;
     Canvas.DrawText(T);
     YPos += YL * 1.5;
     Canvas.SetPos(4, YPos);
-    
+
     Canvas.SetDrawColor(255, 255, 100);
     T = "EnemyKnockedOut: "$playerStats.EnemyKnockedOut;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "EnemyKnockedOutRequired: "$playerStats.EnemyKnockedOutRequired;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "EnemyInjured: "$playerStats.EnemyInjured;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "EnemyKilled: "$playerStats.EnemyKilled;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "EnemyKilledRequired: "$playerStats.EnemyKilledRequired;
     Canvas.DrawText(T);
     YPos += YL * 1.5;
     Canvas.SetPos(4, YPos);
-    
+
     Canvas.SetDrawColor(100, 255, 100);
     T = "CivilianKnockedOut: "$playerStats.CivilianKnockedOut;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "CivilianKnockedOutRequired: "$playerStats.CivilianKnockedOutRequired;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "CivilianInjured: "$playerStats.CivilianInjured;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "CivilianKilled: "$playerStats.CivilianKilled;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "CivilianKilledRequired: "$playerStats.CivilianKilledRequired;
     Canvas.DrawText(T);
     YPos += YL * 1.5;
     Canvas.SetPos(4, YPos);
-    
+
     Canvas.SetDrawColor(100, 255, 255);
     T = "BulletFired: "$playerStats.BulletFired;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "LightDestroyed: "$playerStats.LightDestroyed;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "ObjectDestroyed: "$playerStats.ObjectDestroyed;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "LockPicked: "$playerStats.LockPicked;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "LockDestroyed: "$playerStats.LockDestroyed;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "MedkitUsed: "$playerStats.MedkitUsed;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
-    
+
     T = "NPCsInterrogated: "$playerStats.NPCsInterrogated;
     Canvas.DrawText(T);
     YPos += YL;
     Canvas.SetPos(4, YPos);
 }
 
-//	                                                        
-//	EEEEE   N   N   DDDD            DDDD     &&&     CCCC   
-//	EE      NN  N   DD DD           DD DD   && &&   CC      
-//	EEEE    N N N   DD  D           DD  D    &&&    CC      
-//	EE      N  NN   DD DD           DD DD   &  &&   CC      
-//	EEEEE   N   N   DDDD            DDDD     && &    CCCC   
+//
+//	EEEEE   N   N   DDDD            DDDD     &&&     CCCC
+//	EE      NN  N   DD DD           DD DD   && &&   CC
+//	EEEE    N N N   DD  D           DD  D    &&&    CC
+//	EE      N  NN   DD DD           DD DD   &  &&   CC
+//	EEEEE   N   N   DDDD            DDDD     && &    CCCC
 //
 
 function NotifyFiring()
@@ -2383,7 +2472,7 @@ exec function AltFire(optional float F)
 }
 function ProcessAltFire()
 {
-	if (ePawn.HandItem == None || bInGunTransition) 
+	if (ePawn.HandItem == None || bInGunTransition)
 		return;
 	if (ePawn.HandItem == ActiveGun)
 		ActiveGun.AltFire();
@@ -2442,6 +2531,8 @@ function ProcessReloadGun()
 
 function UsePalm()
 {
+	// Joshua - Store previous state so s_UsingPalm knows where to return
+	JumpLabelPrivate = GetStateName();
 	GotoState('s_UsingPalm');
 }
 
@@ -2460,7 +2551,7 @@ exec function SwitchROF()
 {
 	if (Level.Pauser != None || bStopInput || PlayerInput.bStopInputAlternate)
 		return;
-	if (ePawn.HandItem != ActiveGun || bInGunTransition || bInTransition) 
+	if (ePawn.HandItem != ActiveGun || bInGunTransition || bInTransition)
 		return;
 	if (ActiveGun != None)
 	{
@@ -2479,6 +2570,7 @@ function ProcessHeadSet(float i)
 	// Quick switch goggle mode
 	if (bInGunTransition)
 		return;
+
 	Goggle.SwitchMode(i);
 }
 
@@ -2506,7 +2598,7 @@ function bool ToggleCinematic(EPattern CinematicPattern, bool bStart)
 		SetCameraMode(CinematicPattern, 5/*REN_DynLight*/);
 		SetCameraFOV(CinematicPattern, DesiredFOV);
 		backupRotation	= Rotation;
-		
+
 		CurrentPattern	= CinematicPattern;
 
 		// Reset input (move to function if needed)
@@ -2521,7 +2613,7 @@ function bool ToggleCinematic(EPattern CinematicPattern, bool bStart)
 		SetRotation(backupRotation);
 
 		CurrentPattern	= None;
-		
+
 		m_camera.GoToState('s_Following');
 		// Joshua - Restore HUD state, but validate it matches current player state
 		//myHUD.GotoState(EMainHUD(myHUD).RestoreState());
@@ -2533,8 +2625,8 @@ function bool ToggleCinematic(EPattern CinematicPattern, bool bStart)
 }
 
 //---------------------------------------[Joshua - 10 Dec 2025]-----
-// Description		
-//		Restores HUD state after cinematic, but validates it matches 
+// Description
+//		Restores HUD state after cinematic, but validates it matches
 //		the current player state to prevent mismatches
 //------------------------------------------------------------------------
 function RestoreHUDStateAfterCinematic()
@@ -2543,21 +2635,21 @@ function RestoreHUDStateAfterCinematic()
 	local name CurrentPlayerState;
 	local EGameplayObject SavedMaster;
 	local bool bCanRestoreSlavery;
-	
+
 	SavedState = EMainHUD(myHUD).RestoreState();
 	CurrentPlayerState = GetStateName();
 	SavedMaster = EMainHUD(myHUD).hud_master;
-	
+
 	// If player was in targeting but changed state during cinematic, we need to correct the HUD state
 	if (SavedState == 's_Slavery')
 	{
 		bCanRestoreSlavery = false;
-		
+
 		if (CurrentPlayerState == 's_FirstPersonTargeting' ||
 			CurrentPlayerState == 's_GrabTargeting' ||
 			CurrentPlayerState == 's_HOHTargeting' ||
 			CurrentPlayerState == 's_PlayerBTWTargeting' ||
-			CurrentPlayerState == 's_SplitTargeting' ||			
+			CurrentPlayerState == 's_SplitTargeting' ||
 			CurrentPlayerState == 's_RappellingTargeting' ||
 			CurrentPlayerState == 's_PlayerSniping' ||
 			CurrentPlayerState == 's_SplitSniping' ||
@@ -2575,7 +2667,7 @@ function RestoreHUDStateAfterCinematic()
 				bCanRestoreSlavery = true;
 			}
 		}
-		
+
 		if (bCanRestoreSlavery)
 		{
 			myHUD.GotoState('s_Slavery');
@@ -2598,7 +2690,7 @@ function ProcessToggleCinematic()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Called as soon as a mission is game over/failed. No state changes
 //------------------------------------------------------------------------
 function EndMission(bool bMissionComplete, int iFailureType)
@@ -2612,7 +2704,7 @@ function EndMission(bool bMissionComplete, int iFailureType)
 
 	// Stop player input
 	bStopInput = true;
-	
+
 	// Check if wouldn't be already in mission state
 	// Or allow the same for timer
 	if (iGameOverMsg != -1 && iGameOverMsg != iFailureType)
@@ -2696,7 +2788,7 @@ exec function FullInv()
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Catch all animEnd
 //------------------------------------------------------------------------
 event AnimEnd(int Channel)
@@ -2736,7 +2828,7 @@ event AnimEnd(int Channel)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Called from animations to perform action synch with anims
 //------------------------------------------------------------------------
 event NotifyAction();
@@ -2744,7 +2836,7 @@ event NotifyAction();
 native(1162) final function CheckFallGrab();
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Called just before a player falls from a high point
 //------------------------------------------------------------------------
 event MayFall()
@@ -2766,9 +2858,9 @@ function SendTransmissionMessage(string TextData, EchelonEnums.eTransmissionType
 	local int i;
 	local float CurrentTime;
 	local RecentTransmission RT;
-	
+
 	CurrentTime = Level.TimeSeconds;
-	
+
 	// Joshua - Only check for duplicates on these types
 	switch (eType)
 	{
@@ -2783,7 +2875,7 @@ function SendTransmissionMessage(string TextData, EchelonEnums.eTransmissionType
 			EMainHUD(myHUD).CommunicationBox.AddTransmission(self, eType, TextData, None);
 			return;
 	}
-	
+
 	// Joshua - Check recent transmissions first to prevent rapid duplicates
 	for (i = RecentTransmissions.Length - 1; i >= 0; i--)
 	{
@@ -2793,12 +2885,12 @@ function SendTransmissionMessage(string TextData, EchelonEnums.eTransmissionType
 			RecentTransmissions.Remove(i, 1);
 			continue;
 		}
-		
+
 		// Joshua - Same message sent within 1 second, ignore it
 		if (RecentTransmissions[i].Message == TextData)
 			return;
 	}
-	
+
 	// Joshua - Get the appropriate transmission list
 	switch (eType)
 	{
@@ -2814,7 +2906,7 @@ function SendTransmissionMessage(string TextData, EchelonEnums.eTransmissionType
 			TransmissionList = EMainHUD(myHUD).CommunicationBox.InventoryList;
 			break;
 	}
-	
+
 	// Joshua - Check if the same message already exists in the visible list
 	if (TransmissionList != None && TransmissionList.FirstNode != None)
 	{
@@ -2825,9 +2917,9 @@ function SendTransmissionMessage(string TextData, EchelonEnums.eTransmissionType
 				return;
 		}
 	}
-	
+
 	// Joshua - Also check the queued list (messages waiting while Lambert talks)
-	if (EMainHUD(myHUD).CommunicationBox.QueuedList != None && 
+	if (EMainHUD(myHUD).CommunicationBox.QueuedList != None &&
 		EMainHUD(myHUD).CommunicationBox.QueuedList.FirstNode != None)
 	{
 		for (Node = EMainHUD(myHUD).CommunicationBox.QueuedList.FirstNode; Node != None; Node = Node.NextNode)
@@ -2837,12 +2929,12 @@ function SendTransmissionMessage(string TextData, EchelonEnums.eTransmissionType
 				return;
 		}
 	}
-	
+
 	// Joshua - Add this message to recent transmissions tracking
 	RT.Message = TextData;
 	RT.Timestamp = CurrentTime;
 	RecentTransmissions[RecentTransmissions.Length] = RT;
-	
+
 	// Joshua - Original behavior:
 	EMainHUD(myHUD).CommunicationBox.AddTransmission(self, eType, TextData, None);
 }
@@ -2856,9 +2948,9 @@ function SendTransmissionMessage(string TextData, EchelonEnums.eTransmissionType
 //************************************************************************
 function NotifyLostInventoryItem(EInventoryItem Item)
 {
-	if (Item == None) 
+	if (Item == None)
         return;
-	
+
 	if (EWeapon(Item) == MainGun)
 		MainGun = None;
 	else if (EWeapon(Item) == HandGun)
@@ -2897,7 +2989,7 @@ function DiscardPickup(optional bool bSheathItem, optional bool bNoVelocity)
 	//Log("* * DiscardPickup HAND="$ePawn.HandItem$" Gun="$ActiveGun$" SEL="$ePawn.FullInventory.GetSelectedItem()@bSheathItem);
 	if (ePawn.HandItem == None)
 		return;
-	
+
 	DropVel = ePawn.Velocity;
 	if (!bNoVelocity)
 	{
@@ -2919,21 +3011,21 @@ function DiscardPickup(optional bool bSheathItem, optional bool bNoVelocity)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		Fall back on available weapon
 //------------------------------------------------------------------------
 function SelectWeapon(optional bool bForceHandGun, optional bool bChangeToNone)
 {
 	//Log("SelectWeapon ActiveGun["$ActiveGun$"] HandItem["$ePawn.HandItem$"]"@bChangeToNone);
-	
+
 	// Force HandGun
 	if (bForceHandGun && HandGun != None)
 		ePawn.FullInventory.SetSelectedItem(HandGun);
-	
+
 	// Fallback to currently active gun
 	else if (ActiveGun != None)
 		ePawn.FullInventory.SetSelectedItem(ActiveGun);
-	
+
 	// Fallback to any available weapon
 	else if (MainGun != None)
 		ePawn.FullInventory.SetSelectedItem(MainGun);
@@ -3010,7 +3102,7 @@ event AttachObject(EGameplayObject Obj, name AttachTag)
 }
 
 //------------------------------------------------------------------------
-// Description		
+// Description
 //		For sheath/draw animation, play returned anim inverted
 //------------------------------------------------------------------------
 function name GetWeaponAnimation()
@@ -3104,7 +3196,7 @@ function SheathWeapon(optional name AnimName, optional name BoneStart, optional 
 		BoneStart = '';
 	else if (BoneStart == '' || ePawn.bIsCrouched)
 		BoneStart = ePawn.UpperBodyBoneName;
-	
+
 	// Joshua - Added bNoPlayBack parameter for HOHFUTargeting support
 	if (bNoPlayBack)
 		ePawn.BlendAnimOverCurrent(AnimName, 1, BoneStart);
@@ -3126,7 +3218,7 @@ function DoSheath()
 {
 	//Log("DoSheath"@ePawn.HandItem@ActiveGun);
 	// Grab release will call this .. do nothing if no weapon in hands
-	
+
 	//if (ActiveGun == None)
 	// Joshua - Sheath support
 	if (ActiveGun == None || (ePawn.HandItem != None && ActiveGun != ePawn.HandItem))
@@ -3314,12 +3406,12 @@ state s_Grab
 			offset = Normal(ePawn.Location - m_AttackTarget.Location);
 			EndPos = m_AttackTarget.Location + offset * (m_AttackTarget.CollisionRadius + ePawn.CollisionRadius + 2.0);
 			offset.Z = 0;
-			
+
 			ePawn.m_orientationStart	= ePawn.Rotation;
 			ePawn.m_orientationEnd		= Rotator(-offset);
 			ePawn.m_locationStart		= ePawn.Location;
 			ePawn.m_locationEnd			= EndPos;
-			
+
 			m_AttackTarget.RandomizedAnimRate = 1.0;
 		}
 
@@ -3357,7 +3449,7 @@ state s_Grab
 
 		// Case 1 : When not conversating, any of these interactions are available
 		// Case 2 : Target interaction is always valid (talking or not talking)
-		if ((!bTalking && 
+		if ((!bTalking &&
 			 (IntObj.class.name == 'ERetinalScannerInteraction'	 ||
 			IntObj.class.name == 'ERetinalSafeInteraction'		||
 			IntObj.class.name == 'EForceRetinalSafeInteraction'	||
@@ -3437,7 +3529,7 @@ state s_Grab
 		if (m_AttackTarget != None && m_AttackTarget.Base == ePawn && m_AttackTarget.BodyFlames.Length > 0)
 		{
 			m_AttackTarget.AttenuateFire(0.8);
-			ePawn.TakeDamage(0, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), class'EBurned'); 
+			ePawn.TakeDamage(0, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), class'EBurned');
 		}
 
 		// If npc dies while being grabbed
@@ -3605,13 +3697,13 @@ Computer:
 	MoveToDestination(200, true);
 
 	ePawn.SetPhysics(PHYS_Walking);
-    
+
 	ePawn.PlayAnimOnly(ePawn.AGrabRetinalStart, , 0.1);
 	m_AttackTarget.PlayAnimOnly('GrabStPcBg0', , 0.1);
 	FinishAnim();
 
 	Interaction.Interact(m_AttackTarget.Controller);
-	
+
 	ePawn.LoopAnimOnly(ePawn.AGrabRetinalWait, , 0.1);
 	m_AttackTarget.LoopAnimOnly('GrabStPcNt0', , 0.1);
 	Stop;
@@ -3640,18 +3732,18 @@ RetinalScan:
 	MoveToDestination(200, true);
 
 	ePawn.SetPhysics(PHYS_Walking);
-    
+
 	ePawn.PlayAnimOnly(ePawn.AGrabRetinalStart, , 0.1);
 	m_AttackTarget.PlayAnimOnly(m_AttackTarget.AGrabRetinalStart, , 0.1);
 	FinishAnim();
-	
+
 	// Interact after grab start animation
 	Interaction.Interact(m_AttackTarget.Controller);
-	
+
 	ePawn.LoopAnimOnly(ePawn.AGrabRetinalWait, , 0.1);
 	m_AttackTarget.LoopAnimOnly(m_AttackTarget.AGrabRetinalWait, , 0.1);
 	Stop;
-	
+
 RetinalEnd:
 	ePawn.PlayAnimOnly(ePawn.AGrabRetinalEnd, , 0.1);
 	m_AttackTarget.PlayAnimOnly(m_AttackTarget.AGrabRetinalEnd, , 0.1);
@@ -3750,7 +3842,7 @@ state s_GrabTargeting
 		if (m_AttackTarget != None && m_AttackTarget.Base == ePawn && m_AttackTarget.BodyFlames.Length > 0)
 		{
 			m_AttackTarget.AttenuateFire(0.8);
-			ePawn.TakeDamage(0, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), class'EBurned'); 
+			ePawn.TakeDamage(0, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), class'EBurned');
 		}
 
 		// If npc dies while being grabbed
@@ -3787,7 +3879,7 @@ state s_GrabTargeting
         if (m_curWalkSpeed != 0)
         {
             accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
-            
+
             aForward *= accelModif;
             aStrafe  *= accelModif;
         }
@@ -3807,10 +3899,10 @@ state s_GrabTargeting
 			finalSpeed *= (float(m_curWalkSpeed) / eGame.m_maxSpeedInterval);
 			ePawn.GroundSpeed = finalSpeed * m_speedGrabFP;
 			ePawn.WalkingRatio = VSize(ePawn.Velocity / m_speedGrabFP);
-			
+
 			// Joshua - Update SoundWalkingRatio based on variable speed
 			ePawn.SoundWalkingRatio = finalSpeed;
-			
+
 			m_AttackTarget.WalkingRatio = ePawn.WalkingRatio;
 			ePawn.PlayMove(ePawn.ABlendGrab, Rotation, ePawn.Velocity, 0.0, true, true);
 			m_AttackTarget.PlayMove(m_AttackTarget.ABlendGrab, Rotation, ePawn.Velocity, 0.0,true,true);
@@ -3824,7 +3916,7 @@ state s_GrabTargeting
 			ePawn.LoopAnimOnly('grabstspnt1', , 0.2);
 			m_AttackTarget.LoopAnimOnly(m_AttackTarget.AGrabWait, , 0.2);
 		}
-	}	
+	}
 
 	function NotifyFiring()
 	{
@@ -3936,7 +4028,7 @@ state s_Carry
 	}
 
 	function PlayerTick(float deltaTime)
-	{		
+	{
 		Super.PlayerTick(DeltaTime);
 		HandleBreathSounds(deltaTime);
 	}
@@ -3954,7 +4046,7 @@ state s_Carry
 		if (m_AttackTarget != None && m_AttackTarget.Base == ePawn && m_AttackTarget.BodyFlames.Length > 0)
 		{
 			m_AttackTarget.AttenuateFire(0.8);
-			ePawn.TakeDamage(0, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), class'EBurned'); 
+			ePawn.TakeDamage(0, None, Vect(0,0,0), Vect(0,0,0), Vect(0,0,0), class'EBurned');
 		}
 
 		if (bInTransition)
@@ -4253,7 +4345,7 @@ OpenDoorBack:
 function bool OnGroundScope()
 {
 	// Joshua - Check this first to prevent entering s_Throw during holster
-	// Do nothing if busy with weapon 
+	// Do nothing if busy with weapon
 	if (bInGunTransition)
 		return false;
 
@@ -4292,7 +4384,7 @@ state s_PlayerWalking
 	Ignores MayReload;
 
     function BeginState()
-    {		
+    {
 		if (ePawn.WeaponStance != 0 && !ePawn.IsAnimating(ePawn.ACTIONCHANNEL))
 		{
 			ForceGunAway(true);
@@ -4463,7 +4555,7 @@ state s_PlayerWalking
 	}
 
 	function PlayerTick(float deltaTime)
-	{		
+	{
 		Super.PlayerTick(DeltaTime);
 
 		if (ePawn.SoundWalkingRatio >= 0.65f && VSize(ePawn.Velocity) != 0.0f && !ePawn.bIsCrouched)
@@ -4506,7 +4598,7 @@ state s_PlayerWalking
 
 		if (bInTransition)
 			return;
-        
+
 		GetAxes(ePawn.Rotation,X,Y,Z);
 
 		// Joshua - Normalize movement
@@ -4519,7 +4611,7 @@ state s_PlayerWalking
 		//clauzon the player can now change is speed level
 		if (m_curWalkSpeed != 0)
 		{
-			accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval; 
+			accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
 			aForward *= accelModif;
 			aStrafe  *= accelModif;
 		}
@@ -4543,7 +4635,7 @@ state s_PlayerWalking
 		}
 
 		CheckForCrouch();
-			
+
 		ePawn.ResetZones();
 
 	    SetGroundSpeed();
@@ -4952,8 +5044,8 @@ function PlayOnGround(float waitTween)
 function PlayOnGroundSniping(bool bMoving, float Speed, optional bool bBlendRefPose)
 {
 	local ePawn.SAnimBlend AnimSet;
-	
-	ePawn.SetPhysics(PHYS_Walking);	
+
+	ePawn.SetPhysics(PHYS_Walking);
 
 	//
 	// Lower body movement/wait
@@ -5028,7 +5120,7 @@ state s_Roll
 	function PlayerMove(Float DeltaTime)
 	{
 		local rotator prevRot, deltaRot;
-		
+
 		// Check to get out crouched/uncrouched
 		if (bInTransition && bDuck > 0)
 		{
@@ -5064,7 +5156,7 @@ state s_Roll
 		bDuck = 0;
 		GotoState(, 'DoRoll');
 	}
-	
+
 	function ProcessScope()
 	{
 		m_rollScope = true;
@@ -5105,23 +5197,23 @@ DoRoll:
 state PlayerFlying
 {
 	Ignores Bump;
-		
+
 	function PlayerMove(float DeltaTime)
 	{
 		local vector X,Y,Z;
 
 		GetAxes(Rotation,X,Y,Z);
 		Pawn.Acceleration = (aForward * X + aStrafe * Y) * 30000;
-		
+
 		ePawn.bVisibilityCalculated = true;
 		ePawn.VisibilityFactor = 0.0f;
-		
-		if (Pawn.Acceleration == vect(0,0,0)) 
+
+		if (Pawn.Acceleration == vect(0,0,0))
 			Pawn.Velocity = vect(0,0,0);
 
 		ePawn.PlayWait(0);
 	}
-	
+
 	function BeginState()
 	{
 		Pawn.SetPhysics(PHYS_Flying);
@@ -5280,7 +5372,7 @@ state s_Targeting
         if (m_curWalkSpeed != 0)
         {
             accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
-            
+
             aForward *= accelModif;
             aStrafe  *= accelModif;
         }
@@ -5305,10 +5397,10 @@ state s_Targeting
 		// Joshua - Variable speeds for keyboard in targeting mode
 		finalSpeed = pushingForce;
 		finalSpeed *= (float(m_curWalkSpeed) / eGame.m_maxSpeedInterval);
-		
+
 		// Joshua - Update SoundWalkingRatio based on variable speed
 		ePawn.SoundWalkingRatio = finalSpeed;
-		
+
 		PlayOnGroundSniping((pushingForce > 0.3), finalSpeed * GetGroundSpeed(), true);
 
 		//PlayOnGroundSniping((pushingForce > 0.3), pushingForce * GetGroundSpeed(), true);
@@ -5476,7 +5568,7 @@ Begin:
 // Joshua - Switch weapons in targeting mode
 SwitchWeapon:
 	FinishAnim(EPawn.ACTIONCHANNEL);
-	
+
 	if (ePawn.FullInventory.GetSelectedItem() != None && ePawn.FullInventory.GetSelectedItem().IsA('EWeapon'))
 	{
 		ActiveGun = EWeapon(ePawn.FullInventory.GetSelectedItem());
@@ -5568,8 +5660,9 @@ state s_PlayerSniping extends s_Targeting
 
 	function ProcessHeadSet(float i)
 	{
-		if (ePawn.HandItem == None || bInGunTransition || bInTransition) 
+		if (ePawn.HandItem == None || bInGunTransition || bInTransition)
 			return;
+
 		Global.ProcessHeadSet(i);
 	}
 
@@ -5578,8 +5671,8 @@ state s_PlayerSniping extends s_Targeting
 		// No update on ZoomLevel when reloading
 		if (bHideSam)
 		{
-			// Update this value for motion blur		
-			ZoomLevel = FMax(Abs(aTurn), Abs(aLookUp));		  
+			// Update this value for motion blur
+			ZoomLevel = FMax(Abs(aTurn), Abs(aLookUp));
 			ZoomLevel = FClamp(ZoomLevel, 0.0f, 1.0f);
 			ZoomLevel *= 0.7f;
 		}
@@ -5625,7 +5718,7 @@ Begin:
     {
         while (ESniperGun(ActiveGun).FOVIndex < LastSniperFOVIndex)
             ESniperGun(ActiveGun).ZoomIn();
-        
+
         // Joshua - Clear flash cycle flags after restoring zoom
         ESniperGun(ActiveGun).bStartFirstFlashCycle = false;
         ESniperGun(ActiveGun).bStartSecondFlashCycle = false;
@@ -5690,7 +5783,7 @@ state s_CameraJammerTargeting extends s_Targeting
 	{
 		m_camera.SetMode(ECM_FirstPersonCr);
 	}
-	
+
 	function NotifyEndCrouch()
 	{
 		m_camera.SetMode(ECM_FirstPerson);
@@ -5884,7 +5977,7 @@ state s_LaserMicTargeting extends s_Targeting
 			turnMul = (FovAngle / DesiredFOV) * 0.5;
 		else
 			turnMul = 0.3f; // (FovAngle from Laser mic / DesiredFOV) * 0.5;
-		
+
 	}
 
 	function ProcessHeadSet(float i)
@@ -6043,7 +6136,7 @@ state s_PlayerJumping
 
 	event bool WaistLedge(vector locationEnd, rotator orientationEnd)
 	{
-		return !bInTransition && !bInGunTransition && 
+		return !bInTransition && !bInGunTransition &&
 			   CheckInAirHoist(locationEnd, orientationEnd, 'ledgstalqk0', 'ledgcralqk0', ePawn.m_HoistWaistOffset, ePawn.m_HoistWaistCrOffset);
 	}
 
@@ -6397,7 +6490,7 @@ state s_Throw
         if (m_curWalkSpeed != 0)
         {
             accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
-            
+
             aForward *= accelModif;
             aStrafe  *= accelModif;
         }
@@ -6419,10 +6512,10 @@ state s_Throw
 		// Joshua - Variable speeds for keyboard in targeting mode
 		finalSpeed = pushingForce;
 		finalSpeed *= (float(m_curWalkSpeed) / eGame.m_maxSpeedInterval);
-		
+
 		// Joshua - Update SoundWalkingRatio based on variable speed
 		ePawn.SoundWalkingRatio = finalSpeed;
-		
+
 		PlayOnGroundSniping((pushingForce > 0.3), finalSpeed * GetGroundSpeed(), false);
 
 		//PlayOnGroundSniping((pushingForce > 0.3), pushingForce * GetGroundSpeed(), false);
@@ -6610,7 +6703,7 @@ state s_InteractWithObject
 	function BeginState()
 	{
         NormalIKFade();
-		
+
 		KillPawnSpeed();
 
 		if (ePawn.bIsCrouched)
@@ -6639,7 +6732,7 @@ state s_InteractWithObject
     {
         Super.KeyEvent(Key, Action, Delta);
 
-		// Prevent 
+		// Prevent
         if (Interaction != None && Level.Pauser == None)
             Interaction.KeyEvent(Key, Action, Delta);
 
@@ -6686,7 +6779,7 @@ state s_Conversation extends s_InteractWithObject
 	function bool CanAddInteract(EInteractObject IntObj)
 	{
 		// Allow only current conversation
-		return IntObj.class.name == 'ENpcZoneInteraction' && 
+		return IntObj.class.name == 'ENpcZoneInteraction' &&
 			   IntObj.GetStateName() == 's_NpcTalking' &&
 			   ENpcZoneInteraction(IntObj).Epc == self;
 	}
@@ -6701,11 +6794,11 @@ state s_Conversation extends s_InteractWithObject
 // Joshua - Force player to match NPC stance when having a conversation
 Begin:
     bInTransition = true;
-    
+
     if ((ENpcZoneInteraction(Interaction).Npc.bIsCrouched || ENpcZoneInteraction(Interaction).Npc.bDyingDude || Interaction.Owner.IsA('EBaxter')) != ePawn.bIsCrouched)
     {
         ePawn.bWantsToCrouch = ENpcZoneInteraction(Interaction).Npc.bIsCrouched || ENpcZoneInteraction(Interaction).Npc.bDyingDude || Interaction.Owner.IsA('EBaxter');
-        
+
         if (ENpcZoneInteraction(Interaction).Npc.bIsCrouched || ENpcZoneInteraction(Interaction).Npc.bDyingDude || Interaction.Owner.IsA('EBaxter'))
         {
             ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn, , 0.2);
@@ -6718,7 +6811,7 @@ Begin:
 			FinishAnim();
         }
     }
-    
+
     if (ENpcZoneInteraction(Interaction).Npc.bIsCrouched || ENpcZoneInteraction(Interaction).Npc.bDyingDude || Interaction.Owner.IsA('EBaxter'))
     {
         ePawn.LoopAnimOnly(ePawn.AWaitCrouch, , 0.2);
@@ -6729,7 +6822,7 @@ Begin:
         ePawn.LoopAnimOnly(ePawn.AWait, , 0.2);
         m_camera.SetMode(ECM_Walking);
     }
-    
+
     bInTransition = false;
     Stop;
 
@@ -6954,8 +7047,8 @@ state s_KeyPadInteract extends s_InteractWithObject
 		if (bDuck > 0)
 		{
 			// Do not allow exiting during Access Denied or Access Granted
-			if (Interaction != None && Interaction.Owner != None && 
-				Interaction.Owner.GetStateName() != 's_AccessDenied' && 
+			if (Interaction != None && Interaction.Owner != None &&
+				Interaction.Owner.GetStateName() != 's_AccessDenied' &&
 				Interaction.Owner.GetStateName() != 's_AccessGranted')
 			{
 				bDuck = 0;
@@ -6964,7 +7057,7 @@ state s_KeyPadInteract extends s_InteractWithObject
 			}
 			else
 			{
-				bDuck = 0; 
+				bDuck = 0;
 			}
 		}
 	}
@@ -7001,7 +7094,7 @@ state s_Computer extends s_InteractWithObject
 		// Joshua - Stop keyboard sound if playing when cinematic starts
 		if (ePawn.IsPlaying(Sound'Electronic.Play_Sq_ComputerKeyBoard'))
 			ePawn.PlaySound(Sound'Electronic.Stop_Sq_ComputerKeyBoard', SLOT_SFX);
-		
+
 		Global.ProcessToggleCinematic();
 	}
 
@@ -7020,7 +7113,7 @@ DoInteract:
 	}
 	ePawn.PlayAnimOnly('kbrdstalbg0',,0.1);
 	FinishAnim();
-	
+
 	Interaction.Interact(self);
 
 	ePawn.LoopAnimOnly('kbrdstalnt0');
@@ -7107,10 +7200,10 @@ state s_OpticCable extends s_InteractWithObject
 
 Begin:
 	bInTransition = true;
-	
+
 	// Joshua - Store initial crouch state to restore on exit
 	m_rollCrouch = ePawn.bIsCrouched;
-	
+
 	if (!eGame.bNewDoorInteraction)
 	{
 		// Original method
@@ -7129,14 +7222,14 @@ Begin:
 		backupRotation	= Rotation;
 		bLockedCamera	= true;
 		bInTransition	= false;
-		
+
 		ePawn.HandItem.GotoState('s_Sneaking');
 	}
 	else if (eGame.bNewDoorInteraction)
 	{
 		// Joshua - New door interaction system, supports both original and new interaction methods
 		backupRotation = Rotation;
-		
+
 		// Check if using new interaction box method
 		if (OpticCableItem != None && OpticCableItem.GetStateName() == 's_InteractSelected')
 		{
@@ -7145,7 +7238,7 @@ Begin:
 			ePawn.SetPhysics(PHYS_Linear);
 			ePawn.PlayMoveTo(Rotation);
 			MoveToDestination(300, true);
-			
+
 			if (!ePawn.bIsCrouched)
 			{
 				// Joshua - Crouch the player to adjust camera and collision
@@ -7180,7 +7273,7 @@ Begin:
 			Sleep(ePawn.GetAnimtime('LockStAlNt0') * 0.5);
 			bLockedCamera	= true;
 			bInTransition	= false;
-			
+
 			ePawn.HandItem.GotoState('s_Sneaking');
 		}
 	}
@@ -7193,7 +7286,7 @@ End:
 
 	ePawn.BlendAnimOverCurrent('LockStAlNt0',1,ePawn.UpperBodyBoneName,1,0.2);
 	Sleep(ePawn.GetAnimtime('LockStAlNt0') * 0.5);
-	
+
 	// Joshua - Restore original crouch state
 	if (!m_rollCrouch)
 	{
@@ -7202,10 +7295,10 @@ End:
 		ePawn.PlayAnimOnly(ePawn.AWaitCrouchIn,,,true);
 		FinishAnim();
 	}
-	
+
 	// Set physics back to walking after finishing
 	ePawn.SetPhysics(PHYS_Walking);
-	
+
 	bInTransition = false;
 	GotoState('s_PlayerWalking');
 }
@@ -7283,12 +7376,12 @@ Begin:
 Aborted:
 	ePawn.PlayWait(0.0, 0.1);
 	ePawn.SetPhysics(PHYS_Walking);
-	
+
 	ePawn.PlayAnimOnly('LockStAlNt0',,0.2);
 	FinishAnim();
 
 	Interaction.Interact(self);
-	
+
 	GotoState('s_PlayerWalking');
 }
 
@@ -7309,7 +7402,7 @@ Begin:
 
 	bNoLedgePush = true;
 	ePawn.SetPhysics(PHYS_None);
-	
+
 	ePawn.PlaySound(Sound'FisherEquipement.Play_WallMineFix', SLOT_SFX);
 
 	// Should begin to test whether or not there's a valid surface
@@ -7389,8 +7482,8 @@ Begin:
 	MoveToDestination(200, true);
 	KillPawnSpeed();
 	ePawn.SetPhysics(PHYS_Walking);
-	
-	// Keep track of wallmine distance 
+
+	// Keep track of wallmine distance
 	m_HoistStOffset = Interaction.Owner.Location;
 	bInTransition = false;
 
@@ -7437,7 +7530,7 @@ Defuse:
 	bInTransition = true;
 	Interaction.Interact(self);
 	Stop;
-	
+
 SheathMine:
 	// End
 	if (!ePawn.bIsCrouched)
@@ -7490,8 +7583,8 @@ Begin:
 	MoveToDestination(200, true);
 	KillPawnSpeed();
 	ePawn.SetPhysics(PHYS_Walking);
-	
-	// Keep track of object distance 
+
+	// Keep track of object distance
 	m_HoistStOffset = Interaction.Owner.Location;
 	bInTransition = false;
 
@@ -7623,7 +7716,7 @@ DoDoor:
 	Interaction.SetInteractLocation(EPawn);
 	ePawn.SetPhysics(PHYS_Linear);
 
-	
+
 	//ePawn.PlayMoveTo(Rotation);
 	// Joshua - Not using PlayMoveTo because crouch functionality is commented out
 	if (!ePawn.bIsCrouched)
@@ -7826,7 +7919,7 @@ EndState:
 
 	ePawn.SetPhysics(PHYS_Walking);
 	bInTransition = false;
-	
+
 GetOut:
 	// Check if coming from first person
 	if (JumpLabel == 'BackToFirstPerson')
@@ -7935,7 +8028,7 @@ BeginStealth:
 		ePawn.PlayAnimOnly('doorstpkbgr',,0.2);
 	else
 		ePawn.PlayAnimOnly('doorstpkbgl',,0.2);
-	
+
 	// Finish turn
 	FinishAnim();
 	if (m_BTWSide)
@@ -8145,7 +8238,7 @@ state s_PlayerBTWBase
 			GotoState(, 'Release');
 		}
 	}
-	
+
 	function ProcessScope()
 	{
 		if (!bInTransition && CheckBTWRelease() && ActiveGun != None)
@@ -8323,7 +8416,7 @@ state s_PlayerBTWMove extends s_PlayerBTWBase
 				SetBTWAcceleration(0.0);
 			else
 				SetBTWAcceleration(1.0);
-	
+
 			ePawn.PlayBTW('BackCrAlFdL', 'BackCrAlFdR', 'BackStAlFdL', 'BackStAlFdR', m_BTWSide, 1.0, 0.0);
 		}
     }
@@ -8910,7 +9003,7 @@ EnterWindow:
 
 	ePawn.PlayAnimOnly('raplstalin0',,0.1);
 	FinishAnim();
-	
+
 	ePawn.SetLocation(ePawn.m_locationEnd);
 	m_camera.StopFixeTarget();
 
@@ -8976,7 +9069,7 @@ state s_RappellingTargeting
 
 	function ProcessHeadSet(float i)
 	{
-		if (bInTransition) 
+		if (bInTransition)
 			return;
 		Global.ProcessHeadSet(i);
 	}
@@ -8986,8 +9079,9 @@ state s_RappellingTargeting
 		if (!bInTransition && !bInGunTransition)
 			GotoState(,'BeginUsingPalm');
 	}
+
 	// Called from AirCamera for both split and rapel targeting)
-	function bool OnGroundScope() 
+	function bool OnGroundScope()
 	{
 		bInTransition = false;
 		DrawWeapon();
@@ -9133,17 +9227,17 @@ Begin:
 SwitchWeapon:
 	// Don't wait for full sheath animation so hands don't go back on the rope
 	Sleep(ePawn.GetAnimTime(ePawn.GetAnimName(EPawn.ACTIONCHANNEL)) * 0.75);
-	
+
 	if (ePawn.FullInventory.GetSelectedItem() != None && ePawn.FullInventory.GetSelectedItem().IsA('EWeapon'))
 	{
 		ActiveGun = EWeapon(ePawn.FullInventory.GetSelectedItem());
 		bInTransition = true;
-		
+
 		// Start the draw animation
 		DrawWeapon();
 		ePawn.AnimBlendParams(EPawn.ACTIONCHANNEL, 1.0);
 		FinishAnim(EPawn.ACTIONCHANNEL);
-		
+
 		bInTransition = false;
 		EMainHUD(myHud).Slave(ActiveGun);
 	}
@@ -9199,7 +9293,7 @@ state s_RappellingSniping extends s_PlayerSniping
 		// Joshua - Save the current FOV index before reloading
 		if (ESniperGun(ActiveGun) != None)
 			LastSniperFOVIndex = ESniperGun(ActiveGun).FOVIndex;
-		
+
 		ZoomLevel = 0.0f;
 		SetCameraFOV(self, DesiredFov); // Restore Fov that may have changed in sniping mode
 		ESniperGun(ActiveGun).SetSniperMode(false);
@@ -9291,7 +9385,7 @@ state s_RappellingFall
 	{
 		if (bInTransition)
 			return;
-		
+
 		if (m_LPStartTime != -1 && Level.TimeSeconds - m_LPStartTime > 0.2f)
 			CheckWallLand();
 
@@ -9596,16 +9690,16 @@ Begin:
 SwitchWeapon:
 	m_SMInTrans = true;
 	FinishAnim(EPawn.ACTIONCHANNEL);
-	
+
 	if (ePawn.FullInventory.GetSelectedItem() != None && ePawn.FullInventory.GetSelectedItem().IsA('EWeapon'))
 	{
 		ActiveGun = EWeapon(ePawn.FullInventory.GetSelectedItem());
 		bInTransition = true;
-		
+
 		DrawWeapon();
 		ePawn.AnimBlendParams(EPawn.ACTIONCHANNEL, 1.0, 0.0, 0.0, ePawn.UpperBodyBoneName);
 		FinishAnim(EPawn.ACTIONCHANNEL);
-		
+
 		bInTransition = false;
 		m_useTarget = true;
 		EMainHUD(myHud).Slave(ActiveGun);
@@ -9661,7 +9755,7 @@ state s_SplitZooming
 	/*
 	[ECM_SplitJumpZoom]
 	parent=					ECM_RapelFP
-	offset=					nx=0.0 ny=30.0 nz=40.0 sx=0.0 sy=30.0 sz=40.0 tx=0.0 ty=30.0 tz=40.0 
+	offset=					nx=0.0 ny=30.0 nz=40.0 sx=0.0 sy=30.0 sz=40.0 tx=0.0 ty=30.0 tz=40.0
 	distance=				n=40.0 s=40.0 t=40.0
 	minYaw=					v=-7000
 	maxYaw=					v=7000
@@ -9961,13 +10055,13 @@ OverTop:
 
 Electrocuted:
 	bInTransition = true;
-	
+
 	// Push Pawn away from fence
 	ePawn.AddAmbientDamage(EElectrifiedFence(ePawn.Base).Damage);
 	ePawn.PlayAnimOnly('FencStAlXx0',,0.1);
 	FinishAnim();
 	ePawn.AddAmbientDamage(-EElectrifiedFence(ePawn.Base).Damage);
-	
+
 	ePawn.Velocity += ePawn.ToWorldDir(Vect(-250,0,25));
 	bInTransition = false;
 	GoToState('s_PlayerJumping');
@@ -10116,7 +10210,7 @@ state s_Ledge
 	}
 
 	function PlayerTick(float deltaTime)
-	{		
+	{
 		Super.PlayerTick(DeltaTime);
 
 		HandleBreathSounds(deltaTime);
@@ -10431,7 +10525,7 @@ state s_HandOverHand
 	}
 
 	function PlayerTick(float deltaTime)
-	{		
+	{
 		Super.PlayerTick(DeltaTime);
 
 		HandleBreathSounds(deltaTime);
@@ -10577,7 +10671,7 @@ state s_HandOverHandFeetUp
 	}
 
 	function PlayerTick(float deltaTime)
-	{		
+	{
 		Super.PlayerTick(DeltaTime);
 
 		HandleBreathSounds(deltaTime);
@@ -10723,7 +10817,7 @@ state s_HOHTargeting extends s_FirstPersonTargeting
     function PlayerMove(float DeltaTime)
     {
 		ePawn.LoopAnim('PipHStSpNt1', , 0.2);
-		
+
 		if (bInTransition)
 			return;
 
@@ -10842,7 +10936,7 @@ state s_HOHFUTargeting extends s_FirstPersonTargeting
 			ePawn.SetCollisionSize(ePawn.default.CollisionRadius, ePawn.default.CollisionHeight);
 			ePawn.ResetZones();
 		}
-		
+
 		ePawn.ResetZones();
 		m_LastHOHTime = Level.TimeSeconds;
 		ElapsedTime = 0.0f;
@@ -10923,7 +11017,7 @@ state s_HOHFUTargeting extends s_FirstPersonTargeting
 		GoToState('s_GrabbingZipLine', 'FromAir');
 		return true;
 	}
-	
+
 	function NotifyFiring()
 	{
 		playerStats.AddStat("BulletFired");
@@ -11647,7 +11741,7 @@ state s_Pipe
 	}
 
 	function PlayerTick(float deltaTime)
-	{		
+	{
 		Super.PlayerTick(DeltaTime);
 
 		HandleBreathSounds(deltaTime);
@@ -11735,7 +11829,7 @@ state s_Pipe
 			// We are not at the top and pulling hard, let's slide...
 			ePawn.Acceleration = Z * eGame.m_PDownwardSpeed;
 			GoToState('s_PipeSlideDown');
-		}	
+		}
 		else if (aForward < eGame.m_backwardGentle &&
 				m_GECanGoBackward)
 		{
@@ -12044,10 +12138,10 @@ state s_ZipLine
 	{
 		local vector extent;
 		local bool bWantsToChangeCrouch;
-		
+
 		// Joshua - Anti-spam stance change on zipline
 		bWantsToChangeCrouch = (bCrouchDrop && bPressedJump) || (!bCrouchDrop && bDuck > 0);
-		
+
 		if (bWantsToChangeCrouch)
 		{
 			if (m_ZipLineDropTimer <= 0.0)
@@ -12056,7 +12150,7 @@ state s_ZipLine
 				ePawn.PlayZipLineTransition(ePawn.bWantsToCrouch);
 				m_ZipLineDropTimer = 0.75;
 			}
-			
+
 			if (!bCrouchDrop) // Joshua - Crouch drop
 				bDuck = 0;
 		}
@@ -12228,7 +12322,7 @@ state s_Pole
 	}
 
 	function PlayerTick(float deltaTime)
-	{		
+	{
 		Super.PlayerTick(DeltaTime);
 
 		HandleBreathSounds(deltaTime);
@@ -12519,14 +12613,18 @@ defaultproperties
 	// Enhanced Variables
 	//=============================================================================
 	bMissionFailedQuickMenu=True
+	bQuickDataView=True
 	LastSaveName=""
 	InputMode=IM_Auto
 	ControllerScheme=CS_Default
 	ControllerIcon=CI_Xbox
 	bNormalizeMovement=True
+	bCrouchDrop=True
+	m_LastCrouchTime=-10.000000
+	m_ZipLineDropTimer=-10.000000
 	bToggleBTWTargeting=True
 	bWhistle=True
-	m_WhistleTime=-10.00
+	m_WhistleTime=-10.000000
 	bBinoculars=True
 	bOpticCableVisions=True
 	bLaserMicZoomLevels=True
