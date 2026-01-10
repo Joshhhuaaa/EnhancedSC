@@ -28,6 +28,7 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
 function InitPattern()
 {
     local Pawn P;
+    local ELaptop Laptop;
 
     Super.InitPattern();
 
@@ -35,6 +36,13 @@ function InitPattern()
     {
         if (P.name == 'ELambert0')
             Characters[1] = P.controller;
+    }
+
+    // Joshua - Fix laptop location to not clip in the table
+    ForEach DynamicActors(Class'ELaptop', Laptop)
+    {
+        if (Laptop.name == 'ELaptop0')
+            Laptop.SetLocation(Laptop.Location + vect(5.153198, 0, 0.25));
     }
 
     if (!bInit)
@@ -53,6 +61,7 @@ state Pattern
 
 Begin:
 LookExp:
+    InventoryManager(0, true, '', 1, true, class 'EOpticCable', false); // Joshua - Optic Cable added to Training
     Log("Saving Game through Comms Pattern. Lambert asks Sam to move his head");
     PlayerMove(false);
     Sleep(0.5);

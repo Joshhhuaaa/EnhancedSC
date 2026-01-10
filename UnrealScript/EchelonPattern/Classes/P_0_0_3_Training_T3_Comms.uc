@@ -51,6 +51,7 @@ state Pattern
 
 Begin:
 StartGarage:
+    InventoryManager(0, true, '', 1, true, class 'EOpticCable', false); // Joshua - Optic Cable added to Training
     Log("Opening start garage door test");
     IgnoreAlarmStage(TRUE);
     SendUnrealEvent('StartDoor');
