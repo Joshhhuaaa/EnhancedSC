@@ -96,6 +96,11 @@ LookExp:
     Sleep(0.1);
     Close();
     PlayerMove(true);
+    // Joshua - Adding unused tip for keyboard variable speeds
+    if (!EchelonGameInfo(Level.Game).bUseController)
+    {
+        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0041L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE);
+    }
     End();
 OnTopOfPool:
     Log("");

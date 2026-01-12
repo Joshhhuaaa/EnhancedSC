@@ -79,10 +79,6 @@ JumpAndLedge:
     Log("");
     CheckFlags(JumpAndLedgePlayed,TRUE,'DoNothing');
     SetFlags(JumpAndLedgePlayed,FALSE);
-    if (!EchelonGameInfo(Level.Game).bUseController)
-    {
-        AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0041L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK, TRUE); // Joshua - Adding unused tip for keyboard variable speeds
-    }
     AddTrainingData(Localize("P_0_0_2_Training_T2_Desc", "Training_0001L", "Localization\\P_0_0_2_Training"), KEY_NONE_MASK | KEY_MOVE_LEFT_MASK | KEY_MOVE_RIGHT_MASK | KEY_JUMP_MASK, FALSE);
     End();
 speed:
