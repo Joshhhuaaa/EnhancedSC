@@ -33,6 +33,7 @@ class Enhanced extends Actor;
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\ETGAME_PS2.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="ETGAME_PS2" MIPS=0
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\ETGAME_Hor.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="ETGAME_Hor" MIPS=0
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\ETGAME2_SCPT.dds" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="ETGAME2_SCPT" MIPS=0
+#exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Crosshair_Beta.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Crosshair_Beta" MIPS=0
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Crosshair_PS2.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Crosshair_PS2" MIPS=0
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Crosshair_PS3.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Crosshair_PS3" MIPS=0
 #exec Texture Import File="..\Textures\HUD_Enhanced\HUD\Crosshair_SCCT.tga" PACKAGE="HUD_Enhanced" GROUP="HUD" NAME="Crosshair_SCCT" MIPS=0
