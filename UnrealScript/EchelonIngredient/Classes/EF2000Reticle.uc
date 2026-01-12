@@ -126,6 +126,8 @@ function int GetCrosshairMire()
 {
 	switch (Epc.CrosshairStyle)
 	{
+        case CS_Beta:
+            return eLevel.TGAME.svf2_mire_beta;
 		case CS_PS2:
 			return eLevel.TGAME.svf2_mire_PS2;
 		case CS_PS3:
@@ -147,6 +149,8 @@ function int GetCrosshairMireFond()
 {
 	switch (Epc.CrosshairStyle)
 	{
+		case CS_Beta:
+			return eLevel.TGAME.svf2_mire_fond_beta;
 		case CS_PS2:
 			return eLevel.TGAME.svf2_mire_fond_PS2;
 		case CS_PS3:
@@ -168,6 +172,8 @@ function int GetPistolMireTopBas()
 {
 	switch (Epc.CrosshairStyle)
 	{
+		case CS_Beta:
+			return eLevel.TGAME.pi_mire_top_bas_beta;
 		case CS_PS2:
 			return eLevel.TGAME.pi_mire_top_bas_PS2;
 		case CS_PS3:
@@ -189,6 +195,8 @@ function int GetPistolFondMire()
 {
 	switch (Epc.CrosshairStyle)
 	{
+		case CS_Beta:
+			return eLevel.TGAME.pi_fond_mire_beta;
 		case CS_PS2:
 			return eLevel.TGAME.pi_fond_mire_PS2;
 		case CS_PS3:
@@ -210,6 +218,8 @@ function int GetPistolMireCote()
 {
 	switch (Epc.CrosshairStyle)
 	{
+		case CS_Beta:
+			return eLevel.TGAME.pi_mire_cote_beta;
 		case CS_PS2:
 			return eLevel.TGAME.pi_mire_cote_PS2;
 		case CS_PS3:
@@ -827,7 +837,6 @@ function DrawCrosshair(ECanvas Canvas)
 		CENTERSCALE = Weapon.Accuracy;
 	}
 
-
 	TOPLEFT_DEP_X = - (8 + MAX_CROSSHAIR_DEP_X * CENTERSCALE);
 	TOPLEFT_DEP_Y = - (8 + MAX_CROSSHAIR_DEP_X * CENTERSCALE);
 	TOPRIGHT_DEP_X = 4 + MAX_CROSSHAIR_DEP_X * CENTERSCALE;
@@ -837,10 +846,8 @@ function DrawCrosshair(ECanvas Canvas)
 	BOTTOMRIGHT_DEP_X = 4 + MAX_CROSSHAIR_DEP_X * CENTERSCALE;
 	BOTTOMRIGHT_DEP_Y = 4 + MAX_CROSSHAIR_DEP_X * CENTERSCALE;
 
-
     switch (chStyle)
     {
-
         case CH_NONE:
             chColor = Canvas.MakeColor(38,81,50);
             break;
@@ -851,11 +858,11 @@ function DrawCrosshair(ECanvas Canvas)
 
 	Canvas.Style = ERenderStyle.STY_Alpha;
 
-	if (F2000 == None || !F2000.bSniperMode)
+	// Joshua - Draw outer box in sniper mode for CS_Beta crosshair style
+	if (F2000 == None || !F2000.bSniperMode || Epc.CrosshairStyle == CS_Beta)
 	{
 		if (F2000 != None)
 		{
-
 			// Top Right Corner
 			Canvas.SetPos(CROSSHAIR_CENTER_X + TOPRIGHT_DEP_X - 3, CROSSHAIR_CENTER_Y + TOPRIGHT_DEP_Y + 1);
 			eLevel.TGAME.DrawTileFromManager(Canvas, GetCrosshairMire(), 7, 7, 0, 0, 7, 7);

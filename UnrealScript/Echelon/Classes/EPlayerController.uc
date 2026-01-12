@@ -363,6 +363,7 @@ var(Enhanced) config bool bShowCurrentGadget; // Joshua - Briefly displays the g
 enum ECrosshairStyle
 {
 	CS_Original,
+	CS_Beta,
 	CS_PS2,
 	CS_SCCT,
 	CS_PS3,
@@ -414,7 +415,7 @@ exec function bool LoadLastSave()
 
 	C.Viewport.Console.PendingLoadSaveName = LastSaveName;
 
-	Error = ConsoleCommand("LOADGAME FILENAME=" $ LastSaveName $ ".en3");
+	Error = ConsoleCommand("LOADGAME FILENAME=" $ LastSaveName $ ".en4");
 	return (Error == "");
 }
 
@@ -3369,6 +3370,9 @@ exec function ToggleCrosshair()
 	switch (CrosshairStyle)
 	{
 		case CS_Original:
+			CrosshairStyle = CS_Beta;
+			break;
+		case CS_Beta:
 			CrosshairStyle = CS_PS2;
 			break;
 		case CS_PS2:
