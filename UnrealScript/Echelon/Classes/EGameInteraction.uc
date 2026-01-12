@@ -485,7 +485,7 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 		BindPreviousGadget();
 		BindNextGadget();
 		BindPlayerStats();
-		BindSwitchCam();
+		//BindSwitchCam();
 		bDefaultBindsChecked = true;
 	}
 

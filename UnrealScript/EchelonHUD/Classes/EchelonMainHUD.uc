@@ -1092,6 +1092,15 @@ event DrawErrorMsgBox(ECanvas Canvas, String sErrorMsg)
 	Canvas.Style = ERenderStyle.STY_Normal;
 }
 
+// Joshua - Force exit the quick inventory when the player dies
+function ForceExitQuickInventory()
+{
+	// Only exit if we're currently in the QuickInventory state
+	if (IsInState('QuickInventory'))
+	{
+		QuickInvAndCurrentItems.ForceExitQuickInventory();
+	}
+}
 
 /*=============================================================================
  State:         MainHUD
@@ -1771,10 +1780,10 @@ state s_Training
 			}
 
 			// Draw "Continue" text after button
-			Canvas.DrawColor.R = 12;
-			Canvas.DrawColor.G = 15;
-			Canvas.DrawColor.B = 8;
-			Canvas.DrawColor.A = 255;
+			Canvas.DrawColor.R = 0;
+			Canvas.DrawColor.G = 0;
+			Canvas.DrawColor.B = 0;
+			Canvas.DrawColor.A = 110;
 			Canvas.SetPos(320 + 15, yPos); // Text after button (8px gap from button)
 			Canvas.DrawTextAligned(ProcessedText, TXT_CENTER);
 		}

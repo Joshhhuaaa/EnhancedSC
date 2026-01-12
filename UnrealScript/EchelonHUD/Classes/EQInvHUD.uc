@@ -66,6 +66,7 @@ var bool bIsFirstPerson;
 var EInventoryItem MyItem;
 
 var bool bWasUsingController;	// Joshua - Track previous controller state
+var bool bForceExited;			// Joshua - Force exit the quick inventory when the player dies
 
 /*-----------------------------------------------------------------------------
                       T Y P E   D E F I N I T I O N S
@@ -513,9 +514,17 @@ state s_QDisplay
 
 	function EndState()
 	{
-		// Quick tap to get back to previous item
-		if (!bPreviousConfig)
-			Epc.EPawn.PlaySound(Sound'Interface.Play_ClosePackSac', SLOT_Interface);
+		// Joshua - Don't play sound or do item handling if force exited
+		if (bForceExited)
+		{
+			bForceExited = false;
+		}
+		else
+		{
+			// Quick tap to get back to previous item
+			if (!bPreviousConfig)
+				Epc.EPawn.PlaySound(Sound'Interface.Play_ClosePackSac', SLOT_Interface);
+		}
 
 		Epc.FakeMouseToggle(false);
 
@@ -2298,6 +2307,18 @@ function CheckPreviousWeapon()
 	}
 }
 // Joshua - End of quick switch gadgets
+
+// Joshua - Force exit the quick inventory when the player dies
+function ForceExitQuickInventory()
+{
+	// Only exit if we're currently in the quick inventory state
+	if (IsInState('s_QDisplay'))
+	{
+		bForceExited = true;
+		GotoState('');
+		Owner.GotoState(EchelonMainHud(Owner).RestoreState());
+	}
+}
 
 defaultproperties
 {

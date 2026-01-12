@@ -112,3 +112,5 @@ final function name RestoreState()
 	//Log("RESTORESTATE"@in_game_state_name@hud_master);
 	return in_game_state_name;
 }
+
+function ForceExitQuickInventory(); // Joshua - Implemented in EchelonMainHUD, needs to be called by EPlayerController so declared here

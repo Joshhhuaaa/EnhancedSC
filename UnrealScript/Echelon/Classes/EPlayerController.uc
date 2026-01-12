@@ -1379,6 +1379,10 @@ function PawnDied()
 	if (egi != None)
 		egi.ForceExitInteractionMenu();
 
+	// Joshua - Force exit quick inventory if player dies while in it
+	if (myHUD != None)
+		EMainHUD(myHUD).ForceExitQuickInventory();
+
 	// Joshua - Call PostInteract when player dies to clean any interactions
 	if (Interaction != None)
 		Interaction.PostInteract(self);
