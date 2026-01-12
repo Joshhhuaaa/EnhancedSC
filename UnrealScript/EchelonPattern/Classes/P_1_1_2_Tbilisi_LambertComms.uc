@@ -29,6 +29,7 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
 function InitPattern()
 {
     local Pawn P;
+    local Light L;
 
     Super.InitPattern();
 
@@ -38,6 +39,12 @@ function InitPattern()
             Characters[1] = P.controller;
         if (P.name == 'EAnna0')
             Characters[2] = P.controller;
+    }
+
+    // Joshua - Removing HeatRadius from all light actors
+    ForEach AllActors(Class'Light', L)
+    {
+        L.HeatRadius = 0;
     }
 
     if (!bInit)
