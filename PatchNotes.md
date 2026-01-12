@@ -10,6 +10,7 @@
 - Improved the Optic Cable's enter and exit sounds, restoring the missing exit sound on PC version.
 - The selected rate of fire is now saved before entering sniper mode and correctly restored after exiting.
 - Sam now adjusts his stance to match the NPC's during conversations, similar to Pandora Tomorrow.
+- Sam now tilts his head downward when speaking with seated NPCs.
 - Added the ability to quickly drop a carried body by pressing the Jump key, similar to Chaos Theory.
 - Keyboard variable speeds now affect player movement when using Sniper Mode or the Laser Mic.
 - Added a crouch speed multiplier while sniping, making movement slower when crouched.
@@ -28,10 +29,16 @@
   - 0.50 seconds (Elite)
   - 0.00 seconds (Instant)
 - Added an option for the interaction box and inventory to not pause the game, similar to Chaos Theory.
+- Added an option to quickly view Data Sticks and Satchels.
 - Added an option to restore the checkpoints from the Xbox version.
 - Added an option to use Xbox difficulty, where Sam starts with 300 HP on Normal and 198 HP on Hard, compared to the PC default of 200 HP on Normal and 132 HP on Hard.
 - Added an option to hide letterboxing in cinematics.
 - Added an option to unlock all levels, including their individual parts.
+- Added an option to change crosshair styles for the SC-20K and SC Pistol:
+  - Beta
+  - PlayStation 2
+  - Chaos Theory
+  - PlayStation 3
 - Added an option to show the keypad code as the current goal when using a keypad.
 - Added an optional HUD element to display the alarm count, similar to later Splinter Cell games.
 - Added an option to show/hide individual HUD elements:
@@ -51,7 +58,7 @@
 - Fixed a bug where the mouse wheel changed variable speeds while a weapon was drawn or when using a Sticky Camera or Diversion Camera.
 - Fixed a bug where losing an equipped item while Back to Wall peeking now correctly holsters the item automatically.
 - Sniper sway is no longer disabled when player input is blocked.
-- Added an option to use Binoculars, similar to later Splinter Cell games. 
+- Added an option to use Binoculars, similar to later Splinter Cell games.
 - [@cazzhmir](https://www.youtube.com/@cazzhmir): Added an option to select from three new suits for Sam:
   -	Beta Standard
   -	White Balaclava
@@ -81,6 +88,7 @@
 - Added the ability to drop from a split jump while a weapon is drawn, similar to Chaos Theory.
 - Added the ability to pause on controller during cinematics.
 - Back to Wall targeting can now be exited using the Back to Wall key.
+- Fixed a bug where switching between Night Vision and Thermal Vision while using a Sticky Camera did not play the goggle switch sound.
 - Fixed a bug where entering a Diversion Camera could immediately trigger a whistle because the interaction input was not cleared.
 - Fixed a bug where the player could fall while using a Sticky or Diversion Camera and fall damage was incorrectly not applied.
 - Fixed a bug where dropping a projectile item while in Back to Wall could cause the item to become stuck in the wall.
@@ -118,6 +126,7 @@
 - Fixed a bug where Sticky Camera and Laser Mic zoom levels did not scale correctly at higher frame rates, previously requiring excessive scrolling to achieve full zoom.
 - Added an option to use a horizontal Life Bar, featured in builds prior to E3 2002.
 - The inventory is now consistently sorted across all levels.
+- The Quick Inventory now closes if opened when the player dies.
 - Added an option to enable a persistent HUD. The Life Bar, Communication Box, and Shadow Meter are always displayed, and the Communication Box is also shown during Retinal Scanner interactions.
 - Added the zoom in and zoom out animation for the SC-20K sniper, similar to Pandora Tomorrow.
 - Restored the timer's critical state behavior, causing the timer text to turn red when below the critical threshold.
@@ -142,6 +151,7 @@
 - Added dedicated keybinds to cycle through the inventory (Previous Weapon and Next Weapon), similar to Pandora Tomorrow.
 - Pressing the Crouch key now exits the Optic Cable, Lockpick, Keypad, and Elevator interactions.
 - Improved controller support to more closely match the Xbox version.
+- Added full controller support in PC menus.
 - Added an option to change the default controller layout with alternate control schemes.
 - Added Alt+F4 support to exit the game during menus or in-game.
 - [@Afevis](https://github.com/ShizCalev): Added vibration support for controllers.
@@ -177,11 +187,13 @@
 - [@Afevis](https://github.com/ShizCalev): Added an option to disable inactivity videos.
 - [@Afevis](https://github.com/ShizCalev): Restored EAX support, which was disabled in the official v1.3 patch used by the GOG and Ubisoft Connect versions of the game.
 - [@TGP482](https://www.youtube.com/@TGP482): Restored numerous textures that were previously downscaled to their full resolution.
+- Increased the resolution of Sam's Thermal Vision textures.
 - All mission parts now require a keypress to continue after loading, not just the initial part.
 - Save games now use a new file extension for Enhanced to prevent incompatible saves from the original game from being displayed.
 - Added numerical values to Sound Options sliders to display their exact setting.
 - Added a Discord button in the Main Menu that links directly to the Enhanced SC Discord server.
 - The game now automatically detects if it is running on Steam Deck and disables menu links, displaying a QR code instead to prevent crashes.
+- Fixed a bug where the PC version did not reset the inactivity timer when receiving input in menus.
 - Fixed a bug in the PC version where inactivity videos couldn't be skipped.
 - Restored the Wall Mine gadget video on the OPSAT, which was accidentally left out of the PC release.
 - The "Mission Complete" screen now requires a keypress to continue, giving players the chance to view their Mission Statistics without a timer.
@@ -190,15 +202,17 @@
 - Includes experimental versions of Nuclear Power Plant and Severonickel that can be played. Both cancelled levels currently lack level-specific audio due to incompatible Xbox sound files.
 - [@cazzhmir](https://www.youtube.com/@cazzhmir): Includes newly recreated loading screens to improve the accuracy of the story.
 - [@cazzhmir](https://www.youtube.com/@cazzhmir): Includes updated cutscene that improve the storytelling for Kalinatek, along with two new cutscenes for Nuclear Power Plant and Severonickel.
-- [dgVoodoo2](https://github.com/dege-diosg/dgVoodoo2) is included to restore Shadow Buffer rendering and set a 60 FPS cap. The 60 FPS cap is necessary to prevent [issues](https://youtu.be/X3tuerrwhnw) with AI pathing and SoftBody physics that can occur at higher frame rates. 
+- [dgVoodoo2](https://github.com/dege-diosg/dgVoodoo2) is included to restore Shadow Buffer rendering and set a 60 FPS cap. The 60 FPS cap is necessary to prevent [issues](https://youtu.be/X3tuerrwhnw) with AI pathing and SoftBody physics that can occur at higher frame rates.
 - [ThirteenAG Widescreen Fix](https://github.com/ThirteenAG/WidescreenFixesPack) is included for widescreen support.
 - [Xidi](https://github.com/samuelgr/Xidi) is included to improve compatibility for XInput-based controllers.
+- [DSOAL](<https://github.com/kcat/dsoal>) is included to optionally restore EAX support. EAX can be enabled by running the `eax_restore.reg` script in the System folder and enabling it in-game.
 - Thanks to [iLL_Pazzo](https://www.twitch.tv/ill_pazzo) (French), [NoSleepCoffee](https://www.twitch.tv/nosleepcoffee), [Andry66power](https://www.twitch.tv/andry66power) (Italian), [Distro](https://www.twitch.tv/distrotv) (German), and [MatthewDoomer](https://www.twitch.tv/matthewdoomer) (Spanish) for translating Enhanced localization.
 - [@ThirteenAG](https://github.com/ThirteenAG): Added an option to display cutscenes in fullscreen.
 - [@ThirteenAG](https://github.com/ThirteenAG): Added an option to use the original FOV during in-game cinematics.
 - Mission Failed now offers options to load the last save or checkpoint, load game, restart mission, or quit to the main menu.
 - Added an option to change controller icons between Xbox, PlayStation 2, and GameCube.
 - Added an option to change text fonts between PC, Xbox, and GameCube.
+- Added an option to disable the alert sound that plays before stress and combat music transitions.
 - Adjusted maximum mouse sensitivity from 99 to 100.
 - Profile name and difficulty are now displayed on the in-game pause screen.
 - The brightness/contrast slider now ranges correctly from 0–100.
@@ -210,9 +224,10 @@
 ### Maps
 - Training
   - Based on the Xbox version for both parts, featuring lighting improvements.
-  - Training popups will now dynamically display either the Keyboard or Controller instructions, depending on the last input used.
+  - Added the Optic Cable to the starting inventory.
+  - Overhauled training popups with controller support, dynamic input-based prompts, crouch drop support, and the New Door Interaction System.
   - Grabbing the guard who searches for the body will now fail the section.
-  - Fixed a bug where the training popup would not work on controller while in weapon mode.
+  - Fixed the position of a laptop.
 ---
 - Police Station
   - Based on the Xbox version for all parts, featuring lighting improvements.
@@ -220,6 +235,7 @@
   - Fixed a bug in Police Station's texture package by making a plant texture two-sided, allowing it to render correctly from both sides.
   - Fixed a light that had an unintended glow when destroyed.
   - Fixed a bug where civilian patrols could be repeatedly restarted.
+  - Fixed a bug where certain areas applied excessive Thermal Vision heat radius.
   - Prevented the street restriction from being removed if the player drops into the elevator shaft before obtaining the black box.
   - Blaustein's balcony door is now unlocked before obtaining the black box, as attempting to proceed without it already results in mission failure.
   - Removed the `EOmniAtten` LightType from the Xbox version of the map to prevent a rendering bug.
@@ -340,7 +356,7 @@
   - Fixed disposable picks that were assigned the wrong StaticMesh.
   - Fixed an issue where the keyboard typing sound would endlessly loop after triggering the meltdown.
   - Raised an ammo pickup that was partially clipping in the floor.
-  - Lowered a ceiling camera to prevent it from clipping into the ceiling.
+  - Added an objective opportunity message when failing the mission by eliminating a required target.
   - Fixed a bug where a laptop required for an objective could be destroyed, and updated its screen to the standard red objective PC display.
   - Fixed a bug where the sliding door glass could be destroyed.
   - Fixed a bug where certain textures had incorrect transparency.
@@ -352,4 +368,5 @@
   - Fixed a StaticMesh that was clipping through a ceiling.
   - Added textures for several StaticMeshes that had none assigned.
   - Lowered the neutral rotation of a camera so it can properly detect the player.
+  - Added an objective opportunity message when failing the mission by eliminating a required target.
   - Fixed a note that was incorrectly assigned to a nonexistent object.
