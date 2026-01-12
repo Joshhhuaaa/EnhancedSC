@@ -47,7 +47,13 @@ function bool NotifyPickup(Controller Instigator)
 				bNotEmpty = true;
 
 				if (Instigator.bIsPlayer)
+				{
 					EPlayerController(Instigator).SendTransmissionMessage(Localize("Transmission", "NoPickUp", "Localization\\HUD") $ Localize("InventoryItem", Item.ItemName, "Localization\\HUD"), TR_INVENTORY);
+
+					// Joshua - Show quick data view prompt if enabled
+					if (EPlayerController(Instigator).bQuickDataView)
+						EPlayerController(Instigator).SendTransmissionMessage(EPlayerController(Instigator).Player.Console.ProcessKeyBindingText(Localize("Transmission", "QuickDataViewPrompt", "Localization\\Enhanced")), TR_CONSOLE);
+				}
 
 				item.Destroy();
 			}

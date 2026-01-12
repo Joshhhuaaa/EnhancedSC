@@ -55,7 +55,13 @@ function PostInteract(Controller Instigator)
 		}
 
         if (EPlayerController(Instigator) != None)
+		{
 		    EPlayerController(Instigator).SendTransmissionMessage(Localize("Transmission", "ComputerPickup", "Localization\\HUD"), TR_CONSOLE);
+
+			// Joshua - Show quick data view prompt if enabled
+			if (EPlayerController(Instigator).bQuickDataView)
+				EPlayerController(Instigator).SendTransmissionMessage(EPlayerController(Instigator).Player.Console.ProcessKeyBindingText(Localize("Transmission", "QuickDataViewPrompt", "Localization\\Enhanced")), TR_CONSOLE);
+		}
 	}
 
 	// reset interaction
