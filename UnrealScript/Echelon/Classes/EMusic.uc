@@ -204,7 +204,7 @@ auto state Idle
 				if (CanPlayMusic())
 				{
 					//play stress intro
-					if (PlayPunch && !EchelonGameInfo(Level.Game).bDisableMusicPunch) // Joshua - Added option to disable music punch
+					if (PlayPunch && !EchelonGameInfo(Level.Game).bDisableAlertSound) // Joshua - Added option to disable alert sound
 						PlayMusic(Sound'CommonMusic.Play_PunchStress', false);
 
 					if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayStressMusic)
@@ -226,7 +226,7 @@ auto state Idle
 					}
 					else
 					{
-						if (PlayPunch && !EchelonGameInfo(Level.Game).bDisableMusicPunch) // Joshua - Added option to disable music punch
+						if (PlayPunch && !EchelonGameInfo(Level.Game).bDisableAlertSound) // Joshua - Added option to disable alert sound
 							PlayMusic(Sound'CommonMusic.Play_PunchCombat', false);
 
 						if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFightMusic)
@@ -273,7 +273,7 @@ state StressIntro
 			}
 			else
 			{
-				if (PlayPunch && !EchelonGameInfo(Level.Game).bDisableMusicPunch) // Joshua - Added option to disable music punch
+				if (PlayPunch && !EchelonGameInfo(Level.Game).bDisableAlertSound) // Joshua - Added option to disable alert sound
 					PlayMusic(Sound'CommonMusic.Play_PunchCombat', false);
 
 				if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFightMusic)
@@ -337,7 +337,7 @@ state StressLoop
 			}
 			else
 			{
-				if (PlayPunch && !EchelonGameInfo(Level.Game).bDisableMusicPunch) // Joshua - Added option to disable music punch
+				if (PlayPunch && !EchelonGameInfo(Level.Game).bDisableAlertSound) // Joshua - Added option to disable alert sound
 					PlayMusic(Sound'CommonMusic. Play_PunchCombat', false);
 
 				if (EPattern(CurrentOwner).Characters[1].Pawn.Region.Zone.PlayFightMusic)

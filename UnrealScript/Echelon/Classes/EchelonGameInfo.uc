@@ -209,7 +209,7 @@ enum ETurnOffDistanceScale
 };
 var(Enhanced) config ETurnOffDistanceScale TurnOffDistanceScale;
 
-var(Enhanced) config bool bDisableMusicPunch; // Joshua - Option to disable punch that plays before Stress and Combat music
+var(Enhanced) config bool bDisableAlertSound; // Joshua - Option to disable alert sound that plays before Stress and Combat music
 
 // Native Variables
 var(Enhanced) config bool bEnableRumble; // Joshua - UseRumble in Engine.GameInfo is now deprecated, this setting will now toggle rumble
