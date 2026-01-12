@@ -351,6 +351,7 @@ function Tick(float Delta)
 
 function Notify(UWindowDialogControl C, byte E)
 {
+	local EPlayerController EPC;
 
 	if (E == DE_Click)
 	{
@@ -361,6 +362,10 @@ function Notify(UWindowDialogControl C, byte E)
             if (m_bFromQuickView)
             {
                 m_bFromQuickView = false;
+                // Joshua - Clear the new recon flag since we viewed it
+                EPC = EPlayerController(GetPlayerOwner());
+                if (EPC != None)
+                    EPC.bNewRecon = false;
                 EPCConsole(Root.Console).LaunchGame();
             }
             else
