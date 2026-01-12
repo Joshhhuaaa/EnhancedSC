@@ -160,12 +160,9 @@ function SwitchToCamera()
 	Epc.bDisableWhistle = true;
 }
 
-//------------------------------------------------------------------------
 // Joshua - Check if camera can be switched to
-//------------------------------------------------------------------------
 function bool CanSwitchTo()
 {
-	// Can switch to camera in any state (flying or stuck on wall)
 	return !bDeleteMe && !bHidden && GetStateName() != 's_Flying';
 }
 

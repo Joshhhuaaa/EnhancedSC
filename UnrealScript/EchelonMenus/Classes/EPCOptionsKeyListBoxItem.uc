@@ -23,3 +23,4 @@ var bool            bIsCheckBoxLine;        // Not very clean, but will do.
 //=============================================================================
 var bool            bIsCompactLine;        // Joshua - Compact line spacing
 var UWindowWindow   m_InfoButton;          // Joshua - Optional info button for tooltips
+var bool            bControllerSelected;   // Joshua - True when this item is selected via controller navigation

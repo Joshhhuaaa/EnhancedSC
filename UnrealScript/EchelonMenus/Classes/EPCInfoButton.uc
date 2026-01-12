@@ -20,9 +20,10 @@ function BeforePaint(Canvas C, float X, float Y)
     local EPCEnhancedConfigArea EnhancedConfigArea;
     local EPCControlsConfigArea ControlsConfigArea;
     local EPCCreatePlayerArea CreatePlayerArea;
-    
+    local EPCSoundConfigArea SoundConfigArea;
+
     Super.BeforePaint(C, X, Y);
-    
+
     // Get parent config area to sync pulse values - try all supported types
     EnhancedConfigArea = EPCEnhancedConfigArea(ParentWindow);
     if (EnhancedConfigArea != None)
@@ -49,6 +50,16 @@ function BeforePaint(Canvas C, float X, float Y)
                 PulseTimer = CreatePlayerArea.InfoButtonPulseTimer;
                 bPulseIncreasing = CreatePlayerArea.bInfoButtonPulseIncreasing;
             }
+            else
+            {
+                SoundConfigArea = EPCSoundConfigArea(ParentWindow);
+                if (SoundConfigArea != None)
+                {
+                    // Sync pulse values from parent
+                    PulseTimer = SoundConfigArea.InfoButtonPulseTimer;
+                    bPulseIncreasing = SoundConfigArea.bInfoButtonPulseIncreasing;
+                }
+            }
         }
     }
 }
@@ -58,14 +69,15 @@ function Click(float X, float Y)
     local EPCEnhancedConfigArea EnhancedConfigArea;
     local EPCControlsConfigArea ControlsConfigArea;
     local EPCCreatePlayerArea CreatePlayerArea;
-    
+    local EPCSoundConfigArea SoundConfigArea;
+
     Super.Click(X, Y);
-    
+
     if (InfoText != "")
     {
         ShowInfoMessage();
         bStopPulsing = true; // Stop pulsing for this button after showing the message
-        
+
         // Mark this tooltip as viewed for persistence, try all config area types
         EnhancedConfigArea = EPCEnhancedConfigArea(ParentWindow);
         if (EnhancedConfigArea != None && LocalizationKey != "")
@@ -86,6 +98,14 @@ function Click(float X, float Y)
                 {
                     CreatePlayerArea.MarkTooltipViewed(LocalizationKey);
                 }
+                else
+                {
+                    SoundConfigArea = EPCSoundConfigArea(ParentWindow);
+                    if (SoundConfigArea != None && LocalizationKey != "")
+                    {
+                        SoundConfigArea.MarkTooltipViewed(LocalizationKey);
+                    }
+                }
             }
         }
     }
@@ -105,26 +125,26 @@ function Paint(Canvas C, float X, float Y)
 {
     local float W, H;
     local Color DrawColor;
-    
+
     C.Style = 5; // Alpha
-    
+
     if (bMouseDown || MouseIsOver())
         DrawColor = HoverTextColor;
     else
         DrawColor = TextColor;
-    
+
     if (bStopPulsing)
         DrawColor.A = 255;
     else
         DrawColor.A = int(PulseTimer * 255);
-    
+
     C.DrawColor = DrawColor;
-    
+
     C.Font = Root.Fonts[F_Normal];
-    
+
     TextSize(C, "(?)", W, H);
     ClipText(C, (WinWidth - W) / 2, (WinHeight - H) / 2, "(?)");
-    
+
     C.Style = 1; // Normal
 }
 
@@ -132,7 +152,7 @@ function Paint(Canvas C, float X, float Y)
 function MouseWheelDown(FLOAT X, FLOAT Y)
 {
 	local UWindowWindow W;
-	
+
 	// Find the listbox in our owner window and pass the scroll event to it
 	if (NotifyWindow != None)
 	{
@@ -153,7 +173,7 @@ function MouseWheelDown(FLOAT X, FLOAT Y)
 function MouseWheelUp(FLOAT X, FLOAT Y)
 {
 	local UWindowWindow W;
-	
+
 	// Find the listbox in our owner window and pass the scroll event to it
 	if (NotifyWindow != None)
 	{

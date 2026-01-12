@@ -35,3 +35,45 @@ function Paint(Canvas C, float X, float Y)
 		}
 	}
 }
+
+// Joshua - Allow page scrolling when mouse is over the bitmap
+function MouseWheelDown(FLOAT X, FLOAT Y)
+{
+	local UWindowWindow W;
+
+	// Joshua - Find the listbox in our parent window and pass the scroll event to it
+	if (ParentWindow != None && ParentWindow.ParentWindow != None)
+	{
+		W = ParentWindow.ParentWindow.FirstChildWindow;
+		while (W != None)
+		{
+			if (UWindowListBox(W) != None)
+			{
+				W.MouseWheelDown(X, Y);
+				return;
+			}
+			W = W.NextSiblingWindow;
+		}
+	}
+}
+
+// Joshua - Allow page scrolling when mouse is over the bitmap
+function MouseWheelUp(FLOAT X, FLOAT Y)
+{
+	local UWindowWindow W;
+
+	// Joshua - Find the listbox in our parent window and pass the scroll event to it
+	if (ParentWindow != None && ParentWindow.ParentWindow != None)
+	{
+		W = ParentWindow.ParentWindow.FirstChildWindow;
+		while (W != None)
+		{
+			if (UWindowListBox(W) != None)
+			{
+				W.MouseWheelUp(X, Y);
+				return;
+			}
+			W = W.NextSiblingWindow;
+		}
+	}
+}

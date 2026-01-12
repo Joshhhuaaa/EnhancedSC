@@ -12,22 +12,72 @@ var INT m_IResetToDefaultXPos, m_IResetToDefaultYPos, m_IResetToDefaultWidth, m_
 
 function Created()
 {
-    Super.Created();
-    
+    SetAcceptsFocus(); // Joshua - Enable controller input
+
+    // Joshua - Initialize controller navigation
+    m_totalItems = 7;
+    m_bEnableArea = false;
+    m_selectedItemIndex = 0;
+    m_bSliderFocused = false;
+    m_bComboFocused = false;
+    m_bEAXFocused = false;
+    m_ActiveCombo = None;
+
+    // Joshua - Initialize EAX flicker animation
+    m_EAXPulseTimer = 0.0;
+
+    // Set color values (YM)
+    m_TextColor.R = 71;
+    m_TextColor.G = 71;
+    m_TextColor.G = 71;
+    m_TextColor.B = 71;
+    m_TextColor.A = 255;
+
+    m_DisabledTextColor.R = 128;
+    m_DisabledTextColor.G = 128;
+    m_DisabledTextColor.B = 128;
+    m_DisabledTextColor.A = 255;
+
+    // Joshua - Create the scrollable listbox with limited height for in-game menu
+    m_ListBox = EPCOptionsListBoxEnhanced(CreateWindow(class'EPCOptionsListBoxEnhanced', 0, 0, WinWidth, 176));
+    m_ListBox.SetAcceptsFocus();
+    m_ListBox.bAlwaysBehind = true;
+    m_ListBox.m_ILabelXPos = m_ILabelXPos;
+    m_ListBox.m_ILabelWidth = m_ILabelWidth;
+    m_ListBox.m_ILineItemHeight = m_ILineItemHeight;
+    m_ListBox.m_ITitleLineItemHeight = m_ITitleLineItemHeight;
+    InitSoundOptions();
+    m_ListBox.TitleFont = F_Normal;
+
     m_ResetToDefault = EPCTextButton(CreateControl(class'EPCTextButton', m_IResetToDefaultXPos, m_IResetToDefaultYPos, m_IResetToDefaultWidth, m_IResetToDefaultHeight, self));
     m_ResetToDefault.SetButtonText(Caps(Localize("OPTIONS","RESETTODEFAULT","Localization\\HUD")) ,TXT_CENTER);
     m_ResetToDefault.Font = F_Normal;
 }
 
 function Notify(UWindowDialogControl C, byte E)
-{		
-    
+{
+
 	if (E == DE_Click && C == m_ResetToDefault)
 	{
         ResetToDefault();
-	}  
+	}
     else
         Super.Notify(C, E);
+}
+
+// Joshua - Hide Reset to Default button in controller mode
+function Paint(Canvas C, float X, float Y)
+{
+    Super.Paint(C, X, Y);
+
+    if (EPCMainMenuRootWindow(Root).m_bControllerModeActive)
+    {
+        m_ResetToDefault.HideWindow();
+    }
+    else
+    {
+        m_ResetToDefault.ShowWindow();
+    }
 }
 
 defaultproperties
@@ -36,10 +86,8 @@ defaultproperties
     m_IResetToDefaultYPos=186
     m_IResetToDefaultWidth=240
     m_IResetToDefaultHeight=18
-    m_IScrollWidth=130 // Joshua - Reduced from 150 to fit the new label
-    m_IDropDownLabelYPos=110
-    m_ILabel3DAccXPos=250
-    m_IEaxYPos=135
+    m_ILabelWidth=225
+    m_IScrollWidth=150
     m_TextColor=(R=51,G=51,B=51,A=255)
     m_BorderColor=(R=0,G=0,B=0,A=255)
 }

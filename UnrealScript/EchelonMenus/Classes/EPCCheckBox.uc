@@ -20,7 +20,7 @@ function Click(float X, float Y)
 	Root.PlayClickSound();
 }
 
-// Joshua - Allow page scrolling when mouse is over checkbox
+// Joshua - Allow page scrolling when mouse is over the checkbox
 function MouseWheelDown(FLOAT X, FLOAT Y)
 {
 	local UWindowWindow W;
@@ -41,7 +41,7 @@ function MouseWheelDown(FLOAT X, FLOAT Y)
 	}
 }
 
-// Joshua - Allow page scrolling when mouse is over checkbox
+// Joshua - Allow page scrolling when mouse is over the checkbox
 function MouseWheelUp(FLOAT X, FLOAT Y)
 {
 	local UWindowWindow W;

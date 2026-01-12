@@ -61,7 +61,7 @@ function UpdateLastSaveName()
     if (FileManager == None)
         return;
 
-    Path = "..\\Save\\"$PlayerInfo.PlayerName$"\\*.en3";
+    Path = "..\\Save\\"$PlayerInfo.PlayerName$"\\*.en4";
     FileManager.DetailedFindFiles(Path);
 
     // Find the newest save by comparing FileCompletTime
@@ -73,7 +73,7 @@ function UpdateLastSaveName()
         {
             NewestTime = FileManager.m_pDetailedFileList[i].FileCompletTime;
             Name = FileManager.m_pDetailedFileList[i].Filename;
-            NewestName = Left(Name, Len(Name) - 4); // Remove .en3 extension
+            NewestName = Left(Name, Len(Name) - 4); // Remove .en4 extension
         }
     }
 
@@ -110,14 +110,14 @@ function string GetOldestCheckpointName()
     CheckpointNames[1] = class'Actor'.static.Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "2";
     CheckpointNames[2] = class'Actor'.static.Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "3";
 
-    Path = "..\\Save\\"$PlayerInfo.PlayerName$"\\*.en3";
+    Path = "..\\Save\\"$PlayerInfo.PlayerName$"\\*.en4";
     FileManager.DetailedFindFiles(Path);
 
     // Check which checkpoints exist and get their timestamps
     for (i = 0; i < FileManager.m_pDetailedFileList.Length; i++)
     {
         Name = FileManager.m_pDetailedFileList[i].Filename;
-        Name = Left(Name, Len(Name) - 4); // Remove .en3 extension
+        Name = Left(Name, Len(Name) - 4); // Remove .en4 extension
 
         if (Name == CheckpointNames[0])
         {
@@ -321,7 +321,8 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 
 				if (InStr(CurrentTransmissionText, Localize("Transmission", "ComputerPickup", "Localization\\HUD")) != -1 ||
 					InStr(CurrentTransmissionText, Localize("Transmission", "SatchelFind", "Localization\\HUD")) != -1 ||
-                    InStr(CurrentTransmissionText, Localize("HUD", "Added", "Localization\\HUD")) != -1)
+                    InStr(CurrentTransmissionText, Localize("HUD", "Added", "Localization\\HUD")) != -1 ||
+					InStr(CurrentTransmissionText, EPC.Player.Console.ProcessKeyBindingText(Localize("Transmission", "QuickDataViewPrompt", "Localization\\Enhanced"))) != -1)
 				{
 					MostRecentRecon = EPC.GetMostRecentRecon();
 					// Only go if the most recent recon hasn't been read yet
@@ -352,7 +353,8 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 
 function bool KeyType(EInputKey Key)
 {
-	if (bShowLog) log("ERROR!!!!!!!!!!!!!!!!!!! IN R6Console >> KeyType");
+	if (bShowLog)
+		log("ERROR!!!!!!!!!!!!!!!!!!! IN R6Console >> KeyType");
     return false;
 }
 
@@ -407,7 +409,8 @@ state FakeWindow extends UWindow
         local byte k;
         k = eKey;
 
-        if (bShowLog)log("Console state FakeWindow KeyEvent eAction"@eAction@"Key"@eKey);
+        if (bShowLog)
+			log("Console state FakeWindow KeyEvent eAction"@eAction@"Key"@eKey);
 
         switch (eAction)
         {
@@ -575,15 +578,20 @@ state UWindow
     {
         local byte k;
         local EMainMenuHUD MenuHUD;
+
         k = eKey;
 
         if (bShowLog)
             log("Console state Uwindow KeyEvent eAction"@eAction@"Key"@eKey);
 
+        // Joshua - Reset inactivity timer on PC menus
+        MenuHUD = EchelonMainHUD(ViewportOwner.Actor.myHUD).MainMenuHUD;
+        if (MenuHUD != None)
+            MenuHUD.DemoTimer = 0.0f;
+
         // Joshua - Add functionality to skip inactivity videos
         if (eAction == IST_Press)
         {
-            MenuHUD = EchelonMainHUD(ViewportOwner.Actor.myHUD).MainMenuHUD;
             if (MenuHUD != None && MenuHUD.bInactVideoPlaying)
             {
                 bMusicPlaying = false; // Joshua - Fixes a bug where music stops playing after skipping inactivity video
@@ -947,14 +955,25 @@ function string ConvertKeyToLocalisation(BYTE _Key, string _szEnumKeyName)
 	return szResult;
 }
 
-// ====================================================================
-// Joshua - GetActionKeyName: Get the localized key name for a specific action
-// Ex: GetActionKeyName("MoveForward") returns "W" (or user's bound key)
-// Prioritizes controller bindings (196-215 range) when bUseController is enabled
-// ====================================================================
+// Joshua - Hack to show more common key even if its secondary bind
+function bool IsPreferredKey(BYTE OldKey, BYTE NewKey)
+{
+	// Prefer Space over Enter (Space=32, Enter=13)
+	if (OldKey == EInputKey.IK_Enter && NewKey == EInputKey.IK_Space)
+		return true;
+
+	// Prefer letter keys (WASD) over arrow keys
+	// Arrow keys are IK_Up=38, IK_Down=40, IK_Left=37, IK_Right=39
+	if (OldKey >= 37 && OldKey <= 40 && NewKey >= EInputKey.IK_A && NewKey <= EInputKey.IK_Z)
+		return true;
+
+	return false;
+}
+
+// Joshua - Get the localized key name for a specific action
 function string GetActionKeyName(string ActionName, optional bool bAltKey, optional bool bUsingController)
 {
-	local BYTE Key;
+	local BYTE Key, AltKey;
 	local string szEnumKeyName;
 	local string szResult;
 	local string BoundAction;
@@ -984,7 +1003,19 @@ function string GetActionKeyName(string ActionName, optional bool bAltKey, optio
 	// If no controller button found (or not using controller), fall back to normal key binding
 	if (Key == 0)
 	{
-		Key = ViewportOwner.Actor.GetKey(ActionName, bAltKey);
+		Key = ViewportOwner.Actor.GetKey(ActionName, false);     // Primary binding
+		AltKey = ViewportOwner.Actor.GetKey(ActionName, true);   // Secondary binding
+
+		// Joshua - Hack to show more common key even if its secondary bind
+		if (AltKey != 0 && IsPreferredKey(Key, AltKey))
+		{
+			Key = AltKey;
+		}
+		// If bAltKey was specifically requested and we have an alt key, use it
+		else if (bAltKey && AltKey != 0)
+		{
+			Key = AltKey;
+		}
 	}
 
 	if (Key == 0)
@@ -1003,10 +1034,7 @@ function string GetActionKeyName(string ActionName, optional bool bAltKey, optio
 	return szResult;
 }
 
-// ====================================================================
-// Joshua - ProcessKeyBindingText: Replace {ActionName} placeholders with actual key bindings
-// "Press {MoveForward} to move forward" becomes "Press W to move forward" in localization
-// ====================================================================
+// Joshua - Replace {ActionName} placeholders with actual key bindings in localization
 function string ProcessKeyBindingText(string InputText)
 {
 	local string ResultText;
@@ -1044,11 +1072,7 @@ function string ProcessKeyBindingText(string InputText)
 		// Get the key bound to this action
 		KeyName = GetActionKeyName(ActionName, false, bUsingController);
 
-		// If no key found, try alt key
-		if (KeyName == "")
-			KeyName = GetActionKeyName(ActionName, true, bUsingController);
-
-		// If still no key found, keep the action name as fallback
+		// If no key found, keep the action name as fallback
 		if (KeyName == "")
 			KeyName = ActionName;
 

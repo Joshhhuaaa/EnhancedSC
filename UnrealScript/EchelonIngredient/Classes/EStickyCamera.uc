@@ -31,9 +31,7 @@ function PostBeginPlay()
 	current_fov	 = MaxFov;
 }
 
-//------------------------------------------------------------------------
 // Joshua - Override TakeView to restore saved settings when using SwitchCam
-//------------------------------------------------------------------------
 function TakeView()
 {
 	Super.TakeView();
@@ -55,9 +53,7 @@ function TakeView()
 	}
 }
 
-//------------------------------------------------------------------------
 // Joshua - Override GiveView to save settings before exiting
-//------------------------------------------------------------------------
 function GiveView(bool bFromPlayer)
 {
 	// Save current settings before exiting

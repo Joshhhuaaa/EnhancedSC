@@ -1,9 +1,9 @@
 // ====================================================================
 //  Class:  Engine.Interaction
-//  
+//
 //  Each individual Interaction is a jumping point in UScript.  The should
 //  be the foundatation for any subsystem that requires interaction with
-//  the player (such as a menu).  
+//  the player (such as a menu).
 //
 //  Interactions take on two forms, the Global Interaction and the Local
 //  Interaction.  The GI get's to process data before the LI and get's
@@ -59,6 +59,9 @@ var int StatsLockDestroyed;
 var int StatsMedkitUsed;
 var int StatsNPCsInterrogated;
 var bool StatsCheatsActive;
+
+// Joshua - Track if menus should start in controller mode (persists across level loads)
+var bool bStartInControllerMode;
 
 //-----------------------------------------------------------------------------
 // natives.

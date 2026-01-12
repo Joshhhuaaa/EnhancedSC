@@ -14,7 +14,7 @@ function Created()
 {
     SetAcceptsFocus();
 
-    m_ListBox = EPCOptionKeysListBox(CreateControl(class'EPCOptionKeysListBox', 0, 0, WinWidth, 176, self));            
+    m_ListBox = EPCOptionKeysListBox(CreateControl(class'EPCOptionKeysListBox', 0, 0, WinWidth, 176, self));
     InitOptionControls();
     m_ListBox.TitleFont = F_Normal;
 
@@ -25,14 +25,29 @@ function Created()
 
 
 function Notify(UWindowDialogControl C, byte E)
-{    
+{
 
     if (E == DE_Click && C == m_ResetToDefault)
 	{
-           ResetToDefault();            
+           ResetToDefault();
 	}
     else
         Super.Notify(C,E);
+}
+
+// Joshua - Hide Reset to Default button in controller mode
+function Paint(Canvas C, float X, float Y)
+{
+    Super.Paint(C, X, Y);
+
+    if (EPCMainMenuRootWindow(Root).m_bControllerModeActive)
+    {
+        m_ResetToDefault.HideWindow();
+    }
+    else
+    {
+        m_ResetToDefault.ShowWindow();
+    }
 }
 
 defaultproperties

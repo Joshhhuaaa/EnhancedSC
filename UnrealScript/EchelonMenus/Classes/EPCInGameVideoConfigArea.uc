@@ -14,6 +14,14 @@ function Created()
 {
     SetAcceptsFocus();
 
+    // Joshua - Initialize controller navigation
+    m_totalItems = 8;
+    m_bEnableArea = false;
+    m_selectedItemIndex = 0;
+    m_bSliderFocused = false;
+    m_bComboFocused = false;
+    m_ActiveCombo = None;
+
     m_ListBox = EPCOptionsListBoxEnhanced(CreateWindow(class'EPCOptionsListBoxEnhanced', 0, 0, WinWidth, 176));
     m_ListBox.SetAcceptsFocus();
     m_ListBox.bAlwaysBehind = true;
@@ -21,10 +29,10 @@ function Created()
     m_ListBox.m_ILabelWidth = m_ILabelWidth;
     m_ListBox.m_ILineItemHeight = m_ILineItemHeight;
     m_ListBox.m_ITitleLineItemHeight = m_ITitleLineItemHeight;
-    
+
     InitVideoOptions();
     m_ListBox.TitleFont = F_Normal;
-    
+
     m_ResetToDefault = EPCTextButton(CreateControl(class'EPCTextButton', m_IResetToDefaultXPos, m_IResetToDefaultYPos, m_IResetToDefaultWidth, m_IResetToDefaultHeight, self));
     m_ResetToDefault.SetButtonText(Caps(Localize("OPTIONS","RESETTODEFAULT","Localization\\HUD")) ,TXT_CENTER);
     m_ResetToDefault.Font = F_Normal;
@@ -32,15 +40,30 @@ function Created()
 
 
 function Notify(UWindowDialogControl C, byte E)
-{	
+{
     local EPCGameOptions GO;
-    
+
 	if (E == DE_Click && C == m_ResetToDefault)
 	{
        ResetToDefault();
 	}
     else
         Super.Notify(C, E);
+}
+
+// Joshua - Hide Reset to Default button in controller mode
+function Paint(Canvas C, float X, float Y)
+{
+    Super.Paint(C, X, Y);
+
+    if (EPCMainMenuRootWindow(Root).m_bControllerModeActive)
+    {
+        m_ResetToDefault.HideWindow();
+    }
+    else
+    {
+        m_ResetToDefault.ShowWindow();
+    }
 }
 
 defaultproperties

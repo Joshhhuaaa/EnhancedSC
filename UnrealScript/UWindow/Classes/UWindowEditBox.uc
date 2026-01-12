@@ -87,7 +87,8 @@ function SetValue(string NewValue, optional string NewValue2, optional bool noUp
 		{
 			CurrentHistory = UWindowEditBoxHistory(HistoryList.Insert(class'UWindowEditBoxHistory'));
 			CurrentHistory.HistoryText = Value;
-            if (bShowLog)log("Set value CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
+            if (bShowLog)
+				log("Set value CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
 
 		}
 		CurrentHistory = HistoryList;
@@ -110,7 +111,8 @@ function Clear()
 //This is the default function for enabling editing
 function SelectAll()
 {
-    if (bShowLog)log("SelectAll");
+    if (bShowLog)
+		log("SelectAll");
 
     if (bCanEdit)
     {
@@ -306,7 +308,8 @@ function KeyType(int Key, float MouseX, float MouseY)
 	local string result;
 	result = "";
 
-    if (bShowLog)log("UWindowEditBox::KeyType bCanEdit"@bCanEdit@"bKeyDown"@bKeyDown@"m_CurrentlyEditing"@m_CurrentlyEditing);
+    if (bShowLog)
+		log("UWindowEditBox::KeyType bCanEdit"@bCanEdit@"bKeyDown"@bKeyDown@"m_CurrentlyEditing"@m_CurrentlyEditing);
 
 
     if (bCanEdit && bKeyDown && m_CurrentlyEditing)
@@ -371,7 +374,8 @@ function KeyDown(int Key, float X, float Y)
 	case Root.Console.EInputKey.IK_Escape:
         if (bCanEdit && m_CurrentlyEditing)
 		{
-            if (bShowLog)log("Escape pressed");
+            if (bShowLog)
+				log("Escape pressed");
 
             if (!bHistory)
             {
@@ -379,8 +383,10 @@ function KeyDown(int Key, float X, float Y)
             }
 			else if (CurrentHistory != None && CurrentHistory.Next != None)
 			{
-                if (bShowLog)log("CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
-                if (bShowLog)log("CurrentHistory.Next.HistoryText"@UWindowEditBoxHistory(CurrentHistory.Next).HistoryText);
+                if (bShowLog)
+					log("CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
+                if (bShowLog)
+					log("CurrentHistory.Next.HistoryText"@UWindowEditBoxHistory(CurrentHistory.Next).HistoryText);
 
 				SetValue(UWindowEditBoxHistory(CurrentHistory.Next).HistoryText, "",true);
 			}
@@ -401,7 +407,8 @@ function KeyDown(int Key, float X, float Y)
 				{
 					CurrentHistory = UWindowEditBoxHistory(HistoryList.Insert(class'UWindowEditBoxHistory'));
 					CurrentHistory.HistoryText = Value;
-                    if (bShowLog)log("Set value CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
+                    if (bShowLog)
+						log("Set value CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
 				}
 				CurrentHistory = HistoryList;
 			}
@@ -540,7 +547,8 @@ function KeyDown(int Key, float X, float Y)
 function Click(float X, float Y)
 {
 	Notify(DE_Click);
-    if (bShowLog)log("UWindowEditBox::Click");
+    if (bShowLog)
+		log("UWindowEditBox::Click");
 }
 
 function LMouseDown(float X, float Y)
@@ -548,7 +556,8 @@ function LMouseDown(float X, float Y)
 	Super.LMouseDown(X, Y);
     SelectAll();
 	Notify(DE_LMouseDown);
-    if (bShowLog)log("UWindowEditBox::LMouseDown");
+    if (bShowLog)
+		log("UWindowEditBox::LMouseDown");
 }
 
 function Paint(Canvas C, float X, float Y)
@@ -657,7 +666,8 @@ function Close(optional bool bByParent)
 
 function FocusOtherWindow(UWindowWindow W)
 {
-    if (bShowLog)log("FocusOtherWindow");
+    if (bShowLog)
+		log("FocusOtherWindow");
 	DropSelection();
 
 	if (NotifyOwner != None)
@@ -675,7 +685,8 @@ function DoubleClick(float X, float Y)
 
 function KeyFocusEnter()
 {
-   if (bShowLog)log("UWindowEditBox::KeyFocusEnter");
+   if (bShowLog)
+   	log("UWindowEditBox::KeyFocusEnter");
 
 	if (bSelectOnFocus && !bHasKeyboardFocus)
 		SelectAll();
@@ -685,7 +696,8 @@ function KeyFocusEnter()
 
 function KeyFocusExit()
 {
-    if (bShowLog)log("KeyFocusExit");
+    if (bShowLog)
+		log("KeyFocusExit");
     if (bCanEdit && m_CurrentlyEditing)
 	{
         if (!bHistory)
@@ -698,7 +710,8 @@ function KeyFocusExit()
 {
 				CurrentHistory = UWindowEditBoxHistory(HistoryList.Insert(class'UWindowEditBoxHistory'));
 				CurrentHistory.HistoryText = Value;
-                if (bShowLog)log("Set value CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
+                if (bShowLog)
+					log("Set value CurrentHistory.HistoryText"@CurrentHistory.HistoryText);
 			}
 			CurrentHistory = HistoryList;
 		}

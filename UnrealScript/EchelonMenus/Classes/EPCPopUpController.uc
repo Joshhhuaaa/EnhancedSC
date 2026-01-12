@@ -49,14 +49,14 @@ var INT   m_ITitleTextFont, m_IButtonTextFont, m_IMessageTextFont;
 function Created()
 {
     //Create Message Box
-	MessageBox = EPCMessageBox(CreateWindow(class'EPCMessageBox', m_IMessageBoxXpos, m_IMessageBoxYpos, m_IMessageBoxWidth, m_IMessageBoxHeight, Self));	
-    //MessageBox.bAlwaysOnTop = true;    
+	MessageBox = EPCMessageBox(CreateWindow(class'EPCMessageBox', m_IMessageBoxXpos, m_IMessageBoxYpos, m_IMessageBoxWidth, m_IMessageBoxHeight, Self));
+    //MessageBox.bAlwaysOnTop = true;
 
     //Setup Size and positions
     MessageBox.SetupLabel(m_ILabelXpos, m_ILabelYpos, m_ILabelWidth, m_ILabelHeight, m_ITitleTextFont, TXT_CENTER, m_TitleTextColor);
     MessageBox.SetupMessageArea(m_IMessageAreaXpos, m_IMessageAreaYpos, m_IMessageAreaWidth, m_IMessageAreaHeight,m_IMessageAreaXTextOffset, m_IMessageAreaYTextOffset, m_IMessageTextFont, true, true,m_MessageTextColor);
-    MessageBox.SetupButtons(m_RButtonLeft, m_RButtonMid, m_RButtonRight, m_IButtonTextFont, TXT_CENTER, m_ButtonTextColor);    
-    
+    MessageBox.SetupButtons(m_RButtonLeft, m_RButtonMid, m_RButtonRight, m_IButtonTextFont, TXT_CENTER, m_ButtonTextColor);
+
 }
 
 function AfterCreate()
@@ -70,13 +70,13 @@ function LMouseDown(float X, float Y)
         NotifyWindow.LMouseDown(X, Y);
 }
 
-function MMouseDown(float X, float Y) 
+function MMouseDown(float X, float Y)
 {
     if (m_CancelMouseFocus)
         NotifyWindow.MMouseDown(X, Y);
 }
 
-function RMouseDown(float X, float Y) 
+function RMouseDown(float X, float Y)
 {
 	if (m_CancelMouseFocus)
         NotifyWindow.RMouseDown(X, Y);
@@ -98,8 +98,8 @@ function MouseWheelUp(FLOAT X, FLOAT Y)
 function EPCMessageBox CreateMessageBox(UWindowWindow _NotifyWindow, string Title, string Message, MessageBoxButtons Buttons, MessageBoxResult ESCResult, optional MessageBoxResult EnterResult, optional BOOL cancelMouseFocus)
 {
 	NotifyWindow = _NotifyWindow;
-    MessageBox.Setup(Title, Message, Buttons, EnterResult);        
-    
+    MessageBox.Setup(Title, Message, Buttons, EnterResult);
+
     Result = ESCResult;
 
     if (EnterResult == MR_None)
@@ -120,6 +120,15 @@ function Close(optional bool bByParent)
 {
 	local UWindowWindow tmpNotifyWindow;
 	Super.Close(bByParent);
+
+	// Joshua - Clear held key state in message box to prevent auto-scroll spam when re-opening
+	if (MessageBox != None)
+	{
+		MessageBox.m_heldKey = 0;
+		MessageBox.m_keyHoldTime = 0;
+		MessageBox.m_nextRepeatTime = 0;
+	}
+
 	if (NotifyWindow != None)
 	{
 		tmpNotifyWindow = NotifyWindow;

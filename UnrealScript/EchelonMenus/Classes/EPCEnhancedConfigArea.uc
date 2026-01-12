@@ -23,6 +23,7 @@ var EPCComboControl         m_LevelUnlock;
 var EPCCheckBox             m_bWhistle,
                             m_bNewDoorInteraction,
                             m_bInteractionPause,
+                            m_bQuickDataView,
                             m_bEnableCheckpoints,
                             m_bMissionFailedQuickMenu,
                             m_bXboxDifficulty;
@@ -40,6 +41,7 @@ var EPCCheckBox             m_bBinoculars,
                             m_bLaserMicVisions,
                             m_bOpticCableVisions,
                             m_bThermalOverride,
+                            //m_bSwitchCam,
                             m_bRandomizeLockpick,
                             m_bScaleGadgetDamage;
 
@@ -55,6 +57,7 @@ var EPCCheckBox             m_bPersistentHUD,
 
 // Native
 var EPCComboControl         m_FontType;
+var EPCComboControl         m_CrosshairStyle;
 
 //=============================================================================
 // HUD Visibility
@@ -91,9 +94,27 @@ var EPCComboControl         m_TrainingSamMesh,
                             m_VselkaSamMesh,
                             m_PowerPlantSamMesh,
                             m_SeveronickelSamMesh;
-                            
+
 var bool    m_bModified;
 var bool	m_bFirstRefresh;
+
+// Original values for settings that require restart
+var bool    m_bOriginalCheckForUpdates;
+var bool    m_bOriginalSkipIntroVideos;
+var bool    m_bOriginalDisableMenuIdleTimer;
+
+// Joshua - Controller navigation
+var bool    m_bEnableArea;           // True when area is active for controller navigation
+var int     m_selectedItemIndex;     // Currently selected item index
+var bool    m_bComboBoxOpen;         // True when a combo box is open for selection
+var EPCComboControl m_ActiveCombo;   // Currently focused combo box
+
+// Joshua - Key repeat for auto-scrolling
+var int m_heldKey;                  // Currently held key code
+var float m_keyHoldTime;            // Time the key has been held
+var float m_nextRepeatTime;         // Time for next repeat action
+var const float m_initialDelay;     // Initial delay before repeat starts (0.5s)
+var const float m_repeatRate;       // Time between repeats (0.1s)
 
 // Tooltip persistence
 var(Enhanced) config array<string> ViewedTooltips;
@@ -101,12 +122,6 @@ var(Enhanced) config array<string> ViewedTooltips;
 // Shared info button pulse animation state
 var float InfoButtonPulseTimer;
 var bool bInfoButtonPulseIncreasing;
-var float InfoButtonPauseTimer;  // Pause at 0 and 1
-
-// Original values for settings that require restart
-var bool    m_bOriginalCheckForUpdates;
-var bool    m_bOriginalSkipIntroVideos;
-var bool    m_bOriginalDisableMenuIdleTimer;
 
 function Created()
 {
@@ -126,32 +141,20 @@ function Created()
 function BeforePaint(Canvas C, float X, float Y)
 {
     Super.BeforePaint(C, X, Y);
-    
-    // Joshua - Update pulse animation for info buttons
-    if (bInfoButtonPulseIncreasing)
+
+    // Joshua - Check if combo box was closed externally (by list handling its own input)
+    if (m_bComboBoxOpen && m_ActiveCombo != None && !m_ActiveCombo.bListVisible)
     {
-        InfoButtonPulseTimer += 0.02;
-        if (InfoButtonPulseTimer >= 1.0)
-        {
-            InfoButtonPulseTimer = 1.0;
-            bInfoButtonPulseIncreasing = false;
-        }
-    }
-    else
-    {
-        InfoButtonPulseTimer -= 0.02;
-        if (InfoButtonPulseTimer <= 0.0)
-        {
-            InfoButtonPulseTimer = 0.0;
-            bInfoButtonPulseIncreasing = true;
-        }
+        // Combo was closed by the combo list itself
+        m_bComboBoxOpen = false;
+        m_ActiveCombo = None;
     }
 }
 
 function bool HasViewedTooltip(string LocalizationKey)
 {
     local int i;
-    
+
     for (i = 0; i < ViewedTooltips.Length; i++)
     {
         if (ViewedTooltips[i] == LocalizationKey)
@@ -189,6 +192,7 @@ function InitEnhancedSettings()
     AddCheckBoxItem("Whistle", m_bWhistle);
     AddCheckBoxItemWithInfo("NewDoorInteraction", m_bNewDoorInteraction);
     AddCheckBoxItem("InteractionPause", m_bInteractionPause);
+    AddCheckBoxItemWithInfo("QuickDataView", m_bQuickDataView);
     AddCheckBoxItem("EnableCheckpoints", m_bEnableCheckpoints);
     AddCheckBoxItemWithInfo("MissionFailedQuickMenu", m_bMissionFailedQuickMenu);
     AddCheckBoxItemWithInfo("XboxDifficulty", m_bXboxDifficulty);
@@ -201,7 +205,7 @@ function InitEnhancedSettings()
     AddTitleItem(Caps(Localize("Enhanced", "Title_Equipment", "Localization\\Enhanced")));
     AddLineItem();
 
-    
+
     AddCheckBoxItem("Binoculars", m_bBinoculars);
     AddCheckBoxItem("F2000BurstFire", m_bF2000BurstFire);
     AddCheckBoxItemWithInfo("PS2FN7Accuracy", m_bPS2FN7Accuracy);
@@ -210,9 +214,10 @@ function InitEnhancedSettings()
     AddCheckBoxItem("LaserMicVisions", m_bLaserMicVisions);
     AddCheckBoxItem("OpticCableVisions", m_bOpticCableVisions);
     AddCheckBoxItemWithInfo("ThermalOverride", m_bThermalOverride);
+    //AddCheckBoxItemWithInfo("SwitchCam", m_bSwitchCam);
     AddCheckBoxItem("RandomizeLockpick", m_bRandomizeLockpick);
     AddCheckBoxItemWithInfo("ScaleGadgetDamage", m_bScaleGadgetDamage);
-    
+
     AddCompactLineItem();
     AddComboBoxItem("MineDelay", m_MineDelay);
     AddMineDelayCombo(m_MineDelay);
@@ -229,6 +234,10 @@ function InitEnhancedSettings()
     AddCompactLineItem();
     AddComboBoxItem("FontType", m_FontType);
     AddFontTypeCombo(m_FontType);
+
+    AddCompactLineItem();
+    AddComboBoxItem("CrosshairStyle", m_CrosshairStyle);
+    AddCrosshairStyleCombo(m_CrosshairStyle);
 
     AddLineItem();
     AddTitleItem(Caps(Localize("Enhanced", "Title_HUDVisibility", "Localization\\Enhanced")));
@@ -254,7 +263,7 @@ function InitEnhancedSettings()
     AddTitleItem(Caps(Localize("Enhanced", "Title_Suit", "Localization\\Enhanced")));
     AddLineItem();
 
-    AddComboBoxItem("TrainingSamMesh", m_TrainingSamMesh); 
+    AddComboBoxItem("TrainingSamMesh", m_TrainingSamMesh);
     AddSamMeshCombo(m_TrainingSamMesh, 0);
     AddCompactLineItem();
 
@@ -264,7 +273,7 @@ function InitEnhancedSettings()
 
     AddComboBoxItem("DefenseMinistrySamMesh", m_DefenseMinistrySamMesh);
     AddSamMeshCombo(m_DefenseMinistrySamMesh, 0);
-    AddCompactLineItem();    
+    AddCompactLineItem();
 
     AddComboBoxItem("CaspianOilRefinerySamMesh", m_CaspianOilRefinerySamMesh);
     AddSamMeshCombo(m_CaspianOilRefinerySamMesh, 2);
@@ -313,7 +322,7 @@ function InitEnhancedSettings()
 function AddCheckBoxItem(string LocalizationKey, out EPCCheckBox CheckBox)
 {
     local EPCEnhancedListBoxItem NewItem;
-    
+
     CheckBox = EPCCheckBox(CreateControl(class'EPCCheckBox', 0, 0, 20, 18));
     CheckBox.ImageX = 5;
     CheckBox.ImageY = 5;
@@ -331,7 +340,7 @@ function AddCheckBoxItemWithInfo(string LocalizationKey, out EPCCheckBox CheckBo
     local EPCEnhancedListBoxItem NewItem;
     local EPCInfoButton InfoBtn;
     local string InfoText;
-    
+
     CheckBox = EPCCheckBox(CreateControl(class'EPCCheckBox', 0, 0, 20, 18));
     CheckBox.ImageX = 5;
     CheckBox.ImageY = 5;
@@ -359,7 +368,7 @@ function AddCheckBoxItemWithInfo(string LocalizationKey, out EPCCheckBox CheckBo
 function AddComboBoxItem(string LocalizationKey, out EPCComboControl ComboBox)
 {
     local EPCEnhancedListBoxItem NewItem;
-    
+
     ComboBox = EPCComboControl(CreateControl(class'EPCComboControl', 0, 0, 150, 18));
     ComboBox.SetFont(F_Normal);
     ComboBox.SetEditable(False);
@@ -377,7 +386,7 @@ function AddComboBoxItemWithInfo(string LocalizationKey, out EPCComboControl Com
     local EPCEnhancedListBoxItem NewItem;
     local EPCInfoButton InfoBtn;
     local string InfoText;
-    
+
     ComboBox = EPCComboControl(CreateControl(class'EPCComboControl', 0, 0, 150, 18));
     ComboBox.SetFont(F_Normal);
     ComboBox.SetEditable(False);
@@ -405,7 +414,7 @@ function AddComboBoxItemWithInfo(string LocalizationKey, out EPCComboControl Com
 function AddTitleItem(string Title)
 {
     local EPCEnhancedListBoxItem NewItem;
-    
+
     NewItem = EPCEnhancedListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
     NewItem.Caption = Title;
     NewItem.m_bIsTitle = true;
@@ -419,7 +428,7 @@ function AddTitleItem(string Title)
 function AddLineItem()
 {
     local EPCEnhancedListBoxItem NewItem;
-    
+
     NewItem = EPCEnhancedListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
     NewItem.bIsLine = true;
     NewItem.m_bIsNotSelectable = true;
@@ -428,18 +437,10 @@ function AddLineItem()
 function AddCompactLineItem()
 {
     local EPCEnhancedListBoxItem NewItem;
-    
+
     NewItem = EPCEnhancedListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
     NewItem.bIsCompactLine = true;
     NewItem.m_bIsNotSelectable = true;
-}
-
-function AddPlayerStatsModeCombo(EPCComboControl ComboBox)
-{
-    ComboBox.AddItem(Localize("Enhanced", "PlayerStatsMode_Disabled", "Localization\\Enhanced"));
-    ComboBox.AddItem(Localize("Enhanced", "PlayerStatsMode_Ghost", "Localization\\Enhanced"));
-    ComboBox.AddItem(Localize("Enhanced", "PlayerStatsMode_Stealth", "Localization\\Enhanced"));
-    ComboBox.SetSelectedIndex(1); // Default to Ghost
 }
 
 function AddLevelUnlockCombo(EPCComboControl ComboBox)
@@ -450,11 +451,37 @@ function AddLevelUnlockCombo(EPCComboControl ComboBox)
     ComboBox.SetSelectedIndex(0);
 }
 
+function AddPlayerStatsModeCombo(EPCComboControl ComboBox)
+{
+    ComboBox.AddItem(Localize("Enhanced", "PlayerStatsMode_Disabled", "Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced", "PlayerStatsMode_Ghost", "Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced", "PlayerStatsMode_Stealth", "Localization\\Enhanced"));
+    ComboBox.SetSelectedIndex(1); // Default to Ghost
+}
+
 function AddMineDelayCombo(EPCComboControl ComboBox)
 {
     ComboBox.AddItem(Localize("Enhanced","MineDelay_Default","Localization\\Enhanced"));
     ComboBox.AddItem(Localize("Enhanced","MineDelay_Enhanced","Localization\\Enhanced"));
     ComboBox.AddItem(Localize("Enhanced","MineDelay_Instant","Localization\\Enhanced"));
+    ComboBox.SetSelectedIndex(0);
+}
+
+function AddFontTypeCombo(EPCComboControl ComboBox)
+{
+    ComboBox.AddItem(Localize("Enhanced", "FontType_PC", "Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced", "FontType_Xbox", "Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced", "FontType_GameCube", "Localization\\Enhanced"));
+    ComboBox.SetSelectedIndex(1); // Default to Xbox
+}
+
+function AddCrosshairStyleCombo(EPCComboControl ComboBox)
+{
+    ComboBox.AddItem(Localize("Enhanced", "CrosshairStyle_Original", "Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced", "CrosshairStyle_Beta", "Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced", "CrosshairStyle_PS2", "Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced", "CrosshairStyle_SCCT", "Localization\\Enhanced"));
+    ComboBox.AddItem(Localize("Enhanced", "CrosshairStyle_PS3", "Localization\\Enhanced"));
     ComboBox.SetSelectedIndex(0);
 }
 
@@ -464,7 +491,7 @@ function AddSamMeshCombo(EPCComboControl ComboBox, int SamMeshType)
     if (SamMeshType != 0)
         ComboBox.AddItem(Localize("Enhanced", "SamMesh_Standard", "Localization\\Enhanced"));
     if (SamMeshType != 1)
-        ComboBox.AddItem(Localize("Enhanced", "SamMesh_Balaclava", "Localization\\Enhanced")); 
+        ComboBox.AddItem(Localize("Enhanced", "SamMesh_Balaclava", "Localization\\Enhanced"));
     if (SamMeshType != 2)
         ComboBox.AddItem(Localize("Enhanced", "SamMesh_PartialSleeves", "Localization\\Enhanced"));
     if (SamMeshType != 3)
@@ -481,19 +508,19 @@ function EchelonGameInfo.ESamMeshType GetSamMeshEnumFromIndex(int ComboIndex, in
 {
     local int EnumValue;
     local int SkippedEnum;
-    
+
     // Index 0 is always SMT_Default
     if (ComboIndex == 0)
         return SMT_Default;
-    
+
     SkippedEnum = SamMeshType + 1;
-    
+
     EnumValue = ComboIndex;
-    
+
     // If we're at or past the skipped enum value, add 1 to compensate
     if (EnumValue >= SkippedEnum)
         EnumValue += 1;
-    
+
     switch (EnumValue)
     {
         case 0: return SMT_Default;
@@ -511,29 +538,21 @@ function EchelonGameInfo.ESamMeshType GetSamMeshEnumFromIndex(int ComboIndex, in
 function int GetIndexFromSamMeshEnum(int EnumValue, int SamMeshType)
 {
     local int SkippedEnum;
-    
+
     if (EnumValue == 0)
         return 0;
-    
+
     SkippedEnum = SamMeshType + 1;
-    
+
     // If enum value equals the skipped type, it shouldn't happen but return 0 (default)
     if (EnumValue == SkippedEnum)
         return 0;
-    
+
     // If the enum value is greater than the skipped type, subtract 1
     if (EnumValue > SkippedEnum)
         return EnumValue - 1;
-    
-    return EnumValue;
-}
 
-function AddFontTypeCombo(EPCComboControl ComboBox)
-{
-    ComboBox.AddItem(Localize("Enhanced", "FontType_PC", "Localization\\Enhanced"));
-    ComboBox.AddItem(Localize("Enhanced", "FontType_Xbox", "Localization\\Enhanced"));
-    ComboBox.AddItem(Localize("Enhanced", "FontType_GameCube", "Localization\\Enhanced"));
-    ComboBox.SetSelectedIndex(1); // Default to Xbox
+    return EnumValue;
 }
 
 function Notify(UWindowDialogControl C, byte E)
@@ -547,17 +566,35 @@ function Notify(UWindowDialogControl C, byte E)
             //=============================================================================
             case m_bCheckForUpdates:
                 if (m_bCheckForUpdates.m_bSelected != m_bOriginalCheckForUpdates)
+                {
+                    // Stop any auto-scrolling when opening restart required messagebox
+                    m_heldKey = 0;
+                    m_keyHoldTime = 0;
+                    m_nextRepeatTime = 0;
                     EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "RestartRequired", "Localization\\Enhanced"), Localize("Common", "RestartRequiredWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
+                }
                 m_bModified = true;
                 break;
             case m_bSkipIntroVideos:
                 if (m_bSkipIntroVideos.m_bSelected != m_bOriginalSkipIntroVideos)
+                {
+                    // Stop any auto-scrolling when opening restart required messagebox
+                    m_heldKey = 0;
+                    m_keyHoldTime = 0;
+                    m_nextRepeatTime = 0;
                     EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "RestartRequired", "Localization\\Enhanced"), Localize("Common", "RestartRequiredWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
+                }
                 m_bModified = true;
                 break;
             case m_bDisableMenuIdleTimer:
                 if (m_bDisableMenuIdleTimer.m_bSelected != m_bOriginalDisableMenuIdleTimer)
+                {
+                    // Stop any auto-scrolling when opening restart required messagebox
+                    m_heldKey = 0;
+                    m_keyHoldTime = 0;
+                    m_nextRepeatTime = 0;
                     EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "RestartRequired", "Localization\\Enhanced"), Localize("Common", "RestartRequiredWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
+                }
                 m_bModified = true;
                 break;
 
@@ -567,6 +604,7 @@ function Notify(UWindowDialogControl C, byte E)
             case m_bWhistle:
             case m_bNewDoorInteraction:
             case m_bInteractionPause:
+            case m_bQuickDataView:
             case m_bEnableCheckpoints:
             case m_bMissionFailedQuickMenu:
             case m_bXboxDifficulty:
@@ -583,6 +621,7 @@ function Notify(UWindowDialogControl C, byte E)
             case m_bLaserMicZoomLevels:
             case m_bLaserMicVisions:
             case m_bOpticCableVisions:
+            //case m_bSwitchCam:
             case m_bThermalOverride:
             case m_bRandomizeLockpick:
             case m_bScaleGadgetDamage:
@@ -664,6 +703,7 @@ function Notify(UWindowDialogControl C, byte E)
             // HUD Settings
             //=============================================================================
             case m_FontType:
+            case m_CrosshairStyle:
                 m_bModified = true;
                 break;
 
@@ -706,7 +746,7 @@ function SaveOptions()
     local bool bPreviousBurstFire;
     local bool bPreviousNewDoorInteraction;
     local bool bPreviousOpticCableVisions;
-    
+
     EPC = EPlayerController(GetPlayerOwner());
     HUD = EchelonMainHUD(EPC.myHUD);
 
@@ -716,7 +756,7 @@ function SaveOptions()
     bPreviousBurstFire = EPC.bF2000BurstFire;
     bPreviousNewDoorInteraction = EPC.eGame.bNewDoorInteraction;
     bPreviousOpticCableVisions = EPC.bOpticCableVisions;
-    
+
 	//=============================================================================
 	// General
 	//=============================================================================
@@ -744,6 +784,7 @@ function SaveOptions()
     }
 
     EPC.bInteractionPause = m_bInteractionPause.m_bSelected;
+    EPC.bQuickDataView = m_bQuickDataView.m_bSelected;
     EPC.eGame.bEnableCheckpoints = m_bEnableCheckpoints.m_bSelected;
     EPC.bMissionFailedQuickMenu = m_bMissionFailedQuickMenu.m_bSelected;
     EPC.eGame.bXboxDifficulty = m_bXboxDifficulty.m_bSelected;
@@ -760,7 +801,7 @@ function SaveOptions()
 	// Equipment
 	//=============================================================================
     EPC.bBinoculars = m_bBinoculars.m_bSelected;
-    
+
     EPC.bF2000BurstFire = m_bF2000BurstFire.m_bSelected;
     if (bPreviousBurstFire && !EPC.bF2000BurstFire)
     {
@@ -786,7 +827,7 @@ function SaveOptions()
         else
         {
             EPC.HandGun.AccuracyMovementModifier = EPC.HandGun.default.AccuracyMovementModifier;
-            EPC.HandGun.AccuracyBase = EPC.HandGun.default.AccuracyBase; 
+            EPC.HandGun.AccuracyBase = EPC.HandGun.default.AccuracyBase;
         }
     }
 
@@ -815,13 +856,13 @@ function SaveOptions()
     if (EPC.GetStateName() == 's_LaserMicTargeting' && EPC.ePawn.HandItem != None && EPC.ePawn.HandItem.IsA('ELaserMic'))
     {
         LaserMic = ELaserMic(EPC.ePawn.HandItem);
-        
+
         // Determine the camera controller based on vision setting
         if (EPC.bLaserMicVisions)
             CamController = EPC;
         else
             CamController = LaserMic;
-        
+
         // Handle vision mode toggle
         if (bPreviousLaserMicVisions != EPC.bLaserMicVisions)
         {
@@ -835,7 +876,7 @@ function SaveOptions()
                 EPC.SetCameraFOV(EPC, LaserMic.current_fov);
             }
         }
-        
+
         // Handle zoom levels being disabled, reset to 30 FOV if needed
         if (bPreviousLaserMicZoomLevels && !EPC.bLaserMicZoomLevels)
         {
@@ -843,7 +884,7 @@ function SaveOptions()
             EPC.SetCameraFOV(CamController, 30.0);
         }
     }
-    
+
     EPC.bOpticCableVisions = m_bOpticCableVisions.m_bSelected;
     if (EPC.GetStateName() == 's_OpticCable' && (bPreviousOpticCableVisions != EPC.bOpticCableVisions))
     {
@@ -855,6 +896,8 @@ function SaveOptions()
                 Epc.PopCamera(Epc.OpticCableItem);
         }
     }
+
+    //EPC.bSwitchCam = m_bSwitchCam.m_bSelected;
 
     EPC.eGame.bThermalOverride = m_bThermalOverride.m_bSelected;
     if (EPC.Goggle != None && !EPC.eGame.bEliteMode)
@@ -898,6 +941,16 @@ function SaveOptions()
     // Update menu fonts
     if (Root != None)
         EPCMainMenuRootWindow(Root).SetupFonts();
+
+    switch (m_CrosshairStyle.GetSelectedIndex())
+    {
+        case 0: EPC.CrosshairStyle = CS_Original; break;
+        case 1: EPC.CrosshairStyle = CS_Beta; break;
+        case 2: EPC.CrosshairStyle = CS_PS2; break;
+        case 3: EPC.CrosshairStyle = CS_SCCT; break;
+        case 4: EPC.CrosshairStyle = CS_PS3; break;
+        default: EPC.CrosshairStyle = CS_Original; break;
+    }
 
     //=============================================================================
     // HUD Visibility
@@ -945,12 +998,12 @@ function SaveOptions()
 function UpdateCanvasFont(EchelonGameInfo.EFontType FontType)
 {
     local ECanvas C;
-    
+
     C = ECanvas(class'Actor'.static.GetCanvas());
-    
+
     if (C == None)
         return;
-    
+
     switch(FontType)
     {
         case Font_PC:
@@ -974,7 +1027,7 @@ function RefreshCurrentDoorInteraction(EPlayerController EPC)
 {
     local EDoorInteraction DoorInteraction;
     local EInteractObject InteractObj;
-    
+
     // Check if player currently has a door interaction in their interaction manager
     if (EPC.IManager.IsPresent(class'EDoorInteraction', InteractObj))
     {
@@ -991,7 +1044,7 @@ function ApplyWallMineDelay(EPlayerController EPC)
 {
     local EWallMine WallMine;
     local float NewDelay;
-    
+
     // Determine the new delay based on the setting
     switch (EPC.eGame.WallMineDelay)
     {
@@ -1005,13 +1058,13 @@ function ApplyWallMineDelay(EPlayerController EPC)
             NewDelay = 0.0;
             break;
     }
-    
+
     // Elite Mode overrides if greater than 0.5
     if (EPC.eGame.bEliteMode && NewDelay > 0.5)
     {
         NewDelay = 0.5;
     }
-    
+
     // Update all wall mines in the level
     foreach EPC.AllActors(class'EWallMine', WallMine)
     {
@@ -1036,6 +1089,7 @@ function ResetToDefault()
     m_bWhistle.m_bSelected = true;
     m_bNewDoorInteraction.m_bSelected = true;
     m_bInteractionPause.m_bSelected = false;
+    m_bQuickDataView.m_bSelected = true;
     m_bEnableCheckpoints.m_bSelected = true;
     m_bMissionFailedQuickMenu.m_bSelected = true;
     m_bXboxDifficulty.m_bSelected = false;
@@ -1051,6 +1105,7 @@ function ResetToDefault()
     m_bLaserMicZoomLevels.m_bSelected = true;
     m_bLaserMicVisions.m_bSelected = true;
     m_bOpticCableVisions.m_bSelected = true;
+    //m_bSwitchCam.m_bSelected = true;
     m_bThermalOverride.m_bSelected = false;
     m_bRandomizeLockpick.m_bSelected = true;
     m_bScaleGadgetDamage.m_bSelected = true;
@@ -1064,6 +1119,7 @@ function ResetToDefault()
     m_bInvertInteractionList.m_bSelected = true;
     m_bLetterBoxCinematics.m_bSelected = true;
     m_FontType.SetSelectedIndex(1); // Default to Xbox
+    m_CrosshairStyle.SetSelectedIndex(0);
 
     //=============================================================================
     // HUD Visibility
@@ -1108,6 +1164,10 @@ function ResetToDefault()
         m_bSkipIntroVideos.m_bSelected != m_bOriginalSkipIntroVideos ||
         m_bDisableMenuIdleTimer.m_bSelected != m_bOriginalDisableMenuIdleTimer)
     {
+        // Stop any auto-scrolling when opening restart required messagebox
+        m_heldKey = 0;
+        m_keyHoldTime = 0;
+        m_nextRepeatTime = 0;
         EPCMainMenuRootWindow(Root).m_MessageBoxCW.CreateMessageBox(Self, Localize("Common", "RestartRequired", "Localization\\Enhanced"), Localize("Common", "RestartRequiredWarning", "Localization\\Enhanced"), MB_OK, MR_OK, MR_OK, false);
     }
 }
@@ -1116,7 +1176,7 @@ function Refresh()
 {
     local EPlayerController EPC;
     local EchelonMainHUD HUD;
-    
+
     EPC = EPlayerController(GetPlayerOwner());
     HUD = EchelonMainHUD(EPC.myHUD);
 
@@ -1151,6 +1211,9 @@ function Refresh()
 
     if (m_bInteractionPause != None)
         m_bInteractionPause.m_bSelected = EPC.bInteractionPause;
+
+    if (m_bQuickDataView != None)
+        m_bQuickDataView.m_bSelected = EPC.bQuickDataView;
 
     if (m_bEnableCheckpoints != None)
         m_bEnableCheckpoints.m_bSelected = EPC.eGame.bEnableCheckpoints;
@@ -1188,6 +1251,9 @@ function Refresh()
     if (m_bOpticCableVisions != None)
         m_bOpticCableVisions.m_bSelected = EPC.bOpticCableVisions;
 
+    //if (m_bSwitchCam != None)
+    //    m_bSwitchCam.m_bSelected = EPC.bSwitchCam;
+
     if (m_bThermalOverride != None)
         m_bThermalOverride.m_bSelected = EPC.eGame.bThermalOverride;
 
@@ -1218,6 +1284,9 @@ function Refresh()
     if (m_FontType != None && EPC != None)
         m_FontType.SetSelectedIndex(Clamp(EPC.eGame.FontType, 0, m_FontType.List.Items.Count() - 1));
 
+    if (m_CrosshairStyle != None && EPC != None)
+        m_CrosshairStyle.SetSelectedIndex(Clamp(EPC.CrosshairStyle, 0, m_CrosshairStyle.List.Items.Count() - 1));
+
     //=============================================================================
     // HUD Visibility
     //=============================================================================
@@ -1245,7 +1314,7 @@ function Refresh()
     if (m_bShowCurrentGoal != None)
     {
         m_bShowCurrentGoal.m_bSelected = EPC.bShowCurrentGoal;
-        
+
         if (m_bShowKeypadGoal != None)
         {
             // Gray out keypad goal and current gadget if current goal is disabled
@@ -1253,7 +1322,7 @@ function Refresh()
             m_bShowCurrentGadget.bDisabled = !EPC.bShowCurrentGoal;
         }
     }
-    
+
     if (m_bShowKeypadGoal != None)
         m_bShowKeypadGoal.m_bSelected = EPC.bShowKeyPadGoal;
 
@@ -1277,7 +1346,7 @@ function Refresh()
     //=============================================================================
     if (m_TrainingSamMesh != None)
         m_TrainingSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_Training, 0));
-        
+
     if (m_TbilisiSamMesh != None)
         m_TbilisiSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_Tbilisi, 0));
 
@@ -1286,7 +1355,7 @@ function Refresh()
 
     if (m_CaspianOilRefinerySamMesh != None)
         m_CaspianOilRefinerySamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_CaspianOilRefinery, 2));
-        
+
     if (m_CIASamMesh != None)
         m_CIASamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_CIA, 1));
 
@@ -1298,7 +1367,7 @@ function Refresh()
 
     if (m_AbattoirSamMesh != None)
         m_AbattoirSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_Abattoir, 2));
-        
+
     if (m_ChineseEmbassy2SamMesh != None)
         m_ChineseEmbassy2SamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_ChineseEmbassy2, 2));
 
@@ -1307,16 +1376,525 @@ function Refresh()
 
     if (m_KolaCellSamMesh != None)
         m_KolaCellSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_KolaCell, 0));
-        
+
     if (m_VselkaSamMesh != None)
         m_VselkaSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_Vselka, 1));
 
     if (m_PowerPlantSamMesh != None)
         m_PowerPlantSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_PowerPlant, 0));
-        
+
     if (m_SeveronickelSamMesh != None)
         m_SeveronickelSamMesh.SetSelectedIndex(GetIndexFromSamMeshEnum(EPC.eGame.ESam_Severonickel, 0));
-    
+
 	m_bModified = false;
 	m_bFirstRefresh = false;
+}
+
+// Joshua - Enable/disable this area for controller navigation
+function EnableArea(bool bEnable)
+{
+    local EPCEnhancedListBoxItem Item;
+
+    m_bEnableArea = bEnable;
+
+    // Close any open combo box
+    if (m_bComboBoxOpen && m_ActiveCombo != None)
+    {
+        m_ActiveCombo.CloseUp();
+    }
+    m_bComboBoxOpen = false;
+    m_ActiveCombo = None;
+
+    if (bEnable)
+    {
+        // Find the first visible selectable item (based on scroll position)
+        m_selectedItemIndex = GetFirstVisibleSelectableItemIndex();
+
+        // Highlight without scrolling, user is already viewing where they want
+        ClearHighlight();
+        Item = GetItemAtIndex(m_selectedItemIndex);
+        if (Item != None)
+        {
+            Item.bSelected = true;
+        }
+    }
+    else
+    {
+        // Clear selection
+        m_selectedItemIndex = -1;
+        ClearHighlight();
+        // Clear held key state to prevent auto-scroll on re-entry
+        m_heldKey = 0;
+        m_keyHoldTime = 0;
+        m_nextRepeatTime = 0;
+    }
+}
+
+// Joshua - Check if current item has an info button
+function bool CurrentItemHasInfo()
+{
+    local EPCEnhancedListBoxItem Item;
+
+    if (!m_bEnableArea || m_selectedItemIndex < 0)
+        return false;
+
+    // Get the item at the absolute selected index
+    Item = GetItemAtIndex(m_selectedItemIndex);
+    if (Item != None && Item.m_InfoButton != None)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+// Joshua - Get the index of the first visible selectable item based on scroll position
+function int GetFirstVisibleSelectableItemIndex()
+{
+    local int ScrollPos;
+    local int VisibleCount;
+    local int SelectableIndex;
+    local UWindowList CurItem;
+    local EPCEnhancedListBoxItem EnhancedItem;
+    local bool bPassedScrollPos;
+
+    // Get the current scroll position (number of visible items scrolled past)
+    ScrollPos = 0;
+    if (m_ListBox.VertSB != None)
+    {
+        ScrollPos = m_ListBox.VertSB.Pos;
+    }
+
+    // Walk through all items, counting visible items and selectable items
+    VisibleCount = 0;
+    SelectableIndex = 0;
+    bPassedScrollPos = false;
+
+    for (CurItem = m_ListBox.Items.Next; CurItem != None; CurItem = CurItem.Next)
+    {
+        if (!CurItem.ShowThisItem())
+            continue;
+
+        // Check if we've passed the scroll position
+        if (VisibleCount >= ScrollPos)
+            bPassedScrollPos = true;
+
+        EnhancedItem = EPCEnhancedListBoxItem(CurItem);
+        if (EnhancedItem != None && EnhancedItem.m_Control != None)
+        {
+            // This is a selectable item
+            if (bPassedScrollPos)
+            {
+                // This is the first selectable item at or after the scroll position
+                return SelectableIndex;
+            }
+            SelectableIndex++;
+        }
+
+        VisibleCount++;
+    }
+
+    // Fallback to first selectable item
+    return 0;
+}
+
+// Joshua - Get the total number of selectable items in the list
+// Only counts items that have m_Control (not titles/headers)
+function int GetTotalItemCount()
+{
+    local UWindowList CurItem;
+    local EPCEnhancedListBoxItem EnhancedItem;
+    local int Count;
+
+    Count = 0;
+    for (CurItem = m_ListBox.Items.Next; CurItem != None; CurItem = CurItem.Next)
+    {
+        EnhancedItem = EPCEnhancedListBoxItem(CurItem);
+        if (EnhancedItem != None && EnhancedItem.m_Control != None)
+        {
+            Count++;
+        }
+    }
+    return Count;
+}
+
+// Joshua - Get the selectable item at the specified selectable index
+// This counts only items that have m_Control (not titles/headers)
+function EPCEnhancedListBoxItem GetItemAtIndex(int SelectableIndex)
+{
+    local UWindowList CurItem;
+    local EPCEnhancedListBoxItem EnhancedItem;
+    local int CurSelectableIndex;
+
+    CurSelectableIndex = 0;
+    for (CurItem = m_ListBox.Items.Next; CurItem != None; CurItem = CurItem.Next)
+    {
+        EnhancedItem = EPCEnhancedListBoxItem(CurItem);
+        if (EnhancedItem != None && EnhancedItem.m_Control != None)
+        {
+            if (CurSelectableIndex == SelectableIndex)
+                return EnhancedItem;
+            CurSelectableIndex++;
+        }
+    }
+    return None;
+}
+
+// Joshua - Find the next selectable item index (with a control), returns -1 if none found in direction
+function int GetNextSelectableItemIndex(int CurrentIndex, bool bForward)
+{
+    local int TotalItems;
+    local int NewIndex;
+    local EPCEnhancedListBoxItem Item;
+
+    TotalItems = GetTotalItemCount();
+    if (TotalItems == 0)
+        return -1;
+
+    NewIndex = CurrentIndex;
+
+    while (true)
+    {
+        if (bForward)
+        {
+            NewIndex = NewIndex + 1;
+            if (NewIndex >= TotalItems)
+                return -1; // At the end, no more items
+        }
+        else
+        {
+            NewIndex = NewIndex - 1;
+            if (NewIndex < 0)
+                return -1; // At the beginning, no more items
+        }
+
+        Item = GetItemAtIndex(NewIndex);
+        if (Item != None && Item.m_Control != None)
+            return NewIndex;
+    }
+
+    return -1;
+}
+
+// Joshua - Clear all highlights
+function ClearHighlight()
+{
+    local UWindowList CurItem;
+    local EPCEnhancedListBoxItem EnhancedItem;
+
+    for (CurItem = m_ListBox.Items.Next; CurItem != None; CurItem = CurItem.Next)
+    {
+        EnhancedItem = EPCEnhancedListBoxItem(CurItem);
+        if (EnhancedItem != None)
+        {
+            EnhancedItem.bSelected = false;
+        }
+    }
+}
+
+// Joshua - Restore highlight when controller mode is re-enabled
+// Select the first visible selectable item based on current scroll position, without scrolling
+function RestoreHighlight()
+{
+    local EPCEnhancedListBoxItem Item;
+
+    // Only restore if area is enabled
+    if (m_bEnableArea)
+    {
+        // Find the first visible selectable item (in case user scrolled with mouse)
+        m_selectedItemIndex = GetFirstVisibleSelectableItemIndex();
+
+        // Highlight without scrolling, user is already viewing where they want
+        ClearHighlight();
+        Item = GetItemAtIndex(m_selectedItemIndex);
+        if (Item != None)
+        {
+            Item.bSelected = true;
+        }
+    }
+}
+
+// Joshua - Highlight the item at the specified index
+function HighlightSelectedItem(int Index)
+{
+    local EPCEnhancedListBoxItem Item;
+
+    ClearHighlight();
+
+    Item = GetItemAtIndex(Index);
+    if (Item != None)
+    {
+        Item.bSelected = true;
+
+        // Ensure the item is visible by scrolling if needed
+        ScrollToItem(Index);
+    }
+}
+
+// Joshua - Scroll the list to make the specified selectable item visible
+function ScrollToItem(int SelectableIndex)
+{
+    local int VisibleStart;
+    local int VisibleCount;
+    local int RawIndex;
+
+    if (m_ListBox.VertSB == None)
+        return;
+
+    VisibleStart = m_ListBox.VertSB.Pos;
+    VisibleCount = 8; // Approximate visible items
+
+    // If we're at the first selectable item, scroll all the way to top to show header
+    if (SelectableIndex == 0)
+    {
+        m_ListBox.VertSB.Pos = 0;
+        return;
+    }
+
+    // Convert selectable index to raw visible item index for scrolling
+    RawIndex = GetRawIndexForSelectableItem(SelectableIndex);
+
+    if (RawIndex < VisibleStart)
+    {
+        m_ListBox.VertSB.Pos = RawIndex;
+    }
+    else if (RawIndex >= VisibleStart + VisibleCount - 1)
+    {
+        m_ListBox.VertSB.Pos = RawIndex - VisibleCount + 2;
+    }
+}
+
+// Joshua - Convert a selectable item index to a raw visible item index
+function int GetRawIndexForSelectableItem(int SelectableIndex)
+{
+    local UWindowList CurItem;
+    local EPCEnhancedListBoxItem EnhancedItem;
+    local int RawIndex;
+    local int CurSelectableIndex;
+
+    RawIndex = 0;
+    CurSelectableIndex = 0;
+    for (CurItem = m_ListBox.Items.Next; CurItem != None; CurItem = CurItem.Next)
+    {
+        if (!CurItem.ShowThisItem())
+            continue;
+
+        EnhancedItem = EPCEnhancedListBoxItem(CurItem);
+        if (EnhancedItem != None && EnhancedItem.m_Control != None)
+        {
+            if (CurSelectableIndex == SelectableIndex)
+                return RawIndex;
+            CurSelectableIndex++;
+        }
+        RawIndex++;
+    }
+    return 0;
+}
+
+// Joshua - Activate the currently selected item (toggle checkbox or open combo)
+function ActivateSelectedItem()
+{
+    local EPCEnhancedListBoxItem Item;
+    local EPCCheckBox CheckBox;
+    local EPCComboControl ComboBox;
+
+    Item = GetItemAtIndex(m_selectedItemIndex);
+    if (Item == None || Item.m_Control == None)
+        return;
+
+    // Check if it's a checkbox
+    CheckBox = EPCCheckBox(Item.m_Control);
+    if (CheckBox != None)
+    {
+        CheckBox.m_bSelected = !CheckBox.m_bSelected;
+        Notify(CheckBox, DE_Click);
+        Root.PlayClickSound();
+        return;
+    }
+
+    // Check if it's a combo box - open it for selection
+    ComboBox = EPCComboControl(Item.m_Control);
+    if (ComboBox != None)
+    {
+        OpenComboBox(ComboBox);
+        return;
+    }
+}
+
+// Joshua - Open a combo box for controller selection
+function OpenComboBox(EPCComboControl ComboBox)
+{
+    if (ComboBox == None || ComboBox.List == None)
+        return;
+
+    m_bComboBoxOpen = true;
+    m_ActiveCombo = ComboBox;
+    ComboBox.DropDown();
+    Root.PlayClickSound();
+    // Joshua - Reset held key state so direction isn't carried into combo
+    m_heldKey = 0;
+    m_keyHoldTime = 0;
+}
+
+// Joshua - Handle controller input
+// A=200, B=201, X=202, Y=203
+// DPadUp=212, DPadDown=213, DPadLeft=214, DPadRight=215
+// AnalogUp=196, AnalogDown=197 AnalogLeft=198, AnalogRight=199
+function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
+{
+    Super.WindowEvent(Msg, C, X, Y, Key);
+
+    if (!m_bEnableArea)
+        return;
+
+    // Don't process input while combo box is open, combo list handles it
+    if (m_bComboBoxOpen)
+        return;
+
+    // Track key releases for auto-repeat
+    if (Msg == WM_KeyUp)
+    {
+        if (Key == m_heldKey)
+        {
+            m_heldKey = 0;
+            m_keyHoldTime = 0;
+            m_nextRepeatTime = 0;
+        }
+        return;
+    }
+
+    if (Msg == WM_KeyDown)
+    {
+        // Track repeatable keys (directional keys only)
+        if (Key == 212 || Key == 196 || Key == 213 || Key == 197)
+        {
+            // New key press - reset repeat timing
+            if (Key != m_heldKey)
+            {
+                m_heldKey = Key;
+                m_keyHoldTime = 0;
+                m_nextRepeatTime = m_initialDelay;
+            }
+        }
+
+        HandleItemNavigationInput(Key);
+    }
+}
+
+// Joshua - Handle input when navigating items
+function HandleItemNavigationInput(int Key)
+{
+    local int NewIndex;
+
+    // Navigate down - DPadDown (213) or AnalogDown (197)
+    if (Key == 213 || Key == 197)
+    {
+        NewIndex = GetNextSelectableItemIndex(m_selectedItemIndex, true);
+        if (NewIndex != -1)
+        {
+            Root.PlayClickSound();
+            m_selectedItemIndex = NewIndex;
+            HighlightSelectedItem(m_selectedItemIndex);
+        }
+        // At bottom - do nothing
+    }
+    // Navigate up - DPadUp (212) or AnalogUp (196)
+    else if (Key == 212 || Key == 196)
+    {
+        NewIndex = GetNextSelectableItemIndex(m_selectedItemIndex, false);
+        if (NewIndex != -1)
+        {
+            Root.PlayClickSound();
+            m_selectedItemIndex = NewIndex;
+            HighlightSelectedItem(m_selectedItemIndex);
+        }
+    }
+    // A button - select
+    else if (Key == 200)
+    {
+        ActivateSelectedItem();
+    }
+    // Y button - show tooltip
+    else if (Key == 203)
+    {
+        ShowSelectedItemTooltip();
+    }
+    // B button - exit to tab selection
+    else if (Key == 201)
+    {
+        Root.PlayClickSound();
+        EnableArea(false);
+        EPCOptionsMenu(ParentWindow).AreaExited();
+    }
+}
+
+// Joshua - Show tooltip for the currently selected item (if available)
+function ShowSelectedItemTooltip()
+{
+    local EPCEnhancedListBoxItem Item;
+    local EPCInfoButton InfoBtn;
+
+    Item = GetItemAtIndex(m_selectedItemIndex);
+    if (Item == None)
+        return;
+
+    // Check if this item has an info button
+    InfoBtn = EPCInfoButton(Item.m_InfoButton);
+    if (InfoBtn != None && InfoBtn.InfoText != "")
+    {
+        // Stop any auto-scrolling when opening tooltip
+        m_heldKey = 0;
+        m_keyHoldTime = 0;
+        m_nextRepeatTime = 0;
+
+        // Trigger the info button's click to show the tooltip
+        InfoBtn.Click(0, 0);
+        Root.PlayClickSound();
+    }
+}
+
+// Joshua - Tick function to handle auto-repeat for held keys and info button pulse
+function Tick(float Delta)
+{
+    Super.Tick(Delta);
+
+    if (bInfoButtonPulseIncreasing)
+    {
+        InfoButtonPulseTimer += Delta * 1.2;
+        if (InfoButtonPulseTimer >= 1.0)
+        {
+            InfoButtonPulseTimer = 1.0;
+            bInfoButtonPulseIncreasing = false;
+        }
+    }
+    else
+    {
+        InfoButtonPulseTimer -= Delta * 1.2;
+        if (InfoButtonPulseTimer <= 0.0)
+        {
+            InfoButtonPulseTimer = 0.0;
+            bInfoButtonPulseIncreasing = true;
+        }
+    }
+
+    if (!m_bEnableArea || m_heldKey == 0 || m_bComboBoxOpen)
+        return;
+
+    m_keyHoldTime += Delta;
+
+    // Check if it's time to repeat
+    if (m_keyHoldTime >= m_nextRepeatTime)
+    {
+        // Execute the held key's action
+        HandleItemNavigationInput(m_heldKey);
+
+        // Schedule next repeat
+        m_nextRepeatTime = m_keyHoldTime + m_repeatRate;
+    }
+}
+
+defaultproperties
+{
+    m_initialDelay=0.5
+    m_repeatRate=0.1
 }
