@@ -6,6 +6,13 @@ For a full list of patch notes, refer to the [Patch Notes](PatchNotes.md) page.
 
 [![Discord](https://img.shields.io/discord/1371978442194817254?color=%237289DA&label=Members&logo=discord&logoColor=white)](https://discord.gg/k6mZJcfjSh)
 
+If you’d like to donate, all contributions are appreciated.
+<div align="left">
+  <a href="https://www.paypal.com/ncp/payment/RD7YWTSASWQYS" target="_blank">
+    <img src="https://github.com/user-attachments/assets/6a8878e8-3ae8-48e5-8d2a-ae367c71df10" width="256" alt="PayPal" />
+  </a>
+</div>
+
 ## Installation
 The latest version of Enhanced SC can be found in the [Releases](https://github.com/Joshhhuaaa/EnhancedSC/releases) page. Please note that saves from Enhanced SC are not compatible with the original version of the game.
 
