@@ -30,9 +30,9 @@ In the General tab, add the following to the launch options:
 WINEDLLOVERRIDES="D3D8,msacm32,msvfw32,dinput8=n,b" %command%
 ```
 
-In the Compatibility tab, check `Force the use of a specific Steam Play compatibility tool` and select `Proton 10.0-1 (beta)`. Other versions may work, but this one has been tested.
+In the Compatibility tab, check `Force the use of a specific Steam Play compatibility tool` and select `Proton 10.0-1`. Other versions may work, but this one has been tested.
 
-<img src="https://github.com/user-attachments/assets/93d1d1f4-3c84-49e1-b481-621ecefe9061" width="640"/>
+<img src="https://github.com/user-attachments/assets/b133d6f4-e2c9-48ba-8f71-d96817baa145" width="640"/>
 
 For more detailed instructions on how to override a DLL, refer to this [guide](https://cookieplmonster.github.io/setup-instructions/#proton-wine).
 
