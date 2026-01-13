@@ -86,6 +86,24 @@ Mission Statistics feature two rating systems: Ghost and Stealth. Ghost penalize
 - If an NPC must be taken out and can be done stealthily, you must remain undetected and hide the body.
 - NPCs who carry required data such as door codes in their satchel will not penalize you for knocking them out. You are not expected to remember codes from previous playthroughs.
 
+## Language Pack
+The Steam version of Splinter Cell only includes English and French by default. The original release of the game included English, French, Italian, German, and Spanish. If you would like to play in a missing language, download the language pack below.
+
+- Download [Language Pack](https://drive.usercontent.google.com/download?id=1BNKBA8SiK611fz_Ypj_j6DVSsLYEFTs2)
+- After downloading the language pack, extract the contents to your Splinter Cell directory and overwrite all existing files when prompted.
+- To change the language, open `SplinterCell.ini` in the System folder and modify the `Language=int` line to the code for your desired language:
+
+| Language Code  | Language                |
+| -------------- | ------------------------|
+| deu            | German                  |
+| esp            | Spanish                 |
+| fra            | French                  |
+| int            | English / International |
+| ita            | Italian                 |
+
+> [!NOTE]
+> Russian, Polish, and Korean translations were released for this game, but Enhanced SC does not currently support them due to font incompatibility.
+
 ## PlayStation 3 HD Textures for Enhanced SC
 Enhanced SC includes an improved character texture package that replaces the original PS3 `ETexCharacter.utx`. It also uses the `System\Enhanced\Textures` directory to override the original texture packages without overwriting them. This download has been specifically made to be used with Enhanced SC.
 
