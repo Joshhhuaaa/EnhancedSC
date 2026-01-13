@@ -310,7 +310,7 @@
 - Chinese Embassy 2
   - Based on the Xbox version for all parts, featuring lighting and mesh improvements.
   - Changed the default mesh for Sam to Partial Sleeves.
-  - Fixed an issue where fight music would persist for the rest of the mission if the player sneaked past the guards destroying Feirong's data.\
+  - Fixed an issue where fight music would persist for the rest of the mission if the player sneaked past the guards destroying Feirong's data.
   - [@cazzhmir](https://www.youtube.com/@cazzhmir): Updated the loading screen for the first part to correct incorrect text.
   - Fixed a bug where the Communication Box could become stuck if dialogue was triggered early.
   - Fixed a bug where the player could fall into the embassy grounds without triggering a mission failure on the Xbox version of the map.
@@ -370,3 +370,4 @@
   - Lowered the neutral rotation of a camera so it can properly detect the player.
   - Added an objective opportunity message when failing the mission by eliminating a required target.
   - Fixed a note that was incorrectly assigned to a nonexistent object.
+
