@@ -370,5 +370,3 @@
   - Lowered the neutral rotation of a camera so it can properly detect the player.
   - Added an objective opportunity message when failing the mission by eliminating a required target.
   - Fixed a note that was incorrectly assigned to a nonexistent object.
-
-
