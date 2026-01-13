@@ -225,7 +225,7 @@
 - Training
   - Based on the Xbox version for both parts, featuring lighting improvements.
   - Added the Optic Cable to the starting inventory.
-  - Overhauled training popups to correctly reflect the player’s current keybinds, crouch-drop and the New Door Interaction System.
+  - Overhauled training popups to correctly reflect the player's current keybinds, crouch-drop and the New Door Interaction System.
   - Grabbing the guard who searches for the body will now fail the section.
   - Fixed the position of a laptop.
 ---
@@ -370,4 +370,5 @@
   - Lowered the neutral rotation of a camera so it can properly detect the player.
   - Added an objective opportunity message when failing the mission by eliminating a required target.
   - Fixed a note that was incorrectly assigned to a nonexistent object.
+
 
