@@ -58,7 +58,7 @@ This patch also includes [dgVoodoo2](https://github.com/dege-diosg/dgVoodoo2), [
   - If removing both mods, these `.dll` files can also be deleted.
 
 #### Xidi
-- Delete `dinput8.dll` and `Xidi.ini`.
+- Delete `dinput8.dll`, `Xidi.32.dll`, and `Xidi.ini`.
 
 ## Mission Statistics
 Mission Statistics can be viewed while playing a mission by pressing `Tab` on keyboard or upon completing a mission.
