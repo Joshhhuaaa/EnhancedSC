@@ -53,6 +53,10 @@ function InitPattern()
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.GESoldier.GESoldierA", class'Texture'));
             }
 
+            // Joshua - Fixing incorrect HeatIntensity for spetsnaz
+            P.HeatIntensity = P.default.HeatIntensity;
+        }
+
         // Joshua - Removing HeatRadius from all light actors
         ForEach AllActors(Class'Light', L)
         {
