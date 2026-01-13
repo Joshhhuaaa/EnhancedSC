@@ -37,7 +37,7 @@ In the Compatibility tab, check `Force the use of a specific Steam Play compatib
 For more detailed instructions on how to override a DLL, refer to this [guide](https://cookieplmonster.github.io/setup-instructions/#proton-wine).
 
 > [!NOTE]
-> If you're playing on a Steam Deck, it's recommended to download the `EnhancedSC Layout` by Vanilla from Steam's Community Layouts, which maps the necessary controls to navigate the PC menus with a controller.
+> If you're playing on a Steam Deck, it's recommended to download the `EnhancedSC Layout` by Vanilla from Steam's Community Layouts.
 >
 > <img src="https://github.com/user-attachments/assets/5d559a82-bb8f-4b21-9ecb-d99f314cabda" width="640"/>
 
