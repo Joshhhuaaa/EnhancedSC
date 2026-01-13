@@ -42,9 +42,16 @@ function InitPattern()
     }
 
     // Joshua - Removing HeatRadius from all light actors
-    ForEach AllActors(Class'Light', L)
+    if (!bInit)
     {
-        L.HeatRadius = 0;
+        ForEach AllActors(Class'Light', L)
+        {
+            if (L.name == 'ELight100' || L.name == 'ELight101' || L.name == 'Light29' ||
+                L.name == 'Light23' || L.name == 'Light31' || L.name == 'Light24')
+            {
+                L.HeatRadius = 0;
+            }
+        }
     }
 
     if (!bInit)

@@ -26,6 +26,7 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
 function InitPattern()
 {
     local Pawn P;
+    local Light L;
     local ETimer Timer; // Joshua - Adjusting timer for Elite mode
 
     Super.InitPattern();
@@ -55,6 +56,18 @@ function InitPattern()
             if (P.name == 'EMercenaryTechnician7')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.MercTech.MercTechB", class'Texture'));
+            }
+        }
+
+        // Joshua - Removing HeatRadius from all light actors
+        ForEach AllActors(Class'Light', L)
+        {
+            if (L.name == 'Light21' || L.name == 'Light16' || L.name == 'Light7' ||
+                L.name == 'Light5' || L.name == 'ELight81' || L.name == 'ELight27' ||
+                L.name == 'Light12' || L.name == 'Light13' || L.name == 'Light49' ||
+                L.name == 'Light76' || L.name == 'Light30' || L.name == 'ELight12')
+            {
+                L.HeatRadius = 0;
             }
         }
 

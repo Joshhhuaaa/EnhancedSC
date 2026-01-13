@@ -28,6 +28,7 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
 function InitPattern()
 {
     local Pawn P;
+    local Light L;
     local EZoneAI ZoneAI;
     local ELaptop Laptop;
 
@@ -50,6 +51,17 @@ function InitPattern()
                 P.name == 'EGeorgianSoldier37')
             {
                 P.Skins[0] = Texture(DynamicLoadObject("ETexCharacter.GESoldier.GESoldierA", class'Texture'));
+            }
+
+        // Joshua - Removing HeatRadius from all light actors
+        ForEach AllActors(Class'Light', L)
+        {
+            if (L.name == 'ELight60' || L.name == 'ELight57' || L.name == 'ELight69' ||
+                L.name == 'ELight58' || L.name == 'ELight11' || L.name == 'ELight29' ||
+                L.name == 'ELight70' || L.name == 'Light34' || L.name == 'ELight3' ||
+                L.name == 'ELight59')
+            {
+                L.HeatRadius = 0;
             }
         }
 

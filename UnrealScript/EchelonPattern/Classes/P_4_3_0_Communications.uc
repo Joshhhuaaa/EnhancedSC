@@ -28,6 +28,7 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
 function InitPattern()
 {
     local Pawn P;
+    local Light L;
     local EVolume Volume;
 
     Super.InitPattern();
@@ -57,6 +58,15 @@ function InitPattern()
                     EPlayerController(Characters[0]).HandGun.Ammo = 1;
                     EPlayerController(Characters[0]).HandGun.ClipAmmo = 1;
                 }
+            }
+        }
+
+        // Joshua - Removing HeatRadius from all light actors
+        ForEach AllActors(Class'Light', L)
+        {
+            if (L.name == 'ELight13')
+            {
+                L.HeatRadius = 0;
             }
         }
 

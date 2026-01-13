@@ -31,6 +31,7 @@ function EventCallBack(EAIEvent Event,Actor TriggerActor)
 function InitPattern()
 {
     local Pawn P;
+    local Light L;
     local EEventTrigger EventTrigger;
 
     Super.InitPattern();
@@ -47,6 +48,16 @@ function InitPattern()
     {
         // Joshua - No longer necessary to jam this door, will fail mission when reaching streets without black box instead
         EDoorMover(GetMatchingActor('BlausteinsBalcony')).SetUsable(True);
+
+        // Joshua - Removing HeatRadius from all light actors
+        ForEach AllActors(Class'Light', L)
+        {
+            if (L.name == 'Light105' || L.name == 'Light140' || L.name == 'Light165' ||
+                L.name == 'Light170' || L.name == 'ELight61')
+            {
+                L.HeatRadius = 0;
+            }
+        }
 
         // Joshua - Fixes bug where you can repeatedly restart the civilian patrols
         ForEach AllActors(class'EEventTrigger', EventTrigger)
