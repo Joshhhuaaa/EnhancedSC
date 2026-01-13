@@ -262,6 +262,15 @@ event EnterAltTab()
 }
 */
 
+// Joshua - Clear main menu input state when tabbing back in
+event EnterAltTab()
+{
+	if (bMainMenuActive && EPCMainMenuRootWindow(Root).m_MainMenuWidget != None)
+	{
+		EPCMainMenuRootWindow(Root).m_MainMenuWidget.ClearInputState();
+	}
+}
+
 function PopCD()
 {
 	//ViewportOwner.Actor.SetPause(true);

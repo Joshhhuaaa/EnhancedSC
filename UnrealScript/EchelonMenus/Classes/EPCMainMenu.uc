@@ -47,6 +47,11 @@ var float m_nextRepeatTime;         // Time for next repeat action
 var const float m_initialDelay;     // Initial delay before repeat starts (0.5s)
 var const float m_repeatRate;       // Time between repeats (0.1s)
 
+// Joshua - Delayed action for controller buttons (prevents fullscreen crash)
+var int m_pendingAction;            // 0=none, 1=select (A button), 2=discord (Y button)
+var float m_pendingActionDelay;     // Countdown timer for delayed action
+var const float m_actionDelay;      // Delay before executing action (0.25s)
+
 function Created()
 {
     Super.Created();
@@ -476,11 +481,19 @@ function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
             m_selectedItem = (m_selectedItem + 1) % m_totalItems;
             HighlightSelectedItem(m_selectedItem);
         }
-        // A button - select
+        // A button - select (use delayed action for Website to prevent fullscreen crash)
         else if (Key == 200)
         {
             Root.PlayClickSound();
-            SelectedOption(m_selectedItem);
+            if (m_selectedItem == 5)
+            {
+                m_pendingAction = 1;
+                m_pendingActionDelay = m_actionDelay;
+            }
+            else
+            {
+                SelectedOption(m_selectedItem);
+            }
         }
         // B button - exit
         else if (Key == 201)
@@ -490,11 +503,12 @@ function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
             Root.PlayClickSound();
             Notify(m_ExitGame, DE_Click);
         }
-        // Y button - Discord (only when Website is selected)
+        // Y button - Discord (only when Website is selected, use delayed action)
         else if (Key == 203 && m_selectedItem == 5)
         {
             Root.PlayClickSound();
-            Notify(m_oDiscordLogo, DE_Click);
+            m_pendingAction = 2;
+            m_pendingActionDelay = m_actionDelay;
         }
     }
     else if (Msg == WM_KeyUp)
@@ -508,10 +522,50 @@ function WindowEvent(WinMessage Msg, Canvas C, float X, float Y, int Key)
     }
 }
 
-// Joshua - Tick function for auto-repeat navigation
+// Joshua - Clear all input state when tabbing back into game
+function ClearInputState()
+{
+    m_pendingAction = 0;
+    m_pendingActionDelay = 0.0;
+    m_heldKey = 0;
+    m_keyHoldTime = 0.0;
+    m_nextRepeatTime = 0.0;
+}
+
+// Joshua - Tick function for auto-repeat navigation and delayed actions
 function Tick(float DeltaTime)
 {
+    local int actionToExecute;
+
     Super.Tick(DeltaTime);
+
+    // Handle delayed action for controller buttons (prevents fullscreen crash)
+    if (m_pendingAction != 0)
+    {
+        m_pendingActionDelay -= DeltaTime;
+        if (m_pendingActionDelay <= 0.0)
+        {
+            actionToExecute = m_pendingAction;
+
+            // Clear all input state before executing action to prevent re-triggering when tabbing back
+            m_pendingAction = 0;
+            m_pendingActionDelay = 0.0;
+            m_heldKey = 0;
+            m_keyHoldTime = 0.0;
+            m_nextRepeatTime = 0.0;
+
+            switch (actionToExecute)
+            {
+                case 1: // A button - Website
+                    SelectedOption(m_selectedItem);
+                    break;
+                case 2: // Y button - Discord
+                    Notify(m_oDiscordLogo, DE_Click);
+                    break;
+            }
+        }
+        return; // Don't process auto-repeat while action is pending
+    }
 
     if (m_heldKey == 0)
         return;
@@ -560,4 +614,5 @@ defaultproperties
     m_IDiscordLogoYPos=396
     m_initialDelay=0.5
     m_repeatRate=0.1
+    m_actionDelay=0.25
 }
