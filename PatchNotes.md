@@ -110,7 +110,7 @@
 - Fixed a bug where laptop collision remained active after being destroyed.
 - Fixed a bug where gameplay objects with a SpawnableObject lacking a SpawnClass could incorrectly turn off a light even though the mesh had not changed.
 - Fixed Optic Cable issues caused by fast mouse flicks.
-- Fixed a rendering issue by temporarily disabling the EOmniAtten light effect on Flares, Chemical Flares, and Alarm Lights.
+- Fixed a rendering issue by temporarily disabling the `EOmniAtten` light effect on Flares, Chemical Flares, and Alarm Lights.
 - Dying now immediately exits any active interaction, hiding Keypad, Elevator, and Lockpick pop-up objects.
 - Mission Complete and Mission Failed states now cleanly exit Turret, Keypad, and Elevator interactions.
 - Improved HUD restoration after cinematics, fixing rare cases where player state changed while a cinematic was playing.
@@ -370,4 +370,5 @@
   - Lowered the neutral rotation of a camera so it can properly detect the player.
   - Added an objective opportunity message when failing the mission by eliminating a required target.
   - Fixed a note that was incorrectly assigned to a nonexistent object.
+
 
