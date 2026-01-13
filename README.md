@@ -8,7 +8,7 @@ For a full list of patch notes, refer to the [Patch Notes](PatchNotes.md) page.
 
 If you’d like to donate, all contributions are appreciated.
 <div align="left">
-  <a href="https://www.paypal.com/ncp/payment/RD7YWTSASWQYS" target="_blank">
+  <a href="https://www.paypal.com/ncp/payment/RD7YWTSASWQYS">
     <img src="https://github.com/user-attachments/assets/6a8878e8-3ae8-48e5-8d2a-ae367c71df10" width="256" alt="PayPal" />
   </a>
 </div>
