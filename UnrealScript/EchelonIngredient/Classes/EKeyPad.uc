@@ -208,13 +208,13 @@ function KeyPushed()
 	else
 		PlaySound(Sound'Electronic.Play_keyPadButton', SLOT_SFX);
 
-	// Joshua - Check if any alarm is currently active
-	if (IsAlarmActive())
+	// Joshua - Elite Mode will prevent keypad access during an alarm
+	/*if (EchelonGameInfo(Level.Game).bEliteMode && IsAlarmActive())
 	{
 		// Alarm is active, deny keypad
 		GotoState('s_AccessDenied');
 		return;
-	}
+	}*/
 
 	// RESET button
 	if (SelectedButton == 9)
