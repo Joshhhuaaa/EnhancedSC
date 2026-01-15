@@ -6,7 +6,7 @@ For a full list of patch notes, refer to the [Patch Notes](PatchNotes.md) page.
 
 [![Discord](https://img.shields.io/discord/1371978442194817254?color=%237289DA&label=Members&logo=discord&logoColor=white)](https://discord.gg/k6mZJcfjSh)
 
-If you’d like to donate, all contributions are appreciated.
+If you'd like to donate, all contributions are appreciated.
 <div align="left">
   <a href="https://www.paypal.com/ncp/payment/RD7YWTSASWQYS">
     <img src="https://github.com/user-attachments/assets/6a8878e8-3ae8-48e5-8d2a-ae367c71df10" width="256" alt="PayPal" />
@@ -19,6 +19,9 @@ The latest version of Enhanced SC can be found in the [Releases](https://github.
 ### Game Setup
 - After downloading Enhanced SC, extract the contents to your Splinter Cell directory and overwrite all existing files when prompted.
 - You can adjust additional settings in the Enhanced tab within the in-game settings.
+
+> [!WARNING]
+> On the latest GOG release, `SplinterCellUser.ini` and `SplinterCellSettings.ini` are set to read-only in the `System` folder. You must make them writable, or the patch will not work correctly.
 
 > [!NOTE]
 > Your original saves will not be deleted, but they will appear as missing. Enhanced intentionally hides them because they aren't compatible with this version.
