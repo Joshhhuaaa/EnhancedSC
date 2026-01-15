@@ -31,7 +31,6 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			if (!Epc.eGame.bUseController)
 			{
 				Epc.eGame.bUseController = true;
-				Epc.m_curWalkSpeed = 5;
 			}
 		}
 		else if (Key != IK_MouseX && Key != IK_MouseY)

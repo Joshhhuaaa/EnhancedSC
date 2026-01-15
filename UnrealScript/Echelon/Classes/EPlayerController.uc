@@ -3982,7 +3982,11 @@ state s_GrabTargeting
         // Joshua - Variable speeds for keyboard in targeting mode
         if (m_curWalkSpeed != 0)
         {
-            accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
+            // Joshua - Controller always uses max speed (1.0 ratio)
+            if (eGame.bUseController)
+                accelModif = 1.0;
+            else
+                accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
 
             aForward *= accelModif;
             aStrafe  *= accelModif;
@@ -4723,7 +4727,12 @@ state s_PlayerWalking
 		//clauzon the player can now change is speed level
 		if (m_curWalkSpeed != 0)
 		{
-			accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
+            // Joshua - Controller always uses max speed (1.0 ratio)
+            if (eGame.bUseController)
+                accelModif = 1.0;
+            else
+                accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
+
 			aForward *= accelModif;
 			aStrafe  *= accelModif;
 		}
@@ -5514,7 +5523,11 @@ state s_Targeting
         // Joshua - Variable speeds for keyboard in targeting mode
         if (m_curWalkSpeed != 0)
         {
-            accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
+            // Joshua - Controller always uses max speed (1.0 ratio)
+            if (eGame.bUseController)
+                accelModif = 1.0;
+            else
+                accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
 
             aForward *= accelModif;
             aStrafe  *= accelModif;
@@ -6638,7 +6651,11 @@ state s_Throw
         // Joshua - Variable speeds for keyboard in targeting mode
         if (m_curWalkSpeed != 0)
         {
-            accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
+            // Joshua - Controller always uses max speed (1.0 ratio)
+            if (eGame.bUseController)
+                accelModif = 1.0;
+            else
+                accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
 
             aForward *= accelModif;
             aStrafe  *= accelModif;
