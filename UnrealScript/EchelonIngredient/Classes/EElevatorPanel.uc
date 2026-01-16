@@ -94,7 +94,7 @@ function PostBeginPlay()
 	UpdateDisplays(Floors[SelectedFloor].FloorNumber);
 	CheckDoorEndEvents();
 
-	Super.postBeginPlay();
+	Super.PostBeginPlay();
 }
 
 function CreateKey(StaticMesh Mesh, string Val)
@@ -453,6 +453,7 @@ state s_Use
 			bSpecialLit = true;
 			AmbientGlow = default.AmbientGlow;
 		}
+		SelectedButton = 0; // Joshua - Default to Open button
 		GlowSelected();
 	}
 
