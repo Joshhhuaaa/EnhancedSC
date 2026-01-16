@@ -18,7 +18,7 @@ function PostBeginPlay()
 		log("Problem with EAlarmPanel"@self@"spawning glass");
 	Glass.SetStaticMesh(StaticMesh'EMeshIngredient.Object.AlarmGlass');
 
-	Super.postBeginPlay();
+	Super.PostBeginPlay();
 }
 
 state s_Activate

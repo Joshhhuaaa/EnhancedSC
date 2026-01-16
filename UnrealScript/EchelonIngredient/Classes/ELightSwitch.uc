@@ -35,7 +35,7 @@ function PostBeginPlay()
         }
     }
 
-	Super.postBeginPlay();
+	Super.PostBeginPlay();
 }
 
 function Destroyed()

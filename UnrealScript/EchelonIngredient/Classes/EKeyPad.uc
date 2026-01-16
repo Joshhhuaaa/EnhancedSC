@@ -78,7 +78,7 @@ function PostBeginPlay()
 	SelectedButton = -1;
 	Reset();
 
-	Super.postBeginPlay();
+	Super.PostBeginPlay();
 }
 
 function EKeyButton CreateButton(StaticMesh MeshName, Vector offset, string Val, optional StaticMesh TMesh)

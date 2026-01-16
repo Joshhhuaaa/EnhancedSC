@@ -114,26 +114,22 @@ native(1757) final function CheckError(ECanvas Canvas, bool bGameWasPause);
 -----------------------------------------------------------------------------*/
 event UpdateProfile()
 {
-	// Joshua - Controller related
-	MainMenuHUD.UpdateProfile();
+	//MainMenuHUD.UpdateProfile();
 }
 
 event LoadProfile(String PlayerName)
 {
-	// Joshua - Controller related
-	MainMenuHUD.LoadProfile(PlayerName);
+	//MainMenuHUD.LoadProfile(PlayerName);
 }
 
 event SaveTInfo(int tab)
 {
-	// Joshua - Controller related
-	MainMenuHUD.SaveTInfo(tab);
+	//MainMenuHUD.SaveTInfo(tab);
 }
 
 event LoadTInfo(int tab)
 {
-	// Joshua - Controller related
-	MainMenuHUD.LoadTInfo(tab);
+	//MainMenuHUD.LoadTInfo(tab);
 }
 
 event SetPause(bool bSet)
@@ -171,7 +167,7 @@ function PostBeginPlay()
     GameMenuHUD             	= spawn(class'EGameMenuHUD',self);
     PlayerStatsHUD         		= spawn(class'EPlayerStatsHUD',self); // Joshua - Player statistics screen
 
-    // Joshua - Start of controller related
+/*
     MainMenuHUD            		= spawn(class'EMainMenuHUD', self);
 
 	// (Yanick Mimee) June-13-2002
@@ -215,7 +211,7 @@ function PostBeginPlay()
 	GameMenuHUD.bGameIsFinished = false;
 
 	MainMenuHUD.bInactVideoPlaying = false;
-    // Joshua - End of controller related
+*/
 	// Testing recons system
 	/*
 	Epc.AddRecon(class'EReconMapMinistry');
@@ -265,7 +261,7 @@ function PostBeginPlay()
 
     Super.PostBeginPlay();
 
-	// Joshua - Controller related
+	/*
 	if (Level.bIsStartMenu)
 	{
 		if (Epc.iErrorMsg == -3)
@@ -277,9 +273,10 @@ function PostBeginPlay()
 	else
 	{
 		Epc.iErrorMsg = 0;
-        GotoState('MainHUD'); // Joshua - This was still used on PC
+	*/
+        GotoState('MainHUD');
 		//GotoState('s_LoadingScreen');
-	}
+	//}
 }
 
 //------------------------------------------------------------------------

@@ -16,7 +16,7 @@ function PostBeginPlay()
 	// Remove linked lights once distributed among parts.
 	ObjectLights.Remove(0,ObjectLights.Length);
 
-	Super.postBeginPlay();
+	Super.PostBeginPlay();
 }
 
 function SpawnPart(vector Offset, float Scale)
