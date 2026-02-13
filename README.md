@@ -29,7 +29,7 @@ The latest version of Enhanced SC can be found in the [Releases](https://github.
 ## Linux / Steam Deck Installation
 **This section is intended for Linux only, and should be skipped if installing on Windows.**
 
-Download the latest Linux (Steam Deck) build from the [Releases](https://github.com/Joshhhuaaa/EnhancedSC/releases) page, rather than the standard release. This version includes dgVoodoo v2.79.3 for Linux, since newer versions currently cause the game to crash.
+Download the latest Linux (Steam Deck) build from the [Releases](https://github.com/Joshhhuaaa/EnhancedSC/releases) page, rather than the standard release. This version includes dgVoodoo v2.81.3 for Linux, since newer versions currently cause the game to crash.
 
 Enhanced SC, [dgVoodoo2](https://github.com/dege-diosg/dgVoodoo2), [ThirteenAG Widescreen Fix](https://github.com/ThirteenAG/WidescreenFixesPack), and [Xidi](https://github.com/samuelgr/Xidi) won't load without a DLL override in your Wine prefix.
 
