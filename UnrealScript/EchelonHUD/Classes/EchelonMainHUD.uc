@@ -549,14 +549,14 @@ function DrawLifeBarHorizontal(ECanvas Canvas)
 
 	Canvas.Font = Canvas.ETextFont;
 	Canvas.TextSize("T", xLen, yLen);
-	
+
 	// Joshua - When using the Xbox/GameCube font, set horizontal life bar width to match the interaction box width
 	if (Epc.eGame.FontType == Font_Xbox || Epc.eGame.FontType == Font_GameCube)
 		HOR_WIDTH = xLen * MAX_INTER_NAME_LENGHT + 3 + 3;
 	else
 		HOR_WIDTH = LIFEBAR_HEIGHT;
 	HOR_HEIGHT = LIFEBAR_WIDTH;
-	
+
 	xPos = 640 - eGame.HUD_OFFSET_X - HOR_WIDTH;
 	yPos = eGame.HUD_OFFSET_Y;
 

@@ -14,7 +14,7 @@
 - Added the ability to quickly drop a carried body by pressing the Jump key, similar to Chaos Theory.
 - Keyboard variable speeds now affect player movement when using Sniper Mode or the Laser Mic.
 - Added a crouch speed multiplier while sniping, making movement slower when crouched.
-- Increased the lifespan for bullet shell casings from 3 seconds to 30 seconds.
+- Shell casings now use a maximum concurrent limit of 500 instead of a 3 second lifespan.
 - Added an option to whistle similar to later Splinter Cell games.
 - Added an option to use zoom levels (2x/4x) for the SC-20K, similar to Pandora Tomorrow.
 - Added an option to use zoom levels for the Laser Mic, similar to Pandora Tomorrow.
@@ -64,7 +64,6 @@
   -	White Balaclava
   -	Beta Sleeves
 - Added Mission Statistics that can be viewed during a mission and upon completing a mission, featuring two scoring types: Ghost, which penalizes unnecessary knockouts, and Stealth, which allows knockouts as long as the player remains undetected.
-- Checkpoints are now saved across three rotating slots instead of overwriting a single slot.
 - Improved AI reactions to near-miss gunfire by detecting bullets that pass dangerously close to NPCs, similar to Chaos Theory.
 - Added an option to automatically lock the player's view onto cameras while using the Camera Jammer, similar to Pandora Tomorrow.
 - Added an option to use vision modes with the Laser Mic, similar to the PS2 version.
@@ -97,7 +96,6 @@
 - Fixed a bug where the Sticky Camera and Diversion Camera would not properly exit and holster the weapon on Mission Failed, causing a broken animation.
 - Fixed a bug where holding the Crouch key before getting on a zipline and keeping it held caused an animation bug.
 - Fixed a bug where leaving the Interaction Box, Inventory, or Mission Statistics screen allowed players to regain control while input was blocked.
-- Shell casings now use a maximum concurrent limit of 500 instead of a 3 second lifespan.
 - [@cazzhmir](https://www.youtube.com/@cazzhmir): Replaced the SC-20K texture with a less compressed version.
 - [@TGP482](https://www.youtube.com/@TGP482): Replaced the SC Pistol texture with a less compressed version.
 - [@TGP482](https://www.youtube.com/@TGP482): Replaced various gun textures with less compressed versions: AK-47, AK-107, QBZ-95, Makarov, Dragunov, MK23, and P228.
