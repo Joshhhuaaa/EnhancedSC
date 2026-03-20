@@ -400,8 +400,9 @@ function RenderUWindow(Canvas Canvas)
 
 		// 4:3: MinMouseX = 0, MaxMouseX = 629 (640 - 11)
 		// 16:9: MinMouseX = -106, MaxMouseX = 736
-		MaxMouseX = 629 + ((736 - 629) * (AspectRatio - (4.0 / 3.0)) / ((16.0 / 9.0) - (4.0 / 3.0)));
+		// Offset = (853 - 640) / 2 = 106.5, split as 106 (left), 107 (right)
 		MinMouseX = 0 + ((-106 - 0) * (AspectRatio - (4.0 / 3.0)) / ((16.0 / 9.0) - (4.0 / 3.0)));
+		MaxMouseX = 629 + ((736 - 629) * (AspectRatio - (4.0 / 3.0)) / ((16.0 / 9.0) - (4.0 / 3.0)));
 	}
 	else
 	{
