@@ -22,12 +22,15 @@ var bool bStopInputAlternate; // Joshua - alternate bStopInput flag needed for i
 event PlayerInput(float simDeltaTime)
 {
 	local float mouseSpeedUp;
+	local float stickScale; // Joshua - Controller sensitivity
 
-	mouseSpeedUp = (float(MouseSensitivity) / 50.0);
+	mouseSpeedUp = float(MouseSensitivity) / 50.0;
+	stickScale = 0.5 + (GetControllerSensitivity() - 1) / 99.0 * 1.5;
+	stickScale = Pow(stickScale / 1.242424f, 1.5); // Joshua - 1.242424f = midpoint
 
 	// Add mouse
-    aTurn += (aMouseX / simDeltaTime) * mouseSpeedUp;
-    aLookUp += (aMouseY / simDeltaTime) * mouseSpeedUp;
+    aTurn   = (aMouseX / simDeltaTime) * mouseSpeedUp + aTurn * stickScale;
+    aLookUp = (aMouseY / simDeltaTime) * mouseSpeedUp + aLookUp * stickScale;
 
 	if (bInvertMouse)
 		aLookUp = -aLookUp;

@@ -340,6 +340,8 @@ event PlayerTick(float DeltaTime)
 
 function PlayerMove(float DeltaTime);
 
+function float GetControllerSensitivity(); // Joshua - Implemented in EPlayerController, needs to be called by PlayerInput so declared here
+
 event PlayerCalcView(out actor ViewActor, out vector CameraLocation, out rotator CameraRotation);
 
 // ***********************************************************************************************

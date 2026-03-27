@@ -13,6 +13,8 @@ var EPCMessageBox        m_MessageBox;
 
 var EPCHScrollBar        m_MouseSensitivityScroll;
 var UWindowLabelControl  m_LMouseSensitivityValue; // Joshua - Label for the mouse sensitivity scroll bar
+var EPCHScrollBar        m_ControllerSensitivityScroll; // Joshua - Controller sensitivity
+var UWindowLabelControl  m_LControllerSensitivityValue; // Joshua - Label for the controller sensitivity scroll bar
 var EPCHScrollBar        m_InitialSpeedScroll; // Joshua - Enhanced setting
 var UWindowLabelControl  m_LInitialSpeedValue; // Joshua - Label for the initial speed scroll bar
 var EPCCheckBox          m_InvertMouseButton;
@@ -242,6 +244,8 @@ function InitOptionControls()
     AddCompactLineItem();
     AddControllerIconControls();
     AddCompactLineItem();
+    AddControllerSensitivityControls();
+    AddCompactLineItem();
     AddEnhancedCheckBoxControl("EnableRumble", m_bEnableRumble);
 }
 
@@ -290,6 +294,7 @@ function SaveOptions()
         case 2:  EPC.ControllerIcon = CI_GameCube;    break;
         default: EPC.ControllerIcon = CI_None;        break;
     }
+    EPC.fControllerSensitivity = m_ControllerSensitivityScroll.Pos;
     EPC.eGame.bEnableRumble = m_bEnableRumble.m_bSelected;
 
     // Reset all m_bDrawFlipped's
@@ -353,6 +358,10 @@ function Refresh()
     if (m_LMouseSensitivityValue != None && m_MouseSensitivityScroll != None)
         m_LMouseSensitivityValue.SetLabelText(string(int(m_MouseSensitivityScroll.Pos)), TXT_LEFT);
 
+    // Joshua - Update controller sensitivity value label
+    if (m_LControllerSensitivityValue != None && m_ControllerSensitivityScroll != None)
+        m_LControllerSensitivityValue.SetLabelText(string(int(m_ControllerSensitivityScroll.Pos)), TXT_LEFT);
+
     // MClarke - Patch 1 Beta 2 - Added false parameter
     RefreshKeyList(false);
 
@@ -394,6 +403,8 @@ function ResetToDefault()
     m_bCameraJammerAutoLock.m_bSelected = false;
     m_bToggleInventory.m_bSelected = false;
     m_bHideInactiveCategories.m_bSelected = false;
+    m_ControllerSensitivityScroll.Pos = 50;
+    m_LControllerSensitivityValue.SetLabelText(string(int(m_ControllerSensitivityScroll.Pos)), TXT_LEFT);
     m_InputMode.SetSelectedIndex(0);
     m_ControllerScheme.SetSelectedIndex(0);
     m_ControllerIcon.SetSelectedIndex(0);
@@ -470,6 +481,35 @@ function EPCCheckBox AddEnhancedCheckBoxControl(string LocalizationKey, out EPCC
     m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = CheckBoxVar;
 
     return CheckBoxVar;
+}
+
+//===============================================================================
+// AddControllerSensitivityControls
+// Created by Joshua
+//===============================================================================
+function AddControllerSensitivityControls()
+{
+    local EPCOptionsKeyListBoxItem NewItem;
+
+    NewItem = EPCOptionsKeyListBoxItem(m_ListBox.Items.Append(m_ListBox.ListClass));
+    NewItem.Caption = Localize("Controls","ControllerSensitivity","Localization\\Enhanced");
+    NewItem.m_bIsNotSelectable = true;
+
+    m_ControllerSensitivityScroll = EPCHScrollBar(CreateControl(class'EPCHScrollBar', 0, 0, 150, LookAndFeel.Size_HScrollbarHeight, self));
+    m_ControllerSensitivityScroll.SetScrollHeight(12);
+    m_ControllerSensitivityScroll.SetRange(1, 101, 1);
+
+    m_LControllerSensitivityValue = UWindowLabelControl(CreateControl(class'UWindowLabelControl', 0, 0, 40, 18));
+    m_LControllerSensitivityValue.Font = F_Normal;
+    m_LControllerSensitivityValue.TextColor.R = 71;
+    m_LControllerSensitivityValue.TextColor.G = 71;
+    m_LControllerSensitivityValue.TextColor.B = 71;
+    m_LControllerSensitivityValue.TextColor.A = 255;
+    m_LControllerSensitivityValue.SetLabelText("1", TXT_LEFT);
+
+    NewItem.m_Control = m_ControllerSensitivityScroll;
+    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_ControllerSensitivityScroll;
+    m_ListBox.m_Controls[m_ListBox.m_Controls.Length] = m_LControllerSensitivityValue;
 }
 
 //===============================================================================
@@ -668,6 +708,10 @@ function RefreshKeyList(bool bKeysOnly) // MClarke - Patch 1 Beta 2 - Added bool
         m_bCameraJammerAutoLock.m_bSelected = EPC.bCameraJammerAutoLock;
         m_bToggleInventory.m_bSelected = EPC.bToggleInventory;
         m_bHideInactiveCategories.m_bSelected = EPC.bHideInactiveCategories;
+        m_ControllerSensitivityScroll.Pos = Clamp(int(EPC.fControllerSensitivity), 1, 100);
+        // Joshua - Update value label for controller sensitivity scrollbar
+        if (m_LControllerSensitivityValue != None)
+            m_LControllerSensitivityValue.SetLabelText(string(int(m_ControllerSensitivityScroll.Pos)), TXT_LEFT);
         m_InputMode.SetSelectedIndex(Clamp(EPC.InputMode,0,m_InputMode.List.Items.Count()));
         m_ControllerScheme.SetSelectedIndex(Clamp(EPC.ControllerScheme,0,m_ControllerScheme.List.Items.Count()));
         m_ControllerIcon.SetSelectedIndex(Clamp(EPC.ControllerIcon,0,m_ControllerScheme.List.Items.Count()));
@@ -908,6 +952,13 @@ function Notify(UWindowDialogControl C, byte E)
         // Joshua - Update value label for mouse sensitivity scrollbar
         if (m_LMouseSensitivityValue != None)
             m_LMouseSensitivityValue.SetLabelText(string(int(m_MouseSensitivityScroll.Pos)), TXT_LEFT);
+    }
+    else if (E == DE_Change && C == m_ControllerSensitivityScroll)
+    {
+        m_bModified = true;
+        // Joshua - Update value label for mouse sensitivity scrollbar
+        if (m_LControllerSensitivityValue != None)
+            m_LControllerSensitivityValue.SetLabelText(string(int(m_ControllerSensitivityScroll.Pos)), TXT_LEFT);
     }
     else if (E == DE_Change && C == m_InitialSpeedScroll)
     {
@@ -1378,7 +1429,7 @@ function AdjustSlider(int Direction, int Key)
     bIsDPad = (Key == 214 || Key == 215);
 
     // Determine step size based on which slider and input type
-    if (Slider == m_MouseSensitivityScroll)
+    if (Slider == m_MouseSensitivityScroll || Slider == m_ControllerSensitivityScroll)
     {
         if (bIsDPad)
             Step = 1.0;

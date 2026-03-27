@@ -277,6 +277,8 @@ enum EControllerIcon
 };
 var(Enhanced) config EControllerIcon ControllerIcon;
 
+var (Enhanced) config float fControllerSensitivity;
+
 var(Enhanced) config bool bNormalizeMovement; // Joshua - Option to normalize movement
 var(Enhanced) config bool bCrouchDrop; // Joshua - When hanging or using a zipline, crouch drops and jump raises legs
 var float m_LastCrouchTime; // Joshua - // Joshua - Anti-spam crouch timer
@@ -3471,6 +3473,11 @@ function ResetInputButtons()
 	bDPadRight = 0;
 
 	bResetCamera = 0;
+}
+
+function float GetControllerSensitivity()
+{
+	return fControllerSensitivity;
 }
 
 //-----
@@ -12846,6 +12853,7 @@ defaultproperties
 	InputMode=IM_Auto
 	ControllerScheme=CS_Default
 	ControllerIcon=CI_Xbox
+	fControllerSensitivity=50.000000
 	bNormalizeMovement=True
 	bCrouchDrop=True
 	m_LastCrouchTime=-10.000000
