@@ -540,12 +540,15 @@ state UWindow
             ViewportOwner.Actor.bStopRenderWorld = true;    //Stop Rendering World
 
 			if (ViewportOwner.Actor.Level != None &&
-				ViewportOwner.Actor.Level.bIsStartMenu &&
-				!bMusicPlaying)
+				ViewportOwner.Actor.Level.bIsStartMenu /*&&
+				!bMusicPlaying*/)
 			{
-				if (ViewportOwner.Actor.PlaySound(MenuMusic, SLOT_Music))
+				if (!ViewportOwner.Actor.IsPlaying(MenuMusic)) // Joshua - Always check if music is playing
 				{
-					bMusicPlaying = true;
+					if (ViewportOwner.Actor.PlaySound(MenuMusic, SLOT_Music))
+					{
+						bMusicPlaying = true;
+					}
 				}
 			}
         }
