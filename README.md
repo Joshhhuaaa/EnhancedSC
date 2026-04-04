@@ -30,7 +30,7 @@ To add the DLL override in Steam, right-click the game in the library and select
 
 In the General tab, add the following to the launch options:
 ```
-WINEDLLOVERRIDES="D3D8,msacm32,msvfw32,dinput8=n,b" %command%
+WINEDLLOVERRIDES="d3d8,msacm32,msvfw32,dinput8=n,b" %command%
 ```
 
 In the Compatibility tab, check `Force the use of a specific Steam Play compatibility tool` and select `Proton 10.0-1`. Other versions may work, but this one has been tested.
@@ -53,7 +53,7 @@ To manually remove Enhanced SC from your game installation:
 This patch also includes [dgVoodoo2](https://github.com/dege-diosg/dgVoodoo2), [ThirteenAG Widescreen Fix](https://github.com/ThirteenAG/WidescreenFixesPack), and [Xidi](https://github.com/samuelgr/Xidi).
 
 #### dgVoodoo2
-- Delete `D3D8.dll` and `dgVoodoo.conf`.
+- Delete `d3d8.dll` and `dgVoodoo.conf`.
 
 #### ThirteenAG Widescreen Fix
 - Delete `SplinterCell.WidescreenFix.asi` from the `System/scripts` folder.
