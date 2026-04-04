@@ -54,6 +54,7 @@ namespace ConfigLogger
 #define LOG_CONFIG(section, setting, value) \
     ConfigLogger::Cache(section, setting, value)
 
+/*
 namespace ConfigHelper
 {
     inline void FatalConfigError(const std::string& section, const std::string& key, const std::string& reason)
@@ -130,6 +131,121 @@ namespace ConfigHelper
         out = Util::StripQuotes(keyIt->second);
     }
 }
+*/
+
+// Joshua - ConfigHelper now inserts missing keys with defaults and writes
+// them back to the INI file, instead of fatally exiting.
+namespace ConfigHelper
+{
+    // Tracks whether any missing keys were inserted so we can write the INI back
+    inline bool bDirtyConfig = false;
+
+    /// Internal parsing helper
+    template <typename T>
+    bool TryParse(const std::string& str, T& out)
+    {
+        std::istringstream iss(str);
+        return (iss >> std::boolalpha >> out) ? true : false;
+    }
+
+    /// Parses bool values with case-insensitivity and common boolean strings
+    template <>
+    inline bool TryParse<bool>(const std::string& str, bool& out)
+    {
+        std::string val = str;
+        std::transform(val.begin(), val.end(), val.begin(), ::tolower);
+        if (val == "1" || val == "true" || val == "yes" || val == "on")
+        {
+            out = true;
+            return true;
+        }
+        if (val == "0" || val == "false" || val == "no" || val == "off")
+        {
+            out = false;
+            return true;
+        }
+        return false;
+    }
+
+    /// Converts a value to its INI string representation
+    template <typename T>
+    std::string ToIniString(const T& value)
+    {
+        std::ostringstream oss;
+        oss << value;
+        return oss.str();
+    }
+
+    template <>
+    inline std::string ToIniString<bool>(const bool& value)
+    {
+        return value ? "True" : "False"; // Joshua - Write as "True"/"False" to match UE2 casing
+    }
+
+    /// Generic value loader from INI. If the section or key is missing, inserts the
+    /// default value into the ini and logs a warning instead of fatally exiting.
+    template <typename T>
+    void getValue(inipp::Ini<char>& ini, const std::string& section, const std::string& key, T& out, const T& defaultValue)
+    {
+        auto& sec = ini.sections[section]; // creates section if missing
+
+        auto keyIt = sec.find(key);
+        if (keyIt == sec.end())
+        {
+            // Key not found — insert default
+            out = defaultValue;
+            sec[key] = ToIniString(defaultValue);
+            bDirtyConfig = true;
+            spdlog::warn("[Config] Missing key '{}' in section '{}'. Using default: {}", key, section, ToIniString(defaultValue));
+            return;
+        }
+
+        if (!TryParse<T>(keyIt->second, out))
+        {
+            // Parse failed — use default
+            out = defaultValue;
+            sec[key] = ToIniString(defaultValue);
+            bDirtyConfig = true;
+            spdlog::warn("[Config] Failed to parse key '{}' in section '{}' (value: '{}'). Using default: {}", key, section, keyIt->second, ToIniString(defaultValue));
+        }
+    }
+
+    /// Specialization for std::string values (handles quotes)
+    template <>
+    inline void getValue<std::string>(inipp::Ini<char>& ini, const std::string& section, const std::string& key, std::string& out, const std::string& defaultValue)
+    {
+        auto& sec = ini.sections[section]; // creates section if missing
+
+        auto keyIt = sec.find(key);
+        if (keyIt == sec.end())
+        {
+            out = defaultValue;
+            sec[key] = defaultValue;
+            bDirtyConfig = true;
+            spdlog::warn("[Config] Missing key '{}' in section '{}'. Using default: {}", key, section, defaultValue);
+            return;
+        }
+
+        out = Util::StripQuotes(keyIt->second);
+    }
+
+    /// Writes the INI back to disk if any defaults were inserted
+    void WriteBackIfDirty(const inipp::Ini<char>& ini, const std::filesystem::path& configPath)
+    {
+        if (!bDirtyConfig)
+            return;
+
+        std::ofstream outFile(configPath);
+        if (!outFile)
+        {
+            spdlog::error("[Config] Could not write updated config to '{}'. Missing keys were applied in-memory only.", configPath.string());
+            return;
+        }
+
+        ini.generate(outFile);
+        spdlog::info("[Config] Updated config written to '{}' with missing default values.", configPath.string());
+    }
+}
 
 
 void Config::Read()
@@ -164,38 +280,41 @@ void Config::Read()
     }
     */
 
-    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bDisableMenuIdleTimer", g_IdleTimers.bDisableIdleTimer);
+    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bDisableMenuIdleTimer", g_IdleTimers.bDisableIdleTimer, false);
     LOG_CONFIG(ConfigKeys::DisableMenuIdleTimers_Section, ConfigKeys::DisableMenuIdleTimers_Setting, g_IdleTimers.bDisableIdleTimer);
 
-    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bLODDistance", g_DistanceCulling.isEnabled);
+    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bLODDistance", g_DistanceCulling.isEnabled, true);
     LOG_CONFIG(ConfigKeys::DistanceCulling_Section, ConfigKeys::DistanceCulling_Setting, g_DistanceCulling.isEnabled);
 
-    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bSkipIntroVideos", g_IntroSkip.isEnabled);
+    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bSkipIntroVideos", g_IntroSkip.isEnabled, false);
     LOG_CONFIG(ConfigKeys::SkipIntroLogos_Section, ConfigKeys::SkipIntroLogos_Setting, g_IntroSkip.isEnabled);
 
     /*ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bPauseOnFocusLoss", g_PauseOnFocusLoss.shouldPause);
     LOG_CONFIG(ConfigKeys::EnablePauseOnFocusLoss_Section, ConfigKeys::EnablePauseOnFocusLoss_Setting, g_PauseOnFocusLoss.shouldPause);*/
 
-    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bEnableRumble", g_ControllerRumble.bEnabled);
+    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bEnableRumble", g_ControllerRumble.bEnabled, true);
     LOG_CONFIG(ConfigKeys::EnableRumble_Section, ConfigKeys::EnableRumble_Setting, g_ControllerRumble.bEnabled);
 
-    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bShowErrors", SuppressErrorDialogs::bShowErrors);
+    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bShowErrors", SuppressErrorDialogs::bShowErrors, false);
     LOG_CONFIG(ConfigKeys::ShowErrors_Section, ConfigKeys::ShowErrors_Setting, SuppressErrorDialogs::bShowErrors);
 
-    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bCheckForUpdates", bShouldCheckForUpdates);
+    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bCheckForUpdates", bShouldCheckForUpdates, true);
     LOG_CONFIG(ConfigKeys::CheckForUpdates_Section, ConfigKeys::CheckForUpdates_Setting, bShouldCheckForUpdates);
 
     bConsoleUpdateNotifications = bShouldCheckForUpdates;
 
-    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bWarnReadOnlyInis", CheckINIReadPermissions::Enabled);
+    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bWarnReadOnlyInis", CheckINIReadPermissions::Enabled, true);
     LOG_CONFIG(ConfigKeys::WarnReadOnlyINIFiles_Section, ConfigKeys::WarnReadOnlyINIFiles_Setting, CheckINIReadPermissions::Enabled);
 
-    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bWarnReadOnlySaveFiles", CheckGamesaveFolderWritable::CheckSaveFiles);
+    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bWarnReadOnlySaveFiles", CheckGamesaveFolderWritable::CheckSaveFiles, true);
     LOG_CONFIG(ConfigKeys::WarnReadOnlySaveFiles_Section, ConfigKeys::WarnReadOnlySaveFiles_Setting, CheckGamesaveFolderWritable::CheckSaveFiles);
 
     bool bSteamDeckMode = false;
-    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bSteamDeckMode", bSteamDeckMode); // Not actually used, just to verify config key exists.
+    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bSteamDeckMode", bSteamDeckMode, false); // Not actually used, just to verify config key exists.
 
 
     ConfigLogger::Flush();
+
+    // Write back any missing keys that were filled in with defaults
+    ConfigHelper::WriteBackIfDirty(ini, pConfigFile);
 }
