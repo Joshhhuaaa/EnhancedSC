@@ -221,6 +221,7 @@ var(Enhanced) config bool bCheckForUpdates;
 var(Enhanced) config bool bSteamDeckMode; // Joshua - Block opening links on Steam Deck as it will crash the game
 var(Enhanced) config bool bWarnReadOnlyInis;
 var(Enhanced) config bool bWarnReadOnlySaveFiles;
+var(Enhanced) config bool bShowErrors; // Joshua - Option to disable error dialog boxes
 var(Enhanced) int bWidescreenMode; // Joshua - Widescreen mode via ThirteenAG Widescreen Fix
 
 //----------------------------------------[FSchelling - 15 June 2001]-----

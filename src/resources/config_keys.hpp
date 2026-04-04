@@ -36,4 +36,6 @@ namespace ConfigKeys
     constexpr const char* WarnReadOnlySaveFiles_Section = "Warnings";
     constexpr const char* WarnReadOnlySaveFiles_Setting = "Check for read-only gamesave files.";
 
+    constexpr const char* ShowErrors_Section = "Various";
+    constexpr const char* ShowErrors_Setting = "Show Error Dialogs";
 }

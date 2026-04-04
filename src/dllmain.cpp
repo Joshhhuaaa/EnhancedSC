@@ -13,6 +13,8 @@
 #include "custom_saves.hpp"
 #include "dpad_keybinds.hpp"
 #include "pause_on_focus_loss.hpp"
+#include "controller_rumble.hpp"
+#include "suppress_error_dialogs.hpp"
 
 ///Fixes
 #include "restore_eax.hpp"
@@ -26,7 +28,6 @@
 #include "steam_deck_features.hpp"
 #include "submodule_initiailization.hpp"
 #include "version_checker.hpp"
-#include "controller_rumble.hpp"
 #include "ini_read_state.hpp"
 
 ///WIP
@@ -75,6 +76,7 @@ void InitUWindow() //g_GameDLLs.UWindow
 }
 void InitWinDrv() //g_GameDLLs.WinDrv
 {
+    SuppressErrorDialogs::Initialize();
 }
 
 void InitD3DDrv() //g_GameDLLs.D3DDrv

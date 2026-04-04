@@ -14,6 +14,7 @@
 #include "idle_timers.hpp"
 #include "controller_rumble.hpp"
 #include "ini_read_state.hpp"
+#include "suppress_error_dialogs.hpp"
 
 // -----------------------------------------------------------------------------
 // ConfigHelper: A type-safe, case-insensitive, error-checked INI config reader.
@@ -177,6 +178,9 @@ void Config::Read()
 
     ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bEnableRumble", g_ControllerRumble.bEnabled);
     LOG_CONFIG(ConfigKeys::EnableRumble_Section, ConfigKeys::EnableRumble_Setting, g_ControllerRumble.bEnabled);
+
+    ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bShowErrors", SuppressErrorDialogs::bShowErrors);
+    LOG_CONFIG(ConfigKeys::ShowErrors_Section, ConfigKeys::ShowErrors_Setting, SuppressErrorDialogs::bShowErrors);
 
     ConfigHelper::getValue(ini, "Echelon.EchelonGameInfo", "bCheckForUpdates", bShouldCheckForUpdates);
     LOG_CONFIG(ConfigKeys::CheckForUpdates_Section, ConfigKeys::CheckForUpdates_Setting, bShouldCheckForUpdates);
