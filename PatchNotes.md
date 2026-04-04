@@ -142,6 +142,7 @@
 - Added an option to toggle Back to Wall peek when weapon is equipped.
 - Added an option to toggle the inventory, so holding the key is no longer required, similar to Pandora Tomorrow.
 - Added an option to assign a keybind to toggle the HUD on or off.
+- Added an option to adjust controller sensitivity.
 - [@Shryder](https://github.com/shryder): Added support for Mouse 4 and Mouse 5 (side buttons).
 - Added support for using the NumPad on keypads.
 - Sniper mode now uses a dedicated keybind, similar to later Splinter Cell games, instead of being triggered by the Accelerate key.
@@ -155,7 +156,6 @@
 - [@Afevis](https://github.com/ShizCalev): Added vibration support for controllers.
 - [@Afevis](https://github.com/ShizCalev): Added warnings when game save folders are not writable or when any save files are set to read-only.
 - Added support for skipping cutscenes and starting from loading screens on controllers using the A or Start buttons.
-- Added controller navigation for PC menus: thumbsticks control the cursor, A confirms, and B cancels.
 - The Pause button is now disabled on keyboard when in a game over state, similar to controller behavior.
 - Controllers can now pause during cinematics.
 - The mouse cursor can now use the full aspect ratio instead of being limited to 4:3 bounds.
@@ -169,6 +169,7 @@
 - All inventory categories are now visible when using the controller, instead of displaying only the selected category.
 - The controller pause screen can now access PC menus by selecting the Main Menu section.
 - Adjusted the zoom speed for the Laser Mic, Sticky Camera, and Binoculars when using a controller to match the console version.
+- Elevator panels will now always default to the Open button when using a controller.
 - Restored the Reset Camera keybind that existed in the Splinter Cell PC demo build.
 - Updated the default controller layout so the X button is used to make noise while using the Diversion Camera, similar to Chaos Theory.
 - [@ThirteenAG](https://github.com/ThirteenAG): Added native Alt+F4 support.
@@ -203,7 +204,7 @@
 - [dgVoodoo2](https://github.com/dege-diosg/dgVoodoo2) is included to restore Shadow Buffer rendering and set a 60 FPS cap. The 60 FPS cap is necessary to prevent [issues](https://youtu.be/X3tuerrwhnw) with AI pathing and SoftBody physics that can occur at higher frame rates.
 - [ThirteenAG Widescreen Fix](https://github.com/ThirteenAG/WidescreenFixesPack) is included for widescreen support.
 - [Xidi](https://github.com/samuelgr/Xidi) is included to improve compatibility for XInput-based controllers.
-- [DSOAL](<https://github.com/kcat/dsoal>) is included to optionally restore EAX support. EAX can be enabled by running the `eax_restore.reg` script in the System folder and enabling it in-game.
+- [DSOAL](<https://github.com/kcat/dsoal>) is included to optionally restore EAX support.
 - Thanks to [iLL_Pazzo](https://www.twitch.tv/ill_pazzo) (French), [NoSleepCoffee](https://www.twitch.tv/nosleepcoffee), [Andry66power](https://www.twitch.tv/andry66power) (Italian), [Distro](https://www.twitch.tv/distrotv) (German), and [MatthewDoomer](https://www.twitch.tv/matthewdoomer) (Spanish) for translating Enhanced localization.
 - [@ThirteenAG](https://github.com/ThirteenAG): Added an option to display cutscenes in fullscreen.
 - [@ThirteenAG](https://github.com/ThirteenAG): Added an option to use the original FOV during in-game cinematics.
