@@ -25,6 +25,7 @@ var EPCCheckBox          m_bToggleBTWTargeting; // Joshua - Enhanced setting
 var EPCCheckBox          m_bCameraJammerAutoLock; // Joshua - Enhanced setting
 var EPCCheckBox          m_bToggleInventory; // Joshua - Enhanced setting
 var EPCCheckBox          m_bHideInactiveCategories; // Joshua - Enhanced setting
+var EPCCheckBox          m_bFixedScopedMovementSpeed; // Joshua - Enhanced setting
 var EPCCheckBox          m_bEnableRumble; // Joshua - Enhanced setting
 var EPCComboControl      m_InputMode; // Joshua - Enhanced setting
 var EPCComboControl      m_ControllerScheme; // Joshua - Enhanced setting
@@ -232,10 +233,12 @@ function InitOptionControls()
     AddLineItem();
 
     AddControls();
-
-    // Enhanced
     AddLineItem();
-	AddTitleItem(Caps(Localize("HUD","Enhanced","Localization\\Enhanced")));
+    AddEnhancedCheckBoxControl("FixedScopedMovementSpeed", m_bFixedScopedMovementSpeed);
+
+    // Controller
+    AddLineItem();
+	AddTitleItem(Caps(Localize("Controls","Controller","Localization\\Enhanced")));
     AddLineItem();
 
     AddInputModeControls();
@@ -272,6 +275,7 @@ function SaveOptions()
     EPC.bCameraJammerAutoLock = m_bCameraJammerAutoLock.m_bSelected;
     EPC.bToggleInventory = m_bToggleInventory.m_bSelected;
     EPC.bHideInactiveCategories = m_bHideInactiveCategories.m_bSelected;
+    EPC.bFixedScopedMovementSpeed = m_bFixedScopedMovementSpeed.m_bSelected;
     switch (m_InputMode.GetSelectedIndex())
     {
         case 0:  EPC.InputMode = IM_Auto;       break;
@@ -342,6 +346,9 @@ function Refresh()
     if (m_bHideInactiveCategories != None)
         m_bHideInactiveCategories.m_bSelected = EPC.bHideInactiveCategories;
 
+    if (m_bFixedScopedMovementSpeed != None)
+        m_bFixedScopedMovementSpeed.m_bSelected = EPC.bFixedScopedMovementSpeed;
+
     if (m_InputMode != None)
         m_InputMode.SetSelectedIndex(Clamp(EPC.InputMode, 0, m_InputMode.List.Items.Count() - 1));
 
@@ -403,6 +410,7 @@ function ResetToDefault()
     m_bCameraJammerAutoLock.m_bSelected = false;
     m_bToggleInventory.m_bSelected = false;
     m_bHideInactiveCategories.m_bSelected = false;
+    m_bFixedScopedMovementSpeed.m_bSelected = false;
     m_ControllerSensitivityScroll.Pos = 50;
     m_LControllerSensitivityValue.SetLabelText(string(int(m_ControllerSensitivityScroll.Pos)), TXT_LEFT);
     m_InputMode.SetSelectedIndex(0);
@@ -708,6 +716,7 @@ function RefreshKeyList(bool bKeysOnly) // MClarke - Patch 1 Beta 2 - Added bool
         m_bCameraJammerAutoLock.m_bSelected = EPC.bCameraJammerAutoLock;
         m_bToggleInventory.m_bSelected = EPC.bToggleInventory;
         m_bHideInactiveCategories.m_bSelected = EPC.bHideInactiveCategories;
+        m_bFixedScopedMovementSpeed.m_bSelected = EPC.bFixedScopedMovementSpeed;
         m_ControllerSensitivityScroll.Pos = Clamp(int(EPC.fControllerSensitivity), 1, 100);
         // Joshua - Update value label for controller sensitivity scrollbar
         if (m_LControllerSensitivityValue != None)
@@ -988,6 +997,10 @@ function Notify(UWindowDialogControl C, byte E)
         m_bModified = true;
     }
     else if (E == DE_Click && C == m_bHideInactiveCategories)
+    {
+        m_bModified = true;
+    }
+    else if (E == DE_Click && C == m_bFixedScopedMovementSpeed)
     {
         m_bModified = true;
     }

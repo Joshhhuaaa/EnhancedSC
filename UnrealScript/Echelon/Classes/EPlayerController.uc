@@ -280,6 +280,7 @@ var(Enhanced) config EControllerIcon ControllerIcon;
 var (Enhanced) config float fControllerSensitivity;
 
 var(Enhanced) config bool bNormalizeMovement; // Joshua - Option to normalize movement
+var(Enhanced) config bool bFixedScopedMovementSpeed; // Joshua - Fixed movement speed when scoped (Mouse only)
 var(Enhanced) config bool bCrouchDrop; // Joshua - When hanging or using a zipline, crouch drops and jump raises legs
 var float m_LastCrouchTime; // Joshua - // Joshua - Anti-spam crouch timer
 var float m_ZipLineDropTimer; // Joshua - Anti-spam stance change on zipline
@@ -5510,6 +5511,7 @@ state s_Targeting
 		local float pushingForce;
 		local float accelModif, finalSpeed; // Joshua - Variable speeds for keyboard in targeting mode
 		local float inputMagnitude; // Joshua - Normalize movement
+		local int   effectiveWalkSpeed; // Joshua - Support for fixed movement speed when scoped
 
 		inputMagnitude = sqrt(aForward * aForward + aStrafe * aStrafe);
 		// Joshua - Replacing GetPushingForce() C++ function to be able to calculate magnitude
@@ -5527,14 +5529,23 @@ state s_Targeting
 		// Joshua - Replacing GetPushingForce() C++ function to be able to calculate magnitude
 		pushingForce = sqrt(aForward * aForward + aStrafe * aStrafe);
 
+		// Joshua - Fixed movement speed when scoped (Mouse only)
+		if (bFixedScopedMovementSpeed &&
+			(GetStateName() == 's_PlayerSniping' ||
+			 GetStateName() == 's_Zooming'       ||
+			 GetStateName() == 's_LaserMicTargeting'))
+			effectiveWalkSpeed = eGame.m_maxSpeedInterval;
+		else
+			effectiveWalkSpeed = m_curWalkSpeed;
+
         // Joshua - Variable speeds for keyboard in targeting mode
-        if (m_curWalkSpeed != 0)
+        if (effectiveWalkSpeed != 0)
         {
             // Joshua - Controller always uses max speed (1.0 ratio)
             if (eGame.bUseController)
                 accelModif = 1.0;
             else
-                accelModif = float(m_curWalkSpeed) / eGame.m_maxSpeedInterval;
+                accelModif = float(effectiveWalkSpeed) / eGame.m_maxSpeedInterval;
 
             aForward *= accelModif;
             aStrafe  *= accelModif;
@@ -5559,7 +5570,7 @@ state s_Targeting
 
 		// Joshua - Variable speeds for keyboard in targeting mode
 		finalSpeed = pushingForce;
-		finalSpeed *= (float(m_curWalkSpeed) / eGame.m_maxSpeedInterval);
+		finalSpeed *= (float(effectiveWalkSpeed) / eGame.m_maxSpeedInterval);
 
 		// Joshua - Update SoundWalkingRatio based on variable speed
 		ePawn.SoundWalkingRatio = finalSpeed;
