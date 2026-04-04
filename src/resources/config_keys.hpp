@@ -15,12 +15,14 @@ namespace ConfigKeys
     constexpr const char* SkipIntroLogos_Section = "Various";
     constexpr const char* SkipIntroLogos_Setting = "Skip Intro Videos";
 
-    // Tweaks
     constexpr const char* DisableMenuIdleTimers_Section = "Various";
     constexpr const char* DisableMenuIdleTimers_Setting = "Disable Menu Idle Timers";
 
     constexpr const char* EnableRumble_Section = "Various";
     constexpr const char* EnableRumble_Setting = "Enable Controller Rumble";
+
+    constexpr const char* ShowErrors_Section = "Various";
+    constexpr const char* ShowErrors_Setting = "Show Error Dialogs";
 
     // Internal
     constexpr const char* CheckForUpdates_Section = "Update Notifications";
@@ -36,6 +38,4 @@ namespace ConfigKeys
     constexpr const char* WarnReadOnlySaveFiles_Section = "Warnings";
     constexpr const char* WarnReadOnlySaveFiles_Setting = "Check for read-only gamesave files.";
 
-    constexpr const char* ShowErrors_Section = "Various";
-    constexpr const char* ShowErrors_Setting = "Show Error Dialogs";
 }
