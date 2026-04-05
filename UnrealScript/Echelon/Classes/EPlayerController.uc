@@ -5530,10 +5530,12 @@ state s_Targeting
 		pushingForce = sqrt(aForward * aForward + aStrafe * aStrafe);
 
 		// Joshua - Fixed movement speed when scoped (Mouse only)
-		if (bFixedScopedMovementSpeed &&
+		// Joshua - Controller always uses max speed (1.0 ratio)
+		if (eGame.bUseController ||
+			(bFixedScopedMovementSpeed &&
 			(GetStateName() == 's_PlayerSniping' ||
 			 GetStateName() == 's_Zooming'       ||
-			 GetStateName() == 's_LaserMicTargeting'))
+			 GetStateName() == 's_LaserMicTargeting')))
 			effectiveWalkSpeed = eGame.m_maxSpeedInterval;
 		else
 			effectiveWalkSpeed = m_curWalkSpeed;
