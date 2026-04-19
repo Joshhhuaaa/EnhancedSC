@@ -51,7 +51,7 @@ For more detailed instructions on how to override a DLL, refer to this [guide](h
 >
 > <img src="https://github.com/user-attachments/assets/c192014d-327b-4f5a-86fb-5750cbef8132" width="640"/>
 >
-> You can manually save in the pause menu or use the checkpoint system. Optionally, you can modify this layout to assign Quick Save (F5) and Quick Load (F8) to the rear grip buttons or either touchpad.
+> You can manually save in the pause menu or use the checkpoint system. Optionally, you can modify this layout to assign Quick Save (F5) and Quick Load (F8) to the rear grip buttons or either trackpad.
 
 ## Uninstallation
 To manually remove Enhanced SC from your game installation:
