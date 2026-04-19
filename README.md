@@ -47,10 +47,11 @@ In the Compatibility tab, check `Force the use of a specific Steam Play compatib
 For more detailed instructions on how to override a DLL, refer to this [guide](https://cookieplmonster.github.io/setup-instructions/#proton-wine).
 
 > [!NOTE]
-> If you're playing on a Steam Deck, it's recommended to download the `EnhancedSC Layout` by Vanilla from Steam's Community Layouts.
+> If you're playing on a Steam Deck, use the default template **Gamepad With Joystick Trackpad**, as the patch includes controller support and no additional setup is required.
 >
-> <img src="https://github.com/user-attachments/assets/5d559a82-bb8f-4b21-9ecb-d99f314cabda" width="640"/>
-
+> <img src="https://github.com/user-attachments/assets/c192014d-327b-4f5a-86fb-5750cbef8132" width="640"/>
+>
+> You can manually save in the pause menu or use the checkpoint system. Optionally, you can modify this layout to assign Quick Save (F5) and Quick Load (F8) to the rear grip buttons or either touchpad.
 
 ## Uninstallation
 To manually remove Enhanced SC from your game installation:
