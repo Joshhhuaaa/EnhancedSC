@@ -37,7 +37,7 @@ To add the DLL override in Steam, right-click the game in the library and select
 
 In the General tab, add the following to the launch options:
 ```
-WINEDLLOVERRIDES="d3d8,msacm32,msvfw32,dinput8=n,b" %command%
+WINEDLLOVERRIDES="d3d8,msacm32,msvfw32,dinput8,dsound=n,b" %command%
 ```
 
 In the Compatibility tab, check `Force the use of a specific Steam Play compatibility tool` and select `Proton 10.0-1`. Other versions may work, but this one has been tested.
