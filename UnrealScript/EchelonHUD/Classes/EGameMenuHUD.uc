@@ -570,6 +570,8 @@ state s_MissionFailed
         local string PromptText;
         local string ConfirmMsg;
         local float boxWidth, boxHeight, boxX, boxY;
+        local int barHeight;
+        local int textYOffset;
 
         PostRender_s_MissionFailed(Canvas);
 
@@ -593,29 +595,45 @@ state s_MissionFailed
                     xOffset = -((AspectRatio - 1.333) * 480.0 / 2.0);
             }
 
-            Canvas.DrawLine(xOffset - 1, yPos - 3, Canvas.SizeX + 1, (lineHeight * 4) + 6, Canvas.black, int(100.0 * (Epc.MissionQuickMenuAlpha / 255.0)), eLevel.TMENU);
+            // Joshua - Draw background bar, height depends on whether LoadLastSave is shown
+            if (Epc.LastSaveName != "")
+                barHeight = (lineHeight * 4) + 6;  // 4 options (LoadLastSave, LoadGame, RestartMission, Quit)
+            else
+                barHeight = (lineHeight * 3) + 6;  // 3 options (LoadGame, RestartMission, Quit)
+
+            Canvas.DrawLine(xOffset - 1, yPos - 3, Canvas.SizeX + 1, barHeight, Canvas.black, int(100.0 * (Epc.MissionQuickMenuAlpha / 255.0)), eLevel.TMENU);
 
             Canvas.Font = Canvas.ETextFont;
             Canvas.SetDrawColor(255, 255, 255, Epc.MissionQuickMenuAlpha);
 
-            Canvas.SetPos(320, yPos);
-            if (Epc.LastSaveName == (Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "1") ||
-                Epc.LastSaveName == (Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "2") ||
-                Epc.LastSaveName == (Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "3"))
-                PromptText = FormatPromptString(Localize("HUD", "LoadLastCheckpoint", "Localization\\Enhanced"), GetInputPrompt(0));
+            // Joshua - Adjust text Y offset if no LoadLastSave
+            if (Epc.LastSaveName != "")
+                textYOffset = 0;
             else
-                PromptText = FormatPromptString(Localize("HUD", "LoadLastSave", "Localization\\Enhanced"), GetInputPrompt(0));
-            Canvas.DrawTextAligned(PromptText, TXT_CENTER);
+                textYOffset = -lineHeight; // Joshua - Shift all text up by one line
 
-            Canvas.SetPos(320, yPos + lineHeight);
+            // Joshua - Only show Load Last Save if there's a valid save
+            if (Epc.LastSaveName != "")
+            {
+                Canvas.SetPos(320, yPos);
+                if (Epc.LastSaveName == (Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "1") ||
+                    Epc.LastSaveName == (Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "2") ||
+                    Epc.LastSaveName == (Localize("Common", "CheckpointName", "Localization\\Enhanced") $ "3"))
+                    PromptText = FormatPromptString(Localize("HUD", "LoadLastCheckpoint", "Localization\\Enhanced"), GetInputPrompt(0));
+                else
+                    PromptText = FormatPromptString(Localize("HUD", "LoadLastSave", "Localization\\Enhanced"), GetInputPrompt(0));
+                Canvas.DrawTextAligned(PromptText, TXT_CENTER);
+            }
+
+            Canvas.SetPos(320, yPos + lineHeight + textYOffset);
             PromptText = FormatPromptString(Localize("HUD", "LoadGame", "Localization\\Enhanced"), GetInputPrompt(1));
             Canvas.DrawTextAligned(PromptText, TXT_CENTER);
 
-            Canvas.SetPos(320, yPos + (lineHeight * 2));
+            Canvas.SetPos(320, yPos + (lineHeight * 2) + textYOffset);
             PromptText = FormatPromptString(Localize("HUD", "RestartMission", "Localization\\Enhanced"), GetInputPrompt(3));
             Canvas.DrawTextAligned(PromptText, TXT_CENTER);
 
-            Canvas.SetPos(320, yPos + (lineHeight * 3));
+            Canvas.SetPos(320, yPos + (lineHeight * 3) + textYOffset);
             PromptText = FormatPromptString(Localize("HUD", "Quit", "Localization\\Enhanced"), GetInputPrompt(2));
             Canvas.DrawTextAligned(PromptText, TXT_CENTER);
 

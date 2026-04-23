@@ -133,7 +133,11 @@ function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
 			// Joshua - Normal menu
 			if (Key == IK_Space || Key == IK_Joy1)
 			{
-				Epc.myHUD.GotoState('s_Mission', 'BeginLoadLastSave');
+				// Joshua - Only allow Load Last Save if there's a valid save
+				if (Epc.LastSaveName != "")
+				{
+					Epc.myHUD.GotoState('s_Mission', 'BeginLoadLastSave');
+				}
 				return true;
 			}
 			else if (Key == IK_LeftMouse || Key == IK_Joy4)
