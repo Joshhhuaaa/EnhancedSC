@@ -6,6 +6,13 @@ For a full list of patch notes, refer to the [Patch Notes](PatchNotes.md) page.
 
 [![Discord](https://img.shields.io/discord/1371978442194817254?color=%237289DA&label=Members&logo=discord&logoColor=white)](https://discord.gg/k6mZJcfjSh)
 
+If you'd like to donate, all contributions are appreciated.
+<div align="left">
+  <a href="https://www.paypal.com/donate/?hosted_button_id=UB67N4GNTCEZ6">
+    <img src="https://github.com/user-attachments/assets/6a8878e8-3ae8-48e5-8d2a-ae367c71df10" width="256" alt="PayPal" />
+  </a>
+</div>
+
 ## Installation
 The latest version of Enhanced SC can be found in the [Releases](https://github.com/Joshhhuaaa/EnhancedSC/releases) page. Please note that saves from Enhanced SC are not compatible with the original version of the game.
 
@@ -30,7 +37,7 @@ To add the DLL override in Steam, right-click the game in the library and select
 
 In the General tab, add the following to the launch options:
 ```
-WINEDLLOVERRIDES="d3d8,msacm32,msvfw32,dinput8=n,b" %command%
+WINEDLLOVERRIDES="d3d8,msacm32,msvfw32,dinput8,dsound=n,b" %command%
 ```
 
 In the Compatibility tab, check `Force the use of a specific Steam Play compatibility tool` and select `Proton 10.0-1`. Other versions may work, but this one has been tested.
@@ -40,10 +47,11 @@ In the Compatibility tab, check `Force the use of a specific Steam Play compatib
 For more detailed instructions on how to override a DLL, refer to this [guide](https://cookieplmonster.github.io/setup-instructions/#proton-wine).
 
 > [!NOTE]
-> If you're playing on a Steam Deck, it's recommended to download the `EnhancedSC Layout` by Vanilla from Steam's Community Layouts.
+> If you're playing on a Steam Deck, use the default template **Gamepad With Joystick Trackpad**, as the patch includes controller support and no additional setup is required.
 >
-> <img src="https://github.com/user-attachments/assets/5d559a82-bb8f-4b21-9ecb-d99f314cabda" width="640"/>
-
+> <img src="https://github.com/user-attachments/assets/c192014d-327b-4f5a-86fb-5750cbef8132" width="640"/>
+>
+> You can manually save in the pause menu or use the checkpoint system. Optionally, you can modify this layout to assign Quick Save (F5) and Quick Load (F8) to the rear grip buttons or either trackpad.
 
 ## Uninstallation
 To manually remove Enhanced SC from your game installation:
