@@ -10,7 +10,12 @@ void CustomSaves::Initialize()
 
     if (uint8_t* SaveFormat = Memory::PatternScan(g_GameDLLs.Engine, "2E 00 73 00 61 00 76 00 00 00", "Save Format"))
     {
-        Memory::PatchBytes((uintptr_t)SaveFormat, "\x2E\x00\x65\x00\x6E\x00\x34\x00", 8);
+        // Keep replacement length identical to original ".sav"
+        static_assert(sizeof(kSaveExtension) - sizeof(wchar_t) == 8,
+            "kSaveExtension must match original .sav size");
+        Memory::PatchBytes((uintptr_t)SaveFormat,
+            reinterpret_cast<const char*>(kSaveExtension),
+            sizeof(kSaveExtension) - sizeof(wchar_t));
         spdlog::info("Save Format patched successfully.");
     }
     else

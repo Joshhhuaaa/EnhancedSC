@@ -101,6 +101,9 @@
     <ClCompile Include="src\fixes\suppress_error_dialogs.cpp">
       <Filter>Features</Filter>
     </ClCompile>
+    <ClCompile Include="src\features\checkpoint_quickload.cpp">
+      <Filter>Features</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\features\intro_skip.hpp">
@@ -194,6 +197,9 @@
       <Filter>Warnings\Headers</Filter>
     </ClInclude>
     <ClInclude Include="src\fixes\suppress_error_dialogs.hpp">
+      <Filter>Features\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\features\checkpoint_quickload.hpp">
       <Filter>Features\Headers</Filter>
     </ClInclude>
   </ItemGroup>

@@ -11,6 +11,7 @@
 ///Features
 #include "intro_skip.hpp"
 #include "custom_saves.hpp"
+#include "checkpoint_quickload.hpp"
 #include "dpad_keybinds.hpp"
 #include "pause_on_focus_loss.hpp"
 #include "controller_rumble.hpp"
@@ -47,6 +48,7 @@ void Initeax() //g_GameDLLs.eax
 }
 void InitEchelon() //g_GameDLLs.Echelon
 {
+    g_CheckpointQuickload.InitEchelonHooks();
 }
 void InitEchelonHUD() //g_GameDLLs.EchelonHUD
 {
@@ -99,6 +101,7 @@ void InitializeSubsystems()
         INITIALIZE(g_GameVars.Initialize());
         INITIALIZE(Config::Read()); 
         INITIALIZE(CustomSaves::Initialize());
+        INITIALIZE(g_CheckpointQuickload.Initialize());
         INITIALIZE(g_DistanceCulling.Initialize());
         INITIALIZE(g_IntroSkip.Initialize());
         INITIALIZE(RestoreEAX::Initialize());
