@@ -1,9 +1,12 @@
 ---
 name: Report a bug caused by EnhancedSC
 about: Create a report to help reproduce and fix the issue
-title: '[Enhanced Bug]: '
-labels: ["Enhanced bug"]
+title: "[Enhanced Bug]: "
+labels: Enhanced bug
+assignees: ''
+
 ---
+
 <!-- Write **BELOW** The Headers and **ABOVE** The comments else it may not be viewable -->
 
 ## Issue Summary:

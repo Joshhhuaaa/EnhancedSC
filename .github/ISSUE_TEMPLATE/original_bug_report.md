@@ -1,9 +1,12 @@
 ---
 name: Report a bug in the original/unmodified game
 about: Create a report to help reproduce and fix the issue
-title: '[Original Bug]: '
-labels: ["original bug"]
+title: "[Original Bug]: "
+labels: original bug
+assignees: ''
+
 ---
+
 <!-- Write **BELOW** The Headers and **ABOVE** The comments else it may not be viewable -->
 
 ## Issue Summary:

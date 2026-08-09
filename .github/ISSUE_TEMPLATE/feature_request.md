@@ -1,14 +1,17 @@
 ---
-name: Feature request 
-about: Suggest an idea for this project 
-title: '[Feature Request]: '
-labels: ["enhancement"]
+name: Feature request
+about: Suggest an idea for this project
+title: "[Feature Request]: "
+labels: enhancement, original bug
+assignees: ''
+
 ---
+
 <!-- Write **BELOW** The Headers and **ABOVE** The comments else it may not be viewable -->
 
 ## Feature Summary:
 
-<!-- Briefly explain what your cool new idea is for the project in just a few basic scentences!-->
+<!-- Briefly explain what your cool new idea is for the project in just a few basic sentences!-->
 
 ### Is your proposal related to a problem?
 
