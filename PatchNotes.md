@@ -152,7 +152,6 @@
 - Improved controller support to more closely match the Xbox version.
 - Added full controller support in PC menus.
 - Added an option to change the default controller layout with alternate control schemes.
-- Added Alt+F4 support to exit the game during menus or in-game.
 - [@Afevis](https://github.com/ShizCalev): Added vibration support for controllers.
 - [@Afevis](https://github.com/ShizCalev): Added warnings when game save folders are not writable or when any save files are set to read-only.
 - Added support for skipping cutscenes and starting from loading screens on controllers using the A or Start buttons.
@@ -172,7 +171,7 @@
 - Elevator panels will now always default to the Open button when using a controller.
 - Restored the Reset Camera keybind that existed in the Splinter Cell PC demo build.
 - Updated the default controller layout so the X button is used to make noise while using the Diversion Camera, similar to Chaos Theory.
-- [@ThirteenAG](https://github.com/ThirteenAG): Added native Alt+F4 support.
+- [@ThirteenAG](https://github.com/ThirteenAG): Added native <kbd>Alt</kbd> + <kbd>F4</kbd> support.
 - The in-game console now supports holding Backspace to delete characters instead of requiring individual key presses.
 - [@ThirteenAG](https://github.com/ThirteenAG): Fixed a bug where the mouse would spin uncontrollably when the mouse was lifted.
 - Fixed a bug where primary and alternate fire inputs were not cleared when pausing the game or loading a save, causing weapons to continue firing after gameplay resumed.
